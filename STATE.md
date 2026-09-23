@@ -4,7 +4,7 @@ Keep this under ~40 lines: current position only.
 
 ## Where we are
 
-Plan 1 (fork, strip, tenancy) — see `docs/superpowers/plans/2026-09-23-plan-1-fork-strip-tenancy.md`.
+Plan 1 (fork, strip, tenancy) merged 2026-09-23. Next: per-academy branding + marketing pages (new scope, being specified), then Plan 2 (people & catalogue).
 
 ## Next
 
