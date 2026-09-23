@@ -501,7 +501,7 @@ jobs:
       # A red e2e job with no artefact is a guessing game.
       - name: Upload the Playwright report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report
           path: |
@@ -626,7 +626,7 @@ jobs:
           echo "tree=$tree" >> "$GITHUB_OUTPUT"
           echo "::notice::recording verified tree $tree"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: verified-tree-${{ steps.tree.outputs.tree }}
           path: verified-tree.txt
