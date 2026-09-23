@@ -25,7 +25,7 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
-const CONSUMERS = ["dashboard/package.json"];
+const CONSUMERS = ["dashboard/package.json", "marketing/package.json"];
 const fail = (msg) => {
 	console.error(`\n${msg}\n`);
 	process.exit(1);
