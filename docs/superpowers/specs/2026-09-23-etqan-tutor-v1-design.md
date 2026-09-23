@@ -40,10 +40,10 @@ Public academy signup; SaaS plan billing via a gateway; online student payments 
 | Repo | Action | Notes |
 |---|---|---|
 | `Etqan-agency/etqan_tutor` | Fork of `kaleem-lms/Kaleem` (meta repo) | `.gitmodules` repointed to Etqan forks; `marketing` submodule removed |
-| `Etqan-agency/etqan-backend` | Fork of `kaleem-lms/backend` | Django + DRF modular monolith |
-| `Etqan-agency/etqan-dashboard` | Fork of `kaleem-lms/dashboard` | React + TanStack; the only end-user UI |
-| `Etqan-agency/etqan-infra` | Fork of `kaleem-lms/infra` | Docker, nginx, monitoring; coturn removed |
-| `Etqan-agency/etqan-tokens` | Fork of `kaleem-lms/tokens` | Design tokens, kept as-is then rebranded |
+| `Etqan-agency/etqan_tutor_backend` | Fork of `kaleem-lms/backend` | Django + DRF modular monolith |
+| `Etqan-agency/etqan_tutor_dashboard` | Fork of `kaleem-lms/dashboard` | React + TanStack; the only end-user UI |
+| `Etqan-agency/etqan_tutor_infra` | Fork of `kaleem-lms/infra` | Docker, nginx, monitoring; coturn removed |
+| `Etqan-agency/etqan_tutor_tokens` | Fork of `kaleem-lms/tokens` | Design tokens, kept as-is then rebranded |
 | `kaleem-lms/marketing` | **Not forked** | Revisit when public signup is in scope |
 
 `PHASE_1_SYSTEM_AUDIT.md`, `PHASE_2_SYSTEM_DESIGN.md` and this spec move into the meta repo's `docs/`.

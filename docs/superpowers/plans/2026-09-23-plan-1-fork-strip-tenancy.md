@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- GitHub org: `Etqan-agency`. Meta repo `Etqan-agency/etqan_tutor` (trunk `master`); submodule repos `etqan-backend`, `etqan-dashboard`, `etqan-infra`, `etqan-tokens` (trunk `main`). `kaleem-lms/marketing` is **not** forked.
+- GitHub org: `Etqan-agency`. Meta repo `Etqan-agency/etqan_tutor` (trunk `master`); submodule repos `etqan_tutor_backend`, `etqan_tutor_dashboard`, `etqan_tutor_infra`, `etqan_tutor_tokens` (trunk `main`). `kaleem-lms/marketing` is **not** forked.
 - Python package name: `etqan`. Brand strings: `Etqan` / `etqan`. Tokens package: `@etqan/tokens`.
 - Tenancy: `django-tenants`, schema per academy; schema name `academy_<subdomain with - → _>`; academy domain `<subdomain>.<TENANT_BASE_DOMAIN>`; local `TENANT_BASE_DOMAIN` = `etqan.localhost`.
 - Accounts are per academy (identity lives in every tenant schema). Etqan staff accounts live in the `public` schema.
@@ -49,7 +49,7 @@ etqan_tutor/                          meta repo (Etqan-agency/etqan_tutor, trunk
   docs/superpowers/specs/2026-09-23-etqan-tutor-v1-design.md
   docs/superpowers/plans/2026-09-23-plan-1-fork-strip-tenancy.md
   docs/kaleem-archive/                 all of Kaleem's docs/ moved here, untouched
-backend/                               Etqan-agency/etqan-backend
+backend/                               Etqan-agency/etqan_tutor_backend
   conftest.py                          NEW: session tenants + autouse tenant schema
   config/settings/{base,local,test,production}.py
   config/urls.py                       tenant URLconf (api, accounts, health)
@@ -63,12 +63,12 @@ backend/                               Etqan-agency/etqan-backend
     migrations/0001_initial.py
     tests/{test_models.py,test_services.py,test_admin.py,test_middleware.py,
            test_isolation.py,test_commands.py,test_frontend_url.py}
-dashboard/                             Etqan-agency/etqan-dashboard
+dashboard/                             Etqan-agency/etqan_tutor_dashboard
   src/features/{identity,shell,notifications(empty)}  others deleted
   src/routes/_authed/{index,account,family}.tsx
   e2e/{fixtures.ts, tenant-login.spec.ts, design-preview.spec.ts}
-infra/                                 Etqan-agency/etqan-infra  (coturn/signaling/marketing removed)
-tokens/                                Etqan-agency/etqan-tokens (@etqan/tokens v0.3.0)
+infra/                                 Etqan-agency/etqan_tutor_infra  (coturn/signaling/marketing removed)
+tokens/                                Etqan-agency/etqan_tutor_tokens (@etqan/tokens v0.3.0)
 ```
 
 ---
@@ -76,7 +76,7 @@ tokens/                                Etqan-agency/etqan-tokens (@etqan/tokens 
 ### Task 1: Create the forks and the local workspace
 
 **Files:**
-- Create: GitHub repos `Etqan-agency/{etqan_tutor,etqan-backend,etqan-dashboard,etqan-infra,etqan-tokens}`
+- Create: GitHub repos `Etqan-agency/{etqan_tutor,etqan_tutor_backend,etqan_tutor_dashboard,etqan_tutor_infra,etqan_tutor_tokens}`
 - Modify: `.gitmodules`
 - Move: `PHASE_1_SYSTEM_AUDIT.md`, `PHASE_2_SYSTEM_DESIGN.md` → `docs/`; Kaleem `docs/*` → `docs/kaleem-archive/`
 
@@ -87,7 +87,7 @@ tokens/                                Etqan-agency/etqan-tokens (@etqan/tokens 
 
 ```bash
 set -euo pipefail
-for pair in "Kaleem:etqan_tutor" "backend:etqan-backend" "dashboard:etqan-dashboard" "infra:etqan-infra" "tokens:etqan-tokens"; do
+for pair in "Kaleem:etqan_tutor" "backend:etqan_tutor_backend" "dashboard:etqan_tutor_dashboard" "infra:etqan_tutor_infra" "tokens:etqan_tutor_tokens"; do
   src="${pair%%:*}"; dst="${pair##*:}"
   if gh repo fork "kaleem-lms/$src" --org Etqan-agency --fork-name "$dst" --clone=false; then
     echo "forked $src -> $dst"
@@ -125,16 +125,16 @@ Replace `.gitmodules` entirely with:
 ```ini
 [submodule "backend"]
 	path = backend
-	url = https://github.com/Etqan-agency/etqan-backend.git
+	url = https://github.com/Etqan-agency/etqan_tutor_backend.git
 [submodule "dashboard"]
 	path = dashboard
-	url = https://github.com/Etqan-agency/etqan-dashboard.git
+	url = https://github.com/Etqan-agency/etqan_tutor_dashboard.git
 [submodule "infra"]
 	path = infra
-	url = https://github.com/Etqan-agency/etqan-infra.git
+	url = https://github.com/Etqan-agency/etqan_tutor_infra.git
 [submodule "tokens"]
 	path = tokens
-	url = https://github.com/Etqan-agency/etqan-tokens.git
+	url = https://github.com/Etqan-agency/etqan_tutor_tokens.git
 ```
 
 ```bash
@@ -181,12 +181,12 @@ Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
 
 - [ ] **Step 6: USER ACTION — CI secrets**
 
-Tell the user: the org needs one fine-grained PAT with **read** access to `Etqan-agency/etqan-backend`, `etqan-dashboard`, `etqan-infra`, `etqan-tokens`. Ask them to run:
+Tell the user: the org needs one fine-grained PAT with **read** access to `Etqan-agency/etqan_tutor_backend`, `etqan_tutor_dashboard`, `etqan_tutor_infra`, `etqan_tutor_tokens`. Ask them to run:
 
 ```bash
 gh secret set SUBMODULE_TOKEN --repo Etqan-agency/etqan_tutor
 gh secret set TOKENS_REPO_TOKEN --repo Etqan-agency/etqan_tutor
-gh secret set TOKENS_REPO_TOKEN --repo Etqan-agency/etqan-dashboard
+gh secret set TOKENS_REPO_TOKEN --repo Etqan-agency/etqan_tutor_dashboard
 ```
 
 Do not create or paste tokens yourself. Continue with Task 2 while waiting; CI is only needed in Task 13.
@@ -199,7 +199,7 @@ Do not create or paste tokens yourself. Continue with Task 2 while waiting; CI i
 - Modify: `tokens/package.json`, `tokens/README.md`, `tokens/build.mjs`, `tokens/tokens.css`, `tokens/src/color.primitive.tokens.json`, `tokens/.github/workflows/ci.yml`
 
 **Interfaces:**
-- Produces: tag `v0.3.0` on `Etqan-agency/etqan-tokens` exporting `@etqan/tokens/tokens.css`, `@etqan/tokens/theme.css`, `@etqan/tokens/contrast.mjs` (same files as before, new package name).
+- Produces: tag `v0.3.0` on `Etqan-agency/etqan_tutor_tokens` exporting `@etqan/tokens/tokens.css`, `@etqan/tokens/theme.css`, `@etqan/tokens/contrast.mjs` (same files as before, new package name).
 
 - [ ] **Step 1: Rename**
 
@@ -227,7 +227,7 @@ Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
 git push -u origin feat/etqan-foundation
 # Tag the feature-branch head; the PR is merged later, with the user's approval, in Task 15.
 git tag v0.3.0 && git push origin v0.3.0
-gh pr create --repo Etqan-agency/etqan-tokens --base main --head feat/etqan-foundation \
+gh pr create --repo Etqan-agency/etqan_tutor_tokens --base main --head feat/etqan-foundation \
   --title "chore: rename package to @etqan/tokens v0.3.0" \
   --body $'Rename for the etqan_tutor fork.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)'
 cd ..
@@ -1965,8 +1965,8 @@ cd ..
 
 ```bash
 cd dashboard
-sed -i 's#"@kaleem/tokens": "github:kaleem-lms/tokens\#v0.2.2"#"@etqan/tokens": "github:Etqan-agency/etqan-tokens\#v0.3.0"#' package.json
-node -e 'const p=require("./package.json"); p.name="etqan-dashboard"; require("fs").writeFileSync("package.json", JSON.stringify(p,null,"\t")+"\n")'
+sed -i 's#"@kaleem/tokens": "github:kaleem-lms/tokens\#v0.2.2"#"@etqan/tokens": "github:Etqan-agency/etqan_tutor_tokens\#v0.3.0"#' package.json
+node -e 'const p=require("./package.json"); p.name="etqan_tutor_dashboard"; require("fs").writeFileSync("package.json", JSON.stringify(p,null,"\t")+"\n")'
 grep -rlI --exclude-dir=node_modules --exclude-dir=.git --exclude=pnpm-lock.yaml -e '@kaleem/tokens' . | xargs sed -i 's#@kaleem/tokens#@etqan/tokens#g'
 grep -rlI --exclude-dir=node_modules --exclude-dir=.git --exclude=pnpm-lock.yaml -e 'kaleem' -e 'Kaleem' . \
   | xargs sed -i -e 's/newToKaleem/newToEtqan/g' -e 's/\bKaleem\b/Etqan/g' -e 's/\bkaleem\b/etqan/g'
@@ -2333,7 +2333,7 @@ Validate: `docker compose -f docker-compose.local.yml config -q && echo ok` → 
 - [ ] **Step 2: Update the justfile**
 
 Apply to `justfile`:
-- Header comment `kaleem` → `etqan_tutor`; every `@kaleem/tokens` → `@etqan/tokens`; every `kaleem-lms/tokens` → `Etqan-agency/etqan-tokens`.
+- Header comment `kaleem` → `etqan_tutor`; every `@kaleem/tokens` → `@etqan/tokens`; every `kaleem-lms/tokens` → `Etqan-agency/etqan_tutor_tokens`.
 - `postgres://kaleem:kaleem@…/kaleem` → `postgres://etqan:etqan@…/etqan` (two places).
 - `--cov=kaleem --cov=signaling` → `--cov=etqan` (two places).
 - `migrate` recipe body → `HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm django python manage.py migrate_schemas`.
@@ -2345,7 +2345,7 @@ Run: `just --list` → lists recipes without error; `grep -n -i kaleem justfile 
 - [ ] **Step 3: Small files**
 
 - `.env.example`: replace `VITE_API_URL=…` with nothing (delete the line and its comment); keep `HOST_UID`/`HOST_GID`.
-- `scripts/check-token-pin.mjs`: `CONSUMERS = ["dashboard/package.json"]`; replace `@kaleem/tokens` → `@etqan/tokens`, `kaleem-lms/tokens` → `Etqan-agency/etqan-tokens`.
+- `scripts/check-token-pin.mjs`: `CONSUMERS = ["dashboard/package.json"]`; replace `@kaleem/tokens` → `@etqan/tokens`, `kaleem-lms/tokens` → `Etqan-agency/etqan_tutor_tokens`.
 - `git rm -q .lighthouserc.json .github/workflows/lighthouse.yml .github/workflows/stripe-clock.yml`
 - `.github/dependabot.yml`: delete the marketing comment line.
 - `.github/copilot-instructions.md` and `.claude/commands/*.md`: `sed -i -e 's/\bKaleem\b/Etqan/g' -e 's/\bkaleem\b/etqan/g'`.

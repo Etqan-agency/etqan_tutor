@@ -20,7 +20,7 @@ _compose *args:
     if [ -z "$token" ]; then
       echo "ERROR: no GitHub token for the private @etqan/tokens package." >&2
       echo "Provide one (either works):" >&2
-      echo "  • export GH_TOKEN=<PAT with read access to Etqan-agency/etqan-tokens>   # most reliable" >&2
+      echo "  • export GH_TOKEN=<PAT with read access to Etqan-agency/etqan_tutor_tokens>   # most reliable" >&2
       echo "  • gh auth login                                                # unlocks the gh keyring, then retry" >&2
       exit 1
     fi

@@ -1,12 +1,12 @@
 [submodule "backend"]
 	path = backend
-	url = https://github.com/Etqan-agency/etqan-backend.git
+	url = https://github.com/Etqan-agency/etqan_tutor_backend.git
 [submodule "dashboard"]
 	path = dashboard
-	url = https://github.com/Etqan-agency/etqan-dashboard.git
+	url = https://github.com/Etqan-agency/etqan_tutor_dashboard.git
 [submodule "infra"]
 	path = infra
-	url = https://github.com/Etqan-agency/etqan-infra.git
+	url = https://github.com/Etqan-agency/etqan_tutor_infra.git
 [submodule "tokens"]
 	path = tokens
-	url = https://github.com/Etqan-agency/etqan-tokens.git
+	url = https://github.com/Etqan-agency/etqan_tutor_tokens.git
