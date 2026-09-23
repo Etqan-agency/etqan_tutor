@@ -1,5 +1,7 @@
-# Local stack. Every academy is http://<subdomain>.etqan.localhost (dashboard + /api on
-# the same host); http://etqan.localhost/admin/ is the Etqan staff console.
+# Local stack behind Caddy (caddy/Caddyfile.local). Every academy is
+# http://<subdomain>.etqan.localhost: the marketing site at /, the dashboard at
+# /app/, the API at /api/ — all same-origin. http://etqan.localhost/admin/ is
+# the Etqan staff console.
 x-uidgid: &uidgid
   UID: ${HOST_UID:-1000}
   GID: ${HOST_GID:-1000}
@@ -13,19 +15,13 @@ x-django-env: &django-env
   DJANGO_TENANT_URL_TEMPLATE: http://{domain}
 
 services:
-  traefik:
-    image: traefik:v3.6
-    command:
-      - --providers.docker=true
-      - --providers.docker.exposedbydefault=false
-      - --entrypoints.web.address=:80
-      - --api.insecure=true
-      - --api.dashboard=true
+  caddy:
+    image: caddy:2-alpine
     ports:
       - "80:80"
-      - "8080:8080"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./caddy/Caddyfile.local:/etc/caddy/Caddyfile:ro
+    depends_on: [django, dashboard, marketing]
 
   django:
     build: { context: ./backend, target: dev, args: *uidgid }
@@ -37,13 +33,6 @@ services:
     depends_on:
       postgres: { condition: service_healthy }
       redis: { condition: service_healthy }
-    labels:
-      - traefik.enable=true
-      # Academy API paths on any academy host, and the whole bare domain (staff admin).
-      - traefik.http.routers.api.rule=(HostRegexp(`^[a-z0-9-]+\.etqan\.localhost$`) && (PathPrefix(`/api`) || PathPrefix(`/accounts`) || PathPrefix(`/health`))) || Host(`etqan.localhost`)
-      - traefik.http.routers.api.priority=100
-      - traefik.http.routers.api.entrypoints=web
-      - traefik.http.services.api.loadbalancer.server.port=8000
 
   postgres:
     image: postgres:18-alpine
@@ -94,22 +83,10 @@ services:
     environment: *django-env
     depends_on:
       redis: { condition: service_healthy }
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.flower.rule=Host(`flower.etqan.localhost`)
-      - traefik.http.routers.flower.priority=200
-      - traefik.http.routers.flower.entrypoints=web
-      - traefik.http.services.flower.loadbalancer.server.port=5555
 
   mailpit:
     image: axllent/mailpit:latest
     ports: ["${ETQAN_MAIL_UI_PORT:-8025}:8025", "${ETQAN_SMTP_PORT:-1025}:1025"]
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.mail.rule=Host(`mail.etqan.localhost`)
-      - traefik.http.routers.mail.priority=200
-      - traefik.http.routers.mail.entrypoints=web
-      - traefik.http.services.mail.loadbalancer.server.port=8025
 
   dashboard:
     build:
@@ -122,16 +99,24 @@ services:
     volumes:
       - ./dashboard:/app
       - dashboard_node_modules:/app/node_modules
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.app.rule=HostRegexp(`^[a-z0-9-]+\.etqan\.localhost$`)
-      - traefik.http.routers.app.priority=10
-      - traefik.http.routers.app.entrypoints=web
-      - traefik.http.services.app.loadbalancer.server.port=5173
+
+  marketing:
+    build:
+      context: ./marketing
+      target: dev
+      args: *uidgid
+      secrets: [tokens_token]
+    environment:
+      - SITE_API_ORIGIN=http://django:8000
+      - SITE_SCHEME=http
+    volumes:
+      - ./marketing:/app
+      - marketing_node_modules:/app/node_modules
 
 volumes:
   postgres_data:
   dashboard_node_modules:
+  marketing_node_modules:
 
 secrets:
   tokens_token:

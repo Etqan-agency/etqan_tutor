@@ -13,12 +13,16 @@ Forked from Kaleem (history preserved); Kaleem's docs live in `docs/kaleem-archi
     just setup   # build, migrate all schemas, seed demo academies
     just dev
 
-- Academy: http://demo.etqan.localhost  (admin@demo.test / e2e-EtqanTest-2026)
-- Second academy: http://other.etqan.localhost  (admin@other.test)
+- Academy site: http://demo.etqan.localhost/
+- Academy dashboard: http://demo.etqan.localhost/app/  (admin@demo.test / e2e-EtqanTest-2026)
+- Second academy: http://other.etqan.localhost/ and /app/  (admin@other.test)
 - Etqan staff console: http://etqan.localhost/admin/  (`docker compose -f docker-compose.local.yml run --rm django python manage.py createsuperuser`)
 - Mail: http://mail.etqan.localhost
 
-If ports are taken, set ETQAN_*_PORT in .env.
+If ports are taken, set ETQAN_*_PORT in .env. Caddy (caddy/Caddyfile.local) is the
+edge on port 80: on every academy host `/api`, `/accounts`, `/health`, `/media` go to
+Django, `/app` to the dashboard, everything else to the marketing site. To try a custom
+domain, map it to 127.0.0.1 in /etc/hosts and register it for an academy.
 
 Create an academy from the CLI:
 

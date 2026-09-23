@@ -12,8 +12,18 @@ submodule pointers here.
 - django-tenants, one PostgreSQL schema per academy; `etqan.tenants.Academy` is the tenant.
 - SHARED_APPS migrate into `public`; TENANT_APPS into every academy. New business apps go
   in TENANT_APPS.
-- Academy host `<subdomain>.<TENANT_BASE_DOMAIN>` serves the dashboard and `/api/v1/`
-  same-origin. The bare domain serves only Django admin for Etqan staff.
+- Caddy is the edge (local `caddy/Caddyfile.local`, production `infra/caddy/Caddyfile`).
+  Every academy host (`<subdomain>.<TENANT_BASE_DOMAIN>` or a custom domain) is routed
+  by path, all same-origin:
+
+  | Path | Upstream |
+  |---|---|
+  | `/api/*`, `/accounts/*`, `/health/*`, `/media/*` | Django |
+  | `/app/*` | dashboard (Vite `base: "/app/"`) |
+  | everything else | marketing site (Astro, `marketing/`) |
+  | `/internal/*` | 404 — never reachable from outside Caddy |
+
+  The bare base domain serves only Django (admin for Etqan staff).
 - Migrate with `migrate_schemas`, never assume a single schema.
 - Background jobs must loop over academies explicitly (`tenant_context`).
 - Build any user-facing URL with `etqan.platform.frontend.frontend_url()`.

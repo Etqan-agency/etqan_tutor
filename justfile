@@ -43,13 +43,21 @@ setup:
 
 # ─── Development ──────────────────────────────────────────────
 
-# Bring up the entire stack in Docker, behind Traefik. Ctrl-C stops it.
-dev:
+# Bring up the entire stack in Docker, behind Caddy. Ctrl-C stops it.
+dev: _urls
     just _compose up
 
 # Bring up the stack detached
 dev-backend:
     just _compose up -d
+    @just _urls
+
+_urls:
+    @echo "Academy site:    http://demo.etqan.localhost/"
+    @echo "Dashboard:       http://demo.etqan.localhost/app/"
+    @echo "API:             http://demo.etqan.localhost/api/v1/"
+    @echo "Staff admin:     http://etqan.localhost/admin/"
+    @echo "Mail / Flower:   http://mail.etqan.localhost  http://flower.etqan.localhost"
 
 # Rebuild images (after dependency or Dockerfile changes)
 rebuild:

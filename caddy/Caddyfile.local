@@ -1,0 +1,46 @@
+# Local edge (docker-compose.local.yml). Every academy host is routed by path:
+#   /api /accounts /health /media /__debug__ → Django
+#   /app                                     → dashboard (Vite dev server)
+#   everything else                          → marketing site (Astro)
+# http://etqan.localhost is the Etqan staff admin; any other hostname mapped to
+# 127.0.0.1 in /etc/hosts is routed like an academy host (custom-domain testing).
+#
+# Caddy is the ONLY proxy hop in front of Django (REST_FRAMEWORK NUM_PROXIES=1).
+# No trusted_proxies is configured, so Caddy ignores any client-supplied
+# X-Forwarded-For/-Proto and sets them from the real connection. Keep it that way.
+{
+	auto_https off
+	admin off
+}
+
+(academy) {
+	@internal path /internal/*
+	respond @internal 404
+	@django path /api/* /accounts/* /health/* /media/* /__debug__/*
+	reverse_proxy @django django:8000
+	@app path /app /app/*
+	reverse_proxy @app dashboard:5173
+	reverse_proxy marketing:4321
+}
+
+http://etqan.localhost {
+	@internal path /internal/*
+	respond @internal 404
+	reverse_proxy django:8000
+}
+
+http://flower.etqan.localhost {
+	reverse_proxy flower:5555
+}
+
+http://mail.etqan.localhost {
+	reverse_proxy mailpit:8025
+}
+
+http://*.etqan.localhost {
+	import academy
+}
+
+http:// {
+	import academy
+}
