@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-23
 **Owner:** Etqan Agency (`Etqan-agency` GitHub org)
-**Status:** Approved in brainstorming, awaiting written-spec review
+**Status:** Approved. Amended by `2026-09-23-academy-sites-design.md` (public academy sites, branding, custom domains).
 **Inputs:** `PHASE_1_SYSTEM_AUDIT.md` (TutorHamster audit), `PHASE_2_SYSTEM_DESIGN.md` (full-parity design), the `kaleem-lms/Kaleem` codebase
 
 ---
@@ -31,7 +31,7 @@ It is deliberately **simple and CRUD-shaped**. Phase 2 describes full parity wit
 
 ### 1.2 Non-goals for v1
 
-Public academy signup; SaaS plan billing via a gateway; online student payments (Stripe/PayPal); built-in video; group sessions; family accounts; levels/curriculum progress; homework; certificates; wallets; trial-session pipeline (a trial is just a one-off session); recorded courses; consultations; CMS/marketing site; chat; AI features; fine-grained permission editor; feature-flag system; WhatsApp/SMS delivery; mobile app; data migration from any existing system.
+Public academy signup; SaaS plan billing via a gateway; online student payments (Stripe/PayPal); built-in video; group sessions; family accounts; levels/curriculum progress; homework; certificates; wallets; trial-session pipeline (a trial is just a one-off session); recorded courses; consultations; page builder (academy sites are a fixed template + rich-text pages — see the academy-sites spec); chat; AI features; fine-grained permission editor; feature-flag system; WhatsApp/SMS delivery; mobile app; data migration from any existing system.
 
 ---
 
