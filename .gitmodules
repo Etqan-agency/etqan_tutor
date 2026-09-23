@@ -10,3 +10,7 @@
 [submodule "tokens"]
 	path = tokens
 	url = https://github.com/Etqan-agency/etqan_tutor_tokens.git
+[submodule "marketing"]
+	path = marketing
+	url = https://github.com/Etqan-agency/etqan_tutor_marketing.git
+	branch = main
