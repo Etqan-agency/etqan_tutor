@@ -1,39 +1,32 @@
-# kaleem
+# etqan_tutor
 
-An LMS for teaching non-Arabic speakers Islamic sciences (Quran, Tafsir, Arabic language).
+Multi-academy tutoring operations SaaS by Etqan Agency. Each academy gets its own
+workspace (PostgreSQL schema + subdomain); academy admins manage students, teachers,
+subscriptions, schedules, sessions, billing and payroll.
+
+Forked from Kaleem (history preserved); Kaleem's docs live in `docs/kaleem-archive/`.
 
 ## Quick start
 
-```bash
-git clone --recursive <repo-url>
-cd kaleem
-just setup
-just dev
-```
+    git clone --recursive https://github.com/Etqan-agency/etqan_tutor.git
+    cd etqan_tutor
+    just setup   # build, migrate all schemas, seed demo academies
+    just dev
 
-- Backend API: http://localhost:8000
-- Dashboard: http://localhost:5173
-- Marketing: http://localhost:4321
-- Mailpit: http://localhost:8025
-- Django Admin: http://localhost:8000/admin/
+- Academy: http://demo.etqan.localhost  (admin@demo.test / e2e-EtqanTest-2026)
+- Second academy: http://other.etqan.localhost  (admin@other.test)
+- Etqan staff console: http://etqan.localhost/admin/  (`docker compose -f docker-compose.local.yml run --rm django python manage.py createsuperuser`)
+- Mail: http://mail.etqan.localhost
 
-## Project structure
+If ports are taken, set ETQAN_*_PORT in .env.
 
-| Directory | Purpose |
-| --- | --- |
-| `backend/` | Django + DRF modular monolith (submodule) |
-| `dashboard/` | React + TanStack authenticated app (submodule) |
-| `marketing/` | Astro marketing site (submodule) |
-| `infra/` | Docker, nginx, monitoring (submodule) |
-| `docs/` | Specs, ADRs, architecture, developer guide |
+Create an academy from the CLI:
 
-## Documentation
+    docker compose -f docker-compose.local.yml run --rm django \
+      python manage.py create_academy --name "Noor" --subdomain noor --admin-email admin@noor.test
 
-- [Architecture overview](docs/architecture/overview.md)
-- [Local setup](docs/developer-guide/local-setup.md)
-- [Full rebuild roadmap](docs/superpowers/specs/2026-04-11-rebuild-roadmap-design.md)
-- [Current state](STATE.md)
+## Docs
 
-## Commands
-
-Run `just` to see all available commands.
+- Product spec: `docs/superpowers/specs/2026-09-23-etqan-tutor-v1-design.md`
+- Plans: `docs/superpowers/plans/`
+- Source analysis: `docs/PHASE_1_SYSTEM_AUDIT.md`, `docs/PHASE_2_SYSTEM_DESIGN.md`

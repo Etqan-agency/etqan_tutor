@@ -1,4 +1,4 @@
-# justfile — kaleem task runner
+# justfile — etqan task runner
 # Run `just` to see all available commands.
 
 default:
@@ -7,7 +7,7 @@ default:
 # ─── Internal ─────────────────────────────────────────────────
 
 # docker compose with host UID/GID + a resolved GitHub token (for the private
-# @kaleem/tokens build secret). Prefers $GH_TOKEN, else the gh CLI (stripping
+# @etqan/tokens build secret). Prefers $GH_TOKEN, else the gh CLI (stripping
 # any empty GH_TOKEN/GITHUB_TOKEN that would otherwise shadow gh's keyring).
 # Fails fast with guidance if neither yields a token. Used by build/up recipes.
 _compose *args:
@@ -18,9 +18,9 @@ _compose *args:
       token="$(env -u GH_TOKEN -u GITHUB_TOKEN gh auth token 2>/dev/null || true)"
     fi
     if [ -z "$token" ]; then
-      echo "ERROR: no GitHub token for the private @kaleem/tokens package." >&2
+      echo "ERROR: no GitHub token for the private @etqan/tokens package." >&2
       echo "Provide one (either works):" >&2
-      echo "  • export GH_TOKEN=<PAT with read access to kaleem-lms/tokens>   # most reliable" >&2
+      echo "  • export GH_TOKEN=<PAT with read access to Etqan-agency/etqan_tutor_tokens>   # most reliable" >&2
       echo "  • gh auth login                                                # unlocks the gh keyring, then retry" >&2
       exit 1
     fi
@@ -69,15 +69,14 @@ stop:
 test: test-backend test-frontend check-boundaries
 
 # Backend tests (in container)
-# The --cov flags MUST match ci.yml exactly. `signaling/**` is inside the
-# coverage `include` in pyproject.toml, so omitting `--cov=signaling` here
-# measured a different set of files than the ratchet floor was set from and
-# `just test` failed at ~97.61 against a 97.7 floor -- on every machine, for
-# a reason nothing pointed at. Adding a measured package? Add it in both places.
+# The --cov flag MUST match the `backend` job in .github/workflows/ci.yml
+# exactly (--cov=etqan). A mismatch measures a different set of files than
+# the ratchet floor was set from, and `just test` fails against a floor
+# nothing pointed at. Changing the measured package? Change it in both places.
 test-backend:
     HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm \
-      -e DATABASE_URL=postgres://kaleem:kaleem@postgres:5432/kaleem \
-      django pytest -v --cov=kaleem --cov=signaling --cov-report=term-missing
+      -e DATABASE_URL=postgres://etqan:etqan@postgres:5432/etqan \
+      django pytest -v --cov=etqan --cov-report=term-missing
 
 # Frontend type check (in container)
 test-frontend:
@@ -85,7 +84,7 @@ test-frontend:
 
 # Escape hatch: run backend tests on the host (uses local .venv)
 test-backend-host:
-    cd backend && DATABASE_URL=postgres://kaleem:kaleem@localhost:5432/kaleem pytest -v --cov=kaleem --cov=signaling --cov-report=term-missing
+    cd backend && DATABASE_URL=postgres://etqan:etqan@localhost:${ETQAN_PG_PORT:-5432}/etqan pytest -v --cov=etqan --cov-report=term-missing
 
 # ─── Linting ──────────────────────────────────────────────────
 
@@ -105,36 +104,36 @@ check-boundaries:
 
 # Run Django migrations (inside the django container)
 migrate:
-    HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm django python manage.py migrate
+    HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm django python manage.py migrate_schemas
 
 # Open Django shell (inside the django container)
 shell:
     HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm django python manage.py shell_plus 2>/dev/null \
       || HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm django python manage.py shell
 
-# Reset DB and load seed data
+# Create the public tenant and the demo/other dev academies
 seed:
-    HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm django python manage.py seed basic
+    HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm django python manage.py seed_dev
 
 # ─── Infrastructure ───────────────────────────────────────────
 
 # Deploy to staging (placeholder)
 deploy:
-    @echo "Deploy runbook: see docs/runbook/deploy.md"
+    @echo "Deploy is not wired yet — see STATE.md"
 
 # Scaffold a new backend module
 new-module name:
-    @echo "Creating module kaleem/{{name}}..."
-    mkdir -p backend/kaleem/{{name}}/{api,tests}
-    touch backend/kaleem/{{name}}/__init__.py
-    touch backend/kaleem/{{name}}/apps.py
-    touch backend/kaleem/{{name}}/models.py
-    touch backend/kaleem/{{name}}/services.py
-    touch backend/kaleem/{{name}}/api/__init__.py
-    touch backend/kaleem/{{name}}/api/serializers.py
-    touch backend/kaleem/{{name}}/api/views.py
-    touch backend/kaleem/{{name}}/tests/__init__.py
+    @echo "Creating module etqan/{{name}}..."
+    mkdir -p backend/etqan/{{name}}/{api,tests}
+    touch backend/etqan/{{name}}/__init__.py
+    touch backend/etqan/{{name}}/apps.py
+    touch backend/etqan/{{name}}/models.py
+    touch backend/etqan/{{name}}/services.py
+    touch backend/etqan/{{name}}/api/__init__.py
+    touch backend/etqan/{{name}}/api/serializers.py
+    touch backend/etqan/{{name}}/api/views.py
+    touch backend/etqan/{{name}}/tests/__init__.py
     @echo "Module scaffolded. Remember to:"
-    @echo "  1. Add 'kaleem.{{name}}' to LOCAL_APPS in settings"
+    @echo "  1. Add 'etqan.{{name}}' to TENANT_APPS (and SHARED_APPS only if it must exist in public)"
     @echo "  2. Add import-linter contracts in pyproject.toml"
     @echo "  3. Create docs/architecture/{{name}}.md"

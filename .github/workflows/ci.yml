@@ -1,833 +1,141 @@
 name: CI
 
-# Trunk-based since ADR-0028: there is no `develop` branch, so every PR targets the
-# trunk and every check runs on the PR that introduces the change. `develop` was
-# briefly listed here (2026-09-03) because until then no `feat -> develop` PR ran CI
-# at all — the first check was the promotion, which was also the deploy. That is how
-# two full phases reached staging unverified. Removing the branch removed the problem.
 on:
   pull_request:
-    branches: [master, main]
   push:
-    branches: [master, main]
+    branches: [master]
 
-# On a PULL REQUEST, `head_ref` is the branch, so pushes to one branch share a
-# group and a superseded run is cancelled. On a PUSH, `head_ref` is EMPTY — the
-# old fallback was `run_id`, which is unique per run, so every master run got its
-# own group and two `deploy-staging` jobs could run against the same host at once.
-# That nearly happened on 2026-09-12 and was avoided by cancelling a run by hand.
-# `github.ref` is the correct fallback: all master runs then share one group.
-#
-# CANCELLATION IS DELIBERATELY OFF FOR PUSHES. Sharing a group is only half the
-# fix — with `cancel-in-progress: true`, a second merge would KILL a deploy
-# mid-flight, and `ship.sh` has a window where it has torn the old colour down
-# and not yet brought the new one up. That is the shape of the 2026-09-12
-# incident, which left `.active-color` empty. `false` makes the second run WAIT
-# instead, which is what serialising a deploy means.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  group: ci-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
-# The artifact lookup in `triage` reads the Actions API. Declaring permissions
-# explicitly also drops the token from the repo-default (write) to the least
-# set these jobs need; `deploy-staging` authenticates to GHCR and the VPS with
-# its own secrets, not with this token.
-permissions:
-  actions: read
-  contents: read
+env:
+  PYTHON_VERSION: "3.13"
+  NODE_VERSION: "22"
 
 jobs:
-  # One job, two questions, because a job skipped by `if:` also skips its
-  # dependents -- so a separate guard job would have to run on pull requests
-  # too, and GitHub bills a ONE MINUTE FLOOR per job. Merged, the guard is free.
-  triage:
+  backend:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
-    outputs:
-      # "false" iff every changed path is docs/** or a root *.md.
-      code: ${{ steps.classify.outputs.code }}
-      # "true" iff a green run already tested this exact git tree. EMPTY on a
-      # pull_request event, because the lookup step is skipped there --
-      # consumers must test `!= 'true'`, never `== 'false'`.
-      verified: ${{ steps.guard.outputs.verified }}
-    steps:
-      # fetch-depth 0: the classifier diffs `before..sha`, which the default
-      # shallow checkout cannot reach. No submodules: the classifier reads path
-      # names, and `git rev-parse HEAD^{tree}` reads the commit's tree object --
-      # which already contains the submodule gitlinks whether or not they are
-      # checked out.
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-
-      - name: Self-test the classifier
-        run: .github/scripts/test-classify-changes.sh
-
-      # On a pull_request, actions/checkout gives us the MERGE REF, so HEAD^1 is
-      # the base branch and HEAD is the merged result -- diffing those two is
-      # exactly the PR's net change, with no dependence on the event payload.
-      - name: Classify the change
-        id: classify
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            code="$(.github/scripts/classify-changes.sh HEAD^1 HEAD)"
-          else
-            code="$(.github/scripts/classify-changes.sh \
-              "${{ github.event.before }}" "${{ github.sha }}")"
-          fi
-          case "$code" in
-            true | false) ;;
-            *)
-              echo "::error::classifier emitted '$code', expected true or false"
-              exit 1
-              ;;
-          esac
-          echo "code=$code" >> "$GITHUB_OUTPUT"
-          echo "::notice::code=$code"
-
-      # A tree hash is content-addressed and includes submodule gitlinks, so a
-      # merge commit and the PR merge ref that produced it have the SAME tree --
-      # under merge, squash or rebase alike. If a green run recorded this tree,
-      # the gates have already run against this exact content.
-      - name: Look for a green run of this exact tree
-        id: guard
-        if: github.event_name == 'push'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          tree="$(git rev-parse HEAD^{tree})"
-          count="$(gh api \
-            "/repos/${{ github.repository }}/actions/artifacts?name=verified-tree-$tree" \
-            --jq '[.artifacts[] | select(.expired == false)] | length')"
-          if [ "$count" -gt 0 ]; then verified=true; else verified=false; fi
-          echo "verified=$verified" >> "$GITHUB_OUTPUT"
-          echo "::notice::tree=$tree verified=$verified"
-
-  backend-lint:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: triage
-    # `verified != 'true'` and not `== 'false'`: the guard step is skipped on
-    # pull_request events, so this output is the EMPTY STRING there, not "false".
-    #
-    # A Dependabot PR cannot read secrets.SUBMODULE_TOKEN, so every one of these
-    # jobs dies in `actions/checkout` -- six billed minutes to fail. It is not
-    # newly untested; it was never testable here. See the spec.
-    if: >-
-      needs.triage.outputs.code == 'true'
-      && needs.triage.outputs.verified != 'true'
-      && github.actor != 'dependabot[bot]'
-    defaults:
-      run:
-        working-directory: backend
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          submodules: recursive
-          token: ${{ secrets.SUBMODULE_TOKEN }}
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-      - name: Install dependencies
-        run: pip install -r requirements/local.txt
-      - name: Ruff check
-        run: ruff check .
-      - name: Ruff format check
-        run: ruff format --check .
-      - name: Import linter
-        run: lint-imports
-
-  backend-test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: triage
-    # `verified != 'true'` and not `== 'false'`: the guard step is skipped on
-    # pull_request events, so this output is the EMPTY STRING there, not "false".
-    #
-    # A Dependabot PR cannot read secrets.SUBMODULE_TOKEN, so every one of these
-    # jobs dies in `actions/checkout` -- six billed minutes to fail. It is not
-    # newly untested; it was never testable here. See the spec.
-    if: >-
-      needs.triage.outputs.code == 'true'
-      && needs.triage.outputs.verified != 'true'
-      && github.actor != 'dependabot[bot]'
     services:
       postgres:
         image: postgres:18-alpine
-        env:
-          POSTGRES_DB: kaleem_test
-          POSTGRES_USER: kaleem
-          POSTGRES_PASSWORD: kaleem
-        ports:
-          - 5432:5432
+        env: { POSTGRES_DB: etqan_test, POSTGRES_USER: etqan, POSTGRES_PASSWORD: etqan }
+        ports: ["5432:5432"]
         options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      redis:
-        image: redis:8-alpine
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-    defaults:
-      run:
-        working-directory: backend
+          --health-cmd "pg_isready -U etqan" --health-interval 5s --health-timeout 3s --health-retries 10
     env:
-      DATABASE_URL: postgres://kaleem:kaleem@localhost:5432/kaleem_test
-      CELERY_BROKER_URL: redis://localhost:6379/0
-      DJANGO_SETTINGS_MODULE: config.settings.test
+      DATABASE_URL: postgres://etqan:etqan@localhost:5432/etqan_test
+    defaults: { run: { working-directory: backend } }
     steps:
       - uses: actions/checkout@v7
-        with:
-          submodules: recursive
-          token: ${{ secrets.SUBMODULE_TOKEN }}
+        with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
       - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-      - name: Install dependencies
-        run: pip install -r requirements/local.txt
-      - name: Run migrations
-        run: python manage.py migrate --noinput
-      # D3 coverage gate. The floor lives in backend/pyproject.toml
-      # ([tool.coverage.report] fail_under), NOT here, so the gate runs
-      # identically on a developer's machine and on this runner. It is a ratchet
-      # floor set to the measured value, not the 100% target — see ADR-0026.
-      - name: Run tests with coverage
-        # --cov=kaleem --cov=signaling: signaling is a separate service in the
-        # same repo (ADR-0035) and must be inside the coverage gate, not beside
-        # it. Never a bare `--cov`: it falls back to the `include` filter and
-        # omits files no test imports, reading ~0.55 high -- which set a false
-        # floor once already (see pyproject.toml).
-        run: pytest --cov=kaleem --cov=signaling --cov-report=term-missing -v
+        with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip, cache-dependency-path: backend/requirements/*.txt }
+      - run: pip install -r requirements/local.txt
+      - run: ruff check . && ruff format --check .
+      - run: lint-imports
+      - run: pytest --create-db --cov=etqan -q
 
-  dashboard-lint:
+  dashboard:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    needs: triage
-    # `verified != 'true'` and not `== 'false'`: the guard step is skipped on
-    # pull_request events, so this output is the EMPTY STRING there, not "false".
-    #
-    # A Dependabot PR cannot read secrets.SUBMODULE_TOKEN, so every one of these
-    # jobs dies in `actions/checkout` -- six billed minutes to fail. It is not
-    # newly untested; it was never testable here. See the spec.
-    if: >-
-      needs.triage.outputs.code == 'true'
-      && needs.triage.outputs.verified != 'true'
-      && github.actor != 'dependabot[bot]'
-    defaults:
-      run:
-        working-directory: dashboard
+    defaults: { run: { working-directory: dashboard } }
     steps:
       - uses: actions/checkout@v7
-        with:
-          submodules: recursive
-          token: ${{ secrets.SUBMODULE_TOKEN }}
+        with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
       - uses: pnpm/action-setup@v6
-        with:
-          version: 10
+        with: { version: 10 }
       - uses: actions/setup-node@v6
-        with:
-          node-version: "22"
-          cache: "pnpm"
-          cache-dependency-path: dashboard/pnpm-lock.yaml
-      - name: Configure git auth for private @kaleem/tokens
+        with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: dashboard/pnpm-lock.yaml }
+      - name: Configure git auth for private @etqan/tokens
         run: |
-          # `--add` on the second line is load-bearing: `insteadOf` is a MULTI-valued
-          # key, but plain `git config` REPLACES rather than appends, so without it
-          # the second line silently discards the first and only the SSH form is
-          # authenticated. That was the state from June to 2026-09-12 and nothing
-          # caught it, because the lockfiles happened to record the SSH form
-          # (`git@github.com:...`). The first lockfile regenerated by a newer pnpm
-          # recorded `https://github.com/...` instead and three jobs died in
-          # `pnpm install` with a bare exit 128 against the private tokens repo.
           git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
           git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "git@github.com:"
-      # G3. A STEP, not a job: GitHub bills a one-minute floor per job, and this
-      # takes milliseconds. It runs from the repo root because it is the only
-      # place that can see BOTH the package pin and the tokens submodule -- which
-      # are independent, and whose drift ships the old palette while the tree
-      # looks coherent (audit finding T5, and again in the dev container on
-      # 2026-09-12).
+          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
+      - name: Fetch tokens submodule tags
+        working-directory: .
+        run: git -C tokens fetch --depth=1 --force origin "+refs/tags/*:refs/tags/*"
       - name: Token pin agrees with the submodule (G3)
         working-directory: .
         run: node scripts/check-token-pin.mjs
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      - name: TypeScript check
-        run: pnpm tsc --noEmit
-      # Until 2026-09-03 this job ran tsc ONLY: vitest, biome and coverage were
-      # never executed in CI at all, so D3 was unenforceable for the dashboard
-      # (see ADR-0026). Coverage thresholds live in dashboard/vitest.config.ts.
-      - name: Biome
-        run: pnpm lint
-      - name: Tests with coverage
-        run: pnpm test:coverage
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm tsc --noEmit
+      - run: pnpm lint
+      - run: pnpm test:coverage
+      - run: pnpm build
 
-  dashboard-build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: [triage, dashboard-lint]
-    # `verified != 'true'` and not `== 'false'`: the guard step is skipped on
-    # pull_request events, so this output is the EMPTY STRING there, not "false".
-    #
-    # A Dependabot PR cannot read secrets.SUBMODULE_TOKEN, so every one of these
-    # jobs dies in `actions/checkout` -- six billed minutes to fail. It is not
-    # newly untested; it was never testable here. See the spec.
-    if: >-
-      needs.triage.outputs.code == 'true'
-      && needs.triage.outputs.verified != 'true'
-      && github.actor != 'dependabot[bot]'
-    defaults:
-      run:
-        working-directory: dashboard
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          submodules: recursive
-          token: ${{ secrets.SUBMODULE_TOKEN }}
-      - uses: pnpm/action-setup@v6
-        with:
-          version: 10
-      - uses: actions/setup-node@v6
-        with:
-          node-version: "22"
-          cache: "pnpm"
-          cache-dependency-path: dashboard/pnpm-lock.yaml
-      - name: Configure git auth for private @kaleem/tokens
-        run: |
-          # `--add` on the second line is load-bearing: `insteadOf` is a MULTI-valued
-          # key, but plain `git config` REPLACES rather than appends, so without it
-          # the second line silently discards the first and only the SSH form is
-          # authenticated. That was the state from June to 2026-09-12 and nothing
-          # caught it, because the lockfiles happened to record the SSH form
-          # (`git@github.com:...`). The first lockfile regenerated by a newer pnpm
-          # recorded `https://github.com/...` instead and three jobs died in
-          # `pnpm install` with a bare exit 128 against the private tokens repo.
-          git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
-          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "git@github.com:"
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      - name: Build
-        run: pnpm build
-      # The BUILT stylesheet is the only artifact that cannot lie about what
-      # shipped. The source-side colour lint (G2, in `pnpm lint`) can only reject
-      # files it knows to read, and Tailwind v4 scans EVERY file it is given as
-      # text -- so a utility named in a comment becomes a real rule. That leak
-      # reached production CSS twice before this step existed, the second time
-      # from the colour lint's own doc comment. Milliseconds, in a job that has
-      # already built.
-      - name: No palette rules in the built CSS
-        run: node scripts/check-colors.mjs --built
-
-  # ADR-0021 has required end-to-end tests since 2026-06-17 and no harness existed
-  # until 2026-09-03; ADR-0026 recorded the clause as suspended in the meantime. This
-  # job un-suspends it for identity. It deliberately mirrors the ADR-0019 subdomain
-  # topology rather than serving both halves from localhost: cookies ignore ports, so
-  # `localhost:4173` + `localhost:8000` would share a session by accident and prove
-  # nothing about the cross-subdomain cookie that production actually depends on.
   e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    needs: triage
-    # `verified != 'true'` and not `== 'false'`: the guard step is skipped on
-    # pull_request events, so this output is the EMPTY STRING there, not "false".
-    #
-    # A Dependabot PR cannot read secrets.SUBMODULE_TOKEN, so every one of these
-    # jobs dies in `actions/checkout` -- six billed minutes to fail. It is not
-    # newly untested; it was never testable here. See the spec.
-    if: >-
-      needs.triage.outputs.code == 'true'
-      && needs.triage.outputs.verified != 'true'
-      && github.actor != 'dependabot[bot]'
     services:
       postgres:
         image: postgres:18-alpine
-        env:
-          POSTGRES_DB: kaleem_e2e
-          POSTGRES_USER: kaleem
-          POSTGRES_PASSWORD: kaleem
-        ports:
-          - 5432:5432
+        env: { POSTGRES_DB: etqan, POSTGRES_USER: etqan, POSTGRES_PASSWORD: etqan }
+        ports: ["5432:5432"]
         options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --health-cmd "pg_isready -U etqan" --health-interval 5s --health-timeout 3s --health-retries 10
+      # The cache is Redis in local settings; allauth's login rate limiting uses it.
       redis:
         image: redis:8-alpine
-        ports:
-          - 6379:6379
+        ports: ["6379:6379"]
         options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 3s --health-retries 10
     env:
-      DATABASE_URL: postgres://kaleem:kaleem@localhost:5432/kaleem_e2e
+      DATABASE_URL: postgres://etqan:etqan@localhost:5432/etqan
       CELERY_BROKER_URL: redis://localhost:6379/0
       DJANGO_SETTINGS_MODULE: config.settings.local
-      # No mailpit here; an unreachable SMTP host would turn an incidental send into
-      # a 500 rather than a no-op.
+      DJANGO_SECRET_KEY: ci-only
       DJANGO_EMAIL_BACKEND: django.core.mail.backends.locmem.EmailBackend
-      E2E_APP_URL: http://app.kaleem.localhost:4173
-      # C3d: the call e2e spec needs a real join URL, so this job runs the real
-      # SignalingProvider instead of the FakeVideoProvider default -- otherwise the
-      # browser gets a join_url pointing at the unresolvable https://video.kaleem.test
-      # and no WebSocket ever opens. DJANGO_SIGNALING_SECRET is a fixed, non-secret
-      # value shared with the signaling process started below (this is a throwaway CI
-      # database); if the two ever disagree every join fails authentication with a
-      # correct-looking token. DJANGO_SIGNALING_URL points at the ws.kaleem.localhost
-      # mapping added below.
-      DJANGO_VIDEO_PROVIDER: kaleem.scheduling.providers.signaling_provider.SignalingProvider
-      DJANGO_SIGNALING_SECRET: ci-test-signaling-secret
-      DJANGO_SIGNALING_URL: ws://ws.kaleem.localhost:9000
-      # SignalingProvider fails closed (ImproperlyConfigured) without both TURN
-      # values, so they must be set -- but there is no TURN server in CI and there
-      # should not be one: the test's two peers are on the same host and connect
-      # over host candidates, never touching a relay. These values only need to be
-      # well-formed and non-empty for credential minting to succeed; their presence
-      # here is not a claim that CI exercises the TURN relay (it doesn't -- see the
-      # D3 e2e table and the C3d spec).
-      DJANGO_TURN_SECRET: ci-test-turn-secret
-      DJANGO_TURN_URLS: turn:127.0.0.1:3478
+      DJANGO_TENANT_URL_TEMPLATE: http://{domain}:4173
     steps:
       - uses: actions/checkout@v7
-        with:
-          submodules: recursive
-          token: ${{ secrets.SUBMODULE_TOKEN }}
-
-      - name: Map the kaleem.localhost subdomains
-        run: |
-          echo "127.0.0.1 app.kaleem.localhost api.kaleem.localhost ws.kaleem.localhost" | sudo tee -a /etc/hosts
-
+        with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
       - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
+        with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip, cache-dependency-path: backend/requirements/*.txt }
       - uses: pnpm/action-setup@v6
-        with:
-          version: 10
+        with: { version: 10 }
       - uses: actions/setup-node@v6
-        with:
-          node-version: "22"
-          cache: "pnpm"
-          cache-dependency-path: dashboard/pnpm-lock.yaml
-      - name: Configure git auth for private @kaleem/tokens
+        with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: dashboard/pnpm-lock.yaml }
+      - name: Configure git auth for private @etqan/tokens
         run: |
-          # `--add` on the second line is load-bearing: `insteadOf` is a MULTI-valued
-          # key, but plain `git config` REPLACES rather than appends, so without it
-          # the second line silently discards the first and only the SSH form is
-          # authenticated. That was the state from June to 2026-09-12 and nothing
-          # caught it, because the lockfiles happened to record the SSH form
-          # (`git@github.com:...`). The first lockfile regenerated by a newer pnpm
-          # recorded `https://github.com/...` instead and three jobs died in
-          # `pnpm install` with a bare exit 128 against the private tokens repo.
           git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
           git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "git@github.com:"
-
-      - name: Install backend dependencies
-        working-directory: backend
-        run: pip install -r requirements/local.txt
-      - name: Migrate and seed
+          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
+      - name: Backend up with seeded academies
         working-directory: backend
         run: |
-          python manage.py migrate --noinput
-          python manage.py seed_e2e
-          python manage.py seed_e2e_matching
-      - name: Start the API
-        working-directory: backend
-        run: |
-          nohup python manage.py runserver api.kaleem.localhost:8000 --noreload \
-            > /tmp/django.log 2>&1 &
-      - name: Wait for the API
-        run: |
-          for _ in $(seq 1 60); do
-            curl -sf -o /dev/null http://api.kaleem.localhost:8000/health/ready/ && exit 0
-            sleep 2
-          done
-          echo "::error::API never became ready"; cat /tmp/django.log; exit 1
-
-      # C3d: the signaling service (backend/signaling/app.py) is its own ASGI
-      # deployable, importing no Django (ADR-0035), normally run as
-      # `uvicorn signaling.app:app`. `--log-config` is not optional here either --
-      # without it uvicorn logs every handshake's raw query string, and this repo
-      # is public, so the same redaction production relies on applies in CI.
-      - name: Start signaling
-        working-directory: backend
-        run: |
-          nohup uvicorn signaling.app:app --host 0.0.0.0 --port 9000 \
-            --log-config signaling/logconf.json \
-            > /tmp/signaling.log 2>&1 &
-      - name: Wait for signaling
-        run: |
-          for _ in $(seq 1 60); do
-            curl -sf -o /dev/null http://ws.kaleem.localhost:9000/health/live/ && exit 0
-            sleep 2
-          done
-          echo "::error::Signaling never became ready"; cat /tmp/signaling.log; exit 1
-
-      - name: Install dashboard dependencies
-        working-directory: dashboard
-        run: pnpm install --frozen-lockfile
-      - name: Build the dashboard
-        working-directory: dashboard
-        env:
-          VITE_API_URL: http://api.kaleem.localhost:8000/api/v1/
-        run: pnpm build
-      - name: Serve the built dashboard
+          pip install -r requirements/local.txt
+          python manage.py migrate_schemas --shared
+          python manage.py seed_dev
+          nohup python manage.py runserver 127.0.0.1:8000 > /tmp/django.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf -H "Host: etqan.localhost" http://127.0.0.1:8000/health/live/ && break; sleep 1; done
+          curl -sf -H "Host: etqan.localhost" http://127.0.0.1:8000/health/live/ >/dev/null || { echo "backend did not start"; cat /tmp/django.log; exit 1; }
+      - name: Dashboard preview + Playwright
         working-directory: dashboard
         run: |
-          nohup pnpm preview --host app.kaleem.localhost --port 4173 \
-            > /tmp/preview.log 2>&1 &
-      - name: Wait for the dashboard
-        run: |
-          for _ in $(seq 1 60); do
-            curl -sf -o /dev/null http://app.kaleem.localhost:4173/ && exit 0
-            sleep 2
-          done
-          echo "::error::Dashboard never became ready"; cat /tmp/preview.log; exit 1
+          pnpm install --frozen-lockfile
+          pnpm build
+          nohup pnpm preview > /tmp/preview.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          curl -sf http://127.0.0.1:4173/ >/dev/null || { echo "dashboard preview did not start"; cat /tmp/preview.log; exit 1; }
+          pnpm exec playwright install --with-deps chromium
+          pnpm e2e
+      - if: failure()
+        run: tail -n 200 /tmp/django.log /tmp/preview.log
 
-      - name: Install Playwright chromium
-        working-directory: dashboard
-        run: pnpm exec playwright install --with-deps chromium
-      - name: Run e2e
-        working-directory: dashboard
-        run: pnpm e2e
-
-      # A red e2e job with no artefact is a guessing game.
-      - name: Upload the Playwright report
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: |
-            dashboard/playwright-report/
-            dashboard/test-results/
-            /tmp/django.log
-            /tmp/signaling.log
-            /tmp/preview.log
-          retention-days: 7
-
-  # ADR-0030. The Definition of Done has asked for a security pass since 2026-06-17
-  # and nothing ever ran one: `pip-audit`, `semgrep`, `trivy` and `gitleaks`-as-CI were
-  # all absent, so the gate was satisfied by a human saying "reviewed manually" at
-  # handoff. The first execution of this job found live credentials in this repo's
-  # history (see `.gitleaksignore`) and a stray Stripe portal secret in a committed
-  # Playwright dump. Same shape as the coverage and e2e gates before ADR-0026/0027.
   security:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: triage
-    # `verified != 'true'` and not `== 'false'`: the guard step is skipped on
-    # pull_request events, so this output is the EMPTY STRING there, not "false".
-    #
-    # A Dependabot PR cannot read secrets.SUBMODULE_TOKEN, so every one of these
-    # jobs dies in `actions/checkout` -- six billed minutes to fail. It is not
-    # newly untested; it was never testable here. See the spec.
-    #
-    # THIS JOB DELIBERATELY OMITS THE `code == 'true'` CLAUSE that every other
-    # gate carries. ADR-0038 skips the gates on documentation-only changes, and
-    # root `*.md` counts as documentation -- which is the exact shape of this
-    # project's one previous leak (`portal-snapshot.md`, a root-level `.md`,
-    # caught by the very first `security` run). Skipping the secret scan until
-    # the next code PR is an unbounded window for the one file shape that has
-    # actually leaked here. The `verified` clause stays: a tree already proven
-    # green has already been scanned.
-    #
-    # The cost is one job per docs PR. This repo's net Actions spend is
-    # $0.00/month against a real invoice (ADR-0038 Correction), so the trade is
-    # not close.
-    if: >-
-      needs.triage.outputs.verified != 'true'
-      && github.actor != 'dependabot[bot]'
     steps:
       - uses: actions/checkout@v7
-        with:
-          submodules: recursive
-          token: ${{ secrets.SUBMODULE_TOKEN }}
-          # gitleaks git-mode scans commits; the default shallow checkout would give
-          # it exactly one to look at.
-          fetch-depth: 0
-
-      # Known historical findings are allowlisted by fingerprint in `.gitleaksignore`,
-      # one annotated line each, so a NEW secret in a NEW commit still fails here.
-      # The image is pinned: an unpinned scanner changes what "green" means without a
-      # commit.
+        with: { fetch-depth: 0, submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
+      # Pinned image: an unpinned scanner changes what "green" means without a
+      # commit. Known historical findings are allowlisted by fingerprint in
+      # .gitleaksignore, so a NEW secret in a NEW commit still fails here.
       - name: Gitleaks — meta repo history
         run: |
           docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.30.1 \
             git /repo --redact --no-banner --exit-code 1
-
-      # Directory mode covers the submodule working trees — the code the deploy is
-      # actually built from — which the history scan above cannot see. Submodule
-      # *histories* are covered only by their own pre-commit hooks (ADR-0030, known gap).
+      # Directory mode covers the submodule working trees, which the history
+      # scan above cannot see (submodule histories are a known gap).
       - name: Gitleaks — checked-out tree, submodules included
         run: |
           docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.30.1 \
             dir /repo --redact --no-banner --exit-code 1
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-
-      # Production dependencies only, installed into their own venv so pip-audit's own
-      # dependency tree is not part of what is audited. A CVE in `pytest` cannot reach
-      # a user, and a gate that goes red for something harmless is a gate people learn
-      # to click past.
-      - name: Install the production dependency set
-        working-directory: backend
-        run: |
-          python -m venv /tmp/prodenv
-          /tmp/prodenv/bin/pip install --quiet -r requirements/production.txt
-          pip install --quiet pip-audit
-      - name: pip-audit
-        run: pip-audit --progress-spinner off --path /tmp/prodenv/lib/python3.13/site-packages
-
-  # Publishes "these gates went green against this exact content" so the push
-  # that merges this PR does not have to prove it again.
-  #
-  # No submodules and no token: `git rev-parse HEAD^{tree}` reads the commit's
-  # tree object, which already carries the submodule gitlinks whether or not
-  # they are checked out. Checking them out would produce the same hash more
-  # slowly.
-  record-verified-tree:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    needs:
-      [
-        triage,
-        backend-lint,
-        backend-test,
-        dashboard-lint,
-        dashboard-build,
-        e2e,
-        marketing-build,
-        security,
-      ]
-    # Deliberately NOT `!cancelled()`: unlike deploy-staging, this job must run
-    # only when every gate actually ran and passed. A skipped gate means this
-    # tree was never fully proved, so recording it would let a later push skip
-    # gates on the strength of a run that did not perform them.
-    if: >-
-      github.event_name == 'pull_request'
-      && needs.triage.outputs.code == 'true'
-    steps:
-      - uses: actions/checkout@v7
-
-      - name: Compute the tree this run proved
-        id: tree
-        run: |
-          tree="$(git rev-parse HEAD^{tree})"
-          echo "$tree" > verified-tree.txt
-          echo "tree=$tree" >> "$GITHUB_OUTPUT"
-          echo "::notice::recording verified tree $tree"
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: verified-tree-${{ steps.tree.outputs.tree }}
-          path: verified-tree.txt
-          retention-days: 7
-
-  marketing-build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: triage
-    # `verified != 'true'` and not `== 'false'`: the guard step is skipped on
-    # pull_request events, so this output is the EMPTY STRING there, not "false".
-    #
-    # A Dependabot PR cannot read secrets.SUBMODULE_TOKEN, so every one of these
-    # jobs dies in `actions/checkout` -- six billed minutes to fail. It is not
-    # newly untested; it was never testable here. See the spec.
-    if: >-
-      needs.triage.outputs.code == 'true'
-      && needs.triage.outputs.verified != 'true'
-      && github.actor != 'dependabot[bot]'
-    defaults:
-      run:
-        working-directory: marketing
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          submodules: recursive
-          token: ${{ secrets.SUBMODULE_TOKEN }}
-      - uses: pnpm/action-setup@v6
-        with:
-          version: 10
-      - uses: actions/setup-node@v6
-        with:
-          node-version: "22"
-          cache: "pnpm"
-          cache-dependency-path: marketing/pnpm-lock.yaml
-      - name: Configure git auth for private @kaleem/tokens
-        run: |
-          # `--add` on the second line is load-bearing: `insteadOf` is a MULTI-valued
-          # key, but plain `git config` REPLACES rather than appends, so without it
-          # the second line silently discards the first and only the SSH form is
-          # authenticated. That was the state from June to 2026-09-12 and nothing
-          # caught it, because the lockfiles happened to record the SSH form
-          # (`git@github.com:...`). The first lockfile regenerated by a newer pnpm
-          # recorded `https://github.com/...` instead and three jobs died in
-          # `pnpm install` with a bare exit 128 against the private tokens repo.
-          git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
-          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "git@github.com:"
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      # `astro build` does NOT type-check, which marketing/src/layouts/Layout.astro
-      # documented by experiment and this job made true for three months: it ran
-      # build only. Re-verified 2026-09-12 in both directions -- with a bogus prop
-      # on <Layout>, `astro build` still exits 0 while `astro check` reports the
-      # ts(2322). It catches TypeScript and template errors; it says NOTHING about
-      # the palette (ADR-0040).
-      - name: Type-check
-        run: pnpm check
-      - name: Build
-        run: pnpm build
-
-  deploy-staging:
-    needs:
-      [
-        triage,
-        backend-lint,
-        backend-test,
-        dashboard-lint,
-        dashboard-build,
-        e2e,
-        marketing-build,
-        security,
-      ]
-    # `!cancelled()` opts out of the default "all needs succeeded" rule, which
-    # would treat a deliberately SKIPPED gate as a reason not to deploy. The
-    # explicit failure check is what still stops a red gate reaching staging.
-    # `triage` itself is never skipped, so `code` is always readable here.
-    #
-    # `'cancelled'` is checked separately from `!cancelled()` because that builtin
-    # is a workflow-run-level signal, false only when the whole run is cancelled --
-    # it does NOT cover a single job being killed by its own `timeout-minutes`
-    # (added in this same change). A job timed out on its own reports 'cancelled'
-    # in needs.*.result, so without this clause a hung backend-test could be
-    # killed at its 10-minute cap and deploy-staging would still ship a tree
-    # whose test suite never finished. A deliberately skipped gate is always
-    # 'skipped', never 'cancelled', so this clause cannot cause a false block.
-    #
-    # The actor clause exists because the seven gates skip for
-    # `github.actor == 'dependabot[bot]'` -- without it, a Dependabot-authored
-    # PR merged by Dependabot itself (`@dependabot merge` / auto-merge) would
-    # push to master with every gate skipped and still deploy, ungated.
-    if: >-
-      !cancelled()
-      && !contains(needs.*.result, 'failure')
-      && !contains(needs.*.result, 'cancelled')
-      && github.ref == 'refs/heads/master'
-      && github.event_name == 'push'
-      && github.actor != 'dependabot[bot]'
-      && needs.triage.outputs.code == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          submodules: recursive
-          token: ${{ secrets.SUBMODULE_TOKEN }}
-
-      - name: Set short SHA
-        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
-
-      - name: Log in to GHCR
-        run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Build backend image
-        run: |
-          docker build \
-            -f backend/Dockerfile \
-            --target production \
-            -t ghcr.io/kaleem-lms/backend:${{ env.SHORT_SHA }} \
-            -t ghcr.io/kaleem-lms/backend:latest \
-            backend/
-
-      - name: Push backend image
-        run: |
-          docker push ghcr.io/kaleem-lms/backend:${{ env.SHORT_SHA }}
-          docker push ghcr.io/kaleem-lms/backend:latest
-
-      - name: Build dashboard image
-        env:
-          DOCKER_BUILDKIT: "1"
-          TOKENS_REPO_TOKEN: ${{ secrets.TOKENS_REPO_TOKEN }}
-        run: |
-          docker build \
-            -f dashboard/Dockerfile \
-            --target production \
-            --secret id=tokens_token,env=TOKENS_REPO_TOKEN \
-            --build-arg VITE_API_URL=https://api-staging.kaleem.academy/api/v1/ \
-            -t ghcr.io/kaleem-lms/dashboard:${{ env.SHORT_SHA }} \
-            -t ghcr.io/kaleem-lms/dashboard:latest \
-            dashboard/
-
-      - name: Push dashboard image
-        run: |
-          docker push ghcr.io/kaleem-lms/dashboard:${{ env.SHORT_SHA }}
-          docker push ghcr.io/kaleem-lms/dashboard:latest
-
-      - name: Build marketing image
-        env:
-          DOCKER_BUILDKIT: "1"
-          TOKENS_REPO_TOKEN: ${{ secrets.TOKENS_REPO_TOKEN }}
-        run: |
-          docker build \
-            -f marketing/Dockerfile \
-            --target production \
-            --secret id=tokens_token,env=TOKENS_REPO_TOKEN \
-            -t ghcr.io/kaleem-lms/marketing:${{ env.SHORT_SHA }} \
-            -t ghcr.io/kaleem-lms/marketing:latest \
-            marketing/
-
-      - name: Push marketing image
-        run: |
-          docker push ghcr.io/kaleem-lms/marketing:${{ env.SHORT_SHA }}
-          docker push ghcr.io/kaleem-lms/marketing:latest
-
-      # Push the current infra config to the VPS BEFORE running ship.sh.
-      # Without this, compose-topology / ship.sh changes (e.g. new services)
-      # never reach /opt/kaleem — only the rebuilt image is delivered.
-      # .env.production is intentionally NOT synced: it holds secrets and is
-      # managed on the VPS.
-      # scp-action v1 is a composite action, not the Docker action v0.1.x was:
-      # it curl-downloads the drone-scp binary onto the runner at deploy time,
-      # unpinned by checksum (ISSUES.md). Every input below survived the switch
-      # unchanged, and its entrypoint is `set -euo pipefail` with `curl -f`, so a
-      # missing source file still fails the deploy loudly.
-      - name: Sync infra config to staging
-        uses: appleboy/scp-action@v1.0.0
-        with:
-          host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.STAGING_USER }}
-          key: ${{ secrets.STAGING_SSH_KEY }}
-          # coturn/turnserver.conf is NOT optional here. The compose file bind-mounts
-          # it; if the file is absent on the VPS, Docker silently creates an empty
-          # DIRECTORY at that path and mounts it, so coturn starts with none of its
-          # hardening — no deny-list, no quotas — which is an unfenced relay reachable
-          # on raw UDP: an SSRF pivot into the private network and a DDoS amplifier.
-          source: "infra/docker-compose.production.yml,infra/scripts/ship.sh,infra/traefik/traefik.yml,infra/coturn/turnserver.conf"
-          target: /opt/kaleem
-          strip_components: 1
-          # /opt/kaleem already holds hand-provisioned copies; replace them with
-          # the repo version (default is false, which makes tar refuse to extract
-          # over existing files: "Cannot open: File exists").
-          overwrite: true
-
-      - name: Deploy to staging via SSH
-        uses: appleboy/ssh-action@v1.2.5
-        with:
-          host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.STAGING_USER }}
-          key: ${{ secrets.STAGING_SSH_KEY }}
-          envs: SHORT_SHA
-          script: |
-            echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            cd /opt/kaleem
-            export DEPLOY_SHA=$SHORT_SHA
-            bash scripts/ship.sh $SHORT_SHA

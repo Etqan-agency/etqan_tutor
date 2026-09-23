@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * G3 — the `@kaleem/tokens` pin must agree with the `tokens` submodule.
+ * G3 — the `@etqan/tokens` pin must agree with the `tokens` submodule.
  *
  * THESE ARE INDEPENDENT, and that is the trap. pnpm installs the package from
  * its git URL at the ref in package.json; the submodule checkout exists only so
@@ -25,7 +25,7 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
-const CONSUMERS = ["dashboard/package.json", "marketing/package.json"];
+const CONSUMERS = ["dashboard/package.json"];
 const fail = (msg) => {
 	console.error(`\n${msg}\n`);
 	process.exit(1);
@@ -37,18 +37,18 @@ const git = (args) =>
 const pins = new Map();
 for (const file of CONSUMERS) {
 	const pkg = JSON.parse(readFileSync(file, "utf8"));
-	const ref = { ...pkg.dependencies, ...pkg.devDependencies }["@kaleem/tokens"];
-	if (!ref) fail(`${file} does not depend on @kaleem/tokens at all.`);
+	const ref = { ...pkg.dependencies, ...pkg.devDependencies }["@etqan/tokens"];
+	if (!ref) fail(`${file} does not depend on @etqan/tokens at all.`);
 	if (ref.startsWith("link:") || ref.startsWith("file:")) {
 		fail(
-			`${file} pins @kaleem/tokens to "${ref}".\n` +
+			`${file} pins @etqan/tokens to "${ref}".\n` +
 				`That is the local-iteration override and must never be committed: it\n` +
 				`resolves to no tag, so CI and the Docker build install whatever is on\n` +
 				`disk. Re-pin to a tag before merging.`,
 		);
 	}
-	if (JSON.stringify(pkg.pnpm ?? {}).includes("@kaleem/tokens")) {
-		fail(`${file} carries a pnpm override for @kaleem/tokens. Remove it.`);
+	if (JSON.stringify(pkg.pnpm ?? {}).includes("@etqan/tokens")) {
+		fail(`${file} carries a pnpm override for @etqan/tokens. Remove it.`);
 	}
 	pins.set(file, ref);
 }
@@ -56,7 +56,7 @@ for (const file of CONSUMERS) {
 const refs = new Set(pins.values());
 if (refs.size !== 1) {
 	fail(
-		`Consumers disagree on the @kaleem/tokens ref — a half-done bump:\n` +
+		`Consumers disagree on the @etqan/tokens ref — a half-done bump:\n` +
 			[...pins].map(([f, r]) => `  ${f}  ${r}`).join("\n") +
 			`\nBoth surfaces share one palette; one of them is rendering a different one.`,
 	);
@@ -64,14 +64,14 @@ if (refs.size !== 1) {
 
 const ref = [...refs][0];
 const tag = ref.split("#")[1];
-if (!tag) fail(`@kaleem/tokens is pinned to "${ref}" with no #tag.`);
+if (!tag) fail(`@etqan/tokens is pinned to "${ref}" with no #tag.`);
 
 let tagged;
 try {
 	tagged = git(["-C", "tokens", "rev-parse", `${tag}^{commit}`]);
 } catch {
 	fail(
-		`The consumers pin @kaleem/tokens#${tag}, but that tag does not exist in\n` +
+		`The consumers pin @etqan/tokens#${tag}, but that tag does not exist in\n` +
 			`the tokens submodule. Push the tag, or fix the pin.`,
 	);
 }

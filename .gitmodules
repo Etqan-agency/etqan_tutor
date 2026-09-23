@@ -1,15 +1,12 @@
 [submodule "backend"]
 	path = backend
-	url = https://github.com/kaleem-lms/backend.git
+	url = https://github.com/Etqan-agency/etqan_tutor_backend.git
 [submodule "dashboard"]
 	path = dashboard
-	url = https://github.com/kaleem-lms/dashboard.git
-[submodule "marketing"]
-	path = marketing
-	url = https://github.com/kaleem-lms/marketing.git
+	url = https://github.com/Etqan-agency/etqan_tutor_dashboard.git
 [submodule "infra"]
 	path = infra
-	url = https://github.com/kaleem-lms/infra.git
+	url = https://github.com/Etqan-agency/etqan_tutor_infra.git
 [submodule "tokens"]
 	path = tokens
-	url = https://github.com/kaleem-lms/tokens.git
+	url = https://github.com/Etqan-agency/etqan_tutor_tokens.git
