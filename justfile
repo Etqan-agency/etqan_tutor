@@ -119,7 +119,7 @@ seed:
 
 # Deploy to staging (placeholder)
 deploy:
-    @echo "Deploy runbook: see docs/runbook/deploy.md"
+    @echo "Deploy is not wired yet — see STATE.md"
 
 # Scaffold a new backend module
 new-module name:

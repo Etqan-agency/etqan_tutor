@@ -27,7 +27,7 @@ jobs:
       DATABASE_URL: postgres://etqan:etqan@localhost:5432/etqan_test
     defaults: { run: { working-directory: backend } }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
       - uses: actions/setup-python@v5
         with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip, cache-dependency-path: backend/requirements/*.txt }
@@ -40,14 +40,20 @@ jobs:
     runs-on: ubuntu-latest
     defaults: { run: { working-directory: dashboard } }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with: { version: 10 }
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: dashboard/pnpm-lock.yaml }
-      - run: git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
-      - run: node ../scripts/check-token-pin.mjs
+      - name: Configure git auth for private @etqan/tokens
+        run: |
+          git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "git@github.com:"
+          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
+      - name: Token pin agrees with the submodule (G3)
+        working-directory: .
+        run: node scripts/check-token-pin.mjs
       - run: pnpm install --frozen-lockfile
       - run: pnpm tsc --noEmit
       - run: pnpm lint
@@ -77,15 +83,19 @@ jobs:
       DJANGO_EMAIL_BACKEND: django.core.mail.backends.locmem.EmailBackend
       DJANGO_TENANT_URL_TEMPLATE: http://{domain}:4173
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
       - uses: actions/setup-python@v5
         with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip, cache-dependency-path: backend/requirements/*.txt }
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with: { version: 10 }
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: dashboard/pnpm-lock.yaml }
-      - run: git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
+      - name: Configure git auth for private @etqan/tokens
+        run: |
+          git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "git@github.com:"
+          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
       - name: Backend up with seeded academies
         working-directory: backend
         run: |
@@ -94,6 +104,7 @@ jobs:
           python manage.py seed_dev
           nohup python manage.py runserver 127.0.0.1:8000 > /tmp/django.log 2>&1 &
           for i in $(seq 1 30); do curl -sf -H "Host: etqan.localhost" http://127.0.0.1:8000/health/live/ && break; sleep 1; done
+          curl -sf -H "Host: etqan.localhost" http://127.0.0.1:8000/health/live/ >/dev/null || { echo "backend did not start"; cat /tmp/django.log; exit 1; }
       - name: Dashboard preview + Playwright
         working-directory: dashboard
         run: |
@@ -101,6 +112,7 @@ jobs:
           pnpm build
           nohup pnpm preview > /tmp/preview.log 2>&1 &
           for i in $(seq 1 30); do curl -sf http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          curl -sf http://127.0.0.1:4173/ >/dev/null || { echo "dashboard preview did not start"; cat /tmp/preview.log; exit 1; }
           pnpm exec playwright install --with-deps chromium
           pnpm e2e
       - if: failure()
@@ -109,7 +121,18 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: { fetch-depth: 0, submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
-      - uses: gitleaks/gitleaks-action@v2
-        env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+      # Pinned image: an unpinned scanner changes what "green" means without a
+      # commit. Known historical findings are allowlisted by fingerprint in
+      # .gitleaksignore, so a NEW secret in a NEW commit still fails here.
+      - name: Gitleaks — meta repo history
+        run: |
+          docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.30.1 \
+            git /repo --redact --no-banner --exit-code 1
+      # Directory mode covers the submodule working trees, which the history
+      # scan above cannot see (submodule histories are a known gap).
+      - name: Gitleaks — checked-out tree, submodules included
+        run: |
+          docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.30.1 \
+            dir /repo --redact --no-banner --exit-code 1
