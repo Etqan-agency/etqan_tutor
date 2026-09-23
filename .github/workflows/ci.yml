@@ -63,6 +63,53 @@ jobs:
       - run: pnpm test:coverage
       - run: pnpm build
 
+  marketing:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: marketing } }
+    steps:
+      - uses: actions/checkout@v7
+        with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
+      - uses: pnpm/action-setup@v6
+        with: { version: 10 }
+      - uses: actions/setup-node@v6
+        with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: marketing/pnpm-lock.yaml }
+      - name: Configure git auth for private @etqan/tokens
+        run: |
+          git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "git@github.com:"
+          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
+      - name: Fetch tokens submodule tags
+        working-directory: .
+        run: git -C tokens fetch --depth=1 --force origin "+refs/tags/*:refs/tags/*"
+      - name: Token pin agrees with the submodule (G3)
+        working-directory: .
+        run: node scripts/check-token-pin.mjs
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm lint
+      - run: pnpm test:coverage
+      - run: pnpm build
+
+  caddy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
+      - name: Validate the local and e2e Caddyfiles
+        run: |
+          for f in caddy/Caddyfile.local caddy/Caddyfile.e2e; do
+            docker run --rm -v "$PWD/$f:/etc/caddy/Caddyfile:ro" caddy:2.11.4-alpine \
+              caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile || exit 1
+          done
+      # The production image bakes in infra/caddy/Caddyfile and the cloudflare DNS
+      # module. The token only has to be well-formed (40 chars) to provision.
+      - name: Validate the production Caddyfile (infra)
+        run: |
+          docker build -t etqan-edge infra/caddy
+          docker run --rm -e BASE_DOMAIN=example.com -e ACME_EMAIL=ci@example.com \
+            -e CF_API_TOKEN=0000000000000000000000000000000000000000 etqan-edge \
+            caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+
   e2e:
     runs-on: ubuntu-latest
     services:
@@ -84,7 +131,7 @@ jobs:
       DJANGO_SETTINGS_MODULE: config.settings.local
       DJANGO_SECRET_KEY: ci-only
       DJANGO_EMAIL_BACKEND: django.core.mail.backends.locmem.EmailBackend
-      DJANGO_TENANT_URL_TEMPLATE: http://{domain}:4173
+      DJANGO_TENANT_URL_TEMPLATE: http://{domain}
     steps:
       - uses: actions/checkout@v7
         with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
@@ -93,7 +140,7 @@ jobs:
       - uses: pnpm/action-setup@v6
         with: { version: 10 }
       - uses: actions/setup-node@v6
-        with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: dashboard/pnpm-lock.yaml }
+        with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: "dashboard/pnpm-lock.yaml\nmarketing/pnpm-lock.yaml" }
       - name: Configure git auth for private @etqan/tokens
         run: |
           git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
@@ -106,20 +153,43 @@ jobs:
           python manage.py migrate_schemas --shared
           python manage.py seed_dev
           nohup python manage.py runserver 127.0.0.1:8000 > /tmp/django.log 2>&1 &
-          for i in $(seq 1 30); do curl -sf -H "Host: etqan.localhost" http://127.0.0.1:8000/health/live/ && break; sleep 1; done
+          for _ in $(seq 1 30); do curl -sf -H "Host: etqan.localhost" http://127.0.0.1:8000/health/live/ && break; sleep 1; done
           curl -sf -H "Host: etqan.localhost" http://127.0.0.1:8000/health/live/ >/dev/null || { echo "backend did not start"; cat /tmp/django.log; exit 1; }
-      - name: Dashboard preview + Playwright
+      - name: Dashboard preview (base /app/)
         working-directory: dashboard
         run: |
           pnpm install --frozen-lockfile
           pnpm build
-          nohup pnpm preview > /tmp/preview.log 2>&1 &
-          for i in $(seq 1 30); do curl -sf http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
-          curl -sf http://127.0.0.1:4173/ >/dev/null || { echo "dashboard preview did not start"; cat /tmp/preview.log; exit 1; }
+          nohup pnpm preview --port 4173 --host 127.0.0.1 > /tmp/preview.log 2>&1 &
+          for _ in $(seq 1 30); do curl -sf http://127.0.0.1:4173/app/ >/dev/null && break; sleep 1; done
+          curl -sf http://127.0.0.1:4173/app/ >/dev/null || { echo "dashboard preview did not start"; cat /tmp/preview.log; exit 1; }
+      - name: Marketing site
+        working-directory: marketing
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+          SITE_API_ORIGIN=http://127.0.0.1:8000 SITE_SCHEME=http HOST=127.0.0.1 PORT=4321 \
+            nohup node dist/server/entry.mjs > /tmp/marketing.log 2>&1 &
+          for _ in $(seq 1 30); do curl -s -o /dev/null http://127.0.0.1:4321/ && break; sleep 1; done
+          curl -s -o /dev/null http://127.0.0.1:4321/ || { echo "marketing did not start"; cat /tmp/marketing.log; exit 1; }
+      - name: Caddy edge on :80
+        run: |
+          docker run -d --name edge --network host \
+            -v "$PWD/caddy/Caddyfile.e2e:/etc/caddy/Caddyfile:ro" caddy:2.11.4-alpine
+          for _ in $(seq 1 30); do curl -sf http://demo.etqan.localhost/api/v1/site/branding/ >/dev/null && break; sleep 1; done
+          curl -sf http://demo.etqan.localhost/api/v1/site/branding/ >/dev/null || { echo "edge did not come up"; docker logs edge; exit 1; }
+      - name: Playwright
+        working-directory: dashboard
+        env:
+          E2E_DEMO_URL: http://demo.etqan.localhost
+          E2E_OTHER_URL: http://other.etqan.localhost
+        run: |
           pnpm exec playwright install --with-deps chromium
           pnpm e2e
       - if: failure()
-        run: tail -n 200 /tmp/django.log /tmp/preview.log
+        run: |
+          tail -n 200 /tmp/django.log /tmp/preview.log /tmp/marketing.log
+          docker logs edge 2>&1 | tail -n 100
 
   security:
     runs-on: ubuntu-latest

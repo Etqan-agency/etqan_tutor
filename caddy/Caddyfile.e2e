@@ -1,0 +1,31 @@
+# CI e2e edge (the `e2e` job in .github/workflows/ci.yml). Same routing as
+# Caddyfile.local and infra/caddy/Caddyfile, but every upstream is a process on
+# the runner's loopback (Caddy runs with --network host):
+#   /api /accounts /health /media → Django runserver :8000
+#   /app                          → dashboard `vite preview` :4173
+#   everything else               → marketing site :4321
+# Caddy is the only proxy hop in front of Django (NUM_PROXIES=1).
+{
+	auto_https off
+	admin off
+}
+
+(academy) {
+	@internal path /internal/*
+	respond @internal 404
+	@django path /api/* /accounts/* /health/* /media/*
+	reverse_proxy @django 127.0.0.1:8000
+	@app path /app /app/*
+	reverse_proxy @app 127.0.0.1:4173
+	reverse_proxy 127.0.0.1:4321
+}
+
+http://etqan.localhost {
+	@internal path /internal/*
+	respond @internal 404
+	reverse_proxy 127.0.0.1:8000
+}
+
+http://*.etqan.localhost {
+	import academy
+}
