@@ -1,15 +1,19 @@
-# Inject the host UID/GID into every dev image so containers write
-# bind-mounted files as the developer, not root. HOST_UID/HOST_GID come from
-# the justfile (`id -u`/`id -g`); 1000 is the fallback.
+# Local stack. Every academy is http://<subdomain>.etqan.localhost (dashboard + /api on
+# the same host); http://etqan.localhost/admin/ is the Etqan staff console.
 x-uidgid: &uidgid
   UID: ${HOST_UID:-1000}
   GID: ${HOST_GID:-1000}
 
+x-django-env: &django-env
+  DJANGO_SETTINGS_MODULE: config.settings.local
+  DJANGO_READ_DOT_ENV_FILE: "True"
+  DATABASE_URL: postgres://etqan:etqan@postgres:5432/etqan
+  CELERY_BROKER_URL: redis://redis:6379/0
+  DJANGO_TENANT_BASE_DOMAIN: etqan.localhost
+  DJANGO_TENANT_URL_TEMPLATE: http://{domain}
+
 services:
   traefik:
-    # v3.3 negotiates Docker API v1.24, which Docker Engine 25+ (daemon min API
-    # 1.40) rejects, so the provider discovers nothing. v3.6 negotiates a
-    # version inside the daemon's supported range.
     image: traefik:v3.6
     command:
       - --providers.docker=true
@@ -19,98 +23,42 @@ services:
       - --api.dashboard=true
     ports:
       - "80:80"
-      - "8080:8080" # Traefik dashboard → http://localhost:8080
+      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
   django:
-    build:
-      context: ./backend
-      target: dev
-      args: *uidgid
+    build: { context: ./backend, target: dev, args: *uidgid }
     command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./backend:/app
-    ports:
-      - "8000:8000"
-    env_file:
-      - ./backend/.env
-    environment:
-      - DJANGO_SETTINGS_MODULE=config.settings.local
-      - DJANGO_READ_DOT_ENV_FILE=True
-      # In-container hostnames override the localhost values in .env
-      # (which are correct for host tooling: pytest, `just migrate`).
-      - DATABASE_URL=postgres://kaleem:kaleem@postgres:5432/kaleem
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      # The API MINTS room tokens; the `signaling` service below VERIFIES
-      # them. The two halves must hold byte-for-byte the same secret or every
-      # join fails auth with a correct-looking token. Kept identical here so
-      # that switching DJANGO_VIDEO_PROVIDER to SignalingProvider locally
-      # actually works instead of failing for a reason nobody would guess.
-      - DJANGO_SIGNALING_SECRET=local-dev-signaling-secret
+    volumes: [./backend:/app]
+    ports: ["${ETQAN_API_PORT:-8000}:8000"]
+    env_file: [./backend/.env]
+    environment: *django-env
     depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
     labels:
       - traefik.enable=true
-      - traefik.http.routers.api.rule=Host(`api.kaleem.localhost`)
+      # Academy API paths on any academy host, and the whole bare domain (staff admin).
+      - traefik.http.routers.api.rule=(HostRegexp(`^[a-z0-9-]+\.etqan\.localhost$`) && (PathPrefix(`/api`) || PathPrefix(`/accounts`) || PathPrefix(`/health`))) || Host(`etqan.localhost`)
+      - traefik.http.routers.api.priority=100
       - traefik.http.routers.api.entrypoints=web
       - traefik.http.services.api.loadbalancer.server.port=8000
 
-  # Signaling — its own service, same image, different command (ADR-0035).
-  # No postgres, no redis: it has no database and no ORM by design.
-  signaling:
-    build:
-      context: ./backend
-      target: dev
-      args: *uidgid
-    # --log-config is NOT optional. Without it uvicorn logs every handshake
-    # path INCLUDING its query string, and the query string is the room
-    # capability token -- a replayable grant to a child's lesson, sitting in
-    # `docker logs` for its full life. See signaling/logconf.py.
-    command: >
-      uvicorn signaling.app:app --host 0.0.0.0 --port 9000 --reload
-      --log-config signaling/logconf.json
-    volumes:
-      - ./backend:/app
-    ports:
-      - "9000:9000"
-    environment:
-      # Local-only value. Production reads the real one from .env.production,
-      # and it MUST match the API container's (the `django` service above sets
-      # the identical literal) or every join fails auth with a correct-looking
-      # token. Change one, change both.
-      - DJANGO_SIGNALING_SECRET=local-dev-signaling-secret
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.signaling.rule=Host(`ws.kaleem.localhost`)
-      - traefik.http.routers.signaling.entrypoints=web
-      - traefik.http.services.signaling.loadbalancer.server.port=9000
-
   postgres:
     image: postgres:18-alpine
-    volumes:
-      # PG 18+ images store data in a major-version subdir under
-      # /var/lib/postgresql; mount the parent, not .../data. See ADR-0015.
-      - postgres_data:/var/lib/postgresql
-    environment:
-      POSTGRES_DB: kaleem
-      POSTGRES_USER: kaleem
-      POSTGRES_PASSWORD: kaleem
-    ports:
-      - "5432:5432"
+    volumes: [postgres_data:/var/lib/postgresql]
+    environment: { POSTGRES_DB: etqan, POSTGRES_USER: etqan, POSTGRES_PASSWORD: etqan }
+    ports: ["${ETQAN_PG_PORT:-5432}:5432"]
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U kaleem"]
+      test: ["CMD-SHELL", "pg_isready -U etqan"]
       interval: 5s
       timeout: 3s
       retries: 5
 
   redis:
     image: redis:8-alpine
-    ports:
-      - "6379:6379"
+    ports: ["${ETQAN_REDIS_PORT:-6379}:6379"]
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -118,80 +66,48 @@ services:
       retries: 5
 
   celery_worker:
-    build:
-      context: ./backend
-      target: dev
-      args: *uidgid
+    build: { context: ./backend, target: dev, args: *uidgid }
     command: celery -A config.celery_app worker -l info
-    volumes:
-      - ./backend:/app
-    env_file:
-      - ./backend/.env
-    environment:
-      - DJANGO_SETTINGS_MODULE=config.settings.local
-      - DJANGO_READ_DOT_ENV_FILE=True
-      - DATABASE_URL=postgres://kaleem:kaleem@postgres:5432/kaleem
-      - CELERY_BROKER_URL=redis://redis:6379/0
+    volumes: [./backend:/app]
+    env_file: [./backend/.env]
+    environment: *django-env
     depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
 
   celery_beat:
-    build:
-      context: ./backend
-      target: dev
-      args: *uidgid
+    build: { context: ./backend, target: dev, args: *uidgid }
     command: celery -A config.celery_app beat -l info
-    volumes:
-      - ./backend:/app
-    env_file:
-      - ./backend/.env
-    environment:
-      - DJANGO_SETTINGS_MODULE=config.settings.local
-      - DJANGO_READ_DOT_ENV_FILE=True
-      - DATABASE_URL=postgres://kaleem:kaleem@postgres:5432/kaleem
-      - CELERY_BROKER_URL=redis://redis:6379/0
+    volumes: [./backend:/app]
+    env_file: [./backend/.env]
+    environment: *django-env
     depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
 
   flower:
-    build:
-      context: ./backend
-      target: dev
-      args: *uidgid
+    build: { context: ./backend, target: dev, args: *uidgid }
     command: celery -A config.celery_app flower --port=5555
-    volumes:
-      - ./backend:/app
-    ports:
-      - "5555:5555"
-    env_file:
-      - ./backend/.env
-    environment:
-      - DJANGO_SETTINGS_MODULE=config.settings.local
-      - DJANGO_READ_DOT_ENV_FILE=True
-      - CELERY_BROKER_URL=redis://redis:6379/0
+    volumes: [./backend:/app]
+    ports: ["${ETQAN_FLOWER_PORT:-5555}:5555"]
+    env_file: [./backend/.env]
+    environment: *django-env
     depends_on:
-      redis:
-        condition: service_healthy
+      redis: { condition: service_healthy }
     labels:
       - traefik.enable=true
-      - traefik.http.routers.flower.rule=Host(`flower.kaleem.localhost`)
+      - traefik.http.routers.flower.rule=Host(`flower.etqan.localhost`)
+      - traefik.http.routers.flower.priority=200
       - traefik.http.routers.flower.entrypoints=web
       - traefik.http.services.flower.loadbalancer.server.port=5555
 
   mailpit:
     image: axllent/mailpit:latest
-    ports:
-      - "8025:8025"
-      - "1025:1025"
+    ports: ["${ETQAN_MAIL_UI_PORT:-8025}:8025", "${ETQAN_SMTP_PORT:-1025}:1025"]
     labels:
       - traefik.enable=true
-      - traefik.http.routers.mail.rule=Host(`mail.kaleem.localhost`)
+      - traefik.http.routers.mail.rule=Host(`mail.etqan.localhost`)
+      - traefik.http.routers.mail.priority=200
       - traefik.http.routers.mail.entrypoints=web
       - traefik.http.services.mail.loadbalancer.server.port=8025
 
@@ -200,39 +116,22 @@ services:
       context: ./dashboard
       target: dev
       args: *uidgid
-      secrets:
-        - tokens_token
+      secrets: [tokens_token]
     environment:
-      - VITE_API_URL=http://api.kaleem.localhost/api/v1/
+      - VITE_PROXY_TARGET=http://django:8000
     volumes:
       - ./dashboard:/app
       - dashboard_node_modules:/app/node_modules
     labels:
       - traefik.enable=true
-      - traefik.http.routers.app.rule=Host(`app.kaleem.localhost`)
+      - traefik.http.routers.app.rule=HostRegexp(`^[a-z0-9-]+\.etqan\.localhost$`)
+      - traefik.http.routers.app.priority=10
       - traefik.http.routers.app.entrypoints=web
       - traefik.http.services.app.loadbalancer.server.port=5173
-
-  marketing:
-    build:
-      context: ./marketing
-      target: dev
-      args: *uidgid
-      secrets:
-        - tokens_token
-    volumes:
-      - ./marketing:/app
-      - marketing_node_modules:/app/node_modules
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.web.rule=Host(`kaleem.localhost`)
-      - traefik.http.routers.web.entrypoints=web
-      - traefik.http.services.web.loadbalancer.server.port=4321
 
 volumes:
   postgres_data:
   dashboard_node_modules:
-  marketing_node_modules:
 
 secrets:
   tokens_token:

@@ -1,4 +1,4 @@
-# kaleem — Copilot Instructions
+# etqan — Copilot Instructions
 
 This is a modular-monolith LMS. Key rules:
 

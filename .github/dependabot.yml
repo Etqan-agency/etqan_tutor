@@ -13,9 +13,8 @@
 # reviewed by hand -- which is what already happened, just without the six
 # minutes.
 #
-# The submodules (backend, dashboard, marketing, infra, tokens) have their own
-# dependency surfaces and no CI of their own; updating them is not this file's
-# job.
+# The submodules (backend, dashboard, infra, tokens) have their own dependency
+# surfaces and no CI of their own; updating them is not this file's job.
 version: 2
 updates:
   - package-ecosystem: "github-actions"
