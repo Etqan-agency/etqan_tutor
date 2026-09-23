@@ -17,4 +17,5 @@ meta pointers; merge meta. After that: people & catalogue (v1 spec §9 milestone
 ## Standing warnings
 
 - Deploy is not wired yet: no staging, no production. Wildcard TLS (`*.domain`) needs a DNS-01 ACME challenge — handled in the deploy plan.
+- Deploy order (infra `scripts/ship.sh`): `migrate` + `bootstrap_platform` run from the new image before the new colour starts. Production refuses to boot without `DJANGO_S3_BUCKET` (+ AWS keys, public-read bucket policy; see `infra/.env.production.example`).
 - Kaleem's staging passwords are in this repo's git history (inherited). Never reuse them.
