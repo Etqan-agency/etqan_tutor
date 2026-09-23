@@ -51,6 +51,9 @@ jobs:
           git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
           git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "git@github.com:"
           git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
+      - name: Fetch tokens submodule tags
+        working-directory: .
+        run: git -C tokens fetch --depth=1 --force origin "+refs/tags/*:refs/tags/*"
       - name: Token pin agrees with the submodule (G3)
         working-directory: .
         run: node scripts/check-token-pin.mjs
