@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-23
 **Owner:** Etqan Agency (`Etqan-agency` GitHub org)
-**Status:** Approved. Amended by `2026-09-23-academy-sites-design.md` (public academy sites, branding, custom domains).
+**Status:** Approved. Amended by `2026-09-23-academy-sites-design.md` (public academy sites, branding, custom domains). **Scope narrowed to phase B0 by `2026-09-24-parity-roadmap-design.md`:** the non-goals in §1.2 are now later phases (see the roadmap §3), and B0 adopts TutorHamster field names and option lists where that costs nothing (roadmap R4).
 **Inputs:** `PHASE_1_SYSTEM_AUDIT.md` (TutorHamster audit), `PHASE_2_SYSTEM_DESIGN.md` (full-parity design), the `kaleem-lms/Kaleem` codebase
 
 ---
