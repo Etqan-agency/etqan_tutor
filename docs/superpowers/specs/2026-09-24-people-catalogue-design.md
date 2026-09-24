@@ -72,7 +72,11 @@ The catalogue app talks to identity only through `etqan.identity.services` (teac
 
 - Duplicate email (case-insensitive) → validation error on `email`.
 - Student without email: created with an unusable password; no invite. When an admin later adds an email, the invite is sent; the address counts as verified only once the invite link is used.
-- Changing an existing user's email: the new address must be verified before it replaces the sign-in email (reuse Plan 1's `add_email_address` / verification flow on the user's behalf; the old address keeps working until then).
+- Admins must have an email; an admin without one is refused on `email`.
+- Changing an existing user's email (amended at merge to match plan decision D4):
+  - Invited or never signed in (no password set yet): the address is replaced at once and a fresh invite goes to the new address. The old invite link stops working, because the set-password token hashes the email. A deactivated person gets no invite; the address still changes.
+  - Signed in: the new address stays pending until its owner confirms it through the verification link. On confirmation it replaces the old address, which receives a security alert and stops working for sign-in and resets. Until then the old address keeps working.
+- Invite links expire. An invited person whose link has expired can renew it through "Forgot password": for the unverified primary address of an active account that has never set a password, a fresh invite is sent instead of a reset link. The response is the same either way, so accounts cannot be enumerated.
 
 Account actions (admin only): `resend_invite(user)`, `send_password_reset(user)`, `deactivate(user, by)`, `activate(user)`. `deactivate` refuses the acting admin themselves and the last active admin, and ends the user's sessions.
 
