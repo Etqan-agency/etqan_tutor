@@ -4,15 +4,17 @@ Keep this under ~40 lines: current position only.
 
 ## Where we are
 
-Plan 1 (fork, strip, tenancy) merged 2026-09-23. Plan 2 (academy sites) in review: branch
-`feat/academy-sites` in backend, dashboard, marketing, infra and meta (spec
-`docs/superpowers/specs/2026-09-23-academy-sites-design.md`). Every academy host serves its
-marketing site at `/`, the dashboard at `/app/`, the API at `/api/`, behind Caddy.
+Plan 3 (people & catalogue, B0 milestone 3) in review: branch `feat/people-catalogue` in backend,
+dashboard and meta (spec `docs/superpowers/specs/2026-09-24-people-catalogue-design.md`, plan
+`docs/superpowers/plans/2026-09-24-plan-3-people-catalogue.md`). Admins manage students, parents,
+teachers, admins, courses, packages and academy settings; invites arrive in each person's language.
+Self-registration and parent-created children are gone (returns in B9).
 
 ## Next
 
-Open PRs, get meta CI green, then merge in order: marketing, backend, dashboard, infra; bump
-meta pointers; merge meta. After that: people & catalogue (v1 spec §9 milestone 3).
+Open PRs, get meta CI green, merge backend then dashboard, bump meta pointers, merge meta. Then
+Plan 4: subscriptions, weekly slots and session generation. It must call
+`etqan.catalogue.services.sessions_total` and add the "course/package has subscriptions" delete guard.
 
 ## Standing warnings
 

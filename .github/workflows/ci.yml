@@ -130,7 +130,11 @@ jobs:
       CELERY_BROKER_URL: redis://localhost:6379/0
       DJANGO_SETTINGS_MODULE: config.settings.local
       DJANGO_SECRET_KEY: ci-only
-      DJANGO_EMAIL_BACKEND: django.core.mail.backends.locmem.EmailBackend
+      # Invites are real emails the e2e suite reads back: send them inline (no
+      # worker) into files that e2e/mail.ts parses via E2E_MAIL_DIR.
+      DJANGO_EMAIL_BACKEND: django.core.mail.backends.filebased.EmailBackend
+      DJANGO_EMAIL_FILE_PATH: /tmp/etqan-mail
+      CELERY_TASK_ALWAYS_EAGER: "true"
       DJANGO_TENANT_URL_TEMPLATE: http://{domain}
     steps:
       - uses: actions/checkout@v7
@@ -151,6 +155,7 @@ jobs:
         run: |
           pip install -r requirements/local.txt
           python manage.py migrate_schemas --shared
+          mkdir -p /tmp/etqan-mail
           python manage.py seed_dev
           nohup python manage.py runserver 127.0.0.1:8000 > /tmp/django.log 2>&1 &
           for _ in $(seq 1 30); do curl -sf -H "Host: etqan.localhost" http://127.0.0.1:8000/health/live/ && break; sleep 1; done
@@ -183,6 +188,7 @@ jobs:
         env:
           E2E_DEMO_URL: http://demo.etqan.localhost
           E2E_OTHER_URL: http://other.etqan.localhost
+          E2E_MAIL_DIR: /tmp/etqan-mail
         run: |
           pnpm exec playwright install --with-deps chromium
           pnpm e2e
