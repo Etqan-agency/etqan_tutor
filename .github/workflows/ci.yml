@@ -44,7 +44,7 @@ jobs:
         with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
       - uses: pnpm/action-setup@v6
         with: { version: 10 }
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: dashboard/pnpm-lock.yaml }
       - name: Configure git auth for private @etqan/tokens
         run: |
@@ -71,7 +71,7 @@ jobs:
         with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
       - uses: pnpm/action-setup@v6
         with: { version: 10 }
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: marketing/pnpm-lock.yaml }
       - name: Configure git auth for private @etqan/tokens
         run: |
@@ -139,7 +139,7 @@ jobs:
         with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip, cache-dependency-path: backend/requirements/*.txt }
       - uses: pnpm/action-setup@v6
         with: { version: 10 }
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: "dashboard/pnpm-lock.yaml\nmarketing/pnpm-lock.yaml" }
       - name: Configure git auth for private @etqan/tokens
         run: |
