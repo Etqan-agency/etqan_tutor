@@ -1,7 +1,7 @@
 # Plan 4 — Subscriptions & Scheduling — Design
 
 **Date:** 2026-09-24
-**Status:** Approved in brainstorming (sections 1–4), pending written-spec review.
+**Status:** Approved in brainstorming (sections 1–4). Amended 2026-09-25 after the final review so that §3–§7 match what was built (renewal chain and the live-renewal cap, admin action rules, error codes, API shapes, job limits, seeds).
 **Phase:** B0, milestone 4 of the parity roadmap (`2026-09-24-parity-roadmap-design.md`).
 **Builds on:** v1 spec §4.4–4.6, §5.1, §5.3, §6 (`2026-09-23-etqan-tutor-v1-design.md`); Plan 3 (`2026-09-24-people-catalogue-design.md`): people, courses with teachers, packages, `AcademySettings`, role permissions, `scope_for`, CSV export.
 **Evidence:** `docs/TUTORHAMSTER_FEATURE_AUDIT_2026-09-24.md` §2.3 (SUB-001), §2.4 (SCHED-001, SCHED-002, SCHED-017) and §3 items 3 and 5. Roadmap rule R4 applies.
@@ -62,9 +62,11 @@ New fields:
 | `sessions_total` | copied from the package's `sessions_total` |
 | `session_minutes` | copied |
 | `freeze_days_allowed` | copied |
-| `price_minor`, `currency` | copied, editable at creation and renewal |
+| `duration_value`, `duration_unit` | copied, so a `starts_on` edit recomputes the term that was sold |
+| `price_minor` | copied, editable at creation and renewal |
+| `currency` | always the package's currency; never edited |
 | `status` | `active · paused · expired · cancelled` |
-| `renewed_from` | nullable one-to-one → Subscription (a subscription is renewed at most once) |
+| `renewed_from` | nullable one-to-one → Subscription, on delete SET NULL. A subscription has at most one non-cancelled renewal: a cancelled renewal is detached when the old subscription is renewed again. |
 | `notes` | text |
 
 `term_ends_on` depends on the duration unit:
@@ -134,9 +136,11 @@ Constraint: `UNIQUE(slot, occurs_on)` where `slot` is not null.
 ### 4.1 Generation
 
 `generate(from, to)` covers every active slot whose subscription is `active` or `paused`. For each date D in the window whose weekday matches the slot, it creates a session unless one of these applies:
-- D < `starts_on` or D > `grace_ends_on` (counted as `skipped_out_of_term`);
+- D < `starts_on` or D > the last generating day (counted as `skipped_out_of_term`). The last generating day is `grace_ends_on`, or `min(grace_ends_on, renewal.starts_on − 1)` when the subscription has a live (non-cancelled) renewal, so a renewal takes over with no gap and no overlap;
 - D falls inside a pause (`skipped_paused`);
 - a session for (slot, D) already exists (`skipped_existing`). This uses `bulk_create(ignore_conflicts=True)`.
+
+Today's session is created even when its start time has already passed.
 
 Converting to UTC: D + `start_time` is read in the academy timezone. A local time that doesn't exist (clock change) moves forward. An ambiguous one takes the first occurrence.
 
@@ -144,14 +148,14 @@ Double-bookings: the run lists every created session that overlaps another non-c
 
 When generation runs:
 - **Daily job:** for today … today + `generation_horizon_days`.
-- **On demand:** for an admin range of at most 62 days.
+- **On demand:** for an admin range of at most 62 days, optionally limited to one `subscription`. The range may include past dates (a backfill); sessions created in the past are kept like any other.
 - **For one subscription's horizon:** after it is created, renewed or resumed, and after any slot of it is added, edited or re-activated.
 
 ### 4.2 Lifecycle
 
 **The job** runs hourly for every academy, inside `tenant_context`. "Today" is the academy's local date. Each step is safe to repeat:
 1. **Pauses:** an `active` subscription with a pause covering today becomes `paused`. A `paused` subscription with no pause covering today becomes `active`.
-2. **Expiry:** an `active` or `paused` subscription with today > `grace_ends_on` becomes `expired`. Its untouched sessions are deleted.
+2. **Expiry:** an `active` or `paused` subscription becomes `expired` when today > `grace_ends_on`, or when today ≥ the `starts_on` of its live renewal. Its untouched sessions are deleted. Expiry only changes a subscription that is still `active` or `paused`, so it never overwrites a status an admin set in the meantime.
 3. **Generation:** the horizon is generated.
 
 **Admin actions:**
@@ -159,39 +163,47 @@ When generation runs:
 | Action | Allowed from | Effect |
 |---|---|---|
 | Create | – | Copies the package values; creates the given slots; generates the horizon. |
-| Edit teacher / price / notes | active, paused | A teacher change deletes the untouched sessions and regenerates them with the new teacher. |
-| Edit `starts_on` | active, paused, while none of its sessions has attendance marked | Recomputes `term_ends_on`; deletes the untouched sessions; regenerates. |
-| Add pause | active, paused | Deletes the untouched sessions inside the pause. The status becomes `paused` at once if the pause covers today. |
-| End pause early | a pause covering today | `to_date` becomes yesterday, or the pause is deleted if it started today. The status returns to `active` and the horizon is regenerated. |
-| Delete pause | a pause that hasn't started | The horizon is regenerated. |
+| Edit teacher / price / notes | active, paused | A teacher change deletes the untouched sessions and regenerates them with the new teacher. The edit locks the subscription and re-checks its status, and writes only the edited fields, so a concurrent cancel, pause or expiry stands. |
+| Edit `starts_on` | active, paused, while none of its sessions has attendance marked | Recomputes `term_ends_on` from the copied duration; deletes the untouched sessions; regenerates. A field error on `starts_on` if a pause would start before the new start or after the new `ends_on`. |
+| Add pause | active, paused | Deletes the untouched sessions inside the pause. The status becomes `paused` at once if the pause covers today. The horizon is regenerated, because the term grew. |
+| End pause early | a pause covering today (else `scheduling.pause_not_current`) | `to_date` becomes yesterday, or the pause is deleted if it started today. The untouched sessions after the new grace end are deleted first, then the status returns to `active` and the horizon is regenerated. |
+| Delete pause | a pause that hasn't started (else `scheduling.pause_started`) | The untouched sessions after the new grace end are deleted first, then the horizon is regenerated. |
 | Add / edit / re-activate slot | active, paused | Deletes that slot's untouched sessions, then regenerates. |
-| Deactivate slot | any | Deletes that slot's untouched sessions. |
-| Delete slot | only if it never produced a session | – |
+| Deactivate slot | any | Deletes that slot's untouched sessions. Only a PATCH whose sole change is `is_active=false` counts as deactivation; any other slot edit needs active or paused. |
+| Delete slot | only while the slot currently has no sessions (else `scheduling.slot_has_sessions`) | – |
 | Cancel | active, paused | The status becomes `cancelled`; the untouched sessions are deleted. |
-| Renew | active, paused, expired, and not already renewed | See below. |
-| Delete subscription | only if none of its sessions has attendance marked or is completed | Deletes it together with its untouched sessions, for undoing mistakes. |
+| Renew | active, paused, expired, and no non-cancelled renewal | See below. |
+| Delete subscription | only while none of its sessions is completed, has any attendance marked, or is cancelled (else `scheduling.has_marked_sessions`), and it has no non-cancelled renewal (else `scheduling.already_renewed`) | For undoing mistakes: deletes all its sessions, past ones included, then the subscription with its slots and pauses. |
 
 **Renewal:**
-- The new subscription starts on the day after the old `ends_on`, or today if that is later.
-- It defaults to the same student, course, teacher and package, and the old price. All of them can be changed in the renew dialog.
-- It gets fresh package copies and the old subscription's active slots.
+- The new subscription starts on the day after the old `ends_on`, or today if that is later. The detail payload carries this date as `renewal_starts_on` for the renew dialog.
+- A given `starts_on` must be later than the old `starts_on`, otherwise a `400` on `starts_on`. A start in the past is allowed; the dates between that start and today get no sessions automatically, and the admin backfills them with "Generate for range".
+- The student never changes. Course, teacher, package, price and start can be changed in the renew dialog; they default to the old ones.
+- The price defaults to the old price, unless the chosen package's currency differs from the old one; then it is that package's price. The currency is always the package's.
+- It gets fresh package copies and the old subscription's active slots. A copied slot on the old package's length follows the new package's minutes; a custom length is kept.
 - It gets `renewed_from` = old.
-- The old subscription becomes `expired`. Its untouched sessions dated on or after the new `starts_on` are deleted.
+- The old subscription is **not** expired at renewal. It keeps its status and stops generating the day before the renewal starts (§4.1); the job expires it on the renewal's start day (§4.2 step 2). If the renewal's start is today or earlier, it is expired at once.
+- The old subscription's untouched sessions dated on or after the new `starts_on` are deleted.
 - The new subscription's horizon is generated.
 - Grace sessions already taught on the old subscription stay there. They reach the new one through `carried_over_sessions`.
+- "Already renewed" means renewed by a non-cancelled renewal. A cancelled renewal neither caps the old term nor blocks a new renewal, and the payloads' `renewal` field names only a live renewal.
 
-**Errors:** invalid transitions raise a domain error with a code, returned as `409`:
+**Errors:** invalid transitions raise a domain error with a code, returned as `409` with the body `{"detail", "code"}`:
 - `scheduling.not_allowed_in_status`
 - `scheduling.already_renewed`
 - `scheduling.freeze_days_exceeded`
 - `scheduling.pause_overlaps`
 - `scheduling.has_marked_sessions`
+- `scheduling.pause_not_current`
+- `scheduling.pause_started`
+- `scheduling.slot_has_sessions`
+- `catalogue.in_use`: deleting a course or package that has subscriptions or sessions ("deactivate it instead").
 
 Field problems return `400` with Plan 3's field-error shape.
 
 ### 4.3 Today board
 
-For the academy's local date, the board lists each active slot whose subscription would generate that day. Each row shows the student, teacher, course, time (plus the student's local time), subscription progress and a state:
+For the academy's local date, the board lists each active slot whose subscription would generate that day, using the same last generating day as §4.1. It also lists any slot that has a session on that day, whatever its subscription's status or window, so marked sessions stay visible. Each row shows the student, teacher, course, time (plus the student's local time), subscription progress and a state:
 - `generated`: a scheduled session exists;
 - `missing`: no session exists;
 - `completed`;
@@ -208,25 +220,27 @@ For the academy's local date, the board lists each active slot whose subscriptio
 
 One permission class per role plus `scope_for` per resource, as in Plan 3. Out-of-scope objects return `404`.
 
+Teacher, student and parent payloads omit `notes`, `price_minor`, `currency` and a pause's `reason`. CSV export is admin-only; a non-admin gets `403`. Which subscriptions a teacher still sees after a teacher change is decided in Plan 5.
+
 ## 5. API (`/api/v1/`, existing conventions)
 
 | Route | Methods | Notes |
 |---|---|---|
 | `subscriptions/` | GET, POST | Filters: `status` (`active·paused·expired·cancelled`; none = all), `student`, `teacher`, `course`, `q` (student name). `?format=csv`. POST accepts `slots: [{weekdays: [..], start_time, minutes?, meeting_url?}]`. |
-| `subscriptions/<id>/` | GET, PATCH, DELETE | PATCH: `teacher`, `price_minor`, `notes`, `starts_on` (rules in §4.2). The payload includes every derived value from §3.2. |
-| `subscriptions/<id>/renew/` | POST | Optional `starts_on`, `teacher`, `package`, `price_minor`, `course`. |
+| `subscriptions/<id>/` | GET, PATCH, DELETE | PATCH: `teacher`, `price_minor`, `notes`, `starts_on` (rules in §4.2); no `currency`. The payload includes every derived value from §3.2, `renewal` (the live renewal's id or null) and, in the detail, `renewal_starts_on`. |
+| `subscriptions/<id>/renew/` | POST | Optional `starts_on`, `teacher`, `package`, `price_minor`, `course`. No `student`. Answers `201` with the NEW subscription. |
 | `subscriptions/<id>/cancel/` | POST | |
 | `subscriptions/<id>/pauses/` | GET, POST | |
 | `pauses/<id>/` | DELETE | Only when the pause hasn't started. |
 | `pauses/<id>/end/` | POST | |
 | `subscriptions/<id>/slots/` | GET, POST | POST `{weekdays: [..], start_time, minutes?, meeting_url?}` creates one slot per weekday. |
 | `slots/<id>/` | PATCH, DELETE | PATCH: `start_time`, `minutes`, `meeting_url`, `is_active`. |
-| `subscriptions/<id>/sessions/` | GET | Read-only, paginated, `?when=upcoming|past`. |
-| `schedule/generate/` | POST | `{from, to}`, at most 62 days. Returns the run result from §4.1. |
+| `subscriptions/<id>/sessions/` | GET | Read-only, paginated, `?when=upcoming|past`; any other `when` is a `400`. |
+| `schedule/generate/` | POST | `{from, to, subscription?}`, at most 62 days. Returns the run result from §4.1. |
 | `schedule/today/` | GET | The Today board rows. |
 | `academy/settings/` | GET, PATCH | Adds `generation_horizon_days` and `renewal_grace_days`. |
 
-People are referenced by User id, as in Plan 3.
+People are referenced by User id, as in Plan 3. Every write on a subscription, its slots or its pauses answers with the subscription detail (`201` for creates and renewals); deletes answer `204`.
 
 ## 6. Dashboard (`/app/`, admin)
 
@@ -241,20 +255,20 @@ People are referenced by User id, as in Plan 3.
   - A slot editor: several weekdays, a start time and minutes. It shows the student's local time when the student's timezone differs.
 - **Subscription detail:**
   - **Summary:** dates, remaining/extra/carried-over sessions, grace end, status.
-  - **Actions:** Renew (a pre-filled dialog), Cancel and Delete (confirmations).
+  - **Actions:** Renew (a pre-filled dialog; "Open the renewal" instead while a live renewal exists), Edit (a dialog for teacher, price, notes and start date that sends only the changed fields), Cancel and Delete (confirmations).
   - **Slots panel:** add, edit, deactivate, delete.
   - **Pauses panel:** freeze days left, add, end early, delete.
   - **Sessions panel:** upcoming and past, read-only.
 - **Today:**
   - the board, with "Generate" on missing rows;
-  - a "Generate for range" dialog showing the run result and any double-bookings.
+  - a "Generate for range" dialog showing the run result and any double-bookings. It notes that sessions created in the past are kept.
 - **Settings → Academy:** the horizon and grace days fields.
 - **Throughout:** every string is in Arabic and English; screens work right-to-left and at phone width; only semantic colour tokens are used; not-found and error states are handled.
 
 ## 7. Jobs and seeds
 
-- A Celery beat entry `scheduling.run_daily` runs hourly. It loops over every academy with `tenant_context` and runs §4.2 steps 1–3. A failure in one academy is logged and does not stop the others.
-- `seed_dev` gives the demo academy four subscriptions with slots (one paused, one in grace), plus one in `other`. Running it twice changes nothing.
+- A Celery beat entry `scheduling.run_daily` runs at minute 5 of every hour, with its own limits (soft 3000 s, hard 3300 s). It loops over every academy except suspended ones, each in its own `tenant_context` and transaction, and runs §4.2 steps 1–3. A failure in one academy is logged and does not stop the others. Reaching the soft limit stops the whole run: it is logged, the current academy is rolled back, and it does not count as that academy's failure.
+- `seed_dev` gives the demo academy four subscriptions with slots (one paused, one in grace), plus one in `other`. Running it twice changes nothing. The demo monthly package has 7 freeze days; an older dev database whose package has none gets no paused subscription. A seed entry whose student, teacher, course or package is missing or deactivated is skipped.
 
 ## 8. Testing
 
