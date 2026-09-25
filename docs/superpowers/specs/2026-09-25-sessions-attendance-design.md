@@ -1,7 +1,7 @@
 # Plan 5 — Sessions, Attendance & Reports — Design
 
 **Date:** 2026-09-25
-**Status:** Approved in brainstorming (sections 1–3), pending written-spec review.
+**Status:** Approved in brainstorming (sections 1–3). Amended 2026-09-25 after the final review so that §4–§8 match what was built (the clearing-permission order, server-side `when`/period filters, the session payload's added fields, bulk's dedup and ordering rules, the report shapes, teacher and parent dashboard details, seed order, and the restore rule).
 **Phase:** B0, milestone 5 of the parity roadmap (`2026-09-24-parity-roadmap-design.md`).
 **Builds on:** v1 spec §4.6, §5.2, §5.6, §6 (`2026-09-23-etqan-tutor-v1-design.md`); Plan 4 (`2026-09-24-subscriptions-scheduling-design.md`), which covers `etqan.scheduling`, generation, "untouched" sessions, derived `sessions_used`, carry-over and extras; Plan 3 (people, role permissions, `scope_for`, CSV).
 **Evidence:** `docs/TUTORHAMSTER_FEATURE_AUDIT_2026-09-24.md` §2.4 (SCHED-003, SCHED-016) and §3 item 6; `docs/PHASE_1_SYSTEM_AUDIT.md` SCHED-009 (report scales) and BR-32 (reports are staff notes). Roadmap rule R4 applies.
@@ -34,7 +34,7 @@ Marking attendance makes Plan 4's `sessions_used`, extras and carry-over real.
 | P5-5 | Attendance can be marked only once the session's start time has passed. An absence announced in advance is a cancellation with a reason. |
 | P5-6 | Only admins cancel, restore and bulk-edit. Teachers mark attendance and write reports on their own sessions only. Postponing is phase B2. |
 | P5-7 | Report scales are TutorHamster's 5-point behaviour and participation scales (excellent, good, average, below average, poor), plus notes. |
-| P5-8 | Non-admin screens show times in the viewer's own timezone (`User.timezone`). Admin screens show academy time, plus the student's time when it differs. |
+| P5-8 | Non-admin screens show times in the viewer's own timezone (`User.timezone`). Admin screens show academy time, plus the student's time when it differs. "Today", "this week", "upcoming" and "past" are decided on the server, not the viewer's clock: `today` and `week` use the **academy's** calendar date (`occurs_on`), while `upcoming` and `past` split on the session's **end** instant (`starts_at + minutes`), so a session in progress stays upcoming with its Join link. Only the displayed times and dates use the viewer's timezone. |
 
 ## 3. Data
 
@@ -74,7 +74,8 @@ New fields:
   - Setting it to `present`, `absent` or `excused` on a `scheduled` session makes it `completed`.
   - Changing it between those values keeps the session `completed`.
   - Setting it back to `not_set` is admin-only and returns the session to `scheduled`.
-- **Teacher attendance** is set independently and never changes the status.
+- **Teacher attendance** is set independently and never changes the status. Clearing it back to `not_set` is also admin-only: a teacher sending `not_set` for either attendance gets 403.
+- The checks run in this order: cancelled (409 `session_cancelled`), not started (409 `not_started`), then the clearing permission (403).
 - Every change records `marked_by` and `marked_at`.
 - A marked or cancelled session is not "untouched" (Plan 4 P4-7), so generation and lifecycle never delete or recreate it.
 
@@ -98,9 +99,10 @@ This replaces Plan 4's placeholder rule inside the single derived-values service
   - Sets `cancelled_by` and `cancelled_at`.
   - Attendance is kept as it was, for the record. A report, if any, is kept.
 - **Restore:**
-  - Allowed only from `cancelled`.
+  - Allowed only from `cancelled`, including a session inside a pause or on an ended subscription — restore does not re-check the subscription's window.
   - The session returns to `scheduled` and its cancel fields are cleared.
   - If its student attendance is set, it returns to `completed` instead.
+  - It records no actor.
 - A transition from any other status returns 409 `scheduling.not_allowed_in_status`.
 
 ### 4.4 Bulk (admin)
@@ -110,7 +112,11 @@ This replaces Plan 4's placeholder rule inside the single derived-values service
 - `ids` holds at most 200;
 - `reason` is required for `cancel`.
 
-Each session is handled on its own with the rules above. Sessions that fail a rule are skipped with their code. The response is `{done: [ids], skipped: [{id, code}]}`. Ids outside the admin's academy are not found and are reported as skipped with code `not_found`.
+Ids are deduplicated. A bad body is a 400 before anything runs: `ids` empty or over 200 raw entries, an unknown `action`, or `cancel` without a `reason`.
+
+Each session is handled on its own with the rules above. Sessions that fail a rule are skipped with the rule's own 409 code (`scheduling.*`). The response is `{done: [ids], skipped: [{id, code}]}`, with both lists in ascending id order. Ids outside the admin's academy are not found and are reported as skipped with the unprefixed code `not_found`.
+
+The whole request runs as one transaction with a savepoint per session. The rows are locked up front, in id order.
 
 ### 4.5 Reports
 
@@ -118,10 +124,12 @@ Each session is handled on its own with the rules above. Sessions that fail a ru
   - Only on a `completed` session; otherwise 409 `scheduling.not_completed`.
   - The session's teacher or an admin writes it, with PUT to create or replace.
   - The first writer is kept in `written_by`, and edits update `updated_at`.
-- **Reading:** the session's teacher and admins. Anyone else gets 404.
+  - `PUT` answers 200 with `{session, behaviour, participation, notes, written_by{id, full_name}, created_at, updated_at}`.
+- **Reading:** the session's teacher and admins. Anyone else gets 404. `GET` returns 404 when no report is written yet.
 - **Missing reports:**
   - completed sessions whose `starts_at + minutes` ended more than 24 hours ago, with no report and not cancelled;
-  - admins see all of them, teachers see their own.
+  - admins see all of them, teachers see their own;
+  - a student or parent gets 404 on the report route and 403 on `reports/missing/`.
 
 ### 4.6 Access
 
@@ -136,6 +144,8 @@ Each session is handled on its own with the rules above. Sessions that fail a ru
 - One permission class per role plus `scope_for`, as before. Out-of-scope objects return 404.
 - Session payloads:
   - everyone in scope sees the times (UTC, plus the academy's local date), minutes, meeting link, status, both attendances, and the course, teacher and student names;
+  - it also carries `subscription_id`, `slot_id`, `generated`, `has_started` (the server's start gate, an instant comparison) and `student.timezone`;
+  - `marked_by`, `marked_at`, `cancelled_by` and `cancelled_at` are stored but not shown;
   - `notes` and `cancel_reason` are admin-only;
   - `has_report` is shown to admins and to the session's teacher only.
 
@@ -143,7 +153,7 @@ Each session is handled on its own with the rules above. Sessions that fail a ru
 
 | Route | Methods | Notes |
 |---|---|---|
-| `sessions/` | GET | Filters: `from`, `to` (academy-local dates), `status`, `student_attendance`, `teacher`, `student`, `course`, `subscription`, `q` (student name). Paginated. `?format=csv` is admin-only. Ordered by `starts_at`. |
+| `sessions/` | GET | Filters: `when` (`upcoming · past · today · week`, see P5-8), `from`, `to` (academy-local dates), `status`, `student_attendance`, `teacher`, `student`, `course`, `subscription`, `q` (student name). `teacher` and `student` are **user ids**. A bad filter value is a 400 on that field. Paginated. `?format=csv` is admin-only, and a non-admin gets 403 even with bad filters. `past` is ordered latest first; everything else is ordered by `starts_at`. The CSV columns are: id, date, UTC start, minutes, student, teacher, course, status, both attendances, report yes/no, cancel reason. |
 | `sessions/<id>/` | GET | Scoped. |
 | `sessions/<id>/attendance/` | POST | `{student_attendance?, teacher_attendance?}`, at least one. Returns the session. |
 | `sessions/<id>/cancel/` | POST | `{reason}`. Returns the session. |
@@ -173,14 +183,15 @@ Each session is handled on its own with the rules above. Sessions that fail a ru
 - **Missing reports:** a list linking to each session page.
 
 **Teacher:**
-- **My sessions:** Today / This week / History tabs. Each row has Join, the attendance controls (disabled until the start time) and "Write report" or "Edit report".
+- **My sessions:** Today / This week / History tabs. Each row has Join, the attendance controls (disabled until the start time) and "Write report" or "Edit report". Reports are written in a dialog on these rows; there is no separate teacher session page.
+- The attendance controls open within a minute of the start time, because the list re-reads every minute.
 - **Reports to write:** their own missing reports.
-- **Home:** today's sessions.
+- **Home:** shows "Today's sessions".
 
 **Student and parent:**
 - **My sessions:** upcoming sessions with Join, and past sessions with attendance.
 - **My subscriptions:** each subscription's used/total, extras, end date and a grace notice.
-- **Home:** the next session with Join, plus progress.
+- **Home:** the next session with Join, shown **for each child** (one line per child), plus each live subscription's progress.
 - **Parents** with several children get a child filter.
 
 **Settings → Academy:** the two "counts as used" switches.
@@ -196,12 +207,11 @@ Each session is handled on its own with the rules above. Sessions that fail a ru
 
 ## 7. Seeds
 
-In the demo academy, past generated sessions are marked:
-- a mix of present, absent and excused;
-- one teacher no-show;
-- reports written on most completed sessions, with one completed session older than 24 hours left without a report.
+Seeding runs in every dev academy, not only the demo one, and is a no-op where there is nothing past to mark. It first back-fills the past days, then marks each session as its own teacher, in the cycle present, present, absent, present, excused. The second session in the cycle is the teacher no-show.
 
-Running seeding twice changes nothing.
+It writes a report on every completed session except the oldest, so one completed session older than 24 hours is left without a report (the Missing reports seed row).
+
+Idempotence means "skip when any session in the academy is already marked". Running seeding twice changes nothing.
 
 ## 8. Testing
 
@@ -219,7 +229,7 @@ Running seeding twice changes nothing.
 - **E2E through Caddy:**
   1. The admin sees today's session.
   2. The teacher (invited, sets a password) signs in, marks the student present and writes a report.
-  3. The admin sees the report, and the session is gone from Missing reports.
+  3. The admin sees the report on the session page, and Missing reports renders (the seeded >24 h row). A session taught today can never appear there; the 24-hour window is pinned by the backend tests.
   4. The student signs in and sees 1 session used.
 - **Coverage gates as today.**
 

@@ -1,7 +1,7 @@
 # Plan 4 — Subscriptions & Scheduling — Design
 
 **Date:** 2026-09-24
-**Status:** Approved in brainstorming (sections 1–4). Amended 2026-09-25 after the final review so that §3–§7 match what was built (renewal chain and the live-renewal cap, admin action rules, error codes, API shapes, job limits, seeds).
+**Status:** Approved in brainstorming (sections 1–4). Amended 2026-09-25 after the final review so that §3–§7 match what was built (renewal chain and the live-renewal cap, admin action rules, error codes, API shapes, job limits, seeds). Amended again 2026-09-25 after Plan 5's final review for the nested sessions list's split and scoping.
 **Phase:** B0, milestone 4 of the parity roadmap (`2026-09-24-parity-roadmap-design.md`).
 **Builds on:** v1 spec §4.4–4.6, §5.1, §5.3, §6 (`2026-09-23-etqan-tutor-v1-design.md`); Plan 3 (`2026-09-24-people-catalogue-design.md`): people, courses with teachers, packages, `AcademySettings`, role permissions, `scope_for`, CSV export.
 **Evidence:** `docs/TUTORHAMSTER_FEATURE_AUDIT_2026-09-24.md` §2.3 (SUB-001), §2.4 (SCHED-001, SCHED-002, SCHED-017) and §3 items 3 and 5. Roadmap rule R4 applies.
@@ -235,7 +235,7 @@ Teacher, student and parent payloads omit `notes`, `price_minor`, `currency` and
 | `pauses/<id>/end/` | POST | |
 | `subscriptions/<id>/slots/` | GET, POST | POST `{weekdays: [..], start_time, minutes?, meeting_url?}` creates one slot per weekday. |
 | `slots/<id>/` | PATCH, DELETE | PATCH: `start_time`, `minutes`, `meeting_url`, `is_active`. |
-| `subscriptions/<id>/sessions/` | GET | Read-only, paginated, `?when=upcoming|past`; any other `when` is a `400`. |
+| `subscriptions/<id>/sessions/` | GET | Read-only, paginated, `?when=upcoming` or `past`; any other `when` is a `400`. The split is on the session's **end** time (`starts_at + minutes`), not its start, so a session in progress stays upcoming (Plan 5). It is also scoped by `Session.teacher`: after a teacher change, each teacher sees there only the sessions they teach, while the subscription itself stays scoped by `Subscription.teacher` (Plan 5). |
 | `schedule/generate/` | POST | `{from, to, subscription?}`, at most 62 days. Returns the run result from §4.1. |
 | `schedule/today/` | GET | The Today board rows. |
 | `academy/settings/` | GET, PATCH | Adds `generation_horizon_days` and `renewal_grace_days`. |

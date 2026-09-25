@@ -28,6 +28,7 @@ Plan 6 of the roadmap. Counting goes through `scheduling.services` (`rules.consu
 - Restore is allowed on any cancelled session, even inside a pause or on an ended subscription.
 - A teacher's attendance controls open within a minute of the start (the list re-reads each minute), not at the exact second.
 - `seed_dev` marks and reports past sessions in every academy, not only the demo one.
+- A teacher or family in a far timezone sees "Today" and "This week" roll over at the academy's midnight, not their own (PM6).
 - No payroll locks yet (Plan 7): nothing freezes a marked session.
 - No session reminders yet (Plan 8).
 
