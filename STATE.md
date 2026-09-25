@@ -4,17 +4,25 @@ Keep this under ~40 lines: current position only.
 
 ## Where we are
 
-Plan 3 (people & catalogue, B0 milestone 3) in review: branch `feat/people-catalogue` in backend,
-dashboard and meta (spec `docs/superpowers/specs/2026-09-24-people-catalogue-design.md`, plan
-`docs/superpowers/plans/2026-09-24-plan-3-people-catalogue.md`). Admins manage students, parents,
-teachers, admins, courses, packages and academy settings; invites arrive in each person's language.
-Self-registration and parent-created children are gone (returns in B9).
+Plan 4 (subscriptions & scheduling, B0 milestone 4) in review: branch `feat/subscriptions-scheduling`
+in backend, dashboard and meta (spec `docs/superpowers/specs/2026-09-24-subscriptions-scheduling-design.md`,
+plan `docs/superpowers/plans/2026-09-24-plan-4-subscriptions-scheduling.md`). Admins create
+subscriptions with weekly slots and pauses, sessions generate ahead, an hourly job per academy
+pauses, resumes and expires them, and renewals carry extra sessions over. Today board and
+generate-for-range are live; teacher/student/parent screens are Plan 5.
 
 ## Next
 
 Open PRs, get meta CI green, merge backend then dashboard, bump meta pointers, merge meta. Then
-Plan 4: subscriptions, weekly slots and session generation. It must call
-`etqan.catalogue.services.sessions_total` and add the "course/package has subscriptions" delete guard.
+Plan 5: attendance, session reports and the teacher, student and parent screens. It must use
+`scheduling.services` (the `CONSUMING` rule and `untouched_sessions`) rather than re-deriving them.
+
+## Follow-ups (from Plan 4)
+
+- Changing the academy timezone leaves already-generated sessions at their old UTC instant.
+- Deactivated students and teachers keep generating sessions until the subscription expires.
+- A renewal that starts today can duplicate a slot session that already started today on the old subscription.
+- The teacher and course pickers in the subscription forms cap at 100.
 
 ## Standing warnings
 
