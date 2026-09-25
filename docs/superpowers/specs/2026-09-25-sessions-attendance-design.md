@@ -127,7 +127,8 @@ The whole request runs as one transaction with a savepoint per session. The rows
   - `PUT` answers 200 with `{session, behaviour, participation, notes, written_by{id, full_name}, created_at, updated_at}`.
 - **Reading:** the session's teacher and admins. Anyone else gets 404. `GET` returns 404 when no report is written yet.
 - **Missing reports:**
-  - completed sessions whose `starts_at + minutes` ended more than 24 hours ago, with no report and not cancelled;
+  - completed sessions whose `starts_at + minutes` ended more than 24 hours ago, with no report and not cancelled, where the student was `present` and the teacher was not `absent` (owner decision, 2026-09-25);
+  - absences, excused sessions and teacher no-shows never appear on the list, though a report can still be written on them;
   - admins see all of them, teachers see their own;
   - a student or parent gets 404 on the report route and 403 on `reports/missing/`.
 
