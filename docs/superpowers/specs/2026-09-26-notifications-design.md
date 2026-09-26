@@ -91,7 +91,7 @@ New field: `expired_at` (UTC, nullable). Scheduling's `expire()` sets it, so the
 
 **Look-back:**
 - **Event types** (absent, invoice issued, expired) only consider events from the last 24 hours. So enabling notifications on an academy with history sends no flood, and a scanner outage of up to a day loses nothing.
-- **State types** (low, missing report) are deduped once per object.
+- **State types** are deduped once per object. `subscription.low` looks at current active subscriptions only; `report.missing` only at sessions that ended in the last 7 days, so years of old missing reports are never announced.
 
 ### 4.2 The types
 
@@ -108,7 +108,7 @@ Time comparisons use UTC instants. "Today" is the academy's calendar.
 | 7 | `subscription.expired` | student, guardians, admins | `expired_at` in the last 24 h | — | once per subscription |
 | 8 | `invoice.issued` | payer | a non-void invoice created in the last 24 h | — | once per invoice |
 | 9 | `invoice.overdue` | payer, admins | an `unpaid` or `partial` invoice with today > `due_on` | — | week `n = (today − due_on − 1) // 7`, so the day after the due date, then every 7 days |
-| 10 | `report.missing` | the session's teacher | the session is in scheduling's `missing_reports()` (Plan 5 §4.5) | — | once per session |
+| 10 | `report.missing` | the session's teacher | the session is in scheduling's `missing_reports()` (Plan 5 §4.5) and ended within the last 7 days | — | once per session |
 
 **Notes:**
 - A reminder whose moment has passed still fires as long as the session hasn't started. This covers a session created or moved inside the window. It never fires after the start.
