@@ -31,7 +31,9 @@ and payslips come only from `build`; the session lock is scheduling's (`lock_ses
 - `seed_dev` marks and reports past sessions in every academy, not only the demo one.
 - A teacher or family in a far timezone sees "Today" and "This week" roll over at the academy's midnight, not their own (PM6).
 - A subscription edited after its invoice keeps the invoice's amount; subscriptions created by seeds or services are not invoiced.
-- A session completed after its month's payslip was issued is never paid; the admin adds a bonus (corrections are adjustments).
+- A session completed after its month's payslip was issued is never paid; generate names the teacher under "unpaid sessions" and the admin adds a bonus on a later month (corrections are adjustments). The warning keeps showing on every regenerate of that month, even after the bonus.
+- An adjustment created and deleted while an issue is running can fail the issue with a 500 (very narrow window; not fixed).
+- The adjustment dialog labels an old-currency amount in its old currency when the teacher is beyond the 100-person picker cap.
 - Adjustments left in a currency the teacher is no longer paid in stay pending until edited (generate names them).
 - Reports stay writable on a payroll-locked session (staff notes, not pay).
 - Payslip notifications are Plan 8; incentives, per-student rates, fixed salary, balances and salaries as expenses are B4.
