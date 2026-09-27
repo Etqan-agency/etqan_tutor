@@ -118,7 +118,7 @@ One spec covers v1 §7:
 4. The admin sets up a subscription with two slots and generates sessions.
 5. The teacher accepts their invite, marks the student absent on a started session and writes a report.
 6. The admin records a payment on the subscription's invoice.
-7. The admin sets the teacher's rate, then generates and issues last month's payslip, or the payslip for the month the session falls in once that month is over. A timing-safe arrangement is chosen in the plan.
+7. The admin sets the teacher's rate, then generates and issues **last month's** payslip. To make this possible, the subscription in step 4 starts in the previous month (on its 15th, which is never a month or midnight boundary), so a completed session exists in a month that has already ended. Plan 7's e2e uses the same arrangement.
 8. The scan runs, and the parent sees the absence notification.
 
 It runs in the existing CI `e2e` job with the other specs, and against the simulated staging server.
