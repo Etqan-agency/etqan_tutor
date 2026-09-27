@@ -88,14 +88,16 @@ It is unique on (`kind`, `name_en`) and on (`kind`, `name_ar`), compared case-in
 
 ### 4.3 Who sees what
 
-| Field | Admin | Teacher (their students) | Student (self) / parent (children) |
-|---|---|---|---|
-| Tags | read and write | read | read |
-| XP | read and write | read | read |
-| Age group | read | read | read |
-| Nationality | read and write | — | — |
+The people endpoints stay admin-only (Plan 3), so every other role gets a 403 there, and only admins change tags, XP or nationality. Non-admins read through `/api/v1/me/`:
 
-Teacher tags are visible to admins, and to the teacher on their own profile. Only admins change tags, XP or nationality.
+| Who | Sees (through `me/`) |
+|---|---|
+| Student | their own tags, XP and age group |
+| Parent | each child's tags, XP and age group, in the `children` summaries |
+| Teacher | their own teacher tags |
+
+Nationality is admin-only everywhere. Showing students' tags to their teachers is deferred: no teacher screen shows a student's profile today.
+
 
 ## 5. API (existing `/api/v1/people/` conventions)
 
@@ -126,7 +128,7 @@ There is no `DELETE` and no `PUT`.
   - filters for Tag, and for students also Nationality and Age group;
   - the bulk bar gains Add tag and Remove tag.
 - **Detail pages:** tags on both. For students, also XP and age group, and nationality for admins only.
-- **Student and parent views:** the student's tags and XP on their own page.
+- **Student, parent and teacher views:** the student's tags and XP on their own page; the parent's children's; the teacher's own tags on their profile.
 - **Reuse:** the shared helpers (Pager, `clean`/`csvUrl`, `applyServerErrors`, `useFieldError`). Every string is in en and ar.
 
 ## 7. Seeds
@@ -151,10 +153,9 @@ It is idempotent, and the `other` academy gets only the presets.
   - the `minor` filter;
   - the filters stay exact across pages.
 - **Access:**
-  - a teacher never sees nationality;
-  - a student or parent sees only their own or their children's tags and XP;
-  - non-admins can't write tags, XP or nationality (403, or the field is ignored or refused, whichever the Plan 3 conventions do);
-  - the tag admin is admin-only.
+  - nationality never appears outside admin payloads;
+  - `me/` shows a student their own tags, XP and age group, a parent only their children's, and a teacher their own tags;
+  - every people and tag endpoint answers 403 to non-admins.
 - **Isolation and performance:**
   - another academy's tags are never visible or assignable (with `until_pk_exceeds`);
   - the list's query count stays flat with tags attached.
