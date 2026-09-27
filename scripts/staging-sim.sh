@@ -154,8 +154,28 @@ push() { # push <sha>: A's images, under the tag <sha>
     done
 }
 
+# PIDs of background jobs run_steps starts, so stop_background (its EXIT
+# trap) can always find and kill them, however run_steps exits.
+POLLER_PID=""
+TUNNEL_PID=""
+
+stop_background() {
+    if [ -n "$POLLER_PID" ]; then
+        touch "${SIM_DIR}/stop-polling" 2>/dev/null || true
+        kill "$POLLER_PID" 2>/dev/null || true
+        wait "$POLLER_PID" 2>/dev/null || true
+        POLLER_PID=""
+    fi
+    if [ -n "$TUNNEL_PID" ]; then
+        kill "$TUNNEL_PID" 2>/dev/null || true
+        wait "$TUNNEL_PID" 2>/dev/null || true
+        TUNNEL_PID=""
+    fi
+}
+
 run_steps() {
     local codes before after
+    trap stop_background EXIT
     docker login "localhost:${SIM_REGISTRY_PORT}" -u sim --password-stdin \
         < "${SIM_DIR}/registry-password" >/dev/null
     push "$SHA_A"
@@ -167,8 +187,11 @@ run_steps() {
     echo "━━ Uploads: the S3 store takes a file and serves it publicly"
     on_server bash /opt/etqan/scripts/manage.sh shell -c \
         "'from django.core.files.base import ContentFile; from django.core.files.storage import default_storage as s; s.save(\"tenants/staging-sim/check.txt\", ContentFile(b\"ok\"))'"
-    [ "$(on_server docker exec etqan-s3-1 curl -s \
-        "http://127.0.0.1:9000/etqan-staging-media/tenants/staging-sim/check.txt")" = ok ]
+    if [ "$(on_server docker exec etqan-s3-1 curl -s \
+        "http://127.0.0.1:9000/etqan-staging-media/tenants/staging-sim/check.txt")" != ok ]; then
+        echo "ERROR: the uploaded file was not readable back from the S3 store." >&2
+        exit 1
+    fi
 
     echo "━━ Deploy B (${SHA_B}) while /health/ready/ is polled"
     push "$SHA_B"
@@ -176,18 +199,23 @@ run_steps() {
     before="$(on_server cat /opt/etqan/.active-color)"
     : > "${SIM_DIR}/polls"
     rm -f "${SIM_DIR}/stop-polling"
+    # stdout/stderr point straight at polls (the file the assertion below
+    # reads), not at run_steps' own fds: those feed run()'s tee, and a
+    # background job that still holds that pipe open (because a step after
+    # it failed and exited early) would keep tee from ever seeing EOF.
     (
         while [ ! -f "${SIM_DIR}/stop-polling" ]; do
             curl -s -o /dev/null -w '%{http_code}\n' --max-time 5 \
                 --cacert "${SIM_DIR}/root.crt" --connect-to "::127.0.0.1:${SIM_HTTPS_PORT}" \
-                "${ACADEMY_URL}/health/ready/" >> "${SIM_DIR}/polls" || true
+                "${ACADEMY_URL}/health/ready/" || true
             sleep 0.2
         done
-    ) &
-    local poller=$!
+    ) >> "${SIM_DIR}/polls" 2>&1 &
+    POLLER_PID=$!
     deploy "$SHA_B" 0
     touch "${SIM_DIR}/stop-polling"
-    wait "$poller"
+    wait "$POLLER_PID"
+    POLLER_PID=""
     after="$(on_server cat /opt/etqan/.active-color)"
     codes="$(sort "${SIM_DIR}/polls" | uniq -c | tr -s ' ')"
     echo "Colour ${before} → ${after}; polls:${codes}"
@@ -209,17 +237,20 @@ run_steps() {
         echo "ERROR: the failed deploy changed the active colour." >&2
         exit 1
     fi
-    [ "$(curl -s -o /dev/null -w '%{http_code}' --cacert "${SIM_DIR}/root.crt" \
-        --connect-to "::127.0.0.1:${SIM_HTTPS_PORT}" "${ACADEMY_URL}/health/ready/")" = 200 ]
+    if [ "$(curl -s -o /dev/null -w '%{http_code}' --cacert "${SIM_DIR}/root.crt" \
+        --connect-to "::127.0.0.1:${SIM_HTTPS_PORT}" "${ACADEMY_URL}/health/ready/")" != 200 ]; then
+        echo "ERROR: the edge did not answer 200 after the failed deploy." >&2
+        exit 1
+    fi
     echo "Still serving from ${after}."
 
     echo "━━ The full journey against the deployed stack"
-    local opts tunnel
+    local opts
     mapfile -t opts < <(ssh_opts)
     ssh "${opts[@]}" -N -L "127.0.0.1:${SIM_MAILPIT_PORT}:127.0.0.1:8025" deploy@127.0.0.1 &
-    tunnel=$!
+    TUNNEL_PID=$!
     sleep 2
-    (
+    if ! (
         cd "${ROOT}/dashboard"
         E2E_BASE_URL="https://${BASE_DOMAIN}" \
             E2E_MAILPIT_URL="http://127.0.0.1:${SIM_MAILPIT_PORT}" \
@@ -227,8 +258,12 @@ run_steps() {
             E2E_HOST_RESOLVER_RULES="MAP *.${BASE_DOMAIN} 127.0.0.1:${SIM_HTTPS_PORT}, MAP ${BASE_DOMAIN} 127.0.0.1:${SIM_HTTPS_PORT}" \
             E2E_IGNORE_HTTPS_ERRORS=1 \
             npx pnpm@10 exec playwright test e2e/journey.spec.ts --retries=0
-    ) || { kill "$tunnel"; exit 1; }
-    kill "$tunnel"
+    ); then
+        exit 1
+    fi
+    kill "$TUNNEL_PID" 2>/dev/null || true
+    wait "$TUNNEL_PID" 2>/dev/null || true
+    TUNNEL_PID=""
 }
 
 # Fails when any secret the run handled shows in its output: the registry
@@ -253,7 +288,16 @@ no_secret_in() {
 
 run() {
     local status=0
-    run_steps 2>&1 | tee "${SIM_DIR}/run.log" || status=$?
+    # run_steps in a fresh bash process, not on the left of this run()'s own
+    # `|| status=$?`: with `set -e`, a command on the left of `|` or `||`
+    # inside run_steps would never actually stop it (errexit is suspended for
+    # any command whose exit status is about to be tested), so a failing
+    # step's checks would be silently ignored and the run would report
+    # success. PIPESTATUS[0] is the fresh process's real exit code.
+    set +e
+    bash "${BASH_SOURCE[0]}" run-steps 2>&1 | tee "${SIM_DIR}/run.log"
+    status="${PIPESTATUS[0]}"
+    set -e
     no_secret_in "${SIM_DIR}/run.log"
     if [ "$status" -ne 0 ]; then
         return "$status"
@@ -282,6 +326,9 @@ case "${1:-all}" in
     up) up ;;
     build) build ;;
     run) run ;;
+    # Internal: run() execs this in a fresh process so `set -euo pipefail`
+    # actually applies to it (see run()'s comment).
+    run-steps) run_steps ;;
     down) down ;;
     all)
         trap 'down; remove_images' EXIT

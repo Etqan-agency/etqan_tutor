@@ -38,6 +38,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 SSH=(ssh -i "$STAGING_SSH_KEY_FILE" -p "${STAGING_SSH_PORT:-22}"
     -o IdentitiesOnly=yes -o BatchMode=yes -o ConnectTimeout=20
+    -o ServerAliveInterval=15 -o ServerAliveCountMax=4
     -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$STAGING_KNOWN_HOSTS_FILE")
 TARGET="${STAGING_SSH_USER}@${STAGING_SSH_HOST}"
 remote() {
@@ -56,6 +57,7 @@ echo "── 2/5 Registry login"
 if [ -n "${REGISTRY_TOKEN:-}" ]; then
     printf '%s' "$REGISTRY_TOKEN" |
         remote docker login "${REGISTRY:-ghcr.io}" -u "${REGISTRY_USER:?}" --password-stdin
+    unset REGISTRY_TOKEN
 else
     echo "No REGISTRY_TOKEN: using the server's existing registry login."
 fi
