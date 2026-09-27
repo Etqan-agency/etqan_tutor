@@ -14,7 +14,11 @@ recipient under a unique `dedupe_key`, renders it once in the recipient's langua
 and emails it once on the branded layout (`notifications.deliver_email`, 3 tries). Every role has a
 bell (unread count polled every minute), a Notifications page, and admins a Notifications section in
 the academy settings. `manage.py scan_notifications` runs the scan now (the e2e suite uses it).
-The e2e suite covers the journey through the Caddy edge.
+The e2e suite covers the journey through the Caddy edge. Review fixes on the branch: scheduling's
+`missing_reports` takes an optional `now`, and the `report.missing` finder passes the scan's one
+instant; the email task fails any non-`OSError` immediately (recorded), and email subjects — the
+academy name prefix included — are stripped of line breaks; the settings PATCH answers an unknown
+`type` with a 400 on `type`; mark-read returns the fresh row in one read.
 
 ## Next
 
