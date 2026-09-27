@@ -47,7 +47,36 @@ jobs:
           else
             echo "configured=true" >> "$GITHUB_OUTPUT"
           fi
+      # Never trust inputs.sha before it is proven to be a real, merged
+      # commit: a manual dispatch could otherwise deploy an unmerged commit
+      # or a branch name with every staging secret in scope.
+      - name: Validate the SHA (format)
+        if: steps.gate.outputs.configured == 'true'
+        env:
+          SHA: ${{ inputs.sha }}
+        run: |
+          if [[ ! "$SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error::sha must be a 40-character lowercase hex commit SHA"
+            exit 1
+          fi
       - if: steps.gate.outputs.configured == 'true'
+        name: Checkout master (to verify the SHA against it)
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.SUBMODULE_TOKEN }}
+      - name: Validate the SHA (on master)
+        if: steps.gate.outputs.configured == 'true'
+        env:
+          SHA: ${{ inputs.sha }}
+        run: |
+          git fetch origin master
+          if ! git merge-base --is-ancestor "$SHA" origin/master; then
+            echo "::error::$SHA is not an ancestor of origin/master"
+            exit 1
+          fi
+      - if: steps.gate.outputs.configured == 'true'
+        name: Checkout the deployed SHA
         uses: actions/checkout@v7
         with:
           ref: ${{ inputs.sha }}

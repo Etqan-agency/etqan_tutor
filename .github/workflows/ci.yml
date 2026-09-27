@@ -293,7 +293,8 @@ jobs:
     outputs:
       run: ${{ steps.check.outputs.run }}
     steps:
-      - uses: actions/checkout@v7
+      - if: github.event_name == 'pull_request'
+        uses: actions/checkout@v7
         with: { fetch-depth: 0, submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
       - id: check
         env:
@@ -315,7 +316,7 @@ jobs:
     needs: [sim-needed, images]
     if: needs.sim-needed.outputs.run == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     env:
       SIM_SHA: ${{ github.sha }}
       SIM_DIR: ${{ github.workspace }}/../staging-sim
