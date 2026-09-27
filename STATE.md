@@ -4,46 +4,29 @@ Keep this under ~40 lines: current position only.
 
 ## Where we are
 
-Plan 9 (E2E and staging deploy, B0 milestone 9, the last) built and reviewed, not yet pushed: branch
-`feat/staging` in infra, backend, dashboard and meta (spec
-`docs/superpowers/specs/2026-09-27-staging-design.md`, plan
-`docs/superpowers/plans/2026-09-27-plan-9-staging.md`). CI builds the three images after the tests
-and, on `master`, pushes `ghcr.io/etqan-agency/<name>:<meta-sha>` and `:master`; the `staging-sim` job
-deploys them twice (blue/green under a health poll), fails one deploy on purpose, seeds,
-smoke-checks and walks `e2e/journey.spec.ts` on a simulated server (sshd + Docker-in-Docker,
-`scripts/staging-sim.sh`, `just staging-sim`); `deploy-staging` (reusable, also run by hand for
-rollback) deploys to the real server once the `staging` secrets exist and skips green until then.
-The edge takes `TLS_MODE` (`cloudflare` default, byte-identical; `internal`), `ship.sh` takes
-`ETQAN_OVERLAY=staging` from `.env.production` (S3 store and Mailpit overlay), and `seed_staging`
-creates the demo academy once. The journey (Etqan creates an academy → parent reads the absence)
-runs in the CI e2e job too. `infra/STAGING.md` documents going live: server, DNS, the six secrets
-(a master-only deployment-branch policy on the `staging` environment guards manual dispatch, since
-the workflow's own SHA-format/master-ancestry checks live in the same file a branch could edit),
-`.env.production`, the first seeded deploy, rollback, and moving off the overlay.
+Plan 10 (student and teacher profile depth, B1 plan 1 of 4) built and in review: branch
+`feat/profile-depth` in backend, dashboard and meta (spec
+`docs/superpowers/specs/2026-09-27-profile-depth-design.md`, plan
+`docs/superpowers/plans/2026-09-27-plan-10-profile-depth.md`). In `etqan.identity`: editable emoji
+`Tag`s per academy (21 student and 22 teacher presets from `presets.py`, seeded by migration
+`0014_preset_tags` in every academy schema and by `create_academy`; unique per kind in either
+language, case-insensitively; retire and restore, never delete), `StudentProfile.xp` and
+`.nationality`, and an age group derived on the academy's calendar (`ages.py`, never stored).
+People take `profile.tag_ids` (a retired tag already on a person stays), the students bulk action
+takes `add_tag`/`remove_tag`, the lists filter by `tag`, `nationality` and `age_group` and export
+them, and `me/` shows a student's own tags, XP and age group, a parent's children's, and a
+teacher's own tags. Nationality is admin-only. The dashboard has Settings → Tags, a tag picker on
+the forms, chips, filters and bulk tagging on the lists, and the profile card on `/account`.
+The e2e suite covers the journey through the Caddy edge.
 
 ## Next
 
-The commits are made but not pushed. Next: the user approves the push (workflows go over SSH,
-`git push git@github.com:Etqan-agency/etqan_tutor.git feat/staging`); then open one PR per repo
-(infra, backend, dashboard → `main`; meta → `master`, first pointing submodules at their
-`feat/staging` heads for meta CI); nothing merges without the user's approval. After that, check the
-first hosted `master` run: `images` pushed the three packages, `staging-sim` green, `deploy-staging`
-skipped green (its log shows "Staging not configured"). Then going live is configuration only
-(infra/STAGING.md). Open review follow-ups (all minor, deferred; none blocking): `ship_test.sh`
-doesn't pin overlay-line edge cases (last-line-wins, CRLF, quotes) though `ship.sh` handles them;
-`manage.sh` takes no stdin (`-i`); `ship.sh`'s banner names `ghcr.io` even under `ETQAN_REGISTRY`;
-`deploy-staging.sh`'s rsync `-e` escapes with `printf %q` (backslashes, which rsync's `-e` parser
-ignores), so a key or known-hosts path with spaces breaks it;
-`staging-sim-needed.sh` fails closed on a brand new submodule (the CI step runs the simulation
-whenever the script fails or prints anything but true/false); the simulation rebuilds the images
-rather than pulling the ones `images` pushed; CI's "Server logs" step is not scanned by
-`no_secret_in`; the PR gate misses dashboard/marketing `package.json`, lockfiles and
-`vite.config`, and backend changes the sim exercises beyond the listed files (`master` still runs
-the sim every time); check a built image once for leaked `x-access-token` git URLs.
-Notifications (Plan 8) decide who is told what only in `etqan.notifications`
-(`finders.FINDERS`, `recipients.resolve`, `text.render`, `links.path_for`); no other app imports it
-(the dev seeds excepted), and a new notice type is a finder there, never a call from a domain app.
-Never restate the pay rule, the session lock, `derive` or `overdue`.
+Open the PRs (backend, dashboard → `main`; meta → `master`), get meta CI green, merge backend then
+dashboard, bump the meta pointers, merge meta; nothing merges without the user's approval. Then
+Plan 11 (family accounts and payer). Tags, XP, nationality and the age group live only in
+`etqan.identity`: the age group is `ages.age_group`/`ages.born_lookups` on `clock.today()`, never a
+stored column; the presets are `presets.PRESETS` and `presets.seed`; assignment rules are
+`_tags_to_assign` and `_bulk_tag`. Never restate them elsewhere.
 
 ## Follow-ups (from Plans 4–9)
 
