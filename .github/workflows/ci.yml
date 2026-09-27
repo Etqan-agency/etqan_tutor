@@ -131,7 +131,8 @@ jobs:
       - name: shellcheck the deploy, smoke, simulation and helper scripts
         run: |
           docker run --rm -v "$PWD:/mnt" -w /mnt koalaman/shellcheck:v0.11.0 \
-            infra/scripts/*.sh infra/scripts/tests/*.sh infra/scripts/tests/fakebin/*
+            infra/scripts/*.sh infra/scripts/tests/*.sh infra/scripts/tests/fakebin/* \
+            infra/staging-sim/entrypoint.sh scripts/deploy-staging.sh scripts/staging-sim.sh
       - name: ship.sh, smoke.sh and compose tests
         run: |
           bash infra/scripts/tests/ship_test.sh

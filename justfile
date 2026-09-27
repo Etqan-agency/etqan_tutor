@@ -125,9 +125,13 @@ seed:
 
 # ─── Infrastructure ───────────────────────────────────────────
 
-# Deploy to staging (placeholder)
+# Staging deploys from CI on every green master (infra/STAGING.md)
 deploy:
-    @echo "Deploy is not wired yet — see STATE.md"
+    @echo "Staging deploys from CI on every green master; see infra/STAGING.md."
+
+# Prove the staging deploy on a simulated server (privileged Docker-in-Docker)
+staging-sim:
+    bash scripts/staging-sim.sh all
 
 # Scaffold a new backend module
 new-module name:
