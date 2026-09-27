@@ -123,6 +123,20 @@ jobs:
             echo "TLS_MODE=internl was accepted"; exit 1
           fi
 
+  infra-scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
+      - name: shellcheck the deploy, smoke, simulation and helper scripts
+        run: |
+          docker run --rm -v "$PWD:/mnt" -w /mnt koalaman/shellcheck:v0.11.0 \
+            infra/scripts/*.sh infra/scripts/tests/*.sh infra/scripts/tests/fakebin/*
+      - name: ship.sh and smoke.sh tests
+        run: |
+          bash infra/scripts/tests/ship_test.sh
+          bash infra/scripts/tests/smoke_test.sh
+
   e2e:
     runs-on: ubuntu-latest
     services:
