@@ -17,7 +17,11 @@ takes `add_tag`/`remove_tag`, the lists filter by `tag`, `nationality` and `age_
 them, and `me/` shows a student's own tags, XP and age group, a parent's children's, and a
 teacher's own tags. Nationality is admin-only. The dashboard has Settings → Tags, a tag picker on
 the forms, chips, filters and bulk tagging on the lists, and the profile card on `/account`.
-The e2e suite covers the journey through the Caddy edge.
+The e2e suite covers the journey through the Caddy edge. Post-plan hardening: a concurrent
+duplicate-name save maps to a 400, never a 500 (`_save_tag`); `tag_ids` are coerced to integers and
+capped at 100 (`_tag_ids()`); a test pins the age group to the academy's calendar in a non-UTC zone
+(Pacific/Auckland); the dashboard's tag filter is single-select, though `?tag=` is repeatable on the
+API (`ANY` match).
 
 ## Next
 
