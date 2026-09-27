@@ -43,6 +43,17 @@ stored column; the presets are `presets.PRESETS` and `presets.seed`; assignment 
 - GitHub keeps only the newest pending deploy per concurrency group: start a rollback when no
   deploy is waiting.
 - The production deploy workflow, monitoring alerts, backups and restore drills are not built.
+- Plan 9's open review follow-ups (all minor, deferred; none blocking): `ship_test.sh` doesn't pin
+  overlay-line edge cases (last-line-wins, CRLF, quotes) though `ship.sh` handles them; `manage.sh`
+  takes no stdin (`-i`); `ship.sh`'s banner names `ghcr.io` even under `ETQAN_REGISTRY`;
+  `deploy-staging.sh`'s rsync `-e` escapes with `printf %q` (backslashes, which rsync's `-e` parser
+  ignores), so a key or known-hosts path with spaces breaks it; `staging-sim-needed.sh` fails closed
+  on a brand new submodule (the CI step runs the simulation whenever the script fails or prints
+  anything but true/false); the simulation rebuilds the images rather than pulling the ones `images`
+  pushed; CI's "Server logs" step is not scanned by `no_secret_in`; the PR gate misses
+  dashboard/marketing `package.json`, lockfiles and `vite.config`, and backend changes the sim
+  exercises beyond the listed files (`master` still runs the sim every time); check a built image
+  once for leaked `x-access-token` git URLs.
 - A notice is rendered once: a recipient who changes language or time zone keeps the old text on old
   notices; one whose email is removed before delivery gets `skipped`.
 - A guardian linked after a once-per-object notice (a reminder, a low subscription) does not get it.
@@ -77,4 +88,10 @@ stored column; the presets are `presets.PRESETS` and `presets.seed`; assignment 
 
 - No staging server or domain yet: `deploy-staging` skips until the `staging` secrets exist (infra/STAGING.md). No production deploy workflow. Wildcard TLS (`*.domain`) uses Cloudflare DNS-01 (`TLS_MODE=cloudflare`, the default).
 - Deploy order (infra `scripts/ship.sh`): `migrate` + `bootstrap_platform` run from the new image before the new colour starts. Production refuses to boot without `DJANGO_S3_BUCKET` (+ AWS keys, public-read bucket policy; see `infra/.env.production.example`).
+- A new NOT NULL column needs `db_default=` (Django's DB-side default), so the old colour keeps
+  serving reads with the old model while `ship.sh` migrates and the new colour starts (Plan 10 M4).
+- Notifications (Plan 8) decide who is told what only in `etqan.notifications` (`finders.FINDERS`,
+  `recipients.resolve`, `text.render`, `links.path_for`); no other app imports it (the dev seeds
+  excepted), and a new notice type is a finder there, never a call from a domain app. Never restate
+  the pay rule, the session lock, `derive` or `overdue`.
 - Kaleem's staging passwords are in this repo's git history (inherited). Never reuse them.
