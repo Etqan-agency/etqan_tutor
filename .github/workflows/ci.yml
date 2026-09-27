@@ -137,6 +137,7 @@ jobs:
           bash infra/scripts/tests/ship_test.sh
           bash infra/scripts/tests/smoke_test.sh
           bash infra/scripts/tests/compose_test.sh
+          bash infra/scripts/tests/edge_ca_test.sh
 
   e2e:
     runs-on: ubuntu-latest
