@@ -18,7 +18,11 @@ The e2e suite covers the journey through the Caddy edge. Review fixes on the bra
 `missing_reports` takes an optional `now`, and the `report.missing` finder passes the scan's one
 instant; the email task fails any non-`OSError` immediately (recorded), and email subjects — the
 academy name prefix included — are stripped of line breaks; the settings PATCH answers an unknown
-`type` with a 400 on `type`; mark-read returns the fresh row in one read.
+`type` with a 400 on `type`; mark-read returns the fresh row in one read. Final-review fixes: a
+subscription handed over to a live renewal is never announced as ended or low; overdue reminders stop
+90 days after the due date; each email is queued robustly and every scan re-queues rows pending 5 min
+to 24 h; the beat scan expires after 55 s; the low text is worded per count; the Notifications page
+returns to page 1 after "Mark all read"; each settings switch names its type.
 
 ## Next
 
@@ -35,6 +39,13 @@ call from a domain app. Never restate the pay rule, the session lock, `derive` o
 - A guardian linked after a once-per-object notice (a reminder, a low subscription) does not get it.
 - `invoice.issued` looks back on `created_at`; an invoice voided within the minute is never announced.
 - The bell polls every minute (no push); per-user preferences, WhatsApp and editable templates are B5.
+- Scanner cost grows with history: `report.missing` and `subscription.low` (and the pending-email
+  re-queue) scan every minute; add an index-served bound or run the state types less often.
+- Tail academies can starve past the scan's 240 s soft limit; rotate the order or fan out per academy.
+- Scan inserts take FK KEY SHARE on user rows (a possible deadlock with an admin deactivating a user,
+  retried next minute); mark-read can wait up to `EMAIL_TIMEOUT` on a row the email task holds.
+- Overdue reminders stop 90 days after the due date (`OVERDUE_FOR_DAYS`; the owner may change it).
+- `session.late` reaches families 5 min after the start by default; the owner may want a larger one.
 
 - Changing the academy timezone leaves already-generated sessions at their old UTC instant.
 - Deactivated students and teachers keep generating sessions until the subscription expires.
