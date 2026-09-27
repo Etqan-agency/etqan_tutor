@@ -4,23 +4,33 @@ Keep this under ~40 lines: current position only.
 
 ## Where we are
 
-Plan 7 (teacher payroll, B0 milestone 7) built and in review: branch `feat/payroll` in backend,
-dashboard and meta (spec `docs/superpowers/specs/2026-09-26-payroll-design.md`, plan
-`docs/superpowers/plans/2026-09-26-plan-7-payroll.md`). New tenant app `etqan.payroll`: admins set
-teachers' rates (a default and per course, in the teacher's pay currency) and bonuses and deductions,
-generate a month's draft payslips from completed sessions (teacher present or not marked), issue them
-once the month has ended (which freezes them and locks their sessions in scheduling), mark them paid
-and export CSV; teachers see and print their own issued and paid payslips at `/app/payslips/<id>/print`.
+Plan 8 (notifications, B0 milestone 8) built and in review: branch `feat/notifications` in backend,
+dashboard and meta (spec `docs/superpowers/specs/2026-09-26-notifications-design.md`, plan
+`docs/superpowers/plans/2026-09-26-plan-8-notifications.md`). New tenant app `etqan.notifications`:
+a beat job (`notifications.scan`, every minute, `for_each_academy`) runs one finder per type (session
+reminders, lateness, absences, low and expired subscriptions, issued and overdue invoices, missing
+reports) through scheduling's, billing's and identity's read-only services, writes one row per
+recipient under a unique `dedupe_key`, renders it once in the recipient's language and time zone,
+and emails it once on the branded layout (`notifications.deliver_email`, 3 tries). Every role has a
+bell (unread count polled every minute), a Notifications page, and admins a Notifications section in
+the academy settings. `manage.py scan_notifications` runs the scan now (the e2e suite uses it).
 The e2e suite covers the journey through the Caddy edge.
 
 ## Next
 
 Open PRs, get meta CI green, merge backend then dashboard, bump meta pointers, merge meta. Then
-Plan 8 of the roadmap. The pay rule is `payroll.services.rules.PAYS`, the amount `session_amount`,
-and payslips come only from `build`; the session lock is scheduling's (`lock_sessions`,
-`refuse_if_paid`). Never restate any of them. Scheduling never imports payroll or billing.
+the next milestone of the roadmap. Notifications decide who is told what only in
+`etqan.notifications` (`finders.FINDERS`, `recipients.resolve`, `text.render`, `links.path_for`);
+no other app imports it (the dev seeds excepted), and a new notice type is a finder there, never a
+call from a domain app. Never restate the pay rule, the session lock, `derive` or `overdue`.
 
-## Follow-ups (from Plans 4–7)
+## Follow-ups (from Plans 4–8)
+
+- A notice is rendered once: a recipient who changes language or time zone keeps the old text on old
+  notices; one whose email is removed before delivery gets `skipped`.
+- A guardian linked after a once-per-object notice (a reminder, a low subscription) does not get it.
+- `invoice.issued` looks back on `created_at`; an invoice voided within the minute is never announced.
+- The bell polls every minute (no push); per-user preferences, WhatsApp and editable templates are B5.
 
 - Changing the academy timezone leaves already-generated sessions at their old UTC instant.
 - Deactivated students and teachers keep generating sessions until the subscription expires.
