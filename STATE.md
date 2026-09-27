@@ -4,36 +4,52 @@ Keep this under ~40 lines: current position only.
 
 ## Where we are
 
-Plan 8 (notifications, B0 milestone 8) built and in review: branch `feat/notifications` in backend,
-dashboard and meta (spec `docs/superpowers/specs/2026-09-26-notifications-design.md`, plan
-`docs/superpowers/plans/2026-09-26-plan-8-notifications.md`). New tenant app `etqan.notifications`:
-a beat job (`notifications.scan`, every minute, `for_each_academy`) runs one finder per type (session
-reminders, lateness, absences, low and expired subscriptions, issued and overdue invoices, missing
-reports) through scheduling's, billing's and identity's read-only services, writes one row per
-recipient under a unique `dedupe_key`, renders it once in the recipient's language and time zone,
-and emails it once on the branded layout (`notifications.deliver_email`, 3 tries). Every role has a
-bell (unread count polled every minute), a Notifications page, and admins a Notifications section in
-the academy settings. `manage.py scan_notifications` runs the scan now (the e2e suite uses it).
-The e2e suite covers the journey through the Caddy edge. Review fixes on the branch: scheduling's
-`missing_reports` takes an optional `now`, and the `report.missing` finder passes the scan's one
-instant; the email task fails any non-`OSError` immediately (recorded), and email subjects — the
-academy name prefix included — are stripped of line breaks; the settings PATCH answers an unknown
-`type` with a 400 on `type`; mark-read returns the fresh row in one read. Final-review fixes: a
-subscription handed over to a live renewal is never announced as ended or low; overdue reminders stop
-90 days after the due date; each email is queued robustly and every scan re-queues rows pending 5 min
-to 24 h; the beat scan expires after 55 s; the low text is worded per count; the Notifications page
-returns to page 1 after "Mark all read"; each settings switch names its type.
+Plan 9 (E2E and staging deploy, B0 milestone 9, the last) built and reviewed, not yet pushed: branch
+`feat/staging` in infra, backend, dashboard and meta (spec
+`docs/superpowers/specs/2026-09-27-staging-design.md`, plan
+`docs/superpowers/plans/2026-09-27-plan-9-staging.md`). CI builds the three images after the tests
+and, on `master`, pushes `ghcr.io/etqan-agency/<name>:<meta-sha>` and `:master`; the `staging-sim` job
+deploys them twice (blue/green under a health poll), fails one deploy on purpose, seeds,
+smoke-checks and walks `e2e/journey.spec.ts` on a simulated server (sshd + Docker-in-Docker,
+`scripts/staging-sim.sh`, `just staging-sim`); `deploy-staging` (reusable, also run by hand for
+rollback) deploys to the real server once the `staging` secrets exist and skips green until then.
+The edge takes `TLS_MODE` (`cloudflare` default, byte-identical; `internal`), `ship.sh` takes
+`ETQAN_OVERLAY=staging` from `.env.production` (S3 store and Mailpit overlay), and `seed_staging`
+creates the demo academy once. The journey (Etqan creates an academy → parent reads the absence)
+runs in the CI e2e job too. `infra/STAGING.md` documents going live: server, DNS, the six secrets
+(a master-only deployment-branch policy on the `staging` environment guards manual dispatch, since
+the workflow's own SHA-format/master-ancestry checks live in the same file a branch could edit),
+`.env.production`, the first seeded deploy, rollback, and moving off the overlay.
 
 ## Next
 
-Open PRs, get meta CI green, merge backend then dashboard, bump meta pointers, merge meta. Then
-the next milestone of the roadmap. Notifications decide who is told what only in
-`etqan.notifications` (`finders.FINDERS`, `recipients.resolve`, `text.render`, `links.path_for`);
-no other app imports it (the dev seeds excepted), and a new notice type is a finder there, never a
-call from a domain app. Never restate the pay rule, the session lock, `derive` or `overdue`.
+The commits are made but not pushed. Next: the user approves the push (workflows go over SSH,
+`git push git@github.com:Etqan-agency/etqan_tutor.git feat/staging`); then open one PR per repo
+(infra, backend, dashboard → `main`; meta → `master`, first pointing submodules at their
+`feat/staging` heads for meta CI); nothing merges without the user's approval. After that, check the
+first hosted `master` run: `images` pushed the three packages, `staging-sim` green, `deploy-staging`
+skipped green (its log shows "Staging not configured"). Then going live is configuration only
+(infra/STAGING.md). Open review follow-ups (all minor, deferred; none blocking): `ship_test.sh`
+doesn't pin overlay-line edge cases (last-line-wins, CRLF, quotes) though `ship.sh` handles them;
+`manage.sh` takes no stdin (`-i`); `ship.sh`'s banner names `ghcr.io` even under `ETQAN_REGISTRY`;
+`E2E_MANAGE` set-but-empty takes the remote branch and fails; `manage.ts`'s `execFileSync` has no
+timeout; `deploy-staging.sh`'s rsync doesn't quote paths with spaces; `staging-sim.sh`'s cleanup
+doesn't guard a user-set `SIM_DIR` before `rm -rf`; `staging-sim-needed.sh` fails closed on a brand
+new submodule. Notifications (Plan 8) decide who is told what only in `etqan.notifications`
+(`finders.FINDERS`, `recipients.resolve`, `text.render`, `links.path_for`); no other app imports it
+(the dev seeds excepted), and a new notice type is a finder there, never a call from a domain app.
+Never restate the pay rule, the session lock, `derive` or `overdue`.
 
-## Follow-ups (from Plans 4–8)
+## Follow-ups (from Plans 4–9)
 
+- Staging uploads are linked at the S3 store's in-network address (`http://s3:9000/...`), so
+  browsers cannot load them until staging uses real S3 or a public custom domain (STAGING.md §7).
+- MinIO's images are no longer pullable; the overlay uses RustFS 1.0.0 (service `s3`).
+- `deploy-staging` declares `environment: staging`; if the org's plan has no environments for
+  private repos, drop that line and use repository secrets (STAGING.md §3).
+- GitHub keeps only the newest pending deploy per concurrency group: start a rollback when no
+  deploy is waiting.
+- The production deploy workflow, monitoring alerts, backups and restore drills are not built.
 - A notice is rendered once: a recipient who changes language or time zone keeps the old text on old
   notices; one whose email is removed before delivery gets `skipped`.
 - A guardian linked after a once-per-object notice (a reminder, a low subscription) does not get it.
@@ -66,6 +82,6 @@ call from a domain app. Never restate the pay rule, the session lock, `derive` o
 
 ## Standing warnings
 
-- Deploy is not wired yet: no staging, no production. Wildcard TLS (`*.domain`) needs a DNS-01 ACME challenge — handled in the deploy plan.
+- No staging server or domain yet: `deploy-staging` skips until the `staging` secrets exist (infra/STAGING.md). No production deploy workflow. Wildcard TLS (`*.domain`) uses Cloudflare DNS-01 (`TLS_MODE=cloudflare`, the default).
 - Deploy order (infra `scripts/ship.sh`): `migrate` + `bootstrap_platform` run from the new image before the new colour starts. Production refuses to boot without `DJANGO_S3_BUCKET` (+ AWS keys, public-read bucket policy; see `infra/.env.production.example`).
 - Kaleem's staging passwords are in this repo's git history (inherited). Never reuse them.
