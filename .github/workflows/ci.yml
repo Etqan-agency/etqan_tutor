@@ -103,12 +103,25 @@ jobs:
           done
       # The production image bakes in infra/caddy/Caddyfile and the cloudflare DNS
       # module. The token only has to be well-formed (40 chars) to provision.
-      - name: Validate the production Caddyfile (infra)
+      # TLS_MODE unset is production (cloudflare); internal is staging's.
+      - name: Validate the production Caddyfile (infra) in both TLS modes
         run: |
           docker build -t etqan-edge infra/caddy
-          docker run --rm -e BASE_DOMAIN=example.com -e ACME_EMAIL=ci@example.com \
-            -e CF_API_TOKEN=0000000000000000000000000000000000000000 etqan-edge \
-            caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+          edge() {
+            docker run --rm -e BASE_DOMAIN=example.com -e ACME_EMAIL=ci@example.com \
+              -e CF_API_TOKEN=0000000000000000000000000000000000000000 "$@"
+          }
+          validate=(caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile)
+          adapt=(caddy adapt --config /etc/caddy/Caddyfile --adapter caddyfile)
+          edge etqan-edge "${validate[@]}"
+          edge -e TLS_MODE=internal etqan-edge "${validate[@]}"
+          edge -e TLS_MODE=internal etqan-edge "${adapt[@]}" | grep -q '"module":"internal"'
+          # Unset means cloudflare: the same config, byte for byte.
+          diff <(edge etqan-edge "${adapt[@]}") <(edge -e TLS_MODE=cloudflare etqan-edge "${adapt[@]}")
+          # Any other value names no snippet, and the edge refuses to start.
+          if edge -e TLS_MODE=internl etqan-edge "${validate[@]}"; then
+            echo "TLS_MODE=internl was accepted"; exit 1
+          fi
 
   e2e:
     runs-on: ubuntu-latest
