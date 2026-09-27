@@ -253,7 +253,7 @@ jobs:
   # (its default target is production); the frontends read the private
   # @etqan/tokens repo through the tokens_token build secret.
   images:
-    needs: [backend, dashboard, marketing, caddy, e2e, infra-scripts]
+    needs: [backend, dashboard, marketing, caddy, e2e, infra-scripts, security]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -300,12 +300,21 @@ jobs:
         env:
           EVENT: ${{ github.event_name }}
           BASE: ${{ github.event.pull_request.base.sha }}
+        # Fails closed: a gate script that errors, or prints anything but
+        # true or false, runs the simulation.
         run: |
+          run=true
           if [ "$EVENT" = pull_request ]; then
-            echo "run=$(bash scripts/staging-sim-needed.sh "$BASE")" >> "$GITHUB_OUTPUT"
-          else
-            echo "run=true" >> "$GITHUB_OUTPUT"
+            if out="$(bash scripts/staging-sim-needed.sh "$BASE")"; then
+              case "$out" in
+                true | false) run="$out" ;;
+                *) echo "::warning::gate script printed '$out'; running the simulation" ;;
+              esac
+            else
+              echo "::warning::gate script failed; running the simulation"
+            fi
           fi
+          echo "run=$run" >> "$GITHUB_OUTPUT"
 
   # Spec §5: the staging deploy against a simulated server (sshd and
   # Docker-in-Docker, privileged, started with docker run: a service

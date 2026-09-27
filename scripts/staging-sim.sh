@@ -18,7 +18,8 @@
 #
 # Environment (all optional):
 #   SIM_SHA          tag A, default the meta repo's HEAD
-#   SIM_DIR          work directory (keys, passwords, logs), default /tmp/etqan-staging-sim
+#   SIM_DIR          work directory (keys, passwords, logs), default
+#                    /tmp/etqan-staging-sim; its name must contain staging-sim
 #   SIM_HTTPS_PORT, SIM_SSH_PORT, SIM_REGISTRY_PORT, SIM_MAILPIT_PORT
 #                    host ports, default 18443, 12222, 15000, 18025 (loopback only)
 #   TOKENS_TOKEN_FILE   for `build`: a token that reads the private @etqan/tokens
@@ -41,6 +42,17 @@ NET=etqan-sim
 SERVER=etqan-sim-server
 REGISTRY_CONTAINER=etqan-sim-registry
 IMAGES=(backend dashboard marketing)
+
+# SIM_DIR is removed with rm -rf and chmodded: refuse anything that does not
+# look like a simulation work directory.
+check_sim_dir() {
+    local dir="${1%/}"
+    if [ -z "$dir" ] || [ "$dir" = "${HOME%/}" ] || [[ "$(basename "$dir")" != *staging-sim* ]]; then
+        echo "ERROR: SIM_DIR='$1' is not a staging-sim work directory (its name must contain staging-sim; never / or \$HOME)." >&2
+        exit 2
+    fi
+}
+check_sim_dir "$SIM_DIR"
 
 # The name a host-side tag pushes to; the server pulls the same repository
 # as registry:5000/etqan-agency/<name> (ETQAN_REGISTRY in its env).
@@ -270,9 +282,11 @@ run_steps() {
 # password and the server's generated secrets (read on the server, never
 # printed).
 no_secret_in() {
-    local secret found=0
+    local secret found=0 count=0
     while IFS= read -r secret; do
-        if [ -n "$secret" ] && grep -qF -- "$secret" "$1"; then
+        [ -n "$secret" ] || continue
+        count=$((count + 1))
+        if grep -qF -- "$secret" "$1"; then
             found=1
         fi
     done < <(
@@ -281,6 +295,12 @@ no_secret_in() {
     )
     if [ "$found" = 1 ]; then
         echo "ERROR: a secret appeared in the run's output." >&2
+        return 1
+    fi
+    # The registry password and the server's four: fewer means the check
+    # read nothing to compare with.
+    if [ "$count" -lt 5 ]; then
+        echo "ERROR: only $count of 5 secrets were read; the output was not checked." >&2
         return 1
     fi
     echo "No secret in the run's output."

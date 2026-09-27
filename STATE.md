@@ -32,10 +32,15 @@ skipped green (its log shows "Staging not configured"). Then going live is confi
 (infra/STAGING.md). Open review follow-ups (all minor, deferred; none blocking): `ship_test.sh`
 doesn't pin overlay-line edge cases (last-line-wins, CRLF, quotes) though `ship.sh` handles them;
 `manage.sh` takes no stdin (`-i`); `ship.sh`'s banner names `ghcr.io` even under `ETQAN_REGISTRY`;
-`E2E_MANAGE` set-but-empty takes the remote branch and fails; `manage.ts`'s `execFileSync` has no
-timeout; `deploy-staging.sh`'s rsync doesn't quote paths with spaces; `staging-sim.sh`'s cleanup
-doesn't guard a user-set `SIM_DIR` before `rm -rf`; `staging-sim-needed.sh` fails closed on a brand
-new submodule. Notifications (Plan 8) decide who is told what only in `etqan.notifications`
+`deploy-staging.sh`'s rsync `-e` escapes with `printf %q` (backslashes, which rsync's `-e` parser
+ignores), so a key or known-hosts path with spaces breaks it;
+`staging-sim-needed.sh` fails closed on a brand new submodule (the CI step runs the simulation
+whenever the script fails or prints anything but true/false); the simulation rebuilds the images
+rather than pulling the ones `images` pushed; CI's "Server logs" step is not scanned by
+`no_secret_in`; the PR gate misses dashboard/marketing `package.json`, lockfiles and
+`vite.config`, and backend changes the sim exercises beyond the listed files (`master` still runs
+the sim every time); check a built image once for leaked `x-access-token` git URLs.
+Notifications (Plan 8) decide who is told what only in `etqan.notifications`
 (`finders.FINDERS`, `recipients.resolve`, `text.render`, `links.path_for`); no other app imports it
 (the dev seeds excepted), and a new notice type is a finder there, never a call from a domain app.
 Never restate the pay rule, the session lock, `derive` or `overdue`.
@@ -46,7 +51,8 @@ Never restate the pay rule, the session lock, `derive` or `overdue`.
   browsers cannot load them until staging uses real S3 or a public custom domain (STAGING.md §7).
 - MinIO's images are no longer pullable; the overlay uses RustFS 1.0.0 (service `s3`).
 - `deploy-staging` declares `environment: staging`; if the org's plan has no environments for
-  private repos, drop that line and use repository secrets (STAGING.md §3).
+  private repos, drop that line and use repository secrets (STAGING.md §3); the master-only
+  branch policy on manual dispatch is lost with it.
 - GitHub keeps only the newest pending deploy per concurrency group: start a rollback when no
   deploy is waiting.
 - The production deploy workflow, monitoring alerts, backups and restore drills are not built.

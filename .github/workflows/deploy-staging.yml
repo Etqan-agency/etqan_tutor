@@ -65,12 +65,14 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.SUBMODULE_TOKEN }}
+          persist-credentials: false
       - name: Validate the SHA (on master)
         if: steps.gate.outputs.configured == 'true'
         env:
           SHA: ${{ inputs.sha }}
+        # fetch-depth: 0 already fetched every branch into origin/*; no
+        # credentials are left to fetch again with.
         run: |
-          git fetch origin master
           if ! git merge-base --is-ancestor "$SHA" origin/master; then
             echo "::error::$SHA is not an ancestor of origin/master"
             exit 1
@@ -82,6 +84,9 @@ jobs:
           ref: ${{ inputs.sha }}
           submodules: recursive
           token: ${{ secrets.SUBMODULE_TOKEN }}
+          # The token still checks the submodules out; it is not left in
+          # .git/config for the steps that hold the staging secrets.
+          persist-credentials: false
       - name: SSH key and known hosts, as files
         if: steps.gate.outputs.configured == 'true'
         env:
