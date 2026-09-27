@@ -1,0 +1,81 @@
+name: Deploy staging
+
+# Spec §3.2. Called by CI for every green master push, and run by hand to
+# roll back (or forward) to any master commit whose images are in GHCR.
+# Without the STAGING_SSH_HOST secret every step after the first is skipped
+# and the job succeeds: master stays green before a server exists.
+on:
+  workflow_call:
+    inputs:
+      sha:
+        type: string
+        required: true
+      seed:
+        type: boolean
+        default: false
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Meta commit SHA (40 characters) whose images to deploy
+        type: string
+        required: true
+      seed:
+        description: Run seed_staging (creates the demo academy if it is missing)
+        type: boolean
+        default: false
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging
+    # One deploy at a time, and a running one is never cancelled.
+    concurrency:
+      group: staging
+      cancel-in-progress: false
+    timeout-minutes: 30
+    steps:
+      # Job-level `if:` cannot read secrets; this step can, and every other
+      # step is conditional on its answer.
+      - name: Is staging configured?
+        id: gate
+        env:
+          HOST: ${{ secrets.STAGING_SSH_HOST }}
+        run: |
+          if [ -z "$HOST" ]; then
+            echo "::notice title=Staging not configured::No STAGING_SSH_HOST secret, so nothing was deployed. See infra/STAGING.md."
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.gate.outputs.configured == 'true'
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.sha }}
+          submodules: recursive
+          token: ${{ secrets.SUBMODULE_TOKEN }}
+      - name: SSH key and known hosts, as files
+        if: steps.gate.outputs.configured == 'true'
+        env:
+          KEY: ${{ secrets.STAGING_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.STAGING_KNOWN_HOSTS }}
+        run: |
+          set +x
+          umask 077
+          printf '%s\n' "$KEY" > "$RUNNER_TEMP/staging_key"
+          printf '%s\n' "$KNOWN_HOSTS" > "$RUNNER_TEMP/staging_known_hosts"
+      - name: Deploy, then smoke-check
+        if: steps.gate.outputs.configured == 'true'
+        env:
+          DEPLOY_SHA: ${{ inputs.sha }}
+          STAGING_SSH_HOST: ${{ secrets.STAGING_SSH_HOST }}
+          STAGING_SSH_USER: ${{ secrets.STAGING_SSH_USER }}
+          STAGING_SSH_KEY_FILE: ${{ runner.temp }}/staging_key
+          STAGING_KNOWN_HOSTS_FILE: ${{ runner.temp }}/staging_known_hosts
+          STAGING_BASE_URL: ${{ secrets.STAGING_BASE_URL }}
+          REGISTRY_TOKEN: ${{ secrets.GHCR_READ_TOKEN }}
+          REGISTRY_USER: ${{ github.repository_owner }}
+          SEED: ${{ inputs.seed && '1' || '0' }}
+        run: bash scripts/deploy-staging.sh "$DEPLOY_SHA"
+      - name: Remove the key
+        if: always() && steps.gate.outputs.configured == 'true'
+        run: rm -f "$RUNNER_TEMP/staging_key" "$RUNNER_TEMP/staging_known_hosts"
