@@ -70,6 +70,7 @@ asks `family_payer` and nothing else. Never restate them elsewhere.
 - Deactivated students and teachers keep generating sessions until the subscription expires.
 - A renewal that starts today can duplicate a slot session that already started today on the old subscription.
 - The teacher, course and student pickers in list filters, forms and the Rates page cap at 100.
+- The students list's Family filter and "Family to add to" cap at 100 families (D10).
 - Restore is allowed on any cancelled session, even inside a pause or on an ended subscription.
 - A teacher's attendance controls open within a minute of the start (the list re-reads each minute), not at the exact second.
 - `seed_dev` marks and reports past sessions in every academy, not only the demo one.
@@ -81,7 +82,7 @@ asks `family_payer` and nothing else. Never restate them elsewhere.
 - Adjustments left in a currency the teacher is no longer paid in stay pending until edited (generate names them).
 - Reports stay writable on a payroll-locked session (staff notes, not pay).
 - Payslip notifications are Plan 8; incentives, per-student rates, fixed salary, balances and salaries as expenses are B4.
-- No session or unpaid-invoice reminders yet (Plan 8, B5). No gateways, refunds or family accounts (B1, B3).
+- No session or unpaid-invoice reminders yet (Plan 8, B5). No gateways, refunds, combined family invoices or family wallets (B3).
 
 ## Standing warnings
 
