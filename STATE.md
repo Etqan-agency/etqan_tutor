@@ -4,33 +4,32 @@ Keep this under ~40 lines: current position only.
 
 ## Where we are
 
-Plan 10 (student and teacher profile depth, B1 plan 1 of 4) built and in review: branch
-`feat/profile-depth` in backend, dashboard and meta (spec
-`docs/superpowers/specs/2026-09-27-profile-depth-design.md`, plan
-`docs/superpowers/plans/2026-09-27-plan-10-profile-depth.md`). In `etqan.identity`: editable emoji
-`Tag`s per academy (21 student and 22 teacher presets from `presets.py`, seeded by migration
-`0014_preset_tags` in every academy schema and by `create_academy`; unique per kind in either
-language, case-insensitively; retire and restore, never delete), `StudentProfile.xp` and
-`.nationality`, and an age group derived on the academy's calendar (`ages.py`, never stored).
-People take `profile.tag_ids` (a retired tag already on a person stays), the students bulk action
-takes `add_tag`/`remove_tag`, the lists filter by `tag`, `nationality` and `age_group` and export
-them, and `me/` shows a student's own tags, XP and age group, a parent's children's, and a
-teacher's own tags. Nationality is admin-only. The dashboard has Settings → Tags, a tag picker on
-the forms, chips, filters and bulk tagging on the lists, and the profile card on `/account`.
-The e2e suite covers the journey through the Caddy edge. Post-plan hardening: a concurrent
-duplicate-name save maps to a 400, never a 500 (`_save_tag`); `tag_ids` are coerced to integers and
-capped at 100 (`_tag_ids()`); a test pins the age group to the academy's calendar in a non-UTC zone
-(Pacific/Auckland); the dashboard's tag filter is single-select, though `?tag=` is repeatable on the
-API (`ANY` match).
+Plan 11 (family accounts and payer, B1 plan 2 of 4) built and in review: branch `feat/families` in
+backend, dashboard and meta (spec `docs/superpowers/specs/2026-09-27-families-design.md`, plan
+`docs/superpowers/plans/2026-09-27-plan-11-families.md`). In `etqan.identity`: a `Family` (name,
+notes, active, a payer) and `StudentProfile.family`, one column, so one family per student; the
+account type is derived from it (`services.account_type`), never stored. A payer is one of the
+family's students or an active parent of one (F-2); `payer_needs_choosing` is computed on every
+read (`families_queryset`'s two EXISTS annotations), never stored, and a flagged or retired family
+supplies no payer. Linking goes through `_claim`, a conditional UPDATE, so two admins racing for
+one student get a 400, never a move. The API adds `people/families/` (list, create, read, patch; no
+PUT or DELETE) and `families/payers/?students=`; students gain `account_type` and `family` in
+rows, CSV and `me/`, the `account_type` and `family` filters, and the bulk `create_family`,
+`add_to_family` and `remove_from_family` (skipped students reported, never moved). Billing's
+`payer_options` puts `identity_services.family_payer` first, then guardians, then the student,
+deduplicated; existing invoices never change. The id filters are junk-safe (`as_int`: `int()` in
+`try`, so a 5000-digit id no longer 500s). The dashboard has People → Families (dialogs, retire and
+restore, a family page), the account type and family chip, filters and bulk actions on students,
+"Family payer" on the invoice form and the family on the profile card. The e2e suite covers the
+journey through the Caddy edge.
 
 ## Next
 
 Open the PRs (backend, dashboard → `main`; meta → `master`), get meta CI green, merge backend then
 dashboard, bump the meta pointers, merge meta; nothing merges without the user's approval. Then
-Plan 11 (family accounts and payer). Tags, XP, nationality and the age group live only in
-`etqan.identity`: the age group is `ages.age_group`/`ages.born_lookups` on `clock.today()`, never a
-stored column; the presets are `presets.PRESETS` and `presets.seed`; assignment rules are
-`_tags_to_assign` and `_bulk_tag`. Never restate them elsewhere.
+Plan 12 (roles and permissions). The family rules live only in `etqan.identity.services`
+(`_family_students`, `_payer_for`, `_claim`, `payer_needs_choosing`, `family_payer`); billing
+asks `family_payer` and nothing else. Never restate them elsewhere.
 
 ## Follow-ups (from Plans 4–9)
 
