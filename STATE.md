@@ -71,6 +71,12 @@ asks `family_payer` and nothing else. Never restate them elsewhere.
 - A renewal that starts today can duplicate a slot session that already started today on the old subscription.
 - The teacher, course and student pickers in list filters, forms and the Rates page cap at 100.
 - The students list's Family filter and "Family to add to" cap at 100 families (D10).
+- Plan 11 final review, left open by the owner's merge: the bulk Create family dialog is still
+  unmounted while open. React batches `setOpen(false)` with `onDone`, so submitting with Enter
+  from the Name field drops focus to `<body>` (a click survives only because Save is disabled).
+  Fix: `flushSync(() => setOpen(false))` before `onDone(result)` in `BulkFamilyDialog.tsx`, an
+  Enter-path test, and correct the comments at `BulkFamilyDialog.tsx:29-41` and
+  `StudentsList.tsx:160-162`. A labelled focus target beats the unlabelled root div.
 - Restore is allowed on any cancelled session, even inside a pause or on an ended subscription.
 - A teacher's attendance controls open within a minute of the start (the list re-reads each minute), not at the exact second.
 - `seed_dev` marks and reports past sessions in every academy, not only the demo one.
