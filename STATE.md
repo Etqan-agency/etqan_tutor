@@ -23,12 +23,16 @@ only their own attendance. `supervision/`, `supervision/<id>/open/`, `supervisio
 (`session.supervise`, now in `registry.IN_USE`) and `supervision/supervisors/` (the pickers) are new.
 The dashboard has the switch in Settings → Academy, the supervisor on the subscription form, Edit
 dialog, summary, session page and sessions list, and My supervision (`/scheduling/supervision`, in
-the nav for a staff supervisor while the switch is on). `demo` seeds supervision on, with Sara on
-Yusuf's Tajweed subscription. A staff editor may now remove a role only if they hold its codes
-(Plan 12a's open finding). Beyond the plan: Open and the supervisor's attendance look the session up
-by supervisor only, with no date filter, so a supervisor can open a session running past the
-academy's midnight and mark attendance late with no end (D4); My supervision keeps its "today or
-later" filter. The e2e suite covers the journey through the Caddy edge.
+the nav for a staff supervisor while the switch is on); Open also shows the meeting link as a real
+`<a>` once known, since a mutation's `window.open` can be silently blocked on Safari/iOS. `demo`
+seeds supervision on, with Sara on Yusuf's Tajweed subscription. A staff editor may now remove a
+role only if they hold its codes, whether removed through `role_ids` on a staff account or directly
+from a role's own `permissions` (Plan 12a's open finding, closed in the final review: emptying a
+role's codes used to check only additions). Beyond the plan: Open and the supervisor's attendance
+look the session up by supervisor only, with no date filter, so a supervisor can open a session
+running past the academy's midnight and mark attendance late with no end (D4); My supervision lists
+soonest first and keeps a session that is still running past the academy's local midnight on the
+list too. The e2e suite covers the journey through the Caddy edge.
 
 ## Next
 
@@ -88,14 +92,12 @@ supervision rules live only in `etqan.scheduling.services.supervision`, and who 
 - Staff receive no notifications (R-7); admins alone are told.
 - Supervisors get no notifications either (R-7); a supervisor learns of an assignment from My
   supervision only.
-- My supervision lists newest first, as the spec says (§4.4); the owner may prefer soonest first.
-  This puts today's openable sessions on the last page once a supervisor has more than 25 upcoming —
-  owner to confirm the ordering or switch to "today first".
 - A subscription's supervisor change overwrites a per-session override on its unstarted sessions (the
   latest decision wins), and resets their supervisor attendance and opening.
 - The supervisor pickers list every supervisor, unpaged; an academy with hundreds would want a search.
-- A session crossing the academy's local midnight drops out of the My supervision list (it filters
-  `occurs_on >= today`) while still openable; reachable from the session page only.
+- Sessions inside the 10-minute pre-start window still count as unstarted, so a subscription
+  supervisor change or a regeneration resets an opening/attendance recorded minutes earlier
+  (consistent with D3).
 - Dashboard `test:coverage` once hit timeouts in `StudentsList.test.tsx` and `PageEditor.test.tsx`
   under load (clean on rerun, not reproduced in 3 focused runs); watch CI, raise `testTimeout` if it
   recurs.
