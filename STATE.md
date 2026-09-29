@@ -17,8 +17,10 @@ once per request through the loader `AccessConfig.ready()` registers; past the c
 admins see (`is_office`). `access/` serves the registry, roles and staff (invited through identity)
 with the §4.2 escalation guards as 403s that name their field; `me/` carries `permissions` and
 `is_super_admin`. Two escalation guards go beyond the plan: a staff user may restore a retired role
-only if they hold all its codes, and may change the email of, or deactivate, only a staff account
-whose codes they hold (prevents takeover via email change). The dashboard's `can()`/`useCan()` gates
+only if they hold all its codes, and may change the email of, deactivate, or reactivate only a staff
+account whose codes they hold — counting retired roles; reactivation included (prevents takeover via
+email change, or via reactivating an account an admin deactivated once its stronger role is retired
+and later restored). The dashboard's `can()`/`useCan()` gates
 the nav, every office screen (`staticData.permission`; `PermissionGate` says "You don't have access
 to this page.") and every write action; a screen's secondary lookups (tags, courses, teachers,
 students, parents, invoices/sessions panels, filters) are fetched only when the user holds their
@@ -86,10 +88,11 @@ never restate them elsewhere.
 - Staff receive no notifications (R-7); admins alone are told.
 - RatesPage without `teacher.view_any`: a teacher with no counting rate can't have rates added or
   edited by that user (currency unknown).
-- Open decision for the owner: the students bulk actions `create_family`/`add_to_family` need only
-  `student.update` (not `family.*`), and subscription create/renew issue invoices without
-  `invoice.create` — the spec's "bulk → update on that resource" rule; confirm or require the extra
-  codes.
+- Decided (final review, Plan 12a): the students bulk action `create_family` needs `student.update`
+  *and* `family.create` for staff (admins pass on `student.update` alone); `add_to_family` and
+  `remove_from_family` stay on `student.update` alone. Subscription create/renew keep issuing their
+  derived invoice without `invoice.create`, by design — the invoice there is derived, not a fresh one
+  the caller chose to create.
 - The students list's Family filter and "Family to add to" cap at 100 families (D10).
 - Restore is allowed on any cancelled session, even inside a pause or on an ended subscription.
 - A teacher's attendance controls open within a minute of the start (the list re-reads each minute), not at the exact second.
