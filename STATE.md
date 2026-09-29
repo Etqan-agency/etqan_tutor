@@ -80,8 +80,9 @@ never restate them elsewhere.
   "empty picker" limitation applies only to create/edit forms (SubscriptionForm, InvoiceForm,
   AdjustmentDialog, RateDialog); other screens' secondary lookups are gated on the viewer's code
   instead (STATE.md's Plan 12a paragraph).
-- A form a staff account may only view is read-only, but a rich-text body (site pages, the home
-  page) stays typeable, unsaved. The roles picker and the staff Role filter cap at 100 roles.
+- On a read-only rich-text body (site pages, the home page) typing is blocked, but the toolbar
+  buttons still reformat it (nothing saves). The roles picker and the staff Role filter cap at 100
+  roles.
 - Staff receive no notifications (R-7); admins alone are told.
 - RatesPage without `teacher.view_any`: a teacher with no counting rate can't have rates added or
   edited by that user (currency unknown).
