@@ -4,39 +4,39 @@ Keep this under ~40 lines: current position only.
 
 ## Where we are
 
-Plan 12a (staff roles and permissions, B1 plan 3 of 4) built and in review: branch `feat/roles` in
-backend, dashboard and meta (spec `docs/superpowers/specs/2026-09-28-roles-permissions-design.md`,
-plan `docs/superpowers/plans/2026-09-28-plan-12a-roles.md`). `User.Role` gains `staff`. A new tenant
-app `etqan.access` holds the permission registry (`registry.py`: 22 resources × TutorHamster's 12
-verbs, 4 greyed pages, 5 widgets; `IN_USE` is exactly what the routes declare), `StaffRole` (names,
-codes, active, members; retired, never deleted) and the Supervisor preset (migration `0002` and
-`create_academy`). Every `/api/v1/` route declares its code in `permission_codes`, checked by
-`platform.permissions.HasCode`; `access/tests/test_routes.py` holds the route table and fails on any
-route left out. Admins pass everything; staff pass with a code one of their active roles holds, loaded
-once per request through the loader `AccessConfig.ready()` registers; past the check they see what
-admins see (`is_office`). `access/` serves the registry, roles and staff (invited through identity)
-with the §4.2 escalation guards as 403s that name their field; `me/` carries `permissions` and
-`is_super_admin`. Two escalation guards go beyond the plan: a staff user may restore a retired role
-only if they hold all its codes, and may change the email of, deactivate, or reactivate only a staff
-account whose codes they hold — counting retired roles; reactivation included (prevents takeover via
-email change, or via reactivating an account an admin deactivated once its stronger role is retired
-and later restored). The dashboard's `can()`/`useCan()` gates
-the nav, every office screen (`staticData.permission`; `PermissionGate` says "You don't have access
-to this page.") and every write action; a screen's secondary lookups (tags, courses, teachers,
-students, parents, invoices/sessions panels, filters) are fetched only when the user holds their
-code, otherwise current values show read-only or the dependent control is hidden, and a read-only
-form disables every control. Settings → Roles (the matrix editor) and People → Staff are new. `demo`
-seeds Sara Supervisor. The e2e suite covers the journey through the Caddy edge.
+Plan 12b (session supervision, B1 plan 3 of 4, second half) built and in review: branch
+`feat/supervision` in backend, dashboard and meta (spec
+`docs/superpowers/specs/2026-09-28-roles-permissions-design.md`, plan
+`docs/superpowers/plans/2026-09-29-plan-12b-supervision.md`). Plan 12a (staff roles and permissions)
+is merged. `AcademySettings.supervision_enabled` ("General supervision", off by default) gates it all:
+while off, no supervisor field is sent, the supervision routes and the session PATCH answer 404, and a
+`supervisor_id` in a subscription body is ignored; the stored values are kept. A supervisor is an
+active staff account holding `session.supervise` through an active role
+(`access.services.supervisors_queryset` / `get_supervisor`). `Subscription.supervisor` and
+`Session.supervisor` / `supervisor_attendance` / `opened_by_supervisor_at` are new (nullable or
+`db_default`). The rules live in `scheduling.services.supervision`: generated sessions copy the
+subscription's supervisor; a subscription change moves only its unstarted sessions (resetting their
+supervisor attendance and opening); the session PATCH overrides one session, `supervisor_id` behind
+`session.update` and `supervisor_attendance` behind `attendance.update`; Open works from 10 minutes
+before the start until the end (UTC instants) and records the first opening; the supervisor marks
+only their own attendance. `supervision/`, `supervision/<id>/open/`, `supervision/<id>/attendance/`
+(`session.supervise`, now in `registry.IN_USE`) and `supervision/supervisors/` (the pickers) are new.
+The dashboard has the switch in Settings → Academy, the supervisor on the subscription form, Edit
+dialog, summary, session page and sessions list, and My supervision (`/scheduling/supervision`, in
+the nav for a staff supervisor while the switch is on). `demo` seeds supervision on, with Sara on
+Yusuf's Tajweed subscription. A staff editor may now remove a role only if they hold its codes
+(Plan 12a's open finding). Beyond the plan: Open and the supervisor's attendance look the session up
+by supervisor only, with no date filter, so a supervisor can open a session running past the
+academy's midnight and mark attendance late with no end (D4); My supervision keeps its "today or
+later" filter. The e2e suite covers the journey through the Caddy edge.
 
 ## Next
 
 Open the PRs (backend, dashboard → `main`; meta → `master`), get meta CI green, merge backend then
 dashboard, bump the meta pointers, merge meta; nothing merges without the user's approval. Then
-Plan 12b (session supervision), which switches `session.supervise` into `registry.IN_USE` with its
-routes. A new route declares its code in `permission_codes` and a row in
-`access/tests/test_routes.py`; a new office screen names `staticData.permission`. The escalation
-rules live only in `etqan.access.services` (`_clean_codes`, `_roles_to_assign`, `update_staff`);
-never restate them elsewhere.
+Plan 13 (feature toggles), which absorbs "General supervision" into the academy's toggles. The
+supervision rules live only in `etqan.scheduling.services.supervision`, and who may supervise only in
+`access.services.supervisors_queryset`; never restate them elsewhere.
 
 ## Follow-ups (from Plans 4–9)
 
@@ -86,6 +86,19 @@ never restate them elsewhere.
   buttons still reformat it (nothing saves). The roles picker and the staff Role filter cap at 100
   roles.
 - Staff receive no notifications (R-7); admins alone are told.
+- Supervisors get no notifications either (R-7); a supervisor learns of an assignment from My
+  supervision only.
+- My supervision lists newest first, as the spec says (§4.4); the owner may prefer soonest first.
+  This puts today's openable sessions on the last page once a supervisor has more than 25 upcoming —
+  owner to confirm the ordering or switch to "today first".
+- A subscription's supervisor change overwrites a per-session override on its unstarted sessions (the
+  latest decision wins), and resets their supervisor attendance and opening.
+- The supervisor pickers list every supervisor, unpaged; an academy with hundreds would want a search.
+- A session crossing the academy's local midnight drops out of the My supervision list (it filters
+  `occurs_on >= today`) while still openable; reachable from the session page only.
+- Dashboard `test:coverage` once hit timeouts in `StudentsList.test.tsx` and `PageEditor.test.tsx`
+  under load (clean on rerun, not reproduced in 3 focused runs); watch CI, raise `testTimeout` if it
+  recurs.
 - RatesPage without `teacher.view_any`: a teacher with no counting rate can't have rates added or
   edited by that user (currency unknown).
 - Decided (final review, Plan 12a): the students bulk action `create_family` needs `student.update`
@@ -93,12 +106,6 @@ never restate them elsewhere.
   `remove_from_family` stay on `student.update` alone. Subscription create/renew keep issuing their
   derived invoice without `invoice.create`, by design — the invoice there is derived, not a fresh one
   the caller chose to create.
-- Plan 12a final review, left open by the owner's merge: `access.services._roles_to_assign` guards
-  only roles being added. A `staff.update` editor can strip every role (retired included) from a
-  stronger staff account in one PATCH, then change its email or reactivate it in a second (the
-  stronger-account guard then sees an empty role set). No escalation by itself, but if an admin later
-  re-grants a role the editor controls that account. Fix: require `by` to hold every code of each
-  removed role (403 on `role_ids`), with a test.
 - Payments ride inside the invoice detail, so `invoice.view` shows them without `payment.view_any`;
   the Supervisor sees a subscription's `payment_status` through `is_office` (D7). Owner to confirm.
 - The students list's Family filter and "Family to add to" cap at 100 families (D10).
