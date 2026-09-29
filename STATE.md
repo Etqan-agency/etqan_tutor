@@ -4,32 +4,37 @@ Keep this under ~40 lines: current position only.
 
 ## Where we are
 
-Plan 11 (family accounts and payer, B1 plan 2 of 4) built and in review: branch `feat/families` in
-backend, dashboard and meta (spec `docs/superpowers/specs/2026-09-27-families-design.md`, plan
-`docs/superpowers/plans/2026-09-27-plan-11-families.md`). In `etqan.identity`: a `Family` (name,
-notes, active, a payer) and `StudentProfile.family`, one column, so one family per student; the
-account type is derived from it (`services.account_type`), never stored. A payer is one of the
-family's students or an active parent of one (F-2); `payer_needs_choosing` is computed on every
-read (`families_queryset`'s two EXISTS annotations), never stored, and a flagged or retired family
-supplies no payer. Linking goes through `_claim`, a conditional UPDATE, so two admins racing for
-one student get a 400, never a move. The API adds `people/families/` (list, create, read, patch; no
-PUT or DELETE) and `families/payers/?students=`; students gain `account_type` and `family` in
-rows, CSV and `me/`, the `account_type` and `family` filters, and the bulk `create_family`,
-`add_to_family` and `remove_from_family` (skipped students reported, never moved). Billing's
-`payer_options` puts `identity_services.family_payer` first, then guardians, then the student,
-deduplicated; existing invoices never change. The id filters are junk-safe (`as_int`: `int()` in
-`try`, so a 5000-digit id no longer 500s). The dashboard has People → Families (dialogs, retire and
-restore, a family page), the account type and family chip, filters and bulk actions on students,
-"Family payer" on the invoice form and the family on the profile card. The e2e suite covers the
-journey through the Caddy edge.
+Plan 12a (staff roles and permissions, B1 plan 3 of 4) built and in review: branch `feat/roles` in
+backend, dashboard and meta (spec `docs/superpowers/specs/2026-09-28-roles-permissions-design.md`,
+plan `docs/superpowers/plans/2026-09-28-plan-12a-roles.md`). `User.Role` gains `staff`. A new tenant
+app `etqan.access` holds the permission registry (`registry.py`: 22 resources × TutorHamster's 12
+verbs, 4 greyed pages, 5 widgets; `IN_USE` is exactly what the routes declare), `StaffRole` (names,
+codes, active, members; retired, never deleted) and the Supervisor preset (migration `0002` and
+`create_academy`). Every `/api/v1/` route declares its code in `permission_codes`, checked by
+`platform.permissions.HasCode`; `access/tests/test_routes.py` holds the route table and fails on any
+route left out. Admins pass everything; staff pass with a code one of their active roles holds, loaded
+once per request through the loader `AccessConfig.ready()` registers; past the check they see what
+admins see (`is_office`). `access/` serves the registry, roles and staff (invited through identity)
+with the §4.2 escalation guards as 403s that name their field; `me/` carries `permissions` and
+`is_super_admin`. Two escalation guards go beyond the plan: a staff user may restore a retired role
+only if they hold all its codes, and may change the email of, or deactivate, only a staff account
+whose codes they hold (prevents takeover via email change). The dashboard's `can()`/`useCan()` gates
+the nav, every office screen (`staticData.permission`; `PermissionGate` says "You don't have access
+to this page.") and every write action; a screen's secondary lookups (tags, courses, teachers,
+students, parents, invoices/sessions panels, filters) are fetched only when the user holds their
+code, otherwise current values show read-only or the dependent control is hidden, and a read-only
+form disables every control. Settings → Roles (the matrix editor) and People → Staff are new. `demo`
+seeds Sara Supervisor. The e2e suite covers the journey through the Caddy edge.
 
 ## Next
 
 Open the PRs (backend, dashboard → `main`; meta → `master`), get meta CI green, merge backend then
 dashboard, bump the meta pointers, merge meta; nothing merges without the user's approval. Then
-Plan 12 (roles and permissions). The family rules live only in `etqan.identity.services`
-(`_family_students`, `_payer_for`, `_claim`, `payer_needs_choosing`, `family_payer`); billing
-asks `family_payer` and nothing else. Never restate them elsewhere.
+Plan 12b (session supervision), which switches `session.supervise` into `registry.IN_USE` with its
+routes. A new route declares its code in `permission_codes` and a row in
+`access/tests/test_routes.py`; a new office screen names `staticData.permission`. The escalation
+rules live only in `etqan.access.services` (`_clean_codes`, `_roles_to_assign`, `update_staff`);
+never restate them elsewhere.
 
 ## Follow-ups (from Plans 4–9)
 
@@ -70,13 +75,21 @@ asks `family_payer` and nothing else. Never restate them elsewhere.
 - Deactivated students and teachers keep generating sessions until the subscription expires.
 - A renewal that starts today can duplicate a slot session that already started today on the old subscription.
 - The teacher, course and student pickers in list filters, forms and the Rates page cap at 100.
+- A staff account holding a form's write code but not its pickers' list codes (teachers, courses,
+  students) sees an empty picker; the Supervisor preset holds the list codes it needs. This
+  "empty picker" limitation applies only to create/edit forms (SubscriptionForm, InvoiceForm,
+  AdjustmentDialog, RateDialog); other screens' secondary lookups are gated on the viewer's code
+  instead (STATE.md's Plan 12a paragraph).
+- A form a staff account may only view is read-only, but a rich-text body (site pages, the home
+  page) stays typeable, unsaved. The roles picker and the staff Role filter cap at 100 roles.
+- Staff receive no notifications (R-7); admins alone are told.
+- RatesPage without `teacher.view_any`: a teacher with no counting rate can't have rates added or
+  edited by that user (currency unknown).
+- Open decision for the owner: the students bulk actions `create_family`/`add_to_family` need only
+  `student.update` (not `family.*`), and subscription create/renew issue invoices without
+  `invoice.create` — the spec's "bulk → update on that resource" rule; confirm or require the extra
+  codes.
 - The students list's Family filter and "Family to add to" cap at 100 families (D10).
-- Plan 11 final review, left open by the owner's merge: the bulk Create family dialog is still
-  unmounted while open. React batches `setOpen(false)` with `onDone`, so submitting with Enter
-  from the Name field drops focus to `<body>` (a click survives only because Save is disabled).
-  Fix: `flushSync(() => setOpen(false))` before `onDone(result)` in `BulkFamilyDialog.tsx`, an
-  Enter-path test, and correct the comments at `BulkFamilyDialog.tsx:29-41` and
-  `StudentsList.tsx:160-162`. A labelled focus target beats the unlabelled root div.
 - Restore is allowed on any cancelled session, even inside a pause or on an ended subscription.
 - A teacher's attendance controls open within a minute of the start (the list re-reads each minute), not at the exact second.
 - `seed_dev` marks and reports past sessions in every academy, not only the demo one.
