@@ -93,6 +93,14 @@ never restate them elsewhere.
   `remove_from_family` stay on `student.update` alone. Subscription create/renew keep issuing their
   derived invoice without `invoice.create`, by design — the invoice there is derived, not a fresh one
   the caller chose to create.
+- Plan 12a final review, left open by the owner's merge: `access.services._roles_to_assign` guards
+  only roles being added. A `staff.update` editor can strip every role (retired included) from a
+  stronger staff account in one PATCH, then change its email or reactivate it in a second (the
+  stronger-account guard then sees an empty role set). No escalation by itself, but if an admin later
+  re-grants a role the editor controls that account. Fix: require `by` to hold every code of each
+  removed role (403 on `role_ids`), with a test.
+- Payments ride inside the invoice detail, so `invoice.view` shows them without `payment.view_any`;
+  the Supervisor sees a subscription's `payment_status` through `is_office` (D7). Owner to confirm.
 - The students list's Family filter and "Family to add to" cap at 100 families (D10).
 - Restore is allowed on any cancelled session, even inside a pause or on an ended subscription.
 - A teacher's attendance controls open within a minute of the start (the list re-reads each minute), not at the exact second.
