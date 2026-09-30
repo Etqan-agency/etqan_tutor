@@ -98,11 +98,6 @@ supervision rules live only in `etqan.scheduling.services.supervision`, and who 
 - Sessions inside the 10-minute pre-start window still count as unstarted, so a subscription
   supervisor change or a regeneration resets an opening/attendance recorded minutes earlier
   (consistent with D3).
-- Plan 12b final e2e, left open by the owner's merge: `e2e/mail.ts` `latestLink` returns the newest
-  matching email already in the outbox, and `supervision.spec.ts` reuses the fixed
-  `sara@demo.test`, so a second e2e run on the same database can take run 1's used reset link
-  before the new mail lands (CI, one run on a fresh DB, is unaffected). Fix: `latestLink` takes an
-  `after` timestamp and the spec waits for a mail sent after its own request.
 - Dashboard `test:coverage` once hit timeouts in `StudentsList.test.tsx` and `PageEditor.test.tsx`
   under load (clean on rerun, not reproduced in 3 focused runs); watch CI, raise `testTimeout` if it
   recurs.
