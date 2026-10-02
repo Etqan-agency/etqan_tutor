@@ -346,22 +346,43 @@ def load(directory: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _rollback(directory: Path, previous: dict[Path, bytes | None]) -> None:
+def _rollback(directory: Path, previous: dict[Path, bytes | None]) -> list[str]:
+    """Best-effort restore of the working tree and index to `previous`.
+
+    Returns a list of problems encountered (empty if the rollback was clean);
+    it never raises, so a caller can always report the original failure too."""
+    problems: list[str] = []
     for path, content in previous.items():
-        if content is None:
-            path.unlink(missing_ok=True)
-        else:
-            path.write_bytes(content)
+        try:
+            if content is None:
+                path.unlink(missing_ok=True)
+            else:
+                path.write_bytes(content)
+        except OSError as error:
+            problems.append(f"restoring {path.name}: {error}")
     git = ["git", "-C", str(directory)]
     relative = [str(path.relative_to(directory)) for path in previous]
     has_head = subprocess.run(
         [*git, "rev-parse", "--verify", "-q", "HEAD"], capture_output=True
     ).returncode == 0
     if has_head:
-        subprocess.run([*git, "reset", "-q", "HEAD", "--", *relative])
+        unstage = subprocess.run([*git, "reset", "-q", "HEAD", "--", *relative], capture_output=True, text=True)
     else:
         # Unborn branch (e.g. during `init`): nothing to reset to, just unstage.
-        subprocess.run([*git, "rm", "--cached", "-q", "-r", "--ignore-unmatch", *relative])
+        unstage = subprocess.run(
+            [*git, "rm", "--cached", "-q", "-r", "--ignore-unmatch", *relative], capture_output=True, text=True
+        )
+    if unstage.returncode != 0:
+        problems.append(f"unstaging: {(unstage.stderr or unstage.stdout).strip()}")
+    return problems
+
+
+def _fail(directory: Path, previous: dict[Path, bytes | None], original: str) -> None:
+    problems = _rollback(directory, previous)
+    message = f"commit failed: {original}"
+    if problems:
+        message += f"; rollback incomplete: {'; '.join(problems)} — inspect {directory} by hand"
+    raise LedgerError(message)
 
 
 def save(directory: Path, data: dict, message: str) -> None:
@@ -379,16 +400,14 @@ def save(directory: Path, data: dict, message: str) -> None:
         git = ["git", "-C", str(directory)]
         add = subprocess.run([*git, "add", "orchestration", ".gitignore"], capture_output=True, text=True)
         if add.returncode != 0:
-            _rollback(directory, previous)
-            raise LedgerError(f"commit failed: {add.stderr.strip()}")
+            _fail(directory, previous, add.stderr.strip())
         unchanged = subprocess.run([*git, "diff", "--cached", "--quiet"]).returncode == 0
         if not unchanged:
             commit = subprocess.run(
                 [*git, "commit", "-q", "-m", f"ledger: {message}"], capture_output=True, text=True
             )
             if commit.returncode != 0:
-                _rollback(directory, previous)
-                raise LedgerError(f"commit failed: {(commit.stderr or commit.stdout).strip()}")
+                _fail(directory, previous, (commit.stderr or commit.stdout).strip())
 
 
 def _csv(value: str | None) -> list[str]:

@@ -8,6 +8,7 @@ import tempfile
 import unittest
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from unittest import mock
 
 HERE = Path(__file__).resolve().parent
 SCRIPT = HERE.parent / "ledger.py"
@@ -257,6 +258,62 @@ class Cli(unittest.TestCase):
         cli(self.dir, "init")
         result = cli(self.dir, "escalate", "B3", "whim", "x")
         self.assertNotEqual(result.returncode, 0)
+
+    def test_init_rolls_back_cleanly_when_the_branch_is_unborn(self):
+        hooks = self.dir / ".git" / "hooks"
+        hooks.mkdir(parents=True, exist_ok=True)
+        hook = hooks / "pre-commit"
+        hook.write_text("#!/bin/sh\nexit 1\n")
+        hook.chmod(0o755)
+        result = cli(self.dir, "init")
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("commit failed", result.stderr)
+        self.assertFalse((self.dir / "orchestration" / "ledger.json").exists())
+        self.assertFalse((self.dir / "orchestration" / "LEDGER.md").exists())
+        self.assertFalse((self.dir / ".gitignore").exists())
+        # Nothing staged: the unborn-branch rollback (`git rm --cached`) must leave
+        # an empty index, since `git reset`/`diff --cached` have no HEAD to work from.
+        staged = subprocess.run(
+            ["git", "-C", str(self.dir), "ls-files"], capture_output=True, text=True
+        ).stdout
+        self.assertEqual(staged, "")
+
+
+class RollbackFailures(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.dir = Path(self.tmp.name)
+        subprocess.run(["git", "init", "-q", "-b", "orchestration", str(self.dir)], check=True)
+        for key, value in (("user.name", "t"), ("user.email", "t@t")):
+            subprocess.run(["git", "-C", str(self.dir), "config", key, value], check=True)
+        L.save(self.dir, L.empty(), "init")  # a real, successful commit; HEAD now exists
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_a_failing_rollback_reports_both_errors(self):
+        hooks = self.dir / ".git" / "hooks"
+        hooks.mkdir(parents=True, exist_ok=True)
+        hook = hooks / "pre-commit"
+        hook.write_text("#!/bin/sh\nexit 1\n")
+        hook.chmod(0o755)
+
+        real_run = subprocess.run
+
+        def fake_run(cmd, *args, **kwargs):
+            if "reset" in cmd:
+                return subprocess.CompletedProcess(cmd, 1, stdout="", stderr="reset exploded")
+            return real_run(cmd, *args, **kwargs)
+
+        data = L.load(self.dir)
+        L.set_phase(data, "B2", status="spec", slot=1)
+        with mock.patch("ledger.subprocess.run", side_effect=fake_run):
+            with self.assertRaises(L.LedgerError) as ctx:
+                L.save(self.dir, data, "phase B2")
+        message = str(ctx.exception)
+        self.assertIn("commit failed", message)
+        self.assertIn("rollback incomplete", message)
+        self.assertIn("reset exploded", message)
 
 
 if __name__ == "__main__":
