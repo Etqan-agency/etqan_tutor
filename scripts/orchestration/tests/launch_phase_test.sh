@@ -25,6 +25,12 @@ mkdir -p "$tmp/seed-meta/scripts" && cp -r "$scripts" "$tmp/seed-meta/scripts/or
 cp "$scripts/../../justfile" "$tmp/seed-meta/justfile"
 printf '.env.*\n__pycache__/\n' >"$tmp/seed-meta/.gitignore"  # as the meta .gitignore does
 git -C "$tmp/seed-meta" add . && git -C "$tmp/seed-meta" commit -qm init && git -C "$tmp/seed-meta" push -q origin master
+# A `feat/orchestration` branch exists on origin (as it genuinely does on the
+# real remote) but no bare `orchestration` branch. bootstrap-ledger.sh must
+# not mistake the former for the latter (ls-remote pattern suffix matching).
+git -C "$tmp/seed-meta" branch -q feat/orchestration
+git -C "$tmp/seed-meta" push -q origin feat/orchestration
+git -C "$tmp/seed-meta" branch -q -D feat/orchestration
 
 # The main checkout, as a developer has it.
 git clone -q --recurse-submodules -b master "$tmp/remotes/meta.git" "$tmp/etqan_tutor"

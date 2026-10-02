@@ -9,7 +9,7 @@ mkdir -p "$root"
 if [ ! -d "$ledger" ]; then
   if git -C "$main" show-ref -q --verify refs/heads/orchestration; then
     git -C "$main" worktree add -q "$ledger" orchestration
-  elif git -C "$main" ls-remote -q --exit-code --heads origin orchestration >/dev/null 2>&1; then
+  elif git -C "$main" ls-remote -q --exit-code origin refs/heads/orchestration >/dev/null 2>&1; then
     git -C "$main" fetch -q origin orchestration:orchestration
     git -C "$main" worktree add -q "$ledger" orchestration
   elif ! git -C "$main" worktree add -q --orphan -b orchestration "$ledger"; then
