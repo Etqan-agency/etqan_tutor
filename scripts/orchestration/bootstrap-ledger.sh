@@ -12,8 +12,12 @@ if [ ! -d "$ledger" ]; then
   elif git -C "$main" ls-remote -q --exit-code --heads origin orchestration >/dev/null 2>&1; then
     git -C "$main" fetch -q origin orchestration:orchestration
     git -C "$main" worktree add -q "$ledger" orchestration
-  else
-    git -C "$main" worktree add -q --orphan -b orchestration "$ledger"
+  elif ! git -C "$main" worktree add -q --orphan -b orchestration "$ledger"; then
+    # A stale worktree registration (e.g. the ledger dir was once removed
+    # with `rm -rf` instead of `git worktree remove`) blocks `add`; clear it
+    # so the next run isn't stuck, but still fail this one.
+    git -C "$main" worktree prune
+    exit 1
   fi
 fi
 if [ ! -f "$ledger/orchestration/ledger.json" ]; then

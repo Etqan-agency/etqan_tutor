@@ -2,6 +2,7 @@
 `python3 -m unittest discover -s scripts/orchestration/tests`."""
 
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -314,6 +315,46 @@ class RollbackFailures(unittest.TestCase):
         self.assertIn("commit failed", message)
         self.assertIn("rollback incomplete", message)
         self.assertIn("reset exploded", message)
+
+
+class DefaultDir(unittest.TestCase):
+    """default_dir() must honour the same overrides the shell scripts do
+    (bootstrap-ledger.sh / launch-phase.sh via $ETQAN_WT_ROOT) so a plain
+    `ledger.py show` run from inside a phase worktree finds the bootstrapped
+    ledger (fix round 1, Task 5 review)."""
+
+    def test_etqan_ledger_dir_wins_over_everything(self):
+        with mock.patch.dict(
+            os.environ,
+            {"ETQAN_LEDGER_DIR": "/explicit/ledger", "ETQAN_WT_ROOT": "/wt"},
+            clear=False,
+        ):
+            with mock.patch("ledger.subprocess.run") as run:
+                self.assertEqual(L.default_dir(), Path("/explicit/ledger"))
+                run.assert_not_called()
+
+    def test_etqan_wt_root_is_used_when_no_explicit_ledger_dir(self):
+        env = dict(os.environ)
+        env.pop("ETQAN_LEDGER_DIR", None)
+        env["ETQAN_WT_ROOT"] = "/wt"
+        with mock.patch.dict(os.environ, env, clear=True):
+            with mock.patch("ledger.subprocess.run") as run:
+                self.assertEqual(L.default_dir(), Path("/wt/_ledger"))
+                run.assert_not_called()
+
+    def test_falls_back_to_git_common_dir_when_neither_is_set(self):
+        env = dict(os.environ)
+        env.pop("ETQAN_LEDGER_DIR", None)
+        env.pop("ETQAN_WT_ROOT", None)
+        with mock.patch.dict(os.environ, env, clear=True):
+            with mock.patch("ledger.subprocess.run") as run:
+                run.return_value = subprocess.CompletedProcess(
+                    [], 0, stdout="/home/x/etqan_tutor/.git\n"
+                )
+                self.assertEqual(
+                    L.default_dir(), Path("/home/x/etqan_tutor-wt/_ledger")
+                )
+                run.assert_called_once()
 
 
 if __name__ == "__main__":

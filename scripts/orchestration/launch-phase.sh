@@ -12,11 +12,34 @@ branch="feat/$suffix"
 code="$(tr '[:lower:]' '[:upper:]' <<<"$phase")"
 [ ! -e "$dir" ] || { echo "already exists: $dir" >&2; exit 1; }
 mkdir -p "$root"
+
+# Not atomic by itself (several worktrees across several repos): if a later
+# step fails, undo whatever THIS run created so a retry isn't blocked by a
+# half-made phase and the main checkout's submodules stay healthy.
+meta_worktree_added=false
+subs_added=()
+cleanup() {
+  local status=$?
+  [ "$status" -eq 0 ] && return
+  for sub in "${subs_added[@]:-}"; do
+    [ -n "$sub" ] || continue
+    git -C "$main/$sub" worktree remove --force "$dir/$sub" >/dev/null 2>&1 || true
+    git -C "$main/$sub" branch -D "$branch" >/dev/null 2>&1 || true
+  done
+  if [ "$meta_worktree_added" = true ]; then
+    git -C "$main" worktree remove --force "$dir" >/dev/null 2>&1 || true
+    git -C "$main" branch -D "$branch" >/dev/null 2>&1 || true
+  fi
+}
+trap cleanup EXIT
+
 git -C "$main" fetch -q origin
 git -C "$main" worktree add -q -b "$branch" "$dir" origin/master
+meta_worktree_added=true
 for sub in backend dashboard marketing; do
   git -C "$main/$sub" fetch -q origin
   git -C "$main/$sub" worktree add -q -b "$branch" "$dir/$sub" origin/main
+  subs_added+=("$sub")
 done
 if [ -f "$main/backend/.env" ]; then cp "$main/backend/.env" "$dir/backend/.env"; fi
 bash "$main/scripts/orchestration/stream-env.sh" "$phase" "$slot" "$dir" >/dev/null

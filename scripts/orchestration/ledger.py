@@ -11,6 +11,7 @@ import argparse
 import contextlib
 import fcntl
 import json
+import os
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -324,6 +325,15 @@ def render(data: dict) -> str:
 
 
 def default_dir() -> Path:
+    # Honour the same overrides the shell scripts do (bootstrap-ledger.sh,
+    # launch-phase.sh), so a plain `ledger.py show` run from inside a phase
+    # worktree finds the ledger that was bootstrapped for it.
+    ledger_dir = os.environ.get("ETQAN_LEDGER_DIR")
+    if ledger_dir:
+        return Path(ledger_dir)
+    wt_root = os.environ.get("ETQAN_WT_ROOT")
+    if wt_root:
+        return Path(wt_root) / "_ledger"
     common = subprocess.run(
         ["git", "rev-parse", "--path-format=absolute", "--git-common-dir"],
         capture_output=True, text=True, check=True,

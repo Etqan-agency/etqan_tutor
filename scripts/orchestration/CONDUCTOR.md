@@ -22,12 +22,13 @@ Loop (use /loop or ScheduleWakeup, about every 20 minutes, sooner while a slice 
    (`shared-decision`). Answer `request`s to unowned apps yourself on `master` through the queue.
 5. Pause a phase that made no progress for two queue rounds (`phase <CODE> --status paused`) and
    escalate it (`stalled`). Keep `STATE.md` current after each merge.
-6. When a phase's last slice merges, `ledger.py phase <CODE> --status merged`, then tear down its
-   worktrees in this order — the submodule worktrees first (`git -C backend worktree remove <dir>/backend`,
-   same for `dashboard` and `marketing`), then the meta worktree (`git worktree remove <dir>`); removing
-   the meta worktree first leaves the submodule worktrees dangling and pointed at a gone parent. After
-   teardown, check `git -C backend status` (and `dashboard`, `marketing`) still works from the main
-   checkout — if it doesn't, the phase corrupted the shared submodule config (see PHASE_PROMPT.md) and
-   needs a manual fix before the next phase launches. Also stop its stack (`just stop` in it, then
-   `docker compose -f docker-compose.local.yml down -v`), and start the next eligible phase.
+6. When a phase's last slice merges, `ledger.py phase <CODE> --status merged`, then tear down in this
+   order: (a) stop its stack, inside its worktree (`just stop`, then `docker compose -f
+   docker-compose.local.yml down -v`); (b) remove the submodule worktrees (`git -C backend worktree
+   remove <dir>/backend`, same for `dashboard` and `marketing`); (c) remove the meta worktree
+   (`git worktree remove <dir>`) — removing it before (b) leaves the submodule worktrees dangling and
+   pointed at a gone parent; (d) check `git -C backend status` (and `dashboard`, `marketing`) still
+   works from the main checkout — if it doesn't, the phase corrupted the shared submodule config (see
+   PHASE_PROMPT.md) and needs a manual fix before the next phase launches. Then start the next eligible
+   phase.
 Report to the owner only open escalations and a short note per merge.
