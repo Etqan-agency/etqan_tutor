@@ -4,12 +4,33 @@ Keep this under ~40 lines: current position only.
 
 ## Where we are
 
-Plan 12b (session supervision, B1 plan 3 of 4, second half) built and in review: branch
-`feat/supervision` in backend, dashboard and meta (spec
-`docs/superpowers/specs/2026-09-28-roles-permissions-design.md`, plan
-`docs/superpowers/plans/2026-09-29-plan-12b-supervision.md`). Plan 12a (staff roles and permissions)
-is merged. `AcademySettings.supervision_enabled` ("General supervision", off by default) gates it all:
-while off, no supervisor field is sent, the supervision routes and the session PATCH answer 404, and a
+Plan 13 (per-academy feature toggles, B1 plan 4 of 4) built and in review: branch `feat/features`
+in backend, dashboard and meta (spec `docs/superpowers/specs/2026-09-30-feature-toggles-design.md`,
+plan `docs/superpowers/plans/2026-09-30-plan-13-feature-toggles.md`). `etqan.platform.features` is
+the registry (36 features: 8 built, 28 stored for later phases, off by default); the values are
+`Academy.features` (public schema, code → boolean, `db_default={}`, a missing code means the
+default). `features.enabled(code)` reads `connection.tenant` (no query; the platform never imports
+tenants). A route declares `feature` next to `permission_codes` and lists `FeatureOn` after the
+code check (404 while off); the route table's `FEATURES` column and its guard words keep them
+declared. Off, `families` hides the family fields, filters, CSV columns and bulk actions and the
+family payer; `parents` refuses parent sign-in (a signed-in parent is signed out), drops `me/`'s
+children, guardian payers and guardian notices; `invoices` stops automatic invoices, invoice notices
+and the subscriptions' payment status; `session_reports` stops `report.missing`;
+`auto_notifications` skips the academy's scan; `teacher_attendance` refuses teachers' marks (403)
+and stops `session.late` notices (the final review's Important #1: a teacher can't be told to fix
+attendance it refuses to let them mark); `export` 404s every `?format=csv`. `me/` lists the features that are on; `academy/features/`
+(admins only) lists them all. Etqan switches them on the Academy page of the platform admin
+(grouped, "takes effect when built", held-off prerequisites, history, "Copy features from another
+academy") or with `manage.py set_features <subdomain> --on … --off …`; nothing in the tenant API
+writes them. The dashboard's `hasFeature()`/`useHasFeature()` sit next to `can()`: nav items, route
+`staticData.feature` (a switched-off screen says "This feature isn't enabled for your academy.") and
+buttons follow them; Settings → Features is read-only. `demo` seeds every built feature on; `other`
+keeps the defaults. The e2e suite switches families off and on for demo.
+
+Plan 12b (session supervision) is merged. "General supervision" is the academy's `supervision`
+feature since Plan 13 (a migration carried each academy's old `AcademySettings.supervision_enabled`
+over; that column is no longer written and goes in a later release); Settings → Academy shows it
+read-only. It gates it all: while off, no supervisor field is sent, the supervision routes and the session PATCH answer 404, and a
 `supervisor_id` in a subscription body is ignored; the stored values are kept. A supervisor is an
 active staff account holding `session.supervise` through an active role
 (`access.services.supervisors_queryset` / `get_supervisor`). `Subscription.supervisor` and
@@ -21,9 +42,9 @@ supervisor attendance and opening); the session PATCH overrides one session, `su
 before the start until the end (UTC instants) and records the first opening; the supervisor marks
 only their own attendance. `supervision/`, `supervision/<id>/open/`, `supervision/<id>/attendance/`
 (`session.supervise`, now in `registry.IN_USE`) and `supervision/supervisors/` (the pickers) are new.
-The dashboard has the switch in Settings → Academy, the supervisor on the subscription form, Edit
+The dashboard shows the supervisor on the subscription form, Edit
 dialog, summary, session page and sessions list, and My supervision (`/scheduling/supervision`, in
-the nav for a staff supervisor while the switch is on); Open also shows the meeting link as a real
+the nav for a staff supervisor while the feature is on); Open also shows the meeting link as a real
 `<a>` once known, since a mutation's `window.open` can be silently blocked on Safari/iOS. `demo`
 seeds supervision on, with Sara on Yusuf's Tajweed subscription. A staff editor may now remove a
 role only if they hold its codes, whether removed through `role_ids` on a staff account or directly
@@ -37,9 +58,15 @@ list too. The e2e suite covers the journey through the Caddy edge.
 ## Next
 
 Open the PRs (backend, dashboard → `main`; meta → `master`), get meta CI green, merge backend then
-dashboard, bump the meta pointers, merge meta; nothing merges without the user's approval. Then
-Plan 13 (feature toggles), which absorbs "General supervision" into the academy's toggles. The
-supervision rules live only in `etqan.scheduling.services.supervision`, and who may supervise only in
+dashboard, bump the meta pointers, merge meta; merging is autonomous (the owner's ruling, PO-3,
+`docs/superpowers/specs/2026-10-02-parallel-orchestration-design.md`), no per-PR approval needed.
+Phase B1 is then complete; next is Plan 14, orchestration groundwork
+(`docs/superpowers/plans/2026-10-02-plan-14-orchestration-groundwork.md`, meta branch
+`feat/orchestration`). A later phase that builds one of the 28 stored features flips its `built` in
+the registry and wires the switch in (route `feature`, `FEATURES` row, `staticData.feature`). A
+switch is read only through `etqan.platform.features` and written only by `etqan.tenants`; never
+add a per-feature column or setting. The supervision rules live only in
+`etqan.scheduling.services.supervision`, and who may supervise only in
 `access.services.supervisors_queryset`; never restate them elsewhere.
 
 ## Follow-ups (from Plans 4–9)
@@ -90,6 +117,16 @@ supervision rules live only in `etqan.scheduling.services.supervision`, and who 
   buttons still reformat it (nothing saves). The roles picker and the staff Role filter cap at 100
   roles.
 - Staff receive no notifications (R-7); admins alone are told.
+- Plan 13: drop `AcademySettings.supervision_enabled` in a release after this one (nothing writes it).
+- Plan 13: with families on and parents off, a family whose payer is a parent keeps that payer (the
+  spec's literal rule); the owner may want parents off to skip any parent payer.
+- Plan 13: the e2e suite switches features with `manage.py set_features`, not the Django admin UI (no
+  seeded Etqan staff login); the admin page is covered by backend tests only.
+- Plan 13: `me/` carries the features, so a switch Etqan changes reaches an open dashboard on its next
+  `me/` read (a reload or sign-in), not at once; the server enforces it immediately.
+- Plan 13 final review: `journey.spec.ts` and `payroll.spec.ts` locate their past-dated session by
+  its own date, not just by student/teacher name — creating a subscription also generates its
+  upcoming sessions (today..+14 days), which can land on the same weekday and add a second row.
 - Supervisors get no notifications either (R-7); a supervisor learns of an assignment from My
   supervision only.
 - A subscription's supervisor change overwrites a per-session override on its unstarted sessions (the
