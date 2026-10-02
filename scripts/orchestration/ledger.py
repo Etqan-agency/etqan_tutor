@@ -102,21 +102,35 @@ def _slice(data: dict, sid: str) -> dict:
         raise LedgerError(f"unknown slice {sid}") from None
 
 
+def _holds_slot(phase: dict) -> bool:
+    """A phase keeps its slot until it merges or the conductor releases it
+    (`phase <code> --slot 0`), waiting-deps included: lending is explicit."""
+    return phase["slot"] is not None and phase["status"] != "merged"
+
+
 def set_phase(data: dict, code: str, **fields) -> None:
     phase = _phase(data, code)
     status = fields.get("status")
     if status is not None and status not in STATUSES:
         raise LedgerError(f"unknown status {status}; one of {', '.join(STATUSES)}")
-    slot = fields.get("slot")
+    slot = fields.pop("slot", None)
     if slot is not None:
-        if not 1 <= slot <= SLOTS:
-            raise LedgerError(f"slot must be 1-{SLOTS}")
+        if not 0 <= slot <= SLOTS:
+            raise LedgerError(f"slot must be 1-{SLOTS} (0 releases it)")
         for other_code, other in data["phases"].items():
-            if other_code != code and other["slot"] == slot and other["status"] not in INACTIVE:
+            if slot and other_code != code and other["slot"] == slot and _holds_slot(other):
                 raise LedgerError(f"slot {slot} is held by {other_code}")
-    phase.update({key: value for key, value in fields.items() if value is not None})
-    if phase["status"] == "merged":
-        phase["slot"] = None
+    updated = {**phase, **{key: value for key, value in fields.items() if value is not None}}
+    if slot is not None:
+        updated["slot"] = slot or None
+    if updated["status"] == "merged":
+        updated["slot"] = None
+    # A launched phase that gave its slot away (see CONDUCTOR.md) works again
+    # only once the conductor hands it a slot: its ports may be in use.
+    if (updated["worktree"] is not None and updated["slot"] is None
+            and updated["status"] not in (*INACTIVE, "paused")):
+        raise LedgerError(f"{code} holds no slot; the conductor assigns one (`phase {code} --slot <n>`)")
+    phase.update(updated)
 
 
 def add_slice(data: dict, sid: str, *, phase: str, requires: list[str]) -> None:
@@ -264,12 +278,21 @@ def resolve(data: dict, eid: str, answer: str) -> None:
 
 
 def eligible(data: dict) -> tuple[int, list[str]]:
+    """Free slots, and the phases never launched (no worktree) whose
+    dependencies have specs, best first. A launched phase that is waiting
+    is not offered again: it is resumed in its own worktree."""
     phases = data["phases"]
-    active = sum(1 for p in phases.values() if p["status"] not in INACTIVE)
-    free = max(SLOTS - active, 0)
+    # A working phase with no slot recorded yet still occupies one; a paused
+    # phase whose slot was released does not.
+    held = sum(
+        1 for p in phases.values()
+        if _holds_slot(p) or (p["slot"] is None and p["status"] not in (*INACTIVE, "paused"))
+    )
+    free = max(SLOTS - held, 0)
     ready = [
         code for code in PRIORITY
         if phases[code]["status"] == "waiting-deps"
+        and phases[code]["worktree"] is None
         and all(phases[need]["spec"] for need in phases[code]["requires"])
     ]
     return free, ready[:free]
@@ -408,13 +431,17 @@ def save(directory: Path, data: dict, message: str) -> None:
         path.write_text(content, encoding="utf-8")
     if (directory / ".git").exists():
         git = ["git", "-C", str(directory)]
-        add = subprocess.run([*git, "add", "orchestration", ".gitignore"], capture_output=True, text=True)
+        # Only the files written here: phase notes and MERGES.md are committed by
+        # their authors (under the same lock), never swept into a ledger commit.
+        paths = [str(path.relative_to(directory)) for path in targets]  # git -C directory
+        add = subprocess.run([*git, "add", "--", *paths], capture_output=True, text=True)
         if add.returncode != 0:
             _fail(directory, previous, add.stderr.strip())
-        unchanged = subprocess.run([*git, "diff", "--cached", "--quiet"]).returncode == 0
+        unchanged = subprocess.run([*git, "diff", "--cached", "--quiet", "--", *paths]).returncode == 0
         if not unchanged:
             commit = subprocess.run(
-                [*git, "commit", "-q", "-m", f"ledger: {message}"], capture_output=True, text=True
+                [*git, "commit", "-q", "-m", f"ledger: {message}", "--", *paths],
+                capture_output=True, text=True,
             )
             if commit.returncode != 0:
                 _fail(directory, previous, (commit.stderr or commit.stdout).strip())
@@ -436,7 +463,7 @@ def parser() -> argparse.ArgumentParser:
     ph.add_argument("code")
     for flag in ("status", "worktree", "branch", "spec", "slice", "task"):
         ph.add_argument(f"--{flag}")
-    ph.add_argument("--slot", type=int)
+    ph.add_argument("--slot", type=int, help="1-4; 0 releases the slot (lending it)")
     sl = sub.add_parser("slice")
     sl.add_argument("id")
     for flag in ("phase", "requires", "status", "spec", "plan", "prs"):

@@ -22,12 +22,14 @@ git clone -q "$tmp/remotes/meta.git" "$tmp/seed-meta"
 git -C "$tmp/seed-meta" switch -q -c master
 for sub in backend dashboard marketing; do git -C "$tmp/seed-meta" submodule add -q "$tmp/remotes/$sub.git" "$sub"; done
 mkdir -p "$tmp/seed-meta/scripts" && cp -r "$scripts" "$tmp/seed-meta/scripts/orchestration"
+cp "$scripts/../../justfile" "$tmp/seed-meta/justfile"
 printf '.env.*\n__pycache__/\n' >"$tmp/seed-meta/.gitignore"  # as the meta .gitignore does
 git -C "$tmp/seed-meta" add . && git -C "$tmp/seed-meta" commit -qm init && git -C "$tmp/seed-meta" push -q origin master
 
 # The main checkout, as a developer has it.
 git clone -q --recurse-submodules -b master "$tmp/remotes/meta.git" "$tmp/etqan_tutor"
-echo "SECRET=1" >"$tmp/etqan_tutor/backend/.env"
+printf 'DATABASE_URL=postgres://etqan:etqan@localhost:5432/etqan\nSECRET=1\nCELERY_BROKER_URL=redis://localhost:6379/0\n' \
+  >"$tmp/etqan_tutor/backend/.env"
 main="$tmp/etqan_tutor"
 export ETQAN_WT_ROOT="$tmp/wt"
 
@@ -63,6 +65,13 @@ for repo in "" /backend /dashboard /marketing; do
 done
 [ -z "$(git -C "$dir" status --porcelain)" ] || fail "meta worktree dirty: $(git -C "$dir" status --porcelain)"
 grep -qx "SECRET=1" "$dir/backend/.env" || fail "backend/.env not copied"
+# Host-side manage.py and e2e in the phase reach the phase's database and
+# broker, never the main stack's (final review I1).
+grep -qx "DATABASE_URL=postgres://etqan:etqan@localhost:5632/etqan" "$dir/backend/.env" \
+  || fail "backend/.env DATABASE_URL not on slot 2: $(cat "$dir/backend/.env")"
+grep -qx "CELERY_BROKER_URL=redis://localhost:6579/0" "$dir/backend/.env" \
+  || fail "backend/.env CELERY_BROKER_URL not on slot 2: $(cat "$dir/backend/.env")"
+grep -q "5432" "$main/backend/.env" || fail "main backend/.env was changed"
 grep -qx "ETQAN_HTTP_PORT=8280" "$dir/.env.stream" || fail "no slot-2 .env.stream"
 grep -q "PHASE_PROMPT.md" <<<"$out" || fail "no session command printed: $out"
 grep -q "B3" <<<"$out" || fail "phase code not in the command: $out"
@@ -82,6 +91,39 @@ git -C "$main/backend" status --porcelain >/dev/null || fail "main backend workt
 # phase worktree, with no --dir flag, so a plain `ledger.py show` finds the
 # ledger bootstrap-ledger.sh created (fix round 1, Task 5 review).
 (cd "$dir" && python3 scripts/orchestration/ledger.py show >/dev/null) || fail "ledger.py show did not find the ledger from the phase worktree"
+
+# Stub docker: records each call with the compose project it would act on.
+stub="$tmp/stub"; mkdir -p "$stub"
+cat >"$stub/docker" <<'STUB'
+#!/usr/bin/env bash
+echo "${COMPOSE_PROJECT_NAME:-none} $*" >>"$STUB_LOG"
+STUB
+export STUB_LOG="$tmp/docker.log"
+chmod +x "$stub/docker"
+
+# `just e2e` sets E2E_MANAGE to `just --justfile <justfile> _stack-manage`;
+# e2e/manage.ts runs it from dashboard/ with every argument shell-quoted.
+(cd "$dir/dashboard" && PATH="$stub:$PATH" just --justfile "$dir/justfile" _stack-manage \
+  "'set_features'" "'demo'" "'--on'" "'it'\\''s two'") || fail "_stack-manage failed"
+expected="etqan-b3 compose -f docker-compose.local.yml exec -T django python manage.py set_features demo --on it's two"
+[ "$(tail -n 1 "$tmp/docker.log")" = "$expected" ] || fail "_stack-manage ran: $(tail -n 1 "$tmp/docker.log")"
+
+# `just stream-down` refuses in the main checkout (the owner's volumes).
+if (cd "$main" && PATH="$stub:$PATH" just stream-down 2>/dev/null); then fail "stream-down ran in the main checkout"; fi
+[ "$(wc -l <"$tmp/docker.log")" -eq 1 ] || fail "stream-down called docker in the main checkout"
+
+# A launch takes the phase as eligible prints it (B5) and checks its
+# arguments before creating anything (final review M4).
+for args in "b5 b5a-x 0" "b5 b5a-x 9" "b/5 b5a-x 1" "b5 'bad suffix' 1"; do
+  # shellcheck disable=SC2086
+  if (cd "$main" && eval bash scripts/orchestration/launch-phase.sh $args 2>/dev/null); then fail "launch accepted: $args"; fi
+done
+for made in "$tmp/wt"/*; do
+  case "${made##*/}" in _ledger | b3) ;; *) fail "a refused launch created: $made" ;; esac
+done
+out5="$(cd "$main" && bash scripts/orchestration/launch-phase.sh B5 b5a-x 3)"
+[ -d "$tmp/wt/b5" ] || fail "uppercase phase not lowercased: $out5"
+grep -qx "COMPOSE_PROJECT_NAME=etqan-b5" "$tmp/wt/b5/.env.stream" || fail "b5 .env.stream wrong"
 
 # A second launch of the same phase is refused.
 if (cd "$main" && bash scripts/orchestration/launch-phase.sh b3 b3b-other 3 2>/dev/null); then fail "relaunch accepted"; fi
@@ -103,4 +145,28 @@ for sub in backend dashboard marketing; do
 done
 out4="$(cd "$main" && bash scripts/orchestration/launch-phase.sh b4 b4b-pricing 2)"
 grep -q "B4" <<<"$out4" || fail "retry after a failed launch did not succeed: $out4"
+
+# Teardown (CONDUCTOR.md step 6, final review I4): the stack goes down with
+# its volumes under the phase's own project, then every worktree and every
+# feat/<phase>… branch of the phase, and the main checkout stays healthy.
+git -C "$main/backend" branch -q feat/b3b-later  # a later slice's branch
+git -C "$main/backend" branch -q feat/b30-unrelated  # not b3's
+: >"$tmp/docker.log"
+(cd "$main" && PATH="$stub:$PATH" bash scripts/orchestration/teardown-phase.sh B3 >/dev/null) || fail "teardown failed"
+[ "$(cat "$tmp/docker.log")" = "etqan-b3 compose -f docker-compose.local.yml down -v --remove-orphans" ] \
+  || fail "stack not taken down under etqan-b3: $(cat "$tmp/docker.log")"
+[ ! -e "$dir" ] || fail "phase dir left behind: $(ls -A "$dir")"
+for repo in "" /backend /dashboard /marketing; do
+  if git -C "$main$repo" worktree list --porcelain | grep -qF "$dir"; then fail "worktree left in main$repo"; fi
+  left="$(git -C "$main$repo" branch --list 'feat/b3[a-z]*')"
+  [ -z "$left" ] || fail "branches left in main$repo: $left"
+done
+git -C "$main/backend" rev-parse --verify -q feat/b30-unrelated >/dev/null || fail "teardown deleted another phase's branch"
+for sub in backend dashboard marketing; do
+  worktree="$(git -C "$main" config -f ".git/modules/$sub/config" core.worktree)"
+  [ "$worktree" = "../../../$sub" ] || fail "main's $sub core.worktree corrupted by teardown: $worktree"
+  git -C "$main/$sub" status --porcelain >/dev/null || fail "main $sub broken after teardown"
+done
+[ -d "$tmp/wt/b4" ] && [ -d "$tmp/wt/b5" ] || fail "teardown touched other phases"
+if (cd "$main" && PATH="$stub:$PATH" bash scripts/orchestration/teardown-phase.sh b3 2>/dev/null); then fail "second teardown accepted"; fi
 echo "launch_phase_test: ok"

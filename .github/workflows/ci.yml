@@ -140,6 +140,9 @@ jobs:
           bash infra/scripts/tests/smoke_test.sh
           bash infra/scripts/tests/compose_test.sh
           bash infra/scripts/tests/edge_ca_test.sh
+      # launch_phase_test drives the justfile's stream-down and _stack-manage.
+      - uses: taiki-e/install-action@v2
+        with: { tool: just }
       - name: orchestration scripts
         run: |
           bash scripts/orchestration/tests/stream_env_test.sh

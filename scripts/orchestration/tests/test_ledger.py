@@ -66,6 +66,57 @@ class PhasesAndSlots(unittest.TestCase):
         self.assertEqual(L.eligible(data), (1, ["B6"]))
 
 
+class WaitingPhasesKeepTheirSlot(unittest.TestCase):
+    """A launched phase that sets waiting-deps still holds its slot (final review I3)."""
+
+    def launched_then_waiting(self):
+        data = L.empty()
+        L.set_phase(data, "B2", status="spec", slot=1, worktree="/wt/b2", branch="feat/b2a-x")
+        L.set_phase(data, "B2", status="waiting-deps")
+        return data
+
+    def test_eligible_never_offers_a_launched_phase_again(self):
+        data = self.launched_then_waiting()
+        free, codes = L.eligible(data)
+        self.assertNotIn("B2", codes)
+        self.assertEqual((free, codes), (3, ["B3", "B8", "B9"]))
+
+    def test_a_waiting_phase_still_holds_its_slot(self):
+        data = self.launched_then_waiting()
+        with self.assertRaisesRegex(L.LedgerError, "slot 1 is held by B2"):
+            L.set_phase(data, "B6", status="spec", slot=1)
+
+    def test_slot_0_releases_the_slot_so_it_can_be_lent(self):
+        data = self.launched_then_waiting()
+        L.set_phase(data, "B2", slot=0)
+        self.assertIsNone(data["phases"]["B2"]["slot"])
+        self.assertEqual(L.eligible(data)[0], 4)
+        L.set_phase(data, "B6", status="spec", slot=1, worktree="/wt/b6")
+        self.assertEqual(data["phases"]["B6"]["slot"], 1)
+
+    def test_a_launched_phase_without_a_slot_cannot_resume(self):
+        data = self.launched_then_waiting()
+        L.set_phase(data, "B2", slot=0)
+        L.set_phase(data, "B6", status="spec", slot=1, worktree="/wt/b6")
+        before = json.dumps(data, sort_keys=True)
+        with self.assertRaisesRegex(L.LedgerError, "B2 holds no slot"):
+            L.set_phase(data, "B2", status="build")
+        self.assertEqual(json.dumps(data, sort_keys=True), before)
+        # Given a slot again, it resumes.
+        L.set_phase(data, "B2", status="build", slot=2)
+        self.assertEqual((data["phases"]["B2"]["status"], data["phases"]["B2"]["slot"]), ("build", 2))
+
+    def test_a_paused_phase_may_release_its_slot(self):
+        data = self.launched_then_waiting()
+        L.set_phase(data, "B2", status="paused", slot=0)
+        self.assertEqual((data["phases"]["B2"]["status"], data["phases"]["B2"]["slot"]), ("paused", None))
+        self.assertEqual(L.eligible(data)[0], 4)
+
+    def test_negative_slot_is_refused(self):
+        with self.assertRaises(L.LedgerError):
+            L.set_phase(L.empty(), "B2", slot=-1)
+
+
 class SlicesAndQueue(unittest.TestCase):
     def setUp(self):
         self.data = L.empty()
@@ -203,6 +254,47 @@ class Cli(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertIn("slot 1 is held by B2", result.stderr)
         self.assertEqual((self.dir / "orchestration/ledger.json").read_text(), before)
+
+    def test_the_double_slot_case_is_refused_end_to_end(self):
+        # Final review I3, reproduced through the CLI: B2 launched in slot 1
+        # then waiting; B6 must not get slot 1 until the conductor lends it.
+        cli(self.dir, "init")
+        cli(self.dir, "phase", "B2", "--status", "spec", "--slot", "1",
+            "--worktree", "/wt/b2", "--branch", "feat/b2a-x")
+        cli(self.dir, "phase", "B2", "--status", "waiting-deps")
+        self.assertEqual(cli(self.dir, "eligible").stdout.split(), ["free=3", "B3", "B8", "B9"])
+        refused = cli(self.dir, "phase", "B6", "--status", "spec", "--slot", "1")
+        self.assertEqual(refused.returncode, 1)
+        self.assertIn("slot 1 is held by B2", refused.stderr)
+        self.assertEqual(cli(self.dir, "phase", "B2", "--slot", "0").returncode, 0)
+        self.assertEqual(cli(self.dir, "phase", "B6", "--status", "spec", "--slot", "1").returncode, 0)
+        resumed = cli(self.dir, "phase", "B2", "--status", "build")
+        self.assertEqual(resumed.returncode, 1)
+        self.assertIn("B2 holds no slot", resumed.stderr)
+
+    def test_a_relative_dir_works(self):
+        run = subprocess.run(
+            [sys.executable, str(SCRIPT), "--dir", self.dir.name, "init"],
+            cwd=self.dir.parent, capture_output=True, text=True,
+        )
+        self.assertEqual(run.returncode, 0, run.stderr)
+        log = subprocess.run(
+            ["git", "-C", str(self.dir), "log", "--format=%s"], capture_output=True, text=True
+        ).stdout.split("\n")[0]
+        self.assertEqual(log, "ledger: init")
+
+    def test_a_ledger_commit_never_sweeps_up_phase_notes(self):
+        # Final review M3: notes are committed by their author, not by ledger.py.
+        cli(self.dir, "init")
+        notes = self.dir / "orchestration/phases/B2.md"
+        notes.parent.mkdir(parents=True)
+        notes.write_text("half-written\n")
+        self.assertEqual(cli(self.dir, "phase", "B2", "--status", "spec", "--slot", "1").returncode, 0)
+        committed = subprocess.run(
+            ["git", "-C", str(self.dir), "show", "--name-only", "--format=", "HEAD"],
+            capture_output=True, text=True,
+        ).stdout.split()
+        self.assertNotIn("orchestration/phases/B2.md", committed)
 
     def test_ready_exit_code(self):
         cli(self.dir, "init")

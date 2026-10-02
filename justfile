@@ -89,6 +89,18 @@ logs service:
 stop:
     docker compose -f docker-compose.local.yml down
 
+# Refuses in the main checkout, whose volumes are the owner's dev data
+# (scripts/orchestration/teardown-phase.sh runs it; CONDUCTOR.md).
+# Phase worktree only: stop this stream's stack and delete its volumes
+stream-down:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ ! -f .env.stream ] || [ -z "${COMPOSE_PROJECT_NAME:-}" ]; then
+      echo "stream-down: no .env.stream here; it only runs in a phase worktree" >&2
+      exit 1
+    fi
+    docker compose -f docker-compose.local.yml down -v --remove-orphans
+
 # ─── Testing ──────────────────────────────────────────────────
 
 # Run all tests (backend + frontend + boundary linter)
@@ -107,6 +119,32 @@ test-backend:
 # Frontend type check (in container)
 test-frontend:
     HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm dashboard pnpm tsc --noEmit
+
+# In a phase worktree .env.stream points the suite's URLs and Mailpit at the
+# stream's ports, and its management commands (e2e/manage.ts) run in this
+# stack's django container, so they write this stack's database. Set
+# E2E_MANAGE yourself to override. Needs the stack up (`just dev-backend`).
+# Playwright e2e suite against this checkout's stack, e.g. `just e2e e2e/journey.spec.ts`
+e2e *args:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    export E2E_MANAGE="${E2E_MANAGE:-just --justfile {{justfile()}} _stack-manage}"
+    cd dashboard
+    # The dashboard container mounts its own node_modules volume here, so the
+    # host may have only an empty (possibly root-owned) directory.
+    if [ ! -x node_modules/.bin/playwright ]; then
+      npx --yes pnpm@10 install --frozen-lockfile || {
+        echo 'e2e: host install failed; if dashboard/node_modules is root-owned, run: sudo chown -R "$USER" dashboard/node_modules' >&2
+        exit 1
+      }
+    fi
+    npx --yes pnpm@10 exec playwright install chromium
+    npx --yes pnpm@10 exec playwright test {{args}}
+
+# manage.py in this stack's django container, for E2E_MANAGE: e2e/manage.ts
+# passes every argument shell-quoted, as it does for ssh, so `sh` unquotes them.
+_stack-manage *args:
+    @docker compose -f docker-compose.local.yml exec -T django python manage.py {{args}}
 
 # Escape hatch: run backend tests on the host (uses local .venv)
 test-backend-host:

@@ -39,7 +39,8 @@ product code after wave 0. It:
 1. Runs wave 0 (§6.1).
 2. Creates each phase's worktrees and branches with `scripts/orchestration/launch-phase.sh <phase>` and
    prints the command that starts the phase session.
-3. Allocates plan numbers and stack slots in the ledger.
+3. Allocates stack slots in the ledger. Amended after the final review: a phase allocates its own plan
+   numbers (`ledger.py alloc-plan`); the ledger's lock makes that safe.
 4. Runs the merge queue (§5).
 5. Starts a phase when its dependencies allow (§4.2) and a slot is free.
 6. Settles shared-decision conflicts from the audits, or escalates.
@@ -69,10 +70,19 @@ It writes only its own worktrees, `orchestration/phases/<phase>.md`, and its own
   are already overridable).
 - Each worktree has a git-ignored `.env.stream` setting `COMPOSE_PROJECT_NAME=etqan-<phase>` and every
   `ETQAN_*_PORT` to its default plus `100 × slot` (conductor slot 0, streams 1–4). `just` loads it.
-- The existing `just dev-backend` / `just stop` start and stop that worktree's stack (no new
-  recipes); `just test`, `just lint` and the e2e suite use it.
+  Amended in planning: the HTTP edge is `8080 + 100 × slot` (slot 1 → 8180), not `80 + 100 × slot`,
+  which would fall below 1024 and clash with common ports.
+- The existing `just dev-backend` / `just stop` start and stop that worktree's stack; `just test`,
+  `just lint` and `just e2e` use it. Amended after the final review: two recipes were added —
+  `just e2e` (the dashboard's Playwright suite against the current checkout's stack, its management
+  commands run in that stack's django container; unchanged behaviour in the main checkout) and
+  `just stream-down` (§9).
 - The Vite and Astro HMR client ports, the emailed academy URLs (`DJANGO_TENANT_URL_TEMPLATE`) and the
-  e2e base URLs read the HTTP port from the same file.
+  e2e base URLs (`E2E_APP_URL`, `E2E_DEMO_URL`, `E2E_OTHER_URL`, `E2E_BASE_URL`, and `E2E_MAILPIT_URL`
+  for the stream's Mailpit) read the port from the same file. It also sets `DATABASE_URL` and
+  `CELERY_BROKER_URL` on the stream's Postgres and Redis ports, and `launch-phase.sh` rewrites those two
+  lines in the phase's copy of `backend/.env`, so no host-side `manage.py` in a phase reaches the main
+  checkout's database.
 - Amended in planning: a phase worktree's submodules are `git worktree`s of the main checkout's
   submodules, checked out into the meta worktree's empty submodule directories (verified to work).
 
@@ -92,7 +102,9 @@ Every write goes through `scripts/orchestration/ledger.py`, which takes an exclu
 (`fcntl.flock` on `_ledger/.lock`), applies the edit, re-renders `LEDGER.md` and commits on the
 `orchestration` branch. Amended in planning: every session runs on the same machine and shares the one
 `_ledger` worktree, so a local lock replaces the pull/push retry; the conductor pushes `orchestration`
-to `origin` after each merge as a backup.
+to `origin` after each merge as a backup. Amended after the final review: phase notes and `MERGES.md` are
+committed by their writers under the same lock (`flock _ledger/.lock`), each commit naming only its
+own file, and `ledger.py` commits only `ledger.json`, `LEDGER.md` and `.gitignore`.
 
 `ledger.json` holds:
 
@@ -145,8 +157,12 @@ Slices merge one at a time, in queue order:
    generated files, and reruns `just test`, `just lint` and e2e.
 3. The phase opens the PRs: backend, dashboard, marketing → `main`; meta → `master`, with pointers at the
    PR branches. Meta CI runs (tests, coverage gates, import boundaries, e2e, staging simulation).
-4. Green: the conductor merges backend → dashboard → marketing, bumps the meta pointers to the merged
-   commits, merges meta, updates `main_heads`, writes the merge note, and moves the next item in.
+4. Green: the conductor merges backend → dashboard → marketing, then merges the meta PR (its pointers
+   are the PR branch tips, which the `--merge` merges keep reachable), then bumps `master`'s submodule
+   pointers to the merge commits on `main` and pushes `master`, updates `main_heads`, writes the merge
+   note, and moves the next item in. Amended after the final review: bumping `master` before merging
+   the meta PR makes the PR's gitlinks conflict with `master`'s, and GitHub cannot resolve a submodule
+   conflict.
 5. Red: the slice leaves the queue with its CI log; the phase fixes and re-queues at the back.
 6. `master` CI red after a merge: the conductor reverts that merge in every repo, bumps the pointers, and
    returns the slice. No fixing forward on a red trunk.
@@ -230,7 +246,13 @@ Recorded in `ledger.json` and shown in `LEDGER.md`; the phase continues with oth
 
 - All state is in git (ledger, phase notes, plan checkboxes), so any session can be killed and
   restarted; a new orchestrator reads its phase file, its plan, and the ledger, and carries on.
-- `just stream-down <phase>` frees a slot's stack.
+- `just stream-down`, run inside a phase worktree, stops that stream's stack and deletes its volumes,
+  freeing its slot; it refuses to run in the main checkout. `scripts/orchestration/teardown-phase.sh
+  <phase>` retires a merged phase: `just stream-down`, then the submodule worktrees, then the meta
+  worktree (both with `git worktree remove --force`), then the phase's local `feat/<phase>…` branches in
+  every repo, then a check that the main checkout's submodules still work. A waiting phase's slot is
+  lent only explicitly: the conductor stops its stack (`just stop`) and releases the slot
+  (`ledger.py phase <code> --slot 0`); the phase gets a slot back before it works again.
 - Orchestrators use the session model for specs and reviews, and cheaper subagents for mechanical tasks.
 - The conductor pauses a stream with no progress for two queue rounds (§8.6).
 

@@ -22,6 +22,22 @@ expect "ETQAN_URL_PORT_SUFFIX=:8180"
 expect "E2E_APP_URL=http://demo.etqan.localhost:8180"
 expect "E2E_DEMO_URL=http://demo.etqan.localhost:8180"
 expect "E2E_OTHER_URL=http://other.etqan.localhost:8180"
+# The e2e suite and host-side manage.py reach this stream's stack, never the
+# main one on :80/:5432 (final review I1).
+expect "E2E_BASE_URL=http://etqan.localhost:8180"
+expect "E2E_MAILPIT_URL=http://localhost:8125"
+expect "DATABASE_URL=postgres://etqan:etqan@localhost:5532/etqan"
+expect "CELERY_BROKER_URL=redis://localhost:6479/0"
+[ "$(grep -c . "$env_file")" -eq 16 ] || fail "unexpected lines in: $(cat "$env_file")"
+
+# A backend/.env already in <dir> (launch-phase.sh copies the main one) gets
+# the stream's database and broker; every other line is kept as it was.
+mkdir -p "$tmp/backend"
+printf 'DATABASE_URL=postgres://etqan:etqan@localhost:5432/etqan\nSECRET=1\nCELERY_BROKER_URL=redis://localhost:6379/0\n' >"$tmp/backend/.env"
+bash "$script" b3 2 "$tmp"
+[ "$(cat "$tmp/backend/.env")" = "$(printf 'SECRET=1\nDATABASE_URL=postgres://etqan:etqan@localhost:5632/etqan\nCELERY_BROKER_URL=redis://localhost:6579/0')" ] \
+  || fail "backend/.env not rewritten for slot 2: $(cat "$tmp/backend/.env")"
+rm -rf "$tmp/backend"
 
 # No port is shared between any two slots, nor with the main stack (slot 0).
 ports() { grep -E '^ETQAN_[A-Z_]+_PORT=' "$1" | cut -d= -f2; }
