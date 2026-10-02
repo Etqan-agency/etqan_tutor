@@ -69,9 +69,12 @@ It writes only its own worktrees, `orchestration/phases/<phase>.md`, and its own
   are already overridable).
 - Each worktree has a git-ignored `.env.stream` setting `COMPOSE_PROJECT_NAME=etqan-<phase>` and every
   `ETQAN_*_PORT` to its default plus `100 × slot` (conductor slot 0, streams 1–4). `just` loads it.
-- `just stream-up` / `just stream-down` start and stop that worktree's stack; `just test`, `just lint`
-  and the e2e suite use it.
-- The dashboard and e2e base URLs read the HTTP port from the same file.
+- The existing `just dev-backend` / `just stop` start and stop that worktree's stack (no new
+  recipes); `just test`, `just lint` and the e2e suite use it.
+- The Vite and Astro HMR client ports, the emailed academy URLs (`DJANGO_TENANT_URL_TEMPLATE`) and the
+  e2e base URLs read the HTTP port from the same file.
+- Amended in planning: a phase worktree's submodules are `git worktree`s of the main checkout's
+  submodules, checked out into the meta worktree's empty submodule directories (verified to work).
 
 ## 4. The ledger
 
@@ -85,8 +88,11 @@ On the meta repo's long-lived `orchestration` branch, checked out in a dedicated
 - `orchestration/phases/<phase>.md` — each phase's running notes, deferred findings and current task.
 - `orchestration/MERGES.md` — one paragraph per merge.
 
-Every write is pull → edit → commit → push through `scripts/orchestration/ledger.sh`, which retries on
-a rejected push (re-pull, re-apply, up to 5 times). This gives optimistic locking with no extra service.
+Every write goes through `scripts/orchestration/ledger.py`, which takes an exclusive file lock
+(`fcntl.flock` on `_ledger/.lock`), applies the edit, re-renders `LEDGER.md` and commits on the
+`orchestration` branch. Amended in planning: every session runs on the same machine and shares the one
+`_ledger` worktree, so a local lock replaces the pull/push retry; the conductor pushes `orchestration`
+to `origin` after each merge as a backup.
 
 `ledger.json` holds:
 
@@ -153,11 +159,20 @@ Other phases rebase at their next task boundary after `main_heads` moves, and al
 
 1. Finish **Plan 13** on `feat/features` (Task 1 committed; Task 2 in progress; Tasks 3–11) and merge it.
 2. **Stack isolation** (§3.3).
-3. **Split the shared lists** (the next numbered plan, merged before any phase branches): each app
-   declares its own features, permissions and demo-seed steps in its own module, collected by the
-   registry, the access registry and `seed_dev`/`demo`; the dashboard gets a per-feature nav entry and
-   per-feature `ar`/`en` translation files collected automatically.
-4. **Bootstrap orchestration:** the `orchestration` branch and ledger, `ledger.sh`, `launch-phase.sh`,
+3. **Split the shared lists** (Plan 14, merged before any phase branches). Amended in planning to the
+   cheapest form that merges cleanly:
+   - **Phase sections:** every shared list that is code (`TENANT_APPS`, `config/api_router.py`, the
+     feature registry, the access `RESOURCES`, `seed_academy`'s steps, the platform import contract's
+     forbidden list, the end of the import-linter contracts, the dashboard's `NAV_ITEMS` and
+     `NavGroup`) gets one marker comment per phase, `── phase B2 ──` … `── phase B11 ──`. A phase adds
+     its lines only under its own marker. Two branches inserting under neighbouring markers merge with
+     no conflict (verified with git); a test keeps the markers present and in order.
+   - **Per-area translation files:** the dashboard's single `common.json` per language becomes one file
+     per top-level key (`locales/<lng>/<area>.json`), collected into the same `common` namespace, so
+     no `t()` call changes and a new area is a new file. A test keeps `ar` and `en` key-for-key equal.
+   - The 28 not-yet-built features are already one line each in the registry; a phase flips its own
+     lines in place.
+4. **Bootstrap orchestration:** the `orchestration` branch and ledger, `ledger.py`, `launch-phase.sh`,
    and a phase-session prompt file (`orchestration/PHASE_PROMPT.md`) that every orchestrator starts from.
 
 ### 6.2 Conflict rules
