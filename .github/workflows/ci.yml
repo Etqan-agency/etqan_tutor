@@ -133,13 +133,21 @@ jobs:
           docker run --rm -v "$PWD:/mnt" -w /mnt koalaman/shellcheck:v0.11.0 \
             infra/scripts/*.sh infra/scripts/tests/*.sh infra/scripts/tests/fakebin/* \
             infra/staging-sim/entrypoint.sh scripts/deploy-staging.sh scripts/staging-sim.sh \
-            scripts/staging-sim-needed.sh
+            scripts/staging-sim-needed.sh scripts/orchestration/*.sh scripts/orchestration/tests/*.sh
       - name: ship.sh, smoke.sh and compose tests
         run: |
           bash infra/scripts/tests/ship_test.sh
           bash infra/scripts/tests/smoke_test.sh
           bash infra/scripts/tests/compose_test.sh
           bash infra/scripts/tests/edge_ca_test.sh
+      # launch_phase_test drives the justfile's stream-down and _stack-manage.
+      - uses: taiki-e/install-action@v2
+        with: { tool: just }
+      - name: orchestration scripts
+        run: |
+          bash scripts/orchestration/tests/stream_env_test.sh
+          bash scripts/orchestration/tests/launch_phase_test.sh
+          python3 -m unittest discover -s scripts/orchestration/tests -v
 
   e2e:
     runs-on: ubuntu-latest

@@ -38,5 +38,13 @@ submodule pointers here.
 - Keep it simple: this is a CRUD-first product. Check the spec's non-goals before adding
   anything.
 
+## Parallel phases
+Phases B2–B11 are built by parallel sessions under
+`docs/superpowers/specs/2026-10-02-parallel-orchestration-design.md`: one conductor
+(`scripts/orchestration/CONDUCTOR.md`) and one orchestrator per phase
+(`scripts/orchestration/PHASE_PROMPT.md`), coordinated by `scripts/orchestration/ledger.py`.
+Shared lists carry `── phase Bn ──` markers: add lines only under your phase's marker.
+Translations are one file per area in `dashboard/src/locales/<lng>/`.
+
 ## Commands
 `just setup`, `just dev`, `just test`, `just lint`, `just migrate`, `just seed`.
