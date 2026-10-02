@@ -37,15 +37,27 @@ _compose *args:
 
 # Clone submodules, build images, run migrations + seed (all in Docker)
 setup:
-    git submodule update --init --recursive
-    @echo "Building images…"
+    #!/usr/bin/env bash
+    set -euo pipefail
+    # In a phase worktree (scripts/orchestration/launch-phase.sh) the submodule
+    # dirs are already `git worktree`s of the main checkout's submodules:
+    # `git submodule update --init` there rewrites the MAIN checkout's
+    # .git/modules/<sub>/config core.worktree to point at the phase worktree,
+    # breaking `git status` back in the main checkout. Only the main checkout
+    # (git-dir == git-common-dir) runs it.
+    if [ "$(git rev-parse --git-dir)" = "$(git rev-parse --git-common-dir)" ]; then
+      git submodule update --init --recursive
+    else
+      echo "phase worktree: its submodules are worktrees already (scripts/orchestration/launch-phase.sh); skipping git submodule update"
+    fi
+    echo "Building images…"
     just _compose build
     just _compose up -d postgres redis
-    @echo "Waiting for Postgres…"
+    echo "Waiting for Postgres…"
     sleep 3
     just migrate
     just seed
-    @echo "Setup complete. Run 'just dev'."
+    echo "Setup complete. Run 'just dev'."
 
 # ─── Development ──────────────────────────────────────────────
 
