@@ -103,6 +103,13 @@ class SlicesAndQueue(unittest.TestCase):
         with self.assertRaises(L.LedgerError):
             L.enqueue(self.data, "B3a")
 
+    def test_enqueue_refuses_a_merged_slice(self):
+        L.enqueue(self.data, "B3a")
+        L.take_next(self.data)
+        L.mark_merged(self.data, "B3a", {})
+        with self.assertRaisesRegex(L.LedgerError, "B3a is already merged"):
+            L.enqueue(self.data, "B3a")
+
     def test_a_third_bounce_escalates(self):
         for _ in range(3):
             L.enqueue(self.data, "B3a")
@@ -129,9 +136,19 @@ class ClaimsDecisionsEscalations(unittest.TestCase):
         data = L.empty()
         rid = L.request(data, "B4", "scheduling", "session class field")
         self.assertEqual(rid, "R1")
-        self.assertEqual(data["requests"][0]["owner"], "B2")
+        self.assertEqual(data["requests"][0]["to_owner"], "B2")
         L.request(data, "B4", "unowned_app", "x")
-        self.assertEqual(data["requests"][1]["owner"], "conductor")
+        self.assertEqual(data["requests"][1]["to_owner"], "conductor")
+
+    def test_claims_carry_a_since_timestamp(self):
+        data = L.empty()
+        L.claim(data, "B3", "etqan.catalogue.models", "price field")
+        since = data["claims"][0]["since"]
+        self.assertIsInstance(since, str)
+        # ISO-8601 UTC, e.g. "2026-10-03T12:00:00+00:00"; parseable and tz-aware.
+        from datetime import datetime
+        parsed = datetime.fromisoformat(since)
+        self.assertIsNotNone(parsed.tzinfo)
 
     def test_decisions_and_escalations_are_numbered(self):
         data = L.empty()
@@ -201,6 +218,45 @@ class Cli(unittest.TestCase):
         self.assertEqual(sorted(int(n) for n in numbers), list(range(15, 25)))
         data = json.loads((self.dir / "orchestration/ledger.json").read_text())
         self.assertEqual(data["next_plan_number"], 25)
+
+    def test_a_failed_commit_leaves_nothing_changed(self):
+        cli(self.dir, "init")
+        hooks = self.dir / ".git" / "hooks"
+        hooks.mkdir(parents=True, exist_ok=True)
+        hook = hooks / "pre-commit"
+        hook.write_text("#!/bin/sh\nexit 1\n")
+        hook.chmod(0o755)
+        before = (self.dir / "orchestration/ledger.json").read_text()
+        result = cli(self.dir, "phase", "B2", "--status", "spec", "--slot", "1")
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("commit failed", result.stderr)
+        self.assertEqual((self.dir / "orchestration/ledger.json").read_text(), before)
+        status = subprocess.run(
+            ["git", "-C", str(self.dir), "status", "--porcelain"], capture_output=True, text=True
+        ).stdout
+        self.assertEqual(status, "")
+        hook.unlink()
+        result = cli(self.dir, "phase", "B2", "--status", "spec", "--slot", "1")
+        self.assertEqual(result.returncode, 0)
+        log = subprocess.run(
+            ["git", "-C", str(self.dir), "log", "--format=%s"], capture_output=True, text=True
+        ).stdout.splitlines()
+        self.assertEqual(log, ["ledger: phase B2", "ledger: init"])
+
+    def test_merged_records_both_heads(self):
+        cli(self.dir, "init")
+        cli(self.dir, "slice", "B3a", "--phase", "B3")
+        cli(self.dir, "queue", "B3a")
+        cli(self.dir, "next")
+        result = cli(self.dir, "merged", "B3a", "--head", "backend=abc", "--head", "dashboard=def")
+        self.assertEqual(result.returncode, 0)
+        data = json.loads((self.dir / "orchestration/ledger.json").read_text())
+        self.assertEqual(data["main_heads"], {"backend": "abc", "dashboard": "def"})
+
+    def test_escalate_rejects_unknown_kind(self):
+        cli(self.dir, "init")
+        result = cli(self.dir, "escalate", "B3", "whim", "x")
+        self.assertNotEqual(result.returncode, 0)
 
 
 if __name__ == "__main__":

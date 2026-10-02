@@ -13,6 +13,7 @@ import fcntl
 import json
 import subprocess
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 PHASES = {
@@ -155,6 +156,8 @@ def unmet(data: dict, sid: str) -> list[str]:
 
 def enqueue(data: dict, sid: str) -> None:
     entry = _slice(data, sid)
+    if entry["status"] == "merged":
+        raise LedgerError(f"{sid} is already merged")
     if sid in data["queue"] or data["in_flight"] == sid:
         raise LedgerError(f"{sid} is already queued")
     entry["status"] = "queued"
@@ -213,7 +216,12 @@ def claim(data: dict, phase: str, target: str, reason: str) -> None:
             if held["phase"] == phase:
                 return
             raise LedgerError(f"{target} is claimed by {held['phase']}")
-    data["claims"].append({"target": target, "phase": phase, "reason": reason})
+    data["claims"].append({
+        "target": target,
+        "phase": phase,
+        "reason": reason,
+        "since": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+    })
 
 
 def release(data: dict, phase: str, target: str) -> None:
@@ -229,7 +237,7 @@ def request(data: dict, phase: str, app: str, what: str) -> str:
     rid = _next_id(data["requests"], "R")
     owner = data["ownership"].get(app, "conductor")
     data["requests"].append(
-        {"id": rid, "from": phase, "app": app, "owner": owner, "what": what, "status": "open"}
+        {"id": rid, "from": phase, "app": app, "to_owner": owner, "what": what, "status": "open"}
     )
     return rid
 
@@ -305,10 +313,10 @@ def render(data: dict) -> str:
                   [[d["id"], d["phase"], d["decision"], d["affects"], d["source"]]
                    for d in data["shared_decisions"]])
     out += ["## Claims and requests", ""]
-    out += _table(["Target", "Phase", "Reason"],
-                  [[c["target"], c["phase"], c["reason"]] for c in data["claims"]])
-    out += _table(["Id", "From", "App", "Owner", "What", "Status"],
-                  [[r["id"], r["from"], r["app"], r["owner"], r["what"], r["status"]]
+    out += _table(["Target", "Phase", "Reason", "Since"],
+                  [[c["target"], c["phase"], c["reason"], c["since"]] for c in data["claims"]])
+    out += _table(["Id", "From", "App", "To owner", "What", "Status"],
+                  [[r["id"], r["from"], r["app"], r["to_owner"], r["what"], r["status"]]
                    for r in data["requests"]])
     out += ["## Trunk heads", ""]
     out += _table(["Repo", "Commit"], [[r, h] for r, h in sorted(data["main_heads"].items())])
@@ -338,18 +346,49 @@ def load(directory: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _rollback(directory: Path, previous: dict[Path, bytes | None]) -> None:
+    for path, content in previous.items():
+        if content is None:
+            path.unlink(missing_ok=True)
+        else:
+            path.write_bytes(content)
+    git = ["git", "-C", str(directory)]
+    relative = [str(path.relative_to(directory)) for path in previous]
+    has_head = subprocess.run(
+        [*git, "rev-parse", "--verify", "-q", "HEAD"], capture_output=True
+    ).returncode == 0
+    if has_head:
+        subprocess.run([*git, "reset", "-q", "HEAD", "--", *relative])
+    else:
+        # Unborn branch (e.g. during `init`): nothing to reset to, just unstage.
+        subprocess.run([*git, "rm", "--cached", "-q", "-r", "--ignore-unmatch", *relative])
+
+
 def save(directory: Path, data: dict, message: str) -> None:
     folder = directory / "orchestration"
     folder.mkdir(exist_ok=True)
-    (folder / "ledger.json").write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    (folder / "LEDGER.md").write_text(render(data) + "\n", encoding="utf-8")
-    (directory / ".gitignore").write_text(".lock\n", encoding="utf-8")
+    targets = {
+        folder / "ledger.json": json.dumps(data, indent=2, ensure_ascii=False) + "\n",
+        folder / "LEDGER.md": render(data) + "\n",
+        directory / ".gitignore": ".lock\n",
+    }
+    previous = {path: (path.read_bytes() if path.exists() else None) for path in targets}
+    for path, content in targets.items():
+        path.write_text(content, encoding="utf-8")
     if (directory / ".git").exists():
         git = ["git", "-C", str(directory)]
-        subprocess.run([*git, "add", "orchestration", ".gitignore"], check=True)
+        add = subprocess.run([*git, "add", "orchestration", ".gitignore"], capture_output=True, text=True)
+        if add.returncode != 0:
+            _rollback(directory, previous)
+            raise LedgerError(f"commit failed: {add.stderr.strip()}")
         unchanged = subprocess.run([*git, "diff", "--cached", "--quiet"]).returncode == 0
         if not unchanged:
-            subprocess.run([*git, "commit", "-q", "-m", f"ledger: {message}"], check=True)
+            commit = subprocess.run(
+                [*git, "commit", "-q", "-m", f"ledger: {message}"], capture_output=True, text=True
+            )
+            if commit.returncode != 0:
+                _rollback(directory, previous)
+                raise LedgerError(f"commit failed: {(commit.stderr or commit.stdout).strip()}")
 
 
 def _csv(value: str | None) -> list[str]:
