@@ -16,8 +16,9 @@ declared. Off, `families` hides the family fields, filters, CSV columns and bulk
 family payer; `parents` refuses parent sign-in (a signed-in parent is signed out), drops `me/`'s
 children, guardian payers and guardian notices; `invoices` stops automatic invoices, invoice notices
 and the subscriptions' payment status; `session_reports` stops `report.missing`;
-`auto_notifications` skips the academy's scan; `teacher_attendance` refuses teachers' marks (403);
-`export` 404s every `?format=csv`. `me/` lists the features that are on; `academy/features/`
+`auto_notifications` skips the academy's scan; `teacher_attendance` refuses teachers' marks (403)
+and stops `session.late` notices (the final review's Important #1: a teacher can't be told to fix
+attendance it refuses to let them mark); `export` 404s every `?format=csv`. `me/` lists the features that are on; `academy/features/`
 (admins only) lists them all. Etqan switches them on the Academy page of the platform admin
 (grouped, "takes effect when built", held-off prerequisites, history, "Copy features from another
 academy") or with `manage.py set_features <subdomain> --on … --off …`; nothing in the tenant API
@@ -57,8 +58,11 @@ list too. The e2e suite covers the journey through the Caddy edge.
 ## Next
 
 Open the PRs (backend, dashboard → `main`; meta → `master`), get meta CI green, merge backend then
-dashboard, bump the meta pointers, merge meta; nothing merges without the user's approval. Phase
-B1 is then complete. A later phase that builds one of the 28 stored features flips its `built` in
+dashboard, bump the meta pointers, merge meta; merging is autonomous (the owner's ruling, PO-3,
+`docs/superpowers/specs/2026-10-02-parallel-orchestration-design.md`), no per-PR approval needed.
+Phase B1 is then complete; next is Plan 14, orchestration groundwork
+(`docs/superpowers/plans/2026-10-02-plan-14-orchestration-groundwork.md`, meta branch
+`feat/orchestration`). A later phase that builds one of the 28 stored features flips its `built` in
 the registry and wires the switch in (route `feature`, `FEATURES` row, `staticData.feature`). A
 switch is read only through `etqan.platform.features` and written only by `etqan.tenants`; never
 add a per-feature column or setting. The supervision rules live only in
@@ -120,6 +124,9 @@ add a per-feature column or setting. The supervision rules live only in
   seeded Etqan staff login); the admin page is covered by backend tests only.
 - Plan 13: `me/` carries the features, so a switch Etqan changes reaches an open dashboard on its next
   `me/` read (a reload or sign-in), not at once; the server enforces it immediately.
+- Plan 13 final review: `journey.spec.ts` and `payroll.spec.ts` locate their past-dated session by
+  its own date, not just by student/teacher name — creating a subscription also generates its
+  upcoming sessions (today..+14 days), which can land on the same weekday and add a second row.
 - Supervisors get no notifications either (R-7); a supervisor learns of an assignment from My
   supervision only.
 - A subscription's supervisor change overwrites a per-session override on its unstarted sessions (the
