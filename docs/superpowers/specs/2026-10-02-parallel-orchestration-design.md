@@ -173,7 +173,8 @@ Other phases rebase at their next task boundary after `main_heads` moves, and al
    - The 28 not-yet-built features are already one line each in the registry; a phase flips its own
      lines in place.
 4. **Bootstrap orchestration:** the `orchestration` branch and ledger, `ledger.py`, `launch-phase.sh`,
-   and a phase-session prompt file (`orchestration/PHASE_PROMPT.md`) that every orchestrator starts from.
+   and the prompt files every session starts from (`scripts/orchestration/PHASE_PROMPT.md`,
+   `scripts/orchestration/CONDUCTOR.md`).
 
 ### 6.2 Conflict rules
 

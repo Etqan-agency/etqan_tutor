@@ -164,6 +164,6 @@ new-module name:
     touch backend/etqan/{{name}}/api/views.py
     touch backend/etqan/{{name}}/tests/__init__.py
     @echo "Module scaffolded. Remember to:"
-    @echo "  1. Add 'etqan.{{name}}' to TENANT_APPS (and SHARED_APPS only if it must exist in public)"
-    @echo "  2. Add import-linter contracts in pyproject.toml"
+    @echo "  1. Add 'etqan.{{name}}' to TENANT_APPS under your phase's '── phase Bn ──' marker"
+    @echo "  2. Add import-linter contracts in pyproject.toml under your phase's marker, and the app to the platform contract's forbidden list"
     @echo "  3. Create docs/architecture/{{name}}.md"
