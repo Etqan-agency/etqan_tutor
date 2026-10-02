@@ -139,7 +139,21 @@
     "identity.auth": "B9"
   },
   "claims": [],
-  "shared_decisions": [],
+  "shared_decisions": [
+    {
+      "id": "D1",
+      "phase": "B2",
+      "decision": "R7 dropped: phases are designed from the audits; unobserved behaviour is marked [assumed]",
+      "affects": [
+        "B2",
+        "B4",
+        "B5",
+        "B6",
+        "B11"
+      ],
+      "source": "spec 2026-10-02 PO-2"
+    }
+  ],
   "requests": [],
   "queue": [],
   "in_flight": null,

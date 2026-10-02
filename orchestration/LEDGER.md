@@ -33,6 +33,7 @@ In flight: **—** · Queue: — · Next plan number: 15
 
 | Id | Phase | Decision | Affects | Source |
 |---|---|---|---|---|
+| D1 | B2 | R7 dropped: phases are designed from the audits; unobserved behaviour is marked [assumed] | B2, B4, B5, B6, B11 | spec 2026-10-02 PO-2 |
 
 ## Claims and requests
 
