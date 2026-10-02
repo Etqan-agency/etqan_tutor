@@ -1,0 +1,148 @@
+{
+  "phases": {
+    "B2": {
+      "title": "Scheduling depth",
+      "status": "waiting-deps",
+      "requires": [],
+      "slot": null,
+      "worktree": null,
+      "branch": null,
+      "spec": null,
+      "current_slice": null,
+      "current_task": null
+    },
+    "B3": {
+      "title": "Money depth",
+      "status": "waiting-deps",
+      "requires": [],
+      "slot": null,
+      "worktree": null,
+      "branch": null,
+      "spec": null,
+      "current_slice": null,
+      "current_task": null
+    },
+    "B4": {
+      "title": "Payroll depth",
+      "status": "waiting-deps",
+      "requires": [
+        "B2",
+        "B3"
+      ],
+      "slot": null,
+      "worktree": null,
+      "branch": null,
+      "spec": null,
+      "current_slice": null,
+      "current_task": null
+    },
+    "B5": {
+      "title": "Communication",
+      "status": "waiting-deps",
+      "requires": [
+        "B2"
+      ],
+      "slot": null,
+      "worktree": null,
+      "branch": null,
+      "spec": null,
+      "current_slice": null,
+      "current_task": null
+    },
+    "B6": {
+      "title": "Learning",
+      "status": "waiting-deps",
+      "requires": [
+        "B2"
+      ],
+      "slot": null,
+      "worktree": null,
+      "branch": null,
+      "spec": null,
+      "current_slice": null,
+      "current_task": null
+    },
+    "B7": {
+      "title": "Add-on sales",
+      "status": "waiting-deps",
+      "requires": [
+        "B3"
+      ],
+      "slot": null,
+      "worktree": null,
+      "branch": null,
+      "spec": null,
+      "current_slice": null,
+      "current_task": null
+    },
+    "B8": {
+      "title": "Marketing extras",
+      "status": "waiting-deps",
+      "requires": [],
+      "slot": null,
+      "worktree": null,
+      "branch": null,
+      "spec": null,
+      "current_slice": null,
+      "current_task": null
+    },
+    "B9": {
+      "title": "Platform extras",
+      "status": "waiting-deps",
+      "requires": [],
+      "slot": null,
+      "worktree": null,
+      "branch": null,
+      "spec": null,
+      "current_slice": null,
+      "current_task": null
+    },
+    "B10": {
+      "title": "AI",
+      "status": "waiting-deps",
+      "requires": [
+        "B6"
+      ],
+      "slot": null,
+      "worktree": null,
+      "branch": null,
+      "spec": null,
+      "current_slice": null,
+      "current_task": null
+    },
+    "B11": {
+      "title": "Apps",
+      "status": "waiting-deps",
+      "requires": [
+        "B2",
+        "B3",
+        "B4",
+        "B5"
+      ],
+      "slot": null,
+      "worktree": null,
+      "branch": null,
+      "spec": null,
+      "current_slice": null,
+      "current_task": null
+    }
+  },
+  "slices": {},
+  "next_plan_number": 15,
+  "ownership": {
+    "scheduling": "B2",
+    "billing": "B3",
+    "catalogue.pricing": "B3",
+    "payroll": "B4",
+    "notifications": "B5",
+    "site": "B8",
+    "identity.auth": "B9"
+  },
+  "claims": [],
+  "shared_decisions": [],
+  "requests": [],
+  "queue": [],
+  "in_flight": null,
+  "main_heads": {},
+  "escalations": []
+}
