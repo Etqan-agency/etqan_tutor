@@ -1,6 +1,12 @@
 # justfile — etqan task runner
 # Run `just` to see all available commands.
 
+# Orchestration streams (docs/superpowers/specs/2026-10-02-parallel-orchestration-design.md §3.3):
+# a phase worktree's git-ignored .env.stream sets COMPOSE_PROJECT_NAME and every
+# port, so several stacks run side by side. Without the file nothing changes.
+set dotenv-load := true
+set dotenv-filename := ".env.stream"
+
 default:
     @just --list
 
@@ -53,11 +59,11 @@ dev-backend:
     @just _urls
 
 _urls:
-    @echo "Academy site:    http://demo.etqan.localhost/"
-    @echo "Dashboard:       http://demo.etqan.localhost/app/"
-    @echo "API:             http://demo.etqan.localhost/api/v1/"
-    @echo "Staff admin:     http://etqan.localhost/admin/"
-    @echo "Mail / Flower:   http://mail.etqan.localhost  http://flower.etqan.localhost"
+    @echo "Academy site:    http://demo.etqan.localhost${ETQAN_URL_PORT_SUFFIX:-}/"
+    @echo "Dashboard:       http://demo.etqan.localhost${ETQAN_URL_PORT_SUFFIX:-}/app/"
+    @echo "API:             http://demo.etqan.localhost${ETQAN_URL_PORT_SUFFIX:-}/api/v1/"
+    @echo "Staff admin:     http://etqan.localhost${ETQAN_URL_PORT_SUFFIX:-}/admin/"
+    @echo "Mail / Flower:   http://mail.etqan.localhost${ETQAN_URL_PORT_SUFFIX:-}  http://flower.etqan.localhost${ETQAN_URL_PORT_SUFFIX:-}"
 
 # Rebuild images (after dependency or Dockerfile changes)
 rebuild:
