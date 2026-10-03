@@ -558,6 +558,16 @@
         "B7"
       ],
       "source": "spec 2026-10-03-b3g G-1, G-4"
+    },
+    {
+      "id": "D17",
+      "phase": "B3",
+      "decision": "Extends D13: PayPal completes via server-side capture POST /api/v1/gateways/checkouts/<uuid>/capture/ (re-checks still-payable under a short lock; else cancels, captures nothing); PayPal refunds/reversals only set attention. Checkouts of purposes payment_link (billing) and donation_link (finance) are readable/capturable/cancellable/simulatable by anyone holding the UUID (decided by purpose; B7 registers its own purposes for anonymous access). /app/pay/return and /app/pay/simulate/$id are public routes. gateways never imports a selling app; other apps reach gateways only through gateways.services (import contract).",
+      "affects": [
+        "B7",
+        "B11"
+      ],
+      "source": "spec 2026-10-03-b3c C-7/C-8/C-11/C-13; b3g G-15, G-22"
     }
   ],
   "requests": [],
