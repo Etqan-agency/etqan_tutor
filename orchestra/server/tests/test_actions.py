@@ -2,8 +2,11 @@
 
 import json
 import os
+import shutil
+import threading
 from pathlib import Path
 
+from orchestra_server import sessions
 from orchestra_server.ledger_api import L
 from tests import fakes
 from tests.support import ServerCase
@@ -52,6 +55,23 @@ class Launch(ActionCase):
         self.assertTrue(data["output_tail"].endswith("boom"))
         self.assertIsNone(self.ledger()["phases"]["B3"]["worktree"])
 
+    def test_concurrent_launches_for_the_same_slot_serialize(self):
+        results = {}
+
+        def go(code):
+            results[code] = self.request(
+                "POST", f"/api/phases/{code}/launch", {"suffix": f"{code.lower()}a-x", "slot": 2}
+            )
+
+        threads = [threading.Thread(target=go, args=(code,)) for code in ("B2", "B3")]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        statuses = sorted(status for status, _ in results.values())
+        self.assertEqual(statuses, [200, 409])
+        self.assertEqual(len(self.calls("launch-phase.sh")), 1)
+
 
 class Sessions(ActionCase):
     def test_start_validates_and_passes_options(self):
@@ -66,6 +86,31 @@ class Sessions(ActionCase):
             self.calls("start-session.sh")[0]["argv"][1:],
             ["B3", "--mode", "plan", "--model", "claude-sonnet-5", "--effort", "high"],
         )
+
+    def test_a_stderr_warning_from_start_session_does_not_corrupt_the_id(self):
+        self.launched()
+        os.environ["FAKE_WARN"] = "start-session.sh"
+        status, data = self.request("POST", "/api/phases/B3/session/start", {"mode": "auto"})
+        self.assertEqual((status, data), (200, {"ok": True, "id": "ab12cd34"}))
+
+    def test_a_stderr_warning_from_claude_agents_does_not_break_parsing(self):
+        self.change_ledger(lambda d: L.set_phase(d, "B3", session="aa"))
+        self.agents_file.write_text(
+            json.dumps([{"id": "aa", "name": "etqan-B3", "kind": "background", "pid": 1, "status": "busy"}])
+        )
+        os.environ["FAKE_WARN"] = "claude"
+        status, data = self.request("GET", "/api/state")
+        self.assertEqual(status, 200)
+        self.assertEqual(data["sessions"]["B3"]["state"], "busy")
+
+    def test_start_refuses_a_duplicate_live_session(self):
+        self.launched()
+        self.agents_file.write_text(
+            json.dumps([{"id": "zz", "name": "etqan-B3", "kind": "background", "pid": 1, "status": "idle"}])
+        )
+        status, data = self.request("POST", "/api/phases/B3/session/start", {"mode": "auto"})
+        self.assertEqual((status, data), (409, {"error": "etqan-B3 is already running as zz; use Restart"}))
+        self.assertEqual(self.calls("start-session.sh"), [])
 
     def test_stop_needs_a_session(self):
         self.assertEqual(self.request("POST", "/api/phases/B3/session/stop")[0], 400)
@@ -101,14 +146,47 @@ class Sessions(ActionCase):
         os.environ["FAKE_ID"] = "bb"
         self.assertEqual(self.request("POST", "/api/phases/B3/session/restart")[1], {"ok": True, "id": "bb"})
         resume = self.calls("claude")[-1]
-        self.assertEqual(resume["argv"][:3], ["--bg", "--resume", "aa-uuid"])
-        self.assertIn("etqan-B3", resume["argv"])
+        self.assertEqual(resume["argv"], ["--bg", "--resume", "aa-uuid", sessions.RESUME_PROMPT])
         self.assertEqual(resume["cwd"], str(self.base))
         self.assertEqual(self.ledger()["phases"]["B3"]["session"], "bb")
 
         self.agents_file.write_text("[]")
-        self.request("POST", "/api/phases/B3/session/restart")
+        status, data = self.request("POST", "/api/phases/B3/session/restart")
         self.assertEqual(self.calls()[-1]["cmd"], "start-session.sh")
+        self.assertEqual((status, data), (200, {"ok": True, "id": "bb"}))
+
+    def test_restart_adopts_a_hand_started_session_when_the_recorded_one_is_gone(self):
+        self.launched()
+        self.change_ledger(lambda d: L.set_phase(d, "B3", session="aa"))
+        self.agents_file.write_text(
+            json.dumps(
+                [
+                    {
+                        "id": "aa",
+                        "name": "etqan-B3",
+                        "kind": "background",
+                        "state": "done",
+                        "sessionId": "aa-uuid",
+                        "cwd": str(self.base),
+                    },
+                    {"id": "zz", "name": "etqan-B3", "kind": "background", "pid": 1, "status": "idle"},
+                ]
+            )
+        )
+        status, data = self.request("POST", "/api/phases/B3/session/restart")
+        self.assertEqual((status, data), (200, {"ok": True, "id": "zz"}))
+        self.assertEqual(self.calls("claude")[-1]["argv"], ["respawn", "zz"])
+        self.assertEqual(self.calls("start-session.sh"), [])
+        self.assertEqual(self.ledger()["phases"]["B3"]["session"], "zz")
+
+    def test_restart_reports_a_500_when_agents_fails_and_starts_nothing(self):
+        self.launched()
+        self.change_ledger(lambda d: L.set_phase(d, "B3", session="aa"))
+        os.environ["FAKE_FAIL"] = "claude"
+        status, data = self.request("POST", "/api/phases/B3/session/restart")
+        self.assertEqual(status, 500)
+        self.assertEqual(data["ok"], False)
+        self.assertEqual(self.calls("start-session.sh"), [])
 
     def test_conductor_sessions(self):
         self.assertEqual(self.request("POST", "/api/conductor/session/start", {"mode": "auto"})[0], 200)
@@ -140,6 +218,13 @@ class Slots(ActionCase):
         )
         self.assertTrue(all(c["cwd"] == wt for c in self.calls("just")))
         self.assertEqual(self.ledger()["phases"]["B3"]["slot"], 4)
+
+    def test_a_failed_stop_leaves_the_old_slot(self):
+        self.launched("B3", slot=2)
+        os.environ["FAKE_FAIL"] = "just"
+        status, _ = self.request("POST", "/api/phases/B3/slot", {"slot": 4})
+        self.assertEqual(status, 500)
+        self.assertEqual(self.ledger()["phases"]["B3"]["slot"], 2)
 
     def test_a_held_slot_is_refused_before_anything_runs(self):
         self.launched("B2", slot=1)
@@ -201,3 +286,19 @@ class Teardown(ActionCase):
         self.change_ledger(finish)
         self.request("POST", "/api/phases/B3/teardown", {"confirm": "B3"})
         self.assertEqual(self.ledger()["phases"]["B3"]["status"], "merged")
+
+    def test_teardown_finds_an_unrecorded_worktree(self):
+        wt = self.base / "wt" / "b3"
+        wt.mkdir(parents=True)
+        status, data = self.request("POST", "/api/phases/B3/teardown", {"confirm": "B3"})
+        self.assertEqual(status, 200, data)
+        self.assertEqual(self.calls("teardown-phase.sh")[0]["argv"][1:], ["B3"])
+        self.assertIsNone(self.ledger()["phases"]["B3"]["worktree"])
+
+    def test_teardown_retries_after_the_worktree_is_already_gone(self):
+        wt = self.launched()
+        shutil.rmtree(wt)
+        status, data = self.request("POST", "/api/phases/B3/teardown", {"confirm": "B3"})
+        self.assertEqual(status, 200, data)
+        self.assertEqual(self.calls("teardown-phase.sh"), [])
+        self.assertIsNone(self.ledger()["phases"]["B3"]["worktree"])

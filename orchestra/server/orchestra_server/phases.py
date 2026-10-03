@@ -1,10 +1,16 @@
 """The commands behind a phase's launch, slot, stack and teardown (spec 2026-10-03 §4.2)."""
 
 import contextlib
+import threading
+from pathlib import Path
 
 from . import commands, config, sessions
 from .errors import BadRequest
 from .ledger_api import L, LedgerError, read, write
+
+# Serializes a whole launch's eligibility/slot check through its ledger write, so two
+# concurrent launches for the same slot cannot both pass the check before either writes.
+_LAUNCH_LOCK = threading.Lock()
 
 
 def _worktree(data: dict, code: str) -> str:
@@ -22,18 +28,19 @@ def _slot_holder(data: dict, code: str, slot: int) -> str | None:
 
 
 def launch(code: str, suffix: str, slot: int, mode: str) -> dict:
-    data = read()
-    if code not in L.eligible(data)[1]:
-        raise LedgerError(f"{code} is not eligible to launch")
-    holder = _slot_holder(data, code, slot)
-    if holder:
-        raise LedgerError(f"slot {slot} is held by {holder}")
-    commands.run(commands.script("launch-phase.sh", code, suffix, str(slot)), cwd=config.MAIN, timeout=900)
-    worktree = str(config.wt_root() / code.lower())
-    write(
-        f"launch {code}",
-        lambda d: L.set_phase(d, code, status="spec", slot=slot, worktree=worktree, branch=f"feat/{suffix}"),
-    )
+    with _LAUNCH_LOCK:
+        data = read()
+        if code not in L.eligible(data)[1]:
+            raise LedgerError(f"{code} is not eligible to launch")
+        holder = _slot_holder(data, code, slot)
+        if holder:
+            raise LedgerError(f"slot {slot} is held by {holder}")
+        commands.run(commands.script("launch-phase.sh", code, suffix, str(slot)), cwd=config.MAIN, timeout=900)
+        worktree = str(config.wt_root() / code.lower())
+        write(
+            f"launch {code}",
+            lambda d: L.set_phase(d, code, status="spec", slot=slot, worktree=worktree, branch=f"feat/{suffix}"),
+        )
     return {"ok": True, "worktree": worktree, "session": sessions.start(code, mode)}
 
 
@@ -64,12 +71,21 @@ def teardown(code: str, confirm) -> dict:
     if confirm != code:
         raise BadRequest(f"type {code} to confirm")
     data = read()
-    _worktree(data, code)
+    recorded_worktree = data["phases"][code]["worktree"]
+    # A launch the ledger never recorded (the write after launch-phase.sh never
+    # happened) still left its worktree on disk: find it the same way launch does.
+    worktree = recorded_worktree or str(config.wt_root() / code.lower())
+    exists = Path(worktree).is_dir()
+    if not recorded_worktree and not exists:
+        raise BadRequest(f"{code} has no worktree")
     sid = data["phases"][code]["session"]
     if sid:
         with contextlib.suppress(commands.CommandFailed):  # already stopped or removed
             commands.run(["claude", "stop", sid], timeout=60)
-    commands.run(commands.script("teardown-phase.sh", code), cwd=config.MAIN, timeout=900)
+    if exists:
+        commands.run(commands.script("teardown-phase.sh", code), cwd=config.MAIN, timeout=900)
+    # else: the worktree is already gone (a retry after a script that failed late, past
+    # the point it removed the worktree) — nothing left to tear down but the ledger.
     slices = [s for s in data["slices"].values() if s["phase"] == code]
     finished = bool(slices) and all(s["status"] == "merged" for s in slices)
 

@@ -3,7 +3,7 @@
 import json
 import unittest
 
-from orchestra_server import sessions
+from orchestra_server import commands, sessions
 from orchestra_server.ledger_api import L
 from tests.support import ServerCase
 
@@ -53,6 +53,22 @@ class Reconcile(unittest.TestCase):
         self.assertEqual(adopt, {"B6": "ee", "conductor": "ff"})
         self.assertEqual(view["B6"]["state"], "idle")
         self.assertEqual(view["B5"]["state"], "none")
+
+    def test_a_session_started_by_hand_under_the_same_name_replaces_an_exited_one(self):
+        L.set_phase(self.data, "B3", session="aa")
+        items = [agent("aa", "etqan-B3", state="done", pid=False), agent("zz", "etqan-B3")]
+        view, adopt = sessions.reconcile(self.data, items)
+        self.assertEqual(adopt, {"B3": "zz"})
+        self.assertEqual(view["B3"]["id"], "zz")
+        self.assertEqual(view["B3"]["state"], "idle")
+
+
+class Agents(ServerCase):
+    def test_invalid_json_is_lenient_by_default_and_raises_when_strict(self):
+        self.agents_file.write_text("not json")
+        self.assertEqual(sessions.agents(), [])
+        with self.assertRaises(commands.CommandFailed):
+            sessions.agents(strict=True)
 
 
 class Snapshot(ServerCase):

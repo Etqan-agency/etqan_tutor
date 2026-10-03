@@ -1,5 +1,6 @@
 """Every subprocess the server runs: an argv list from a fixed template, never a
-shell (spec 2026-10-03 §4.1); a failure carries its last 50 lines to the page."""
+shell (spec 2026-10-03 §4.1); a success returns stdout only (stderr noise never
+reaches a parser); a failure carries its last 50 lines of stdout+stderr to the page."""
 
 import subprocess
 from pathlib import Path
@@ -39,10 +40,13 @@ def run(
         raise CommandFailed(argv, -1, tail(f"{output}\n(timed out after {timeout:.0f}s)")) from None
     except FileNotFoundError:
         raise CommandFailed(argv, 127, f"{argv[0]}: not found") from None
-    output = (proc.stdout or "")[-MAX_OUTPUT:] + (proc.stderr or "")[-MAX_OUTPUT:]
+    except (NotADirectoryError, PermissionError) as error:
+        raise CommandFailed(argv, 127, f"{cwd}: {error}") from None
+    stdout = (proc.stdout or "")[-MAX_OUTPUT:]
+    stderr = (proc.stderr or "")[-MAX_OUTPUT:]
     if proc.returncode not in ok_codes:
-        raise CommandFailed(argv, proc.returncode, tail(output))
-    return output
+        raise CommandFailed(argv, proc.returncode, tail(stdout + stderr))
+    return stdout
 
 
 def script(name: str, *args: str) -> list[str]:
