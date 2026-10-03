@@ -516,6 +516,18 @@
         "B11"
       ],
       "source": "spec 2026-10-03-b3b B-1, B-4, §4.2-4.3"
+    },
+    {
+      "id": "D14",
+      "phase": "B2",
+      "decision": "Archived subscriptions and sessions (B2d) are the same rows with archived_at set, hidden only from the office's default scheduling lists and Today board. Other apps never filter on archived_at: invoices, payroll, consumption, notifications and reports keep counting archived rows (BR-46 'table + archive').",
+      "affects": [
+        "B3",
+        "B4",
+        "B5",
+        "B11"
+      ],
+      "source": "spec 2026-10-03-b2d-archives D-2 (draft, B2d branch); P1 BR-46"
     }
   ],
   "requests": [],
