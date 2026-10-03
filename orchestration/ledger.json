@@ -9,7 +9,8 @@
       "branch": "feat/b2a-scheduling",
       "spec": null,
       "current_slice": null,
-      "current_task": null
+      "current_task": null,
+      "session": null
     },
     "B3": {
       "title": "Money depth",
@@ -20,7 +21,8 @@
       "branch": "feat/b3a-money",
       "spec": null,
       "current_slice": null,
-      "current_task": null
+      "current_task": null,
+      "session": null
     },
     "B4": {
       "title": "Payroll depth",
@@ -34,7 +36,8 @@
       "branch": null,
       "spec": null,
       "current_slice": null,
-      "current_task": null
+      "current_task": null,
+      "session": null
     },
     "B5": {
       "title": "Communication",
@@ -47,7 +50,8 @@
       "branch": null,
       "spec": null,
       "current_slice": null,
-      "current_task": null
+      "current_task": null,
+      "session": null
     },
     "B6": {
       "title": "Learning",
@@ -60,7 +64,8 @@
       "branch": null,
       "spec": null,
       "current_slice": null,
-      "current_task": null
+      "current_task": null,
+      "session": null
     },
     "B7": {
       "title": "Add-on sales",
@@ -73,7 +78,8 @@
       "branch": null,
       "spec": null,
       "current_slice": null,
-      "current_task": null
+      "current_task": null,
+      "session": null
     },
     "B8": {
       "title": "Marketing extras",
@@ -84,7 +90,8 @@
       "branch": "feat/b8a-marketing",
       "spec": null,
       "current_slice": null,
-      "current_task": null
+      "current_task": null,
+      "session": null
     },
     "B9": {
       "title": "Platform extras",
@@ -95,7 +102,8 @@
       "branch": "feat/b9a-platform",
       "spec": null,
       "current_slice": null,
-      "current_task": null
+      "current_task": null,
+      "session": null
     },
     "B10": {
       "title": "AI",
@@ -108,7 +116,8 @@
       "branch": null,
       "spec": null,
       "current_slice": null,
-      "current_task": null
+      "current_task": null,
+      "session": null
     },
     "B11": {
       "title": "Apps",
@@ -124,7 +133,8 @@
       "branch": null,
       "spec": null,
       "current_slice": null,
-      "current_task": null
+      "current_task": null,
+      "session": null
     }
   },
   "slices": {},
@@ -158,5 +168,6 @@
   "queue": [],
   "in_flight": null,
   "main_heads": {},
-  "escalations": []
+  "escalations": [],
+  "conductor_session": "26f4e8f3"
 }
