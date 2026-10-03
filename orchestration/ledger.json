@@ -100,9 +100,9 @@
       "slot": 4,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b9",
       "branch": "feat/b9a-platform",
-      "spec": null,
+      "spec": "docs/superpowers/specs/2026-10-03-platform-extras-design.md",
       "current_slice": "B9a",
-      "current_task": "brainstorm phase spec",
+      "current_task": "spec review",
       "session": "60ad3859"
     },
     "B10": {

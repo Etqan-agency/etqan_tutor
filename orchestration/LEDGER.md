@@ -15,7 +15,7 @@ In flight: **—** · Queue: — · Next plan number: 15
 | B6 | Learning | waiting-deps |  |  |  | B2 |  |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |
 | B8 | Marketing extras | spec | 3 | B8a | spec review |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md |
-| B9 | Platform extras | spec | 4 | B9a | brainstorm phase spec |  |  |
+| B9 | Platform extras | spec | 4 | B9a | spec review |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md |
 | B10 | AI | waiting-deps |  |  |  | B6 |  |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |
 
