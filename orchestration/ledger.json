@@ -190,7 +190,7 @@
     },
     "B2a": {
       "phase": "B2",
-      "status": "plan",
+      "status": "build",
       "requires": [],
       "plan_number": 17,
       "spec": "docs/superpowers/specs/2026-10-03-b2a-session-classes-design.md",
