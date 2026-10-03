@@ -83,7 +83,6 @@ In flight: **B8b** · Queue: B9a · Next plan number: 24 · Conductor: 04a3f739
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| academy | B2 | B2b: AcademySettings.postpone_limit_minutes | 2026-10-03T14:31:11+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
