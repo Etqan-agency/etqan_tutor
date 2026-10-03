@@ -9,7 +9,7 @@
       "branch": "feat/b2a-scheduling",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2a",
-      "current_task": "B2a T1: registry + model + migration",
+      "current_task": "B2a T2: consumption/payroll/deletions",
       "session": "b56a274c"
     },
     "B3": {
