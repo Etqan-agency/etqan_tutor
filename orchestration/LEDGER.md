@@ -44,6 +44,7 @@ In flight: **B3a** · Queue: B2a · Next plan number: 21 · Conductor: aa12c664
 | B3d | B3 | spec |  |  |  | 0 |
 | B3e | B3 | spec |  |  |  | 0 |
 | B3f | B3 | spec |  |  |  | 0 |
+| B2g | B2 | spec |  |  |  | 0 |
 
 ## Open escalations
 
