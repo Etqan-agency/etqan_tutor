@@ -36,6 +36,11 @@ else
   prompt="$(sed -e "s/{{PHASE}}/$who/g" -e "s/{{SLOT}}/$slot/g" "$dir/scripts/orchestration/PHASE_PROMPT.md")"
 fi
 args=(--bg --name "$name" --permission-mode "$mode")
+# A background session cannot answer Claude Code's "new MCP server found in this
+# project" prompt, which blocks it forever. Load exactly the checkout's own
+# .mcp.json (codegraph) as explicit config, and nothing else, so no prompt appears.
+if [ -f "$dir/.mcp.json" ]; then args+=(--mcp-config "$dir/.mcp.json"); fi
+args+=(--strict-mcp-config)
 [ -z "$model" ] || args+=(--model "$model")
 [ -z "$effort" ] || args+=(--effort "$effort")
 out="$(cd "$dir" && claude "${args[@]}" "$prompt")"
