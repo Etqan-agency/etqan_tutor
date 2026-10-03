@@ -548,6 +548,16 @@
         "B11"
       ],
       "source": "spec 2026-10-03-b2f-bundles-groups §10, §4.6 (draft, B2f branch)"
+    },
+    {
+      "id": "D16",
+      "phase": "B3",
+      "decision": "Refines D5: revenue = amount_minor + fee_minor of completed billing payments, with or without an invoice, grouped by Payment.currency. Payment.invoice becomes nullable and every Payment carries its own currency (B3g).",
+      "affects": [
+        "B4",
+        "B7"
+      ],
+      "source": "spec 2026-10-03-b3g G-1, G-4"
     }
   ],
   "requests": [],
