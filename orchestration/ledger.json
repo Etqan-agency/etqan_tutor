@@ -14,14 +14,14 @@
     },
     "B3": {
       "title": "Money depth",
-      "status": "plan",
+      "status": "build",
       "requires": [],
       "slot": 2,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b3",
       "branch": "feat/b3a-money",
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
       "current_slice": "B3a",
-      "current_task": "write plan",
+      "current_task": "Task 1",
       "session": "8b61efa3"
     },
     "B4": {

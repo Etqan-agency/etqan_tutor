@@ -9,7 +9,7 @@ In flight: **—** · Queue: — · Next plan number: 19
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec |
 |---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | plan | 1 | B2a | B2a: writing plan |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md |
-| B3 | Money depth | plan | 2 | B3a | write plan |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md |
+| B3 | Money depth | build | 2 | B3a | Task 1 |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |
 | B6 | Learning | waiting-deps |  |  |  | B2 |  |
