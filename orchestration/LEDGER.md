@@ -8,7 +8,7 @@ In flight: **B8b** · Queue: B9a · Next plan number: 24 · Conductor: 04a3f739
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | queued | 1 | B2a | B2a PRs open; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | a29a300d |
+| B2 | Scheduling depth | plan | 1 | B2b | B2b: committing spec + plan 21, amending phase spec |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | a29a300d |
 | B3 | Money depth | build | 2 | B3b | B3b Task 5 (T1-4 done) |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | bbb7e4fa |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
