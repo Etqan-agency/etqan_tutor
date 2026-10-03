@@ -34,6 +34,7 @@ In flight: **—** · Queue: — · Next plan number: 15
 | B2d | B2 | spec |  |  |  | 0 |
 | B2e | B2 | spec |  |  |  | 0 |
 | B2f | B2 | spec |  |  |  | 0 |
+| B9a | B9 | spec |  |  |  | 0 |
 
 ## Open escalations
 
