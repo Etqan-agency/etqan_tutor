@@ -150,11 +150,11 @@
     },
     "B8b": {
       "phase": "B8",
-      "status": "spec",
+      "status": "build",
       "requires": [],
       "plan_number": 19,
       "spec": "docs/superpowers/specs/2026-10-03-b8b-faqs-ads-redirects-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-03-plan-19-faqs-ads-redirects.md",
       "prs": null,
       "bounces": 0
     },
