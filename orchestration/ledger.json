@@ -88,11 +88,11 @@
     },
     "B9": {
       "title": "Platform extras",
-      "status": "waiting-deps",
+      "status": "spec",
       "requires": [],
-      "slot": null,
-      "worktree": null,
-      "branch": null,
+      "slot": 4,
+      "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b9",
+      "branch": "feat/b9a-platform",
       "spec": null,
       "current_slice": null,
       "current_task": null
