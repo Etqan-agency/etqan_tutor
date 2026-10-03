@@ -51,12 +51,22 @@ on B1, which is merged.
 
 | Slice | Contents | Audit IDs | Switches (off by default) | Unblocks |
 |---|---|---|---|---|
-| **B2a** session classes | Session kinds; adding a session by hand to a subscription; extra sessions; compensation sessions; `pays_teacher`; `at_disposal`; in/out times and actual minutes; who created a session | SCHED-003, SCHED-008; TH §1.3 #4, #18 | `manual_sessions`, `extra_sessions`, `compensation_sessions`, `session_times`, `disposal_status` | B4 (session classes) |
-| **B2b** postponement & activity log | Postponement window and rescheduling; the session and subscription activity log with revert | SCHED-015, SCHED-004, SYS-008 | `postponement`, `activity_log` | B5 (postponement notices) |
+| **B2a** session classes | Session kinds; adding a session by hand to a subscription; extra sessions; compensation sessions; `pays_teacher`; `at_disposal`; who created a session | SCHED-003, SCHED-008; TH §1.3 #4, #18 | `manual_sessions`, `extra_sessions`, `compensation_sessions`, `disposal_status` | B4 (session classes) |
+| **B2b** times, postponement & activity log | Teacher / student in / out times and actual minutes; postponement window and rescheduling; the session and subscription activity log with revert | SCHED-003, SCHED-015, SCHED-004, SYS-008 | `session_times`, `postponement`, `activity_log` | B5 (postponement notices) |
 | **B2c** archives & simplified view | Subscription archive (delete keeping records, restore, archive screen), session archive, the simplified sessions view | SUB-003, SUB-004, SCHED-005, SCHED-006 | `subscription_archive`, `session_archive` (registry lines flipped), `simplified_sessions` | — |
 | **B2d** trials & availability | Trial requests, scheduling, outcome, conversion, inquiry intake; teacher availability windows and "suggest a teacher" | SCHED-007, SCHED-012, FLOW-002 | `trial_sessions`, `teacher_availability` | B4 (trial pay) |
-| **B2e** bundles & groups | Study groups; subscription bundles (multi-course, family, group) with rosters; bundle renew / pause / cancel | SUB-001, SUB-008, PEOPLE-003 | `study_groups` (flipped), `multi_course_subscriptions`, `family_subscriptions` (requires `families`), `group_subscriptions` (requires `study_groups`) | B6 (student levels on subscriptions) |
-| **B2f** weekly schedules | The weekly-schedule object, its tabs, stop / restore, bulk change, delete and move, CSV download, expanded calendar | SCHED-001, BR-44 | `weekly_schedules` | B5 (per-course WhatsApp group routing) |
+| **B2e** bundles & groups | Study groups; subscription bundles (multi-course, family, group) with rosters; the individual-subscription type normal / group; bundle renew / pause / cancel | SUB-001, SUB-006 (individual type), SUB-008, PEOPLE-003 | `study_groups` (flipped), `multi_course_subscriptions`, `family_subscriptions` (requires `families`), `group_subscriptions` (requires `study_groups`) | B6 (student levels on subscriptions) |
+| **B2f** weekly schedules | The weekly-schedule object, its tabs, stop / restore, bulk change (including a substitute teacher), delete and move, CSV download, expanded calendar | SCHED-001, BR-44 | `weekly_schedules` | B5 (per-course WhatsApp group routing) |
+
+Not taken by any B2 slice, with the reason:
+
+- **SUB-006** payment type (prepaid / postpaid) and subscription system (normal / monthly): payment metadata, handed
+  to B3 by a ledger decision. SUB-006's individual type normal / group is B2e's.
+- **SUB-007** "Calculate and update subscription details": not applicable, our totals are derived (TH §5.4).
+- TutorHamster session fields teacher approval (BR-05, set automatically), student excuse, actual session timestamp
+  and "creation date used for salaries" (BR-06): not built [assumed low value]; payroll keeps `occurs_on` (TH §5.5).
+- The registry's `free_sessions` ("free sessions for subscribers") is not B2's: an extra session with
+  `pays_teacher` off already covers a free lesson; the switch stays unbuilt for B3 to decide.
 
 Each slice spec details its own data, rules, API, screens, seeds and tests; this table is the contract between
 them. A slice may move an item to a later slice only by amending this table.
