@@ -104,7 +104,7 @@ stream-down:
 # ─── Testing ──────────────────────────────────────────────────
 
 # Run all tests (backend + frontend + boundary linter)
-test: test-backend test-frontend check-boundaries
+test: test-backend test-frontend test-marketing check-boundaries
 
 # Backend tests (in container)
 # The --cov flag MUST match the `backend` job in .github/workflows/ci.yml
@@ -114,7 +114,14 @@ test: test-backend test-frontend check-boundaries
 test-backend:
     HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm \
       -e DATABASE_URL=postgres://etqan:etqan@postgres:5432/etqan \
+      -e DJANGO_EMAIL_SUBJECT_PREFIX= \
       django pytest -v --cov=etqan --cov-report=term-missing
+
+# Marketing unit tests (in container). CI runs them without SITE_SCHEME, so the
+# code's https default; the stack's own SITE_SCHEME=http is for serving only.
+test-marketing:
+    HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm \
+      -e SITE_SCHEME=https marketing pnpm test:coverage
 
 # Frontend type check (in container)
 test-frontend:
@@ -159,7 +166,7 @@ lint-backend:
     HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm django sh -euc 'ruff check . && ruff format --check .'
 
 lint-frontend:
-    HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm dashboard pnpm dlx @biomejs/biome check .
+    HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm dashboard pnpm lint
 
 check-boundaries:
     HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm django lint-imports
