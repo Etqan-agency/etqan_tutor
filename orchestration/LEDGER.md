@@ -29,7 +29,7 @@ In flight: **B8b** · Queue: B9a · Next plan number: 24 · Conductor: 04a3f739
 | B8d | B8 | spec |  |  |  | 0 |
 | B8e | B8 | spec |  |  |  | 0 |
 | B2a | B2 | merged | 17 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/7 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/6 https://github.com/Etqan-agency/etqan_tutor/pull/16 | 0 |
-| B2b | B2 | plan | 21 |  |  | 0 |
+| B2b | B2 | build | 21 |  |  | 0 |
 | B2c | B2 | spec |  |  |  | 0 |
 | B2d | B2 | spec |  |  |  | 0 |
 | B2e | B2 | spec |  |  |  | 0 |
