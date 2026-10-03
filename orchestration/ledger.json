@@ -403,6 +403,18 @@
         "B7"
       ],
       "source": "P1 BR-47/48; spec 2026-10-03-b3 B3-5"
+    },
+    {
+      "id": "D6",
+      "phase": "B2",
+      "decision": "Group classes are one Session row per roster student (same time, linked by the group), each with its own attendance and consumption; how a teacher is paid for a group class is B4's",
+      "affects": [
+        "B4",
+        "B5",
+        "B6",
+        "B11"
+      ],
+      "source": "spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-2"
     }
   ],
   "requests": [],
