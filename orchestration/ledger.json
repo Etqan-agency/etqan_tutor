@@ -9,7 +9,7 @@
       "branch": "feat/b2a-scheduling",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2a",
-      "current_task": "B2a T9: sessions list + Add session",
+      "current_task": "B2a T10: session page actions",
       "session": "b56a274c"
     },
     "B3": {
