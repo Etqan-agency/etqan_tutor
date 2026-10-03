@@ -1,8 +1,18 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { type ReactNode, useEffect, useId, useState } from "react";
+import {
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useId,
+	useRef,
+	useState,
+} from "react";
 import { Button } from "./Button";
 import { ErrorBox } from "./ErrorBox";
 import { Field, inputClass } from "./Field";
+
+const FOCUSABLE_SELECTOR =
+	'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])';
 
 type Props = {
 	label: string;
@@ -37,20 +47,59 @@ export function ActionDialog({
 	const [typed, setTyped] = useState("");
 	const [pending, setPending] = useState(false);
 	const [error, setError] = useState<unknown>(null);
+	const dialogRef = useRef<HTMLDivElement>(null);
+	const triggerRef = useRef<HTMLElement | null>(null);
 
-	const close = () => {
+	const close = useCallback(() => {
 		setOpen(false);
 		setTyped("");
 		setError(null);
-	};
+	}, []);
 
+	// Move focus into the dialog on open (the first field, else Cancel — never
+	// Confirm, so Enter can't fire a destructive action by accident), and
+	// return it to the button that opened the dialog when it closes.
 	useEffect(() => {
 		if (!open) return;
-		const onKey = (event: KeyboardEvent) =>
-			event.key === "Escape" && !pending && close();
+		const dialog = dialogRef.current;
+		const firstField = dialog?.querySelector<HTMLElement>(
+			"input, select, textarea",
+		);
+		const cancelButton = dialog?.querySelector<HTMLElement>("[data-cancel]");
+		(firstField ?? cancelButton)?.focus();
+		return () => {
+			triggerRef.current?.focus();
+		};
+	}, [open]);
+
+	// Escape closes (unless a submit is in flight); Tab traps focus inside the dialog.
+	useEffect(() => {
+		if (!open) return;
+		const onKey = (event: KeyboardEvent) => {
+			if (event.key === "Escape") {
+				if (!pending) close();
+				return;
+			}
+			if (event.key !== "Tab") return;
+			const focusable = Array.from(
+				dialogRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR) ??
+					[],
+			);
+			if (focusable.length === 0) return;
+			const first = focusable[0];
+			const last = focusable[focusable.length - 1];
+			const active = document.activeElement;
+			if (event.shiftKey && active === first) {
+				event.preventDefault();
+				last.focus();
+			} else if (!event.shiftKey && active === last) {
+				event.preventDefault();
+				first.focus();
+			}
+		};
 		window.addEventListener("keydown", onKey);
 		return () => window.removeEventListener("keydown", onKey);
-	});
+	}, [open, pending, close]);
 
 	async function submit() {
 		setPending(true);
@@ -74,13 +123,17 @@ export function ActionDialog({
 				variant={variant === "destructive" ? "destructive" : "secondary"}
 				size="sm"
 				disabled={disabled}
-				onClick={() => setOpen(true)}
+				onClick={(e) => {
+					triggerRef.current = e.currentTarget;
+					setOpen(true);
+				}}
 			>
 				{label}
 			</Button>
 			{open && (
 				<div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay p-4">
 					<div
+						ref={dialogRef}
 						role="dialog"
 						aria-modal="true"
 						aria-labelledby={id}
@@ -112,7 +165,12 @@ export function ActionDialog({
 						)}
 						{error !== null && <ErrorBox error={error} />}
 						<div className="mt-5 flex justify-end gap-2">
-							<Button variant="ghost" onClick={close} disabled={pending}>
+							<Button
+								variant="ghost"
+								onClick={close}
+								disabled={pending}
+								data-cancel
+							>
 								Cancel
 							</Button>
 							<Button
