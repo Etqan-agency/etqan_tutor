@@ -9,7 +9,7 @@ In flight: **B8a** · Queue: B3a · Next plan number: 19
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec |
 |---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | review | 1 | B2a | B2a: final whole-slice review |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md |
-| B3 | Money depth | review | 2 | B3a | slice gates |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md |
+| B3 | Money depth | queued | 2 | B3a | queued B3a; next: B3b spec |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |
 | B6 | Learning | waiting-deps |  |  |  | B2 |  |
