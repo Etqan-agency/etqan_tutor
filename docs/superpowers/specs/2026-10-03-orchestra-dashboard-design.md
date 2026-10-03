@@ -66,7 +66,7 @@ and the build.
 |---|---|
 | `GET /api/state` | ledger JSON + reconciled sessions + eligible phases + queue + open escalations count |
 | `GET /api/ci` | latest `master` CI run and checks of open PRs named in the ledger (cached 60 s) |
-| `GET /api/events` | SSE: `ledger` (on a new ledger commit), `sessions` (on a change in `claude agents --json`, polled 5 s), `log` (per subscribed phase) |
+| `GET /api/events` | SSE: `ledger` (on a new ledger commit), `sessions` (on a change in `claude agents --json`, polled 5 s). Logs are not pushed: the phase page polls `GET /api/phases/<code>/log` every 3 s while open (amended in planning — one viewer, same effect, far simpler). |
 | `GET /api/phases/<code>/log?lines=N` | `claude logs <id>` tail |
 | `POST /api/phases/<code>/launch` `{suffix, slot}` | `launch-phase.sh`, ledger `phase --status spec --slot --worktree --branch`, then start its session |
 | `POST /api/phases/<code>/session/start` `{mode, model?, effort?}` | `start-session.sh <code>` (§4.3) and record the id |
@@ -74,7 +74,7 @@ and the build.
 | `POST /api/phases/<code>/status` `{status}` | ledger `phase --status` (pause/resume included) |
 | `POST /api/phases/<code>/slot` `{slot}` | the lending flow: `just stop` in the worktree → ledger release → `stream-env.sh` for the new slot → ledger set slot → `just dev-backend` |
 | `POST /api/phases/<code>/stack` `{up: bool}` | `just dev-backend` / `just stop` in the worktree |
-| `POST /api/phases/<code>/teardown` `{confirm: "<CODE>"}` | stop session, `teardown-phase.sh`, ledger `--status merged` if every slice is merged, else `--status paused --slot 0 --worktree none` (slot released, worktree cleared, so it can be launched again) |
+| `POST /api/phases/<code>/teardown` `{confirm: "<CODE>"}` | stop session, `teardown-phase.sh`, ledger `--status merged` if every slice is merged, else `--status waiting-deps --slot 0 --worktree none --branch none --session none` (slot released, worktree cleared, so `eligible` offers it for launch again) |
 | `POST /api/conductor/session/start|stop|restart` | the conductor's session, prompt `CONDUCTOR.md` |
 | `POST /api/queue/next` · `/bounce` `{slice, reason}` · `/merged` `{slice, heads}` · `/reorder` `{slice, dir}` | ledger `next` / `bounce` / `merged` / `reorder` |
 | `POST /api/escalations/<id>/resolve` `{answer}` | ledger `resolve` |
@@ -105,7 +105,7 @@ Ledger writes from the server use the commit message prefix `ledger (orchestra):
 ## 5. Web
 
 Routes (TanStack Router): `/` Overview, `/phase/:code`, `/queue`, `/escalations`, `/coordination`.
-Data with TanStack Query; the SSE stream invalidates `state`, `ci` and the subscribed log.
+Data with TanStack Query; the SSE stream invalidates `state` and `ci`; the open phase page polls its log every 3 s.
 
 - **Overview:** four slot cards (phase, title, status, slice, task, session state, stack up/down, last log
   line, time since last ledger change, Open); the conductor card (state, Start/Stop/Restart); merge-queue
