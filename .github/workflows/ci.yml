@@ -147,6 +147,7 @@ jobs:
         run: |
           bash scripts/orchestration/tests/stream_env_test.sh
           bash scripts/orchestration/tests/launch_phase_test.sh
+          bash scripts/orchestration/tests/start_session_test.sh
           python3 -m unittest discover -s scripts/orchestration/tests -v
 
   e2e:
