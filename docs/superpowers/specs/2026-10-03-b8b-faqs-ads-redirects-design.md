@@ -49,7 +49,7 @@ switches on per academy.
 |---|---|---|
 | `Faq` | `question_ar`, `question_en` (char 300), `answer_ar`, `answer_en` (text, sanitised, ≤ 10 000), `is_active` (bool, true), `order` (`PositiveIntegerField`, 0), `updated_at` | `order, id` |
 | `Advertisement` | `kind` (`general`·`discount`), `title_ar`, `title_en` (char 120), `body_ar`, `body_en` (text ≤ 500), `banner` (image, `uploads.ad_path` → `tenants/<schema>/site/ads/<uuid>.<ext>`), `expires_on` (date), `created_at` | `-created_at, -id` |
-| `Redirect` | `from_path` (char 200, unique), `to` (char 500), `permanent` (bool, true), `is_active` (bool, true), `created_at` | `from_path` |
+| `Redirect` | `from_path` (char 200, unique), `to` (char 500), `permanent` (bool, false), `is_active` (bool, true), `created_at` | `from_path` |
 
 Services (`etqan.site.services`): `active_faqs()`, `active_ads(today)`, `active_redirects()`; `academy_today()`
 (today in `academy.services.get_settings().timezone`, B-5); `canonical_path(raw) -> str` (B-8a, raising a
