@@ -63,6 +63,7 @@ In flight: **—** · Queue: — · Next plan number: 18
 | D8 | B2 | Session.kind regular\|compensation\|extra\|trial; only regular and compensation (not compensated) consume the package; status gains at_disposal (never consumes; today's payroll rule does not pay it) | B4, B5, B6, B11 | spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-4, B2-6 |
 | D9 | B2 | Session.pays_teacher (default true): scheduling.payroll_sessions leaves out sessions with it off; a hand-added session in an issued month is paid as a later adjustment (P7-4) | B4 | spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-5; B2a A-15 |
 | D10 | B2 | SUB-006 payment type (prepaid/postpaid) and subscription system (normal/monthly) are B3's payment metadata, not B2's | B3 | spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md §3 |
+| D11 | B9 | Spanish arrives in B9d (dashboard + emails). Other phases add en and ar strings only; a missing es string falls back to English per key; the ar/en key-equality test is unchanged; the public site stays ar/en in B9. | B2, B3, B4, B5, B6, B7, B8, B10, B11 | spec 2026-10-03-platform-extras B9-6 |
 
 ## Claims and requests
 
