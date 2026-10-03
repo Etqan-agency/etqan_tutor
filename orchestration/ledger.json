@@ -8,8 +8,8 @@
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b2",
       "branch": "feat/b2a-scheduling",
       "spec": null,
-      "current_slice": null,
-      "current_task": null,
+      "current_slice": "B2a",
+      "current_task": "brainstorm phase spec + B2a spec",
       "session": "b56a274c"
     },
     "B3": {
