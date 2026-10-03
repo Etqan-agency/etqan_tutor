@@ -262,7 +262,7 @@
       "phase": "B9",
       "status": "spec",
       "requires": [],
-      "plan_number": null,
+      "plan_number": 23,
       "spec": "docs/superpowers/specs/2026-10-03-b9b-sign-in-design.md",
       "plan": null,
       "prs": null,
@@ -369,7 +369,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 23,
+  "next_plan_number": 24,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
