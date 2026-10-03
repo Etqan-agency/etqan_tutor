@@ -383,7 +383,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "academy",
+      "phase": "B2",
+      "reason": "B2b: AcademySettings.postpone_limit_minutes",
+      "since": "2026-10-03T14:31:11+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
