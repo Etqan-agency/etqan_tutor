@@ -14,7 +14,7 @@ In flight: **—** · Queue: — · Next plan number: 15
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |
 | B6 | Learning | waiting-deps |  |  |  | B2 |  |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |
-| B8 | Marketing extras | waiting-deps |  |  |  |  |  |
+| B8 | Marketing extras | spec | 3 |  |  |  |  |
 | B9 | Platform extras | waiting-deps |  |  |  |  |  |
 | B10 | AI | waiting-deps |  |  |  | B6 |  |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |

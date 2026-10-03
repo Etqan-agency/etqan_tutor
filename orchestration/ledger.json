@@ -77,11 +77,11 @@
     },
     "B8": {
       "title": "Marketing extras",
-      "status": "waiting-deps",
+      "status": "spec",
       "requires": [],
-      "slot": null,
-      "worktree": null,
-      "branch": null,
+      "slot": 3,
+      "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b8",
+      "branch": "feat/b8a-marketing",
       "spec": null,
       "current_slice": null,
       "current_task": null
