@@ -21,7 +21,7 @@
       "branch": "feat/b3a-money",
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
       "current_slice": "B3a",
-      "current_task": "B3a PRs open (awaiting merge); drafting B3c spec",
+      "current_task": "B3a in flight (CI green); B3c/B3g specs approved; Plan 22 (B3c) being written",
       "session": "bbb7e4fa"
     },
     "B4": {
