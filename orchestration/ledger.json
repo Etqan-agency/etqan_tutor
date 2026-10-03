@@ -195,7 +195,7 @@
       "plan_number": 17,
       "spec": "docs/superpowers/specs/2026-10-03-b2a-session-classes-design.md",
       "plan": "docs/superpowers/plans/2026-10-03-plan-17-session-classes.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/7 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/6 https://github.com/Etqan-agency/etqan_tutor/pull/16",
       "bounces": 0
     },
     "B2b": {
