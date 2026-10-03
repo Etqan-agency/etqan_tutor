@@ -440,6 +440,15 @@
         "B11"
       ],
       "source": "spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-4, B2-6"
+    },
+    {
+      "id": "D9",
+      "phase": "B2",
+      "decision": "Session.pays_teacher (default true): scheduling.payroll_sessions leaves out sessions with it off; a hand-added session in an issued month is paid as a later adjustment (P7-4)",
+      "affects": [
+        "B4"
+      ],
+      "source": "spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-5; B2a A-15"
     }
   ],
   "requests": [],
