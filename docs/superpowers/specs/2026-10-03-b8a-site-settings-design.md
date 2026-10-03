@@ -119,7 +119,8 @@ feature switch is separate, `set_features`).
   - `maintenance` → "Under maintenance", 503, `Retry-After: 3600`; `sitemap.xml` 503.
   - `system_only` → "Restricted area" with a "Sign in" link to `/app/`, 403; `robots.txt` =
     `User-agent: *` / `Disallow: /`; `sitemap.xml` 404.
-- `beta` → `Layout` shows the banner (`role="status"`) above the header.
+- `beta` → `Layout` shows the banner above the header: a plain `<p data-site-banner>` with no ARIA live role
+  (the contact form's confirmation is the page's one `role="status"`, and e2e relies on that).
 - **Tracking** (A-10): `Layout` renders, only for non-empty IDs, the verification `<meta>` and the gtag.js,
   Meta Pixel and AdSense loaders from fixed templates; the ID is the only interpolated value, re-checked
   against A-8's pattern in Astro before use (defence in depth, as `Layout` already does for colours).
@@ -166,16 +167,15 @@ feature switch is separate, `set_features`).
 - **Dashboard:** Settings tab cards per feature and permission; forms submit both languages; ID format
   errors shown; branding form's new socials.
 - **e2e** `dashboard/e2e/b8-site-settings.spec.ts`, `test.describe.configure({ mode: "serial" })`:
-  1. *Settings (demo, UI):* the admin fills footer text, a GA4 ID and status `beta` in Website → Settings;
-     the public home page shows the footer text, the gtag loader and the beta banner (assertions poll
-     ≤ 90 s for the 60 s cache). `afterAll` resets demo through the UI-independent path
-     (`tenant_command set_site_status live --schema=academy_demo`, and the footer/ID cleared through the
-     admin API) so other suites see an unchanged demo.
+  1. *Settings (demo, UI):* the admin fills a unique footer text and a GA4 ID in Website → Settings and
+     sees the status card; the public home page shows the footer text and the gtag loader (assertions poll
+     ≤ 90 s for the 60 s cache). The test ends by restoring demo's seeded footer text and clearing the ID
+     in the same UI, so other suites see an unchanged demo; demo's status is never changed.
   2. *Closed site (dedicated academy):* `beforeAll` runs `create_academy --subdomain b8site` (an
      "already exists" error is ignored, so reruns work), `set_features b8site --on site_status`, and
      `set_site_status maintenance` **before** any visit, so the first request sees it uncached → 503
      maintenance page; `/app/` on that host still answers; then `system_only` → poll for 403 "Restricted
-     area" with a sign-in link. A dedicated academy keeps the parallel `academy-sites` suite's `demo` and
+     area" with a sign-in link; then `beta` → poll for the banner; then `live`. A dedicated academy keeps the parallel `academy-sites` suite's `demo` and
      `other` open.
 
 ## 6. Non-goals
