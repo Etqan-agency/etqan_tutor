@@ -51,6 +51,7 @@ In flight: **B2a** · Queue: B8b, B9a · Next plan number: 24 · Conductor: 04a3
 
 | Id | Phase | Kind | Question |
 |---|---|---|---|
+| E1 | B9 | money | B9c (password reset by one-time code) needs an SMS provider account (e.g. Twilio, Vonage, Unifonic for Gulf/Egypt numbers) to send codes to phones in production. Which provider, and will you supply the account/keys? Until then B9c ships with console/test SMS backends and hides the phone option in production; email codes work. |
 
 ## Shared decisions
 

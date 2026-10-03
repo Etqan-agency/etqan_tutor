@@ -623,6 +623,15 @@
     "marketing": "cc02b562e0a22ed83c1ab3f06859f03d5fd3ecd5",
     "meta": "594639f205f263d8576107ba619026e57bdc1547"
   },
-  "escalations": [],
+  "escalations": [
+    {
+      "id": "E1",
+      "phase": "B9",
+      "kind": "money",
+      "question": "B9c (password reset by one-time code) needs an SMS provider account (e.g. Twilio, Vonage, Unifonic for Gulf/Egypt numbers) to send codes to phones in production. Which provider, and will you supply the account/keys? Until then B9c ships with console/test SMS backends and hides the phone option in production; email codes work.",
+      "status": "open",
+      "answer": null
+    }
+  ],
   "conductor_session": "04a3f739"
 }
