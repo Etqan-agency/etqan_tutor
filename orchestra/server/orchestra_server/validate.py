@@ -16,7 +16,7 @@ MAX_TEXT = 4000
 
 
 def phase(code) -> str:
-    if code not in L.PHASES:
+    if not isinstance(code, str) or code not in L.PHASES:
         raise BadRequest(f"unknown phase {code}")
     return code
 
@@ -46,7 +46,7 @@ def suffix(value) -> str:
 
 def mode(value) -> str:
     value = value or "auto"
-    if value not in MODES:
+    if not isinstance(value, str) or value not in MODES:
         raise BadRequest(f"mode must be one of {', '.join(MODES)}")
     return value
 
@@ -62,13 +62,13 @@ def model(value) -> str | None:
 def effort(value) -> str | None:
     if value in (None, ""):
         return None
-    if value not in EFFORTS:
+    if not isinstance(value, str) or value not in EFFORTS:
         raise BadRequest(f"effort must be one of {', '.join(EFFORTS)}")
     return value
 
 
 def status(value) -> str:
-    if value not in L.STATUSES:
+    if not isinstance(value, str) or value not in L.STATUSES:
         raise BadRequest(f"status must be one of {', '.join(L.STATUSES)}")
     return value
 
@@ -82,7 +82,7 @@ def text(value, name: str) -> str:
 
 
 def direction(value) -> str:
-    if value not in ("up", "down"):
+    if not isinstance(value, str) or value not in ("up", "down"):
         raise BadRequest("direction must be up or down")
     return value
 

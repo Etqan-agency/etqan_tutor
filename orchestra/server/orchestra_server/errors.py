@@ -21,3 +21,8 @@ class Forbidden(HttpError):
 class NotFound(HttpError):
     def __init__(self, message: str = "no such route"):
         super().__init__(404, {"error": message})
+
+
+class MethodNotAllowed(HttpError):
+    def __init__(self, message: str = "method not allowed"):
+        super().__init__(405, {"error": message})

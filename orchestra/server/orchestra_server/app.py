@@ -7,7 +7,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit
 
 from . import config
-from .errors import BadRequest, Forbidden, HttpError, NotFound
+from .errors import BadRequest, Forbidden, HttpError, MethodNotAllowed, NotFound
 from .ledger_api import LedgerError
 from .routing import ROUTES, STREAMED, Request, route
 
@@ -43,7 +43,7 @@ class Handler(BaseHTTPRequestHandler):
         if origin is not None and origin not in {f"http://{host}" for host in hosts}:
             raise Forbidden("bad origin")
         sent = self.headers.get("X-Orchestra-Token", "")
-        if method != "GET" and not secrets.compare_digest(sent, self.server.token):
+        if method != "GET" and not secrets.compare_digest(sent.encode(), self.server.token.encode()):
             raise Forbidden("bad token")
 
     def _dispatch(self, method: str) -> None:
@@ -55,14 +55,20 @@ class Handler(BaseHTTPRequestHandler):
                     raise NotFound()
                 self._static(url.path)
                 return
+            matched_methods = set()
             for wanted, pattern, handler in ROUTES:
                 match = pattern.match(url.path)
-                if match and wanted == method:
+                if not match:
+                    continue
+                matched_methods.add(wanted)
+                if wanted == method:
                     body = self._body() if method == "POST" else {}
                     result = handler(Request(self, match.groupdict(), parse_qs(url.query), body))
                     if result is not STREAMED:
                         self._json(200, result)
                     return
+            if matched_methods:
+                raise MethodNotAllowed()
             raise NotFound()
         except HttpError as error:
             self._json(error.status, error.payload)
@@ -72,7 +78,12 @@ class Handler(BaseHTTPRequestHandler):
             self._json(500, {"error": f"{type(error).__name__}: {error}"})
 
     def _body(self) -> dict:
-        length = int(self.headers.get("Content-Length") or 0)
+        try:
+            length = int(self.headers.get("Content-Length") or 0)
+        except ValueError:
+            raise BadRequest("bad Content-Length") from None
+        if length < 0:
+            raise BadRequest("bad Content-Length")
         if length > MAX_BODY:
             raise BadRequest("body too large")
         raw = self.rfile.read(length) if length else b"{}"
@@ -84,12 +95,21 @@ class Handler(BaseHTTPRequestHandler):
             raise BadRequest("body must be a JSON object")
         return body
 
+    def security_headers(self) -> dict:
+        """Clickjacking defence — reused by the SSE route, which writes its own headers."""
+        return {
+            "X-Frame-Options": "DENY",
+            "Content-Security-Policy": "frame-ancestors 'none'",
+        }
+
     def _send(self, status: int, content_type: str, data: bytes) -> None:
         self.send_response(status)
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(data)))
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
+        for name, value in self.security_headers().items():
+            self.send_header(name, value)
         self.end_headers()
         self.wfile.write(data)
 
@@ -99,8 +119,12 @@ class Handler(BaseHTTPRequestHandler):
     def _static(self, path: str) -> None:
         root = config.web_dist().resolve()
         index = root / "index.html"
-        target = (root / path.lstrip("/")).resolve()
-        if not target.is_relative_to(root) or not target.is_file():
+        try:
+            target = (root / path.lstrip("/")).resolve()
+            valid = target.is_relative_to(root) and target.is_file()
+        except (ValueError, OSError):
+            valid = False
+        if not valid:
             target = index
         if not target.is_file():
             self._send(
