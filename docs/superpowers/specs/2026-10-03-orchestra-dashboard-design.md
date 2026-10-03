@@ -107,8 +107,8 @@ Ledger writes from the server use the commit message prefix `ledger (orchestra):
 Routes (TanStack Router): `/` Overview, `/phase/:code`, `/queue`, `/escalations`, `/coordination`.
 Data with TanStack Query; the SSE stream invalidates `state` and `ci`; the open phase page polls its log every 3 s.
 
-- **Overview:** four slot cards (phase, title, status, slice, task, session state, stack up/down, last log
-  line, time since last ledger change, Open); the conductor card (state, Start/Stop/Restart); merge-queue
+- **Overview:** four slot cards (phase, title, status, slice, task, session state, stack up/down, link to the
+  phase page — amended in planning: no last log line or per-card age; the live log is on the phase page); the conductor card (state, Start/Stop/Restart); merge-queue
   strip (in flight with PR checks, then queued); open-escalations badge; CI (`master` run, open PR checks);
   eligible phases with **Launch** (suffix and free slot pre-filled, editable).
 - **Phase page:** header (status, slot, branch, worktree path with copy); slices table (status, plan,
