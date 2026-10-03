@@ -150,7 +150,7 @@
     },
     "B8b": {
       "phase": "B8",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 19,
       "spec": "docs/superpowers/specs/2026-10-03-b8b-faqs-ads-redirects-design.md",
@@ -626,12 +626,12 @@
   "queue": [
     "B9a"
   ],
-  "in_flight": "B8b",
+  "in_flight": null,
   "main_heads": {
-    "backend": "dd81cfa544da86cbc894a8640ddbc71577fc26bb",
-    "dashboard": "7939e34b44cfbec4ca2ef406039868394387faf5",
-    "marketing": "cc02b562e0a22ed83c1ab3f06859f03d5fd3ecd5",
-    "meta": "51d112448e78560c8d49b09c80a95912678608f0"
+    "backend": "5bf7573c3435dd5727648b929a800faf4b337909",
+    "dashboard": "4a0332d3ffbcd957ffe0d830673efd03590912f6",
+    "marketing": "50041f7cf0b83825ba7ef67e6f3349fe71f2f6a6",
+    "meta": "510ae06f1395731f42880a6f438f659737610296"
   },
   "escalations": [
     {
