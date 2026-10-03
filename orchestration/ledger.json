@@ -290,7 +290,7 @@
     },
     "B3a": {
       "phase": "B3",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 15,
       "spec": "docs/superpowers/specs/2026-10-03-b3a-expenses-donations-design.md",
@@ -592,10 +592,10 @@
   "queue": [
     "B2a"
   ],
-  "in_flight": "B3a",
+  "in_flight": null,
   "main_heads": {
-    "backend": "ad8cd2792c3f3243a12bd1316980edd1a1f0741f",
-    "dashboard": "c79c18eefdd1a9e9dde0c88a3951832840337d40",
+    "backend": "2fa9a401a786e9e952df9594076cd5d2c787c7c3",
+    "dashboard": "7bd37d6c1ee9713ccec0dabc566102af48a89377",
     "marketing": "cc02b562e0a22ed83c1ab3f06859f03d5fd3ecd5",
     "meta": "594639f205f263d8576107ba619026e57bdc1547"
   },
