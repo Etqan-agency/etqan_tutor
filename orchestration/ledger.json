@@ -589,6 +589,15 @@
         "B11"
       ],
       "source": "spec 2026-10-03-b9b-sign-in S-9b"
+    },
+    {
+      "id": "D20",
+      "phase": "B9",
+      "decision": "Secrets at rest: etqan.platform.secrets.encrypt/decrypt (Fernet under env ETQAN_SECRETS_KEY, D4's key) is the one helper; whichever of B3b and B9b lands first builds it in etqan.platform, the other reuses it.",
+      "affects": [
+        "B3"
+      ],
+      "source": "spec 2026-10-03-b9b-sign-in S-2a; ledger D4"
     }
   ],
   "requests": [
