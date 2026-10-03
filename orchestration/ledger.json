@@ -393,6 +393,16 @@
         "B11"
       ],
       "source": "spec 2026-10-03-b3 B3-6/B3-7"
+    },
+    {
+      "id": "D5",
+      "phase": "B3",
+      "decision": "Revenue = completed payment records only (BR-47); donations are not revenue; net profit = revenue - expenses per currency per academy month (BR-48); never summed across currencies.",
+      "affects": [
+        "B4",
+        "B7"
+      ],
+      "source": "P1 BR-47/48; spec 2026-10-03-b3 B3-5"
     }
   ],
   "requests": [],
