@@ -449,6 +449,15 @@
         "B4"
       ],
       "source": "spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-5; B2a A-15"
+    },
+    {
+      "id": "D10",
+      "phase": "B2",
+      "decision": "SUB-006 payment type (prepaid/postpaid) and subscription system (normal/monthly) are B3's payment metadata, not B2's",
+      "affects": [
+        "B3"
+      ],
+      "source": "spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md §3"
     }
   ],
   "requests": [],

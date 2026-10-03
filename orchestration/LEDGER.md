@@ -62,6 +62,7 @@ In flight: **—** · Queue: — · Next plan number: 17
 | D7 | B2 | Subscription keeps its meaning (one student, course, teacher, package). Multi-course, family and group subscriptions are a bundle grouping several Subscriptions; billing, payroll and notifications keep reading single subscriptions | B3, B4, B5, B6, B11 | spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-3 |
 | D8 | B2 | Session.kind regular\|compensation\|extra\|trial; only regular and compensation (not compensated) consume the package; status gains at_disposal (never consumes; today's payroll rule does not pay it) | B4, B5, B6, B11 | spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-4, B2-6 |
 | D9 | B2 | Session.pays_teacher (default true): scheduling.payroll_sessions leaves out sessions with it off; a hand-added session in an issued month is paid as a later adjustment (P7-4) | B4 | spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-5; B2a A-15 |
+| D10 | B2 | SUB-006 payment type (prepaid/postpaid) and subscription system (normal/monthly) are B3's payment metadata, not B2's | B3 | spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md §3 |
 
 ## Claims and requests
 
