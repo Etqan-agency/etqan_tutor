@@ -95,14 +95,14 @@
     },
     "B9": {
       "title": "Platform extras",
-      "status": "review",
+      "status": "queued",
       "requires": [],
       "slot": 4,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b9",
       "branch": "feat/b9a-platform",
       "spec": "docs/superpowers/specs/2026-10-03-platform-extras-design.md",
       "current_slice": "B9a",
-      "current_task": "B9a final review",
+      "current_task": "B9a queued",
       "session": "60ad3859"
     },
     "B10": {
