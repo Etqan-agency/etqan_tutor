@@ -76,7 +76,7 @@ and the build.
 | `POST /api/phases/<code>/stack` `{up: bool}` | `just dev-backend` / `just stop` in the worktree |
 | `POST /api/phases/<code>/teardown` `{confirm: "<CODE>"}` | stop session, `teardown-phase.sh`, ledger `--status merged` if every slice is merged, else `--status waiting-deps --slot 0 --worktree none --branch none --session none` (slot released, worktree cleared, so `eligible` offers it for launch again) |
 | `POST /api/conductor/session/start|stop|restart` | the conductor's session, prompt `CONDUCTOR.md` |
-| `POST /api/queue/next` · `/bounce` `{slice, reason}` · `/merged` `{slice, heads}` · `/reorder` `{slice, dir}` | ledger `next` / `bounce` / `merged` / `reorder` |
+| `POST /api/queue/next` · `/bounce` `{slice, reason}` · `/merged` `{slice, heads}` · `/reorder` `{slice, direction}` | ledger `next` / `bounce` / `merged` / `reorder` |
 | `POST /api/escalations/<id>/resolve` `{answer}` | ledger `resolve` |
 | `POST /api/decisions` `{phase, text, affects, source}` | ledger `decide` |
 | `POST /api/claims/release` `{target}` | ledger `release-claim` (forced) |
