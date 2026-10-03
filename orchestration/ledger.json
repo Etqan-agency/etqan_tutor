@@ -9,7 +9,7 @@
       "branch": "feat/b2a-scheduling",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2a",
-      "current_task": "B2a in flight: rebased; gates running",
+      "current_task": "B2a PRs open; awaiting conductor merge",
       "session": "a29a300d"
     },
     "B3": {
