@@ -290,11 +290,11 @@
     },
     "B3a": {
       "phase": "B3",
-      "status": "spec",
+      "status": "plan",
       "requires": [],
       "plan_number": 15,
       "spec": "docs/superpowers/specs/2026-10-03-b3a-expenses-donations-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-03-plan-15-expenses-donations.md",
       "prs": null,
       "bounces": 0
     },
