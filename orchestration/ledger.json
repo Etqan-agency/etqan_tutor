@@ -2,14 +2,14 @@
   "phases": {
     "B2": {
       "title": "Scheduling depth",
-      "status": "review",
+      "status": "queued",
       "requires": [],
       "slot": 1,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b2",
       "branch": "feat/b2a-scheduling",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2a",
-      "current_task": "B2a: final whole-slice review",
+      "current_task": "B2a queued; next: B2b spec",
       "session": "b56a274c"
     },
     "B3": {

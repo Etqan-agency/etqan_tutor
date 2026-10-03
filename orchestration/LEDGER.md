@@ -8,7 +8,7 @@ In flight: **—** · Queue: B3a, B2a · Next plan number: 20 · Conductor: aa12
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | review | 1 | B2a | B2a: final whole-slice review |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | b56a274c |
+| B2 | Scheduling depth | queued | 1 | B2a | B2a queued; next: B2b spec |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | b56a274c |
 | B3 | Money depth | queued | 2 | B3a | B3b plan (B3a queued) |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | 8b61efa3 |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
