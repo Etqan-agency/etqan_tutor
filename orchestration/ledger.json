@@ -2,11 +2,11 @@
   "phases": {
     "B2": {
       "title": "Scheduling depth",
-      "status": "waiting-deps",
+      "status": "spec",
       "requires": [],
-      "slot": null,
-      "worktree": null,
-      "branch": null,
+      "slot": 1,
+      "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b2",
+      "branch": "feat/b2a-scheduling",
       "spec": null,
       "current_slice": null,
       "current_task": null
