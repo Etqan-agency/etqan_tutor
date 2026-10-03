@@ -1,4 +1,4 @@
-import { screen, waitFor, within } from "@testing-library/react";
+import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { lastPost, mockApi } from "@/test/api";
 import { makeState } from "@/test/fixtures";
@@ -103,6 +103,17 @@ describe("QueuePage", () => {
 				heads: { backend: "abc1234" },
 			}),
 		);
+	});
+
+	it("JSON-escapes quotes in the bounce reason preview", async () => {
+		mockApi(base);
+		renderAt("/queue");
+		const user = userEvent.setup();
+		await user.click(await screen.findByRole("button", { name: "Bounce" }));
+		const dialog = screen.getByRole("dialog");
+		const input = within(dialog).getByLabelText("Reason");
+		fireEvent.change(input, { target: { value: 'say "hi"' } });
+		expect(dialog).toHaveTextContent(JSON.stringify('say "hi"'));
 	});
 
 	it("warns while the conductor is running", async () => {

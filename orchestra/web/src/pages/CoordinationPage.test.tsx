@@ -1,4 +1,4 @@
-import { screen, waitFor, within } from "@testing-library/react";
+import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { lastPost, mockApi } from "@/test/api";
 import { makeState } from "@/test/fixtures";
@@ -82,5 +82,27 @@ describe("CoordinationPage", () => {
 		await waitFor(() =>
 			expect(lastPost(calls)?.path).toBe("/api/requests/R1/done"),
 		);
+	});
+
+	it("JSON-escapes quotes and newlines in the add-decision command preview", async () => {
+		const state = makeState();
+		mockApi({
+			"GET /api/state": { body: state },
+			"GET /api/ci": { body: { master: null, prs: [] } },
+		});
+		renderAt("/coordination");
+		const user = userEvent.setup();
+		await user.click(
+			await screen.findByRole("button", { name: "Add decision" }),
+		);
+		const dialog = screen.getByRole("dialog");
+		const text = within(dialog).getByLabelText("Decision");
+		const source = within(dialog).getByLabelText("Source");
+		// Decision is a <textarea> so it can carry a real newline; Source is a
+		// single-line <input>, which browsers (and jsdom) never let hold one.
+		fireEvent.change(text, { target: { value: 'say "hi"\nbye' } });
+		fireEvent.change(source, { target: { value: 'audit "§2"' } });
+		expect(dialog).toHaveTextContent(JSON.stringify('say "hi"\nbye'));
+		expect(dialog).toHaveTextContent(JSON.stringify('audit "§2"'));
 	});
 });

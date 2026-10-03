@@ -22,7 +22,7 @@ function AddDecision({ codes }: { codes: string[] }) {
 			label="Add decision"
 			title="Record a shared decision"
 			variant="primary"
-			command={`ledger.py decide ${phase} "${text}" --affects ${affects.join(",")} --source "${source}"`}
+			command={`ledger.py decide ${phase} ${JSON.stringify(text)} --affects ${affects.join(",")} --source ${JSON.stringify(source)}`}
 			canSubmit={text.trim() !== "" && source.trim() !== ""}
 			run={() => post("/api/decisions", { phase, text, affects, source })}
 		>

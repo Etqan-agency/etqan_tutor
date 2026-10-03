@@ -15,7 +15,7 @@ function Answer({ escalation }: { escalation: Escalation }) {
 			title={`Answer ${escalation.id}`}
 			variant="primary"
 			canSubmit={answer.trim() !== ""}
-			command={`ledger.py resolve ${escalation.id} "${answer}"`}
+			command={`ledger.py resolve ${escalation.id} ${JSON.stringify(answer)}`}
 			run={() => post(`/api/escalations/${escalation.id}/resolve`, { answer })}
 		>
 			<p className="text-sm">{escalation.question}</p>
@@ -64,8 +64,9 @@ export function EscalationsPage() {
 	);
 	return (
 		<div className="space-y-6">
+			<h1 className="text-xl font-semibold">Escalations</h1>
 			<section aria-label="Open">
-				<h1 className="mb-3 text-xl font-semibold">Open</h1>
+				<h2 className="mb-3 font-semibold">Open</h2>
 				{open.length === 0 ? (
 					<p className="text-sm text-muted-foreground">
 						Nothing is waiting for you.

@@ -16,7 +16,7 @@ function Bounce({ sid, warning }: { sid: string; warning?: string }) {
 			label="Bounce"
 			title={`Bounce ${sid}`}
 			warning={warning}
-			command={`ledger.py bounce ${sid} --reason "${reason}"`}
+			command={`ledger.py bounce ${sid} --reason ${JSON.stringify(reason)}`}
 			canSubmit={reason.trim() !== ""}
 			run={() => post("/api/queue/bounce", { slice: sid, reason })}
 		>
