@@ -200,7 +200,7 @@
     },
     "B2b": {
       "phase": "B2",
-      "status": "spec",
+      "status": "plan",
       "requires": [],
       "plan_number": 21,
       "spec": null,
