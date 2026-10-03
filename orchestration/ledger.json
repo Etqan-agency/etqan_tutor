@@ -250,7 +250,7 @@
     },
     "B9a": {
       "phase": "B9",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 18,
       "spec": "docs/superpowers/specs/2026-10-03-platform-extras-design.md",
@@ -626,12 +626,12 @@
   "queue": [
     "B8c"
   ],
-  "in_flight": "B9a",
+  "in_flight": null,
   "main_heads": {
-    "backend": "5bf7573c3435dd5727648b929a800faf4b337909",
-    "dashboard": "4a0332d3ffbcd957ffe0d830673efd03590912f6",
+    "backend": "2e4c23139dc44de097508f673227d819e6a60a8f",
+    "dashboard": "9d3a1d4f720203dd19289eb5597dd1a1709c1526",
     "marketing": "50041f7cf0b83825ba7ef67e6f3349fe71f2f6a6",
-    "meta": "510ae06f1395731f42880a6f438f659737610296"
+    "meta": "2d6c526dda22954a9d9bf526292495309f632350"
   },
   "escalations": [
     {
