@@ -190,7 +190,7 @@
     },
     "B2a": {
       "phase": "B2",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [],
       "plan_number": 17,
       "spec": "docs/superpowers/specs/2026-10-03-b2a-session-classes-design.md",
@@ -589,10 +589,8 @@
       "status": "open"
     }
   ],
-  "queue": [
-    "B2a"
-  ],
-  "in_flight": null,
+  "queue": [],
+  "in_flight": "B2a",
   "main_heads": {
     "backend": "2fa9a401a786e9e952df9594076cd5d2c787c7c3",
     "dashboard": "7bd37d6c1ee9713ccec0dabc566102af48a89377",
