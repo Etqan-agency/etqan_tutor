@@ -309,7 +309,7 @@
       "plan_number": 20,
       "spec": "docs/superpowers/specs/2026-10-03-b3b-online-payments-design.md",
       "plan": null,
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/11 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/10 https://github.com/Etqan-agency/etqan_tutor/pull/20",
       "bounces": 0
     },
     "B3c": {
