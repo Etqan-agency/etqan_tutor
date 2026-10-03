@@ -140,7 +140,7 @@
   "slices": {
     "B8a": {
       "phase": "B8",
-      "status": "build",
+      "status": "queued",
       "requires": [],
       "plan_number": 16,
       "spec": "docs/superpowers/specs/2026-10-03-b8a-site-settings-design.md",
@@ -489,7 +489,9 @@
     }
   ],
   "requests": [],
-  "queue": [],
+  "queue": [
+    "B8a"
+  ],
   "in_flight": null,
   "main_heads": {},
   "escalations": [],
