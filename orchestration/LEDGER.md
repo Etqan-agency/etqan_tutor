@@ -55,6 +55,7 @@ In flight: **—** · Queue: — · Next plan number: 15
 |---|---|---|---|---|
 | D1 | B2 | R7 dropped: phases are designed from the audits; unobserved behaviour is marked [assumed] | B2, B4, B5, B6, B11 | spec 2026-10-02 PO-2 |
 | D2 | B8 | No academy-supplied script or raw HTML executes on an academy host: the public site shares its origin with /app/ and /api/ and the CSRF cookie is script-readable. Third-party integrations are validated IDs rendered from fixed templates; user-uploaded HTML/SVG is never served inline from the academy origin. | B8, B9, B10 | spec 2026-10-03-b8a A-7 |
+| D3 | B3 | Expenses live in new app etqan.finance. Other apps post expenses only via finance.services.post_expense(source, source_id, title, type, amount_minor, currency, spent_on, notes='') — idempotent per (source, source_id) — and withdraw_expense(source, source_id); posted expenses are read-only in the API. B4 posts paid payslips with source 'payroll.payslip', type 'salaries' (PAY-013). | B4 | spec 2026-10-03-b3a A-8; audit PAY-013 |
 
 ## Claims and requests
 
