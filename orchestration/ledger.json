@@ -142,7 +142,7 @@
       "phase": "B8",
       "status": "spec",
       "requires": [],
-      "plan_number": null,
+      "plan_number": 16,
       "spec": "docs/superpowers/specs/2026-10-03-b8a-site-settings-design.md",
       "plan": null,
       "prs": null,
@@ -339,7 +339,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 16,
+  "next_plan_number": 17,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
