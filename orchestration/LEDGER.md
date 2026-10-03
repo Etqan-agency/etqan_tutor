@@ -28,7 +28,7 @@ In flight: **B8a** · Queue: — · Next plan number: 19 · Conductor: aa12c664
 | B8c | B8 | spec |  |  |  | 0 |
 | B8d | B8 | spec |  |  |  | 0 |
 | B8e | B8 | spec |  |  |  | 0 |
-| B2a | B2 | build | 17 |  |  | 0 |
+| B2a | B2 | review | 17 |  |  | 0 |
 | B2b | B2 | spec |  |  |  | 0 |
 | B2c | B2 | spec |  |  |  | 0 |
 | B2d | B2 | spec |  |  |  | 0 |
