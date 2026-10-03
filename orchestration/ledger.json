@@ -102,7 +102,7 @@
       "branch": "feat/b9b-sign-in",
       "spec": "docs/superpowers/specs/2026-10-03-platform-extras-design.md",
       "current_slice": "B9b",
-      "current_task": "Task 5 sign-in rework",
+      "current_task": "Task 6 two-factor self-service",
       "session": "60ad3859"
     },
     "B10": {
