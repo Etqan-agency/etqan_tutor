@@ -45,6 +45,8 @@ Phases B2–B11 are built by parallel sessions under
 (`scripts/orchestration/PHASE_PROMPT.md`), coordinated by `scripts/orchestration/ledger.py`.
 Shared lists carry `── phase Bn ──` markers: add lines only under your phase's marker.
 Translations are one file per area in `dashboard/src/locales/<lng>/`.
+Orchestra (`just orchestra`, `orchestra/`) shows and controls all of it at
+http://127.0.0.1:7700; sessions start only through `scripts/orchestration/start-session.sh`.
 
 ## Commands
 `just setup`, `just dev`, `just test`, `just lint`, `just migrate`, `just seed`.
