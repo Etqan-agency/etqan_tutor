@@ -147,6 +147,16 @@
       "plan": null,
       "prs": null,
       "bounces": 0
+    },
+    "B8b": {
+      "phase": "B8",
+      "status": "spec",
+      "requires": [],
+      "plan_number": null,
+      "spec": null,
+      "plan": null,
+      "prs": null,
+      "bounces": 0
     }
   },
   "next_plan_number": 15,
