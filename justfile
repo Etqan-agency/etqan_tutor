@@ -214,7 +214,7 @@ orchestra:
     set -euo pipefail
     cd orchestra/web
     [ -d node_modules ] || npx pnpm@10 install --frozen-lockfile
-    if [ ! -f dist/index.html ] || [ -n "$(find src index.html package.json -newer dist/index.html -print -quit)" ]; then
+    if [ ! -f dist/index.html ] || [ -n "$(find src index.html package.json vite.config.ts tsconfig.json -newer dist/index.html -print -quit)" ]; then
       npx pnpm@10 build
     fi
     cd ../server

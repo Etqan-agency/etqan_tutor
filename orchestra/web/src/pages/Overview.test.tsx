@@ -1,8 +1,18 @@
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { vi } from "vitest";
 import { lastPost, mockApi } from "@/test/api";
 import { makeState } from "@/test/fixtures";
 import { renderAt } from "@/test/render";
+
+vi.mock("@xterm/xterm", () => ({
+	Terminal: class {
+		open() {}
+		reset() {}
+		write() {}
+		dispose() {}
+	},
+}));
 
 const ci = {
 	master: {
@@ -58,6 +68,71 @@ describe("Overview", () => {
 		expect(screen.getByText("In flight: B3a")).toBeInTheDocument();
 		expect(screen.getByText("B3b")).toBeInTheDocument();
 		expect(await screen.findByText("success")).toBeInTheDocument();
+	});
+
+	it("hides the without-a-slot section when every launched phase holds a slot", async () => {
+		mockApi({
+			"GET /api/state": { body: launchedState() },
+			"GET /api/ci": { body: ci },
+		});
+		renderAt("/");
+		await screen.findByText("Ready to launch");
+		expect(screen.queryByText("Without a slot")).toBeNull();
+	});
+
+	it("lists a launched, unmerged phase that holds no slot, linked to its phase page", async () => {
+		const state = launchedState();
+		Object.assign(state.ledger.phases.B8, {
+			status: "paused",
+			slot: null,
+			worktree: "/wt/b8",
+		});
+		mockApi({
+			"GET /api/state": { body: state },
+			"GET /api/ci": { body: ci },
+		});
+		renderAt("/");
+		const section = (await screen.findByText("Without a slot")).closest(
+			"section",
+		) as HTMLElement;
+		const link = within(section).getByRole("link", {
+			name: "B8 · Marketing extras",
+		});
+		expect(link).toHaveAttribute("href", "/phase/B8");
+		expect(within(section).getByText("paused")).toBeInTheDocument();
+	});
+
+	it("shows the conductor's live output only once toggled on", async () => {
+		const calls = mockApi({
+			"GET /api/state": { body: makeState() },
+			"GET /api/ci": { body: ci },
+			"GET /api/conductor/log": { body: { text: "conductor output" } },
+		});
+		renderAt("/");
+		const section = (await screen.findByText("Conductor")).closest(
+			"section",
+		) as HTMLElement;
+		expect(calls.some((c) => c.path === "/api/conductor/log")).toBe(false);
+		await userEvent.click(
+			within(section).getByRole("button", { name: "Show output" }),
+		);
+		await waitFor(() =>
+			expect(calls.some((c) => c.path === "/api/conductor/log")).toBe(true),
+		);
+		expect(
+			within(section).getByRole("button", { name: "Hide output" }),
+		).toBeInTheDocument();
+		const before = calls.filter((c) => c.path === "/api/conductor/log").length;
+		await userEvent.click(
+			within(section).getByRole("button", { name: "Hide output" }),
+		);
+		expect(
+			within(section).queryByText("Session output"),
+		).not.toBeInTheDocument();
+		await new Promise((resolve) => setTimeout(resolve, 10));
+		expect(calls.filter((c) => c.path === "/api/conductor/log").length).toBe(
+			before,
+		);
 	});
 
 	it("starts the conductor with the chosen mode", async () => {

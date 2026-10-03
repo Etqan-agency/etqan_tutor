@@ -3,7 +3,7 @@ import { CiPanel } from "@/components/CiPanel";
 import { ConductorCard } from "@/components/ConductorCard";
 import { EligiblePhases } from "@/components/EligiblePhases";
 import { QueueStrip } from "@/components/QueueStrip";
-import { SlotCards } from "@/components/SlotCards";
+import { SlotCards, WithoutSlot } from "@/components/SlotCards";
 import { ErrorBox } from "@/ui/ErrorBox";
 
 export function Overview() {
@@ -13,6 +13,7 @@ export function Overview() {
 	return (
 		<div className="space-y-6">
 			<SlotCards state={data} />
+			<WithoutSlot state={data} />
 			<div className="grid gap-4 lg:grid-cols-3">
 				<ConductorCard state={data} />
 				<QueueStrip ledger={data.ledger} />

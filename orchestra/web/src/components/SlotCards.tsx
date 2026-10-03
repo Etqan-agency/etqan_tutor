@@ -75,3 +75,41 @@ export function SlotCards({ state }: { state: State }) {
 		</div>
 	);
 }
+
+/** A phase launched (it has a worktree) and not yet merged, but holding no slot: released
+ * through "Move slot → Release", or lent out per CONDUCTOR.md. Its only link anywhere else
+ * in the app is the slot cards above, which skip it — without this, the owner must type its
+ * URL by hand to give it a slot back, resume it, stop its session or tear it down. */
+export function WithoutSlot({ state }: { state: State }) {
+	const codes = Object.entries(state.ledger.phases)
+		.filter(
+			([, phase]) =>
+				phase.worktree !== null &&
+				phase.status !== "merged" &&
+				phase.slot === null,
+		)
+		.map(([code]) => code);
+	if (codes.length === 0) return null;
+	return (
+		<Card title="Without a slot">
+			<ul className="space-y-2">
+				{codes.map((code) => {
+					const phase = state.ledger.phases[code];
+					return (
+						<li
+							key={code}
+							className="flex items-center justify-between gap-3 text-sm"
+						>
+							<Link
+								to="/phase/$code"
+								params={{ code }}
+								className="hover:underline"
+							>{`${code} · ${phase.title}`}</Link>
+							<Badge tone={phaseTone[phase.status]}>{phase.status}</Badge>
+						</li>
+					);
+				})}
+			</ul>
+		</Card>
+	);
+}

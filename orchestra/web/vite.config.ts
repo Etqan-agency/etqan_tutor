@@ -16,6 +16,12 @@ export default defineConfig({
 		strictPort: true,
 		allowedHosts: ["127.0.0.1", "localhost"],
 		cors: false,
+		// Dev mode serves the page itself (the production anti-framing headers, app.py
+		// `_guard`, only cover the built server), so the dev server sends them too.
+		headers: {
+			"X-Frame-Options": "DENY",
+			"Content-Security-Policy": "frame-ancestors 'none'",
+		},
 		proxy: {
 			"/api": {
 				target: api,
