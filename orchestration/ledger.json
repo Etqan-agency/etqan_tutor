@@ -577,6 +577,18 @@
         "B2"
       ],
       "source": "spec 2026-10-03-b3g G-18, G-19; ledger D10"
+    },
+    {
+      "id": "D19",
+      "phase": "B9",
+      "decision": "Impersonation (B9b quick login): etqan.platform.permissions.impersonator_id(request) -> int|None and the DRF permission NotImpersonating. Money-moving and messaging actions (payments, checkout, payment links, chat, broadcasts) add NotImpersonating so an admin signed in as someone else cannot pay, message or broadcast as them.",
+      "affects": [
+        "B3",
+        "B5",
+        "B7",
+        "B11"
+      ],
+      "source": "spec 2026-10-03-b9b-sign-in S-9b"
     }
   ],
   "requests": [
