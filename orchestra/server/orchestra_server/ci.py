@@ -10,7 +10,8 @@ from . import commands, config
 CACHE_SECONDS = 60
 PR = re.compile(r"https://github\.com/([\w.-]+/[\w.-]+)/pull/(\d+)")
 _cache: dict = {"at": 0.0, "value": None}
-_lock = threading.Lock()
+_lock = threading.Lock()  # guards `_cache`
+_refresh_lock = threading.Lock()  # serializes `collect()` so concurrent stale requests share one run
 
 
 def clear_cache() -> None:
@@ -67,11 +68,20 @@ def collect(data: dict) -> dict:
     return {"master": master, "prs": prs}
 
 
+def _fresh() -> bool:
+    return _cache["value"] is not None and time.monotonic() - _cache["at"] < CACHE_SECONDS
+
+
 def cached(data: dict) -> dict:
     with _lock:
-        if _cache["value"] is not None and time.monotonic() - _cache["at"] < CACHE_SECONDS:
+        if _fresh():
             return _cache["value"]
-    value = collect(data)
-    with _lock:
-        _cache.update(at=time.monotonic(), value=value)
-    return value
+    with _refresh_lock:
+        # Another request may have refreshed while this one waited for `_refresh_lock`.
+        with _lock:
+            if _fresh():
+                return _cache["value"]
+        value = collect(data)
+        with _lock:
+            _cache.update(at=time.monotonic(), value=value)
+        return value
