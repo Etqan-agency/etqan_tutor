@@ -57,8 +57,10 @@ and the build.
   modes ∈ {`auto`, `acceptEdits`, `manual`, `plan`, `dontAsk`} (never `bypassPermissions`); model and
   effort from fixed lists. Free text goes only into ledger data or one argv element; nothing is ever run
   through a shell.
-- Every command returns `{ok, exit_code, output_tail}` (last 50 lines); a `LedgerError` returns 409 with
-  its message.
+- A successful command returns `{ok: true, ...}` (no `exit_code`/`output_tail`); a failed one is a 500
+  carrying `{ok: false, exit_code, output_tail}` (last 50 lines); a `LedgerError` returns 409 with its
+  message (amended after final review: ships as the shape above, not `{ok, exit_code, output_tail}` on
+  every response).
 
 ### 4.2 API (all JSON under `/api`)
 
@@ -67,12 +69,12 @@ and the build.
 | `GET /api/state` | ledger JSON + reconciled sessions + eligible phases + queue + open escalations count |
 | `GET /api/ci` | latest `master` CI run and checks of open PRs named in the ledger (cached 60 s) |
 | `GET /api/events` | SSE: `ledger` (on a new ledger commit), `sessions` (on a change in `claude agents --json`, polled 5 s). Logs are not pushed: the phase page polls `GET /api/phases/<code>/log` every 3 s while open (amended in planning — one viewer, same effect, far simpler). |
-| `GET /api/phases/<code>/log?lines=N` | `claude logs <id>` tail |
+| `GET /api/phases/<code>/log` | `claude logs <id>` tail, the latest ≤200 000 characters (amended after final review: no `?lines` param) |
 | `POST /api/phases/<code>/launch` `{suffix, slot}` | `launch-phase.sh`, ledger `phase --status spec --slot --worktree --branch`, then start its session |
 | `POST /api/phases/<code>/session/start` `{mode, model?, effort?}` | `start-session.sh <code>` (§4.3) and record the id |
 | `POST /api/phases/<code>/session/stop` · `/restart` | `claude stop` · `claude respawn` (or a fresh start when the session is gone) |
 | `POST /api/phases/<code>/status` `{status}` | ledger `phase --status` (pause/resume included) |
-| `POST /api/phases/<code>/slot` `{slot}` | the lending flow: `just stop` in the worktree → ledger release → `stream-env.sh` for the new slot → ledger set slot → `just dev-backend` |
+| `POST /api/phases/<code>/slot` `{slot}` | the lending flow: `just stop` in the worktree → ledger set slot (0 = release, status `paused`, and stop there) → else `stream-env.sh` for the new slot → `just dev-backend` (amended after final review: the ledger write for the new slot happens before `stream-env.sh`, not after) |
 | `POST /api/phases/<code>/stack` `{up: bool}` | `just dev-backend` / `just stop` in the worktree |
 | `POST /api/phases/<code>/teardown` `{confirm: "<CODE>"}` | stop session, `teardown-phase.sh`, ledger `--status merged` if every slice is merged, else `--status waiting-deps --slot 0 --worktree none --branch none --session none` (slot released, worktree cleared, so `eligible` offers it for launch again) |
 | `POST /api/conductor/session/start|stop|restart` | the conductor's session, prompt `CONDUCTOR.md` |
@@ -93,10 +95,19 @@ Ledger writes from the server use the commit message prefix `ledger (orchestra):
   checkout for the conductor) it runs `claude --bg --name etqan-<code> --permission-mode <mode> [--model]
   [--effort] "<prompt>"` with `PHASE_PROMPT.md` (placeholders filled) or `CONDUCTOR.md`, prints the id,
   and records it in the ledger.
-- Reconciliation: a recorded id present in `claude agents --json` → its state (running / idle / waiting);
-  absent → `exited`; a running `etqan-<code>` session with no recorded id is adopted (recorded) and shown.
+- Reconciliation states, as shown (amended after final review — ships as `busy`/`idle`/`exited`/`gone`/
+  `none`, not running/idle/waiting/exited): a recorded id present in `claude agents --json` → `busy` or
+  `idle`; present but ended → `exited`; no longer listed at all (the agent fell out of `claude agents`'
+  window) → `gone`; no id ever recorded → `none`. A running `etqan-<code>` session with no recorded id is
+  adopted (recorded) and shown.
 - `CONDUCTOR.md` step 1 changes: the conductor starts phase sessions with `start-session.sh` instead of
   handing the owner commands.
+- Restart (amended after final review): when the recorded or an adopted same-named session is still live,
+  it is respawned (`claude respawn <id>`), keeping its own mode. Start and restart both refuse to create a
+  second live `etqan-<who>` session. Restarting an exited session that still has a `sessionId` resumes it
+  with `claude --bg --resume <sessionId> "<continue prompt>"` and no other flags — passing `--name` or
+  `--permission-mode` alongside `--resume` does not resume it; it starts an idle copy under a new id
+  (confirmed against the real CLI) — otherwise it starts fresh.
 
 ### 4.4 Ledger additions (in `ledger.py`, with tests)
 `reorder <slice> up|down` (within the queue; not the in-flight slice), `request-done <id>`,
@@ -108,16 +119,21 @@ Routes (TanStack Router): `/` Overview, `/phase/:code`, `/queue`, `/escalations`
 Data with TanStack Query; the SSE stream invalidates `state` and `ci`; the open phase page polls its log every 3 s.
 
 - **Overview:** four slot cards (phase, title, status, slice, task, session state, stack up/down, link to the
-  phase page — amended in planning: no last log line or per-card age; the live log is on the phase page); the conductor card (state, Start/Stop/Restart); merge-queue
-  strip (in flight with PR checks, then queued); open-escalations badge; CI (`master` run, open PR checks);
-  eligible phases with **Launch** (suffix and free slot pre-filled, editable).
+  phase page — amended in planning: no last log line or per-card age; the live log is on the phase page); a
+  "Without a slot" card listing any launched, unmerged phase that currently holds no slot (released, or lent
+  out per CONDUCTOR.md), each linked to its phase page, hidden when there is none (amended after final
+  review: the slot cards alone cannot reach such a phase); the conductor card (state, Start/Stop/Restart,
+  a "Show output" toggle that renders its live log, polling only while shown — amended after final review);
+  merge-queue strip (in flight with PR checks, then queued); open-escalations badge; CI (`master` run, open
+  PR checks); eligible phases with **Launch** (suffix and free slot pre-filled, editable).
 - **Phase page:** header (status, slot, branch, worktree path with copy); slices table (status, plan,
   requirements with met ✓/✗, PRs, bounces); live log (auto-scroll, pause); session controls (Start with
   mode/model/effort, Stop, Restart, copy `claude attach <id>`); phase controls (Pause/Resume, Release slot,
   Move to slot N, status); stack up/down; Teardown (type the phase code).
-- **Queue:** in flight and queued; Next, Bounce (reason required), Mark merged (heads pre-filled from each
-  repo's `origin/main`, editable; typed confirm), Move up/down. While the conductor's session is running, a
-  warning that it may act too.
+- **Queue:** in flight and queued; Next, Bounce (reason required), Mark merged (heads typed by hand —
+  amended after final review: merging is the conductor's job, and pre-filling them would need a fetch from
+  a read route; typed confirm), Move up/down. While the conductor's session is running, a warning that it
+  may act too.
 - **Escalations:** open first; Answer (text → resolve); resolved history.
 - **Coordination:** shared decisions (add), claims (force-release, typed confirm), requests (mark done),
   ownership.
