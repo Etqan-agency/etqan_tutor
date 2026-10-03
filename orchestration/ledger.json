@@ -140,11 +140,11 @@
   "slices": {
     "B8a": {
       "phase": "B8",
-      "status": "spec",
+      "status": "build",
       "requires": [],
       "plan_number": 16,
       "spec": "docs/superpowers/specs/2026-10-03-b8a-site-settings-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-03-plan-16-site-settings-depth.md",
       "prs": null,
       "bounces": 0
     },

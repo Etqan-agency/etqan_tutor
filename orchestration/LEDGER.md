@@ -23,7 +23,7 @@ In flight: **—** · Queue: — · Next plan number: 19
 
 | Slice | Phase | Status | Plan | Requires | PRs | Bounces |
 |---|---|---|---|---|---|---|
-| B8a | B8 | spec | 16 |  |  | 0 |
+| B8a | B8 | build | 16 |  |  | 0 |
 | B8b | B8 | spec |  |  |  | 0 |
 | B8c | B8 | spec |  |  |  | 0 |
 | B8d | B8 | spec |  |  |  | 0 |
