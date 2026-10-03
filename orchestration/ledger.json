@@ -9,7 +9,7 @@
       "branch": "feat/b2a-scheduling",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2a",
-      "current_task": "B2a queued; next: B2b spec",
+      "current_task": "B2a queued; B2b spec approved, plan being written",
       "session": "b56a274c"
     },
     "B3": {
