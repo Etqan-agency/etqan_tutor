@@ -23,7 +23,7 @@ In flight: **B8a** · Queue: — · Next plan number: 19 · Conductor: aa12c664
 
 | Slice | Phase | Status | Plan | Requires | PRs | Bounces |
 |---|---|---|---|---|---|---|
-| B8a | B8 | in-flight | 16 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/5 https://github.com/Etqan-agency/etqan_tutor_marketing/pull/2 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/4  | 0 |
+| B8a | B8 | in-flight | 16 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/5 https://github.com/Etqan-agency/etqan_tutor_marketing/pull/2 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/4 https://github.com/Etqan-agency/etqan_tutor/pull/12 | 0 |
 | B8b | B8 | spec |  |  |  | 0 |
 | B8c | B8 | spec |  |  |  | 0 |
 | B8d | B8 | spec |  |  |  | 0 |
