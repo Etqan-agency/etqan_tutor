@@ -8,7 +8,7 @@ In flight: **B3a** · Queue: B2a · Next plan number: 22 · Conductor: aa12c664
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | queued | 1 | B2a | B2a queued; B2b spec approved, plan being written |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | b56a274c |
+| B2 | Scheduling depth | queued | 1 | B2a | B2a queued; B2b spec approved, plan being written |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | a29a300d |
 | B3 | Money depth | queued | 2 | B3a | B3a in flight: verify e2e, then PRs (see notes) |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | bbb7e4fa |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
