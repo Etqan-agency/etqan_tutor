@@ -290,7 +290,7 @@
     },
     "B3a": {
       "phase": "B3",
-      "status": "review",
+      "status": "queued",
       "requires": [],
       "plan_number": 15,
       "spec": "docs/superpowers/specs/2026-10-03-b3a-expenses-donations-design.md",
@@ -489,7 +489,9 @@
     }
   ],
   "requests": [],
-  "queue": [],
+  "queue": [
+    "B3a"
+  ],
   "in_flight": "B8a",
   "main_heads": {},
   "escalations": [],
