@@ -4,70 +4,27 @@ Keep this under ~40 lines: current position only.
 
 ## Where we are
 
-Plan 13 (per-academy feature toggles, B1 plan 4 of 4) built and in review: branch `feat/features`
-in backend, dashboard and meta (spec `docs/superpowers/specs/2026-09-30-feature-toggles-design.md`,
-plan `docs/superpowers/plans/2026-09-30-plan-13-feature-toggles.md`). `etqan.platform.features` is
-the registry (36 features: 8 built, 28 stored for later phases, off by default); the values are
-`Academy.features` (public schema, code → boolean, `db_default={}`, a missing code means the
-default). `features.enabled(code)` reads `connection.tenant` (no query; the platform never imports
-tenants). A route declares `feature` next to `permission_codes` and lists `FeatureOn` after the
-code check (404 while off); the route table's `FEATURES` column and its guard words keep them
-declared. Off, `families` hides the family fields, filters, CSV columns and bulk actions and the
-family payer; `parents` refuses parent sign-in (a signed-in parent is signed out), drops `me/`'s
-children, guardian payers and guardian notices; `invoices` stops automatic invoices, invoice notices
-and the subscriptions' payment status; `session_reports` stops `report.missing`;
-`auto_notifications` skips the academy's scan; `teacher_attendance` refuses teachers' marks (403)
-and stops `session.late` notices (the final review's Important #1: a teacher can't be told to fix
-attendance it refuses to let them mark); `export` 404s every `?format=csv`. `me/` lists the features that are on; `academy/features/`
-(admins only) lists them all. Etqan switches them on the Academy page of the platform admin
-(grouped, "takes effect when built", held-off prerequisites, history, "Copy features from another
-academy") or with `manage.py set_features <subdomain> --on … --off …`; nothing in the tenant API
-writes them. The dashboard's `hasFeature()`/`useHasFeature()` sit next to `can()`: nav items, route
-`staticData.feature` (a switched-off screen says "This feature isn't enabled for your academy.") and
-buttons follow them; Settings → Features is read-only. `demo` seeds every built feature on; `other`
-keeps the defaults. The e2e suite switches families off and on for demo.
-
-Plan 12b (session supervision) is merged. "General supervision" is the academy's `supervision`
-feature since Plan 13 (a migration carried each academy's old `AcademySettings.supervision_enabled`
-over; that column is no longer written and goes in a later release); Settings → Academy shows it
-read-only. It gates it all: while off, no supervisor field is sent, the supervision routes and the session PATCH answer 404, and a
-`supervisor_id` in a subscription body is ignored; the stored values are kept. A supervisor is an
-active staff account holding `session.supervise` through an active role
-(`access.services.supervisors_queryset` / `get_supervisor`). `Subscription.supervisor` and
-`Session.supervisor` / `supervisor_attendance` / `opened_by_supervisor_at` are new (nullable or
-`db_default`). The rules live in `scheduling.services.supervision`: generated sessions copy the
-subscription's supervisor; a subscription change moves only its unstarted sessions (resetting their
-supervisor attendance and opening); the session PATCH overrides one session, `supervisor_id` behind
-`session.update` and `supervisor_attendance` behind `attendance.update`; Open works from 10 minutes
-before the start until the end (UTC instants) and records the first opening; the supervisor marks
-only their own attendance. `supervision/`, `supervision/<id>/open/`, `supervision/<id>/attendance/`
-(`session.supervise`, now in `registry.IN_USE`) and `supervision/supervisors/` (the pickers) are new.
-The dashboard shows the supervisor on the subscription form, Edit
-dialog, summary, session page and sessions list, and My supervision (`/scheduling/supervision`, in
-the nav for a staff supervisor while the feature is on); Open also shows the meeting link as a real
-`<a>` once known, since a mutation's `window.open` can be silently blocked on Safari/iOS. `demo`
-seeds supervision on, with Sara on Yusuf's Tajweed subscription. A staff editor may now remove a
-role only if they hold its codes, whether removed through `role_ids` on a staff account or directly
-from a role's own `permissions` (Plan 12a's open finding, closed in the final review: emptying a
-role's codes used to check only additions). Beyond the plan: Open and the supervisor's attendance
-look the session up by supervisor only, with no date filter, so a supervisor can open a session
-running past the academy's midnight and mark attendance late with no end (D4); My supervision lists
-soonest first and keeps a session that is still running past the academy's local midnight on the
-list too. The e2e suite covers the journey through the Caddy edge.
+Phases B0 and B1 are complete (Plans 1–13). Plan 13 made every feature a per-academy switch
+(`etqan.platform.features`, values in `Academy.features`, off by default for unbuilt ones; Etqan sets
+them in the platform admin or `manage.py set_features`, the academy admin only reads them). Plan 14
+(orchestration groundwork) is merged: from here the roadmap's phases B2–B11 are built by parallel
+sessions under `docs/superpowers/specs/2026-10-02-parallel-orchestration-design.md`. One conductor
+(`scripts/orchestration/CONDUCTOR.md`, in this checkout) and up to four phase orchestrators
+(`scripts/orchestration/PHASE_PROMPT.md`, each in `../etqan_tutor-wt/<phase>/` with its own
+`.env.stream` stack) coordinate through the ledger, `python3 scripts/orchestration/ledger.py show`
+(branch `orchestration`, worktree `../etqan_tutor-wt/_ledger`): it is the live position of every
+phase, slice, claim, decision, escalation and the merge queue. Merging is autonomous once every gate
+passes (owner ruling PO-3); production stays the owner's. R7 is dropped (PO-2, ledger D1): B2 onward
+is designed from the audits, unobserved behaviour marked `[assumed]`.
 
 ## Next
 
-Open the PRs (backend, dashboard → `main`; meta → `master`), get meta CI green, merge backend then
-dashboard, bump the meta pointers, merge meta; merging is autonomous (the owner's ruling, PO-3,
-`docs/superpowers/specs/2026-10-02-parallel-orchestration-design.md`), no per-PR approval needed.
-Phase B1 is then complete; next is Plan 14, orchestration groundwork
-(`docs/superpowers/plans/2026-10-02-plan-14-orchestration-groundwork.md`, meta branch
-`feat/orchestration`). A later phase that builds one of the 28 stored features flips its `built` in
-the registry and wires the switch in (route `feature`, `FEATURES` row, `staticData.feature`). A
-switch is read only through `etqan.platform.features` and written only by `etqan.tenants`; never
-add a per-feature column or setting. The supervision rules live only in
-`etqan.scheduling.services.supervision`, and who may supervise only in
-`access.services.supervisors_queryset`; never restate them elsewhere.
+Wave 1: B2 scheduling depth, B3 money depth, B8 marketing extras, B9 platform extras, slots 1–4.
+Each phase adds lines to shared lists only under its own `── phase Bn ──` marker, registers every new
+feature in `etqan.platform.features` (off by default), and never runs `git submodule update` in its
+worktree. A switch is read only through `etqan.platform.features` and written only by
+`etqan.tenants`; the supervision rules live only in `etqan.scheduling.services.supervision`, and who
+may supervise only in `access.services.supervisors_queryset`; never restate them elsewhere.
 
 ## Follow-ups (from Plans 4–9)
 
