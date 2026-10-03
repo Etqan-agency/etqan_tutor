@@ -34,7 +34,7 @@ In flight: **B9a** · Queue: — · Next plan number: 25 · Conductor: 04a3f739
 | B2d | B2 | spec |  |  |  | 0 |
 | B2e | B2 | spec |  |  |  | 0 |
 | B2f | B2 | spec |  |  |  | 0 |
-| B9a | B9 | in-flight | 18 |  |  | 0 |
+| B9a | B9 | in-flight | 18 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/9 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/8 https://github.com/Etqan-agency/etqan_tutor/pull/18 | 0 |
 | B9b | B9 | plan | 23 | B9a |  | 0 |
 | B9c | B9 | spec |  | B9b |  | 0 |
 | B9d | B9 | spec |  |  |  | 0 |
