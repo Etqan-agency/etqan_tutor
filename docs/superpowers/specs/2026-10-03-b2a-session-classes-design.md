@@ -202,5 +202,5 @@ exists); `other` gets nothing.
 
 ## 10. Out of scope
 
-In / out times, postponement and the activity log (B2b); archives (B2c); trials (B2d); groups and bundles (B2e);
-weekly schedules and substitute teachers in bulk (B2f); paying these classes (B4); notices about them (B5).
+In / out times and postponement (B2b); the activity log (B2c); archives (B2d); trials (B2e); groups and bundles
+(B2f); weekly schedules and substitute teachers in bulk (B2g); paying these classes (B4); notices about them (B5).
