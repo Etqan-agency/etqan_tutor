@@ -1,5 +1,6 @@
 """Routes that only read or write the ledger (spec 2026-10-03 §4.2)."""
 
+from . import sessions
 from . import validate as v
 from .ledger_api import L, read, write
 from .routing import route
@@ -9,7 +10,13 @@ OK = {"ok": True}
 
 def build_state(data: dict) -> dict:
     free, codes = L.eligible(data)
-    return {"ledger": data, "eligible": {"free": free, "phases": codes}}
+    view = sessions.snapshot()
+    return {
+        "ledger": read(),
+        "eligible": {"free": free, "phases": codes},
+        "sessions": view,
+        "stacks": sessions.stacks(data),
+    }
 
 
 @route("GET", "/api/state")
