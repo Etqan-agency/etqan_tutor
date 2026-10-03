@@ -337,6 +337,16 @@
       "plan": null,
       "prs": null,
       "bounces": 0
+    },
+    "B3f": {
+      "phase": "B3",
+      "status": "spec",
+      "requires": [],
+      "plan_number": null,
+      "spec": null,
+      "plan": null,
+      "prs": null,
+      "bounces": 0
     }
   },
   "next_plan_number": 19,
