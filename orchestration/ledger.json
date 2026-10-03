@@ -250,11 +250,11 @@
     },
     "B9a": {
       "phase": "B9",
-      "status": "spec",
+      "status": "build",
       "requires": [],
       "plan_number": 18,
       "spec": "docs/superpowers/specs/2026-10-03-platform-extras-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-03-plan-18-platform.md",
       "prs": null,
       "bounces": 0
     },
