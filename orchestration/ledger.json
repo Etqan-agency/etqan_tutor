@@ -383,6 +383,16 @@
         "B4"
       ],
       "source": "spec 2026-10-03-b3a A-8; audit PAY-013"
+    },
+    {
+      "id": "D4",
+      "phase": "B3",
+      "decision": "Online payments live in new app etqan.gateways (Stripe + PayPal, each academy's own merchant keys, Fernet-encrypted under env ETQAN_SECRETS_KEY). Other apps take online money only via gateways.services.start_checkout(purpose, ...) with a per-purpose completion handler registered by the owning app; only the provider webhook (/api/v1/gateways/webhooks/<provider>/) marks a checkout paid. Exact signature fixed by B3b's spec.",
+      "affects": [
+        "B7",
+        "B11"
+      ],
+      "source": "spec 2026-10-03-b3 B3-6/B3-7"
     }
   ],
   "requests": [],

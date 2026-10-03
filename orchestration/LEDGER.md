@@ -56,6 +56,7 @@ In flight: **—** · Queue: — · Next plan number: 15
 | D1 | B2 | R7 dropped: phases are designed from the audits; unobserved behaviour is marked [assumed] | B2, B4, B5, B6, B11 | spec 2026-10-02 PO-2 |
 | D2 | B8 | No academy-supplied script or raw HTML executes on an academy host: the public site shares its origin with /app/ and /api/ and the CSRF cookie is script-readable. Third-party integrations are validated IDs rendered from fixed templates; user-uploaded HTML/SVG is never served inline from the academy origin. | B8, B9, B10 | spec 2026-10-03-b8a A-7 |
 | D3 | B3 | Expenses live in new app etqan.finance. Other apps post expenses only via finance.services.post_expense(source, source_id, title, type, amount_minor, currency, spent_on, notes='') — idempotent per (source, source_id) — and withdraw_expense(source, source_id); posted expenses are read-only in the API. B4 posts paid payslips with source 'payroll.payslip', type 'salaries' (PAY-013). | B4 | spec 2026-10-03-b3a A-8; audit PAY-013 |
+| D4 | B3 | Online payments live in new app etqan.gateways (Stripe + PayPal, each academy's own merchant keys, Fernet-encrypted under env ETQAN_SECRETS_KEY). Other apps take online money only via gateways.services.start_checkout(purpose, ...) with a per-purpose completion handler registered by the owning app; only the provider webhook (/api/v1/gateways/webhooks/<provider>/) marks a checkout paid. Exact signature fixed by B3b's spec. | B7, B11 | spec 2026-10-03-b3 B3-6/B3-7 |
 
 ## Claims and requests
 
