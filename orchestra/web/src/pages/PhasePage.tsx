@@ -43,10 +43,11 @@ export function PhasePage() {
 				</div>
 			</header>
 			<Card title="Session">
-				<SessionControls who={code} session={session} />
+				<SessionControls key={code} who={code} session={session} />
 			</Card>
 			<Card title="Phase">
 				<PhaseControls
+					key={code}
 					code={code}
 					ledger={data.ledger}
 					stackUp={data.stacks[code] ?? false}
@@ -56,7 +57,7 @@ export function PhasePage() {
 				<SlicesTable ledger={data.ledger} code={code} />
 			</Card>
 			<Card>
-				<SessionLog who={code} />
+				<SessionLog key={code} who={code} />
 			</Card>
 		</div>
 	);

@@ -7,6 +7,7 @@ import { Button } from "@/ui/Button";
 export function SessionLog({ who }: { who: string }) {
 	const host = useRef<HTMLDivElement>(null);
 	const terminal = useRef<Terminal | null>(null);
+	const lastText = useRef<string | null>(null);
 	const [paused, setPaused] = useState(false);
 	const { data } = useLog(who, !paused);
 
@@ -26,6 +27,8 @@ export function SessionLog({ who }: { who: string }) {
 
 	useEffect(() => {
 		if (!terminal.current || data === undefined) return;
+		if (data.text === lastText.current) return;
+		lastText.current = data.text;
 		terminal.current.reset();
 		terminal.current.write(data.text);
 	}, [data]);

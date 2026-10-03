@@ -24,6 +24,26 @@ export function PhaseControls({
 	// unless the phase is already merged, so an unrecorded worktree isn't stuck.
 	const canTeardown = launched || phase.status !== "merged";
 	const lower = code.toLowerCase();
+	// Mirrors the server's actual teardown steps (orchestra_server/phases.py:
+	// teardown): `claude stop` only runs when a session is recorded;
+	// `teardown-phase.sh` only when a worktree exists (or might, unrecorded); the
+	// ledger write sets `merged` only once every slice of the phase is merged.
+	const phaseSlices = Object.values(ledger.slices).filter(
+		(s) => s.phase === code,
+	);
+	const finished =
+		phaseSlices.length > 0 && phaseSlices.every((s) => s.status === "merged");
+	const teardownCommand = [
+		phase.session && `claude stop ${phase.session}`,
+		phase.worktree
+			? `teardown-phase.sh ${code}`
+			: `teardown-phase.sh ${code} (only if an unrecorded worktree exists)`,
+		finished
+			? `ledger.py phase ${code} --status merged`
+			: `ledger.py phase ${code} --status waiting-deps --slot 0 --worktree none --branch none --session none`,
+	]
+		.filter(Boolean)
+		.join("\n");
 	return (
 		<div className="flex flex-wrap gap-2">
 			{phase.status === "paused" ? (
@@ -99,7 +119,7 @@ export function PhaseControls({
 				disabled={!canTeardown}
 				confirmWord={code}
 				warning="Stops the session, removes the stack (volumes too), the worktrees and the phase's local branches. If the ledger has no worktree, this removes an unrecorded one left by a failed launch, if any."
-				command={`claude stop ${phase.session ?? ""}\nteardown-phase.sh ${code}`}
+				command={teardownCommand}
 				run={() => post(`/api/phases/${code}/teardown`, { confirm: code })}
 			/>
 		</div>

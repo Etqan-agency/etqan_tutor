@@ -193,4 +193,56 @@ describe("PhasePage", () => {
 			await screen.findByRole("button", { name: "Tear down" }),
 		).toBeEnabled();
 	});
+
+	it("names the exact teardown commands for a launched phase with a session", async () => {
+		mockApi(routes());
+		renderAt("/phase/B3");
+		const user = userEvent.setup();
+		await user.click(await screen.findByRole("button", { name: "Tear down" }));
+		const dialog = screen.getByRole("dialog");
+		expect(dialog.querySelector("pre")?.textContent).toBe(
+			"claude stop ab12\nteardown-phase.sh B3\nledger.py phase B3 --status waiting-deps --slot 0 --worktree none --branch none --session none",
+		);
+	});
+
+	it("omits the claude stop line for an unlaunched phase with no session", async () => {
+		mockApi({
+			"GET /api/state": { body: makeState() },
+			"GET /api/ci": { body: { master: null, prs: [] } },
+			"GET /api/phases/B2/log": { body: { text: "" } },
+		});
+		renderAt("/phase/B2");
+		const user = userEvent.setup();
+		await user.click(await screen.findByRole("button", { name: "Tear down" }));
+		const dialog = screen.getByRole("dialog");
+		expect(dialog.querySelector("pre")?.textContent).toBe(
+			"teardown-phase.sh B2 (only if an unrecorded worktree exists)\nledger.py phase B2 --status waiting-deps --slot 0 --worktree none --branch none --session none",
+		);
+	});
+
+	it("resets per-phase control state when navigating between phases", async () => {
+		mockApi({
+			"GET /api/state": { body: state() },
+			"GET /api/ci": { body: { master: null, prs: [] } },
+			"GET /api/phases/B3/log": { body: { text: "" } },
+			"GET /api/phases/B2/log": { body: { text: "" } },
+		});
+		const { router } = renderAt("/phase/B3");
+		const user = userEvent.setup();
+		await user.click(await screen.findByRole("button", { name: "Set status" }));
+		await user.selectOptions(
+			within(screen.getByRole("dialog")).getByLabelText("Status"),
+			"paused",
+		);
+		await user.click(
+			within(screen.getByRole("dialog")).getByRole("button", {
+				name: "Cancel",
+			}),
+		);
+		await router.navigate({ to: "/phase/$code", params: { code: "B2" } });
+		await user.click(await screen.findByRole("button", { name: "Set status" }));
+		expect(
+			within(screen.getByRole("dialog")).getByLabelText("Status"),
+		).toHaveValue("build");
+	});
 });
