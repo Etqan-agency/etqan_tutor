@@ -190,7 +190,7 @@
     },
     "B2a": {
       "phase": "B2",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 17,
       "spec": "docs/superpowers/specs/2026-10-03-b2a-session-classes-design.md",
@@ -627,12 +627,12 @@
     "B8b",
     "B9a"
   ],
-  "in_flight": "B2a",
+  "in_flight": null,
   "main_heads": {
-    "backend": "2fa9a401a786e9e952df9594076cd5d2c787c7c3",
-    "dashboard": "7bd37d6c1ee9713ccec0dabc566102af48a89377",
+    "backend": "dd81cfa544da86cbc894a8640ddbc71577fc26bb",
+    "dashboard": "7939e34b44cfbec4ca2ef406039868394387faf5",
     "marketing": "cc02b562e0a22ed83c1ab3f06859f03d5fd3ecd5",
-    "meta": "594639f205f263d8576107ba619026e57bdc1547"
+    "meta": "51d112448e78560c8d49b09c80a95912678608f0"
   },
   "escalations": [
     {
