@@ -250,7 +250,7 @@
     },
     "B9a": {
       "phase": "B9",
-      "status": "build",
+      "status": "queued",
       "requires": [],
       "plan_number": 18,
       "spec": "docs/superpowers/specs/2026-10-03-platform-extras-design.md",
@@ -590,7 +590,8 @@
     }
   ],
   "queue": [
-    "B8b"
+    "B8b",
+    "B9a"
   ],
   "in_flight": "B2a",
   "main_heads": {
