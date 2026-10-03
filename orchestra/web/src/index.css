@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import "@etqan/tokens/tokens.css";
+@import "@etqan/tokens/theme.css";
+@import "@xterm/xterm/css/xterm.css";
+
+body {
+	background: var(--color-background);
+	color: var(--color-foreground);
+}

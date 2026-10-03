@@ -1,0 +1,7 @@
+# pnpm 10 requires an explicit decision on which dependencies may run install
+# scripts. Both of these are the toolchain's own compilers (SWC powers the React
+# plugin, esbuild powers Vite's dep pre-bundling); their postinstall only selects
+# the prebuilt native binary for the platform.
+allowBuilds:
+  '@swc/core': true
+  esbuild: true
