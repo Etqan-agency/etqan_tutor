@@ -150,7 +150,7 @@
     },
     "B8b": {
       "phase": "B8",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [],
       "plan_number": 19,
       "spec": "docs/superpowers/specs/2026-10-03-b8b-faqs-ads-redirects-design.md",
@@ -624,10 +624,9 @@
     }
   ],
   "queue": [
-    "B8b",
     "B9a"
   ],
-  "in_flight": null,
+  "in_flight": "B8b",
   "main_heads": {
     "backend": "dd81cfa544da86cbc894a8640ddbc71577fc26bb",
     "dashboard": "7939e34b44cfbec4ca2ef406039868394387faf5",
