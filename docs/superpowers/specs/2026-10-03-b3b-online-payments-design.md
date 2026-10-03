@@ -24,7 +24,7 @@ online, plus a service fee. A verified Stripe event records the payment on the i
 online checkout, clear the ones that need attention, and can mark a payment refunded.
 
 The gateway core (accounts, encryption, checkouts, purposes, webhooks, simulator) is built so that
-PayPal (B3c) and the later purposes (payment links B3c, wallet top-up B3e, add-on sales B7) only plug in.
+PayPal (B3c) and the later purposes (payment links B3g, wallet top-up B3e, add-on sales B7) only plug in.
 
 ## 2. Decisions
 
@@ -240,7 +240,7 @@ The `(method, transaction_number)` constraint backs this up against a double pay
 ### 4.8 Checkouts list (admin)
 
 `GET gateways/checkouts/` (`checkout.view_any`) is paginated and newest first. Its filters are `status`,
-`purpose`, `attention` (`open`) and `created_from` / `created_to`. CSV export moves to B3c, with the
+`purpose`, `attention` (`open`) and `created_from` / `created_to`. CSV export moves to B3g, with the
 payment records list.
 
 ## 5. API summary (`/api/v1/`)
@@ -356,7 +356,7 @@ fee. Seeding twice changes nothing.
 ## 10. Out of scope
 
 - PayPal, payment links, standalone payments, online donations, the checkouts CSV, and SUB-006's payment
-  metadata (ledger D10). All of these are B3c.
+  metadata (ledger D10). All of these are B3c/B3g per phase §3.
 - Wallet credit for surplus money (B3e).
 - Refund API calls, disputes, payouts and saved cards (phase B3-10).
 - Any live key or production configuration (B-15).
