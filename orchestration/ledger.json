@@ -304,7 +304,7 @@
     },
     "B3b": {
       "phase": "B3",
-      "status": "build",
+      "status": "queued",
       "requires": [],
       "plan_number": 20,
       "spec": "docs/superpowers/specs/2026-10-03-b3b-online-payments-design.md",
@@ -624,7 +624,8 @@
     }
   ],
   "queue": [
-    "B2b"
+    "B2b",
+    "B3b"
   ],
   "in_flight": "B8c",
   "main_heads": {
