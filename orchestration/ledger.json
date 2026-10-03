@@ -150,7 +150,7 @@
     },
     "B8b": {
       "phase": "B8",
-      "status": "build",
+      "status": "queued",
       "requires": [],
       "plan_number": 19,
       "spec": "docs/superpowers/specs/2026-10-03-b8b-faqs-ads-redirects-design.md",
@@ -589,7 +589,9 @@
       "status": "open"
     }
   ],
-  "queue": [],
+  "queue": [
+    "B8b"
+  ],
   "in_flight": "B2a",
   "main_heads": {
     "backend": "2fa9a401a786e9e952df9594076cd5d2c787c7c3",
