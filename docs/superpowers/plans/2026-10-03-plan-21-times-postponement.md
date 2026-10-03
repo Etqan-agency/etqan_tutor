@@ -63,7 +63,7 @@
 ### Decisions this plan makes where the spec is silent or leaves a choice
 
 - **D1 — `by=None` is the system and acts as the office** (as B2a D4): the seeds call `record_times` and `postpone_session` with `by=None`.
-- **D2 — `can_postpone` leaves the time limit to the dashboard.** The payload's `can_postpone` is every row-local B-6 / B-7 condition (role and scope, status, attendance, times, supervisor attendance, payroll lock, compensated, a regular session's subscription live). The time limit needs the academy's setting; reading it once per row would be one query per row, so the dashboard — which already loads `academy/settings/` for everyone — applies `now ≤ starts_at − postpone_limit_minutes` for non-office viewers. The server enforces everything on submit.
+- **D2 — `can_postpone` includes the time limit (amended after review: the dashboard never restates the rule).** The payload's `can_postpone` is every row-local B-6 / B-7 condition (role and scope, status, attendance, times, supervisor attendance, payroll lock, compensated, a regular session's subscription live) **and**, for a non-office viewer, `now ≤ starts_at − postpone_limit_minutes`. The limit is read **once per request**: list views call `services.postpone_limit_minutes()` once and pass it to `session_row(..., postpone_limit=limit)`; a detail view passes nothing and `session_row` reads it itself (one query). For non-office viewers the payload also carries `postpone_until` (`starts_at − limit`), so the dashboard can say "postponing closed at …" without computing the rule. The server enforces everything again on submit.
 - **D3 — `postpone_limit_minutes` is always in `academy/settings/`**; Settings → Academy shows the field only with `postponement` on.
 - **D4 — `SESSION_RELATED` gains `subscription`** so `can_postpone` reads the subscription's status without a query per row.
 - **D5 — The Today board's `TodayRow` gains `start_time` and `minutes`** (local wall-clock and length of the row, from the slot or the session), so slotless rows need no slot; the payload reads them from the row. Slotless rows are only for postponed sessions with a subscription (an extra session without one has no board place, as before).
@@ -111,7 +111,7 @@ dashboard/
   src/features/scheduling/
     schemas.ts api.ts                            times, postpone, TodayRow (Task 9)
     TodayBoard.tsx                               postponed state, slotless rows (Task 9)
-    postponing.ts                                NEW: mayPostpone(session, me, limit, now) (Task 9)
+    postponing.ts                                NEW: mayPostpone(session), postponeClosed(session, now) (Task 9)
     TimesPanel.tsx PostponeDialog.tsx            NEW (Task 10)
     SessionPage.tsx                              Times panel, Postpone, "Postponed from" (Task 10)
     TeacherSessionTable.tsx FamilySessions.tsx   I'm in / I'm out, Postpone (Task 11)
@@ -718,7 +718,8 @@ Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
 - Produces (exported):
   - `Postponed` — frozen dataclass `(session: Session, conflicts: list[tuple[Session, Session]])`; `session` read from `sessions_queryset()`; `conflicts` empty for a non-office caller.
   - `postpone_session(session: Session, *, by, occurs_on: date, start_time: time) -> Postponed`
-  - `can_postpone(session: Session, viewer) -> bool` — the row-local check (D2), no query when `session.subscription` is select-related.
+  - `can_postpone(session: Session, viewer, *, limit_minutes: int, now: datetime | None = None) -> bool` — the row-local check plus the time limit for non-office viewers (D2); no query when `session.subscription` is select-related.
+  - `postpone_limit_minutes() -> int` — the academy's setting (one query).
   - `MAX_MOVE = timedelta(days=14)`.
 
 - [ ] **Step 1: Write the failing tests**
@@ -948,8 +949,18 @@ def test_it_locks_the_subscription_before_the_session(sub):
 def test_can_postpone_reads_only_the_row(sub, django_assert_num_queries):
     row = services.sessions_queryset().get(pk=upcoming(sub).pk)
     with django_assert_num_queries(0):
-        assert services.can_postpone(row, row.student.user) is True
-        assert services.can_postpone(row, None) is False
+        assert services.can_postpone(row, row.student.user, limit_minutes=120) is True
+        assert services.can_postpone(row, None, limit_minutes=120) is False
+
+
+def test_can_postpone_holds_non_office_viewers_to_the_limit(sub):
+    row = services.sessions_queryset().get(pk=upcoming(sub).pk)
+    edge = row.starts_at - timedelta(minutes=120)
+    student = row.student.user
+    assert services.can_postpone(row, student, limit_minutes=120, now=edge) is True
+    late = edge + timedelta(seconds=1)
+    assert services.can_postpone(row, student, limit_minutes=120, now=late) is False
+    assert services.can_postpone(row, make_admin(), limit_minutes=120, now=late) is True
 ```
 
 (`identity_services.link_guardian` is the Plan 3 service that links a parent: check its exact name in `etqan/identity/services` and use it.)
@@ -1015,12 +1026,26 @@ def _postponable(session: Session) -> bool:
     )
 
 
-def can_postpone(session: Session, viewer) -> bool:
-    """Plan 21 D2: everything B-6 / B-7 ask that the row itself holds. The
-    time limit is the dashboard's to apply (and the server's on submit)."""
+def postpone_limit_minutes() -> int:
+    """B-11: the academy's postponement limit (one query)."""
+    return rules.settings().postpone_limit_minutes
+
+
+def can_postpone(
+    session: Session, viewer, *, limit_minutes: int, now: datetime | None = None
+) -> bool:
+    """Plan 21 D2: everything B-6 / B-7 ask that the row itself holds, plus
+    the time limit for a non-office viewer. ``limit_minutes`` is read once
+    per request by the caller; the server checks everything again on
+    submit."""
     if viewer is None or role_of(viewer) is None:
         return False
-    if not (is_office(viewer) or role_of(viewer) in OWN_ROLES):
+    office = is_office(viewer)
+    if not (office or role_of(viewer) in OWN_ROLES):
+        return False
+    if not office and (now or dates.now()) > session.starts_at - timedelta(
+        minutes=limit_minutes
+    ):
         return False
     if session.payroll_locked or session.compensated or not _postponable(session):
         return False
@@ -1755,11 +1780,15 @@ class PostponeInput(serializers.Serializer):
             original_starts_at=session.original_starts_at,
             postponed_at=session.postponed_at,
             postponed_by=_user(session.postponed_by),
-            can_postpone=services.can_postpone(session, viewer),
+            can_postpone=services.can_postpone(
+                session, viewer, limit_minutes=limit
+            ),
         )
+        if not is_office(viewer):
+            row["postpone_until"] = session.starts_at - timedelta(minutes=limit)
 ```
 
-and make the office filter tolerant of absent keys: `row.pop(field, None)`. Import `from etqan.platform import features`. Add `"postponed_by"` and `"subscription"` to `rules.SESSION_RELATED` (D4).
+where `limit = postpone_limit if postpone_limit is not None else services.postpone_limit_minutes()` (computed only inside the `postponement` branch); `session_row` gains the keyword `postpone_limit: int | None = None`, and every **list** view that renders `session_row` per row (sessions list and CSV, my sessions, the subscription's sessions panel, family sessions, supervision list, missing reports) computes `services.postpone_limit_minutes()` once per request and passes it. Add a query-count test: the sessions list with `postponement` on issues the same number of queries for 1 and for 10 rows. Make the office filter tolerant of absent keys: `row.pop(field, None)`. Import `from etqan.platform import features`. Add `"postponed_by"` and `"subscription"` to `rules.SESSION_RELATED` (D4).
 
 Add:
 
@@ -1959,7 +1988,9 @@ Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
   - `TodayState` gains `"postponed"`; `TodayRow.slot_id: number | null`.
   - `TimesBody = Partial<Record<"teacher_in_at"|"teacher_out_at"|"student_in_at"|"student_out_at", string | null>> & { actual_minutes?: number | null }`; `PostponeBody = { occurs_on: string; start_time: string }`; `PostponedSession = { session: Session; conflicts: { session: Session; other: Session }[] }`.
   - `schedulingApi.recordTimes({ id, ...TimesBody }): Promise<Session>`, `schedulingApi.postpone({ id, ...PostponeBody }): Promise<PostponedSession>`.
-  - `mayPostpone(session: Session, opts: { office: boolean; limitMinutes: number; now: Date }): boolean` — `session.can_postpone === true` and, for non-office, `now <= starts_at − limit` (D2).
+  - `Session` also gains `postpone_until?: string` (non-office viewers).
+  - `mayPostpone(session: Session): boolean` — exactly `session.can_postpone === true` (D2: the server applies the limit).
+  - `postponeClosed(session: Session, now: Date): boolean` — `can_postpone` is false and `postpone_until` is set and in the past (drives the "postponing closed at …" line; never used to allow anything).
   - i18n `sessionTimes.*` (below).
 
 - [ ] **Step 1: Failing tests**
@@ -1969,37 +2000,27 @@ Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
 ```ts
 import { describe, expect, it } from "vitest";
 import { sessionRow } from "@/test/scheduling-fixtures";
-import { mayPostpone } from "./postponing";
+import { mayPostpone, postponeClosed } from "./postponing";
 
 const at = "2026-06-03T18:00:00Z";
+const until = "2026-06-03T16:00:00Z";
 
 describe("mayPostpone", () => {
-	it("needs the server's can_postpone", () => {
-		expect(
-			mayPostpone(sessionRow({ starts_at: at, can_postpone: false }), {
-				office: true,
-				limitMinutes: 120,
-				now: new Date("2026-06-01T00:00:00Z"),
-			}),
-		).toBe(false);
+	it("is exactly the server's can_postpone", () => {
+		expect(mayPostpone(sessionRow({ starts_at: at, can_postpone: false }))).toBe(false);
+		expect(mayPostpone(sessionRow({ starts_at: at, can_postpone: true }))).toBe(true);
+		expect(mayPostpone(sessionRow({ starts_at: at }))).toBe(false);
 	});
-	it("holds non-office viewers to the limit, to the second", () => {
-		const s = sessionRow({ starts_at: at, can_postpone: true });
-		const edge = new Date("2026-06-03T16:00:00Z");
-		expect(mayPostpone(s, { office: false, limitMinutes: 120, now: edge })).toBe(true);
-		expect(
-			mayPostpone(s, {
-				office: false,
-				limitMinutes: 120,
-				now: new Date(edge.getTime() + 1000),
-			}),
-		).toBe(false);
-	});
-	it("lets the office postpone any time", () => {
-		const s = sessionRow({ starts_at: at, can_postpone: true });
-		expect(
-			mayPostpone(s, { office: true, limitMinutes: 120, now: new Date(at) }),
-		).toBe(true);
+});
+
+describe("postponeClosed", () => {
+	it("is true only when refused and the server's deadline has passed", () => {
+		const closed = sessionRow({ starts_at: at, can_postpone: false, postpone_until: until });
+		expect(postponeClosed(closed, new Date("2026-06-03T16:00:01Z"))).toBe(true);
+		expect(postponeClosed(closed, new Date("2026-06-03T15:59:59Z"))).toBe(false);
+		const open = sessionRow({ starts_at: at, can_postpone: true, postpone_until: until });
+		expect(postponeClosed(open, new Date("2026-06-03T17:00:00Z"))).toBe(false);
+		expect(postponeClosed(sessionRow({ starts_at: at, can_postpone: false }), new Date(at))).toBe(false);
 	});
 });
 ```
@@ -2015,16 +2036,16 @@ describe("mayPostpone", () => {
 ```ts
 import type { Session } from "./schemas";
 
-/** Slice B2b (Plan 21 D2): the server says what the row allows; the time
- * limit comes from the academy's settings and binds everyone but the office. */
-export function mayPostpone(
-	session: Session,
-	{ office, limitMinutes, now }: { office: boolean; limitMinutes: number; now: Date },
-): boolean {
-	if (session.can_postpone !== true) return false;
-	if (office) return true;
-	const lastMoment = new Date(session.starts_at).getTime() - limitMinutes * 60_000;
-	return now.getTime() <= lastMoment;
+/** Slice B2b (Plan 21 D2): the server decides, the time limit included. */
+export function mayPostpone(session: Session): boolean {
+	return session.can_postpone === true;
+}
+
+/** True when the server refused and its deadline (`postpone_until`) has
+ * passed: drives the "postponing closed at …" line, never allows anything. */
+export function postponeClosed(session: Session, now: Date): boolean {
+	if (session.can_postpone !== false || !session.postpone_until) return false;
+	return now.getTime() > new Date(session.postpone_until).getTime();
 }
 ```
 
@@ -2121,13 +2142,13 @@ ar: same keys with Arabic text, e.g. `"title": "الأوقات"`, `"imIn": "دخ
 - Modify: `dashboard/src/features/scheduling/TeacherSessionTable.tsx` (+ test), `FamilySessions.tsx` (+ test)
 
 **Interfaces:**
-- Consumes: `TimesPanel` (teacher mode), `PostponeDialog` (office=false), `mayPostpone`, `useAcademySettings` (for `postpone_limit_minutes`), `useMe`.
+- Consumes: `TimesPanel` (teacher mode), `PostponeDialog` (office=false), `mayPostpone`, `postponeClosed`, `useMe`.
 
 - [ ] **Step 1: Failing tests**
   - Teacher table (upcoming/today): with `session_times` on, a started row shows "I'm in"; with `postponement` on and `can_postpone` true and `now` before `starts_at − limit`, the row shows "Postpone"; one minute after the limit it doesn't.
   - Family sessions (upcoming): the same for Postpone, and when `can_postpone` is true but the limit has passed, the line "It's too late to postpone this session." shows.
 
-- [ ] **Step 2: Run** → FAIL. **Step 3: Implement**: a column/cell `actions` on upcoming rows that renders `<TimesPanel session mode="teacher" />` (teacher table only, with `session_times`) and `<PostponeDialog session academyZone={zone} office={false} />` when `hasFeature("postponement") && mayPostpone(session, { office: false, limitMinutes: academy.postpone_limit_minutes, now: new Date() })`; the family list shows the too-late line when `session.can_postpone && !mayPostpone(...)`. Add `postpone_limit_minutes: number` to `AcademySettings` in `dashboard/src/features/academy/api.ts` and to the `academySettings()` fixture (default 120).
+- [ ] **Step 2: Run** → FAIL. **Step 3: Implement**: a column/cell `actions` on upcoming rows that renders `<TimesPanel session mode="teacher" />` (teacher table only, with `session_times`) and `<PostponeDialog session academyZone={zone} office={false} />` when `hasFeature("postponement") && mayPostpone(session)`; the family and teacher lists show the closed line ("Postponing closed at {time}") when `postponeClosed(session, new Date())`. Add `postpone_limit_minutes: number` to `AcademySettings` in `dashboard/src/features/academy/api.ts` and to the `academySettings()` fixture (default 120).
 
 - [ ] **Step 4: Run**, `tsc`, lint, coverage → PASS. **Step 5: Commit** ("feat(scheduling): I'm in/out and postpone for teachers, students and parents (B2b)").
 
