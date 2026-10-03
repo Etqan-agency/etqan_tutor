@@ -14,7 +14,7 @@ In flight: **—** · Queue: B3a · Next plan number: 20 · Conductor: aa12c664
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
 | B6 | Learning | waiting-deps |  |  |  | B2 |  |  |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
-| B8 | Marketing extras | spec | 3 | B8b | B8b spec review |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 2f141069 |
+| B8 | Marketing extras | plan | 3 | B8b | B8b plan |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 2f141069 |
 | B9 | Platform extras | build | 4 | B9a | Task 4 contracts |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | 60ad3859 |
 | B10 | AI | waiting-deps |  |  |  | B6 |  |  |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
