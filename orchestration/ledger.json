@@ -160,11 +160,11 @@
     },
     "B8c": {
       "phase": "B8",
-      "status": "spec",
+      "status": "build",
       "requires": [],
       "plan_number": 24,
       "spec": "docs/superpowers/specs/2026-10-03-b8c-articles-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-03-plan-24-articles.md",
       "prs": null,
       "bounces": 0
     },
