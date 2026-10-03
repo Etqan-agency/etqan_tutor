@@ -496,6 +496,16 @@
         "B8"
       ],
       "source": "spec 2026-10-03-platform-extras A-7, A-10"
+    },
+    {
+      "id": "D13",
+      "phase": "B3",
+      "decision": "Supersedes D4's interface text: other apps take online money via gateways.services.start_checkout(purpose, reference_id, provider, *, user, params=None) -> StartedCheckout{id, redirect_url, amount_minor, fee_minor, currency}, after register_purpose(name, *, prepare(reference_id, user, params) -> Prepared(amount_minor, currency, description, add_fee), complete(CompletedCheckout) -> Applied(ok, reason)) in AppConfig.ready(). A verified provider event (or, for PayPal from B3c, a verified server-side capture response) completes a checkout from any state but completed; money that cannot be applied stays as applied=false 'needs attention'. Stripe in B3b, PayPal in B3c.",
+      "affects": [
+        "B7",
+        "B11"
+      ],
+      "source": "spec 2026-10-03-b3b B-1, B-4, §4.2-4.3"
     }
   ],
   "requests": [],
