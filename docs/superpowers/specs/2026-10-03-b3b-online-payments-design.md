@@ -249,7 +249,7 @@ payment records list.
 |---|---|---|---|
 | `gateways/settings/` | GET, PATCH | `online_payments` | `gateway.view`, `gateway.update` |
 | `gateways/checkouts/` | GET | `online_payments` | `checkout.view_any` |
-| `gateways/checkouts/` | POST | `online_payments` | self-service, scoped by the purpose |
+| `gateways/checkouts/start/` | POST | `online_payments` | self-service, scoped by the purpose (plan D1) |
 | `gateways/checkouts/<uuid>/` | GET | — | creator or `checkout.view_any` |
 | `gateways/checkouts/<uuid>/resolve/` | POST | `online_payments` | `checkout.update` |
 | `gateways/webhooks/stripe/` | POST | — | public, signature-checked |
@@ -374,3 +374,38 @@ PayPal:
 - a named throttle scope for its webhook, since every verification costs two PayPal calls;
 - the observed currency (one of USD, EUR, SAR, AED, GBP, CAD) and locale fields;
 - a pending PayPal checkout expires after N hours.
+
+## 12. Amendments from planning and build (Plan 20)
+
+- **Start route** (§4.2, §5): `POST gateways/checkouts/start/`. The route-table test keys code-exempt
+  routes by view class, so the self-service start cannot share the coded list's view.
+- **Secrets** (B-5): `etqan.platform.secrets`. A missing key raises the platform's new `UnavailableError`
+  (503 with a code); dev and tests may derive the key from `SECRET_KEY`. A malformed key is reported as
+  `gateways.bad_key`, and `available()` is false for it.
+- **Fee** (B-6, B-7): `(amount × bp + 5000) // 10000`. For a three-digit currency the total is rounded up
+  to a multiple of 10 through the fee. With no fee, an amount Stripe cannot take leaves Stripe out of the
+  options. Whether Stripe also needs each line item to be a multiple of 10 is unverified (owner's live
+  smoke test).
+- **Attention codes** (B-11): `invoice_void`, `balance_below_amount`, `amount_mismatch`,
+  `currency_mismatch`, `mode_mismatch`, `purpose_unknown`, `reference_missing`, `already_recorded`.
+- **Validation errors** are 400s on their fields: `gateways.incomplete` is a 400 on `enabled`,
+  `gateways.mode_mismatch` a 400 on `mode`/`public_key`/`secret`, and `gateways.amount_too_small` a 400 on
+  `amount_minor`. Codes stay for 409 and 503. A provider failure is the platform's 502
+  (`ExternalServiceError`), not `gateways.provider_error`.
+- **Mode switch** (§4.1): a settings change that switches `mode` must carry a new `webhook_secret`, since
+  Stripe signs each mode with its own secret. Other changes never decrypt the stored secret.
+- **Starting** (B-8): starts for one (academy, purpose, reference) are serialised by a transaction-scoped
+  advisory lock that is never held across the provider call. A start meeting another one still at the
+  provider (under 2 minutes old) answers 409 `gateways.checkout_starting`. A pending checkout is reused
+  only by the same user, at the same price, in the account's current mode, and when under 23 hours old.
+- **Purposes** (§4.3): registering a second owner for a purpose name raises `ImproperlyConfigured`.
+- **Void invoices** stay void: deleting or refunding a payment never recalculates a void invoice.
+- **Simulator** (§4.6): it answers 409 `gateways.no_webhook_secret` when the signing secret is cleared,
+  and its event carries the account's mode.
+- **Expiry** (B-9) is local only: pending checkouts older than 25 hours are marked expired in the
+  database; no provider call is made.
+- **`can_pay_online`** is on the invoice detail only, not on list rows.
+- **The checkouts list's dates** are UTC days, since gateways reads no academy calendar.
+- **Seeds**: the demo academy gets a Stripe test account only when `GATEWAYS_SIMULATE` is on, so staging
+  (production settings) seeds none.
+
