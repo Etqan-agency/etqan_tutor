@@ -160,7 +160,7 @@
     },
     "B8c": {
       "phase": "B8",
-      "status": "build",
+      "status": "queued",
       "requires": [],
       "plan_number": 24,
       "spec": "docs/superpowers/specs/2026-10-03-b8c-articles-design.md",
@@ -623,7 +623,9 @@
       "status": "open"
     }
   ],
-  "queue": [],
+  "queue": [
+    "B8c"
+  ],
   "in_flight": "B9a",
   "main_heads": {
     "backend": "5bf7573c3435dd5727648b929a800faf4b337909",
