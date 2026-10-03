@@ -146,7 +146,9 @@ e2e *args:
       }
     fi
     npx --yes pnpm@10 exec playwright install chromium
-    npx --yes pnpm@10 exec playwright test {{args}}
+    # One worker, as in CI: the suite shares one seeded database (playwright.config.ts),
+    # and parallel specs race (features.spec switches demo's families off mid-families.spec).
+    npx --yes pnpm@10 exec playwright test --workers=1 {{args}}
 
 # manage.py in this stack's django container, for E2E_MANAGE: e2e/manage.ts
 # passes every argument shell-quoted, as it does for ssh, so `sh` unquotes them.
