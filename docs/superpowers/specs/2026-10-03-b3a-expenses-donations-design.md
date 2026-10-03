@@ -266,3 +266,23 @@ The demo academy has both features on through `BUILT` (A-2); `other` keeps the d
 - Gateway donations taken online (B3b), exchange-rate conversion of the totals (B3c).
 - Posting paid payslips as expenses: the call is B4's (A-8 provides the service).
 - Expense receipts or attachments, budgets, recurring expenses, charts.
+
+## 10. Amendments from planning (Plan 15)
+
+- **Donation methods** (A-6, §4.5): finance keeps the list as a static tuple in `finance.models`, and a test
+  pins it to `billing.services.MANUAL_PAYMENT_METHODS` plus `stripe` and `paypal`. Computing it from
+  billing's services while Django loads apps would make the models import billing's services.
+- **`posted` filter** (§4.3) accepts only `true` or `false`; any other value is a 400. A missing filter
+  means both kinds.
+- **Wiring** (§5):
+  - `FEATURE_WORDS` gets `"/expenses/"`, `"/donations/"` and `"/finance/summary/"`, since finance's routes
+    belong to two features.
+  - Finance's import rules are three new contracts under the B3 marker, not edits to the existing shared
+    line. They are: finance reaches billing only through its services; billing never imports finance;
+    finance's models are its own.
+- **PATCH** ignores `source`, `source_id` and `number` in the body, without an error.
+- **The posted-expense 409** is translated from `finance.json` by a finance helper; `errors.json` is left
+  alone.
+- **The home card** reads the `expenses` and `donations` flags from `me` and renders nothing when both are
+  off.
+- **Seeds** are in EGP, dated the first of the academy's current month.
