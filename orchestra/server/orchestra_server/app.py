@@ -150,7 +150,7 @@ class OrchestraServer(ThreadingHTTPServer):
 
 
 def make_server(port: int, token: str) -> OrchestraServer:
-    from . import routes_actions, routes_ledger  # noqa: F401 — registers its routes
+    from . import routes_actions, routes_ledger, routes_live  # noqa: F401 — registers its routes
 
     return OrchestraServer(port, token)
 
