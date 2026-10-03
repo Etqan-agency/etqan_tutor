@@ -38,7 +38,7 @@ In flight: **—** · Queue: — · Next plan number: 19
 | B9b | B9 | spec |  |  |  | 0 |
 | B9c | B9 | spec |  |  |  | 0 |
 | B9d | B9 | spec |  |  |  | 0 |
-| B3a | B3 | plan | 15 |  |  | 0 |
+| B3a | B3 | build | 15 |  |  | 0 |
 | B3b | B3 | spec |  |  |  | 0 |
 | B3c | B3 | spec |  |  |  | 0 |
 | B3d | B3 | spec |  |  |  | 0 |
