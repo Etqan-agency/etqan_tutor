@@ -2,14 +2,14 @@
   "phases": {
     "B2": {
       "title": "Scheduling depth",
-      "status": "plan",
+      "status": "build",
       "requires": [],
       "slot": 1,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b2",
       "branch": "feat/b2b-postponement",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2b",
-      "current_task": "B2b: committing spec + plan 21, amending phase spec",
+      "current_task": "B2b Task 1",
       "session": "a29a300d"
     },
     "B3": {
