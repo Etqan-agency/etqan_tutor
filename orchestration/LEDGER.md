@@ -82,6 +82,7 @@ In flight: **B3a** · Queue: B2a · Next plan number: 22 · Conductor: 26f4e8f3
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
+| R1 | B3 | scheduling | B2 | Optional, non-blocking (B3g): one line in dashboard/src/routes/_authed/scheduling.subscriptions.$subscriptionId.tsx rendering SubscriptionTermsCard exported from features/billing, once B3g merges. | open |
 
 ## Trunk heads
 

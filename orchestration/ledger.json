@@ -579,7 +579,16 @@
       "source": "spec 2026-10-03-b3g G-18, G-19; ledger D10"
     }
   ],
-  "requests": [],
+  "requests": [
+    {
+      "id": "R1",
+      "from": "B3",
+      "app": "scheduling",
+      "to_owner": "B2",
+      "what": "Optional, non-blocking (B3g): one line in dashboard/src/routes/_authed/scheduling.subscriptions.$subscriptionId.tsx rendering SubscriptionTermsCard exported from features/billing, once B3g merges.",
+      "status": "open"
+    }
+  ],
   "queue": [
     "B2a"
   ],
