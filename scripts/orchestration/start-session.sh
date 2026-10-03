@@ -44,7 +44,8 @@ args+=(--strict-mcp-config)
 [ -z "$model" ] || args+=(--model "$model")
 [ -z "$effort" ] || args+=(--effort "$effort")
 out="$(cd "$dir" && claude "${args[@]}" "$prompt")"
-id="$(sed -n 's/^backgrounded · \([0-9a-f]\{1,\}\) · .*/\1/p' <<<"$out" | head -n 1)"
+# It colours the id when it thinks it has a terminal: drop ANSI escapes first.
+id="$(sed -n -e $'s/\e\\[[0-9;]*m//g' -e 's/^backgrounded · \([0-9a-f]\{1,\}\) · .*/\1/p' <<<"$out" | head -n 1)"
 [ -n "$id" ] || { echo "could not read the session id from: $out" >&2; exit 1; }
 if [ "$who" = conductor ]; then
   "${ledger[@]}" conductor --session "$id" >/dev/null

@@ -46,6 +46,12 @@ grep -qx -- "plan" "$tmp/claude.log" || fail "conductor mode"
 grep -qx -- "--strict-mcp-config" "$tmp/claude.log" || fail "conductor: no --strict-mcp-config"
 grep -qx -- "$main/.mcp.json" "$tmp/claude.log" || fail "conductor: not the main checkout's .mcp.json"
 
+# `claude --bg` colours the id when it thinks it has a terminal; the id is still read.
+FAKE_CLAUDE_OUT=$'backgrounded \u00b7 \e[36mee90aa12\e[39m \u00b7 etqan-B3\n\e[2m  claude agents  list sessions\e[22m' \
+  bash "$script" B3 >/dev/null || fail "coloured output refused"
+[ "$(session_of B3)" = ee90aa12 ] || fail "coloured id: $(session_of B3)"
+bash "$script" B3 >/dev/null
+
 # A worktree with no .mcp.json still gets no project MCP servers, so no approval prompt can block it.
 rm "$tmp/wt/b3/.mcp.json"
 bash "$script" B3 >/dev/null
