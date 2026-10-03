@@ -366,14 +366,14 @@
       "phase": "B3",
       "status": "spec",
       "requires": [],
-      "plan_number": null,
+      "plan_number": 26,
       "spec": "docs/superpowers/specs/2026-10-03-b3g-links-records-design.md",
       "plan": null,
       "prs": null,
       "bounces": 0
     }
   },
-  "next_plan_number": 26,
+  "next_plan_number": 27,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
