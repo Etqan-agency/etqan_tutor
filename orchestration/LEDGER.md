@@ -8,7 +8,7 @@ In flight: **—** · Queue: — · Next plan number: 19 · Conductor: aa12c664
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | build | 1 | B2a | B2a T2: consumption/payroll/deletions |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | b56a274c |
+| B2 | Scheduling depth | build | 1 | B2a | B2a T3: manual.py create services |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | b56a274c |
 | B3 | Money depth | build | 2 | B3a | Task 1 |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | 8b61efa3 |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
