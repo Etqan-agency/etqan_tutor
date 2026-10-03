@@ -101,8 +101,8 @@
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b9",
       "branch": "feat/b9a-platform",
       "spec": null,
-      "current_slice": null,
-      "current_task": null,
+      "current_slice": "B9a",
+      "current_task": "brainstorm phase spec",
       "session": "60ad3859"
     },
     "B10": {
