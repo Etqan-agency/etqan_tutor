@@ -19,9 +19,10 @@ is designed from the audits, unobserved behaviour marked `[assumed]`.
 
 ## Next
 
-Run `just orchestra` and start the conductor and the wave-1 sessions from it (or `bash
-scripts/orchestration/start-session.sh <CODE|conductor>`).
-Wave 1: B2 scheduling depth, B3 money depth, B8 marketing extras, B9 platform extras, slots 1–4.
+Wave 1 is running (conductor + B2 scheduling depth, B3 money depth, B8 marketing extras, B9
+platform extras on slots 1–4). Merged so far: B8a site settings depth (plan 16, 2026-10-03); the
+rest is in the ledger and `orchestration/MERGES.md`. Restart a session with `bash
+scripts/orchestration/start-session.sh <CODE|conductor>` or from `just orchestra`.
 Each phase adds lines to shared lists only under its own `── phase Bn ──` marker, registers every new
 feature in `etqan.platform.features` (off by default), and never runs `git submodule update` in its
 worktree. A switch is read only through `etqan.platform.features` and written only by
