@@ -528,6 +528,16 @@
         "B11"
       ],
       "source": "spec 2026-10-03-b2d-archives D-2 (draft, B2d branch); P1 BR-46"
+    },
+    {
+      "id": "D15",
+      "phase": "B2",
+      "decision": "Until B4 decides group pay, today's payroll rule pays a group class once per student row (D6), since payroll_sessions is unchanged. B2f also adds an optional member_id to etqan.platform ConflictError/ValidationError (additive; the exception handler adds it to the body when set).",
+      "affects": [
+        "B4",
+        "B11"
+      ],
+      "source": "spec 2026-10-03-b2f-bundles-groups §10, §4.6 (draft, B2f branch)"
     }
   ],
   "requests": [],
