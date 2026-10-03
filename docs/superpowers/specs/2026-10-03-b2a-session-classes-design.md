@@ -74,7 +74,8 @@ happened). `meeting_url` optional: else the teacher's default. `notes` optional.
 | `extra` | `student`, `course`, `teacher`, `occurs_on`, `start_time`, `minutes` | A-7; 400 on the failing field. `subscription` optional, the student's (400). `pays_teacher` optional, default true. |
 | `compensation` | `compensates`, `occurs_on`, `start_time` | The original is locked; it must qualify (A-3; else 409 `scheduling.not_compensable`, or `scheduling.already_compensated` when it has a live one). Student, course and subscription from it; `teacher` (an active teacher who teaches the course) and `minutes` default to it. Sets the original's `compensated`. |
 
-The kind's switch must be on, else 404 (checked after the permission, before validation, as Plan 13 does). The new
+The kind's switch must be on, else 404 (checked after the permission, before validation, as Plan 13 does; each kind has its own route, so each route
+declares one feature). The new
 session is `scheduled`, `generated = false`, `created_by = by`, `pays_teacher` as given (default true), with the
 subscription's supervisor when it has one (Plan 12b). The answer includes `conflicts`: the teacher's other
 non-cancelled sessions that overlap it (reported, never blocked, P4-9).
@@ -125,8 +126,8 @@ subscription never counted and still don't.
 
 ### 4.7 `pays_teacher`
 
-Set on create and changed by the office through `PATCH sessions/<id>/` while the session is not payroll-locked
-(409 `payroll.payslip_issued`). `payroll_sessions` filters `pays_teacher=True`.
+Set on create and changed by the office through `POST sessions/<id>/pays-teacher/` while the session is not
+payroll-locked (409 `payroll.payslip_issued`). `PATCH sessions/<id>/` stays supervision's (its feature is `supervision`). `payroll_sessions` filters `pays_teacher=True`.
 
 ## 5. Access
 
@@ -135,7 +136,7 @@ Set on create and changed by the office through `PATCH sessions/<id>/` while the
 | Add a session (any kind) | `session.create` | | |
 | Delete a hand-added session | `session.delete` | | |
 | Place at disposal | `session.update` | | |
-| Change `pays_teacher` | `session.update` | | |
+| Change `pays_teacher` (`extra_sessions` on) | `session.update` | | |
 | Read kind and compensation links | ✓ | ✓ (own) | ✓ (own) |
 
 `session.create` is already in the resource's `in_use`; `delete` is added (phase §4).
@@ -147,9 +148,11 @@ alone sees `pays_teacher`, `compensated`, `created_by {id, full_name} | null` an
 
 | Route | Method | Notes |
 |---|---|---|
-| `sessions/` | POST | `{kind, subscription?, compensates?, student?, course?, teacher?, occurs_on, start_time, minutes?, meeting_url?, pays_teacher?, notes?}`. Feature per kind. `201` with `{session, conflicts}`. People by User id, as elsewhere. |
+| `sessions/regular/` | POST | `{subscription, occurs_on, start_time, teacher?, minutes?, meeting_url?, pays_teacher?, notes?}`. Feature `manual_sessions`. `201` with `{session, conflicts}`. People by User id, as elsewhere. |
+| `sessions/extra/` | POST | `{student, course, teacher, occurs_on, start_time, minutes, subscription?, meeting_url?, pays_teacher?, notes?}`. Feature `extra_sessions`. Same answer. |
+| `sessions/compensation/` | POST | `{compensates, occurs_on, start_time, teacher?, minutes?, meeting_url?, pays_teacher?, notes?}`. Feature `compensation_sessions`. Same answer. |
 | `sessions/` | GET | New filter `kind` (`regular · compensation · extra`); `status` accepts `at_disposal`. CSV adds a Kind column. |
-| `sessions/<id>/` | PATCH | Adds `pays_teacher` (`session.update`); supervision fields unchanged. |
+| `sessions/<id>/pays-teacher/` | POST | `{pays_teacher}` (`session.update`). Feature `extra_sessions`. Returns the session. |
 | `sessions/<id>/` | DELETE | §4.2. `204`. No feature check (A-13). |
 | `sessions/<id>/disposal/` | POST | `{reason?}`. Feature `disposal_status`. |
 | `sessions/<id>/restore/` | POST | Also from `at_disposal`; compensation rules of §4.6. |
