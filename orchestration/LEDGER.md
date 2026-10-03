@@ -23,6 +23,7 @@ In flight: **—** · Queue: — · Next plan number: 15
 
 | Slice | Phase | Status | Plan | Requires | PRs | Bounces |
 |---|---|---|---|---|---|---|
+| B8a | B8 | spec |  |  |  | 0 |
 
 ## Open escalations
 
