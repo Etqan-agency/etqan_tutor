@@ -568,6 +568,15 @@
         "B11"
       ],
       "source": "spec 2026-10-03-b3c C-7/C-8/C-11/C-13; b3g G-15, G-22"
+    },
+    {
+      "id": "D18",
+      "phase": "B3",
+      "decision": "Confirms D10: SUB-006 payment type/subscription system live in billing.SubscriptionTerms keyed by subscription id; B2 adds no fields or hooks; a renewal starts from defaults; office-only metadata nothing reads.",
+      "affects": [
+        "B2"
+      ],
+      "source": "spec 2026-10-03-b3g G-18, G-19; ledger D10"
     }
   ],
   "requests": [],
