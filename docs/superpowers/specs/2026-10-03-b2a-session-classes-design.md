@@ -83,7 +83,7 @@ non-cancelled sessions that overlap it (reported, never blocked, P4-9).
 ### 4.2 Deleting a hand-added session (office)
 
 A-10. Refusals, checked in this order: `payroll.payslip_issued`; `scheduling.session_generated`;
-`scheduling.has_compensation` (it is `compensated`); `scheduling.session_marked` (an attendance is set);
+`scheduling.has_compensation` (it is `compensated`, or any compensation — even a cancelled one — points at it); `scheduling.session_marked` (an attendance is set);
 `scheduling.not_allowed_in_status` (`completed` or `cancelled`). Deleting a compensation clears its original's
 `compensated`.
 
