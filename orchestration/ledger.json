@@ -602,6 +602,15 @@
         "B3"
       ],
       "source": "spec 2026-10-03-b9b-sign-in S-2a; ledger D4"
+    },
+    {
+      "id": "D21",
+      "phase": "B9",
+      "decision": "Self-registration (B9c) stores scheduling preferences (start date, hours/week, preferred days, intro-call time, teacher gender) on registration.Registration; B2's trial intake may read them through registration.services.preferences(registration_id). B9c books nothing itself.",
+      "affects": [
+        "B2"
+      ],
+      "source": "spec 2026-10-03-b9c-registration R-3"
     }
   ],
   "requests": [

@@ -77,6 +77,7 @@ In flight: **B2a** · Queue: B8b, B9a · Next plan number: 24 · Conductor: 04a3
 | D18 | B3 | Confirms D10: SUB-006 payment type/subscription system live in billing.SubscriptionTerms keyed by subscription id; B2 adds no fields or hooks; a renewal starts from defaults; office-only metadata nothing reads. | B2 | spec 2026-10-03-b3g G-18, G-19; ledger D10 |
 | D19 | B9 | Impersonation (B9b quick login): etqan.platform.permissions.impersonator_id(request) -> int\|None and the DRF permission NotImpersonating. Money-moving and messaging actions (payments, checkout, payment links, chat, broadcasts) add NotImpersonating so an admin signed in as someone else cannot pay, message or broadcast as them. | B3, B5, B7, B11 | spec 2026-10-03-b9b-sign-in S-9b |
 | D20 | B9 | Secrets at rest: etqan.platform.secrets.encrypt/decrypt (Fernet under env ETQAN_SECRETS_KEY, D4's key) is the one helper; whichever of B3b and B9b lands first builds it in etqan.platform, the other reuses it. | B3 | spec 2026-10-03-b9b-sign-in S-2a; ledger D4 |
+| D21 | B9 | Self-registration (B9c) stores scheduling preferences (start date, hours/week, preferred days, intro-call time, teacher gender) on registration.Registration; B2's trial intake may read them through registration.services.preferences(registration_id). B9c books nothing itself. | B2 | spec 2026-10-03-b9c-registration R-3 |
 
 ## Claims and requests
 
