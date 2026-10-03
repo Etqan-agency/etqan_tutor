@@ -88,9 +88,9 @@
       "slot": 3,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b8",
       "branch": "feat/b8a-marketing",
-      "spec": null,
-      "current_slice": null,
-      "current_task": null,
+      "spec": "docs/superpowers/specs/2026-10-03-marketing-extras-design.md",
+      "current_slice": "B8a",
+      "current_task": "spec review",
       "session": "2f141069"
     },
     "B9": {
