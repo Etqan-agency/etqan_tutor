@@ -14,7 +14,7 @@ In flight: **B8c** · Queue: B2b · Next plan number: 26 · Conductor: 04a3f739
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
 | B6 | Learning | waiting-deps |  |  |  | B2 |  |  |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
-| B8 | Marketing extras | queued | 3 | B8c | queued B8c |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 2f141069 |
+| B8 | Marketing extras | queued | 3 | B8c | B8c PRs open, awaiting merge |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 2f141069 |
 | B9 | Platform extras | build | 4 | B9b | Task 5 sign-in rework |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | 60ad3859 |
 | B10 | AI | waiting-deps |  |  |  | B6 |  |  |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
