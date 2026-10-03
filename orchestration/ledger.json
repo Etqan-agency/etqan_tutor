@@ -260,11 +260,13 @@
     },
     "B9b": {
       "phase": "B9",
-      "status": "spec",
-      "requires": [],
+      "status": "plan",
+      "requires": [
+        "B9a"
+      ],
       "plan_number": 23,
       "spec": "docs/superpowers/specs/2026-10-03-b9b-sign-in-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-03-plan-23-sign-in.md",
       "prs": null,
       "bounces": 0
     },
