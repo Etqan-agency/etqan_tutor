@@ -260,7 +260,7 @@
     },
     "B9b": {
       "phase": "B9",
-      "status": "plan",
+      "status": "build",
       "requires": [
         "B9a"
       ],
