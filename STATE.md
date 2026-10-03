@@ -21,7 +21,7 @@ is designed from the audits, unobserved behaviour marked `[assumed]`.
 
 Wave 1 is running (conductor + B2 scheduling depth, B3 money depth, B8 marketing extras, B9
 platform extras on slots 1–4). Merged so far (2026-10-03): B8a site settings depth (plan 16), B3a expenses & donations
-(plan 15), B2a session classes (plan 17), B8b FAQs/ads/redirects (plan 19); the rest is in the ledger and `orchestration/MERGES.md`. Restart a session with `bash
+(plan 15), B2a session classes (plan 17), B8b FAQs/ads/redirects (plan 19), B9a uploads/files/contracts/system status (plan 18); the rest is in the ledger and `orchestration/MERGES.md`. Restart a session with `bash
 scripts/orchestration/start-session.sh <CODE|conductor>` or from `just orchestra`.
 Each phase adds lines to shared lists only under its own `── phase Bn ──` marker, registers every new
 feature in `etqan.platform.features` (off by default), and never runs `git submodule update` in its
