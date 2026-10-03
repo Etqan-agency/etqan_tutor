@@ -9,7 +9,7 @@ In flight: **—** · Queue: — · Next plan number: 15
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec |
 |---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | spec | 1 |  |  |  |  |
-| B3 | Money depth | waiting-deps |  |  |  |  |  |
+| B3 | Money depth | spec | 2 |  |  |  |  |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |
 | B6 | Learning | waiting-deps |  |  |  | B2 |  |
