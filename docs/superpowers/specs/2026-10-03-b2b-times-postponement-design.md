@@ -186,6 +186,12 @@ on with `features.BUILT`. Idempotent; `other` gets nothing.
 - For compensation and extra sessions (no window) the 14-day cap counts from the current start, so repeated moves can
   push them further.
 
+- A renewal deletes a postponed lesson whose original slot date it regenerates (B-5); if that slot was deactivated
+  after the postponement, the renewal does not copy it and the date is not recreated (narrow: a grace-period lesson, a
+  deactivated slot, then a renewal).
+- A lesson postponed from a date on or after the renewal's start that is already marked (or was moved to a past time
+  and left unmarked) is kept, and the renewal also generates that date (as B2a does for marked generated sessions).
+
 ## 11. Out of scope
 
 The activity log and revert (B2c); archives (B2d); trials and availability (B2e); bundles and groups (B2f); weekly
