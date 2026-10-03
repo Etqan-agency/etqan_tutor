@@ -58,7 +58,7 @@ tests `backend/etqan/site/tests/test_articles_models.py`, `backend/etqan/access/
 `services.public_articles(today)` (queryset), `services.public_categories(today)`, `services.ip_key(ip: str) -> str`,
 `MAX_CATEGORIES = 100`, `ARTICLE_BODY_MAX = 50_000`.
 
-- [ ] Tests: status around midnight in Africa/Cairo (patch `services.now`); `public_articles` excludes draft,
+- [x] Tests: status around midnight in Africa/Cairo (patch `services.now`); `public_articles` excludes draft,
   scheduled, other academies; `public_categories` only those with a public article, ordered `order, id`;
   `ip_key("203.0.113.9") == "203.0.113.9"`, `ip_key("2001:db8:1:2:3:4:5:6") == ip_key("2001:db8:1:2:ffff::1")`
   (same /64), different /64 differs, garbage → `"unknown"`; registry/resources per Global Constraints;
@@ -79,7 +79,7 @@ def ip_key(ip: str) -> str:
     return str(addr)
 ```
 
-- [ ] Implement, generate the migration, run site/platform/access, lint, boundaries; commit
+- [x] Implement, generate the migration, run site/platform/access, lint, boundaries; commit
   `feat(site): article and article-category models; articles feature and resources`.
 
 ### Task 2: Admin API
@@ -87,7 +87,7 @@ def ip_key(ip: str) -> str:
 **Files:** `admin_serializers.py`, `admin_views.py`, `api/urls.py`, `backend/etqan/access/tests/test_routes.py`;
 test `backend/etqan/site/tests/test_admin_articles.py`.
 
-- [ ] Categories CRUD `/api/v1/site/admin/article-categories/` (unpaginated, cap 100, slug unique, delete in use
+- [x] Categories CRUD `/api/v1/site/admin/article-categories/` (unpaginated, cap 100, slug unique, delete in use
   → `ConflictError` "This category has N articles; move or delete them first." → 409). Articles CRUD
   `/api/v1/site/admin/articles/` (`pagination_class = StandardPagination` with `page_size = 25`; filters
   `?status=draft|scheduled|published`, `?category=<id>`; read-only `status`, `views`, `reactions`,
@@ -96,10 +96,10 @@ test `backend/etqan/site/tests/test_admin_articles.py`.
   saves via `save(update_fields=[editable…, "updated_at"])`). `[HasCode, FeatureOn]`, `feature="articles"`,
   `viewset_codes("article")` / `("article_category")`. Route table: append ROUTES, FEATURES, FEATURE_WORDS
   (`"/site/admin/articles/"` and `"/site/admin/article-categories/"` → `articles`).
-- [ ] Tests: CRUD and validation for both; 409 on in-use delete; filters; pagination envelope; cover lifecycle
+- [x] Tests: CRUD and validation for both; 409 on in-use delete; filters; pagination envelope; cover lifecycle
   (`default_storage.exists`); **counter safety** — load an article, increment `reactions` with `F()` in between,
   PATCH the title → reactions keep the increment; staff without codes 403, feature off 404.
-- [ ] Commit `feat(site): admin articles and categories`.
+- [x] Commit `feat(site): admin articles and categories`.
 
 ### Task 3: Public API and beacons
 
@@ -137,22 +137,22 @@ def react(article, ip: str) -> tuple[bool, int]:
   client IP from DRF's `SimpleRateThrottle().get_ident(request)` pattern (respects `NUM_PROXIES`) — put a small
   `client_ip(request)` helper in `etqan/site/throttling.py`; closed → 403 `site.closed`; feature off / not public
   → 404. Public GETs extend `PublicView`; unknown/empty `?category` → 404; page out of range → 404.
-- [ ] Tests: shapes; feature off/closed/draft/scheduled; pagination (12, envelope, page past end 404,
+- [x] Tests: shapes; feature off/closed/draft/scheduled; pagination (12, envelope, page past end 404,
   `page_size` ignored); category 404; sitemap shape/cap/order; views and reactions counted once per window per IP
   key, again from another IP, IPv6 same /64 once; form-encoded POST → 415; closed → 403; `updated_at` unchanged
   by counting; `has_articles` true/false.
-- [ ] Commit `feat(site): public articles API, view and reaction beacons`.
+- [x] Commit `feat(site): public articles API, view and reaction beacons`.
 
 ### Task 4: Seeds
 
 **Files:** `services.py` (seed helpers `seed_article_category`, `seed_article`, validated via `full_clean`,
 allow-listed fields, dev-only docstrings), `backend/etqan/tenants/seeds/b8.py`; tests.
 
-- [ ] Demo: categories `tajweed` ("التجويد" / "Tajweed", 📖) and `study-tips` ("نصائح الدراسة" / "Study tips",
+- [x] Demo: categories `tajweed` ("التجويد" / "Tajweed", 📖) and `study-tips` ("نصائح الدراسة" / "Study tips",
   💡); articles `learning-tajweed-at-home` (− 7 days), `five-study-habits` (− 1 day), `ramadan-schedule`
   (+ 30 days, moved forward on each seed); short bilingual summaries and `<p>` bodies; covers generated (Pillow
   1200×675 in the primary colour) only when missing. Idempotent by slug; `other` untouched.
-- [ ] Commit `feat(site): demo articles`.
+- [x] Commit `feat(site): demo articles`.
 
 ### Task 5: Marketing
 
@@ -165,13 +165,13 @@ allow-listed fields, dev-only docstrings), `backend/etqan/tenants/seeds/b8.py`; 
 (button + inline script posting JSON to `/api/v1/site/articles/<slug>/react/`, `localStorage` pressed state;
 view beacon posted on load), `Header.astro` (link), `sitemap.xml.ts`, `i18n.ts`; tests `marketing/test/articles.test.ts`.
 
-- [ ] Tests: list/category/detail in both languages; `?page` validation (`abc`, `0`, `99999` → 404 in layout);
+- [x] Tests: list/category/detail in both languages; `?page` validation (`abc`, `0`, `99999` → 404 in layout);
   `noindex,follow` on page ≥ 2; OG `article` tags, cover/share fallback, keywords fallback; JSON-LD Article
   fields with a `</script>` title escaped; the inline script posts JSON (`Content-Type: application/json`) and is
   absent when JS-off markup is checked (button hidden by default, shown by the script); header link only with
   `has_articles`; sitemap adds index, categories, articles with `<lastmod>`, and B8b's redirect filter drops a
   redirected article URL; missing `has_articles` → false; backend 404 → academy 404.
-- [ ] Commit `feat: articles on the public site`.
+- [x] Commit `feat: articles on the public site`.
 
 ### Task 6: Dashboard
 
@@ -181,21 +181,21 @@ view beacon posted on load), `Header.astro` (link), `sitemap.xml.ts`, `i18n.ts`;
 `feature: "articles"`), `features/identity/schemas.ts` (`FeatureCode` += `"articles"`), `routes/permissions.test.ts`
 (FEATURE_SCREENS + FEATURE_WORDS), locales `website.json`, `routeTree.gen.ts` (generated).
 
-- [ ] Tests: list with pager (25), status and category filters, status badge; editor create/edit with both
+- [x] Tests: list with pager (25), status and category filters, status badge; editor create/edit with both
   languages (rich text body via `RichTextEditor`), SEO section with counters read-only, cover upload and clear
   (multipart only when a file is sent), slug-change hint shown when the slug of a saved article is edited;
   categories CRUD and the 409 message on delete; gating by code and feature (tab, route `staticData`, index).
-- [ ] Commit `feat(website): articles and categories`.
+- [x] Commit `feat(website): articles and categories`.
 
 ### Task 7: e2e
 
 **Files:** `dashboard/e2e/b8-articles.spec.ts`.
 
-- [ ] Demo admin creates category `b8c-<stamp>` and article `b8c-<stamp>` (`publish_on` = yesterday, published);
+- [x] Demo admin creates category `b8c-<stamp>` and article `b8c-<stamp>` (`publish_on` = yesterday, published);
   poll (≤ 90 s) `/en/articles/b8c-<stamp>` shows the title; press Helpful once → `{counted: true}`; reload shows
   the count; `afterAll` (fresh context, API by id, article before category, plus a sweep of `b8c-` slugs).
   Run `just e2e b8-articles` then the full `just e2e`. Commit `test(e2e): B8c articles`.
 
 ### Task 8: Slice wrap-up
 
-- [ ] Gates one at a time; final whole-slice review; fix wave; `queue B8c`.
+- [x] Gates one at a time; final whole-slice review; fix wave; `queue B8c`.
