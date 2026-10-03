@@ -60,6 +60,7 @@ In flight: **—** · Queue: — · Next plan number: 17
 | D5 | B3 | Revenue = completed payment records only (BR-47); donations are not revenue; net profit = revenue - expenses per currency per academy month (BR-48); never summed across currencies. | B4, B7 | P1 BR-47/48; spec 2026-10-03-b3 B3-5 |
 | D6 | B2 | Group classes are one Session row per roster student (same time, linked by the group), each with its own attendance and consumption; how a teacher is paid for a group class is B4's | B4, B5, B6, B11 | spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-2 |
 | D7 | B2 | Subscription keeps its meaning (one student, course, teacher, package). Multi-course, family and group subscriptions are a bundle grouping several Subscriptions; billing, payroll and notifications keep reading single subscriptions | B3, B4, B5, B6, B11 | spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-3 |
+| D8 | B2 | Session.kind regular\|compensation\|extra\|trial; only regular and compensation (not compensated) consume the package; status gains at_disposal (never consumes; today's payroll rule does not pay it) | B4, B5, B6, B11 | spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-4, B2-6 |
 
 ## Claims and requests
 

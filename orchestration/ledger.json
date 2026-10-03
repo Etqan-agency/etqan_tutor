@@ -428,6 +428,18 @@
         "B11"
       ],
       "source": "spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-3"
+    },
+    {
+      "id": "D8",
+      "phase": "B2",
+      "decision": "Session.kind regular|compensation|extra|trial; only regular and compensation (not compensated) consume the package; status gains at_disposal (never consumes; today's payroll rule does not pay it)",
+      "affects": [
+        "B4",
+        "B5",
+        "B6",
+        "B11"
+      ],
+      "source": "spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-4, B2-6"
     }
   ],
   "requests": [],
