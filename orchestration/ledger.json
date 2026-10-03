@@ -83,14 +83,14 @@
     },
     "B8": {
       "title": "Marketing extras",
-      "status": "review",
+      "status": "queued",
       "requires": [],
       "slot": 3,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b8",
       "branch": "feat/b8a-marketing",
       "spec": "docs/superpowers/specs/2026-10-03-marketing-extras-design.md",
       "current_slice": "B8a",
-      "current_task": "gates (stopped: low memory)",
+      "current_task": "queued B8a",
       "session": "2f141069"
     },
     "B9": {
