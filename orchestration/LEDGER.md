@@ -59,6 +59,7 @@ In flight: **—** · Queue: — · Next plan number: 17
 | D4 | B3 | Online payments live in new app etqan.gateways (Stripe + PayPal, each academy's own merchant keys, Fernet-encrypted under env ETQAN_SECRETS_KEY). Other apps take online money only via gateways.services.start_checkout(purpose, ...) with a per-purpose completion handler registered by the owning app; only the provider webhook (/api/v1/gateways/webhooks/<provider>/) marks a checkout paid. Exact signature fixed by B3b's spec. | B7, B11 | spec 2026-10-03-b3 B3-6/B3-7 |
 | D5 | B3 | Revenue = completed payment records only (BR-47); donations are not revenue; net profit = revenue - expenses per currency per academy month (BR-48); never summed across currencies. | B4, B7 | P1 BR-47/48; spec 2026-10-03-b3 B3-5 |
 | D6 | B2 | Group classes are one Session row per roster student (same time, linked by the group), each with its own attendance and consumption; how a teacher is paid for a group class is B4's | B4, B5, B6, B11 | spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-2 |
+| D7 | B2 | Subscription keeps its meaning (one student, course, teacher, package). Multi-course, family and group subscriptions are a bundle grouping several Subscriptions; billing, payroll and notifications keep reading single subscriptions | B3, B4, B5, B6, B11 | spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-3 |
 
 ## Claims and requests
 

@@ -415,6 +415,19 @@
         "B11"
       ],
       "source": "spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-2"
+    },
+    {
+      "id": "D7",
+      "phase": "B2",
+      "decision": "Subscription keeps its meaning (one student, course, teacher, package). Multi-course, family and group subscriptions are a bundle grouping several Subscriptions; billing, payroll and notifications keep reading single subscriptions",
+      "affects": [
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B11"
+      ],
+      "source": "spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-3"
     }
   ],
   "requests": [],
