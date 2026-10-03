@@ -475,6 +475,17 @@
         "B11"
       ],
       "source": "spec 2026-10-03-platform-extras B9-6"
+    },
+    {
+      "id": "D12",
+      "phase": "B9",
+      "decision": "etqan.platform.uploads (B9a) offers shared upload checks: extension + content signature table, size cap, Pillow re-encode of PNG/JPEG/WEBP, tenant_upload_path. Available for reuse; no phase is required to switch to it. Private (non-public) files use STORAGES['private'] (DJANGO_S3_PRIVATE_BUCKET in production).",
+      "affects": [
+        "B6",
+        "B7",
+        "B8"
+      ],
+      "source": "spec 2026-10-03-platform-extras A-7, A-10"
     }
   ],
   "requests": [],

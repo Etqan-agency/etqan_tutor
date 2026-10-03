@@ -64,6 +64,7 @@ In flight: **—** · Queue: — · Next plan number: 18
 | D9 | B2 | Session.pays_teacher (default true): scheduling.payroll_sessions leaves out sessions with it off; a hand-added session in an issued month is paid as a later adjustment (P7-4) | B4 | spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md B2-5; B2a A-15 |
 | D10 | B2 | SUB-006 payment type (prepaid/postpaid) and subscription system (normal/monthly) are B3's payment metadata, not B2's | B3 | spec docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md §3 |
 | D11 | B9 | Spanish arrives in B9d (dashboard + emails). Other phases add en and ar strings only; a missing es string falls back to English per key; the ar/en key-equality test is unchanged; the public site stays ar/en in B9. | B2, B3, B4, B5, B6, B7, B8, B10, B11 | spec 2026-10-03-platform-extras B9-6 |
+| D12 | B9 | etqan.platform.uploads (B9a) offers shared upload checks: extension + content signature table, size cap, Pillow re-encode of PNG/JPEG/WEBP, tenant_upload_path. Available for reuse; no phase is required to switch to it. Private (non-public) files use STORAGES['private'] (DJANGO_S3_PRIVATE_BUCKET in production). | B6, B7, B8 | spec 2026-10-03-platform-extras A-7, A-10 |
 
 ## Claims and requests
 
