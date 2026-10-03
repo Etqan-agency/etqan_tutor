@@ -192,7 +192,7 @@
       "phase": "B2",
       "status": "plan",
       "requires": [],
-      "plan_number": null,
+      "plan_number": 17,
       "spec": "docs/superpowers/specs/2026-10-03-b2a-session-classes-design.md",
       "plan": null,
       "prs": null,
@@ -339,7 +339,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 17,
+  "next_plan_number": 18,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
