@@ -312,7 +312,7 @@
       "phase": "B3",
       "status": "spec",
       "requires": [],
-      "plan_number": null,
+      "plan_number": 22,
       "spec": "docs/superpowers/specs/2026-10-03-b3c-paypal-design.md",
       "plan": null,
       "prs": null,
@@ -369,7 +369,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 22,
+  "next_plan_number": 23,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
