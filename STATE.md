@@ -19,6 +19,8 @@ is designed from the audits, unobserved behaviour marked `[assumed]`.
 
 ## Next
 
+Run `just orchestra` and start the conductor and the wave-1 sessions from it (or `bash
+scripts/orchestration/start-session.sh <CODE|conductor>`).
 Wave 1: B2 scheduling depth, B3 money depth, B8 marketing extras, B9 platform extras, slots 1–4.
 Each phase adds lines to shared lists only under its own `── phase Bn ──` marker, registers every new
 feature in `etqan.platform.features` (off by default), and never runs `git submodule update` in its

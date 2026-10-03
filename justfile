@@ -205,3 +205,30 @@ new-module name:
     @echo "  1. Add 'etqan.{{name}}' to TENANT_APPS under your phase's '── phase Bn ──' marker"
     @echo "  2. Add import-linter contracts in pyproject.toml under your phase's marker, and the app to the platform contract's forbidden list"
     @echo "  3. Create docs/architecture/{{name}}.md"
+
+# ─── Orchestra (the parallel-phases dashboard) ────────────────
+
+# Build the web app when its sources changed, then serve http://127.0.0.1:7700
+orchestra:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    cd orchestra/web
+    [ -d node_modules ] || npx pnpm@10 install --frozen-lockfile
+    if [ ! -f dist/index.html ] || [ -n "$(find src index.html package.json vite.config.ts tsconfig.json -newer dist/index.html -print -quit)" ]; then
+      npx pnpm@10 build
+    fi
+    cd ../server
+    exec python3 -m orchestra_server
+
+# Work on the UI: the server plus Vite on :5174 with /api proxied
+orchestra-dev:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    (cd orchestra/server && ORCHESTRA_DEV=1 exec python3 -m orchestra_server) &
+    trap 'kill %1' EXIT
+    cd orchestra/web && npx pnpm@10 dev
+
+# Orchestra's tests: server, web, types and lint
+orchestra-test:
+    cd orchestra/server && python3 -m unittest discover -s tests -t .
+    cd orchestra/web && npx pnpm@10 test:coverage && npx pnpm@10 build && npx pnpm@10 lint

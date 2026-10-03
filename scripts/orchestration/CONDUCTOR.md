@@ -8,14 +8,15 @@ Loop (use /loop or ScheduleWakeup, about every 20 minutes, sooner while a slice 
 1. Start phases: `ledger.py eligible` lists the free slots and the phases never launched. For each code
    listed, pick a free slot (1–4) and a branch suffix (`<phase>a-<topic>`), run
    `bash scripts/orchestration/launch-phase.sh <CODE> <suffix> <slot>`, record it with
-   `ledger.py phase <CODE> --status spec --slot <n> --worktree <dir> --branch feat/<suffix>`, and tell the
-   owner the printed command to start the session in a new terminal.
+   `ledger.py phase <CODE> --status spec --slot <n> --worktree <dir> --branch feat/<suffix>`, then
+   start its session with `bash scripts/orchestration/start-session.sh <CODE>` (it records the session
+   id; never hand the owner commands to paste).
    A phase in `waiting-deps` keeps its slot. To lend it to another phase, inside the waiting phase's
    worktree run `just stop` (its volumes stay), then `ledger.py phase <CODE> --slot 0` (release); the
    slot is then free. When the waiting phase can go on, give it a free slot `<m>`:
    `bash scripts/orchestration/stream-env.sh <phase> <m> <dir>` (rewrites its `.env.stream` and its
-   `backend/.env` database/broker lines), `ledger.py phase <CODE> --slot <m>`, and tell it to
-   `just dev-backend`. Until then the ledger refuses that phase any working status.
+   `backend/.env` database/broker lines), `ledger.py phase <CODE> --slot <m>`, and start its stack with
+   `just dev-backend` in its worktree. Until then the ledger refuses that phase any working status.
 2. Merge queue: if nothing is in flight, `ledger.py next`. Tell the phase (SendMessage to its session if
    it is listed by ListAgents; the phase also polls the ledger). Wait for its PRs in the ledger, then
    `gh pr checks --watch` on the meta PR. Green, in this order (another order makes the meta PR's
@@ -51,3 +52,7 @@ Loop (use /loop or ScheduleWakeup, about every 20 minutes, sooner while a slice 
    submodule config (see PHASE_PROMPT.md) and it needs a manual fix before the next launch. Then start
    the next eligible phase.
 Report to the owner only open escalations and a short note per merge.
+
+The owner may act through Orchestra (`just orchestra`) at the same time; it uses the same ledger
+and scripts. A ledger refusal caused by such a clash (for example "B3a is in flight") is normal:
+re-read the ledger and carry on.

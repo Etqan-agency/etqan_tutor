@@ -123,6 +123,30 @@ jobs:
             echo "TLS_MODE=internl was accepted"; exit 1
           fi
 
+  orchestra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with: { version: 10 }
+      - uses: actions/setup-node@v7
+        with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: orchestra/web/pnpm-lock.yaml }
+      - name: Configure git auth for private @etqan/tokens
+        run: |
+          git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "git@github.com:"
+          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
+      - name: Server tests
+        working-directory: orchestra/server
+        run: python3 -m unittest discover -s tests -t . -v
+      - name: Web tests, types, lint and build
+        working-directory: orchestra/web
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm test:coverage
+          pnpm build
+          pnpm lint
+
   infra-scripts:
     runs-on: ubuntu-latest
     steps:
@@ -147,6 +171,7 @@ jobs:
         run: |
           bash scripts/orchestration/tests/stream_env_test.sh
           bash scripts/orchestration/tests/launch_phase_test.sh
+          bash scripts/orchestration/tests/start_session_test.sh
           python3 -m unittest discover -s scripts/orchestration/tests -v
 
   e2e:
@@ -261,7 +286,7 @@ jobs:
   # (its default target is production); the frontends read the private
   # @etqan/tokens repo through the tokens_token build secret.
   images:
-    needs: [backend, dashboard, marketing, caddy, e2e, infra-scripts, security]
+    needs: [backend, dashboard, marketing, caddy, e2e, infra-scripts, orchestra, security]
     runs-on: ubuntu-latest
     permissions:
       contents: read

@@ -449,5 +449,133 @@ class DefaultDir(unittest.TestCase):
                 run.assert_called_once()
 
 
+class OrchestraAdditions(unittest.TestCase):
+    def _queued(self, *sids):
+        data = L.empty()
+        for sid in sids:
+            L.add_slice(data, sid, phase="B3", requires=[])
+            L.enqueue(data, sid)
+        return data
+
+    def test_reorder_moves_a_queued_slice(self):
+        data = self._queued("B3a", "B3b", "B3c")
+        L.reorder(data, "B3c", "up")
+        self.assertEqual(data["queue"], ["B3a", "B3c", "B3b"])
+        L.reorder(data, "B3a", "down")
+        self.assertEqual(data["queue"], ["B3c", "B3a", "B3b"])
+
+    def test_reorder_refuses_edges_unqueued_and_bad_directions(self):
+        data = self._queued("B3a")
+        L.add_slice(data, "B3b", phase="B3", requires=[])
+        with self.assertRaisesRegex(L.LedgerError, "already first"):
+            L.reorder(data, "B3a", "up")
+        with self.assertRaisesRegex(L.LedgerError, "already last"):
+            L.reorder(data, "B3a", "down")
+        with self.assertRaisesRegex(L.LedgerError, "B3b is not queued"):
+            L.reorder(data, "B3b", "up")
+        with self.assertRaisesRegex(L.LedgerError, "up or down"):
+            L.reorder(data, "B3a", "sideways")
+
+    def test_request_done(self):
+        data = L.empty()
+        rid = L.request(data, "B4", "scheduling", "a field")
+        L.request_done(data, rid)
+        self.assertEqual(data["requests"][0]["status"], "done")
+        with self.assertRaisesRegex(L.LedgerError, "already done"):
+            L.request_done(data, rid)
+        with self.assertRaisesRegex(L.LedgerError, "unknown request R9"):
+            L.request_done(data, "R9")
+
+    def test_force_release_ignores_the_holder(self):
+        data = L.empty()
+        L.claim(data, "B3", "etqan.catalogue.models", "price")
+        L.force_release(data, "etqan.catalogue.models")
+        self.assertEqual(data["claims"], [])
+        with self.assertRaisesRegex(L.LedgerError, "no claim on x"):
+            L.force_release(data, "x")
+
+    def test_clear_empties_a_field_and_the_phase_is_eligible_again(self):
+        data = L.empty()
+        L.set_phase(data, "B2", status="spec", slot=1, worktree="/w/b2", branch="feat/b2a-x", session="ab12")
+        self.assertEqual(data["phases"]["B2"]["session"], "ab12")
+        L.set_phase(data, "B2", status="waiting-deps", slot=0, worktree=L.CLEAR, branch=L.CLEAR, session=L.CLEAR)
+        phase = data["phases"]["B2"]
+        self.assertEqual([phase[k] for k in ("slot", "worktree", "branch", "session")], [None] * 4)
+        self.assertIn("B2", L.eligible(data)[1])
+
+    def test_conductor_session(self):
+        data = L.empty()
+        self.assertIsNone(data["conductor_session"])
+        L.set_conductor_session(data, "cd34")
+        self.assertEqual(data["conductor_session"], "cd34")
+        L.set_conductor_session(data, L.CLEAR)
+        self.assertIsNone(data["conductor_session"])
+
+    def test_load_backfills_an_older_ledger(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            old = L.empty()
+            del old["conductor_session"]
+            for phase in old["phases"].values():
+                del phase["session"]
+            (directory / "orchestration").mkdir()
+            (directory / "orchestration" / "ledger.json").write_text(json.dumps(old))
+            data = L.load(directory)
+            self.assertIsNone(data["conductor_session"])
+            self.assertTrue(all(p["session"] is None for p in data["phases"].values()))
+
+    def test_save_names_its_source_in_the_commit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            subprocess.run(["git", "init", "-q", "-b", "orchestration", tmp], check=True)
+            for key, value in (("user.name", "t"), ("user.email", "t@t")):
+                subprocess.run(["git", "-C", tmp, "config", key, value], check=True)
+            L.save(directory, L.empty(), "init", source="orchestra")
+            subject = subprocess.run(
+                ["git", "-C", tmp, "log", "-1", "--format=%s"], capture_output=True, text=True
+            ).stdout.strip()
+            self.assertEqual(subject, "ledger (orchestra): init")
+
+
+class OrchestraCli(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.dir = Path(self.tmp.name)
+        subprocess.run(["git", "init", "-q", "-b", "orchestration", str(self.dir)], check=True)
+        for key, value in (("user.name", "t"), ("user.email", "t@t")):
+            subprocess.run(["git", "-C", str(self.dir), "config", key, value], check=True)
+        cli(self.dir, "init")
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def _data(self):
+        return json.loads((self.dir / "orchestration/ledger.json").read_text())
+
+    def test_phase_session_and_none_clearing(self):
+        self.assertEqual(cli(self.dir, "phase", "B2", "--status", "spec", "--slot", "1",
+                             "--worktree", "/w", "--branch", "feat/b2a-x", "--session", "ab12").returncode, 0)
+        result = cli(self.dir, "phase", "B2", "--status", "waiting-deps", "--slot", "0",
+                     "--worktree", "none", "--branch", "none", "--session", "none")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        phase = self._data()["phases"]["B2"]
+        self.assertEqual([phase[k] for k in ("worktree", "branch", "session")], [None] * 3)
+
+    def test_conductor_reorder_request_done_release_claim(self):
+        self.assertEqual(cli(self.dir, "conductor", "--session", "cd34").returncode, 0)
+        self.assertEqual(self._data()["conductor_session"], "cd34")
+        for sid in ("B3a", "B3b"):
+            cli(self.dir, "slice", sid, "--phase", "B3")
+            cli(self.dir, "queue", sid)
+        self.assertEqual(cli(self.dir, "reorder", "B3b", "up").returncode, 0)
+        self.assertEqual(self._data()["queue"], ["B3b", "B3a"])
+        cli(self.dir, "request", "B4", "scheduling", "a field")
+        self.assertEqual(cli(self.dir, "request-done", "R1").returncode, 0)
+        cli(self.dir, "claim", "B3", "t", "--reason", "r")
+        self.assertEqual(cli(self.dir, "release-claim", "t").returncode, 0)
+        self.assertEqual(self._data()["claims"], [])
+        self.assertNotEqual(cli(self.dir, "reorder", "B3a", "left").returncode, 0)
+
+
 if __name__ == "__main__":
     unittest.main()
