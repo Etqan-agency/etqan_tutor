@@ -310,7 +310,7 @@
     },
     "B3c": {
       "phase": "B3",
-      "status": "spec",
+      "status": "plan",
       "requires": [],
       "plan_number": 22,
       "spec": "docs/superpowers/specs/2026-10-03-b3c-paypal-design.md",
