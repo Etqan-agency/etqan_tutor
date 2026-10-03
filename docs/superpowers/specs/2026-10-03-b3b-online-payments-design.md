@@ -101,7 +101,7 @@ The migration adds columns with defaults only, so no data is rewritten.
 
 - `MINOR_DIGITS`: a table of ISO 4217 minor-unit digits, defaulting to 2. It includes 0 (JPY, KRW, …)
   and 3 (KWD, BHD, JOD, OMR, TND).
-- `minor_digits(code)` and `to_decimal_string(minor, code)`.
+- `minor_digits(code)`. (`to_decimal_string(minor, code)` arrives with B3c: Plan 22 adds it.)
 
 ## 4. Behaviour
 
@@ -144,7 +144,8 @@ same fields. The steps:
      - two line items (the amount, then the fee when > 0);
      - `client_reference_id` = checkout id;
      - `metadata.checkout` and `payment_intent_data.metadata.checkout` = checkout id;
-     - success and cancel URLs from `app_url("/pay/return?checkout=<id>")`.
+     - the success URL from `app_url("/pay/return?checkout=<id>")`, and the cancel URL as that plus
+       `&cancelled=1`.
    - Store the session id and URL.
 5. **A Stripe error** is a 502 `gateways.provider_error`, or a 400 `gateways.amount_too_small` when that is
    the cause. The checkout becomes `failed`, and the detail is logged server-side only.
@@ -207,6 +208,8 @@ The `(method, transaction_number)` constraint backs this up against a double pay
 - **The return page** `/app/pay/return?checkout=<id>`:
   - polls every 2 s for up to 60 s;
   - shows Paid, Still processing (with a refresh button) or Not paid (with a retry);
+  - with `cancelled=1` (the payer cancelled at Stripe) and the checkout still pending, shows Not paid
+    at once and does not poll;
   - links back to the invoice at `/learning/invoices/$id` for families or `/billing/invoices/$id` for
     the office.
 - **Expiry:** a daily Celery job loops over academies (`tenant_context`) and marks `expired` every
@@ -299,7 +302,7 @@ finance's donation-methods test is unchanged, since `MANUAL_PAYMENT_METHODS` sta
 - **Settings:**
   - `ETQAN_SECRETS_KEY`, read from the environment, with the DEBUG/test derivation of B3-6;
   - `GATEWAYS_SIMULATE`;
-  - the throttle scope `gateway_simulate`;
+  - the throttle scopes `gateway_simulate` and `gateway_start` (starting a checkout, §4.2);
   - the Celery beat entry for the expiry job.
 - **For the conductor (meta files):** add `ETQAN_SECRETS_KEY` to `infra/` (production and staging env) and
   to CI's env if CI ever runs production settings. This is requested in the ledger when B3b is queued.
