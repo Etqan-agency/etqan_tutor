@@ -20,8 +20,8 @@
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b3",
       "branch": "feat/b3a-money",
       "spec": null,
-      "current_slice": null,
-      "current_task": null,
+      "current_slice": "B3a",
+      "current_task": "brainstorm phase spec",
       "session": "8b61efa3"
     },
     "B4": {
