@@ -75,7 +75,7 @@ TanStack Router/Query + zod + react-hook-form (vitest + Testing Library), Playwr
   `services.CLOSED = frozenset({"maintenance", "system_only"})`; registry codes `site_status`,
   `site_tracking`.
 
-- [ ] **Step 1: Write the failing tests** — `backend/etqan/site/tests/test_settings_model.py`:
+- [x] **Step 1: Write the failing tests** — `backend/etqan/site/tests/test_settings_model.py`:
 
 ```python
 import pytest
@@ -145,11 +145,11 @@ def test_registry_has_b8a_features_off_by_default():
         assert f.group == "content"
 ```
 
-- [ ] **Step 2: Run them, expect failures** — from the meta worktree:
+- [x] **Step 2: Run them, expect failures** — from the meta worktree:
   `docker compose -f docker-compose.local.yml run --rm django pytest etqan/site/tests/test_settings_model.py -q`
   Expected: ImportError on `SiteSettings`.
 
-- [ ] **Step 3: Implement.** In `models.py` add after `LandingContent`:
+- [x] **Step 3: Implement.** In `models.py` add after `LandingContent`:
 
 ```python
 TRACKING_PATTERNS = {
@@ -229,10 +229,10 @@ def is_closed(status: str) -> bool:
   makemigrations site --name sitesettings_branding_socials` (from the meta worktree, `.env.stream` loaded
   by `just`; if `just` has a `makemigrations` recipe use it).
 
-- [ ] **Step 4: Run** the new tests plus `etqan/platform` and `etqan/site` suites: all pass. Run the
+- [x] **Step 4: Run** the new tests plus `etqan/platform` and `etqan/site` suites: all pass. Run the
   registry tests (`etqan/platform/tests`) — fix any count-based assertion only if it counts `REGISTRY` and
   B8's two lines are the reason.
-- [ ] **Step 5: Commit** (backend): `feat(site): SiteSettings, three socials, site_status and site_tracking features`.
+- [x] **Step 5: Commit** (backend): `feat(site): SiteSettings, three socials, site_status and site_tracking features`.
 
 ---
 
@@ -248,7 +248,7 @@ def is_closed(status: str) -> bool:
   "tracking": {<4 ids>}}`; `branding.social` with 9 keys (adds `linkedin`, `snapchat`, `soundcloud`);
   `settings_payload(s, status: str) -> dict` in `serializers.py`.
 
-- [ ] **Step 1: Failing tests** — `test_public_settings.py`:
+- [x] **Step 1: Failing tests** — `test_public_settings.py`:
 
 ```python
 import pytest
@@ -369,8 +369,8 @@ def test_closing_one_academy_leaves_the_other_open(content, set_features, tenant
   (Check `test_inquiries.py` for the exact inquiry body the existing tests post, and for how throttling is
   reset between tests; copy that.)
 
-- [ ] **Step 2: Run, expect failures** (`KeyError: 'settings'`).
-- [ ] **Step 3: Implement.** In `serializers.py`: extend the social tuple to
+- [x] **Step 2: Run, expect failures** (`KeyError: 'settings'`).
+- [x] **Step 3: Implement.** In `serializers.py`: extend the social tuple to
   `("facebook", "instagram", "youtube", "x", "tiktok", "telegram", "linkedin", "snapchat", "soundcloud")`;
   add
 
@@ -404,9 +404,9 @@ def closed_landing_payload() -> dict:
   `PageView.get`: `if is_closed(effective_status()): raise Http404`. `InquiryCreateView.post`: before
   validation, `if is_closed(effective_status()): return Response({"code": "site.closed", "detail":
   "This site is closed."}, status=403)`.
-- [ ] **Step 4: Run** `etqan/site` tests: all pass (existing `test_public_api.py` asserts on social keys —
+- [x] **Step 4: Run** `etqan/site` tests: all pass (existing `test_public_api.py` asserts on social keys —
   update it only if it compares the whole `social` dict, adding the three keys).
-- [ ] **Step 5: Commit** `feat(site): public settings payload and closed-site API`.
+- [x] **Step 5: Commit** `feat(site): public settings payload and closed-site API`.
 
 ---
 
@@ -423,7 +423,7 @@ def closed_landing_payload() -> dict:
   `GET/PATCH /api/v1/site/admin/status/` (`status`), `GET/PATCH /api/v1/site/admin/tracking/` (four IDs);
   branding admin gains the three socials.
 
-- [ ] **Step 1: Failing tests** — `test_admin_settings.py` (reuse `client_for` style from
+- [x] **Step 1: Failing tests** — `test_admin_settings.py` (reuse `client_for` style from
   `test_admin_api.py`; use the `staff_for` fixture from the root conftest for staff with codes):
 
 ```python
@@ -511,8 +511,8 @@ def test_branding_accepts_new_socials(admin):
 
   (Check the `staff_for` fixture's signature in `backend/conftest.py` before using it; adapt the call.)
 
-- [ ] **Step 2: Run, expect 404s/failures.**
-- [ ] **Step 3: Implement.** Serializers:
+- [x] **Step 2: Run, expect 404s/failures.**
+- [x] **Step 3: Implement.** Serializers:
 
 ```python
 class SiteSettingsAdminSerializer(serializers.ModelSerializer):
@@ -597,9 +597,9 @@ class SiteTrackingAdminView(SiteSettingsSingletonView):
 ```
 
   and to `FEATURE_WORDS`: `"/site/admin/status/": "site_status"`, `"/site/admin/tracking/": "site_tracking"`.
-- [ ] **Step 4: Run** `etqan/site` and `etqan/access` tests: all pass (the route table tests exercise 403/404
+- [x] **Step 4: Run** `etqan/site` and `etqan/access` tests: all pass (the route table tests exercise 403/404
   ordering and the "every other route is there with every feature off" check).
-- [ ] **Step 5: Commit** `feat(site): admin settings, status and tracking routes`.
+- [x] **Step 5: Commit** `feat(site): admin settings, status and tracking routes`.
 
 ---
 
@@ -617,7 +617,7 @@ class SiteTrackingAdminView(SiteSettingsSingletonView):
 - Produces: `manage.py tenant_command set_site_status <status> --schema=<schema>`; `seed_b8(subdomain: str)`
   in `etqan/tenants/seeds/b8.py`.
 
-- [ ] **Step 1: Failing tests:**
+- [x] **Step 1: Failing tests:**
 
 ```python
 import pytest
@@ -641,8 +641,8 @@ def test_rejects_unknown_status():
   (The test runs inside the academy schema the root conftest sets, which is what `tenant_command` does in
   production.)
 
-- [ ] **Step 2: Run, expect "Unknown command".**
-- [ ] **Step 3: Implement:**
+- [x] **Step 2: Run, expect "Unknown command".**
+- [x] **Step 3: Implement:**
 
 ```python
 from django.core.management.base import BaseCommand
@@ -675,8 +675,8 @@ class Command(BaseCommand):
   `keywords_ar="دروس خصوصية، قرآن"`, `keywords_en="private tutoring, quran"`; idempotent (plain assignment).
   In `seed_dev.py` under `# ── phase B8 ──`: `seed_b8(subdomain)` (check how neighbouring steps get the
   subdomain in that function and match it).
-- [ ] **Step 4: Run** the new tests and the tenants seed tests.
-- [ ] **Step 5: Commit** `feat(site): set_site_status command and demo seed`.
+- [x] **Step 4: Run** the new tests and the tenants seed tests.
+- [x] **Step 5: Commit** `feat(site): set_site_status command and demo seed`.
 
 ---
 
@@ -697,7 +697,7 @@ class Command(BaseCommand):
   i18n keys `betaBanner`, `maintenanceTitle`, `maintenanceBody`, `restrictedTitle`, `restrictedBody`,
   `signIn` in both languages.
 
-- [ ] **Step 1: Failing tests.** Update `fixtures.ts`: `social` gains `linkedin: "", snapchat: "", soundcloud: ""`;
+- [x] **Step 1: Failing tests.** Update `fixtures.ts`: `social` gains `linkedin: "", snapchat: "", soundcloud: ""`;
   add `settings: { status: "live", footer_text: { ar: "نص التذييل", en: "Footer words" }, keywords: { ar: "قرآن", en: "quran, tutoring" }, tracking: { ga4_id: "", meta_pixel_id: "", adsense_client: "", google_site_verification: "" } }`.
   `tracking.test.ts`:
 
@@ -780,9 +780,9 @@ describe("site settings on the landing page", () => {
 });
 ```
 
-- [ ] **Step 2: Run** `docker compose -f docker-compose.local.yml run --rm marketing pnpm vitest run` (or the
+- [x] **Step 2: Run** `docker compose -f docker-compose.local.yml run --rm marketing pnpm vitest run` (or the
   repo's documented test command in `marketing/CLAUDE.md`): failures.
-- [ ] **Step 3: Implement.** `tracking.ts`:
+- [x] **Step 3: Implement.** `tracking.ts`:
 
 ```ts
 import type { Tracking } from "./site";
@@ -822,8 +822,8 @@ export function safeTracking(t: Tracking): Tracking {
   `maintenanceBody: "We'll be back shortly."`, `restrictedTitle: "Restricted area"`,
   `restrictedBody: "This academy's website is not public."`, `signIn: "Sign in"`; ar: `"نسخة تجريبية — هذا الموقع قيد الاختبار"`,
   `"الموقع تحت الصيانة"`, `"سنعود قريباً."`, `"منطقة محظورة"`, `"موقع هذه الأكاديمية غير متاح للعامة."`, `"تسجيل الدخول"`.
-- [ ] **Step 4: Run** the marketing suite and `pnpm astro check` / biome as `marketing/CLAUDE.md` says: green.
-- [ ] **Step 5: Commit** (marketing) `feat: site settings — beta banner, keywords, tracking, footer text, socials`.
+- [x] **Step 4: Run** the marketing suite and `pnpm astro check` / biome as `marketing/CLAUDE.md` says: green.
+- [x] **Step 5: Commit** (marketing) `feat: site settings — beta banner, keywords, tracking, footer text, socials`.
 
 ---
 
@@ -838,7 +838,7 @@ export function safeTracking(t: Tracking): Tracking {
 - Consumes: Task 5 (`isClosed`, `SiteStatus`, strings).
 - Produces: route `/closed-site`; middleware behaviour below.
 
-- [ ] **Step 1: Failing tests** — `closed.test.ts`:
+- [x] **Step 1: Failing tests** — `closed.test.ts`:
 
 ```ts
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
@@ -947,8 +947,8 @@ describe("closed sites", () => {
 });
 ```
 
-- [ ] **Step 2: Run, expect failures.**
-- [ ] **Step 3: Implement.** Middleware, after `context.locals.siteResult = siteResult;`:
+- [x] **Step 2: Run, expect failures.**
+- [x] **Step 3: Implement.** Middleware, after `context.locals.siteResult = siteResult;`:
 
 ```ts
 	const path = new URL(context.request.url).pathname;
@@ -975,9 +975,9 @@ describe("closed sites", () => {
   render exactly what `404.astro` renders (import and reuse its components; `Astro.response.status = 404`).
   `robots.txt.ts`: when ok and status `system_only` → `"User-agent: *\nDisallow: /\n"`. `sitemap.xml.ts`:
   `system_only` → 404 `"Not found"`, `maintenance` → 503 `"Unavailable"`.
-- [ ] **Step 4: Run** the full marketing suite + coverage + lint: green. Also smoke the real stack:
+- [x] **Step 4: Run** the full marketing suite + coverage + lint: green. Also smoke the real stack:
   `curl -s -o /dev/null -w '%{http_code}' http://demo.etqan.localhost:8380/en/` → 200 (demo is live).
-- [ ] **Step 5: Commit** `feat: closed sites — maintenance and system-only pages`.
+- [x] **Step 5: Commit** `feat: closed sites — maintenance and system-only pages`.
 
 ---
 
@@ -998,7 +998,7 @@ describe("closed sites", () => {
   `useSiteTracking(enabled: boolean)`, `useUpdateSiteTracking`; zod `siteSettingsSchema`, `trackingSchema`;
   `type SiteStatus = "live" | "maintenance" | "beta" | "system_only"`.
 
-- [ ] **Step 1: Failing tests** — `SiteSettingsForm.test.tsx`, following `HomePageForm.test.tsx`'s setup
+- [x] **Step 1: Failing tests** — `SiteSettingsForm.test.tsx`, following `HomePageForm.test.tsx`'s setup
   (mock `./api`, `QueryClientProvider`, `CanProvider` with `staffMe`/admin fixtures from
   `@/test/access-fixtures`; find there how a test supplies features to `hasFeature` and use the same
   provider). Cases:
@@ -1011,8 +1011,8 @@ describe("closed sites", () => {
      error and does not call `patchTracking`; `G-ABC123` saves.
   4. Without `site.update`: inputs disabled, no save buttons.
   `BrandingForm.test.tsx`: add a case that LinkedIn, Snapchat and SoundCloud inputs render and are sent.
-- [ ] **Step 2: Run** `docker compose -f docker-compose.local.yml run --rm dashboard pnpm vitest run src/features/website`: failures.
-- [ ] **Step 3: Implement.**
+- [x] **Step 2: Run** `docker compose -f docker-compose.local.yml run --rm dashboard pnpm vitest run src/features/website`: failures.
+- [x] **Step 3: Implement.**
   - `schemas.ts`: add `linkedin`, `snapchat`, `soundcloud: optionalUrl` to `brandingSchema`;
 
 ```ts
@@ -1066,9 +1066,9 @@ export type Tracking = z.infer<typeof trackingSchema>;
     "رمز التحقق من Google Search Console"; hints "Format: G-XXXXXXX", "Digits only", "Format:
     ca-pub-0000000000", "The content value of the verification meta tag"; `settings.tracking.formatError`
     "Use the format shown under the field." / "استخدم الصيغة الموضحة أسفل الحقل.".
-- [ ] **Step 4: Run** the website tests, `pnpm tsc --noEmit`, the locale key-equality test, biome, and the
+- [x] **Step 4: Run** the website tests, `pnpm tsc --noEmit`, the locale key-equality test, biome, and the
   full dashboard suite with coverage: green.
-- [ ] **Step 5: Commit** (dashboard) `feat(website): Settings tab — footer/SEO, site status, analytics IDs; three socials`.
+- [x] **Step 5: Commit** (dashboard) `feat(website): Settings tab — footer/SEO, site status, analytics IDs; three socials`.
 
 ---
 
@@ -1081,7 +1081,7 @@ export type Tracking = z.infer<typeof trackingSchema>;
 - Consumes: everything above; `manage()` from `e2e/manage.ts`; `login`, `DEMO_URL`, `DEMO_ADMIN` from
   `e2e/fixtures.ts`; `E2E_BASE_URL`-style host building as `fixtures.ts` does for `OTHER_URL`.
 
-- [ ] **Step 1: Write the spec.**
+- [x] **Step 1: Write the spec.**
 
 ```ts
 import { expect, test } from "@playwright/test";
@@ -1151,15 +1151,15 @@ test("a closed site answers every path with its closed page", async ({ page }) =
   `notifications.spec.ts` shows with `academy_demo`); the exact error text `create_academy` raises for an
   existing subdomain (adjust the regex); the field labels `BilingualField` produces (adjust `getByLabel`);
   and that `DEMO_URL`'s host form makes the `replace` correct.
-- [ ] **Step 2: Run** `just e2e b8-site-settings` (stack up via `just dev-backend`, after `just migrate` /
+- [x] **Step 2: Run** `just e2e b8-site-settings` (stack up via `just dev-backend`, after `just migrate` /
   seed if the recipes require). Fix until green. Then run the full `just e2e` to prove no other suite
   regressed.
-- [ ] **Step 3: Commit** (dashboard) `test(e2e): B8a site settings and closed sites`.
+- [x] **Step 3: Commit** (dashboard) `test(e2e): B8a site settings and closed sites`.
 
 ---
 
 ### Task 9: Slice wrap-up
 
-- [ ] `just test`, `just lint`, `just e2e` — all green; note results in the phase notes.
-- [ ] Final whole-slice review by a fresh reviewer (spec + this plan + diff of all four repos).
-- [ ] Commit the plan's checkboxes (meta) and `queue B8a`.
+- [x] `just test`, `just lint`, `just e2e` — all green; note results in the phase notes.
+- [x] Final whole-slice review by a fresh reviewer (spec + this plan + diff of all four repos).
+- [x] Commit the plan's checkboxes (meta) and `queue B8a`.
