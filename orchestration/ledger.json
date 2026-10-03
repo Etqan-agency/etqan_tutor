@@ -7,7 +7,7 @@
       "slot": 1,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b2",
       "branch": "feat/b2a-scheduling",
-      "spec": null,
+      "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2a",
       "current_task": "brainstorm phase spec + B2a spec",
       "session": "b56a274c"

@@ -8,7 +8,7 @@ In flight: **—** · Queue: — · Next plan number: 15
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec |
 |---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | spec | 1 | B2a | brainstorm phase spec + B2a spec |  |  |
+| B2 | Scheduling depth | spec | 1 | B2a | brainstorm phase spec + B2a spec |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md |
 | B3 | Money depth | spec | 2 | B3a | brainstorm phase spec |  |  |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |
