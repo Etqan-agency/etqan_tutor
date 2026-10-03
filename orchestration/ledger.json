@@ -200,7 +200,7 @@
     },
     "B2b": {
       "phase": "B2",
-      "status": "build",
+      "status": "queued",
       "requires": [],
       "plan_number": 21,
       "spec": null,
@@ -623,7 +623,9 @@
       "status": "open"
     }
   ],
-  "queue": [],
+  "queue": [
+    "B2b"
+  ],
   "in_flight": "B8c",
   "main_heads": {
     "backend": "2e4c23139dc44de097508f673227d819e6a60a8f",
