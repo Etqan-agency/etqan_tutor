@@ -295,7 +295,7 @@
       "plan_number": 15,
       "spec": "docs/superpowers/specs/2026-10-03-b3a-expenses-donations-design.md",
       "plan": "docs/superpowers/plans/2026-10-03-plan-15-expenses-donations.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/6 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/5 https://github.com/Etqan-agency/etqan_tutor/pull/15",
       "bounces": 0
     },
     "B3b": {
