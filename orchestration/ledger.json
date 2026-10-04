@@ -170,7 +170,7 @@
     },
     "B8d": {
       "phase": "B8",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [],
       "plan_number": 27,
       "spec": "docs/superpowers/specs/2026-10-04-b8d-media-design.md",
@@ -623,10 +623,8 @@
       "status": "open"
     }
   ],
-  "queue": [
-    "B8d"
-  ],
-  "in_flight": null,
+  "queue": [],
+  "in_flight": "B8d",
   "main_heads": {
     "backend": "16294307327d5b1183730a1dd40c5151d6736e2d",
     "dashboard": "ffdb80a3cc905cb72c8514f4dc43922c4e8a54d2",
