@@ -200,7 +200,7 @@
     },
     "B2b": {
       "phase": "B2",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 21,
       "spec": null,
@@ -626,12 +626,12 @@
   "queue": [
     "B3b"
   ],
-  "in_flight": "B2b",
+  "in_flight": null,
   "main_heads": {
-    "backend": "6eb6420815b42c8ab6714af677a6f7464010f865",
-    "dashboard": "e906267dbcce318da8c79b1076b308f08390a179",
+    "backend": "463db8052648722b51e4f994c60a353ffb4835f9",
+    "dashboard": "45311742f73cc07df97536b25e78d9241dc9eb7a",
     "marketing": "0e7d3c83acf5cc1ca4f1540e69cdbb564cb7ad90",
-    "meta": "9b880171c2cf215ccf007ec596b3d61e2181a0cf"
+    "meta": "1c3cb333aaa6de726adc018fa22f74f7d55499ca"
   },
   "escalations": [
     {
