@@ -205,7 +205,7 @@
       "plan_number": 21,
       "spec": null,
       "plan": null,
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/12 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/11 https://github.com/Etqan-agency/etqan_tutor/pull/21",
       "bounces": 0
     },
     "B2c": {
