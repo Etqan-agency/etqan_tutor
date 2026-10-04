@@ -200,7 +200,7 @@
     },
     "B2b": {
       "phase": "B2",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [],
       "plan_number": 21,
       "spec": null,
@@ -624,10 +624,9 @@
     }
   ],
   "queue": [
-    "B2b",
     "B3b"
   ],
-  "in_flight": null,
+  "in_flight": "B2b",
   "main_heads": {
     "backend": "6eb6420815b42c8ab6714af677a6f7464010f865",
     "dashboard": "e906267dbcce318da8c79b1076b308f08390a179",
