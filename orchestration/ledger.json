@@ -222,7 +222,7 @@
       "phase": "B2",
       "status": "spec",
       "requires": [],
-      "plan_number": null,
+      "plan_number": 31,
       "spec": null,
       "plan": null,
       "prs": null,
@@ -373,7 +373,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 31,
+  "next_plan_number": 32,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
