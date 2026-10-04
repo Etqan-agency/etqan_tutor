@@ -26,3 +26,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **meta#23 + infra#2** (2026-10-04): Referrer-Policy no-referrer on /app/quick-login* in the local, e2e and production edges (requested by B9 for B9b S-11b); infra bumped on master 1590861.
 
 **B8d** (media, plan 27) merged 2026-10-04: backend#13 → main 0e34580, dashboard#12 → main f6b118a, marketing#5 → main 3763ebe, meta#24 → ab604d9; pointers bumped on master c0a54b0. Meta CI green incl. staging-sim, 0 bounces.
+
+**B9b** (sign-in: switches, two-factor, impersonation, quick-login link; plan 23) merged 2026-10-05: backend#14 → main 3af447a, dashboard#13 → main deed0ab, meta#25 → 92bf2bd; pointers bumped on master caee462. Meta CI green incl. staging-sim, 0 bounces.
