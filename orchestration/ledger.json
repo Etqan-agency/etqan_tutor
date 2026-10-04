@@ -102,7 +102,7 @@
       "branch": "feat/b9b-sign-in",
       "spec": "docs/superpowers/specs/2026-10-03-platform-extras-design.md",
       "current_slice": "B9b",
-      "current_task": "Task 11 quick-login UI",
+      "current_task": "Task 12 e2e",
       "session": "60ad3859"
     },
     "B10": {
