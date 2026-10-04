@@ -260,7 +260,7 @@
     },
     "B9b": {
       "phase": "B9",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [
         "B9a"
       ],
@@ -643,12 +643,12 @@
   "queue": [
     "B2c"
   ],
-  "in_flight": "B9b",
+  "in_flight": null,
   "main_heads": {
-    "backend": "0e34580cb03fdc0af59c518c37b4d72c5d6d09cd",
-    "dashboard": "f6b118a8ee029e6b45689eba4365304e378462f7",
+    "backend": "3af447a37da2b34107b13915b22e06c7b46401aa",
+    "dashboard": "deed0ab98fcbabb78088f9f7f6c68f0aa135b855",
     "marketing": "3763ebeda39ad1bd86cd75fbc77b764e7f2ca04b",
-    "meta": "c0a54b0babd6a3e2ee72268a85521a50046d03dc"
+    "meta": "caee4624657c02726c257bc3238b8a44ff585b9c"
   },
   "escalations": [
     {
