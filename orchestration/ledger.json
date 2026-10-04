@@ -170,11 +170,11 @@
     },
     "B8d": {
       "phase": "B8",
-      "status": "spec",
+      "status": "build",
       "requires": [],
       "plan_number": 27,
       "spec": "docs/superpowers/specs/2026-10-04-b8d-media-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-04-plan-27-media.md",
       "prs": null,
       "bounces": 0
     },
