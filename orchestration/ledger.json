@@ -83,14 +83,14 @@
     },
     "B8": {
       "title": "Marketing extras",
-      "status": "plan",
+      "status": "build",
       "requires": [],
       "slot": 3,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b8",
       "branch": "feat/b8d-media",
       "spec": "docs/superpowers/specs/2026-10-03-marketing-extras-design.md",
       "current_slice": "B8d",
-      "current_task": "B8d plan",
+      "current_task": "B8d Task 1",
       "session": "2f141069"
     },
     "B9": {
