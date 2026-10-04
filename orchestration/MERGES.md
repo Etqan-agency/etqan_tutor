@@ -18,3 +18,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B9a** (uploads, file library, contracts, system status, plan 18) merged 2026-10-03: backend#9 → main 2e4c231, dashboard#8 → main 9d3a1d4, meta#18 → 4351dd6; pointers bumped on master 2d6c526. Meta CI green incl. staging-sim, 0 bounces; e2e 32/32. E1 resolved by the owner: Twilio for B9c SMS.
 
 **B8c** (articles, plan 24) merged 2026-10-04: backend#10 → main 6eb6420, dashboard#9 → main e906267, marketing#4 → main 0e7d3c8, meta#19 → 855cf72; pointers bumped on master 9b88017. Meta CI green incl. staging-sim, 0 bounces.
+
+**B2b** (plan 21) merged 2026-10-04: backend#12 → main 463db80, dashboard#11 → main 4531174, meta#21 → 407de91 (also carries the B2c–B2g specs); pointers bumped on master 1c3cb33. Meta CI green incl. staging-sim, 0 bounces. Earlier: meta#22 made `just e2e` retry once (ERR_NETWORK_CHANGED from other streams containers, found by B2).
