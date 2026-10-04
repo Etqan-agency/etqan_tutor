@@ -272,13 +272,13 @@
     },
     "B9c": {
       "phase": "B9",
-      "status": "spec",
+      "status": "plan",
       "requires": [
         "B9b"
       ],
       "plan_number": 28,
       "spec": "docs/superpowers/specs/2026-10-03-b9c-registration-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-04-plan-28-registration.md",
       "prs": null,
       "bounces": 0
     },
