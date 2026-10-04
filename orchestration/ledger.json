@@ -182,7 +182,7 @@
       "phase": "B8",
       "status": "spec",
       "requires": [],
-      "plan_number": null,
+      "plan_number": 30,
       "spec": "docs/superpowers/specs/2026-10-05-b8e-page-builder-design.md",
       "plan": null,
       "prs": null,
@@ -373,7 +373,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 30,
+  "next_plan_number": 31,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
