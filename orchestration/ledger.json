@@ -304,7 +304,7 @@
     },
     "B3b": {
       "phase": "B3",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 20,
       "spec": "docs/superpowers/specs/2026-10-03-b3b-online-payments-design.md",
@@ -624,12 +624,12 @@
     }
   ],
   "queue": [],
-  "in_flight": "B3b",
+  "in_flight": null,
   "main_heads": {
-    "backend": "463db8052648722b51e4f994c60a353ffb4835f9",
-    "dashboard": "45311742f73cc07df97536b25e78d9241dc9eb7a",
+    "backend": "16294307327d5b1183730a1dd40c5151d6736e2d",
+    "dashboard": "ffdb80a3cc905cb72c8514f4dc43922c4e8a54d2",
     "marketing": "0e7d3c83acf5cc1ca4f1540e69cdbb564cb7ad90",
-    "meta": "1c3cb333aaa6de726adc018fa22f74f7d55499ca"
+    "meta": "1ef44737a55bae62269b5d35577d4c1369878768"
   },
   "escalations": [
     {
