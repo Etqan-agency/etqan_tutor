@@ -364,11 +364,11 @@
     },
     "B3g": {
       "phase": "B3",
-      "status": "spec",
+      "status": "plan",
       "requires": [],
       "plan_number": 26,
       "spec": "docs/superpowers/specs/2026-10-03-b3g-links-records-design.md",
-      "plan": null,
+      "plan": "26",
       "prs": null,
       "bounces": 0
     }
