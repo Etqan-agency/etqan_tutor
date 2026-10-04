@@ -16,3 +16,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B8b** (FAQs, ads, redirects, plan 19) merged 2026-10-03: backend#8 → main 5bf7573, dashboard#7 → main 4a0332d, marketing#3 → main 50041f7, meta#17 → 4ba8e2f; pointers bumped on master 510ae06. Meta CI green incl. staging-sim, 0 bounces.
 
 **B9a** (uploads, file library, contracts, system status, plan 18) merged 2026-10-03: backend#9 → main 2e4c231, dashboard#8 → main 9d3a1d4, meta#18 → 4351dd6; pointers bumped on master 2d6c526. Meta CI green incl. staging-sim, 0 bounces; e2e 32/32. E1 resolved by the owner: Twilio for B9c SMS.
+
+**B8c** (articles, plan 24) merged 2026-10-04: backend#10 → main 6eb6420, dashboard#9 → main e906267, marketing#4 → main 0e7d3c8, meta#19 → 855cf72; pointers bumped on master 9b88017. Meta CI green incl. staging-sim, 0 bounces.
