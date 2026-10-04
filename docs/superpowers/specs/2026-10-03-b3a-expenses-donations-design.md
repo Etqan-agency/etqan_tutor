@@ -263,7 +263,7 @@ The demo academy has both features on through `BUILT` (A-2); `other` keeps the d
 
 ## 9. Out of scope
 
-- Gateway donations taken online (B3c after the re-slicing), exchange-rate conversion of the totals (B3d).
+- Gateway donations taken online (B3g after the re-slicing), exchange-rate conversion of the totals (B3d).
 - Posting paid payslips as expenses: the call is B4's (A-8 provides the service).
 - Expense receipts or attachments, budgets, recurring expenses, charts.
 

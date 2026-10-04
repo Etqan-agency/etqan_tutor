@@ -24,7 +24,7 @@ online, plus a service fee. A verified Stripe event records the payment on the i
 online checkout, clear the ones that need attention, and can mark a payment refunded.
 
 The gateway core (accounts, encryption, checkouts, purposes, webhooks, simulator) is built so that
-PayPal (B3c) and the later purposes (payment links B3c, wallet top-up B3e, add-on sales B7) only plug in.
+PayPal (B3c) and the later purposes (payment links B3g, wallet top-up B3e, add-on sales B7) only plug in.
 
 ## 2. Decisions
 
@@ -101,7 +101,7 @@ The migration adds columns with defaults only, so no data is rewritten.
 
 - `MINOR_DIGITS`: a table of ISO 4217 minor-unit digits, defaulting to 2. It includes 0 (JPY, KRW, …)
   and 3 (KWD, BHD, JOD, OMR, TND).
-- `minor_digits(code)` and `to_decimal_string(minor, code)`.
+- `minor_digits(code)`. (`to_decimal_string(minor, code)` arrives with B3c: Plan 22 adds it.)
 
 ## 4. Behaviour
 
@@ -144,7 +144,8 @@ same fields. The steps:
      - two line items (the amount, then the fee when > 0);
      - `client_reference_id` = checkout id;
      - `metadata.checkout` and `payment_intent_data.metadata.checkout` = checkout id;
-     - success and cancel URLs from `app_url("/pay/return?checkout=<id>")`.
+     - the success URL from `app_url("/pay/return?checkout=<id>")`, and the cancel URL as that plus
+       `&cancelled=1`.
    - Store the session id and URL.
 5. **A Stripe error** is a 502 `gateways.provider_error`, or a 400 `gateways.amount_too_small` when that is
    the cause. The checkout becomes `failed`, and the detail is logged server-side only.
@@ -207,6 +208,8 @@ The `(method, transaction_number)` constraint backs this up against a double pay
 - **The return page** `/app/pay/return?checkout=<id>`:
   - polls every 2 s for up to 60 s;
   - shows Paid, Still processing (with a refresh button) or Not paid (with a retry);
+  - with `cancelled=1` (the payer cancelled at Stripe) and the checkout still pending, shows Not paid
+    at once and does not poll;
   - links back to the invoice at `/learning/invoices/$id` for families or `/billing/invoices/$id` for
     the office.
 - **Expiry:** a daily Celery job loops over academies (`tenant_context`) and marks `expired` every
@@ -240,7 +243,7 @@ The `(method, transaction_number)` constraint backs this up against a double pay
 ### 4.8 Checkouts list (admin)
 
 `GET gateways/checkouts/` (`checkout.view_any`) is paginated and newest first. Its filters are `status`,
-`purpose`, `attention` (`open`) and `created_from` / `created_to`. CSV export moves to B3c, with the
+`purpose`, `attention` (`open`) and `created_from` / `created_to`. CSV export moves to B3g, with the
 payment records list.
 
 ## 5. API summary (`/api/v1/`)
@@ -249,7 +252,7 @@ payment records list.
 |---|---|---|---|
 | `gateways/settings/` | GET, PATCH | `online_payments` | `gateway.view`, `gateway.update` |
 | `gateways/checkouts/` | GET | `online_payments` | `checkout.view_any` |
-| `gateways/checkouts/` | POST | `online_payments` | self-service, scoped by the purpose |
+| `gateways/checkouts/start/` | POST | `online_payments` | self-service, scoped by the purpose (plan D1) |
 | `gateways/checkouts/<uuid>/` | GET | — | creator or `checkout.view_any` |
 | `gateways/checkouts/<uuid>/resolve/` | POST | `online_payments` | `checkout.update` |
 | `gateways/webhooks/stripe/` | POST | — | public, signature-checked |
@@ -299,7 +302,7 @@ finance's donation-methods test is unchanged, since `MANUAL_PAYMENT_METHODS` sta
 - **Settings:**
   - `ETQAN_SECRETS_KEY`, read from the environment, with the DEBUG/test derivation of B3-6;
   - `GATEWAYS_SIMULATE`;
-  - the throttle scope `gateway_simulate`;
+  - the throttle scopes `gateway_simulate` and `gateway_start` (starting a checkout, §4.2);
   - the Celery beat entry for the expiry job.
 - **For the conductor (meta files):** add `ETQAN_SECRETS_KEY` to `infra/` (production and staging env) and
   to CI's env if CI ever runs production settings. This is requested in the ledger when B3b is queued.
@@ -356,7 +359,7 @@ fee. Seeding twice changes nothing.
 ## 10. Out of scope
 
 - PayPal, payment links, standalone payments, online donations, the checkouts CSV, and SUB-006's payment
-  metadata (ledger D10). All of these are B3c.
+  metadata (ledger D10). All of these are B3c/B3g per phase §3.
 - Wallet credit for surplus money (B3e).
 - Refund API calls, disputes, payouts and saved cards (phase B3-10).
 - Any live key or production configuration (B-15).
@@ -374,3 +377,38 @@ PayPal:
 - a named throttle scope for its webhook, since every verification costs two PayPal calls;
 - the observed currency (one of USD, EUR, SAR, AED, GBP, CAD) and locale fields;
 - a pending PayPal checkout expires after N hours.
+
+## 12. Amendments from planning and build (Plan 20)
+
+- **Start route** (§4.2, §5): `POST gateways/checkouts/start/`. The route-table test keys code-exempt
+  routes by view class, so the self-service start cannot share the coded list's view.
+- **Secrets** (B-5): `etqan.platform.secrets`. A missing key raises the platform's new `UnavailableError`
+  (503 with a code); dev and tests may derive the key from `SECRET_KEY`. A malformed key is reported as
+  `gateways.bad_key`, and `available()` is false for it.
+- **Fee** (B-6, B-7): `(amount × bp + 5000) // 10000`. For a three-digit currency the total is rounded up
+  to a multiple of 10 through the fee. With no fee, an amount Stripe cannot take leaves Stripe out of the
+  options. Whether Stripe also needs each line item to be a multiple of 10 is unverified (owner's live
+  smoke test).
+- **Attention codes** (B-11): `invoice_void`, `balance_below_amount`, `amount_mismatch`,
+  `currency_mismatch`, `mode_mismatch`, `purpose_unknown`, `reference_missing`, `already_recorded`.
+- **Validation errors** are 400s on their fields: `gateways.incomplete` is a 400 on `enabled`,
+  `gateways.mode_mismatch` a 400 on `mode`/`public_key`/`secret`, and `gateways.amount_too_small` a 400 on
+  `amount_minor`. Codes stay for 409 and 503. A provider failure is the platform's 502
+  (`ExternalServiceError`), not `gateways.provider_error`.
+- **Mode switch** (§4.1): a settings change that switches `mode` must carry a new `webhook_secret`, since
+  Stripe signs each mode with its own secret. Other changes never decrypt the stored secret.
+- **Starting** (B-8): starts for one (academy, purpose, reference) are serialised by a transaction-scoped
+  advisory lock that is never held across the provider call. A start meeting another one still at the
+  provider (under 2 minutes old) answers 409 `gateways.checkout_starting`. A pending checkout is reused
+  only by the same user, at the same price, in the account's current mode, and when under 23 hours old.
+- **Purposes** (§4.3): registering a second owner for a purpose name raises `ImproperlyConfigured`.
+- **Void invoices** stay void: deleting or refunding a payment never recalculates a void invoice.
+- **Simulator** (§4.6): it answers 409 `gateways.no_webhook_secret` when the signing secret is cleared,
+  and its event carries the account's mode.
+- **Expiry** (B-9) is local only: pending checkouts older than 25 hours are marked expired in the
+  database; no provider call is made.
+- **`can_pay_online`** is on the invoice detail only, not on list rows.
+- **The checkouts list's dates** are UTC days, since gateways reads no academy calendar.
+- **Seeds**: the demo academy gets a Stripe test account only when `GATEWAYS_SIMULATE` is on, so staging
+  (production settings) seeds none.
+
