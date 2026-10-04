@@ -18,6 +18,9 @@
 	respond @internal 404
 	@django path /api/* /accounts/* /health/* /media/* /__debug__/*
 	reverse_proxy @django django:8000
+	# The one-time sign-in link carries its token in the query string (B9b S-11b):
+	# never send it on as a Referer.
+	header /app/quick-login* Referrer-Policy no-referrer
 	@app path /app /app/*
 	reverse_proxy @app dashboard:5173
 	reverse_proxy marketing:4321
