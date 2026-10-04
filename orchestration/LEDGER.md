@@ -35,7 +35,7 @@ In flight: **B9b** · Queue: — · Next plan number: 31 · Conductor: 4ddff076
 | B2e | B2 | spec |  |  |  | 0 |
 | B2f | B2 | spec |  |  |  | 0 |
 | B9a | B9 | merged | 18 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/9 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/8 https://github.com/Etqan-agency/etqan_tutor/pull/18 | 0 |
-| B9b | B9 | in-flight | 23 | B9a |  | 0 |
+| B9b | B9 | in-flight | 23 | B9a | https://github.com/Etqan-agency/etqan_tutor_backend/pull/14 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/13 https://github.com/Etqan-agency/etqan_tutor/pull/25 | 0 |
 | B9c | B9 | plan | 28 | B9b |  | 0 |
 | B9d | B9 | plan | 29 |  |  | 0 |
 | B3a | B3 | merged | 15 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/6 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/5 https://github.com/Etqan-agency/etqan_tutor/pull/15 | 0 |

@@ -267,7 +267,7 @@
       "plan_number": 23,
       "spec": "docs/superpowers/specs/2026-10-03-b9b-sign-in-design.md",
       "plan": "docs/superpowers/plans/2026-10-03-plan-23-sign-in.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/14 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/13 https://github.com/Etqan-agency/etqan_tutor/pull/25",
       "bounces": 0
     },
     "B9c": {
