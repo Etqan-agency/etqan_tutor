@@ -21,7 +21,7 @@
       "branch": "feat/b3c-paypal",
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
       "current_slice": "B3c",
-      "current_task": "B3c pre-flight (Plan 22)",
+      "current_task": "B3c Task 1 (pre-flight: 22 rulings)",
       "session": "bbb7e4fa"
     },
     "B4": {
