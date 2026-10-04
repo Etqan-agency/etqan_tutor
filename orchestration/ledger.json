@@ -210,7 +210,7 @@
     },
     "B2c": {
       "phase": "B2",
-      "status": "plan",
+      "status": "build",
       "requires": [],
       "plan_number": 25,
       "spec": null,
