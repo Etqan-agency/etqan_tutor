@@ -284,11 +284,11 @@
     },
     "B9d": {
       "phase": "B9",
-      "status": "spec",
+      "status": "plan",
       "requires": [],
       "plan_number": 29,
       "spec": "docs/superpowers/specs/2026-10-04-b9d-languages-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-05-plan-29-languages.md",
       "prs": null,
       "bounces": 0
     },
