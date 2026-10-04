@@ -77,6 +77,7 @@ In flight: **B8d** · Queue: B9b · Next plan number: 29 · Conductor: 04a3f739
 | D19 | B9 | Impersonation (B9b quick login): etqan.platform.permissions.impersonator_id(request) -> int\|None and the DRF permission NotImpersonating. Money-moving and messaging actions (payments, checkout, payment links, chat, broadcasts) add NotImpersonating so an admin signed in as someone else cannot pay, message or broadcast as them. | B3, B5, B7, B11 | spec 2026-10-03-b9b-sign-in S-9b |
 | D20 | B9 | Secrets at rest: etqan.platform.secrets.encrypt/decrypt (Fernet under env ETQAN_SECRETS_KEY, D4's key) is the one helper; whichever of B3b and B9b lands first builds it in etqan.platform, the other reuses it. | B3 | spec 2026-10-03-b9b-sign-in S-2a; ledger D4 |
 | D21 | B9 | Self-registration (B9c) stores scheduling preferences (start date, hours/week, preferred days, intro-call time, teacher gender) on registration.Registration; B2's trial intake may read them through registration.services.preferences(registration_id). B9c books nothing itself. | B2 | spec 2026-10-03-b9c-registration R-3 |
+| D22 | B9 | Spanish (B9d): dashboard es files are a subset of en (plural-stripped keys, same placeholders), tested separately from the unchanged ar/en equality test; identity emails fall back to English when an es template is missing; other apps' language rules unchanged (notifications give an es reader the academy default). Later areas need no es file. | B2, B3, B4, B5, B6, B7, B8, B10, B11 | spec 2026-10-04-b9d-languages L-1, L-4 |
 
 ## Claims and requests
 

@@ -611,6 +611,23 @@
         "B2"
       ],
       "source": "spec 2026-10-03-b9c-registration R-3"
+    },
+    {
+      "id": "D22",
+      "phase": "B9",
+      "decision": "Spanish (B9d): dashboard es files are a subset of en (plural-stripped keys, same placeholders), tested separately from the unchanged ar/en equality test; identity emails fall back to English when an es template is missing; other apps' language rules unchanged (notifications give an es reader the academy default). Later areas need no es file.",
+      "affects": [
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7",
+        "B8",
+        "B10",
+        "B11"
+      ],
+      "source": "spec 2026-10-04-b9d-languages L-1, L-4"
     }
   ],
   "requests": [
