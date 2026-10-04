@@ -260,7 +260,7 @@
     },
     "B9b": {
       "phase": "B9",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [
         "B9a"
       ],
@@ -640,10 +640,8 @@
       "status": "open"
     }
   ],
-  "queue": [
-    "B9b"
-  ],
-  "in_flight": null,
+  "queue": [],
+  "in_flight": "B9b",
   "main_heads": {
     "backend": "0e34580cb03fdc0af59c518c37b4d72c5d6d09cd",
     "dashboard": "f6b118a8ee029e6b45689eba4365304e378462f7",
