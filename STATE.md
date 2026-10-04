@@ -22,7 +22,7 @@ is designed from the audits, unobserved behaviour marked `[assumed]`.
 Wave 1 is running (conductor + B2 scheduling depth, B3 money depth, B8 marketing extras, B9
 platform extras on slots 1–4). Merged so far (2026-10-03): B8a site settings depth (plan 16), B3a expenses & donations
 (plan 15), B2a session classes (plan 17), B8b FAQs/ads/redirects (plan 19), B9a uploads/files/contracts/system status (plan 18), and on 2026-10-04 B8c articles
-(plan 24), B2b (plan 21); the rest is in the ledger and `orchestration/MERGES.md`. Restart a session with `bash
+(plan 24), B2b (plan 21), B3b online payments (plan 20); the rest is in the ledger and `orchestration/MERGES.md`. Restart a session with `bash
 scripts/orchestration/start-session.sh <CODE|conductor>` or from `just orchestra`.
 Each phase adds lines to shared lists only under its own `── phase Bn ──` marker, registers every new
 feature in `etqan.platform.features` (off by default), and never runs `git submodule update` in its
@@ -32,6 +32,8 @@ may supervise only in `access.services.supervisors_queryset`; never restate them
 
 ## Follow-ups (from Plans 4–9)
 
+- Online payments (B3b, feature `online_payments`, off by default): before switching it on in
+  staging or production, set `ETQAN_SECRETS_KEY` (a Fernet key) and leave `GATEWAYS_SIMULATE` unset.
 - Staging uploads are linked at the S3 store's in-network address (`http://s3:9000/...`), so
   browsers cannot load them until staging uses real S3 or a public custom domain (STAGING.md §7).
 - MinIO's images are no longer pullable; the overlay uses RustFS 1.0.0 (service `s3`).
