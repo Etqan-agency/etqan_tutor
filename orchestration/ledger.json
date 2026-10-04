@@ -172,7 +172,7 @@
       "phase": "B8",
       "status": "spec",
       "requires": [],
-      "plan_number": null,
+      "plan_number": 27,
       "spec": "docs/superpowers/specs/2026-10-04-b8d-media-design.md",
       "plan": null,
       "prs": null,
@@ -373,7 +373,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 27,
+  "next_plan_number": 28,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
