@@ -6,10 +6,10 @@
       "requires": [],
       "slot": 1,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b2",
-      "branch": "feat/b2b-postponement",
+      "branch": "feat/b2c-activity-log",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
-      "current_slice": "B2b",
-      "current_task": "B2b PRs open; awaiting conductor merge",
+      "current_slice": "B2c",
+      "current_task": "B2c preflight",
       "session": "a29a300d"
     },
     "B3": {
