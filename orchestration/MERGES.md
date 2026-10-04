@@ -24,3 +24,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B3b** (online payments: gateways, links, fee; plan 20) merged 2026-10-04: backend#11 → main 1629430, dashboard#10 → main ffdb80a, meta#20 → cc00f5f (also carries Plan 26 B3g docs); pointers bumped on master 1ef4473. Meta CI green incl. staging-sim, 0 bounces. Feature online_payments is off by default. Before switching it on: set ETQAN_SECRETS_KEY (Fernet) and leave GATEWAYS_SIMULATE unset in that environment.
 
 **meta#23 + infra#2** (2026-10-04): Referrer-Policy no-referrer on /app/quick-login* in the local, e2e and production edges (requested by B9 for B9b S-11b); infra bumped on master 1590861.
+
+**B8d** (media, plan 27) merged 2026-10-04: backend#13 → main 0e34580, dashboard#12 → main f6b118a, marketing#5 → main 3763ebe, meta#24 → ab604d9; pointers bumped on master c0a54b0. Meta CI green incl. staging-sim, 0 bounces.
