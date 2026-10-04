@@ -160,7 +160,7 @@
     },
     "B8c": {
       "phase": "B8",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 24,
       "spec": "docs/superpowers/specs/2026-10-03-b8c-articles-design.md",
@@ -627,12 +627,12 @@
     "B2b",
     "B3b"
   ],
-  "in_flight": "B8c",
+  "in_flight": null,
   "main_heads": {
-    "backend": "2e4c23139dc44de097508f673227d819e6a60a8f",
-    "dashboard": "9d3a1d4f720203dd19289eb5597dd1a1709c1526",
-    "marketing": "50041f7cf0b83825ba7ef67e6f3349fe71f2f6a6",
-    "meta": "2d6c526dda22954a9d9bf526292495309f632350"
+    "backend": "6eb6420815b42c8ab6714af677a6f7464010f865",
+    "dashboard": "e906267dbcce318da8c79b1076b308f08390a179",
+    "marketing": "0e7d3c83acf5cc1ca4f1540e69cdbb564cb7ad90",
+    "meta": "9b880171c2cf215ccf007ec596b3d61e2181a0cf"
   },
   "escalations": [
     {
