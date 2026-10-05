@@ -8,7 +8,7 @@ In flight: **B2d** · Queue: — · Next plan number: 34 · Conductor: 4ddff076
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | queued | 1 | B2d | B2d queued (gates green); next: B2e plan |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | de2813da |
+| B2 | Scheduling depth | build | 1 | B2d | B2d in flight: rebasing |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | de2813da |
 | B3 | Money depth | build | 2 | B3g | B3g Task 3 (T1-2 done); B3afix in flight |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | bbb7e4fa |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
