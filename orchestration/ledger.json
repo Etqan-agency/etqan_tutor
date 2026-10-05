@@ -426,7 +426,7 @@
     },
     "B3afix": {
       "phase": "B3",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": null,
       "spec": null,
@@ -774,12 +774,12 @@
   "queue": [
     "B2d"
   ],
-  "in_flight": "B3afix",
+  "in_flight": null,
   "main_heads": {
     "backend": "a94dbbb8945f4a0283d5b618f0a71b28fa8bf054",
-    "dashboard": "5411766bb45bb29b0f9e36d43f77a3bc34987ccb",
+    "dashboard": "37b907c33d5f3b365550e49e0405aa78eea0adf7",
     "marketing": "3d50f3c79e0133eca9dfdd48323bb22a480e2aca",
-    "meta": "e12456f6ac5446ad4c8e0cf1995fe9a0c56cc106"
+    "meta": "aa926cfa15c1aba2644b179ca43a50c4b7598bb1"
   },
   "escalations": [
     {
