@@ -12,7 +12,7 @@ In flight: **B2e** · Queue: B9d, B6b · Next plan number: 40 · Conductor: 4ddf
 | B3 | Money depth | build | 2 | B3h | B3h Task 7 (e2e) |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
-| B6 | Learning | queued | 3 | B6b | B6b queued; B6c plan ready; B6d spec review | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 87f8af50 |
+| B6 | Learning | queued | 3 | B6b | B6b queued (be#23 da#24 meta#36); B6c plan 38 + B6d plan 39 ready | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 87f8af50 |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | build | 4 | B9d | B9d re-queued after gitleaks fix |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |

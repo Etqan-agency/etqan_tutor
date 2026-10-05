@@ -64,7 +64,7 @@
       "branch": "feat/b6b-homework",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
       "current_slice": "B6b",
-      "current_task": "B6b queued; B6c plan ready; B6d spec review",
+      "current_task": "B6b queued (be#23 da#24 meta#36); B6c plan 38 + B6d plan 39 ready",
       "session": "87f8af50"
     },
     "B7": {
