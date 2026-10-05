@@ -421,7 +421,7 @@
       "phase": "B6",
       "status": "plan",
       "requires": [],
-      "plan_number": null,
+      "plan_number": 39,
       "spec": "docs/superpowers/specs/2026-10-05-b6d-certificates-design.md",
       "plan": null,
       "prs": null,
@@ -438,7 +438,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 39,
+  "next_plan_number": 40,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
