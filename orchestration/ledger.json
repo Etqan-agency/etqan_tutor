@@ -324,13 +324,13 @@
     },
     "B3d": {
       "phase": "B3",
-      "status": "spec",
+      "status": "plan",
       "requires": [
         "B2-hook-request"
       ],
       "plan_number": 36,
       "spec": "docs/superpowers/specs/2026-10-05-b3d-countries-currencies-design.md",
-      "plan": null,
+      "plan": "36",
       "prs": null,
       "bounces": 0
     },
