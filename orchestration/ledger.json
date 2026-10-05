@@ -14,14 +14,14 @@
     },
     "B3": {
       "title": "Money depth",
-      "status": "build",
+      "status": "queued",
       "requires": [],
       "slot": 2,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b3",
       "branch": "feat/b3g-links-records",
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
       "current_slice": "B3g",
-      "current_task": "B3g Task 11 e2e + amendments (T1-10 done)",
+      "current_task": "B3g queued; next B3d (blocked on B2 hook R2) / B3h",
       "session": "b34329de"
     },
     "B4": {
