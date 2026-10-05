@@ -30,3 +30,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B9b** (sign-in: switches, two-factor, impersonation, quick-login link; plan 23) merged 2026-10-05: backend#14 → main 3af447a, dashboard#13 → main deed0ab, meta#25 → 92bf2bd; pointers bumped on master caee462. Meta CI green incl. staging-sim, 0 bounces.
 
 **B2c** (plan 25) merged 2026-10-05: backend#15 → main 7ee81c4, dashboard#14 → main 866dad3, meta#26 → 8d9625a; pointers bumped on master 1fb0606. Meta CI green incl. staging-sim, 0 bounces. Dashboard#14 also updated the B2a e2e spec b2-session-classes (disposal banner check).
+
+**B8e** (page builder, plan 30; B8 last slice) merged 2026-10-05: backend#17 → main 596f669, dashboard#16 → main 40d7724, marketing#6 → main 3d50f3c, meta#28 → 87b79fa; pointers bumped on master 166d66b. Meta CI green incl. staging-sim, 0 bounces; e2e 42/42. Deploy note (E-13): ship the backend first. Phase B8 complete (B8a to B8e).
