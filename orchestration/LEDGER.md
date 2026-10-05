@@ -98,7 +98,6 @@ In flight: **B3g** · Queue: — · Next plan number: 36 · Conductor: 4ddff076
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| dashboard/src/routes/_authed/website.inquiries.tsx | B2 | B2e spec E-8/§7, conductor ruling 2026-10-03: InquiriesList gains an optional actions prop; the inquiries route passes scheduling's TrialFromInquiry (one commit) | 2026-10-05T14:44:29+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
