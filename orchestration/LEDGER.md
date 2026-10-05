@@ -8,7 +8,7 @@ In flight: **B2e** · Queue: B9d, B6b · Next plan number: 40 · Conductor: 4ddf
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | build | 1 | B2e | B2f build (stacked on B2e branches until B2e merges; CI down E2) |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 4fddb642 |
+| B2 | Scheduling depth | build | 1 | B2e | B2f T1 (B2e PRs open, CI down E2) |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 4fddb642 |
 | B3 | Money depth | build | 2 | B3h | B3h Task 7 (e2e) |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
