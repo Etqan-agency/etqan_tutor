@@ -386,11 +386,11 @@
     },
     "B6a": {
       "phase": "B6",
-      "status": "plan",
+      "status": "build",
       "requires": [],
       "plan_number": 32,
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-05-plan-32-curriculum.md",
       "prs": null,
       "bounces": 0
     },
