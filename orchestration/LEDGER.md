@@ -47,7 +47,7 @@ In flight: **B9c** · Queue: — · Next plan number: 34 · Conductor: 4ddff076
 | B2g | B2 | spec |  |  |  | 0 |
 | B3g | B3 | build | 26 |  |  | 0 |
 | B3h | B3 | spec |  |  |  | 0 |
-| B6a | B6 | build | 32 |  |  | 0 |
+| B6a | B6 | build | 32 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/20 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/21 https://github.com/Etqan-agency/etqan_tutor/pull/33 | 0 |
 | B6b | B6 | spec |  |  |  | 0 |
 | B6c | B6 | spec |  |  |  | 0 |
 | B6d | B6 | spec |  |  |  | 0 |
