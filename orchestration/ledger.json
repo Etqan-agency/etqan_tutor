@@ -83,9 +83,9 @@
     },
     "B8": {
       "title": "Marketing extras",
-      "status": "build",
+      "status": "merged",
       "requires": [],
-      "slot": 3,
+      "slot": null,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b8",
       "branch": "feat/b8e-page-builder",
       "spec": "docs/superpowers/specs/2026-10-03-marketing-extras-design.md",
