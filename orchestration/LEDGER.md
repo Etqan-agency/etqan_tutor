@@ -8,7 +8,7 @@ In flight: **—** · Queue: B3g · Next plan number: 35 · Conductor: 4ddff076
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | build | 1 | B2e | B2e Task 11 |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | e0015815 |
+| B2 | Scheduling depth | build | 1 | B2e | B2e Task 12 (dashboard) |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | e0015815 |
 | B3 | Money depth | queued | 2 | B3g | B3g queued; next B3d (blocked on B2 hook R2) / B3h |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
