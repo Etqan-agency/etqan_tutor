@@ -55,16 +55,16 @@
     },
     "B6": {
       "title": "Learning",
-      "status": "queued",
+      "status": "build",
       "requires": [
         "B2"
       ],
       "slot": 3,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b6",
-      "branch": "feat/b6c-reviews",
+      "branch": "feat/b6d-certificates",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
-      "current_slice": "B6c",
-      "current_task": "B6b+B6c queued; B6c regenerates its learning migration if B6b merges first; next: B6d build after B6b merges",
+      "current_slice": "B6d",
+      "current_task": "B6d Task 1 (models)",
       "session": "87f8af50"
     },
     "B7": {
