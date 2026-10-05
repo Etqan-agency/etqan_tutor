@@ -396,7 +396,7 @@
     },
     "B6b": {
       "phase": "B6",
-      "status": "spec",
+      "status": "plan",
       "requires": [],
       "plan_number": null,
       "spec": "docs/superpowers/specs/2026-10-05-b6b-homework-content-design.md",
