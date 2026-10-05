@@ -9,7 +9,7 @@
       "branch": "feat/b2e-trials",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2e",
-      "current_task": "B2e final fix wave (backend + dashboard)",
+      "current_task": "B2e queued; gates green (e2e 44+1 flaky cold-start acceptInvite)",
       "session": "4fddb642"
     },
     "B3": {
