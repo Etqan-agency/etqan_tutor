@@ -240,7 +240,7 @@
     },
     "B2f": {
       "phase": "B2",
-      "status": "plan",
+      "status": "build",
       "requires": [],
       "plan_number": 37,
       "spec": null,
