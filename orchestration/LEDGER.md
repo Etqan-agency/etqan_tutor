@@ -9,7 +9,7 @@ In flight: **B2e** · Queue: B9d, B6b, B3h, B6c · Next plan number: 40 · Condu
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | build | 1 | B2e | B2f T12 seeds (T1–11 done) |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 4fddb642 |
-| B3 | Money depth | build | 2 | B3h | B3d Task 9 (R2 hook, claims held); B3h queued |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
+| B3 | Money depth | build | 2 | B3h | B3d Task 10 (R2 hook dashboard, claims held); B3h queued |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
 | B6 | Learning | build | 3 | B6d | B6d Task 3 (seed) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 87f8af50 |
