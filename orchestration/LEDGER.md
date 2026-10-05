@@ -8,7 +8,7 @@ In flight: **B3g** · Queue: — · Next plan number: 35 · Conductor: 4ddff076
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | build | 1 | B2e | B2e T15 convert to subscription (T14 done) |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 4fddb642 |
+| B2 | Scheduling depth | build | 1 | B2e | B2e T16 (T15 done) |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 4fddb642 |
 | B3 | Money depth | queued | 2 | B3g | B3g in flight: rebased on 00f0bc1, unit gates green, e2e running |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
