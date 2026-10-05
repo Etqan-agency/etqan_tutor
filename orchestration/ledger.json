@@ -64,7 +64,7 @@
       "branch": "feat/b6a-learning",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
       "current_slice": "B6a",
-      "current_task": "B6a queued (be#20 da#21 meta#33); next: B6b spec",
+      "current_task": "B6a queued (be#20 da#21 meta#33); B6b spec review",
       "session": "0bc5cdff"
     },
     "B7": {
