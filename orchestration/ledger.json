@@ -55,7 +55,7 @@
     },
     "B6": {
       "title": "Learning",
-      "status": "review",
+      "status": "queued",
       "requires": [
         "B2"
       ],
@@ -64,7 +64,7 @@
       "branch": "feat/b6c-reviews",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
       "current_slice": "B6c",
-      "current_task": "B6c fresh-stack gates",
+      "current_task": "B6b+B6c queued; B6c regenerates its learning migration if B6b merges first; next: B6d build after B6b merges",
       "session": "87f8af50"
     },
     "B7": {
