@@ -15,7 +15,7 @@ In flight: **B3c** · Queue: — · Next plan number: 33 · Conductor: 4ddff076
 | B6 | Learning | build | 3 | B6a | B6a Task 6 (levels/chapters API) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 0bc5cdff |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
-| B9 | Platform extras | build | 4 | B9c | Task 9 admin registrations (review) |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | 60ad3859 |
+| B9 | Platform extras | build | 4 | B9c | Task 10 Google button, code reset, sign-in settings |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | 60ad3859 |
 | B10 | AI | waiting-deps |  |  |  | B6 |  |  |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 
