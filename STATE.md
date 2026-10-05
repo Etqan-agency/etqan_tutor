@@ -21,7 +21,7 @@ is designed from the audits, unobserved behaviour marked `[assumed]`.
 
 Phases run in parallel on slots 1–4: B2 scheduling depth (1), B3 money depth (2), B6 learning (3,
 from 2026-10-05), B9 platform extras (4). Phase B8 marketing extras is complete (B8a–B8e). Merged
-slices so far: B8a–B8e, B2a–B2d, B3a–B3c (plus a B3a currency fix), B9a–B9b, and a conductor fix to
+slices so far: B8a–B8e, B2a–B2d, B3a–B3c (plus a B3a currency fix), B9a–B9c, and a conductor fix to
 the page builder; details in the ledger and
 `orchestration/MERGES.md`. Restart a session with `bash scripts/orchestration/start-session.sh
 <CODE|conductor>` or from `just orchestra`.
@@ -33,6 +33,8 @@ may supervise only in `access.services.supervisors_queryset`; never restate them
 
 ## Follow-ups (from Plans 4–9)
 
+- Phone reset codes (B9c, Twilio): set `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` and `TWILIO_FROM` in
+  production to show the phone option; until then only email codes are offered.
 - Online payments (B3b, feature `online_payments`, off by default): before switching it on in
   staging or production, set `ETQAN_SECRETS_KEY` (a Fernet key) and leave `GATEWAYS_SIMULATE` unset.
 - Staging uploads are linked at the S3 store's in-network address (`http://s3:9000/...`), so
