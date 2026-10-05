@@ -32,3 +32,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B2c** (plan 25) merged 2026-10-05: backend#15 → main 7ee81c4, dashboard#14 → main 866dad3, meta#26 → 8d9625a; pointers bumped on master 1fb0606. Meta CI green incl. staging-sim, 0 bounces. Dashboard#14 also updated the B2a e2e spec b2-session-classes (disposal banner check).
 
 **B8e** (page builder, plan 30; B8 last slice) merged 2026-10-05: backend#17 → main 596f669, dashboard#16 → main 40d7724, marketing#6 → main 3d50f3c, meta#28 → 87b79fa; pointers bumped on master 166d66b. Meta CI green incl. staging-sim, 0 bounces; e2e 42/42. Deploy note (E-13): ship the backend first. Phase B8 complete (B8a to B8e).
+
+**master CI flake** (2026-10-05): run 37255240218 on b05a107 failed e2e only, b8-page-builder.spec.ts (an admin builds and publishes a blocks page) timing out at a click on both attempts; submodule trees identical to 87b79fa, which passed. Rerun of the failed job passed; no revert. Watch this spec (owned by the conductor now that B8 is merged).
