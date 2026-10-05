@@ -104,6 +104,7 @@ In flight: **B2e** · Queue: B9d, B6b, B3h · Next plan number: 40 · Conductor:
 | Target | Phase | Reason | Since |
 |---|---|---|---|
 | backend/etqan/scheduling/services/subscriptions.py | B3 | R2 hook (B3d T9-T10, delegated by B2) | 2026-10-05T21:16:22+00:00 |
+| backend/etqan/scheduling/api/serializers.py | B3 | R2 hook (B3d T9-T10, delegated by B2) | 2026-10-05T21:16:22+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
