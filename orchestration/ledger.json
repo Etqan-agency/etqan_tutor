@@ -366,7 +366,7 @@
     },
     "B3g": {
       "phase": "B3",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [],
       "plan_number": 26,
       "spec": "docs/superpowers/specs/2026-10-03-b3g-links-records-design.md",
@@ -803,10 +803,8 @@
       "status": "open"
     }
   ],
-  "queue": [
-    "B3g"
-  ],
-  "in_flight": null,
+  "queue": [],
+  "in_flight": "B3g",
   "main_heads": {
     "backend": "82bc5ed761c324d1814533a6c3395709148c1f9c",
     "dashboard": "87f241346d7f2b745c22c456e437c8f82a592bcc",
