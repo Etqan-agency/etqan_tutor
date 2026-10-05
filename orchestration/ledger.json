@@ -62,9 +62,9 @@
       "slot": 3,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b6",
       "branch": "feat/b6a-learning",
-      "spec": null,
+      "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
       "current_slice": "B6a",
-      "current_task": "B6 phase spec + B6a spec (brainstorm)",
+      "current_task": "B6a spec drafted; spec review next",
       "session": "0bc5cdff"
     },
     "B7": {
