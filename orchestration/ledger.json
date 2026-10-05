@@ -21,7 +21,7 @@
       "branch": "feat/b3g-links-records",
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
       "current_slice": "B3g",
-      "current_task": "B3g Task 3 (T1-2 done); B3afix in flight",
+      "current_task": "B3g Task 4 payment links (T1-3 done)",
       "session": "bbb7e4fa"
     },
     "B4": {
