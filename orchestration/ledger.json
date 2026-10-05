@@ -180,7 +180,7 @@
     },
     "B8e": {
       "phase": "B8",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [],
       "plan_number": 30,
       "spec": "docs/superpowers/specs/2026-10-05-b8e-page-builder-design.md",
@@ -640,10 +640,8 @@
       "status": "open"
     }
   ],
-  "queue": [
-    "B8e"
-  ],
-  "in_flight": null,
+  "queue": [],
+  "in_flight": "B8e",
   "main_heads": {
     "backend": "7ee81c4157036b8ce034475fad1bbfe61ed2f531",
     "dashboard": "866dad3d3dc7f485215eaec22ae72a2c93a9007b",
