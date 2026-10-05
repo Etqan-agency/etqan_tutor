@@ -34,3 +34,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B8e** (page builder, plan 30; B8 last slice) merged 2026-10-05: backend#17 → main 596f669, dashboard#16 → main 40d7724, marketing#6 → main 3d50f3c, meta#28 → 87b79fa; pointers bumped on master 166d66b. Meta CI green incl. staging-sim, 0 bounces; e2e 42/42. Deploy note (E-13): ship the backend first. Phase B8 complete (B8a to B8e).
 
 **master CI flake** (2026-10-05): run 37255240218 on b05a107 failed e2e only, b8-page-builder.spec.ts (an admin builds and publishes a blocks page) timing out at a click on both attempts; submodule trees identical to 87b79fa, which passed. Rerun of the failed job passed; no revert. Watch this spec (owned by the conductor now that B8 is merged).
+
+**B3c** (PayPal, plan 22) merged 2026-10-05: backend#16 → main a94dbbb, dashboard#15 → main 5411766, meta#27 → beec9e3 (also carries the B3d and B3h specs and the B3 re-slice); pointers bumped on master e12456f. Meta CI green after one rerun of e2e (failed only on the b8-page-builder flake; not B3c code), 0 bounces. Page-builder fix: dashboard#17 → main 1bb4d3b; meta#29 repointed and re-running CI.
