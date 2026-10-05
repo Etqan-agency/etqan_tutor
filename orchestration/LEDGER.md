@@ -9,7 +9,7 @@ In flight: **B3c** · Queue: — · Next plan number: 33 · Conductor: 4ddff076
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | build | 1 | B2d | B2d Task 15 (e2e) |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | de2813da |
-| B3 | Money depth | queued | 2 | B3c | B3c in flight: force-pushed (be 4ec1462, da e3c0b5a, meta 1c8d7d9), gates green; awaiting merge |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | bbb7e4fa |
+| B3 | Money depth | queued | 2 | B3c | B3c in flight (pushed); B3afix (finance dialog currency race) building on fix/b3a-dialog-currency |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | bbb7e4fa |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
 | B6 | Learning | build | 3 | B6a | B6a Task 5 (upgrade requests) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 0bc5cdff |
