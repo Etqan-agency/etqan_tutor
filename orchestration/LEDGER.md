@@ -15,7 +15,7 @@ In flight: **B9d** · Queue: B2e · Next plan number: 38 · Conductor: 4ddff076
 | B6 | Learning | build | 3 | B6b | B6b Task 11 (e2e) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 87f8af50 |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
-| B9 | Platform extras | build | 4 | B9d | B9d queued (last slice) |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
+| B9 | Platform extras | build | 4 | B9d | B9d PRs open; awaiting conductor merge (last slice) |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
 | B10 | AI | waiting-deps |  |  |  | B6 |  |  |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 

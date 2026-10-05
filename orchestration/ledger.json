@@ -102,7 +102,7 @@
       "branch": "feat/b9d-languages",
       "spec": "docs/superpowers/specs/2026-10-03-platform-extras-design.md",
       "current_slice": "B9d",
-      "current_task": "B9d queued (last slice)",
+      "current_task": "B9d PRs open; awaiting conductor merge (last slice)",
       "session": "a0268b17"
     },
     "B10": {
