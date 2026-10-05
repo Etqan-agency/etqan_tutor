@@ -420,10 +420,12 @@
     "B6d": {
       "phase": "B6",
       "status": "plan",
-      "requires": [],
+      "requires": [
+        "B6a"
+      ],
       "plan_number": 39,
       "spec": "docs/superpowers/specs/2026-10-05-b6d-certificates-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-05-plan-39-certificates.md",
       "prs": null,
       "bounces": 0
     },
