@@ -65,7 +65,7 @@
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
       "current_slice": "B6a",
       "current_task": "B6a in flight: rebased on 34b1ac4, gates green, pushed (be bf67779, da 4854d74, meta ddb1fe4)",
-      "session": "0bc5cdff"
+      "session": "87f8af50"
     },
     "B7": {
       "title": "Add-on sales",
