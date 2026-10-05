@@ -99,10 +99,10 @@
       "requires": [],
       "slot": 4,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b9",
-      "branch": "feat/b9c-registration",
+      "branch": "feat/b9d-languages",
       "spec": "docs/superpowers/specs/2026-10-03-platform-extras-design.md",
       "current_slice": "B9c",
-      "current_task": "B9c PRs open; awaiting conductor merge",
+      "current_task": "B9d Task 1 switches",
       "session": "60ad3859"
     },
     "B10": {
