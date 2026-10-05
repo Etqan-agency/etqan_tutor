@@ -210,7 +210,7 @@
     },
     "B2c": {
       "phase": "B2",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 25,
       "spec": null,
@@ -641,12 +641,12 @@
     }
   ],
   "queue": [],
-  "in_flight": "B2c",
+  "in_flight": null,
   "main_heads": {
-    "backend": "3af447a37da2b34107b13915b22e06c7b46401aa",
-    "dashboard": "deed0ab98fcbabb78088f9f7f6c68f0aa135b855",
+    "backend": "7ee81c4157036b8ce034475fad1bbfe61ed2f531",
+    "dashboard": "866dad3d3dc7f485215eaec22ae72a2c93a9007b",
     "marketing": "3763ebeda39ad1bd86cd75fbc77b764e7f2ca04b",
-    "meta": "caee4624657c02726c257bc3238b8a44ff585b9c"
+    "meta": "1fb06068b9dd7c24ad8c95b8991c4ea28a8e4e29"
   },
   "escalations": [
     {
