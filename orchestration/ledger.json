@@ -2,14 +2,14 @@
   "phases": {
     "B2": {
       "title": "Scheduling depth",
-      "status": "queued",
+      "status": "build",
       "requires": [],
       "slot": 1,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b2",
       "branch": "feat/b2c-activity-log",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2c",
-      "current_task": "B2c queued (gates green); next: B2d plan",
+      "current_task": "B2c in flight: rebasing",
       "session": "584ba70e"
     },
     "B3": {
