@@ -14,7 +14,14 @@
 
 ## Global Constraints
 
-- Every command runs from the worktree `/home/abdulkhalek/Projects/etqan_tutor-wt/b6`. Backend tests: `just test-backend` or `cd backend && uv run pytest <path>` (whatever `just test` uses; never point at another database — `.env.stream` sets ours). Never run `git submodule update` or any writing `git submodule` command.
+- Every command runs from the worktree `/home/abdulkhalek/Projects/etqan_tutor-wt/b6`, against this stream's stack (its `.env.stream`; the stack is up via `just dev-backend`). Never run `git submodule update` or any writing `git submodule` command. Never run `manage.py`, `migrate` or e2e any other way than below.
+- **How to run things** (wherever a step says `uv run pytest …`, `just manage …`, `pnpm vitest …`, use these):
+  - `export DC="docker compose -f docker-compose.local.yml"; set -a; . ./.env.stream; set +a; export HOST_UID=$(id -u) HOST_GID=$(id -g)` (once per shell)
+  - backend tests: `$DC run --rm -e DATABASE_URL=postgres://etqan:etqan@postgres:5432/etqan -e DJANGO_EMAIL_SUBJECT_PREFIX= django pytest <paths> -q` (add `--cov=etqan.learning --cov-report=term-missing` for coverage)
+  - backend lint: `$DC run --rm django sh -euc 'ruff check . && ruff format --check .'`; boundaries: `$DC run --rm django lint-imports`
+  - migrations: `$DC run --rm django python manage.py makemigrations learning`, then `just migrate`
+  - dashboard tests: `$DC run --rm dashboard pnpm vitest run <paths>`; types: `$DC run --rm dashboard pnpm tsc --noEmit`; lint: `$DC run --rm dashboard pnpm lint`
+  - whole suites: `just test`, `just lint`, `just e2e [spec]`, `just seed`
 - Backend coverage ≥ 80 %; dashboard lines/statements ≥ 80, branches/functions ≥ 70.
 - Business logic only in `etqan/learning/services/`; views are thin. `etqan.learning` imports only `etqan.platform`, `etqan.identity.services`, `etqan.catalogue.services`, `etqan.scheduling.services` (tests may import other apps' models).
 - Shared lists: add lines only under the `── phase B6 ──` markers (settings `TENANT_APPS`, `config/api_router.py`, `etqan/platform/features.py`, `etqan/access/registry.py` `RESOURCES`, `seed_academy` in `seed_dev.py`, `backend/pyproject.toml`, dashboard `NAV_ITEMS`). The only in-place edit allowed outside markers is flipping the registry's `_later("levels", …)` line.
