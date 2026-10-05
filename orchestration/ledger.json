@@ -102,7 +102,7 @@
       "branch": "feat/b9c-registration",
       "spec": "docs/superpowers/specs/2026-10-03-platform-extras-design.md",
       "current_slice": "B9c",
-      "current_task": "B9c final review",
+      "current_task": "B9c gates on rebased branch (e2e)",
       "session": "60ad3859"
     },
     "B10": {
