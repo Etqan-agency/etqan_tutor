@@ -818,6 +818,16 @@
         "B10"
       ],
       "source": "spec 2026-10-05-b6d-certificates T-8, T-11"
+    },
+    {
+      "id": "D34",
+      "phase": "B2",
+      "decision": "Bundle-row API errors are keyed in dot form rows.<i>.<field> (e.g. rows.0.price_minor), matching DRF and the dashboard server-error mapping (react-hook-form cannot use rows[i]). B3d D-5 and R2 item 4 read rows[0].price_minor as rows.0.price_minor. Whichever of B3d and B2f builds D-5 first keys it this way.",
+      "affects": [
+        "B3",
+        "B2"
+      ],
+      "source": "B2 plan 37; conductor ruling 2026-10-05"
     }
   ],
   "requests": [
