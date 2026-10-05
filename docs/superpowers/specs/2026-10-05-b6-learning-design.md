@@ -77,9 +77,10 @@ between them. A slice may move an item to a later slice only by amending this ta
   `etqan/tenants/seeds/b6.py`), `pyproject.toml` (the platform contract's forbidden list and a
   `etqan.learning` contract), the dashboard's `NAV_ITEMS`.
 - The `etqan.learning` contract forbids importing other apps' `models` and `api` (and `etqan.tenants`,
-  `etqan.site`, `etqan.notifications`, `etqan.access`, `etqan.billing`, `etqan.payroll`, `etqan.finance`,
-  `etqan.gateways`); it may import `etqan.platform`, `etqan.identity.services`, `etqan.catalogue.services`
-  and `etqan.scheduling.services`. It has `allow_indirect_imports = true` and `ignore_imports` entries for
+  `etqan.site`, `etqan.academy` models/api, `etqan.notifications`, `etqan.access`, `etqan.billing`, `etqan.payroll`, `etqan.finance`,
+  `etqan.gateways`); it may import `etqan.platform`, `etqan.identity.services`, `etqan.catalogue.services`,
+  `etqan.scheduling.services` and `etqan.academy.services` (the academy timezone for `progress_of`'s month;
+  amended during the B6a build). It has `allow_indirect_imports = true` and `ignore_imports` entries for
   `etqan.learning.tests.* -> etqan.<app>.models` (identity, catalogue, scheduling) so tests can build fixtures.
 - New translation areas are new files `dashboard/src/locales/{en,ar}/<area>.json` (en and ar only, ledger
   D11/D22). New e2e specs are `e2e/b6-*.spec.ts`.
