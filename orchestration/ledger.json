@@ -398,7 +398,7 @@
       "phase": "B6",
       "status": "plan",
       "requires": [],
-      "plan_number": null,
+      "plan_number": 34,
       "spec": "docs/superpowers/specs/2026-10-05-b6b-homework-content-design.md",
       "plan": null,
       "prs": null,
@@ -435,7 +435,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 34,
+  "next_plan_number": 35,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
