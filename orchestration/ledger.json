@@ -773,6 +773,16 @@
         "B10"
       ],
       "source": "spec 2026-10-05-b6b-homework-content H-11, H-12"
+    },
+    {
+      "id": "D30",
+      "phase": "B3",
+      "decision": "Refines D17: the public return page (/app/pay/return) calls /identity/me/ only for checkouts whose purpose is not public (e.g. invoice) — anonymous link payers never hit authed endpoints; for those checkouts it renders back/retry links only after me has settled. B7's public purposes get the anonymous behaviour automatically.",
+      "affects": [
+        "B7",
+        "B11"
+      ],
+      "source": "Plan 26 Task 8 review"
     }
   ],
   "requests": [
