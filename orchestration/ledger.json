@@ -180,7 +180,7 @@
     },
     "B8e": {
       "phase": "B8",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 30,
       "spec": "docs/superpowers/specs/2026-10-05-b8e-page-builder-design.md",
@@ -702,12 +702,12 @@
   "queue": [
     "B3c"
   ],
-  "in_flight": "B8e",
+  "in_flight": null,
   "main_heads": {
-    "backend": "7ee81c4157036b8ce034475fad1bbfe61ed2f531",
-    "dashboard": "866dad3d3dc7f485215eaec22ae72a2c93a9007b",
-    "marketing": "3763ebeda39ad1bd86cd75fbc77b764e7f2ca04b",
-    "meta": "1fb06068b9dd7c24ad8c95b8991c4ea28a8e4e29"
+    "backend": "596f669f3e50d09078cf39bac4800186f611b26b",
+    "dashboard": "40d7724e3054f42c26a1f9a424f6d5fc99aac2c0",
+    "marketing": "3d50f3c79e0133eca9dfdd48323bb22a480e2aca",
+    "meta": "166d66b67925856d7b55e9623c71ca01f4f8f91b"
   },
   "escalations": [
     {
