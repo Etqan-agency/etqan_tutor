@@ -426,7 +426,7 @@
     },
     "B3afix": {
       "phase": "B3",
-      "status": "build",
+      "status": "queued",
       "requires": [],
       "plan_number": null,
       "spec": null,
@@ -771,7 +771,9 @@
       "status": "open"
     }
   ],
-  "queue": [],
+  "queue": [
+    "B3afix"
+  ],
   "in_flight": "B3c",
   "main_heads": {
     "backend": "596f669f3e50d09078cf39bac4800186f611b26b",
