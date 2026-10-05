@@ -9,7 +9,7 @@ In flight: **B9c** · Queue: — · Next plan number: 34 · Conductor: 4ddff076
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | build | 1 | B2e | B2e preflight |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | e0015815 |
-| B3 | Money depth | build | 2 | B3g | B3g Task 4 review (T1-3 done) |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
+| B3 | Money depth | build | 2 | B3g | B3g Task 5 gateways core (T1-4 done) |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
 | B6 | Learning | build | 3 | B6a | B6a final-review fix wave (interrupted; resume from SDD ledger) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 0bc5cdff |
