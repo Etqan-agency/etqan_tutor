@@ -454,12 +454,6 @@
   },
   "claims": [
     {
-      "target": "dashboard/src/features/scheduling/RenewDialog.tsx",
-      "phase": "B3",
-      "reason": "R2 hook (B3d T9-T10, delegated by B2)",
-      "since": "2026-10-05T21:16:23+00:00"
-    },
-    {
       "target": "dashboard/src/features/scheduling/schemas.ts",
       "phase": "B3",
       "reason": "R2 hook (B3d T9-T10, delegated by B2)",
