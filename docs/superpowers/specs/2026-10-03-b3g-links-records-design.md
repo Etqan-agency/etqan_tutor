@@ -362,3 +362,18 @@ ruling taken during the build.
 - "Copy link" uses the server's `row.url`.
 - Seeds run only under `GATEWAYS_SIMULATE`.
 - SUB-006 terms reset on renewal.
+- **D12, §4.1.** A payment row's `customer` also carries `email` and `phone` (additive), so the edit dialog
+  can prefill them.
+- **D15, tokens.** A link token is compared on bytes, and a token that is not 1 to 32 characters of
+  `[A-Za-z0-9_-]` is a 404 before any query.
+- **D16, a closed link.** `gateways.link_closed` (409) answers a cancel of a non-open link and a public
+  checkout POST for one; the public GET answers 200 with `payable: false` instead, so the page can say why.
+- **G-20, public checkouts.** The public checkout status, capture and cancel routes are not gated by
+  `payment_links`: a checkout already started still completes with the switch off.
+- **G-15, the anonymous status.** A public checkout's status read by anyone other than its creator or the
+  office leaves out `purpose` and `reference_id`.
+- **§4.1, the `has_invoice` filter.** An absent `has_invoice` is no filter (every payment), never "false".
+- **Impersonation wording.** `identity.impersonating` reads "You can't make or change payments while
+  signed in as someone else." wherever a payment action is refused.
+- **§6, the link fee flag.** When the account may not read the gateway settings, the dialog sends
+  `add_fee` only if the admin touched the toggle; otherwise the server's `fee.enabled` applies.
