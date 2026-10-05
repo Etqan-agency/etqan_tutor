@@ -9,7 +9,7 @@ In flight: **B2c** · Queue: — · Next plan number: 32 · Conductor: 4ddff076
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | build | 1 | B2c | B2c PRs open; awaiting conductor merge; B2d plan being written |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 584ba70e |
-| B3 | Money depth | build | 2 | B3c | B3c Task 8 dashboard pay flow (T1-7 done) |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | bbb7e4fa |
+| B3 | Money depth | build | 2 | B3c | B3c Task 9 e2e+amendment (T1-8 done) |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | bbb7e4fa |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
 | B6 | Learning | waiting-deps |  |  |  | B2 |  |  |
