@@ -21,7 +21,7 @@
       "branch": "feat/b3c-paypal",
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
       "current_slice": "B3c",
-      "current_task": "B3c in flight (pushed); B3afix (finance dialog currency race) building on fix/b3a-dialog-currency",
+      "current_task": "B3c in flight (pushed); B3afix queued (da#18 meta#30); next B3g after B3c merges",
       "session": "bbb7e4fa"
     },
     "B4": {
