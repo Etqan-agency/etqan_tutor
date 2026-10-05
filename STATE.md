@@ -21,7 +21,8 @@ is designed from the audits, unobserved behaviour marked `[assumed]`.
 
 Phases run in parallel on slots 1–4: B2 scheduling depth (1), B3 money depth (2), B6 learning (3,
 from 2026-10-05), B9 platform extras (4). Phase B8 marketing extras is complete (B8a–B8e). Merged
-slices so far: B8a–B8e, B2a–B2c, B3a–B3c, B9a–B9b; details in the ledger and
+slices so far: B8a–B8e, B2a–B2d, B3a–B3c (plus a B3a currency fix), B9a–B9b, and a conductor fix to
+the page builder; details in the ledger and
 `orchestration/MERGES.md`. Restart a session with `bash scripts/orchestration/start-session.sh
 <CODE|conductor>` or from `just orchestra`.
 Each phase adds lines to shared lists only under its own `── phase Bn ──` marker, registers every new
