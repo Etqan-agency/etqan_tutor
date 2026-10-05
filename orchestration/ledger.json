@@ -640,6 +640,17 @@
         "B11"
       ],
       "source": "spec 2026-10-04-b9d-languages L-1, L-4"
+    },
+    {
+      "id": "D23",
+      "phase": "B3",
+      "decision": "Every new or renewed subscription takes its default price and currency from catalogue.services.package_price(package, country=student.country): the country row while country_pricing is on and a row exists, else the package's own. Create/renew take an optional currency; an explicit price_minor is in the resolved currency and a different currency is 400 catalogue.price_currency_changed. P4-10 compares with the resolved currency. Group bundles: explicit price only when all members resolve to one currency; roster add copies the template price only on a currency match. Existing subscriptions keep their snapshot.",
+      "affects": [
+        "B2",
+        "B3f",
+        "B11"
+      ],
+      "source": "spec 2026-10-05-b3d D-4..D-6, §4.2"
     }
   ],
   "requests": [
