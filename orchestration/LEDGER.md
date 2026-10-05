@@ -51,7 +51,7 @@ In flight: **B3c** · Queue: — · Next plan number: 33 · Conductor: 4ddff076
 | B6b | B6 | spec |  |  |  | 0 |
 | B6c | B6 | spec |  |  |  | 0 |
 | B6d | B6 | spec |  |  |  | 0 |
-| B3afix | B3 | build |  |  |  | 0 |
+| B3afix | B3 | build |  |  | https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/18 https://github.com/Etqan-agency/etqan_tutor/pull/30 | 0 |
 
 ## Open escalations
 

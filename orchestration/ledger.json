@@ -431,7 +431,7 @@
       "plan_number": null,
       "spec": null,
       "plan": null,
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/18 https://github.com/Etqan-agency/etqan_tutor/pull/30",
       "bounces": 0
     }
   },
