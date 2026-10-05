@@ -15,7 +15,7 @@ In flight: **B6a** · Queue: — · Next plan number: 35 · Conductor: 4ddff076
 | B6 | Learning | queued | 3 | B6a | B6a in flight: rebased on 34b1ac4, gates green, pushed (be bf67779, da 4854d74, meta ddb1fe4) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 0bc5cdff |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
-| B9 | Platform extras | build | 4 | B9d | B9d T4 language control; T5 translations backend |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | 60ad3859 |
+| B9 | Platform extras | build | 4 | B9d | B9d T5 translations backend (building); T4 done |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | 60ad3859 |
 | B10 | AI | waiting-deps |  |  |  | B6 |  |  |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 
