@@ -435,7 +435,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "dashboard/src/features/billing/InvoiceForm.tsx",
+      "phase": "B2",
+      "reason": "B2d spec §4.4/§7: InvoiceForm's subscription picker includes archived subscriptions (one line); files: dashboard/src/features/billing/InvoiceForm.tsx and dashboard/src/features/billing/InvoiceForm.test.tsx",
+      "since": "2026-10-05T04:48:28+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",

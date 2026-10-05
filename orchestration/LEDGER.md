@@ -92,6 +92,7 @@ In flight: **B3c** · Queue: — · Next plan number: 33 · Conductor: 4ddff076
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
+| dashboard/src/features/billing/InvoiceForm.tsx | B2 | B2d spec §4.4/§7: InvoiceForm's subscription picker includes archived subscriptions (one line); files: dashboard/src/features/billing/InvoiceForm.tsx and dashboard/src/features/billing/InvoiceForm.test.tsx | 2026-10-05T04:48:28+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
