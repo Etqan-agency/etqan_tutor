@@ -3,11 +3,10 @@
 **Date:** 2026-10-05
 **Status:** Draft for the B3 orchestrator's review (orchestration spec PO-3), revised after an independent
 spec review (2 critical, 7 important, 13 minor findings folded in). The review moved exchange rates and the
-converted net-profit estimate to the new slice B3h (`2026-10-05-b3h-exchange-rates-design.md`, built right
-after this one).
+converted net-profit estimate to the new slice B3h (`2026-10-05-b3h-exchange-rates-design.md`), which is built before this one.
 **Phase:** B3 (`2026-10-03-b3-money-depth-design.md`), slice B3d. **Requires:** B2's subscription-creation
 hook (phase §3, §4). This spec designs that hook as one additive change to `scheduling`. The change is
-requested from B2 in the ledger and written out in full in §7. B3c and B3g merge first (phase B3-1).
+requested from B2 in the ledger and written out in full in §7. B3c, B3g and B3h merge first (phase B3-1).
 **Builds on:**
 - Plan 4 catalogue and scheduling: the package snapshot (P4-5) and the renewal price (P4-10);
 - Plan 6 billing: the invoice page, `invoices_queryset` and `pay_options`;
@@ -198,8 +197,10 @@ currency, and `pay_options` already filters providers by currency.
   - an add / edit dialog with a logo picker (PNG, JPEG or WEBP) and a plain-text instructions box;
   - delete.
 
-  The nav item shows only while the setting is on. The `/billing` index always lists the page, in the order
-  invoices, payments, links, expenses, donations, local methods.
+  The nav item shows only while the setting is on. The page is an insertion into the existing
+  `BILLING_PAGES` (`dashboard/src/features/finance/landing.ts`), placed after `/billing/exchange-rates`
+  (B3h is built first and B3d rebases onto it); `/billing` redirects to the first visible entry and is
+  not a list.
 - **Settings → Payment gateways:** a "Local payment" card with the same switch and a link to the methods
   page.
 - **Invoice page** (`InvoicePage`, office and family): a "Pay locally" section (`LocalPaymentMethods`) next
