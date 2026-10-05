@@ -55,13 +55,13 @@
     },
     "B6": {
       "title": "Learning",
-      "status": "waiting-deps",
+      "status": "spec",
       "requires": [
         "B2"
       ],
-      "slot": null,
-      "worktree": null,
-      "branch": null,
+      "slot": 3,
+      "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b6",
+      "branch": "feat/b6a-learning",
       "spec": null,
       "current_slice": null,
       "current_task": null,
