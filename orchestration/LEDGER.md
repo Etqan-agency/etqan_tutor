@@ -41,7 +41,7 @@ In flight: **B8e** · Queue: B3c · Next plan number: 32 · Conductor: 4ddff076
 | B3a | B3 | merged | 15 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/6 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/5 https://github.com/Etqan-agency/etqan_tutor/pull/15 | 0 |
 | B3b | B3 | merged | 20 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/11 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/10 https://github.com/Etqan-agency/etqan_tutor/pull/20 | 0 |
 | B3c | B3 | queued | 22 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/16 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/15 https://github.com/Etqan-agency/etqan_tutor/pull/27 | 0 |
-| B3d | B3 | spec |  |  |  | 0 |
+| B3d | B3 | spec |  | B2-hook-request |  | 0 |
 | B3e | B3 | spec |  |  |  | 0 |
 | B3f | B3 | spec |  |  |  | 0 |
 | B2g | B2 | spec |  |  |  | 0 |
