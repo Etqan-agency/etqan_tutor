@@ -102,7 +102,7 @@
       "branch": "feat/b9d-languages",
       "spec": "docs/superpowers/specs/2026-10-03-platform-extras-design.md",
       "current_slice": "B9d",
-      "current_task": "B9d T5 translations backend (building); T4 done",
+      "current_task": "B9d T5 fix round; T6 quick translate page",
       "session": "60ad3859"
     },
     "B10": {
