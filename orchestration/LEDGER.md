@@ -47,6 +47,7 @@ In flight: **B3c** · Queue: — · Next plan number: 32 · Conductor: 4ddff076
 | B2g | B2 | spec |  |  |  | 0 |
 | B3g | B3 | plan | 26 |  |  | 0 |
 | B3h | B3 | spec |  |  |  | 0 |
+| B6a | B6 | spec |  |  |  | 0 |
 
 ## Open escalations
 
