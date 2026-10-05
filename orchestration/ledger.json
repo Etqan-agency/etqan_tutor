@@ -793,6 +793,16 @@
         "B11"
       ],
       "source": "spec 2026-10-05-b3h H-2..H-9 (post-review)"
+    },
+    {
+      "id": "D32",
+      "phase": "B6",
+      "decision": "Extends D26/D29 (B6c): learning.services.review_summary(*, teacher_user_id=None, student_user_id=None, since: date, until: date) -> ReviewSummary(count: int, average: float|None) over eligible reviewed sessions with since <= occurs_on < until (average rounded to 2 places, None when count 0); learning.services.reviews_of(student_user_id, *, month: date) -> list[ReviewMonth(session_id, occurs_on, course_id, course_name_en, course_name_ar, teacher_user_id, teacher_name, rating, comment)] for that calendar month, oldest first. Eligible = completed, student present, has a subscription, kind != trial. Reviews change nothing else (no pay effect).",
+      "affects": [
+        "B4",
+        "B10"
+      ],
+      "source": "spec 2026-10-05-b6c-reviews-honour R-5"
     }
   ],
   "requests": [
