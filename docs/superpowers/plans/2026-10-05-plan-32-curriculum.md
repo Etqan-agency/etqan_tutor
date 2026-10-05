@@ -15,12 +15,11 @@
 ## Global Constraints
 
 - Every command runs from the worktree `/home/abdulkhalek/Projects/etqan_tutor-wt/b6`, against this stream's stack (its `.env.stream`; the stack is up via `just dev-backend`). Never run `git submodule update` or any writing `git submodule` command. Never run `manage.py`, `migrate` or e2e any other way than below.
-- **How to run things** (wherever a step says `uv run pytest …`, `just manage …`, `pnpm vitest …`, use these):
-  - `export DC="docker compose -f docker-compose.local.yml"; set -a; . ./.env.stream; set +a; export HOST_UID=$(id -u) HOST_GID=$(id -g)` (once per shell)
-  - backend tests: `$DC run --rm -e DATABASE_URL=postgres://etqan:etqan@postgres:5432/etqan -e DJANGO_EMAIL_SUBJECT_PREFIX= django pytest <paths> -q` (add `--cov=etqan.learning --cov-report=term-missing` for coverage)
-  - backend lint: `$DC run --rm django sh -euc 'ruff check . && ruff format --check .'`; boundaries: `$DC run --rm django lint-imports`
-  - migrations: `$DC run --rm django python manage.py makemigrations learning`, then `just migrate`
-  - dashboard tests: `$DC run --rm dashboard pnpm vitest run <paths>`; types: `$DC run --rm dashboard pnpm tsc --noEmit`; lint: `$DC run --rm dashboard pnpm lint`
+- **How to run things** (wherever a step says `uv run pytest …`, `just manage …`, `pnpm vitest …`, use these; `D=/home/abdulkhalek/.claude/jobs/0bc5cdff/tmp/dc`, a wrapper that loads `.env.stream` and calls `docker compose` on this stack):
+  - backend tests: `$D pytest <paths> -q` (paths relative to `backend/`; add `--cov=etqan.learning --cov-report=term-missing` for coverage)
+  - backend lint: `$D django sh -euc 'ruff check . && ruff format --check .'`; boundaries: `$D django lint-imports`; format: `$D django ruff format <paths>`
+  - migrations: `$D manage makemigrations learning`, then `just migrate`
+  - dashboard: `$D dash pnpm vitest run <paths>`; `$D dash pnpm tsc --noEmit`; `$D dash pnpm lint`
   - whole suites: `just test`, `just lint`, `just e2e [spec]`, `just seed`
 - Backend coverage ≥ 80 %; dashboard lines/statements ≥ 80, branches/functions ≥ 70.
 - Business logic only in `etqan/learning/services/`; views are thin. `etqan.learning` imports only `etqan.platform`, `etqan.identity.services`, `etqan.catalogue.services`, `etqan.scheduling.services` (tests may import other apps' models).
