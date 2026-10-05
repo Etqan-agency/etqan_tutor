@@ -9,7 +9,7 @@ In flight: **B9d** · Queue: B2e · Next plan number: 38 · Conductor: 4ddff076
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | build | 1 | B2e | B2e queued; B2f plan 37 being written |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 4fddb642 |
-| B3 | Money depth | build | 2 | B3h | B3h Task 3 |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
+| B3 | Money depth | build | 2 | B3h | B3h Task 4 |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
 | B6 | Learning | build | 3 | B6b | B6b Task 11 (e2e) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 87f8af50 |
