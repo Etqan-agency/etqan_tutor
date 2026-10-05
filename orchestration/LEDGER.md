@@ -103,7 +103,6 @@ In flight: **B2e** · Queue: B9d, B6b, B3h, B6c · Next plan number: 40 · Condu
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| dashboard/src/features/scheduling/TermFields.test.tsx | B3 | R2 hook (B3d T9-T10, delegated by B2) | 2026-10-05T21:16:23+00:00 |
 | dashboard/src/features/scheduling/SubscriptionForm.test.tsx | B3 | R2 hook (B3d T9-T10, delegated by B2) | 2026-10-05T21:16:23+00:00 |
 | dashboard/src/features/scheduling/SubscriptionActions.test.tsx | B3 | R2 hook (B3d T9-T10, delegated by B2) | 2026-10-05T21:16:23+00:00 |
 | dashboard/src/features/scheduling/SupervisorFields.test.tsx | B3 | R2 hook (B3d T9-T10, delegated by B2) | 2026-10-05T21:16:23+00:00 |
