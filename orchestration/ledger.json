@@ -328,7 +328,7 @@
       "requires": [
         "B2-hook-request"
       ],
-      "plan_number": null,
+      "plan_number": 36,
       "spec": "docs/superpowers/specs/2026-10-05-b3d-countries-currencies-design.md",
       "plan": null,
       "prs": null,
@@ -437,7 +437,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 36,
+  "next_plan_number": 37,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
