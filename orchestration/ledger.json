@@ -805,6 +805,17 @@
         "B10"
       ],
       "source": "spec 2026-10-05-b6c-reviews-honour R-5"
+    },
+    {
+      "id": "D33",
+      "phase": "B6",
+      "decision": "Extends D26/D29/D32 (B6d): learning.services.certificates_of(student_user_id, *, month: date) -> list[CertificateMonth(certificate_id, course_id, course_name_en, course_name_ar, kind, issued_on, revoked)] for certificates issued in that calendar month. No B5 hook (COMM-004 has no certificate notice). Recorded-course certificates are B7's: any change to learning.Certificate/issue_certificate is a request to B6. Public verification: anonymous GET /api/v1/learning/certificates/verify/<code>/ (unguessable code, per-IP throttle, verified_certificates requires certificates).",
+      "affects": [
+        "B5",
+        "B7",
+        "B10"
+      ],
+      "source": "spec 2026-10-05-b6d-certificates T-8, T-11"
     }
   ],
   "requests": [
