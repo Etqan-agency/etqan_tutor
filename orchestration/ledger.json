@@ -730,6 +730,17 @@
         "B10"
       ],
       "source": "spec 2026-10-05-b6-learning B6-3, B6-6, B6-9"
+    },
+    {
+      "id": "D27",
+      "phase": "B9",
+      "decision": "dashboard nav gains optional NavItem.badge (count badge, 99+ cap, 60s refresh) with NAV_BADGE_LABELS in nav.ts and a badges prop on AppSidebar/AppShell — additive shell change outside the phase markers, first used by B9c Registrations — no nav badge existed; reuse it rather than copying — cost if wrong: a small merge in AppShell/AppSidebar",
+      "affects": [
+        "B5",
+        "B6",
+        "B7"
+      ],
+      "source": "B9c Task 9 (dashboard a0bc4b8)"
     }
   ],
   "requests": [
