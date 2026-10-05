@@ -12,7 +12,7 @@ In flight: **—** · Queue: B3afix · Next plan number: 33 · Conductor: 4ddff0
 | B3 | Money depth | build | 2 | B3g | B3g pre-flight (Plan 26) |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | bbb7e4fa |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
-| B6 | Learning | build | 3 | B6a | B6a Task 11 (student levels, panel, upgrades) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 0bc5cdff |
+| B6 | Learning | build | 3 | B6a | B6a Task 12 (my progress + card) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 0bc5cdff |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | build | 4 | B9c | Task 11 e2e |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | 60ad3859 |
