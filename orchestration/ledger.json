@@ -449,12 +449,6 @@
   },
   "claims": [
     {
-      "target": "dashboard/src/features/website/InquiriesList.test.tsx",
-      "phase": "B2",
-      "reason": "B2e spec E-8/§7, conductor ruling 2026-10-03: InquiriesList gains an optional actions prop; the inquiries route passes scheduling's TrialFromInquiry (one commit)",
-      "since": "2026-10-05T14:44:29+00:00"
-    },
-    {
       "target": "dashboard/src/routes/_authed/website.inquiries.tsx",
       "phase": "B2",
       "reason": "B2e spec E-8/§7, conductor ruling 2026-10-03: InquiriesList gains an optional actions prop; the inquiries route passes scheduling's TrialFromInquiry (one commit)",
