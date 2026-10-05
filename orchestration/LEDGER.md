@@ -108,6 +108,7 @@ In flight: **B2e** · Queue: B9d, B6b, B3h · Next plan number: 40 · Conductor:
 | backend/etqan/scheduling/tests/test_country_pricing.py | B3 | R2 hook (B3d T9-T10, delegated by B2) | 2026-10-05T21:16:22+00:00 |
 | dashboard/src/features/scheduling/TermFields.tsx | B3 | R2 hook (B3d T9-T10, delegated by B2) | 2026-10-05T21:16:22+00:00 |
 | dashboard/src/features/scheduling/SubscriptionForm.tsx | B3 | R2 hook (B3d T9-T10, delegated by B2) | 2026-10-05T21:16:22+00:00 |
+| dashboard/src/features/scheduling/RenewDialog.tsx | B3 | R2 hook (B3d T9-T10, delegated by B2) | 2026-10-05T21:16:23+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
