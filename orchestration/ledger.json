@@ -374,7 +374,7 @@
     },
     "B3h": {
       "phase": "B3",
-      "status": "plan",
+      "status": "build",
       "requires": [],
       "plan_number": 35,
       "spec": "docs/superpowers/specs/2026-10-05-b3h-exchange-rates-design.md",
