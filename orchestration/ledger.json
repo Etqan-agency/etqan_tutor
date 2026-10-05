@@ -662,6 +662,23 @@
         "B11"
       ],
       "source": "spec 2026-10-05-b3h H-3..H-7"
+    },
+    {
+      "id": "D25",
+      "phase": "B3",
+      "decision": "etqan.platform.exceptions.ValidationError gains an optional code (default validation_error), additive like D15's member_id; the exception handler adds it to the body.",
+      "affects": [
+        "B2",
+        "B4",
+        "B5",
+        "B6",
+        "B7",
+        "B8",
+        "B9",
+        "B10",
+        "B11"
+      ],
+      "source": "spec 2026-10-05-b3d D-20; ledger D15 precedent"
     }
   ],
   "requests": [
