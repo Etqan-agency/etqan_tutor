@@ -719,6 +719,17 @@
         "B11"
       ],
       "source": "spec 2026-10-05-b3d D-20; ledger D15 precedent"
+    },
+    {
+      "id": "D26",
+      "phase": "B6",
+      "decision": "Learning data for B10: learning.services.progress_of(student_user_id, *, month) -> list[CourseProgress] (per course: level at the month's end, topics completed in the month, completed_total/total_topics, level changes and upgrade decisions in the month; month = calendar month in the academy's timezone). A student's level is kept per (student, course), not per subscription, so renewals/bundles/group rows keep progress; B6 needs nothing from B2f. B6 sends no notifications: B5 finders call B6's read services (each B6 slice names its own).",
+      "affects": [
+        "B2",
+        "B5",
+        "B10"
+      ],
+      "source": "spec 2026-10-05-b6-learning B6-3, B6-6, B6-9"
     }
   ],
   "requests": [
