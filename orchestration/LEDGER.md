@@ -8,7 +8,7 @@ In flight: **B3g** · Queue: B9d · Next plan number: 37 · Conductor: 4ddff076
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | build | 1 | B2e | B2e final whole-slice review (T1–19 done) |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 4fddb642 |
+| B2 | Scheduling depth | build | 1 | B2e | B2e final fix wave (backend + dashboard) |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 4fddb642 |
 | B3 | Money depth | queued | 2 | B3g | B3g in flight: force-pushed (be 5020791, da 27380f6, meta 8bdbf94), gates green; awaiting merge |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
