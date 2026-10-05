@@ -761,6 +761,16 @@
         "B11"
       ],
       "source": "spec 2026-10-03-b3g G-12, G-14, G-15; Plan 26 Task 5"
+    },
+    {
+      "id": "D29",
+      "phase": "B6",
+      "decision": "Extends D26 (B6b): learning.services.homework_events(*, since, until) -> list[HomeworkEvent(kind 'set'|'answered'|'completed', homework_id, student_user_id, course_id, set_by_user_id|None, at)], window [since, until) aware UTC, inside tenant_context, derived from current state (not an event log); B5 resolves parents via identity.services. learning.services.homework_of(student_user_id, *, month) -> list[HomeworkMonth(homework_id, course_id, course_name_en, course_name_ar, title, status, set_on, answered_at, completed_at)] for homework set or completed in the academy-timezone month.",
+      "affects": [
+        "B5",
+        "B10"
+      ],
+      "source": "spec 2026-10-05-b6b-homework-content H-11, H-12"
     }
   ],
   "requests": [
