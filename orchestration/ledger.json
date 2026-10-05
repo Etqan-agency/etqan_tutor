@@ -220,7 +220,7 @@
     },
     "B2d": {
       "phase": "B2",
-      "status": "plan",
+      "status": "build",
       "requires": [],
       "plan_number": 31,
       "spec": null,
