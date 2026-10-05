@@ -9,7 +9,7 @@ In flight: **B2e** · Queue: B9d, B6b, B3h · Next plan number: 40 · Conductor:
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | build | 1 | B2e | B2f T12 seeds (T1–11 done) |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 4fddb642 |
-| B3 | Money depth | build | 2 | B3h | B3d Task 8; B3h queued |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
+| B3 | Money depth | build | 2 | B3h | B3d Task 9 (R2 hook, claims held); B3h queued |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
 | B6 | Learning | review | 3 | B6c | B6c fresh-stack gates | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 87f8af50 |
