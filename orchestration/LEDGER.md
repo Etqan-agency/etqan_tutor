@@ -50,7 +50,7 @@ In flight: **B2e** · Queue: B9d, B6b, B3h, B6c · Next plan number: 40 · Condu
 | B6a | B6 | merged | 32 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/20 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/21 https://github.com/Etqan-agency/etqan_tutor/pull/33 | 0 |
 | B6b | B6 | queued | 34 | B6a | https://github.com/Etqan-agency/etqan_tutor_backend/pull/23 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/24 https://github.com/Etqan-agency/etqan_tutor/pull/36 | 0 |
 | B6c | B6 | queued | 38 | B6a | https://github.com/Etqan-agency/etqan_tutor_backend/pull/25 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/26 https://github.com/Etqan-agency/etqan_tutor/pull/39 | 0 |
-| B6d | B6 | plan | 39 | B6a |  | 0 |
+| B6d | B6 | build | 39 | B6a |  | 0 |
 | B3afix | B3 | merged |  |  | https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/18 https://github.com/Etqan-agency/etqan_tutor/pull/30 | 0 |
 
 ## Open escalations
