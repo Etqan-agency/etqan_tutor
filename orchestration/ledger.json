@@ -651,6 +651,17 @@
         "B11"
       ],
       "source": "spec 2026-10-05-b3d D-4..D-6, §4.2"
+    },
+    {
+      "id": "D24",
+      "phase": "B3",
+      "decision": "Cross-currency figures only via finance.services.convert_estimate(lines) -> Estimate(currency, amount_minor|None, missing, as_of): manual current rates to the academy currency, exact sum rounded once, null (never partial) when a rate is missing, always labelled an estimate next to the per-currency figures (extends B3-4).",
+      "affects": [
+        "B4",
+        "B7",
+        "B11"
+      ],
+      "source": "spec 2026-10-05-b3h H-3..H-7"
     }
   ],
   "requests": [
