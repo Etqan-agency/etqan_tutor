@@ -284,7 +284,7 @@
     },
     "B9d": {
       "phase": "B9",
-      "status": "build",
+      "status": "queued",
       "requires": [],
       "plan_number": 29,
       "spec": "docs/superpowers/specs/2026-10-04-b9d-languages-design.md",
@@ -812,7 +812,9 @@
       "status": "done"
     }
   ],
-  "queue": [],
+  "queue": [
+    "B9d"
+  ],
   "in_flight": "B3g",
   "main_heads": {
     "backend": "82bc5ed761c324d1814533a6c3395709148c1f9c",
