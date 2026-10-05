@@ -95,14 +95,14 @@
     },
     "B9": {
       "title": "Platform extras",
-      "status": "queued",
+      "status": "build",
       "requires": [],
       "slot": 4,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b9",
-      "branch": "feat/b9b-sign-in",
+      "branch": "feat/b9c-registration",
       "spec": "docs/superpowers/specs/2026-10-03-platform-extras-design.md",
-      "current_slice": "B9b",
-      "current_task": "B9b queued",
+      "current_slice": "B9c",
+      "current_task": "Task 1 switches, sign-in options, SMS",
       "session": "60ad3859"
     },
     "B10": {

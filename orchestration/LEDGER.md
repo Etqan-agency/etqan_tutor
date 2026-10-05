@@ -15,7 +15,7 @@ In flight: **B2c** · Queue: — · Next plan number: 32 · Conductor: 4ddff076
 | B6 | Learning | waiting-deps |  |  |  | B2 |  |  |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
 | B8 | Marketing extras | build | 3 | B8e | B8e Task 6 |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
-| B9 | Platform extras | queued | 4 | B9b | B9b queued |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | 60ad3859 |
+| B9 | Platform extras | build | 4 | B9c | Task 1 switches, sign-in options, SMS |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | 60ad3859 |
 | B10 | AI | waiting-deps |  |  |  | B6 |  |  |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 
