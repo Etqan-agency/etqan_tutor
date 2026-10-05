@@ -9,7 +9,7 @@
       "branch": "feat/b2f-bundles",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2e",
-      "current_task": "B2f T1 (B2e PRs open, CI down E2)",
+      "current_task": "B2f T3 (T1 done, T2 in review)",
       "session": "4fddb642"
     },
     "B3": {
