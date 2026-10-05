@@ -396,7 +396,7 @@
     },
     "B6b": {
       "phase": "B6",
-      "status": "plan",
+      "status": "build",
       "requires": [
         "B6a"
       ],
