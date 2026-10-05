@@ -12,7 +12,7 @@ In flight: **B3c** · Queue: — · Next plan number: 33 · Conductor: 4ddff076
 | B3 | Money depth | queued | 2 | B3c | B3c in flight: rebased on b05a107, unit gates green, e2e running |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | bbb7e4fa |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
-| B6 | Learning | spec | 3 | B6a | B6a spec review (rerun) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 0bc5cdff |
+| B6 | Learning | plan | 3 | B6a | B6a plan (writing) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 0bc5cdff |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | build | 4 | B9c | Task 8 registration page (review) |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | 60ad3859 |
