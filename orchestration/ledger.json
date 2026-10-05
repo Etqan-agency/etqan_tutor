@@ -419,7 +419,7 @@
     },
     "B6d": {
       "phase": "B6",
-      "status": "spec",
+      "status": "plan",
       "requires": [],
       "plan_number": null,
       "spec": "docs/superpowers/specs/2026-10-05-b6d-certificates-design.md",
