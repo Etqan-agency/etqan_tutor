@@ -55,16 +55,16 @@
     },
     "B6": {
       "title": "Learning",
-      "status": "queued",
+      "status": "build",
       "requires": [
         "B2"
       ],
       "slot": 3,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b6",
-      "branch": "feat/b6a-learning",
+      "branch": "feat/b6b-homework",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
-      "current_slice": "B6a",
-      "current_task": "B6a in flight: rebased on 34b1ac4, gates green, pushed (be bf67779, da 4854d74, meta ddb1fe4)",
+      "current_slice": "B6b",
+      "current_task": "B6b Task 1 (models)",
       "session": "87f8af50"
     },
     "B7": {
