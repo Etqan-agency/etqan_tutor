@@ -14,14 +14,14 @@
     },
     "B3": {
       "title": "Money depth",
-      "status": "queued",
+      "status": "build",
       "requires": [],
       "slot": 2,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b3",
-      "branch": "feat/b3g-links-records",
+      "branch": "feat/b3h-exchange-rates",
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
-      "current_slice": "B3g",
-      "current_task": "B3g in flight: force-pushed (be 5020791, da 27380f6, meta 8bdbf94), gates green; awaiting merge",
+      "current_slice": "B3h",
+      "current_task": "B3h pre-flight (Plan 35)",
       "session": "b34329de"
     },
     "B4": {

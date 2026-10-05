@@ -9,7 +9,7 @@ In flight: **B9d** · Queue: — · Next plan number: 37 · Conductor: 4ddff076
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | build | 1 | B2e | B2e final fix wave (backend + dashboard) |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 4fddb642 |
-| B3 | Money depth | queued | 2 | B3g | B3g in flight: force-pushed (be 5020791, da 27380f6, meta 8bdbf94), gates green; awaiting merge |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
+| B3 | Money depth | build | 2 | B3h | B3h pre-flight (Plan 35) |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
 | B6 | Learning | build | 3 | B6b | B6b Task 9 (homework screens) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 87f8af50 |
