@@ -9,7 +9,7 @@
       "branch": "feat/b2c-activity-log",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2c",
-      "current_task": "B2c in flight: rebasing",
+      "current_task": "B2c PRs open; awaiting conductor merge; B2d plan being written",
       "session": "584ba70e"
     },
     "B3": {
