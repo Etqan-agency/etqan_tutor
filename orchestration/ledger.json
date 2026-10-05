@@ -63,8 +63,8 @@
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b6",
       "branch": "feat/b6a-learning",
       "spec": null,
-      "current_slice": null,
-      "current_task": null,
+      "current_slice": "B6a",
+      "current_task": "B6 phase spec + B6a spec (brainstorm)",
       "session": "0bc5cdff"
     },
     "B7": {
