@@ -386,7 +386,7 @@
     },
     "B6a": {
       "phase": "B6",
-      "status": "spec",
+      "status": "plan",
       "requires": [],
       "plan_number": 32,
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
