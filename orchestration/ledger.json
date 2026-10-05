@@ -6,10 +6,10 @@
       "requires": [],
       "slot": 1,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b2",
-      "branch": "feat/b2e-trials",
+      "branch": "feat/b2f-bundles",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2e",
-      "current_task": "B2e PRs open (be#24 da#25 meta); B2f plan 37 ready",
+      "current_task": "B2f build (stacked on B2e branches until B2e merges; CI down E2)",
       "session": "4fddb642"
     },
     "B3": {
