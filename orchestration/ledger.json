@@ -55,7 +55,7 @@
     },
     "B6": {
       "title": "Learning",
-      "status": "build",
+      "status": "review",
       "requires": [
         "B2"
       ],
@@ -64,7 +64,7 @@
       "branch": "feat/b6c-reviews",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
       "current_slice": "B6c",
-      "current_task": "B6c Task 9 (e2e)",
+      "current_task": "B6c final whole-branch review",
       "session": "87f8af50"
     },
     "B7": {
