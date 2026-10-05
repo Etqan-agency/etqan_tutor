@@ -8,7 +8,7 @@ In flight: **B9c** · Queue: — · Next plan number: 34 · Conductor: 4ddff076
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | build | 1 | B2e | B2e preflight |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | e0015815 |
+| B2 | Scheduling depth | build | 1 | B2e | B2e Task 1 |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | e0015815 |
 | B3 | Money depth | build | 2 | B3g | B3g Task 6 public pay routes + purposes (T1-5 done) |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
