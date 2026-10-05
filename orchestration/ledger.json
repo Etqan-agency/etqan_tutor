@@ -397,10 +397,12 @@
     "B6b": {
       "phase": "B6",
       "status": "plan",
-      "requires": [],
+      "requires": [
+        "B6a"
+      ],
       "plan_number": 34,
       "spec": "docs/superpowers/specs/2026-10-05-b6b-homework-content-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-05-plan-34-homework-content.md",
       "prs": null,
       "bounces": 0
     },
