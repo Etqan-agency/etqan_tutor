@@ -830,6 +830,18 @@
         "B2"
       ],
       "source": "B2 plan 37; conductor ruling 2026-10-05"
+    },
+    {
+      "id": "D35",
+      "phase": "B3",
+      "decision": "After B3d, create/renew subscription calls that send price_minor without currency read it in the student's resolved currency (no error), so any form or caller that sends price_minor MUST also send currency. B3d forms do; B2f group/bundle forms and any later caller must too. Row errors use dot keys (D34).",
+      "affects": [
+        "B2",
+        "B3",
+        "B4",
+        "B11"
+      ],
+      "source": "B3d spec D-4..D-6; B3 note 2026-10-05"
     }
   ],
   "requests": [
