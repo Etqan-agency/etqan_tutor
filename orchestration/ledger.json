@@ -21,7 +21,7 @@
       "branch": "feat/b3c-paypal",
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
       "current_slice": "B3c",
-      "current_task": "B3c queued (be#16 da#15 meta PR); next: B3g build after merge",
+      "current_task": "B3c in flight: rebased on b05a107, unit gates green, e2e running",
       "session": "bbb7e4fa"
     },
     "B4": {
