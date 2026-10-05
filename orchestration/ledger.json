@@ -55,7 +55,7 @@
     },
     "B6": {
       "title": "Learning",
-      "status": "review",
+      "status": "queued",
       "requires": [
         "B2"
       ],
@@ -64,7 +64,7 @@
       "branch": "feat/b6b-homework",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
       "current_slice": "B6b",
-      "current_task": "B6b rebased on master; fresh-stack gates",
+      "current_task": "B6b queued (be#23 da#24 meta#36); next: B6c spec",
       "session": "87f8af50"
     },
     "B7": {
