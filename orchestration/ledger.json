@@ -409,7 +409,7 @@
       "phase": "B6",
       "status": "plan",
       "requires": [],
-      "plan_number": null,
+      "plan_number": 38,
       "spec": "docs/superpowers/specs/2026-10-05-b6c-reviews-honour-design.md",
       "plan": null,
       "prs": null,
@@ -436,7 +436,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 38,
+  "next_plan_number": 39,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
