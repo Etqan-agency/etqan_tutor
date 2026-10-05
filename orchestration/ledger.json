@@ -284,7 +284,7 @@
     },
     "B9d": {
       "phase": "B9",
-      "status": "plan",
+      "status": "build",
       "requires": [],
       "plan_number": 29,
       "spec": "docs/superpowers/specs/2026-10-04-b9d-languages-design.md",
