@@ -36,7 +36,7 @@ In flight: **B9c** · Queue: — · Next plan number: 34 · Conductor: 4ddff076
 | B2f | B2 | spec |  |  |  | 0 |
 | B9a | B9 | merged | 18 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/9 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/8 https://github.com/Etqan-agency/etqan_tutor/pull/18 | 0 |
 | B9b | B9 | merged | 23 | B9a | https://github.com/Etqan-agency/etqan_tutor_backend/pull/14 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/13 https://github.com/Etqan-agency/etqan_tutor/pull/25 | 0 |
-| B9c | B9 | in-flight | 28 | B9b |  | 0 |
+| B9c | B9 | in-flight | 28 | B9b | https://github.com/Etqan-agency/etqan_tutor_backend/pull/19 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/20 https://github.com/Etqan-agency/etqan_tutor/pull/32 | 0 |
 | B9d | B9 | plan | 29 |  |  | 0 |
 | B3a | B3 | merged | 15 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/6 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/5 https://github.com/Etqan-agency/etqan_tutor/pull/15 | 0 |
 | B3b | B3 | merged | 20 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/11 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/10 https://github.com/Etqan-agency/etqan_tutor/pull/20 | 0 |
