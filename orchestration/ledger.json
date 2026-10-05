@@ -314,7 +314,7 @@
     },
     "B3c": {
       "phase": "B3",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [],
       "plan_number": 22,
       "spec": "docs/superpowers/specs/2026-10-03-b3c-paypal-design.md",
@@ -699,10 +699,8 @@
       "status": "open"
     }
   ],
-  "queue": [
-    "B3c"
-  ],
-  "in_flight": null,
+  "queue": [],
+  "in_flight": "B3c",
   "main_heads": {
     "backend": "596f669f3e50d09078cf39bac4800186f611b26b",
     "dashboard": "40d7724e3054f42c26a1f9a424f6d5fc99aac2c0",
