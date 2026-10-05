@@ -319,7 +319,7 @@
       "plan_number": 22,
       "spec": "docs/superpowers/specs/2026-10-03-b3c-paypal-design.md",
       "plan": "22",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/16 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/15 https://github.com/Etqan-agency/etqan_tutor/pull/27",
       "bounces": 0
     },
     "B3d": {
