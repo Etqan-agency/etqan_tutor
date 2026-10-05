@@ -21,7 +21,7 @@
       "branch": "feat/b3h-exchange-rates",
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
       "current_slice": "B3h",
-      "current_task": "B3h pre-flight (Plan 35)",
+      "current_task": "B3h Task 1 (pre-flight: 14 rulings)",
       "session": "b34329de"
     },
     "B4": {
