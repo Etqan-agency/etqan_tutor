@@ -751,6 +751,16 @@
         "B7"
       ],
       "source": "B9c Task 9 (dashboard a0bc4b8)"
+    },
+    {
+      "id": "D28",
+      "phase": "B3",
+      "decision": "Refines D13/D17: a purpose is anonymous-capable via register_purpose(name, prepare=, complete=, public=False); gateways.services.is_public_purpose(name) gates anonymous read/capture/cancel/simulate by checkout UUID. Prepared gains use_switch (default True): fee_for(..., use_switch=) — with use_switch=False the purpose's own add_fee decides at the current fee_basis_points regardless of the academy fee switch. still_payable re-runs prepare with params=RECHECK ({'recheck': True}); public routes must build params only from server-side values (never forward request data).",
+      "affects": [
+        "B7",
+        "B11"
+      ],
+      "source": "spec 2026-10-03-b3g G-12, G-14, G-15; Plan 26 Task 5"
     }
   ],
   "requests": [
