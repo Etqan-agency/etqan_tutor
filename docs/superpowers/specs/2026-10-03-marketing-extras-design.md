@@ -23,7 +23,7 @@ marked `[assumed]` (orchestration PO-2).
 An academy's public site reaches TutorHamster's content surface: it can be put in maintenance, beta or
 "system only" mode, carry the academy's own tracking/ads code, link every social network TutorHamster
 lists, and publish FAQs, advertisements, redirects, articles, a video library, audio/video testimonials
-and pages designed in a visual builder. Every new behaviour or screen is a feature Etqan switches on per
+and pages composed from blocks in a structured editor (B8e E-1: not a free-form visual builder, per D2). Every new behaviour or screen is a feature Etqan switches on per
 academy (M-10).
 
 ## 2. Phase decisions
