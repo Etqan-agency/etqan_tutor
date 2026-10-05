@@ -386,7 +386,7 @@
     },
     "B6a": {
       "phase": "B6",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [],
       "plan_number": 32,
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
@@ -793,10 +793,8 @@
       "status": "open"
     }
   ],
-  "queue": [
-    "B6a"
-  ],
-  "in_flight": null,
+  "queue": [],
+  "in_flight": "B6a",
   "main_heads": {
     "backend": "7a05ba4bb570470ddd750d67dcf1332e0106858a",
     "dashboard": "aab8ea526bf0f96afb1e1ac5311572e6ce06c694",
