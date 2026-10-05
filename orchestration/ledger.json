@@ -408,10 +408,12 @@
     "B6c": {
       "phase": "B6",
       "status": "plan",
-      "requires": [],
+      "requires": [
+        "B6a"
+      ],
       "plan_number": 38,
       "spec": "docs/superpowers/specs/2026-10-05-b6c-reviews-honour-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-05-plan-38-reviews-honour.md",
       "prs": null,
       "bounces": 0
     },
