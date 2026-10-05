@@ -12,7 +12,7 @@ In flight: **B3g** · Queue: — · Next plan number: 35 · Conductor: 4ddff076
 | B3 | Money depth | queued | 2 | B3g | B3g queued; next B3d (blocked on B2 hook R2) / B3h |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
-| B6 | Learning | build | 3 | B6b | B6b Task 2 (homework services) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 87f8af50 |
+| B6 | Learning | build | 3 | B6b | B6b Task 3 (content services) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 87f8af50 |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | build | 4 | B9d | B9d T5 fix round; T6 quick translate page |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | 60ad3859 |
