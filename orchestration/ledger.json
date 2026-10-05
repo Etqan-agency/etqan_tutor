@@ -364,7 +364,7 @@
     },
     "B3g": {
       "phase": "B3",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 26,
       "spec": "docs/superpowers/specs/2026-10-03-b3g-links-records-design.md",
@@ -815,12 +815,12 @@
   "queue": [
     "B9d"
   ],
-  "in_flight": "B3g",
+  "in_flight": null,
   "main_heads": {
-    "backend": "82bc5ed761c324d1814533a6c3395709148c1f9c",
-    "dashboard": "87f241346d7f2b745c22c456e437c8f82a592bcc",
+    "backend": "acaf49678d314db2fe5c316b151d1708891c86e8",
+    "dashboard": "1361e950f115537c1487b8ca80c2d9983288c3bf",
     "marketing": "3d50f3c79e0133eca9dfdd48323bb22a480e2aca",
-    "meta": "cc2074276e332e11971f406d9fc140df55703821"
+    "meta": "39e9c01a0dcff7c935050dde12ac43301bad1a1c"
   },
   "escalations": [
     {
