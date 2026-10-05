@@ -12,7 +12,7 @@ In flight: **B9c** · Queue: B6a · Next plan number: 35 · Conductor: 4ddff076
 | B3 | Money depth | build | 2 | B3g | B3g Task 8 dashboard (backend T1-7 done) |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
-| B6 | Learning | queued | 3 | B6a | B6a queued; B6b spec approved, plan next | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 0bc5cdff |
+| B6 | Learning | queued | 3 | B6a | B6a queued (be#20 da#21 meta#33); B6b spec+plan 34 ready to build after B6a merges | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 0bc5cdff |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | build | 4 | B9c | B9c PRs open; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | 60ad3859 |
