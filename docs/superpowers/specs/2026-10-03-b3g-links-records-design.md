@@ -323,3 +323,42 @@ empty.
 - Any effect of SUB-006 on invoicing or renewals (G-18).
 - Wallet top-up through links (B3e), activation codes as a payment method (B3f), local payment methods
   (B3d).
+
+## 12. Amendments from planning and build (Plan 26)
+
+None of these changes what the slice does for a user; each fixes a name, a gap or a number, or records a
+ruling taken during the build.
+
+**From Plan 26 §12**
+
+- **G-15, the start route.** The generic start route is `POST gateways/checkouts/start/` (not
+  `gateways/checkouts/`). The rule is unchanged: a link purpose's `prepare` answers 404 without a matching
+  token, and that route passes no params.
+- **§3.1, `customer_email`** is an email field of 254 characters; `customer_phone` is at most 30.
+- **§3.1, the migration** is three files, one per step (`0004`, `0005`, `0006`), because Postgres refuses
+  `ALTER TABLE` after an `UPDATE` with pending trigger events in one transaction. `SubscriptionTerms` is
+  `0007`.
+- **§7, features** are plain `Feature(...)` rows.
+
+**Rulings S1 and S2**
+
+- **S1, G-22, imports.** Gateways may read `academy.services` as well as `identity.services`. The contract
+  "gateways reaches identity and academy only through their services" forbids the packages' models, api
+  and scopes; the other gateways contract allows indirect imports.
+- **S2, G-14, still payable.** "Still payable?" is stricter than planned: the link is open and its price
+  is unchanged.
+
+**D-rulings from the build**
+
+- A refunded standalone payment record is not editable (409).
+- Refunding a standalone record needs `payment_receipts` and answers the record's row.
+- A `ValidationError` from the `payment_link` or `donation_link` purpose becomes `purpose_refused`; it is
+  never a webhook 500.
+- Public pay parameters come only from the path token; `RECHECK` is immutable.
+- `NotImpersonating` guards link create and cancel, and capture, cancel and simulate.
+- Payers who share one link token share one pending checkout.
+- The return page calls `/identity/me/` only for non-public purposes, and waits for it before showing
+  invoice links (ledger D30).
+- "Copy link" uses the server's `row.url`.
+- Seeds run only under `GATEWAYS_SIMULATE`.
+- SUB-006 terms reset on renewal.
