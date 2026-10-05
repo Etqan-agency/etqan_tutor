@@ -230,7 +230,7 @@
     },
     "B2e": {
       "phase": "B2",
-      "status": "spec",
+      "status": "plan",
       "requires": [],
       "plan_number": 33,
       "spec": null,

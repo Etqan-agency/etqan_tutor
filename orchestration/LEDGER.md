@@ -32,7 +32,7 @@ In flight: **B3afix** · Queue: B2d · Next plan number: 34 · Conductor: 4ddff0
 | B2b | B2 | merged | 21 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/12 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/11 https://github.com/Etqan-agency/etqan_tutor/pull/21 | 0 |
 | B2c | B2 | merged | 25 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/15 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/14 https://github.com/Etqan-agency/etqan_tutor/pull/26 | 0 |
 | B2d | B2 | queued | 31 |  |  | 0 |
-| B2e | B2 | spec | 33 |  |  | 0 |
+| B2e | B2 | plan | 33 |  |  | 0 |
 | B2f | B2 | spec |  |  |  | 0 |
 | B9a | B9 | merged | 18 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/9 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/8 https://github.com/Etqan-agency/etqan_tutor/pull/18 | 0 |
 | B9b | B9 | merged | 23 | B9a | https://github.com/Etqan-agency/etqan_tutor_backend/pull/14 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/13 https://github.com/Etqan-agency/etqan_tutor/pull/25 | 0 |
