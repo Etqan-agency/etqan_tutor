@@ -235,3 +235,52 @@ without C-5's remote checks, and the step runs only when no PayPal row exists. T
 | Named throttle scope for the PayPal webhook | C-12, §7 |
 | Observed currency (USD, EUR, SAR, AED, GBP, CAD) and locale fields | C-3, C-6 |
 | A pending PayPal checkout expires after N hours | C-16 (N = 72, after reading the order) |
+
+## 12. Amendments from planning and build (Plan 22)
+
+- **Field errors** (C-5, C-6), as B3b's Plan 20 D18 decided: `gateways.incomplete` is a 400 on
+  `enabled`, `gateways.paypal_auth_failed` on `client_id`, `gateways.paypal_webhook_unknown` on
+  `webhook_id`, `gateways.currency_not_supported` on `provider`. `gateways.provider_error` is the
+  platform's 502. PayPal unreachable while enabling is a 502, not a 400.
+- **503 codes:** `gateways.not_configured` (a webhook while the account lacks a webhook id or secret) and
+  `gateways.provider_unavailable` (verification timed out, 5xx, or 401/403/429), per B3b §12 precedent
+  (field 400s, platform 502, named 503s). Attention codes: `provider_refunded`, `provider_reversed`,
+  `purpose_refused`, `capture_unreadable`. Resolve and "needs attention" key on an open attention.
+- **Finding a checkout** (C-12): `CHECKOUT.ORDER.APPROVED` carries an order (its id, and `custom_id` in
+  `purchase_units[0]`). Refunds and reversals are found by the capture id in their `up` link, against
+  `transaction_number`.
+- **Still payable** (C-8): the fee is compared, so a changed fee percentage cancels an approved checkout.
+- **Expiry** (C-16): every PayPal checkout uses 72 h; simulated or orderless ones expire without a read;
+  an approved order no longer payable becomes `expired`. C-16 supersedes B3b §12 "expiry is local only"
+  for PayPal. The PayPal pass runs outside the per-academy transaction (`for_each_academy`,
+  `atomic=False`).
+- **Expiry retries (M6):** transient PayPal errors (unreachable, 5xx, 401/403/429) and a 2xx answer that
+  cannot be read (not a JSON object, or a capture call answered without a capture) leave the checkout
+  pending for a retry; a 4xx refusal other than 401/403/429 expires it. An order PayPal reports
+  `COMPLETED` whose capture cannot be read is never expired: money moved, so the checkout stays pending
+  with attention `capture_unreadable` (`applied=false`) until a later read or webhook completes it or the
+  office resolves it (a resolved flag is not raised again). This supersedes C-16's literal text. Stale
+  real PayPal checkouts with bad credentials (401) stay pending, with a daily warning.
+- **Seeds (H4):** the demo PayPal and Stripe accounts are seeded only when `GATEWAYS_SIMULATE` is on.
+- **Mode switch (L6):** a PayPal mode switch keeps the other environment's webhook id. Enabling checks
+  call PayPal on every enabled save, so a notes-only save answers 502 while PayPal is down.
+- **Reuse window:** a pending PayPal checkout is reused for at most 3 hours (Stripe: 23 h).
+- **Capture failures:** `INSTRUMENT_DECLINED` is treated as any other capture error (502, the checkout
+  stays pending). A retry may get PayPal's cached response, so the payer may have to wait for expiry and
+  restart. Follow-up: a per-attempt capture request id.
+- **Settings changed mid-flight:** switching PayPal mode or client id while an order is approved makes its
+  capture answer 502 until expiry settles it.
+- **Webhook verification** sends the delivered raw bytes verbatim inside `webhook_event`.
+- **Cancel** answers 404 for a non-PayPal checkout, as capture does.
+- **Return page:** it re-captures a still-pending PayPal checkout on each mount (harmless, the server is
+  idempotent) and shows capture errors with a Refresh that asks again.
+- **Decimals:** `etqan.platform.currency` gains `to_decimal_string` and `from_decimal_string`; an amount
+  that does not parse is `amount_mismatch`.
+- **Notes** are at most 2000 characters in the API.
+- **Locale** is only format-checked at save (`^[a-z]{2}-[A-Z]{2}$`): a locale PayPal rejects makes every
+  start fail with 502 until it is corrected.
+- **Impersonation (ledger D19):** start, capture, cancel and simulate refuse a quick-login session (403
+  `identity.impersonating`); reading a checkout stays open.
+- **Wording:** `gateways.errors.provider_failed` is neutral ("did not answer"), since it shows for any
+  provider 502: start, capture on the return page and settings saves. The capture call sends
+  `Prefer: return=representation`.
