@@ -9,7 +9,7 @@ In flight: **—** · Queue: B3afix · Next plan number: 33 · Conductor: 4ddff0
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | build | 1 | B2d | B2d Task 15 (e2e) |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | de2813da |
-| B3 | Money depth | queued | 2 | B3c | B3c in flight (pushed); B3afix queued (da#18 meta#30); next B3g after B3c merges |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | bbb7e4fa |
+| B3 | Money depth | build | 2 | B3g | B3g pre-flight (Plan 26) |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | bbb7e4fa |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
 | B6 | Learning | build | 3 | B6a | B6a Task 11 (student levels, panel, upgrades) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 0bc5cdff |

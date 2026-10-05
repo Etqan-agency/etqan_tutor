@@ -14,14 +14,14 @@
     },
     "B3": {
       "title": "Money depth",
-      "status": "queued",
+      "status": "build",
       "requires": [],
       "slot": 2,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b3",
-      "branch": "feat/b3c-paypal",
+      "branch": "feat/b3g-links-records",
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
-      "current_slice": "B3c",
-      "current_task": "B3c in flight (pushed); B3afix queued (da#18 meta#30); next B3g after B3c merges",
+      "current_slice": "B3g",
+      "current_task": "B3g pre-flight (Plan 26)",
       "session": "bbb7e4fa"
     },
     "B4": {
