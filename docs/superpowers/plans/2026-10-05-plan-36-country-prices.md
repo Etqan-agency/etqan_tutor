@@ -74,7 +74,7 @@ export HOST_UID=$(id -u) HOST_GID=$(id -g)
 | P7 | The price route: `?student` that is not a positive integer is a 400 on `student`; a staff account without `student.view_any` asking with `?student` is a 403, checked before the lookup. Without `?student` the answer is the package's own price whatever the switch says. |
 | P8 | **Dashboard price prefill, one path:** `TermFields` always reads `usePackagePrice(package, studentId)`; without a student the route answers the package's own price. The price field is reset each time the key (package, student, resolved currency) changes; the renew dialog passes `keep` (the subscription's price and currency), and when the resolved currency equals `keep.currency` the field takes `keep.price_minor` (P4-10). Submit is disabled while the price is pending or failed; a failure shows "The price for this student could not be loaded." A 400 with code `catalogue.price_currency_changed` refetches the price queries, so the field resets to the new resolved price. |
 | P9 | `RenewDialog` moves from `values:` to `defaultValues` + `useFillOnOpen` while it is under the claim (house rule), and asks for the price only while open. |
-| P10 | **Group bundles (R2 item 4, D-5)**: B2f is still at `spec` in the ledger, so per R2's own text item (4) becomes part of B2f's build and is not in this plan. **B2e's conversion form** is `SubscriptionForm` with a `trial` prop (B2e branch): it passes `watch("student")` like any create, so it is covered without a change of its own. Rebase on whichever of B2e/B2f merges first; their changes to the same signatures are additive. |
+| P10 | **Group bundles (R2 item 4, D-5)**: B2f is still at `spec` in the ledger, so per R2's own text item (4) becomes part of B2f's build and is not in this plan. **B2e's conversion form** is `SubscriptionForm` with a `trial` prop (B2e branch): it passes `watch("student")` like any create, so it is covered without a change of its own. Rebase on whichever of B2e/B2f merges first; their changes to the same signatures are additive. | Keys are dot-form per D34 (`rows.<i>.<field>`).
 | P11 | The 400's translated text lives in `errors.json` as `errors.catalogue.price_currency_changed` (the form error helper turns any `code` into `errors.<code>`). |
 | P12 | Multipart booleans: DRF reads a missing checkbox in a multipart body as `False`. `LocalMethodInput.is_active` is an `OptionalBoolean` (`default_empty_html = empty`), so a create that leaves it out creates an **active** method. |
 | P13 | The logo is read from `request.data` outside the serializer: absent → unchanged; `""` (or null) → cleared; an uploaded file → checked and stored; anything else → 400 on `logo`. A replaced, cleared or deleted logo's file is deleted in `transaction.on_commit`, so a rolled-back request keeps it. |
@@ -86,7 +86,7 @@ export HOST_UID=$(id -u) HOST_GID=$(id -g)
 
 1. **A student whose country has a price row while `country_pricing` is off** gets the package's own price and currency, on the price route and on a created subscription (D-3). Tests in Task 1 (resolver), Task 2 (route) and Task 9 (hook).
 2. **The resolved currency changes under an open form** (the country row or the student's country is edited after the prefill): the server refuses the stale currency with a 400 `catalogue.price_currency_changed` on `price_minor`, the form shows it, refetches the price and resets the field. Tests in Task 9 (backend) and Task 10 (dashboard).
-3. **A repeated country or a bad row deep in a PUT**: a 400 keyed `rows[i].<field>` on the later row and nothing written (the old list stays). Tests in Task 1 and Task 2.
+3. **A repeated country or a bad row deep in a PUT**: a 400 keyed `rows.i.<field>` on the later row and nothing written (the old list stays). Tests in Task 1 and Task 2.
 4. **Instructions holding HTML, a link and Windows line breaks**: stored trimmed with `\n`, rendered as text with the breaks kept, no element and no anchor made. Tests in Task 3 (service) and Task 8 (invoice block).
 5. **A logo replaced, cleared or deleted, then the request rolled back**: the old file stays; on commit it is removed. A multipart create with no `is_active` makes an active method (P12). Tests in Task 3 and Task 4.
 
@@ -241,17 +241,17 @@ def test_set_country_prices_replaces_the_whole_list_and_cleans_codes(package):
 @pytest.mark.parametrize(
     ("rows", "field"),
     [
-        ([{"country": "", "price_minor": 1, "currency": "SAR"}], "rows[0].country"),
-        ([{"country": "SAU", "price_minor": 1, "currency": "SAR"}], "rows[0].country"),
-        ([{"price_minor": 1, "currency": "SAR"}], "rows[0].country"),
-        ([sa(), {"country": "sa", "price_minor": 1, "currency": "SAR"}], "rows[1].country"),
-        ([sa(), {"country": "EG", "price_minor": 1, "currency": "EG"}], "rows[1].currency"),
-        ([sa(-1)], "rows[0].price_minor"),
-        ([sa(1.5)], "rows[0].price_minor"),
-        ([sa(True)], "rows[0].price_minor"),
-        ([sa("100")], "rows[0].price_minor"),
-        ([{"country": 12, "price_minor": 1, "currency": "SAR"}], "rows[0].country"),
-        (["SA"], "rows[0].country"),
+        ([{"country": "", "price_minor": 1, "currency": "SAR"}], "rows.0.country"),
+        ([{"country": "SAU", "price_minor": 1, "currency": "SAR"}], "rows.0.country"),
+        ([{"price_minor": 1, "currency": "SAR"}], "rows.0.country"),
+        ([sa(), {"country": "sa", "price_minor": 1, "currency": "SAR"}], "rows.1.country"),
+        ([sa(), {"country": "EG", "price_minor": 1, "currency": "EG"}], "rows.1.currency"),
+        ([sa(-1)], "rows.0.price_minor"),
+        ([sa(1.5)], "rows.0.price_minor"),
+        ([sa(True)], "rows.0.price_minor"),
+        ([sa("100")], "rows.0.price_minor"),
+        ([{"country": 12, "price_minor": 1, "currency": "SAR"}], "rows.0.country"),
+        (["SA"], "rows.0.country"),
         ({"country": "SA"}, "rows"),
         ([sa()] * 251, "rows"),
     ],
@@ -399,7 +399,7 @@ def country_prices(package: Package) -> list[PackageCountryPrice]:
 
 
 def _row_error(index: int, field: str, message: str) -> ValidationError:
-    return ValidationError(message, field=f"rows[{index}].{field}")
+    return ValidationError(message, field=f"rows.{index}.{field}")
 
 
 def _clean_country_row(index: int, row) -> dict:
@@ -593,7 +593,7 @@ def test_a_bad_row_is_a_400_keyed_by_its_index(api_for, package):
         format="json",
     )
     assert resp.status_code == 400
-    assert set(resp.json()) == {"rows[1].country"}
+    assert set(resp.json()) == {"rows.1.country"}
     resp = admin.put(rows_url(package), {"country": "SA"}, format="json")
     assert resp.status_code == 400 and "rows" in resp.json()
     assert admin.get(rows_url(package)).json() == [good]
@@ -2284,7 +2284,7 @@ describe("CountryPricesCard", () => {
 		vi.mocked(catalogueApi.setCountryPrices).mockRejectedValue(
 			new AxiosError("bad", "400", undefined, undefined, {
 				status: 400,
-				data: { "rows[1].country": ["This country is already in the list."] },
+				data: { "rows.1.country": ["This country is already in the list."] },
 			} as never),
 		);
 		const user = userEvent.setup();
@@ -4930,7 +4930,7 @@ Expected: PASS, including `subscriptions.spec.ts`, `billing.spec.ts` and `journe
 4. D-5 and R2 item (4) (group bundles) depend on B2f, which is still at `spec`; R2's own text moves (4) into B2f's build, so it is not in this plan (P10).
 5. D-6 says B3d builds the hook "only if B2 explicitly delegates"; the ledger shows R2 as `done` with no delegation note, while the orchestrator states B2 delegated it. The plan takes the delegation as given and claims the files (Task 9 Step 1).
 6. §6 asks that the nav item hide while a *setting* (not a feature) is off; the nav filtered only by codes and features. The plan adds an optional `NavItem.setting` and an `AppShell` fetch (P5) — an additive shell change outside the phase markers, like ledger D27.
-7. §4.1's PUT body is a bare list, but errors are keyed `rows[i].<field>`; the spec does not say where a list-level error goes (not a list, more than 250 rows). The plan uses `rows` (P6).
+7. §4.1's PUT body is a bare list, but errors are keyed `rows.i.<field>`; the spec does not say where a list-level error goes (not a list, more than 250 rows). The plan uses `rows` (P6).
 8. The spec does not mention DRF's multipart rule that a missing boolean reads as `false`; without P12 a method created from a multipart form without `is_active` would be inactive.
 9. "Every existing scheduling test passes unchanged" holds for the backend; two dashboard scheduling tests must add a `catalogueApi.price` mock and `currency: "EGP"` to their expected bodies, since the forms now resolve the price and always send the currency (Task 10).
 10. §8 adds a fourth demo student, so `test_seed_dev`'s demo student count changes from 3 to 4 (Task 5).
