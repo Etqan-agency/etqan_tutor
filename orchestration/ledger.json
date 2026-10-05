@@ -867,6 +867,14 @@
       "question": "B9c (password reset by one-time code) needs an SMS provider account (e.g. Twilio, Vonage, Unifonic for Gulf/Egypt numbers) to send codes to phones in production. Which provider, and will you supply the account/keys? Until then B9c ships with console/test SMS backends and hides the phone option in production; email codes work.",
       "status": "resolved",
       "answer": "Owner (2026-10-03): Twilio. Build a Twilio SMS backend behind the existing provider interface, keys read from env (e.g. TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM), tested with mocks only; console/test backends stay for dev/CI. The phone option stays hidden in production until the keys are set; the owner supplies the account at deploy time."
+    },
+    {
+      "id": "E2",
+      "phase": "B2",
+      "kind": "money",
+      "question": "Conductor (affects all phases): GitHub Actions stopped starting jobs for Etqan-agency repos about 16:30 UTC on 2026-10-05: 'The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check Billing & plans.' No CI can run, so no slice can pass the merge gate (B2e in flight; B9d, B6b queued). Owner: fix the org payment method or raise the Actions spending limit; the conductor then re-runs the pending checks.",
+      "status": "open",
+      "answer": null
     }
   ],
   "conductor_session": "4ddff076"

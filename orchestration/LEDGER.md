@@ -57,6 +57,7 @@ In flight: **B2e** · Queue: B9d, B6b · Next plan number: 40 · Conductor: 4ddf
 
 | Id | Phase | Kind | Question |
 |---|---|---|---|
+| E2 | B2 | money | Conductor (affects all phases): GitHub Actions stopped starting jobs for Etqan-agency repos about 16:30 UTC on 2026-10-05: 'The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check Billing & plans.' No CI can run, so no slice can pass the merge gate (B2e in flight; B9d, B6b queued). Owner: fix the org payment method or raise the Actions spending limit; the conductor then re-runs the pending checks. |
 
 ## Shared decisions
 
