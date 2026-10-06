@@ -341,7 +341,7 @@
       "requires": [
         "B3d"
       ],
-      "plan_number": null,
+      "plan_number": 40,
       "spec": "docs/superpowers/specs/2026-10-06-b3e-student-wallet-design.md",
       "plan": null,
       "prs": null,
@@ -444,7 +444,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 40,
+  "next_plan_number": 41,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
