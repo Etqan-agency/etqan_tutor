@@ -64,7 +64,7 @@
       "branch": "feat/b6d-certificates",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
       "current_slice": "B6d",
-      "current_task": "B6d built; gates running; PRs after B6b/B6c merge",
+      "current_task": "B6d built + gates green; waiting B6b/B6c merge to rebase and open PRs",
       "session": "49b08672"
     },
     "B7": {
