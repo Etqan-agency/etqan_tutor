@@ -9,7 +9,7 @@
       "branch": "feat/b2g-schedules",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2e",
-      "current_task": "B2g T10 (T1–8 done, T9 review); B2e push awaits owner",
+      "current_task": "B2g T11 dashboard (backend T1–9 done, T10 review); B2e push awaits owner",
       "session": "93cae38a"
     },
     "B3": {
