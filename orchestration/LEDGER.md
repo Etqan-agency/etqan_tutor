@@ -107,6 +107,7 @@ In flight: **B9d** · Queue: B6b, B3h, B6c, B3d, B2f · Next plan number: 42 · 
 | backend/etqan/scheduling/services/__init__.py | B3 | R3 hook (B3e T17, delegated by B2) | 2026-10-06T06:20:40+00:00 |
 | backend/etqan/scheduling/services/compensation_balance.py | B3 | R3 hook (B3e T17, delegated by B2) | 2026-10-06T06:20:40+00:00 |
 | backend/etqan/scheduling/services/attendance.py | B3 | R3 hook (B3e T17, delegated by B2) | 2026-10-06T06:20:40+00:00 |
+| backend/etqan/scheduling/services/manual.py | B3 | R3 hook (B3e T17, delegated by B2) | 2026-10-06T06:20:40+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
