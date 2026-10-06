@@ -12,7 +12,7 @@ In flight: **B2e** · Queue: B9d, B6b, B3h, B6c · Next plan number: 40 · Condu
 | B3 | Money depth | build | 2 | B3h | B3d gates done exc. e2e triage (1 failed/3 flaky); B3e spec drafted; B3h queued |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
-| B6 | Learning | build | 3 | B6d | B6d Task 6 (office screens) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 87f8af50 |
+| B6 | Learning | build | 3 | B6d | B6d Task 6 (office screens) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | build | 4 | B9d | B9d re-queued after gitleaks fix |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
