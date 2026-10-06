@@ -457,12 +457,6 @@
   },
   "claims": [
     {
-      "target": "dashboard/src/features/scheduling/SessionPage.test.tsx",
-      "phase": "B3",
-      "reason": "R3 hook (B3e T17): message-text assertions only",
-      "since": "2026-10-06T06:39:45+00:00"
-    },
-    {
       "target": "dashboard/e2e/b2-session-classes.spec.ts",
       "phase": "B3",
       "reason": "R3 hook (B3e T17): message-text assertions only",
