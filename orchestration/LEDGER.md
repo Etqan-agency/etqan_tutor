@@ -9,7 +9,7 @@ In flight: **B9d** · Queue: B6b, B3h, B6c, B3d, B2f · Next plan number: 42 · 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | build | 1 | B2e | B2e rebase pushed? NO — push denied, awaiting owner; B2g T8 building |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 93cae38a |
-| B3 | Money depth | build | 2 | B3h | B3e Task 14; B3h+B3d queued |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
+| B3 | Money depth | build | 2 | B3h | B3e Task 15 (e2e); B3h+B3d queued |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
 | B6 | Learning | build | 3 | B6d | B6d built + gates green; waiting B6b/B6c merge to rebase and open PRs | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
