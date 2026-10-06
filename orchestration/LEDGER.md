@@ -8,7 +8,7 @@ In flight: **B2e** · Queue: B9d, B6b, B3h, B6c, B3d, B2f · Next plan number: 4
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | build | 1 | B2e | B2g T8 (T1–6 done, T7 review) |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 93cae38a |
+| B2 | Scheduling depth | build | 1 | B2e | B2e rebase pushed? NO — push denied, awaiting owner; B2g T8 building |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 93cae38a |
 | B3 | Money depth | build | 2 | B3h | B3e Task 14; B3h+B3d queued |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |

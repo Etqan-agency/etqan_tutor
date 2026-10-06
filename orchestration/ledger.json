@@ -9,7 +9,7 @@
       "branch": "feat/b2g-schedules",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2e",
-      "current_task": "B2g T8 (T1–6 done, T7 review)",
+      "current_task": "B2e rebase pushed? NO — push denied, awaiting owner; B2g T8 building",
       "session": "93cae38a"
     },
     "B3": {
