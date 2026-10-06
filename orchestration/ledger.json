@@ -854,6 +854,17 @@
         "B11"
       ],
       "source": "B3e spec; conductor ruling 2026-10-06"
+    },
+    {
+      "id": "D37",
+      "phase": "B3",
+      "decision": "Wallet balances are read only through wallet.services.balances_of(student_user_id), which returns per-currency balances; later phases (B4, B7, B11) never query wallet models directly.",
+      "affects": [
+        "B4",
+        "B7",
+        "B11"
+      ],
+      "source": "B3e spec; conductor ruling 2026-10-06"
     }
   ],
   "requests": [

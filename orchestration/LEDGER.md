@@ -99,6 +99,7 @@ In flight: **B2e** · Queue: B9d, B6b, B3h, B6c, B3d · Next plan number: 40 · 
 | D34 | B2 | Bundle-row API errors are keyed in dot form rows.<i>.<field> (e.g. rows.0.price_minor), matching DRF and the dashboard server-error mapping (react-hook-form cannot use rows[i]). B3d D-5 and R2 item 4 read rows[0].price_minor as rows.0.price_minor. Whichever of B3d and B2f builds D-5 first keys it this way. | B3, B2 | B2 plan 37; conductor ruling 2026-10-05 |
 | D35 | B3 | After B3d, create/renew subscription calls that send price_minor without currency read it in the student's resolved currency (no error), so any form or caller that sends price_minor MUST also send currency. B3d forms do; B2f group/bundle forms and any later caller must too. Row errors use dot keys (D34). | B2, B3, B4, B11 | B3d spec D-4..D-6; B3 note 2026-10-05 |
 | D36 | B3 | Refines D16 for the wallet (B3e): wallet top-ups are revenue when they arrive; payments with method wallet are never revenue (the money was already counted at top-up, so counting it again would double it); a payment moved into the wallet (status credited) stays revenue. Still per currency, never summed across currencies (D5). | B3, B4, B7, B11 | B3e spec; conductor ruling 2026-10-06 |
+| D37 | B3 | Wallet balances are read only through wallet.services.balances_of(student_user_id), which returns per-currency balances; later phases (B4, B7, B11) never query wallet models directly. | B4, B7, B11 | B3e spec; conductor ruling 2026-10-06 |
 
 ## Claims and requests
 
