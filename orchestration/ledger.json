@@ -240,7 +240,7 @@
     },
     "B2f": {
       "phase": "B2",
-      "status": "build",
+      "status": "queued",
       "requires": [],
       "plan_number": 37,
       "spec": null,
@@ -900,7 +900,8 @@
     "B6b",
     "B3h",
     "B6c",
-    "B3d"
+    "B3d",
+    "B2f"
   ],
   "in_flight": "B2e",
   "main_heads": {
