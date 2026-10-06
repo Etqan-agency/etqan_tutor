@@ -842,6 +842,18 @@
         "B11"
       ],
       "source": "B3d spec D-4..D-6; B3 note 2026-10-05"
+    },
+    {
+      "id": "D36",
+      "phase": "B3",
+      "decision": "Refines D16 for the wallet (B3e): wallet top-ups are revenue when they arrive; payments with method wallet are never revenue (the money was already counted at top-up, so counting it again would double it); a payment moved into the wallet (status credited) stays revenue. Still per currency, never summed across currencies (D5).",
+      "affects": [
+        "B3",
+        "B4",
+        "B7",
+        "B11"
+      ],
+      "source": "B3e spec; conductor ruling 2026-10-06"
     }
   ],
   "requests": [
