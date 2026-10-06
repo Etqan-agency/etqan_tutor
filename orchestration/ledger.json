@@ -230,13 +230,14 @@
     },
     "B2e": {
       "phase": "B2",
-      "status": "in-flight",
+      "status": "build",
       "requires": [],
       "plan_number": 33,
       "spec": null,
       "plan": null,
       "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/24 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/25 https://github.com/Etqan-agency/etqan_tutor/pull/38",
-      "bounces": 0
+      "bounces": 1,
+      "last_bounce": "not a CI failure: owner decision pending on publishing the rebased branch (B2 session push permission); held out of flight so B9d, B6b, B3h, B6c can proceed"
     },
     "B2f": {
       "phase": "B2",
@@ -903,7 +904,7 @@
     "B3d",
     "B2f"
   ],
-  "in_flight": "B2e",
+  "in_flight": null,
   "main_heads": {
     "backend": "acaf49678d314db2fe5c316b151d1708891c86e8",
     "dashboard": "1361e950f115537c1487b8ca80c2d9983288c3bf",
