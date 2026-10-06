@@ -48,3 +48,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B6a** (learning, plan 32; B6 first slice) merged 2026-10-05: backend#20 → main 82bc5ed, dashboard#21 → main 87f2413, meta#33 → 69bb813; pointers bumped on master cc20742. Meta CI green incl. staging-sim, 0 bounces. Locally b9-sign-in phone timed out under load (passes alone); B9 asked to check it.
 
 **B3g** (payment links and records, plan 26) merged 2026-10-05: backend#21 → main acaf496, dashboard#22 → main 1361e95, meta#34 → 838fa59 (also carries B3h spec review fixes); pointers bumped on master 39e9c01. Meta CI green incl. staging-sim, 0 bounces. Requests: R2 (B3d pricing hook) delegated by B2 to B3 under a claim, marked done; R1 (SubscriptionTermsCard line) stays with B2 and can land now.
+
+**meta#37 + dashboard#27** (conductor, 2026-10-06): `just secrets` (gitleaks over tracked files, part of `just lint`), and the two slow axe tests raised (ProfileEditForm 30s to 90s, it took ~42s on every CI run after the billing fix; RegisterPage 60s to 120s). dashboard → main e29be1c; master 894a996. E2 (Actions billing) resolved by the owner earlier today.
