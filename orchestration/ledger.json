@@ -337,13 +337,13 @@
     },
     "B3e": {
       "phase": "B3",
-      "status": "spec",
+      "status": "plan",
       "requires": [
         "B3d"
       ],
       "plan_number": 40,
       "spec": "docs/superpowers/specs/2026-10-06-b3e-student-wallet-design.md",
-      "plan": null,
+      "plan": "40",
       "prs": null,
       "bounces": 0
     },
