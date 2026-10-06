@@ -21,7 +21,7 @@
       "branch": "feat/b3h-exchange-rates",
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
       "current_slice": "B3h",
-      "current_task": "B3e Task 15 (e2e); B3h+B3d queued",
+      "current_task": "B3e T15 review + T17 (R3+Part B, claims held); B3h+B3d queued",
       "session": "b34329de"
     },
     "B4": {
