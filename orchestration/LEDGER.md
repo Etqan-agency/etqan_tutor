@@ -104,7 +104,6 @@ In flight: **B9d** · Queue: B6b, B3h, B6c, B3d, B2f · Next plan number: 42 · 
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| dashboard/e2e/b2-session-classes.spec.ts | B3 | R3 hook (B3e T17): message-text assertions only | 2026-10-06T06:39:45+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
