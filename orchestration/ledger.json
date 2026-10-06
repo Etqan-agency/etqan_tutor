@@ -503,6 +503,12 @@
       "phase": "B3",
       "reason": "R3 hook (B3e T17, delegated by B2)",
       "since": "2026-10-06T06:20:40+00:00"
+    },
+    {
+      "target": "dashboard/src/locales/en/errors.json",
+      "phase": "B3",
+      "reason": "R3 hook (B3e T17, delegated by B2)",
+      "since": "2026-10-06T06:20:40+00:00"
     }
   ],
   "shared_decisions": [
