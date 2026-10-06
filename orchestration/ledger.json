@@ -6,10 +6,10 @@
       "requires": [],
       "slot": 1,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b2",
-      "branch": "feat/b2f-bundles",
+      "branch": "feat/b2g-schedules",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2e",
-      "current_task": "B2f queued; B2g plan 41 being written",
+      "current_task": "B2g T1 (B2f queued, B2e in flight)",
       "session": "4fddb642"
     },
     "B3": {
