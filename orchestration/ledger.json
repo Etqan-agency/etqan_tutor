@@ -9,7 +9,7 @@
       "branch": "feat/b2f-bundles",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2e",
-      "current_task": "B2f final whole-slice review (T1–21 done; T20 skipped)",
+      "current_task": "B2f final fix wave (backend + dashboard)",
       "session": "4fddb642"
     },
     "B3": {
