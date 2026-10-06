@@ -9,7 +9,7 @@
       "branch": "feat/b2g-schedules",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2e",
-      "current_task": "B2g T1 (B2f queued, B2e in flight)",
+      "current_task": "B2g T2 (T1 done)",
       "session": "4fddb642"
     },
     "B3": {
