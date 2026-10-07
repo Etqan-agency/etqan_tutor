@@ -415,7 +415,7 @@
     },
     "B6c": {
       "phase": "B6",
-      "status": "in-flight",
+      "status": "build",
       "requires": [
         "B6a"
       ],
@@ -423,7 +423,8 @@
       "spec": "docs/superpowers/specs/2026-10-05-b6c-reviews-honour-design.md",
       "plan": "docs/superpowers/plans/2026-10-05-plan-38-reviews-honour.md",
       "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/25 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/26 https://github.com/Etqan-agency/etqan_tutor/pull/39",
-      "bounces": 0
+      "bounces": 1,
+      "last_bounce": "e2e: b6-reviews.spec.ts:134 honour-entry dialog stays open after submit (toBeHidden on dialog, both attempts) on CI fresh DB"
     },
     "B6d": {
       "phase": "B6",
@@ -1016,7 +1017,7 @@
     "B3e",
     "B2g"
   ],
-  "in_flight": "B6c",
+  "in_flight": null,
   "main_heads": {
     "backend": "9bf1d02696e917c1bf37841b67656f75e8e90bc0",
     "dashboard": "14c9ae7a491e6d59800f42f331216246998bde10",
