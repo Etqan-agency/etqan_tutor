@@ -78,7 +78,7 @@
       "branch": "feat/b7-spec",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7a",
-      "current_task": "spec-only: all 7 slice specs reviewed+committed (B7a–B7g); R8/R8 requests filed; writing plans 49 (B7a), 50 (B7c)",
+      "current_task": "spec-only: specs B7a–B7g done; plans 49 (B7a), 50 (B7c), 51 (B7b) done; 52 (B7e) in progress; B7d/B7f plans next; B7g plan waits B6d/B3f/R8/R9",
       "session": "b2d9309e"
     },
     "B8": {
