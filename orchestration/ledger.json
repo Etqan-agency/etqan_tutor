@@ -1137,6 +1137,17 @@
         "B11"
       ],
       "source": "spec 2026-10-08-b4-payroll-depth §3 deviations, A-3..A-5"
+    },
+    {
+      "id": "D49",
+      "phase": "B10",
+      "decision": "AI lives in new tenant app etqan.ai and calls Claude only through integrations.resolve('ai'); B10a replaces integrations' NotYet AI provider (providers/ai.py + dashboard AiAccountForm, under a claim on etqan.integrations; probe = models.retrieve, a deviation from integrations §3.3's one-token call). Generation is a draft (AiDraft, Celery, polled), never a write: other phases that want an AI action (B7 playlist content, later course SEO fields) ask B10 by request for an entry in etqan/ai/registry.py and mount the dashboard AiDraftButton; no other app imports anthropic. Metering via ai.services.meter -> etqan_billing.record_usage once integrations slice 2 lands. B10a cannot build until integrations slice 1 is merged (not a ledger slice).",
+      "affects": [
+        "B7",
+        "B11",
+        "conductor"
+      ],
+      "source": "spec 2026-10-08-b10-ai AI-1, AI-2, AI-9, A-1, §4"
     }
   ],
   "requests": [
