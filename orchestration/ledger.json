@@ -639,6 +639,18 @@
       "plan": null,
       "prs": null,
       "bounces": 0
+    },
+    "B7e": {
+      "phase": "B7",
+      "status": "spec",
+      "requires": [
+        "B7a"
+      ],
+      "plan_number": null,
+      "spec": null,
+      "plan": null,
+      "prs": null,
+      "bounces": 0
     }
   },
   "next_plan_number": 49,
