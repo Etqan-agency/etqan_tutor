@@ -1064,7 +1064,7 @@
       "app": "scheduling",
       "to_owner": "B2",
       "what": "R-B5b-1 (B5b broadcasts, spec docs/superpowers/specs/2026-10-07-b5b-broadcasts-design.md §7): once B2f merges, an additive read-only service exported from etqan.scheduling.services: study_group_members(group_id: int) -> StudyGroupMembers(name: str, is_active: bool, student_user_ids: list[int]) — all members of the B2f study group (no eligibility filtering; notifications does that); NotFoundError for a missing group; fixed query count. Non-blocking: B5b ships without the study-group audience if it is not in, and the audience moves to B5d.",
-      "status": "open"
+      "status": "done"
     },
     {
       "id": "R6",
