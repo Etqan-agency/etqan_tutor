@@ -43,7 +43,7 @@ In flight: **B2e** · Queue: B3d, B2f, B3e, B2g, B5a, B6c, B5e · Next plan numb
 | B3c | B3 | merged | 22 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/16 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/15 https://github.com/Etqan-agency/etqan_tutor/pull/27 | 0 |
 | B3d | B3 | queued | 36 | B3h |  | 0 |
 | B3e | B3 | queued | 40 | B3d |  | 0 |
-| B3f | B3 | spec | 45 | B3e |  | 0 |
+| B3f | B3 | plan | 45 | B3e |  | 0 |
 | B2g | B2 | queued | 41 | B2f |  | 0 |
 | B3g | B3 | merged | 26 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/21 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/22 https://github.com/Etqan-agency/etqan_tutor/pull/34 | 0 |
 | B3h | B3 | merged | 35 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/26 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/28 https://github.com/Etqan-agency/etqan_tutor/pull/40 | 0 |

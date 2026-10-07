@@ -350,13 +350,13 @@
     },
     "B3f": {
       "phase": "B3",
-      "status": "spec",
+      "status": "plan",
       "requires": [
         "B3e"
       ],
       "plan_number": 45,
       "spec": "docs/superpowers/specs/2026-10-07-b3f-system-codes-design.md",
-      "plan": null,
+      "plan": "45",
       "prs": null,
       "bounces": 0
     },
