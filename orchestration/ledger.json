@@ -380,7 +380,7 @@
     },
     "B3h": {
       "phase": "B3",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 35,
       "spec": "docs/superpowers/specs/2026-10-05-b3h-exchange-rates-design.md",
@@ -923,12 +923,12 @@
     "B6b",
     "B3e"
   ],
-  "in_flight": "B3h",
+  "in_flight": null,
   "main_heads": {
-    "backend": "96f38fa6e028a1eb1344f85221e8aae7ff63a72e",
-    "dashboard": "e6545d3c5fe6d2792a7f357c521275dc27584be9",
+    "backend": "9bf1d02696e917c1bf37841b67656f75e8e90bc0",
+    "dashboard": "14c9ae7a491e6d59800f42f331216246998bde10",
     "marketing": "3d50f3c79e0133eca9dfdd48323bb22a480e2aca",
-    "meta": "2b8b600bf36e8eecde8fe8fa9d34657c38dfe0b8"
+    "meta": "fbea578816a737ddcf04303ac98b324cbfb743b5"
   },
   "escalations": [
     {
