@@ -11,7 +11,7 @@ In flight: **B6b** · Queue: B2e, B3d, B2f, B3e, B2g, B5a · Next plan number: 4
 | B2 | Scheduling depth | build | 1 | B2e | B2g queued (gates green); B2e/B2f queued; all B2 slices built |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | b1dd2d90 |
 | B3 | Money depth | build | 2 | B3h | B3h CI green (meta#40), awaiting merge; B3d+B3e queued |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
-| B5 | Communication | queued | 4 | B5a | B5a queued; B5b spec+plan 43 ready (needs B5a merged); designing B5e (chat) meanwhile | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
+| B5 | Communication | build | 4 | B5a | B5a queued; building B5e (Plan 44) on feat/b5e-chat stacked on b5a | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
 | B6 | Learning | build | 3 | B6d | B6b in flight: rebased on B3h, gates green, pushed (be ab3b1c1, da 1698b24, meta 2ea48db). B6c fix c940a52 pushed; re-gate + re-queue after B6b merges (migration → 0003) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
