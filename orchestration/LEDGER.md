@@ -16,7 +16,7 @@ In flight: **B3e** · Queue: B2g, B5a, B6c, B5e · Next plan number: 46 · Condu
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  | b2d9309e |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
-| B10 | AI | waiting-deps |  |  |  | B6 |  |  |
+| B10 | AI | waiting-deps |  |  |  | B6 |  | 54d58fd1 |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 
 ## Slices
