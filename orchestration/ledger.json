@@ -351,9 +351,11 @@
     "B3f": {
       "phase": "B3",
       "status": "spec",
-      "requires": [],
+      "requires": [
+        "B3e"
+      ],
       "plan_number": null,
-      "spec": null,
+      "spec": "docs/superpowers/specs/2026-10-07-b3f-system-codes-design.md",
       "plan": null,
       "prs": null,
       "bounces": 0
