@@ -361,7 +361,9 @@
     "B2g": {
       "phase": "B2",
       "status": "build",
-      "requires": [],
+      "requires": [
+        "B2f"
+      ],
       "plan_number": 41,
       "spec": null,
       "plan": null,

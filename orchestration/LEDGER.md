@@ -44,7 +44,7 @@ In flight: **B6c** · Queue: B6b, B2e, B3d, B2f, B3e · Next plan number: 43 · 
 | B3d | B3 | queued | 36 | B3h |  | 0 |
 | B3e | B3 | queued | 40 | B3d |  | 0 |
 | B3f | B3 | spec |  |  |  | 0 |
-| B2g | B2 | build | 41 |  |  | 0 |
+| B2g | B2 | build | 41 | B2f |  | 0 |
 | B3g | B3 | merged | 26 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/21 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/22 https://github.com/Etqan-agency/etqan_tutor/pull/34 | 0 |
 | B3h | B3 | merged | 35 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/26 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/28 https://github.com/Etqan-agency/etqan_tutor/pull/40 | 0 |
 | B6a | B6 | merged | 32 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/20 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/21 https://github.com/Etqan-agency/etqan_tutor/pull/33 | 0 |
