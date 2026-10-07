@@ -949,6 +949,15 @@
         "B11"
       ],
       "source": "spec 2026-10-07-b5-communication B5-2, B5-10, B5-12"
+    },
+    {
+      "id": "D40",
+      "phase": "B5",
+      "decision": "WhatsApp provider is the official WhatsApp Cloud API (Meta); no group posting; stub until credentials",
+      "affects": [
+        "B5"
+      ],
+      "source": "owner, escalation E3"
     }
   ],
   "requests": [
