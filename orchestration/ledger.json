@@ -9,7 +9,7 @@
       "branch": "feat/b2g-schedules",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2e",
-      "current_task": "B2e: merged main, gates running; then push + meta + queue",
+      "current_task": "B2e re-queued (merged main incl. B9d+B3h, gates green); B2g gates next",
       "session": "b1dd2d90"
     },
     "B3": {
