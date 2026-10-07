@@ -647,7 +647,7 @@
         "B7a",
         " B7b"
       ],
-      "plan_number": null,
+      "plan_number": 52,
       "spec": "docs/superpowers/specs/2026-10-08-b7e-recorded-comments-reviews-design.md",
       "plan": null,
       "prs": null,
@@ -681,7 +681,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 52,
+  "next_plan_number": 53,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
