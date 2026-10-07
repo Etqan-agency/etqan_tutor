@@ -400,7 +400,7 @@
     },
     "B6b": {
       "phase": "B6",
-      "status": "in-flight",
+      "status": "build",
       "requires": [
         "B6a"
       ],
@@ -408,7 +408,8 @@
       "spec": "docs/superpowers/specs/2026-10-05-b6b-homework-content-design.md",
       "plan": "docs/superpowers/plans/2026-10-05-plan-34-homework-content.md",
       "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/23 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/24 https://github.com/Etqan-agency/etqan_tutor/pull/36",
-      "bounces": 0
+      "bounces": 1,
+      "last_bounce": "not a CI failure: no B6 session running to rebase (merge-only mode); B6 re-queues when resumed"
     },
     "B6c": {
       "phase": "B6",
@@ -921,7 +922,7 @@
     "B3d",
     "B2f"
   ],
-  "in_flight": "B6b",
+  "in_flight": null,
   "main_heads": {
     "backend": "96f38fa6e028a1eb1344f85221e8aae7ff63a72e",
     "dashboard": "e6545d3c5fe6d2792a7f357c521275dc27584be9",
