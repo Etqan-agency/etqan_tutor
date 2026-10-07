@@ -32,6 +32,16 @@ worktree. A switch is read only through `etqan.platform.features` and written on
 `etqan.tenants`; the supervision rules live only in `etqan.scheduling.services.supervision`, and who
 may supervise only in `access.services.supervisors_queryset`; never restate them elsewhere.
 
+## Integrations (outside the phases)
+
+Slice 1 of `docs/superpowers/specs/2026-10-07-integrations-and-etqan-billing-design.md` is built:
+`etqan.integrations` (`PlatformAccount` in public, `AcademyAccount` per academy), the resolver
+`integrations.services.resolve(service)` (own account → Etqan default if on, feature switch allows
+it and `Academy.etqan_defaults_suspended` is off → none), email sent only through it, Settings →
+Integrations (codes `integration.view` / `integration.update`) and Etqan's defaults in the platform
+admin. Next: slice 2 (metering through `integrations.services.email.meter_email`, prices, Etqan
+invoices, the suspend switch in the admin); B5c builds WhatsApp on the resolver (D41).
+
 ## Follow-ups (from Plans 4–9)
 
 - Phone reset codes (B9c, Twilio): set `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` and `TWILIO_FROM` in
