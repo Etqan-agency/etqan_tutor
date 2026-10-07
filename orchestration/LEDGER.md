@@ -8,7 +8,7 @@ In flight: **B6c** · Queue: B6b, B2e, B3d, B2f, B3e, B2g · Next plan number: 4
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | build | 1 | B2e | B2e re-queued (merged main incl. B9d+B3h, gates green); B2g gates next |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | b1dd2d90 |
+| B2 | Scheduling depth | build | 1 | B2e | B2g queued (gates green); B2e/B2f queued; all B2 slices built |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | b1dd2d90 |
 | B3 | Money depth | build | 2 | B3h | B3h CI green (meta#40), awaiting merge; B3d+B3e queued |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | build | 4 | B5a | B5a Task 3/8: preferences | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
