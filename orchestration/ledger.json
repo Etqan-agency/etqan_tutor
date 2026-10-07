@@ -8,8 +8,8 @@
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b2",
       "branch": "feat/b2g-schedules",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
-      "current_slice": "B2f",
-      "current_task": "B2f PRs open (R2/D-5 built, gates green, e2e 56); B2g queued next",
+      "current_slice": "B2g",
+      "current_task": "B2f merged; B2g merging trunk (B2f) in prep for its in-flight turn",
       "session": "edb38e65"
     },
     "B3": {
