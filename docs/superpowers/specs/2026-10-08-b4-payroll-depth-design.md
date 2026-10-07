@@ -190,7 +190,7 @@ Order: B4a → B4b → B4c → B4d. B4c needs only B4a, so it may be built befor
 | A-5 | **`at_disposal` pay.** With `at_disposal_pays` on, an `at_disposal` session whose teacher attendance is `present` or `not_set` pays at 10000. Its student attendance is always `not_set` (B2a A-11). With the setting off, it is not paid, as today. | ledger D8; B2 B2-6 ("B4 decides its pay"); B2a A-11 · [assumed] |
 | A-6 | **Group class.** See the A-6 detail after this table. | ledger D6, D15; B2f F-4, F-6 · [assumed] |
 | A-7 | **Descriptive line columns** are filled on every session line, whatever the switches: `session_kind` (`regular`, `compensation`, `extra` or `trial`), `session_status` (`completed` or `at_disposal`), `student_attendance`, `pay_bp`, `group_key` (empty without a group) and `group_role` (empty, `carrier` or `member`; filled only in `per_class` mode). `group_key` is `"<bundle_id>:<starts_at as UTC YYYY-MM-DDTHH:MM:SSZ>:<minutes>"`. Lines written before this slice keep these columns empty. | P1 PAY-001/002 columns; spec Plan 7 P7-4 (copied lines) |
-| A-8 | **Counters.** The payslip payload gains `counts = {regular, compensation, extra, trial, at_disposal, student_absent, student_excused, group_members}`. They are computed in SQL from the session lines, as correlated subqueries the way `sessions` and `minutes` are today. `counts` is `null` for a payslip that has session lines with an empty `session_kind` (written before this slice). The existing `sessions` and `minutes` now count only lines that are not `member` lines, so "total hours" is not inflated by per-class rows. Before this slice there are no member lines, so nothing changes. The office list shows the counters as optional columns, as TutorHamster does. They describe stored lines, so they need no switch. | TH §2.6 PAY-001 columns; P1 PAY-002 |
+| A-8 | **Counters.** The payslip payload gains `counts = {regular, compensation, extra, trial, at_disposal, student_absent, student_excused, group_members}`. They are computed in SQL from the session lines, as correlated subqueries the way `sessions` and `minutes` are today. `counts` is `null` for a payslip that has session lines with an empty `session_kind` (written before this slice). The existing `sessions` and `minutes` now count only lines that are not `member` lines, so "total hours" is not inflated by per-class rows. Before this slice there are no member lines, so nothing changes. The office list shows the counters as optional columns behind one toggle, as TutorHamster shows optional columns. They describe stored lines, so they need no switch. | TH §2.6 PAY-001 columns; P1 PAY-002 |
 | A-9 | **Trial and extra sessions** pay by the same rules as any other session. `pays_teacher` decides whether they are paid at all (B2e E-4, B2a A-7). There is no separate trial or extra rate. | ledger D9; B2e E-4 ("B4 decides trial pay") · [assumed] no separate rate (TH shows only counts) |
 | A-10 | **Missing rate.** `missing_rate` is true when any line other than a `member` line has no rate. Today's rule is otherwise unchanged. | spec Plan 7 §4.1 |
 | A-11 | **Access.** See the A-11 detail after this table. | spec Plan 7 §4.7; Plan 12a codes |
@@ -359,18 +359,15 @@ Generate, issue, mark paid, the lock and numbering are unchanged, except that:
   - the student-attendance badge;
   - the weight, when it is below 100 %;
   - "group class — paid on the first line" for `member` lines.
-- **Payslips list.** The counters are optional columns, chosen with the column picker as on other lists.
+- **Payslips list.** A "Show session counts" toggle adds the counter columns. The list has no column picker
+  today, and one toggle is the cheapest form of TutorHamster's optional columns.
 - **Throughout:** both languages, right-to-left, phone width, semantic tokens, and translated error codes
   (`payroll.mixed_currencies`, `payroll.rate_exists`).
 
 ## 10. Seeds (`seed_b4`)
 
-`seed_b4` is idempotent: it skips itself when any `StudentRate` exists. It creates:
-- one student rate for a demo teacher and one of their students;
-- a last-month completed session with the student marked absent, for a teacher whose last-month payslip
-  stays a draft (the plan checks which demo teacher fits Plan 7's seeds).
-
-The switches stay off. The settings row comes from the migration.
+`seed_b4` is idempotent: it skips itself when any `StudentRate` exists. It creates one student rate for a
+demo teacher and one of their students. The switches stay off. The settings row comes from the migration.
 
 ## 11. Testing
 
@@ -402,6 +399,8 @@ The switches stay off. The settings row comes from the migration.
   - Cross-academy isolation.
 - **Dashboard.** The settings page, the student-rate section, the bulk dialog, the payslip line badges and
   the list columns, in both languages. Coverage gates as today.
-- **E2E** (`e2e/b4-pay-rules.spec.ts`). The admin turns on `payroll_rules` and sets the student-absent
-  weight to 50 %. They then regenerate last month and see the seeded absent-student line paid at half
-  rate.
+- **E2E** (`e2e/b4-pay-rules.spec.ts`). The test builds its own data through the API as the admin, so it
+  never depends on the seeds' payslip states. That data is a fresh teacher with a default rate, and an extra
+  session on the 15th of last month marked student absent and teacher present. The admin turns on
+  `payroll_rules` and sets the student-absent weight to 50 % on the settings page. They then generate last
+  month and open the teacher's payslip, where the line is paid at half rate and marked absent at 50 %.
