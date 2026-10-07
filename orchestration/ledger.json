@@ -598,11 +598,11 @@
     },
     "B7a": {
       "phase": "B7",
-      "status": "spec",
+      "status": "plan",
       "requires": [],
       "plan_number": 49,
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-08-plan-49-recorded-courses.md",
       "prs": null,
       "bounces": 0
     },
