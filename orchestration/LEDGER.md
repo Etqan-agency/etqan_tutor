@@ -11,7 +11,7 @@ In flight: **B6b** · Queue: B2e, B3d, B2f, B3e, B2g · Next plan number: 43 · 
 | B2 | Scheduling depth | build | 1 | B2e | B2g queued (gates green); B2e/B2f queued; all B2 slices built |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | b1dd2d90 |
 | B3 | Money depth | build | 2 | B3h | B3h CI green (meta#40), awaiting merge; B3d+B3e queued |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
-| B5 | Communication | build | 4 | B5a | B5a Task 7/8: preferences card | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
+| B5 | Communication | build | 4 | B5a | B5a Task 8/8: e2e + gates | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
 | B6 | Learning | build | 3 | B6d | B6c in flight: updated onto B3h (be f9c185f, da 8fb2a0d, meta 674f0da), gates green; conductor told | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
