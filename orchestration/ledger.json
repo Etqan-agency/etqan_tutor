@@ -1023,6 +1023,17 @@
         "B11"
       ],
       "source": "spec 2026-10-07-b3f-system-codes-design.md §7"
+    },
+    {
+      "id": "D45",
+      "phase": "B4",
+      "decision": "B4, B7 and B10 are launched SPEC-ONLY with no slot (owner, 2026-10-08): worktrees exist, status stays waiting-deps, they write specs and slice plans only, no stack. Conductor: when a slot frees and a phase's deps allow building, give these phases a slot (phase <CODE> --slot n, stream-env.sh, just dev-backend) before launching anything new.",
+      "affects": [
+        "B7",
+        "B10",
+        "conductor"
+      ],
+      "source": "owner"
     }
   ],
   "requests": [
