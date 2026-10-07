@@ -501,7 +501,7 @@
     },
     "B5e": {
       "phase": "B5",
-      "status": "build",
+      "status": "queued",
       "requires": [],
       "plan_number": 44,
       "spec": "docs/superpowers/specs/2026-10-07-b5e-chat-design.md",
@@ -1073,7 +1073,8 @@
     "B3e",
     "B2g",
     "B5a",
-    "B6c"
+    "B6c",
+    "B5e"
   ],
   "in_flight": "B2e",
   "main_heads": {
