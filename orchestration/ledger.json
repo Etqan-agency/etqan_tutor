@@ -345,7 +345,7 @@
       "plan_number": 40,
       "spec": "docs/superpowers/specs/2026-10-06-b3e-student-wallet-design.md",
       "plan": "40",
-      "prs": null,
+      "prs": " https://github.com/Etqan-agency/etqan_tutor_backend/pull/29 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/31 https://github.com/Etqan-agency/etqan_tutor/pull/43",
       "bounces": 0
     },
     "B3f": {
