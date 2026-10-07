@@ -41,7 +41,7 @@
     },
     "B5": {
       "title": "Communication",
-      "status": "review",
+      "status": "queued",
       "requires": [
         "B2"
       ],
@@ -50,7 +50,7 @@
       "branch": "feat/b5a-communication",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "current_slice": "B5a",
-      "current_task": "B5a: all 8 tasks done, gates green; final whole-slice review",
+      "current_task": "B5a queued (final review clean, gates green); next: B5b spec while waiting",
       "session": "4b5b7034"
     },
     "B6": {
