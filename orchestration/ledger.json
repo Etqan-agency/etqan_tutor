@@ -285,7 +285,7 @@
     },
     "B9d": {
       "phase": "B9",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 29,
       "spec": "docs/superpowers/specs/2026-10-04-b9d-languages-design.md",
@@ -903,12 +903,12 @@
     "B3d",
     "B2f"
   ],
-  "in_flight": "B9d",
+  "in_flight": null,
   "main_heads": {
-    "backend": "acaf49678d314db2fe5c316b151d1708891c86e8",
-    "dashboard": "1361e950f115537c1487b8ca80c2d9983288c3bf",
+    "backend": "96f38fa6e028a1eb1344f85221e8aae7ff63a72e",
+    "dashboard": "e6545d3c5fe6d2792a7f357c521275dc27584be9",
     "marketing": "3d50f3c79e0133eca9dfdd48323bb22a480e2aca",
-    "meta": "39e9c01a0dcff7c935050dde12ac43301bad1a1c"
+    "meta": "2b8b600bf36e8eecde8fe8fa9d34657c38dfe0b8"
   },
   "escalations": [
     {
