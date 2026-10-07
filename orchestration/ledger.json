@@ -622,7 +622,7 @@
       "phase": "B7",
       "status": "spec",
       "requires": [],
-      "plan_number": null,
+      "plan_number": 50,
       "spec": "docs/superpowers/specs/2026-10-08-b7c-consultations-office-design.md",
       "plan": null,
       "prs": null,
@@ -681,7 +681,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 50,
+  "next_plan_number": 51,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
