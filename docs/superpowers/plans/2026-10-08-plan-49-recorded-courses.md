@@ -3340,6 +3340,10 @@ def test_others(people, lesson, api_for, staff_for):
     assert as_user(people.other).get(path(v)).status_code == 404
     assert as_user(people.teacher).get(path(v)).status_code == 404
     assert as_user(people.parent).get(path(v)).status_code == 403
+    services.revoke(e, by=api_for("admin").user)
+    # Not their child's course any more: no existence leak to the parent.
+    assert as_user(people.parent).get(path(v)).status_code == 404
+    services.restore(e, by=api_for("admin").user)
     assert staff_for().get(path(v)).status_code == 403
     services.update_video(v, status="draft")
     assert staff_for("playlist_video.view_any").get(path(v)).status_code == 200
@@ -3370,23 +3374,37 @@ def test_off_is_404(people, lesson, set_features):
 ```python
 """Spec A-13, A-14: what a student or parent may see of recorded courses."""
 
+from etqan.identity import services as identity_services
 from etqan.platform.permissions import role_of
 from etqan.recorded.models import Enrolment
 from etqan.recorded.models import PlaylistVideo
 
 
-def can_watch(user, video) -> bool:
-    if role_of(user) != "student":
-        return False
+def _visible_to(student_user_ids, video) -> bool:
     return (
         video.status == PlaylistVideo.Status.PUBLISHED
         and video.playlist.is_published
         and Enrolment.objects.filter(
             playlist_id=video.playlist_id,
-            student__user_id=user.pk,
+            student__user_id__in=student_user_ids,
             status=Enrolment.Status.ACTIVE,
         ).exists()
     )
+
+
+def can_watch(user, video) -> bool:
+    if role_of(user) != "student":
+        return False
+    return _visible_to([user.pk], video)
+
+
+def parent_sees(user, video) -> bool:
+    """A-13: a parent may see a child's published lesson (then 403 on the
+    file and the watched toggle); any other lesson is a 404 to them."""
+    if role_of(user) != "parent":
+        return False
+    children = [c.pk for c in identity_services.children_of(user)]
+    return bool(children) and _visible_to(children, video)
 ```
 
 `services/serving.py`:
@@ -3515,6 +3533,9 @@ class VideoFileView(APIView):
         except NotFoundError:
             raise Http404 from None
         if role_of(request.user) == "parent":
+            # Scope first (no existence leak): 403 only for a child's lesson.
+            if not services.parent_sees(request.user, video):
+                raise Http404
             raise ForbiddenError("A parent cannot open a lesson.")
         if not is_office(request.user) and not services.can_watch(request.user, video):
             raise Http404
@@ -3526,7 +3547,7 @@ class VideoFileView(APIView):
         return services.serve_video(request, video, download=download)
 ```
 
-Export `can_watch` and `serve_video` from `services/__init__.py`. Add to `api/urls.py`:
+Export `can_watch`, `parent_sees` and `serve_video` from `services/__init__.py`. Add to `api/urls.py`:
 
 ```python
 from etqan.recorded.api import file_views
@@ -3552,7 +3573,7 @@ Note: `ATOMIC_REQUESTS` wraps the view; a streamed body is read after the view r
 - Produces:
   - `scope.my_enrolments(user, student_user_id: int | None) -> list[Enrolment]`: a student gets their own; a parent passes a child's user id (missing or not their child → `NotFoundError`). Only active enrolments in published playlists, annotated `watched_count`.
   - `scope.my_playlist(user, playlist_id, student_user_id) -> tuple[Enrolment, list[PlaylistVideo], set[int]]`: published videos and the watched ids. NotFoundError otherwise.
-  - Routes (`IsStudent | IsParent`, `FeatureOn`, listed in `SELF_SERVICE`): `GET recorded/my/?student=<id>`, `GET recorded/my/<playlist id>/?student=<id>`, `PUT|DELETE recorded/my/videos/<id>/watched/` (student only; parent 403).
+  - Routes (`IsStudent | IsParent`, `FeatureOn`, listed in `SELF_SERVICE`): `GET recorded/my/?student=<id>`, `GET recorded/my/<playlist id>/?student=<id>`, `PUT|DELETE recorded/my/videos/<id>/watched/` (student only; a parent gets 403 on a child's lesson, 404 otherwise).
   - JSON: `my/` → `[{enrolment_id, playlist: {id, title, thumbnail_url, content_language}, progress: {watched, total}}]`. `my/<id>/` → `{enrolment_id, playlist: {id, title, description, content, terms, thumbnail_url, content_language}, videos: [{id, title, description, kind, url, embed_provider, embed_id, has_file, downloadable, duration_seconds, thumbnail_url, watched}], progress}`. Watched PUT and DELETE → `{progress}`.
 
 - [ ] **Step 1: Write the failing tests** (`tests/test_api_my.py`)
@@ -3818,12 +3839,15 @@ class MyWatchedView(APIView):
     permission_classes = FAMILY
 
     def _toggle(self, request, pk, watched: bool):
-        if role_of(request.user) != "student":
-            raise ForbiddenError("Only the student marks a lesson watched.")
         try:
             video = services.get_video(pk)
         except NotFoundError:
             raise Http404 from None
+        if role_of(request.user) == "parent":
+            # Scope first (A-13): 403 only for a child's lesson, else 404.
+            if not services.parent_sees(request.user, video):
+                raise Http404
+            raise ForbiddenError("Only the student marks a lesson watched.")
         if not services.can_watch(request.user, video):
             raise Http404
         enrolment = services.enrolment_for(request.user.pk, video.playlist_id)
@@ -3861,7 +3885,7 @@ Export `my_enrolments` and `my_playlist` from `services/__init__.py`.
         "the student's own recorded course, or a parent's child's; scoped in the service"
     ),
     "etqan.recorded.api.my_views.MyWatchedView": (
-        "the student's own watched toggle; parents 403; scoped in the view"
+        "the student's own watched toggle; a parent 403 on a child's lesson, else 404; scoped in the view"
     ),
 ```
 
