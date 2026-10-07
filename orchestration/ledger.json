@@ -22,7 +22,7 @@
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
       "current_slice": "B3h",
       "current_task": "B3h CI green (meta#40), awaiting merge; B3d+B3e queued",
-      "session": "b34329de"
+      "session": "6fb32127"
     },
     "B4": {
       "title": "Payroll depth",
