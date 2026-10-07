@@ -338,7 +338,7 @@
     },
     "B3e": {
       "phase": "B3",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [
         "B3d"
       ],
@@ -1133,12 +1133,12 @@
     "B6c",
     "B5e"
   ],
-  "in_flight": "B3e",
+  "in_flight": null,
   "main_heads": {
-    "backend": "e86e418eaf3f7715cc3fd56af987cec864027776",
-    "dashboard": "0fd99ee970d108f2627a12b66d26f68177f5bff4",
+    "backend": "7b9a594a240d9afe22461f5322e2070082174816",
+    "dashboard": "545d6d1f686a314cebb88d659381408baef4426e",
     "marketing": "3d50f3c79e0133eca9dfdd48323bb22a480e2aca",
-    "meta": "8da3fd9dcb2669b6ccb38ba4aa7d45bc107b090b"
+    "meta": "6b25e64e30a7f36050c776fbb1a113d34094b336"
   },
   "escalations": [
     {
