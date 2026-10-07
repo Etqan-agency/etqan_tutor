@@ -9,7 +9,7 @@
       "branch": "feat/b2g-schedules",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2f",
-      "current_task": "B2f prepped (main + R5 + R6a–d); waits for B3d",
+      "current_task": "B2f in flight: merged B3d trunk (be 7b3393a, da 567621a); building R2/D-5 currency items (plan 37 T20)",
       "session": "edb38e65"
     },
     "B3": {
