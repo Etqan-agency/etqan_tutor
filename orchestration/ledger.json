@@ -530,6 +530,20 @@
       "plan": null,
       "prs": null,
       "bounces": 0
+    },
+    "B10b": {
+      "phase": "B10",
+      "status": "spec",
+      "requires": [
+        "B10a",
+        "B6c",
+        "B6d"
+      ],
+      "plan_number": null,
+      "spec": "docs/superpowers/specs/2026-10-08-b10b-student-reports-design.md",
+      "plan": null,
+      "prs": null,
+      "bounces": 0
     }
   },
   "next_plan_number": 46,
