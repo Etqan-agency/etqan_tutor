@@ -230,7 +230,7 @@
     },
     "B2e": {
       "phase": "B2",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [],
       "plan_number": 33,
       "spec": null,
@@ -1045,14 +1045,13 @@
     }
   ],
   "queue": [
-    "B2e",
     "B3d",
     "B2f",
     "B3e",
     "B2g",
     "B5a"
   ],
-  "in_flight": null,
+  "in_flight": "B2e",
   "main_heads": {
     "backend": "a334f8fd4c14b58bb07042ad34232b4446486492",
     "dashboard": "81df5c29709f93851eda38b26fcd8dcd7cfb3a3a",
