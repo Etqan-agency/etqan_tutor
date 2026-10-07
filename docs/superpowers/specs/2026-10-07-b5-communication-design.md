@@ -242,7 +242,8 @@ The package `__init__` exports them (additive).
 ## 9. B5a API (under `/api/v1/notifications/`)
 
 The preferences endpoints use one shape for reading and writing:
-`{"categories": [{"category": "...", "enabled": bool}]}`. A PATCH may send a subset.
+`{"categories": [{"category": "...", "enabled": bool}]}`; a PATCH may send a subset. Answers also carry
+`notifiable` (`recipients.eligible(user)`), so the card can show T-11's note.
 
 | Method & path | Permission | Body / answer |
 |---|---|---|
