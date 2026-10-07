@@ -8,7 +8,7 @@ In flight: **B3h** · Queue: B6c, B3d, B2f, B6b, B3e · Next plan number: 42 · 
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | build | 1 | B2e | B2g final fix wave |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 93cae38a |
+| B2 | Scheduling depth | build | 1 | B2e | B2g final fix wave |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | b1dd2d90 |
 | B3 | Money depth | build | 2 | B3h | B3h in flight (PRs open); B3d+B3e queued; B3d/B3e rebase after B2e settles |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
