@@ -1034,6 +1034,15 @@
         "conductor"
       ],
       "source": "owner"
+    },
+    {
+      "id": "D46",
+      "phase": "B3",
+      "decision": "Catalogue's _delete message reads 'is used by subscriptions or system codes' (B3f F-25); the code catalogue.in_use is unchanged. VoucherBatch course/package/teacher FKs are PROTECT.",
+      "affects": [
+        "B7"
+      ],
+      "source": "spec 2026-10-07-b3f-system-codes-design.md F-25"
     }
   ],
   "requests": [
