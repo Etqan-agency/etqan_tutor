@@ -973,6 +973,20 @@
         "B10"
       ],
       "source": "owner brainstorming 2026-10-07"
+    },
+    {
+      "id": "D42",
+      "phase": "B5",
+      "decision": "Outside services go through etqan.integrations.resolve(service) (Etqan default or the academy's own account); no phase stores keys of its own; usage on Etqan defaults is recorded via etqan_billing.record_usage. Spec: docs/superpowers/specs/2026-10-07-integrations-and-etqan-billing-design.md (branch feat/integrations).",
+      "affects": [
+        "B2",
+        "B3",
+        "B5",
+        "B7",
+        "B10",
+        "B11"
+      ],
+      "source": "owner brainstorming 2026-10-07"
     }
   ],
   "requests": [
