@@ -62,7 +62,6 @@ In flight: **B6c** · Queue: B6b, B2e, B3d, B2f, B3e · Next plan number: 43 · 
 
 | Id | Phase | Kind | Question |
 |---|---|---|---|
-| E3 | B5 | money | WhatsApp provider for B5c (spec 2026-10-07-b5-communication §3, B5-5): which WhatsApp sending service/account should academies use (e.g. WhatsApp Cloud API / Twilio / a linked-number gateway like TutorHamster's, which also posts to group IDs)? Not blocking: B5c ships a provider interface with an outbox stub that sends nothing; a real provider is a later one-file change once you choose and supply test credentials. |
 
 ## Shared decisions
 

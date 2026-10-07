@@ -1021,8 +1021,8 @@
       "phase": "B5",
       "kind": "money",
       "question": "WhatsApp provider for B5c (spec 2026-10-07-b5-communication §3, B5-5): which WhatsApp sending service/account should academies use (e.g. WhatsApp Cloud API / Twilio / a linked-number gateway like TutorHamster's, which also posts to group IDs)? Not blocking: B5c ships a provider interface with an outbox stub that sends nothing; a real provider is a later one-file change once you choose and supply test credentials.",
-      "status": "open",
-      "answer": null
+      "status": "resolved",
+      "answer": "Owner (2026-10-07): use the official WhatsApp Cloud API (Meta). Build the B5c provider against the Cloud API; keep the stub as the default until the owner supplies test credentials (phone number id + access token). Note: the Cloud API does not post to WhatsApp groups — group messaging is out unless a later decision adds a gateway."
     }
   ],
   "conductor_session": "4ddff076"
