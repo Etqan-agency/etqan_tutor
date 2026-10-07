@@ -1001,6 +1001,14 @@
       "question": "Conductor (affects all phases): GitHub Actions stopped starting jobs for Etqan-agency repos about 16:30 UTC on 2026-10-05: 'The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check Billing & plans.' No CI can run, so no slice can pass the merge gate (B2e in flight; B9d, B6b queued). Owner: fix the org payment method or raise the Actions spending limit; the conductor then re-runs the pending checks.",
       "status": "resolved",
       "answer": "owner fixed billing; Actions runs again"
+    },
+    {
+      "id": "E3",
+      "phase": "B5",
+      "kind": "money",
+      "question": "WhatsApp provider for B5c (spec 2026-10-07-b5-communication §3, B5-5): which WhatsApp sending service/account should academies use (e.g. WhatsApp Cloud API / Twilio / a linked-number gateway like TutorHamster's, which also posts to group IDs)? Not blocking: B5c ships a provider interface with an outbox stub that sends nothing; a real provider is a later one-file change once you choose and supply test credentials.",
+      "status": "open",
+      "answer": null
     }
   ],
   "conductor_session": "4ddff076"
