@@ -12,7 +12,7 @@ In flight: **B6c** · Queue: B3d, B2f, B6b, B3e · Next plan number: 42 · Condu
 | B3 | Money depth | build | 2 | B3h | B3h CI green (meta#40), awaiting merge; B3d+B3e queued |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
-| B6 | Learning | build | 3 | B6d | B6b + B6c rebased on main, gates green, pushed; waiting for queue | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
+| B6 | Learning | build | 3 | B6d | B6c in flight: rebased onto B3h main, gates running | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
