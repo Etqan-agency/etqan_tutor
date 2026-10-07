@@ -657,7 +657,8 @@
       "phase": "B7",
       "status": "spec",
       "requires": [
-        "B7c"
+        "B7c",
+        " B7d"
       ],
       "plan_number": null,
       "spec": null,
