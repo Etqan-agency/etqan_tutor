@@ -54,3 +54,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B9d** (languages, plan 29; B9 last slice) merged 2026-10-07: backend#22 → main 96f38fa, dashboard#23 → main e6545d3, meta#35; pointers bumped on master 2b8b600. Meta CI green; 1 earlier bounce (gitleaks false positive, fixed). Phase B9 complete (B9a to B9d).
 
 **B3h** (exchange rates, plan 35) merged 2026-10-07: backend#26 → main 9bf1d02, dashboard#28 → main 14c9ae7, meta#40; pointers bumped on master fbea578. Meta CI green, 0 bounces.
+
+**B6b** (homework, plan 34) merged 2026-10-07: backend#23 → main a334f8f, dashboard#24 → main 81df5c2, meta#36; pointers bumped on master 2b9d254. Meta CI green, 0 CI bounces (one step-aside: no session during merge-only mode). Includes the b6 e2e email-locator fix.
