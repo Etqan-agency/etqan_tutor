@@ -52,7 +52,7 @@ In flight: **B6c** · Queue: B6b, B2e, B3d, B2f, B3e · Next plan number: 43 · 
 | B6c | B6 | in-flight | 38 | B6a | https://github.com/Etqan-agency/etqan_tutor_backend/pull/25 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/26 https://github.com/Etqan-agency/etqan_tutor/pull/39 | 0 |
 | B6d | B6 | build | 39 | B6a |  | 0 |
 | B3afix | B3 | merged |  |  | https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/18 https://github.com/Etqan-agency/etqan_tutor/pull/30 | 0 |
-| B5a | B5 | spec | 42 |  |  | 0 |
+| B5a | B5 | build | 42 |  |  | 0 |
 | B5b | B5 | spec |  | B2f |  | 0 |
 | B5c | B5 | spec |  | B2g |  | 0 |
 | B5d | B5 | spec |  | B2e, B2g, B6b |  | 0 |

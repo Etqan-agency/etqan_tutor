@@ -447,11 +447,11 @@
     },
     "B5a": {
       "phase": "B5",
-      "status": "spec",
+      "status": "build",
       "requires": [],
       "plan_number": 42,
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-07-plan-42-templates-preferences.md",
       "prs": null,
       "bounces": 0
     },
