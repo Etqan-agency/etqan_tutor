@@ -1011,6 +1011,16 @@
         "B11"
       ],
       "source": "spec 2026-10-07-b3f-system-codes-design.md §7"
+    },
+    {
+      "id": "D44",
+      "phase": "B3",
+      "decision": "Later phases (B7 recorded courses, P1 RC-003 activation code) reach system codes only through vouchers.services; B7 asks B3 for a new kind rather than reading voucher models.",
+      "affects": [
+        "B7",
+        "B11"
+      ],
+      "source": "spec 2026-10-07-b3f-system-codes-design.md §7"
     }
   ],
   "requests": [
