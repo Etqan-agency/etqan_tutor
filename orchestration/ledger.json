@@ -64,7 +64,7 @@
       "branch": "feat/b6d-certificates",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
       "current_slice": "B6d",
-      "current_task": "B6c in flight: rebased onto B3h main, gates running",
+      "current_task": "B6c in flight: updated onto B3h (be f9c185f, da 8fb2a0d, meta 674f0da), gates green; conductor told",
       "session": "49b08672"
     },
     "B7": {
