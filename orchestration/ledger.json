@@ -48,9 +48,9 @@
       "slot": 4,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b5",
       "branch": "feat/b5a-communication",
-      "spec": null,
-      "current_slice": null,
-      "current_task": null,
+      "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
+      "current_slice": "B5a",
+      "current_task": "B5a: phase spec written, spec review running",
       "session": "4b5b7034"
     },
     "B6": {
