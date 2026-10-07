@@ -1073,6 +1073,14 @@
       "to_owner": "B2",
       "what": "R-B5d-1 (B5d more notices, spec docs/superpowers/specs/2026-10-07-b5d-more-notices-design.md §4 R6): additive read-only services exported from etqan.scheduling.services, each a fixed query count, returning Session objects with student__user, teacher__user, course selected: (a) teacher_absences_marked(*, since) — non-cancelled sessions with teacher_attendance='absent' and marked_at>=since; (b) sessions_ended(*, now, after, give_up) — status scheduled, both attendances not_set, ENDS_AT in (now-give_up, now-after]; (c) postponements(*, since, until) -> list[Postponement(entry_id, session, previous_starts_at, new_starts_at, by_user_id, at)] from B2c POSTPONE activity entries (moves back included); (d) sessions_booked(*, kind, since, now) — sessions of kind created >= since, starts_at > now, not cancelled; (e) after B2g: substitutions(*, since, until) -> list[Substitution(id, subscription_id, student, course, regular_teacher_user, substitute_user, starts_on, ends_on, created_at)]. Non-blocking: each B5d notice is built only when its service exists.",
       "status": "open"
+    },
+    {
+      "id": "R7",
+      "from": "B5",
+      "app": "learning",
+      "to_owner": "conductor",
+      "what": "R-B5d-2 (B5d more notices, spec docs/superpowers/specs/2026-10-07-b5d-more-notices-design.md §4 R7): additive, UNSCOPED (no user) read-only services exported from etqan.learning.services, fixed query count: (a) homework_notices(*, since, until) -> list[HomeworkNotice(kind 'set'|'answered'|'completed', homework_id, title, course_name_ar, course_name_en, student: StudentProfile with user selected, set_by_user_id, set_by_role, at)] (derived from homework_events); (b) upgrade_notices(*, since, until) -> list[UpgradeNotice(kind 'requested'|'decided', request_id, student: StudentProfile with user, course_name_ar, course_name_en, level_name_ar, level_name_en, status, requested_by_user_id, requested_by_role, at)]. Non-blocking: each B5d notice is built only when its service exists.",
+      "status": "open"
     }
   ],
   "queue": [
