@@ -444,6 +444,16 @@
       "plan": null,
       "prs": "https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/18 https://github.com/Etqan-agency/etqan_tutor/pull/30",
       "bounces": 0
+    },
+    "B5a": {
+      "phase": "B5",
+      "status": "spec",
+      "requires": [],
+      "plan_number": null,
+      "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
+      "plan": null,
+      "prs": null,
+      "bounces": 0
     }
   },
   "next_plan_number": 42,

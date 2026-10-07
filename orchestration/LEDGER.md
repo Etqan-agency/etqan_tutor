@@ -52,6 +52,7 @@ In flight: **B6c** · Queue: B3d, B2f, B6b, B3e · Next plan number: 42 · Condu
 | B6c | B6 | in-flight | 38 | B6a | https://github.com/Etqan-agency/etqan_tutor_backend/pull/25 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/26 https://github.com/Etqan-agency/etqan_tutor/pull/39 | 0 |
 | B6d | B6 | build | 39 | B6a |  | 0 |
 | B3afix | B3 | merged |  |  | https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/18 https://github.com/Etqan-agency/etqan_tutor/pull/30 | 0 |
+| B5a | B5 | spec |  |  |  | 0 |
 
 ## Open escalations
 
