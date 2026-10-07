@@ -55,7 +55,7 @@ In flight: **B3d** · Queue: B2f, B3e, B2g, B5a, B6c, B5e · Next plan number: 4
 | B5a | B5 | queued | 42 |  |  | 0 |
 | B5b | B5 | plan | 43 | B5a, B2f |  | 0 |
 | B5c | B5 | spec |  | B2g |  | 0 |
-| B5d | B5 | spec |  | B2e, B2g, B6b |  | 0 |
+| B5d | B5 | spec |  | B5a, B5b |  | 0 |
 | B5e | B5 | queued | 44 |  |  | 0 |
 | B5f | B5 | spec |  | B5e |  | 0 |
 
