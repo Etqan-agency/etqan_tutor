@@ -623,7 +623,7 @@
       "status": "spec",
       "requires": [],
       "plan_number": null,
-      "spec": null,
+      "spec": "docs/superpowers/specs/2026-10-08-b7c-consultations-office-design.md",
       "plan": null,
       "prs": null,
       "bounces": 0
