@@ -15,7 +15,7 @@ In flight: **B9d** · Queue: B6b, B3h, B6c, B3d, B2f · Next plan number: 42 · 
 | B6 | Learning | build | 3 | B6d | B6d built + gates green; waiting B6b/B6c merge to rebase and open PRs | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
-| B9 | Platform extras | build | 4 | B9d | B9d in flight; rebased + pushed; awaiting merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
+| B9 | Platform extras | build | 4 | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
 | B10 | AI | waiting-deps |  |  |  | B6 |  |  |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 
