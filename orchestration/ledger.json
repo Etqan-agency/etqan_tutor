@@ -1118,6 +1118,16 @@
         "B7"
       ],
       "source": "spec 2026-10-07-b3f-system-codes-design.md F-25"
+    },
+    {
+      "id": "D47",
+      "phase": "B4",
+      "decision": "Group-class pay (settles D6/D15): payroll setting group_pay per_student (default, today's behaviour) | per_class. A class = paying rows sharing teacher, subscription.bundle_id of a kind=group bundle, starts_at and minutes (B2f F-4); sessions without a subscription are never grouped. per_class: lowest-id row is the carrier (paid at its own rate, highest weight of the class), others are member lines at 0, all locked at issue; late rows of a paid class are not reported as unpaid. Payroll reaches bundle via field paths on payroll_sessions; no B2 change.",
+      "affects": [
+        "B2",
+        "B11"
+      ],
+      "source": "spec 2026-10-08-b4-payroll-depth B4-7, A-6"
     }
   ],
   "requests": [
