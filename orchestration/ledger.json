@@ -1230,6 +1230,16 @@
         "conductor"
       ],
       "source": "spec 2026-10-08-b10-ai AI-1, AI-2, AI-9, A-1, §4"
+    },
+    {
+      "id": "D50",
+      "phase": "B7",
+      "decision": "B7 sales are revenue: each B7 purpose's complete() records the money via billing.services.record_link_payment(...) (standalone record, notes name the sale) inside one atomic block with its own row, and hand-paid B7 sales via billing.services.create_record(...). A checkout's reference_id is always a B7-owned pending row (recorded.Purchase; the consultation booking). An unappliable sale records nothing and returns Applied(ok=False) (needs attention). B7 asks no billing change.",
+      "affects": [
+        "B3",
+        " B4"
+      ],
+      "source": "spec docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md B7-3, B7-4"
     }
   ],
   "requests": [
