@@ -58,3 +58,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B6b** (homework, plan 34) merged 2026-10-07: backend#23 → main a334f8f, dashboard#24 → main 81df5c2, meta#36; pointers bumped on master 2b9d254. Meta CI green, 0 CI bounces (one step-aside: no session during merge-only mode). Includes the b6 e2e email-locator fix.
 
 **B2e** (trials, plan 33) merged 2026-10-07: backend#24 → main 035732d, dashboard#25 → main 64b89a1, meta#38 → 9e31f4f; pointers bumped on master 1cbcb1c (push delayed by a GitHub git outage). Meta CI green. Stepped aside once (owner push decision), 0 CI bounces. R1 (SubscriptionTermsCard line) landed; B8 site claim commit 4500e76; dashboard ff57201 fixes the b9 forgot-password email locator in supervision and b9-platform specs.
+
+**B3d** (countries and currencies, plan 36) merged 2026-10-07: backend#27 → main 55c54b9, dashboard#29 → main 7fde1a7, meta#41; pointers bumped on master 4ea6e38. Meta CI green, 0 bounces. Includes the R2 scheduling pricing hook (built by B3 under claims); B2f applies the bundle currency items on its rebase (D34, D35).
