@@ -117,7 +117,6 @@ In flight: **B3e** · Queue: B2g, B5a, B6c, B5e · Next plan number: 46 · Condu
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| backend/etqan/scheduling/api/serializers.py | B3 | R4 compensated_by (B3e, delegated by B2) | 2026-10-07T20:26:28+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
