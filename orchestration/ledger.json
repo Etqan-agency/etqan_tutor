@@ -1251,6 +1251,15 @@
         " B11"
       ],
       "source": "spec docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md B7-10"
+    },
+    {
+      "id": "D52",
+      "phase": "B7",
+      "decision": "Consultation teacher earnings are not payroll: product teacher share in basis points, shown in B7f's profit-margin report; B4 may read consultations.services.teacher_earnings(...) later (B4's choice).",
+      "affects": [
+        "B4"
+      ],
+      "source": "spec docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md B7-11"
     }
   ],
   "requests": [
