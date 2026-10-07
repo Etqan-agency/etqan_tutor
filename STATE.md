@@ -20,8 +20,9 @@ is designed from the audits, unobserved behaviour marked `[assumed]`.
 ## Next
 
 Phases run in parallel on slots 1–4: B2 scheduling depth (1), B3 money depth (2), B6 learning (3,
-from 2026-10-05), B9 platform extras (4). Phase B8 marketing extras is complete (B8a–B8e). Merged
-slices so far: B8a–B8e, B2a–B2d, B3a–B3c, B3g (plus a B3a currency fix), B9a–B9c, B6a, and a conductor fix to
+from 2026-10-05), slot 4 free (merge-only mode until 2026-10-11). Phases B8 marketing extras (B8a–B8e) and B9 platform
+extras (B9a–B9d) are complete. Merged
+slices so far: B8a–B8e, B2a–B2d, B3a–B3c, B3g (plus a B3a currency fix), B9a–B9d, B6a, and a conductor fix to
 the page builder; details in the ledger and
 `orchestration/MERGES.md`. Restart a session with `bash scripts/orchestration/start-session.sh
 <CODE|conductor>` or from `just orchestra`.
