@@ -41,13 +41,13 @@
     },
     "B5": {
       "title": "Communication",
-      "status": "waiting-deps",
+      "status": "spec",
       "requires": [
         "B2"
       ],
-      "slot": null,
-      "worktree": null,
-      "branch": null,
+      "slot": 4,
+      "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b5",
+      "branch": "feat/b5a-communication",
       "spec": null,
       "current_slice": null,
       "current_task": null,
