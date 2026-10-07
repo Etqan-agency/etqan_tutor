@@ -9,7 +9,7 @@
       "branch": "feat/b2g-schedules",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2e",
-      "current_task": "B2g queued (gates green); B2e/B2f queued; all B2 slices built",
+      "current_task": "B2e in flight: merged main (B6b), gates running",
       "session": "b1dd2d90"
     },
     "B3": {
