@@ -547,7 +547,7 @@
     },
     "B4a": {
       "phase": "B4",
-      "status": "spec",
+      "status": "plan",
       "requires": [
         "B2a",
         "B2e",
@@ -555,7 +555,7 @@
       ],
       "plan_number": 46,
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-08-plan-46-pay-rules.md",
       "prs": null,
       "bounces": 0
     },
