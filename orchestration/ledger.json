@@ -608,13 +608,13 @@
     },
     "B7b": {
       "phase": "B7",
-      "status": "spec",
+      "status": "plan",
       "requires": [
         "B7a"
       ],
       "plan_number": 51,
       "spec": "docs/superpowers/specs/2026-10-08-b7b-selling-recorded-courses-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-08-plan-51-selling-recorded-courses.md",
       "prs": null,
       "bounces": 0
     },
