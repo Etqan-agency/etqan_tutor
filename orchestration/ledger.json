@@ -570,6 +570,19 @@
       "plan": null,
       "prs": null,
       "bounces": 0
+    },
+    "B4c": {
+      "phase": "B4",
+      "status": "spec",
+      "requires": [
+        "B4a",
+        "B3a"
+      ],
+      "plan_number": null,
+      "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
+      "plan": null,
+      "prs": null,
+      "bounces": 0
     }
   },
   "next_plan_number": 46,

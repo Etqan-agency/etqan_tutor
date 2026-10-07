@@ -62,6 +62,7 @@ In flight: **B2g** · Queue: B5a, B6c, B5e · Next plan number: 46 · Conductor:
 | B10b | B10 | spec |  | B10a, B6c, B6d |  | 0 |
 | B4a | B4 | spec |  | B2a, B2e, B2f |  | 0 |
 | B4b | B4 | spec |  | B4a |  | 0 |
+| B4c | B4 | spec |  | B4a, B3a |  | 0 |
 
 ## Open escalations
 
