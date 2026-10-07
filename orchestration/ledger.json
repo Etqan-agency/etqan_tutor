@@ -76,9 +76,9 @@
       "slot": null,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b7",
       "branch": "feat/b7-spec",
-      "spec": null,
-      "current_slice": null,
-      "current_task": "spec-only: writing B7 phase spec + B7a spec",
+      "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
+      "current_slice": "B7a",
+      "current_task": "spec-only: phase spec + B7a spec approved; writing B7a plan",
       "session": "b2d9309e"
     },
     "B8": {
