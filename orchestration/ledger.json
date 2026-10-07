@@ -462,6 +462,7 @@
       "phase": "B5",
       "status": "spec",
       "requires": [
+        "B5a",
         "B2f"
       ],
       "plan_number": null,
