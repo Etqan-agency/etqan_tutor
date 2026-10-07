@@ -10,7 +10,7 @@
 **Architecture:**
 - **Data** (spec §3). `Subscription.schedule_status` (`active` · `stopped` · `deleted`, database default `active`), `schedule_changed_at`, `schedule_changed_by`; `Session.substitute_for` (→ TeacherProfile, PROTECT); a new `TeacherSubstitution` (subscription CASCADE, teacher PROTECT, `from_date ≤ to_date`). One additive migration `0012_weekly_schedules`. No data rewritten (B2-16).
 - **Generation** (G-2, G-5). `_lock_live` leaves out schedules that are not `active` — the same filter that already leaves out B2d's archived subscriptions; `_new_session` gives a date inside a substitution the substitute as `teacher` and the regular teacher as `substitute_for`; the range run reports `skipped_stopped`.
-- **Services.** New `services/schedules.py` (one lock for many schedules — bundles first, then every subscription in one statement — then stop, delete, activate, restore and the bulk teacher change, all or nothing, refusals naming the subscription); `services/substitutions.py` (add and remove, each regenerating its range); `services/schedule_reads.py` (the list with bundle rows and collapsed group lines, the calendar, the CSV's slots, the "Add" candidates, seed markers). `create_subscription` gains `schedule_status=` and `substitutions_from=` (renewal and a group newcomer copy them); slots of a deleted schedule are refused; B2b's postponed-teacher move keeps a substitute; `substitute_for_id` joins the activity log.
+- **Services.** New `services/schedules.py` (one lock for many schedules — bundles first, then every subscription in one statement — then stop, delete, activate, restore and the bulk teacher change, all or nothing, refusals naming the subscription); `services/substitute_teachers.py` (add and remove, each regenerating its range); `services/schedule_reads.py` (the list with bundle rows and collapsed group lines, the calendar, the CSV's slots, the "Add" candidates, seed markers). `create_subscription` gains `schedule_status=` and `substitutions_from=` (renewal and a group newcomer copy them); slots of a deleted schedule are refused; B2b's postponed-teacher move keeps a substitute; `substitute_for_id` joins the activity log.
 - **API.** `schedules/` (+ `?format=csv`), `schedules/calendar/`, `schedules/candidates/`, `schedules/stop/`, `schedules/delete/`, `schedules/teacher/`, `schedules/substitutions/`, `schedules/substitutions/<id>/` behind `weekly_schedules`; `schedules/activate/` and `schedules/restore/` ungated (listed in `UNGATED`). New resource `weekly_schedule`. Office only: 404 before the code check. Subscription rows gain `schedule_status`; the office's detail gains `substitutions` and who changed the status; session rows and Today rows gain `substitute_for`.
 - **Dashboard.** Weekly schedules (`/app/scheduling/schedules`: tabs, filters, bundle rows, bulk Stop / Activate / Delete / Restore / Change teacher / Substitute, Add, Download all); the expanded calendar (`/app/scheduling/schedules/calendar`, one day at a time on a phone); a "Weekly schedule" card on the subscription page (status badge with Activate / Restore, substitutions with Remove); "Substitute for {teacher}" on session rows and the Today board. New area file `schedules.json`.
 
@@ -137,7 +137,7 @@ backend/
     services/bundle_actions.py                                   a group newcomer copies the schedule (Task 3)
     services/schedules.py                                        NEW: lock_schedules, status actions (Task 4),
                                                                  bulk_change_teacher (Task 6)
-    services/substitutions.py                                    NEW (Task 5)
+    services/substitute_teachers.py                                    NEW (Task 5)
     services/availability.py                                     sessions_outside (Task 5)
     services/activity.py activity_feed.py                        substitute_for_id logged and named (Task 6)
     services/schedule_reads.py                                   NEW (Task 7)
@@ -1438,7 +1438,7 @@ Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
 ### Task 5: Substitutions — add one for a period, remove it, each regenerating its range
 
 **Files:**
-- Create: `backend/etqan/scheduling/services/substitutions.py`
+- Create: `backend/etqan/scheduling/services/substitute_teachers.py`
 - Modify: `backend/etqan/scheduling/services/availability.py` (`sessions_outside`)
 - Modify: `backend/etqan/scheduling/services/__init__.py` (exports)
 - Test: `backend/etqan/scheduling/tests/test_schedules_substitutions.py`
@@ -1745,7 +1745,7 @@ def sessions_outside(sessions) -> list[int] | None:
     ]
 ```
 
-`backend/etqan/scheduling/services/substitutions.py`:
+`backend/etqan/scheduling/services/substitute_teachers.py`:
 
 ```python
 """Slice B2g G-5, G-6: substitute teachers. A substitution is a record
@@ -1952,7 +1952,7 @@ Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git -C $W/backend add etqan/scheduling/services/substitutions.py etqan/scheduling/services/availability.py etqan/scheduling/services/__init__.py etqan/scheduling/tests/test_schedules_substitutions.py
+git -C $W/backend add etqan/scheduling/services/substitute_teachers.py etqan/scheduling/services/availability.py etqan/scheduling/services/__init__.py etqan/scheduling/tests/test_schedules_substitutions.py
 git -C $W/backend commit -m "feat(scheduling): substitute teachers for a period, regenerating their range (B2g)
 
 Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
