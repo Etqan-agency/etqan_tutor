@@ -1260,6 +1260,15 @@
         "B4"
       ],
       "source": "spec docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md B7-11"
+    },
+    {
+      "id": "D53",
+      "phase": "B7",
+      "decision": "B7 registers gateways purposes recorded_course (public=False; add_fee=True, use_switch=True) and consultation (public=True; add_fee=product.fee_enabled, use_switch=False; prepare needs the booking's manage token from the URL or RECHECK). B7b/B7d add their app to the 'gateways imports no business app' contract and a ReturnPage branch, each under a one-commit claim.",
+      "affects": [
+        "B3"
+      ],
+      "source": "spec docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md B7-3, §4"
     }
   ],
   "requests": [
