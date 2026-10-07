@@ -64,7 +64,7 @@
       "branch": "feat/b6d-certificates",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
       "current_slice": "B6d",
-      "current_task": "B6b merged; B6c rebased on B6b main (migration → 0003, honour fix c940a52), gates running",
+      "current_task": "B6c re-queued (on B6b main, mig 0003, honour fix); B6d after B6c merges",
       "session": "49b08672"
     },
     "B7": {
