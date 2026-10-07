@@ -56,6 +56,7 @@ In flight: **B6c** · Queue: B3d, B2f, B6b, B3e · Next plan number: 42 · Condu
 | B5b | B5 | spec |  |  |  | 0 |
 | B5c | B5 | spec |  | B2g |  | 0 |
 | B5d | B5 | spec |  | B2e, B2g, B6b |  | 0 |
+| B5e | B5 | spec |  |  |  | 0 |
 
 ## Open escalations
 
