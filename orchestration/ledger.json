@@ -532,7 +532,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "backend/etqan/scheduling/models.py",
+      "phase": "B3",
+      "reason": "R4 compensated_by (B3e, delegated by B2)",
+      "since": "2026-10-07T20:26:27+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
