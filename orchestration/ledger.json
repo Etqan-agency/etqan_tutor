@@ -938,6 +938,17 @@
         "B11"
       ],
       "source": "spec 2026-10-06-b3e-student-wallet-design.md E-9; review C1"
+    },
+    {
+      "id": "D39",
+      "phase": "B5",
+      "decision": "Notifications stay pull-based (N8-2): no app imports etqan.notifications; every B5 notice (incl. chat) is a finder over the owning app's read service. B5d will ask B2 (postponement, substitute, schedule-change events) and B6 (level-upgrade decisions) for windowed read services shaped like D29's homework_events(*, since, until), as requests. COMM-007's nine per-session reminder stamps are not built as Session fields: per-type offsets + the Notification row (dedupe_key, created_at) cover them, so B2 adds no notification fields. Per-person comms settings (teacher WhatsApp group, student chat switches, notice preferences) live in B5-owned tables keyed by user id, not on identity profiles.",
+      "affects": [
+        "B2",
+        "B6",
+        "B11"
+      ],
+      "source": "spec 2026-10-07-b5-communication B5-2, B5-10, B5-12"
     }
   ],
   "requests": [
