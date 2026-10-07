@@ -400,7 +400,7 @@
     },
     "B6b": {
       "phase": "B6",
-      "status": "build",
+      "status": "queued",
       "requires": [
         "B6a"
       ],
@@ -919,7 +919,8 @@
   "queue": [
     "B6c",
     "B3d",
-    "B2f"
+    "B2f",
+    "B6b"
   ],
   "in_flight": "B3h",
   "main_heads": {
