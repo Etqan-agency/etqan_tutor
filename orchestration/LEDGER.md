@@ -57,6 +57,7 @@ In flight: **B6b** · Queue: B2e, B3d, B2f, B3e, B2g, B5a · Next plan number: 4
 | B5c | B5 | spec |  | B2g |  | 0 |
 | B5d | B5 | spec |  | B2e, B2g, B6b |  | 0 |
 | B5e | B5 | spec |  |  |  | 0 |
+| B5f | B5 | spec |  | B5e |  | 0 |
 
 ## Open escalations
 
