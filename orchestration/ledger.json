@@ -595,6 +595,16 @@
       "plan": null,
       "prs": null,
       "bounces": 0
+    },
+    "B7a": {
+      "phase": "B7",
+      "status": "spec",
+      "requires": [],
+      "plan_number": null,
+      "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
+      "plan": null,
+      "prs": null,
+      "bounces": 0
     }
   },
   "next_plan_number": 49,
