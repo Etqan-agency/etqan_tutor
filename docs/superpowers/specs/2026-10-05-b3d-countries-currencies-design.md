@@ -40,7 +40,7 @@ its unpaid invoice.
 | D-2 | **The student's country is `identity.StudentProfile.country`**, which already exists (ISO 3166-1 alpha-2, may be blank). No new field. A blank country always gets the package's price. | identity model (`country`, `COUNTRY_CODE`); audit PEOPLE-001 |
 | D-3 | **One resolver:** `catalogue.services.package_price(package, *, country) -> Price(price_minor, currency, country, source)`. <br>• While `country_pricing` is on and a row exists for the country, it answers that row with `source="country"`. <br>• Otherwise it answers the package's price with `source="package"`. <br>• `Price.country` is always the country asked for, blank when none, whichever source answered. <br>With the switch off, every result is today's. | phase B3-4; [assumed] (resolver form) |
 | D-4 | **The B2 hook is a call plus one optional field.** <br>• `create_subscription` and `renew_subscription` take their default price **and currency** from `package_price(package, country=student.country)`. <br>• Both gain an optional `currency`, and so do the subscription create and renew bodies. <br>• An explicit `price_minor` is read in the resolved currency. A given `currency` that differs from the resolved one is a 400 on `price_minor` with code `catalogue.price_currency_changed`. <br>• P4-10 ("keep the amount paid unless the currency changed") compares with the resolved currency. <br>• Every create path goes through these two functions: the API, renewals, B2e's trial conversion and B2f's bundle rows. Every change is additive. | phase §4; orchestration spec §6.2.5; scheduling code; review C1 |
-| D-5 | **Group bundles (B2f) and mixed currencies.** <br>• A group row with an explicit `price_minor` is refused (400 on `rows[0].price_minor`) unless every member resolves to the same currency. Without a price, each member takes its own resolved default. <br>• Adding a student to a group copies the template's price only when the two currencies match (P4-10); otherwise the student takes the resolved default. <br>• The group form shows no price prefill while the members' currencies differ. | spec b2f §4.2–4.3; review C2 |
+| D-5 | **Group bundles (B2f) and mixed currencies.** <br>• A group row with an explicit `price_minor` is refused (400 on `rows.0.price_minor`) unless every member resolves to the same currency. Without a price, each member takes its own resolved default. <br>• Adding a student to a group copies the template's price only when the two currencies match (P4-10); otherwise the student takes the resolved default. <br>• The group form shows no price prefill while the members' currencies differ. | spec b2f §4.2–4.3; review C2 |
 | D-6 | **B2 makes the hook.** <br>• It is a ledger `request` (§7). B3d makes it itself under a `claim` only if B2 explicitly delegates it. <br>• The backend and dashboard halves land in the same merge pair. <br>• The hook needs B3d's resolver and `usePackagePrice`, so its commits are added to B3d's branches. <br>• B3d's hook-dependent work (the E2E) is blocked until those commits are in, and B3d is not queued before then. | orchestration spec §6.2.1; review I1 |
 | D-7 | **The snapshot stays** (P4-5). A later change to the student's country, to a country row or to the switch never reaches an existing subscription or its invoices. | spec Plan 4 P4-5 |
 | D-8 | **The office form shows the resolved price.** `GET catalogue/packages/<id>/price/?student=<user id>` answers `{price_minor, currency, source}`. The subscription form and the renew dialog prefill the price and label the currency from it, and always send the currency they converted with. | review C1, I3; [assumed] |
@@ -104,7 +104,7 @@ Each route below is its own `APIView` with `permission_classes=[HasCode]`, never
   - the currency passes `clean_currency`;
   - a repeated country is a 400 on that row.
 
-  Errors are keyed `rows[i].<field>`. The route answers the new list.
+  Errors are keyed `rows.i.<field>`. The route answers the new list.
 - **`catalogue.services`** gains:
   - `country_prices(package)`;
   - `set_country_prices(package, rows)`;
@@ -233,7 +233,7 @@ currency, and `pay_options` already filters providers by currency.
   > the price for the old subscription's student and the new package, applies the same check, and P4-10 becomes
   > price_minor = old.price_minor if price.currency == old.currency else price.price_minor. (3) scheduling API:
   > SubscriptionCreateInput and RenewInput gain optional currency (3 letters, upper-cased); bundle rows inherit it.
-  > (4) B2f group bundles: a group row with explicit price_minor is refused 400 on rows[0].price_minor unless every
+  > (4) B2f group bundles: a group row with explicit price_minor is refused 400 on rows.0.price_minor unless every
   > active member resolves to the same currency (then (1)'s check applies); without price_minor each member takes
   > its own resolved default; add_to_group_bundle copies the template's price_minor only when the new student's
   > resolved currency equals the template's currency, otherwise the resolved default. If B2f is not merged when

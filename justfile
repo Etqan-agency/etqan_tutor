@@ -165,7 +165,18 @@ test-backend-host:
 # ─── Linting ──────────────────────────────────────────────────
 
 # Run all linters
-lint: lint-backend lint-frontend check-boundaries
+lint: lint-backend lint-frontend check-boundaries secrets
+
+# Secret scan of the tracked tree, submodules included, as CI's security job runs
+# it (gitleaks `dir`). Only tracked files are copied, so git-ignored local files
+# (.superpowers/, node_modules, .venv) never show up as findings.
+secrets:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    tmp="$(mktemp -d)"
+    trap 'rm -rf "$tmp"' EXIT
+    git ls-files -z --recurse-submodules | tar --null -T - -cf - | tar -xf - -C "$tmp"
+    docker run --rm -v "$tmp:/repo:ro" zricethezav/gitleaks:v8.30.1 dir /repo --redact --no-banner -v --exit-code 1
 
 lint-backend:
     HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose -f docker-compose.local.yml run --rm django sh -euc 'ruff check . && ruff format --check .'
