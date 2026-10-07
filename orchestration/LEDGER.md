@@ -9,7 +9,7 @@ In flight: **B3h** · Queue: B6c, B3d, B2f, B6b · Next plan number: 42 · Condu
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | build | 1 | B2e | B2g final fix wave |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | 93cae38a |
-| B3 | Money depth | build | 2 | B3h | B3e T15 review + T17 (R3+Part B, claims held); B3h+B3d queued |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
+| B3 | Money depth | build | 2 | B3h | B3h in flight: PRs open (be#26 da#28 meta#40); B3e finishing; B3d awaits B2e |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps |  |  |  | B2 |  |  |
 | B6 | Learning | build | 3 | B6d | B6b re-queued (rebased on B9d, gates green); B6c pre-rebasing on main, gates running | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
