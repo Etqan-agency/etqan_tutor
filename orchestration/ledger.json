@@ -868,6 +868,17 @@
         "B11"
       ],
       "source": "B3e spec; conductor ruling 2026-10-06"
+    },
+    {
+      "id": "D38",
+      "phase": "B3",
+      "decision": "Billing guards (delete_payment, refund_payment, update_record) decide on the payment row re-read under select_for_update, and refuse wallet-method, wallet_topup and credited payments with distinct billing.* codes; only etqan.wallet may move or undo wallet money (record_wallet_payment, credit_payment, record_topup_payment, refund_topup_payment are etqan.wallet-only).",
+      "affects": [
+        "B4",
+        "B7",
+        "B11"
+      ],
+      "source": "spec 2026-10-06-b3e-student-wallet-design.md E-9; review C1"
     }
   ],
   "requests": [
