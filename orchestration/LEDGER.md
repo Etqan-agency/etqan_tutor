@@ -10,7 +10,7 @@ In flight: **B3e** · Queue: B2g, B5a, B6c, B5e · Next plan number: 46 · Condu
 |---|---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | build | 1 | B2g | B2g: merged trunk (B2f) be 7536b15 da 3af5bdd meta; building R6e substitutions read; then gates, wait for queue turn |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | edb38e65 |
 | B3 | Money depth | build | 2 | B3h | B3e CI green (meta#43), awaiting merge; B3f Task 15 (e2e) |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | 6fb32127 |
-| B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
+| B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  | b9940c56 |
 | B5 | Communication | waiting-deps | 4 | B5a | B5a, B5e queued; B5b plan ready; B5d spec done (R6/R7 filed); waiting for B5a merge | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
 | B6 | Learning | build | 3 | B6d | B6c queued; B6d ready (stacked on B6c, gates green, pushed) — PRs after B6c merges | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
