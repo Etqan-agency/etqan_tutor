@@ -213,3 +213,15 @@ Idempotent; `other` gets nothing.
 
 Payment fields on the bundle (B3, ledger D10); student levels on subscriptions (B6); weekly-schedule objects over a
 bundle's slots (B2g); group pay (B4); package type individual / group.
+
+## Amendments from plan 37 (2026-10-05)
+
+These are the shipped contract where they differ from the sections above (plan 37 rulings).
+
+- **D5 — Pause and Cancel (§4.3).** Pause applies to every live member whose term holds `from_date`, not only current members. Cancel cancels every live member, both the old link and a pending renewal. With no candidate, pause is a 400 on `from_date`, and cancel is a 409 `scheduling.not_allowed_in_status`.
+- **D7 — Course change on renewal (F-6).** A member's renewal that changes course is refused with a 400 on `course` (the body key), not on `course_id`.
+- **D13 — New route (§6).** `GET groups/candidates/?q=&group=<id>` answers who may join a study group. It needs `study_group.create` or `study_group.update`, and the `study_groups` feature.
+- **D15 — Service signatures (§4.3).** These drop the unused `by`:
+  - `pause_bundle`, `cancel_bundle`, `add_to_group_bundle`, `remove_from_group_bundle`, `update_bundle` and `dissolve_bundle` take no `by`.
+  - `renew_bundle`, `archive_bundle` and `restore_bundle` take it keyword-only.
+- **D1 / ledger D34 — Row error keys.** Errors on bundle rows are keyed `rows.<i>.<field>` (dot form) everywhere, including B3d's group currency refusal on `rows.0.price_minor`.
