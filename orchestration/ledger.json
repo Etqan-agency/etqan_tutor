@@ -1128,6 +1128,15 @@
         "B11"
       ],
       "source": "spec 2026-10-08-b4-payroll-depth B4-7, A-6"
+    },
+    {
+      "id": "D48",
+      "phase": "B4",
+      "decision": "P7-2 becomes configurable behind payroll_rules (off by default): per-academy weights (basis points) for student-absent and student-excused sessions and an opt-in to pay at_disposal sessions; defaults reproduce P7-2 exactly; the teacher-attendance gate is never configurable. Session amount = round_half_up(rate*minutes*pay_bp, 600000).",
+      "affects": [
+        "B11"
+      ],
+      "source": "spec 2026-10-08-b4-payroll-depth §3 deviations, A-3..A-5"
     }
   ],
   "requests": [
