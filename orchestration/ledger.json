@@ -9,7 +9,7 @@
       "branch": "feat/b2g-schedules",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
       "current_slice": "B2g",
-      "current_task": "B2g: merged trunk (B2f) be 7536b15 da 3af5bdd meta; building R6e substitutions read; then gates, wait for queue turn",
+      "current_task": "B2g ready (R6e built, gates green: be 6213+, da 2282, lint/secrets clean, e2e 53+2 order-dependent pass alone); waiting for B3e merge, then merge trunk + rerun",
       "session": "edb38e65"
     },
     "B3": {
