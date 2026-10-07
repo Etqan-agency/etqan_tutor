@@ -490,7 +490,8 @@
       "status": "spec",
       "requires": [
         "B5a",
-        "B5b"
+        "B5b",
+        "B2f"
       ],
       "plan_number": null,
       "spec": "docs/superpowers/specs/2026-10-07-b5d-more-notices-design.md",
