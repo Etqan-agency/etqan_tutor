@@ -465,7 +465,7 @@
         "B5a",
         "B2f"
       ],
-      "plan_number": null,
+      "plan_number": 43,
       "spec": "docs/superpowers/specs/2026-10-07-b5b-broadcasts-design.md",
       "plan": null,
       "prs": null,
@@ -508,7 +508,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 43,
+  "next_plan_number": 44,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
