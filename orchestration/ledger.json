@@ -620,11 +620,11 @@
     },
     "B7c": {
       "phase": "B7",
-      "status": "spec",
+      "status": "plan",
       "requires": [],
       "plan_number": 50,
       "spec": "docs/superpowers/specs/2026-10-08-b7c-consultations-office-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-08-plan-50-consultations-office.md",
       "prs": null,
       "bounces": 0
     },
