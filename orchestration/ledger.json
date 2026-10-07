@@ -112,8 +112,8 @@
         "B6"
       ],
       "slot": null,
-      "worktree": null,
-      "branch": null,
+      "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b10",
+      "branch": "feat/b10-spec",
       "spec": null,
       "current_slice": null,
       "current_task": null,
