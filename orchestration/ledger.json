@@ -333,7 +333,7 @@
       "plan_number": 36,
       "spec": "docs/superpowers/specs/2026-10-05-b3d-countries-currencies-design.md",
       "plan": "36",
-      "prs": null,
+      "prs": " https://github.com/Etqan-agency/etqan_tutor_backend/pull/27 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/29 https://github.com/Etqan-agency/etqan_tutor/pull/41",
       "bounces": 0
     },
     "B3e": {
