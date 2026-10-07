@@ -8,8 +8,8 @@
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b2",
       "branch": "feat/b2g-schedules",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
-      "current_slice": "B2e",
-      "current_task": "B2e pushed for merge (in flight); B2f, B2g queued",
+      "current_slice": "B2f",
+      "current_task": "B2e merged; B2f queued after B3d, B2g after B2f",
       "session": "b1dd2d90"
     },
     "B3": {
