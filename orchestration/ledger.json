@@ -476,6 +476,20 @@
       "plan": null,
       "prs": null,
       "bounces": 0
+    },
+    "B5d": {
+      "phase": "B5",
+      "status": "spec",
+      "requires": [
+        "B2e",
+        "B2g",
+        "B6b"
+      ],
+      "plan_number": null,
+      "spec": null,
+      "plan": null,
+      "prs": null,
+      "bounces": 0
     }
   },
   "next_plan_number": 42,
