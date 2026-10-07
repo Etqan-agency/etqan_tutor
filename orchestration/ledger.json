@@ -458,7 +458,9 @@
     "B5b": {
       "phase": "B5",
       "status": "spec",
-      "requires": [],
+      "requires": [
+        "B2f"
+      ],
       "plan_number": null,
       "spec": null,
       "plan": null,
