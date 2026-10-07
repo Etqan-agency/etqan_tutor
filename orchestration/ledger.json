@@ -41,7 +41,7 @@
     },
     "B5": {
       "title": "Communication",
-      "status": "build",
+      "status": "queued",
       "requires": [
         "B2"
       ],
@@ -50,7 +50,7 @@
       "branch": "feat/b5a-communication",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "current_slice": "B5a",
-      "current_task": "B5e Task 7/7: e2e + gates (B5a queued)",
+      "current_task": "B5a + B5e queued (B5e stacked on B5a; rebase onto main after B5a merges). Next: B5b build after B5a merges",
       "session": "4b5b7034"
     },
     "B6": {
