@@ -1022,6 +1022,14 @@
       "to_owner": "B2",
       "what": "B3e follow-up (final review I-1): a session claimed for balance (claim_session_for_balance sets compensated=True) still counts as owed in sessions_remaining, because nothing consumes it, so the student gets the money and keeps the lesson. A make-up consumes when delivered; a balance credit never does. Ask: should a balance-compensated session count as consumed? R3 had to be additive and could not tell the two apart (both set compensated). Options: a field such as compensated_by='balance' (migration) so rules.consuming counts it, or accept and document. B2 decides; if code is needed, B2 builds it or delegates to B3 under a claim. Not blocking B3e's merge (feature off by default); B3e's PR notes it.",
       "status": "open"
+    },
+    {
+      "id": "R5",
+      "from": "B5",
+      "app": "scheduling",
+      "to_owner": "B2",
+      "what": "R-B5b-1 (B5b broadcasts, spec docs/superpowers/specs/2026-10-07-b5b-broadcasts-design.md §7): once B2f merges, an additive read-only service exported from etqan.scheduling.services: study_group_members(group_id: int) -> StudyGroupMembers(name: str, is_active: bool, student_user_ids: list[int]) — all members of the B2f study group (no eligibility filtering; notifications does that); NotFoundError for a missing group; fixed query count. Non-blocking: B5b ships without the study-group audience if it is not in, and the audience moves to B5d.",
+      "status": "open"
     }
   ],
   "queue": [
