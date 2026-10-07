@@ -1000,6 +1000,17 @@
         "B11"
       ],
       "source": "owner brainstorming 2026-10-07"
+    },
+    {
+      "id": "D43",
+      "phase": "B3",
+      "decision": "Refines D36 and D38: billing payments with method code (B3f system codes) are never revenue; a code is revenue only when the academy records its sale as a payment record. Billing refuses to refund or delete (refuse_reserved_money, alias refuse_wallet_money) or move to the balance (credit_payment's own check) a code payment (409 billing.code_payment). Only etqan.vouchers records one (settle_with_code, record_code_payment) or removes one (delete_code_payment, discounts only, office with voucher.update + payment.update). Activation and renewal redemptions are final.",
+      "affects": [
+        "B4",
+        "B7",
+        "B11"
+      ],
+      "source": "spec 2026-10-07-b3f-system-codes-design.md §7"
     }
   ],
   "requests": [
