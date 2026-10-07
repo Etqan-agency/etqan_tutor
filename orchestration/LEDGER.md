@@ -12,7 +12,7 @@ In flight: **B6b** · Queue: B2e, B3d, B2f, B3e, B2g · Next plan number: 43 · 
 | B3 | Money depth | build | 2 | B3h | B3h CI green (meta#40), awaiting merge; B3d+B3e queued |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | b34329de |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | build | 4 | B5a | B5a Task 8/8: e2e + gates | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
-| B6 | Learning | build | 3 | B6d | B6b in flight: rebased on B3h main, gates running; B6c bounced → fix c940a52 (honour add waits for academy month) pending its gates | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
+| B6 | Learning | build | 3 | B6d | B6b in flight: rebased on B3h, gates green, pushed (be ab3b1c1, da 1698b24, meta 2ea48db). B6c fix c940a52 pushed; re-gate + re-queue after B6b merges (migration → 0003) | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
 | B7 | Add-on sales | waiting-deps |  |  |  | B3 |  |  |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
