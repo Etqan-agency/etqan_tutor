@@ -21,7 +21,7 @@
       "branch": "feat/b3h-exchange-rates",
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
       "current_slice": "B3h",
-      "current_task": "B3h in flight: PRs open (be#26 da#28 meta#40); B3e finishing; B3d awaits B2e",
+      "current_task": "B3h in flight (PRs open); B3d+B3e queued; B3d/B3e rebase after B2e settles",
       "session": "b34329de"
     },
     "B4": {
