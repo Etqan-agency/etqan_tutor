@@ -958,6 +958,18 @@
         "B5"
       ],
       "source": "owner, escalation E3"
+    },
+    {
+      "id": "D41",
+      "phase": "B5",
+      "decision": "HOLD B5c (WhatsApp sending) until the owner's integrations design is approved: hybrid model — Etqan provides a default account per service, an academy may switch to its own in Settings → Integrations. Build other B5 slices first; design B5c's provider behind that model.",
+      "affects": [
+        "B5",
+        "B3",
+        "B7",
+        "B10"
+      ],
+      "source": "owner brainstorming 2026-10-07"
     }
   ],
   "requests": [
