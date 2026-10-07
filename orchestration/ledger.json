@@ -1337,6 +1337,14 @@
       "to_owner": "conductor",
       "what": "R-B7g-1 (B7g, spec docs/superpowers/specs/2026-10-08-b7g-recorded-certificates-codes-design.md §4): additive learning table SubjectCertificate(student, subject_en/ar, count, count_label, source, source_id, code, issued_on, revoked_at, revoke_reason, issued_by null) unique (source, source_id) while not revoked, read by verify() and the printable page under verified_certificates; services issue_subject_certificate(*, student_user_id, subject_en, subject_ar, count, source, source_id, by=None) -> CertificateRef(id, code), revoke_by_source(source, source_id, *, reason, by), certificate_by_source(source, source_id) -> CertificateRef|None; office cannot edit/delete these via B6 routes. Certificate itself untouched. Whether certificates_of lists them is B6's call (D33 amendment). Non-blocking until B7g builds; if declined, B7 builds its own certificate + verify.",
       "status": "open"
+    },
+    {
+      "id": "R9",
+      "from": "B7",
+      "app": "vouchers",
+      "to_owner": "conductor",
+      "what": "R-B7g-2 (B7g, spec docs/superpowers/specs/2026-10-08-b7g-recorded-certificates-codes-design.md §4): voucher kind 'playlist' via a generic redeemer registry: register_redeemer(kind, *, describe(target_id)->(name_en,name_ar), check(target_id), redeem(*, target_id, student_user_id, code_display, by)->(student_profile_id, ref_id), office_code, feature) filled from RecordedConfig.ready() (vouchers never imports recorded); batch gains generic target_id, voucher gains target_ref_id (migration on vouchers tables); family scope (in_family) before the hook; preview() lists family students; KIND_CODES gains the registered office code; generation/redeem refuse while the feature is off; lock order Voucher -> Playlist -> Enrolment; F-1 amended to allow etqan.recorded -> vouchers.services, plus a 'vouchers never imports recorded' contract; export batches_exist(kind, target_id). Non-blocking until B7g builds.",
+      "status": "open"
     }
   ],
   "queue": [
