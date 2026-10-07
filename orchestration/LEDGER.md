@@ -69,6 +69,7 @@ In flight: **B2g** · Queue: B5a, B6c, B5e · Next plan number: 49 · Conductor:
 | B7c | B7 | spec |  |  |  | 0 |
 | B7d | B7 | spec |  | B7c |  | 0 |
 | B7e | B7 | spec |  | B7a |  | 0 |
+| B7f | B7 | spec |  | B7c |  | 0 |
 
 ## Open escalations
 
