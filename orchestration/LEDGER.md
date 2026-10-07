@@ -8,7 +8,7 @@ In flight: **B2f** · Queue: B3e, B2g, B5a, B6c, B5e · Next plan number: 46 · 
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | build | 1 | B2f | B2f in flight: merged B3d trunk (be 7b3393a, da 567621a); building R2/D-5 currency items (plan 37 T20) |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | edb38e65 |
+| B2 | Scheduling depth | build | 1 | B2f | B2f PRs open (R2/D-5 built, gates green, e2e 56); B2g queued next |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | edb38e65 |
 | B3 | Money depth | build | 2 | B3h | B3f Task 5 (redeem); B3e waits B2f |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | 6fb32127 |
 | B4 | Payroll depth | waiting-deps |  |  |  | B2, B3 |  |  |
 | B5 | Communication | waiting-deps | 4 | B5a | B5a, B5e queued; B5b plan ready; B5d spec done (R6/R7 filed); waiting for B5a merge | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
