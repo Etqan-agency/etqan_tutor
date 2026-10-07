@@ -1055,7 +1055,7 @@
       "app": "scheduling",
       "to_owner": "B2",
       "what": "B3e follow-up (final review I-1): a session claimed for balance (claim_session_for_balance sets compensated=True) still counts as owed in sessions_remaining, because nothing consumes it, so the student gets the money and keeps the lesson. A make-up consumes when delivered; a balance credit never does. Ask: should a balance-compensated session count as consumed? R3 had to be additive and could not tell the two apart (both set compensated). Options: a field such as compensated_by='balance' (migration) so rules.consuming counts it, or accept and document. B2 decides; if code is needed, B2 builds it or delegates to B3 under a claim. Not blocking B3e's merge (feature off by default); B3e's PR notes it.",
-      "status": "open"
+      "status": "done"
     },
     {
       "id": "R5",
