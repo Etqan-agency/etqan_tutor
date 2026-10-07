@@ -121,6 +121,7 @@ In flight: **B3e** · Queue: B2g, B5a, B6c, B5e · Next plan number: 46 · Condu
 | backend/etqan/scheduling/migrations/0012_session_compensated_by.py | B3 | R4 compensated_by (B3e, delegated by B2) | 2026-10-07T20:26:28+00:00 |
 | backend/etqan/scheduling/services/rules.py | B3 | R4 compensated_by (B3e, delegated by B2) | 2026-10-07T20:26:28+00:00 |
 | backend/etqan/scheduling/services/manual.py | B3 | R4 compensated_by (B3e, delegated by B2) | 2026-10-07T20:26:28+00:00 |
+| backend/etqan/scheduling/tests/test_compensated_by.py | B3 | R4 compensated_by (B3e, delegated by B2) | 2026-10-07T20:26:28+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
