@@ -1240,6 +1240,17 @@
         " B4"
       ],
       "source": "spec docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md B7-3, B7-4"
+    },
+    {
+      "id": "D51",
+      "phase": "B7",
+      "decision": "Consultations (etqan.consultations) are not scheduling Sessions: own time, link, statuses, attendance. Slots come from scheduling.services.windows_of minus the teacher's non-cancelled sessions (sessions_queryset) and other consultations; self-booking needs teacher_availability on. Scheduling's conflict warnings do not see consultations; B2 needs no change.",
+      "affects": [
+        "B2",
+        " B5",
+        " B11"
+      ],
+      "source": "spec docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md B7-10"
     }
   ],
   "requests": [
