@@ -501,7 +501,7 @@
       "phase": "B5",
       "status": "spec",
       "requires": [],
-      "plan_number": null,
+      "plan_number": 44,
       "spec": "docs/superpowers/specs/2026-10-07-b5e-chat-design.md",
       "plan": null,
       "prs": null,
@@ -520,7 +520,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 44,
+  "next_plan_number": 45,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
