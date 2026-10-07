@@ -114,9 +114,9 @@
       "slot": null,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b10",
       "branch": "feat/b10-spec",
-      "spec": null,
+      "spec": "docs/superpowers/specs/2026-10-08-b10-ai-design.md",
       "current_slice": null,
-      "current_task": null,
+      "current_task": "spec-only: B10 phase spec + B10a/B10b specs in review",
       "session": "54d58fd1"
     },
     "B11": {
