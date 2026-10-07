@@ -46,7 +46,7 @@ In flight: **B3h** · Queue: B6c, B3d, B2f, B6b · Next plan number: 42 · Condu
 | B3f | B3 | spec |  |  |  | 0 |
 | B2g | B2 | build | 41 |  |  | 0 |
 | B3g | B3 | merged | 26 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/21 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/22 https://github.com/Etqan-agency/etqan_tutor/pull/34 | 0 |
-| B3h | B3 | in-flight | 35 |  |  | 0 |
+| B3h | B3 | in-flight | 35 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/26 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/28 https://github.com/Etqan-agency/etqan_tutor/pull/40 | 0 |
 | B6a | B6 | merged | 32 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/20 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/21 https://github.com/Etqan-agency/etqan_tutor/pull/33 | 0 |
 | B6b | B6 | queued | 34 | B6a | https://github.com/Etqan-agency/etqan_tutor_backend/pull/23 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/24 https://github.com/Etqan-agency/etqan_tutor/pull/36 | 1 |
 | B6c | B6 | queued | 38 | B6a | https://github.com/Etqan-agency/etqan_tutor_backend/pull/25 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/26 https://github.com/Etqan-agency/etqan_tutor/pull/39 | 0 |
