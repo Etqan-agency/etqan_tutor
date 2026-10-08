@@ -58,7 +58,7 @@ In flight: **B7a** · Queue: B5b, B5f, B10a · Next plan number: 60 · Conductor
 | B5d | B5 | plan | 56 | B5a, B5b, B2f |  | 0 |
 | B5e | B5 | merged | 44 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/34 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/36 https://github.com/Etqan-agency/etqan_tutor/pull/49 | 0 |
 | B5f | B5 | queued | 58 | B5e |  | 0 |
-| B10a | B10 | queued | 47 |  |  | 0 |
+| B10a | B10 | queued | 47 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/39 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/41 https://github.com/Etqan-agency/etqan_tutor/pull/54 | 0 |
 | B10b | B10 | plan | 48 | B10a, B6c, B6d |  | 0 |
 | B4a | B4 | merged | 46 | B2a, B2e, B2f | https://github.com/Etqan-agency/etqan_tutor_backend/pull/36 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/38 https://github.com/Etqan-agency/etqan_tutor/pull/51 | 0 |
 | B4b | B4 | plan | 54 | B4a |  | 0 |
