@@ -574,7 +574,7 @@
     },
     "B4c": {
       "phase": "B4",
-      "status": "plan",
+      "status": "build",
       "requires": [
         "B4a",
         "B3a"
