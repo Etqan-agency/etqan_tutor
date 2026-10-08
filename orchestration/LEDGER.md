@@ -10,7 +10,7 @@ In flight: **B4a** · Queue: B7a, B5b, B5f · Next plan number: 60 · Conductor:
 |---|---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | merged |  | B2g | B2g PRs open (be#30 da#32 meta#45); R6 done; last slice — awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | edb38e65 |
 | B3 | Money depth | merged |  | B3h | B3f CI green (meta#46), awaiting merge; then B3 complete |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | 6fb32127 |
-| B4 | Payroll depth | build | 1 | B4a | B4a in flight: merged origin/main (bb369aa trunk) into be/da cleanly; gates running | B2, B3 | docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md | 1862018a |
+| B4 | Payroll depth | build | 1 | B4a | B4a PRs open (be#36 da#38 meta#51) on trunk bb369aa; gates: test 0, lint+secrets 0, e2e 64 pass + people-catalogue stream-DB data fail; awaiting conductor merge | B2, B3 | docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md | 1862018a |
 | B5 | Communication | waiting-deps | 4 | B5f | B5b, B5f queued; B5d (Plan 56) and B5c (Plan 57) wait for B5b merge | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
 | B6 | Learning | merged |  | B6d | B6d rebased on B5e trunk (be 9b0985d, da 0c6edb8, meta 4a16431), gates green: test 0, lint+secrets 0, e2e fresh stack 62 pass + 2 flaky (journey, payroll); awaiting conductor merge — last B6 slice | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 4fbaa491 |
 | B7 | Add-on sales | build | 2 | B7c | B7a queued; B7c review clean, test+lint green, e2e+coverage pending (low memory); B7g plan 59 ready | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | b2d9309e |

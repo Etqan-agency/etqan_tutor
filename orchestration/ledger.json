@@ -36,7 +36,7 @@
       "branch": "feat/b4a-pay-rules",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4a",
-      "current_task": "B4a in flight: merged origin/main (bb369aa trunk) into be/da cleanly; gates running",
+      "current_task": "B4a PRs open (be#36 da#38 meta#51) on trunk bb369aa; gates: test 0, lint+secrets 0, e2e 64 pass + people-catalogue stream-DB data fail; awaiting conductor merge",
       "session": "1862018a"
     },
     "B5": {
