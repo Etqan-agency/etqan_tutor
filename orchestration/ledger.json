@@ -457,7 +457,7 @@
       "plan_number": 42,
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "plan": "docs/superpowers/plans/2026-10-07-plan-42-templates-preferences.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/33 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/35 https://github.com/Etqan-agency/etqan_tutor/pull/48",
       "bounces": 0
     },
     "B5b": {
