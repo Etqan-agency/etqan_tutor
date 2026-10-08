@@ -16,7 +16,7 @@ In flight: **B2g** · Queue: B5a, B6c, B5e, B3f · Next plan number: 53 · Condu
 | B7 | Add-on sales | waiting-deps |  | B7a | spec-only: specs B7a–B7g done; plans 49 (B7a), 50 (B7c), 51 (B7b) done; 52 (B7e) in progress; B7d/B7f plans next; B7g plan waits B6d/B3f/R8/R9 | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | b2d9309e |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
-| B10 | AI | waiting-deps |  |  | spec-only: B10 phase spec + B10a/B10b specs in review | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | 54d58fd1 |
+| B10 | AI | waiting-deps |  |  | spec-only: B10 phase spec + B10a/B10b specs in review | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | 8b6b7142 |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 
 ## Slices
