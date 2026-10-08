@@ -62,7 +62,7 @@ In flight: **B2g** · Queue: B5a, B6c, B5e, B3f · Next plan number: 55 · Condu
 | B10b | B10 | plan | 48 | B10a, B6c, B6d |  | 0 |
 | B4a | B4 | plan | 46 | B2a, B2e, B2f |  | 0 |
 | B4b | B4 | spec | 54 | B4a |  | 0 |
-| B4c | B4 | spec | 53 | B4a, B3a |  | 0 |
+| B4c | B4 | plan | 53 | B4a, B3a |  | 0 |
 | B4d | B4 | spec |  | B4b |  | 0 |
 | B7a | B7 | plan | 49 |  |  | 0 |
 | B7b | B7 | plan | 51 | B7a |  | 0 |
