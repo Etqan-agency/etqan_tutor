@@ -430,7 +430,7 @@
     },
     "B6d": {
       "phase": "B6",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [
         "B6a"
       ],
@@ -1459,12 +1459,12 @@
     "B5b",
     "B5f"
   ],
-  "in_flight": "B6d",
+  "in_flight": null,
   "main_heads": {
-    "backend": "3b68c9414c2a6ca615cf292deea5b1f3da6e2f0b",
-    "dashboard": "6d2714b6b032c077b36b93e2e75a1b93ee12bec3",
+    "backend": "2f0daa41ee8d9d63ae15daef763053e9a3b98ac5",
+    "dashboard": "074b1fe7bc4ffe2df76df125121fcffeca0eb883",
     "marketing": "3d50f3c79e0133eca9dfdd48323bb22a480e2aca",
-    "meta": "0a1bcb26d22ba38070be65960925ab3b86151b23"
+    "meta": "bb369aa2d689e6746a6110c922627dc02475d0db"
   },
   "escalations": [
     {
