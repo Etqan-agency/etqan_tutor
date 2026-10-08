@@ -512,7 +512,7 @@
     },
     "B5f": {
       "phase": "B5",
-      "status": "build",
+      "status": "queued",
       "requires": [
         "B5e"
       ],
@@ -1456,7 +1456,8 @@
   "queue": [
     "B4a",
     "B7a",
-    "B5b"
+    "B5b",
+    "B5f"
   ],
   "in_flight": "B6d",
   "main_heads": {
