@@ -524,7 +524,7 @@
     },
     "B10a": {
       "phase": "B10",
-      "status": "plan",
+      "status": "queued",
       "requires": [],
       "plan_number": 47,
       "spec": "docs/superpowers/specs/2026-10-08-b10-ai-design.md",
@@ -1480,7 +1480,8 @@
   ],
   "queue": [
     "B5b",
-    "B5f"
+    "B5f",
+    "B10a"
   ],
   "in_flight": "B7a",
   "main_heads": {
