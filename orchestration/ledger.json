@@ -1291,6 +1291,15 @@
         "B6"
       ],
       "source": "owner"
+    },
+    {
+      "id": "D56",
+      "phase": "B7",
+      "decision": "R9 ruling (vouchers is unowned, so the conductor decides): B7 builds the generic voucher redeemer registry on B7g's branches under a claim on etqan.vouchers. Additive only: register_redeemer(kind, ...), generic batch target_id and voucher target_ref_id via one additive migration, KIND_CODES extended by registration, export batches_exist(kind, target_id). Import contract F-1 is amended to allow etqan.recorded -> vouchers.services, with a new contract that vouchers never imports recorded. Lock order Voucher -> Playlist -> Enrolment. Existing voucher kinds keep working unchanged.",
+      "affects": [
+        "B7"
+      ],
+      "source": "R9; conductor ruling 2026-10-08"
     }
   ],
   "requests": [
