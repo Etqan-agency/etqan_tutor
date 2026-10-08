@@ -1280,6 +1280,17 @@
         "B11"
       ],
       "source": "spec 2026-10-08-b4c-balance-payouts C-2, C-5"
+    },
+    {
+      "id": "D55",
+      "phase": "B5",
+      "decision": "Integrations slice 1 (not a phase; PRs backend #32, dashboard #34, meta #47) merges NEXT on master (owner, 2026-10-08). Conductor: after the slice now in flight merges, do not start the next queued slice until the supervisor has merged integrations (it merges as soon as #47's CI is green, then bumps pointers); then rebase the queue as usual. B5c may start once it merges (lifts D41).",
+      "affects": [
+        "conductor",
+        "B5",
+        "B6"
+      ],
+      "source": "owner"
     }
   ],
   "requests": [
