@@ -41,16 +41,16 @@
     },
     "B5": {
       "title": "Communication",
-      "status": "review",
+      "status": "build",
       "requires": [
         "B2"
       ],
       "slot": 4,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b5",
-      "branch": "feat/b5a-communication-r2",
+      "branch": "feat/b5e-chat",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "current_slice": "B5a",
-      "current_task": "B5a PRs open (r2 branches), awaiting conductor merge",
+      "current_task": "B5a merged; B5e rebased onto main (r2 push pending), gates running; next B5b build, B5c spec (D59)",
       "session": "4b5b7034"
     },
     "B6": {
