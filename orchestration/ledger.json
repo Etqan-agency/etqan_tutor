@@ -1321,6 +1321,20 @@
         "B7"
       ],
       "source": "requests R7, R8; D33; D57"
+    },
+    {
+      "id": "D59",
+      "phase": "B5",
+      "decision": "Integrations slice 1 is MERGED (2026-10-08: backend #32, dashboard #34, meta #47). D41's hold on B5c is lifted: build the WhatsApp Cloud API provider on etqan.integrations (replace providers' NotYet whatsapp, resolve('whatsapp'), register B5's whatsapp switch in integrations.services SWITCHES). B10a may build (D49). Email goes only through integrations.services.queue_email/send_email_now (CLAUDE.md rule). D55 is done: conductor resumes the queue normally; rebase in-flight/queued slices on master.",
+      "affects": [
+        "conductor",
+        "B5",
+        "B10",
+        "B7",
+        "B4",
+        "B6"
+      ],
+      "source": "owner"
     }
   ],
   "requests": [
