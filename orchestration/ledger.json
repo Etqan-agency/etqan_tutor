@@ -73,7 +73,7 @@
       "requires": [
         "B3"
       ],
-      "slot": null,
+      "slot": 2,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b7",
       "branch": "feat/b7-spec",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
