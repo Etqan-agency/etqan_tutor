@@ -64,7 +64,7 @@
       "branch": "feat/b6d-certificates",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
       "current_slice": "B6d",
-      "current_task": "B6d queued (be#35, da#37, meta#50) — last B6 slice",
+      "current_task": "B6d: rebased be/da onto B5e trunk; re-gating (test, lint+secrets, e2e)",
       "session": "4fbaa491"
     },
     "B7": {
