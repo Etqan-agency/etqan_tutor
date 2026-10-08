@@ -507,7 +507,7 @@
       "plan_number": 44,
       "spec": "docs/superpowers/specs/2026-10-07-b5e-chat-design.md",
       "plan": "docs/superpowers/plans/2026-10-07-plan-44-chat.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/34 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/36 https://github.com/Etqan-agency/etqan_tutor/pull/49",
       "bounces": 0
     },
     "B5f": {
