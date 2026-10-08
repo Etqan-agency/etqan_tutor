@@ -79,7 +79,7 @@
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7a",
       "current_task": "B7a PRs open (be/da/meta -r2) on trunk 6abc9f2; gates: test PASS 7784/98.45%, lint+secrets PASS, vitest 372 PASS; local e2e cut at 12/12 by host memory (CI authoritative); stack stopped",
-      "session": "09557787"
+      "session": "5e75f8ee"
     },
     "B8": {
       "title": "Marketing extras",
