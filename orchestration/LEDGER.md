@@ -12,7 +12,7 @@ In flight: **B5a** · Queue: B6c, B5e, B4a · Next plan number: 56 · Conductor:
 | B3 | Money depth | merged |  | B3h | B3f CI green (meta#46), awaiting merge; then B3 complete |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | 6fb32127 |
 | B4 | Payroll depth | queued | 1 | B4a | B4a queued: final review clean, gates green (test/lint; e2e 59 pass + 1 unrelated B3 flake passing alone); branches pushed feat/b4a-pay-rules (be, da, meta). Next while waiting: B4c (plan 53) can start only after B4a merges | B2, B3 | docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md | b9940c56 |
 | B5 | Communication | review | 4 | B5a | B5a PRs open (r2 branches), awaiting conductor merge | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
-| B6 | Learning | build | 3 | B6d | B6c next in queue: pre-rebased on main (B2g), gates running | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
+| B6 | Learning | build | 3 | B6d | B6c pre-rebased on main (B2/B3 complete), gates green, pushed (be dcc912a, da 2163aa1, meta 2224587); next after B5a | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
 | B7 | Add-on sales | build | 2 | B7a | B7a: plan 49 Tasks 1–9 done (backend API complete); Task 10 seed | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | b2d9309e |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |

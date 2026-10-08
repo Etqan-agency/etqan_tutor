@@ -64,7 +64,7 @@
       "branch": "feat/b6d-certificates",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
       "current_slice": "B6d",
-      "current_task": "B6c next in queue: pre-rebased on main (B2g), gates running",
+      "current_task": "B6c pre-rebased on main (B2/B3 complete), gates green, pushed (be dcc912a, da 2163aa1, meta 2224587); next after B5a",
       "session": "49b08672"
     },
     "B7": {
