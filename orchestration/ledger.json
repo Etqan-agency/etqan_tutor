@@ -69,7 +69,7 @@
     },
     "B7": {
       "title": "Add-on sales",
-      "status": "build",
+      "status": "queued",
       "requires": [
         "B3"
       ],
@@ -78,7 +78,7 @@
       "branch": "feat/b7a-recorded-courses",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7a",
-      "current_task": "B7a: final review clean; running final gates (test/lint/e2e)",
+      "current_task": "B7a queued (gates green); next: plan B7c build (no deps) while waiting",
       "session": "b2d9309e"
     },
     "B8": {
