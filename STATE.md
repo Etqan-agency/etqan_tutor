@@ -19,13 +19,11 @@ is designed from the audits, unobserved behaviour marked `[assumed]`.
 
 ## Next
 
-Phases run in parallel on slots 1–4: B2 scheduling depth (1), B3 money depth (2), B6 learning (3,
-from 2026-10-05), slot 4 free (merge-only mode until 2026-10-11). Phases B8 marketing extras (B8a–B8e) and B9 platform
-extras (B9a–B9d) are complete. Merged
-slices so far: B8a–B8e, B2a–B2d, B3a–B3c, B3g (plus a B3a currency fix), B9a–B9d, B6a, and a conductor fix to
-the page builder; details in the ledger and
-`orchestration/MERGES.md`. Restart a session with `bash scripts/orchestration/start-session.sh
-<CODE|conductor>` or from `just orchestra`.
+Phases run in parallel on slots 1–4: B4 payroll depth (1), B7 add-on sales (2), B6 learning (3),
+B5 communication (4). Complete: B2 scheduling depth (B2a–B2g), B3 money depth (B3a–B3h), B8 marketing
+extras (B8a–B8e), B9 platform extras (B9a–B9d). B10 has specs and plans on feat/b10-spec2 and waits
+for a slot. Details in the ledger and `orchestration/MERGES.md`. Restart a session with `bash
+scripts/orchestration/start-session.sh <CODE|conductor>` or from `just orchestra`.
 Each phase adds lines to shared lists only under its own `── phase Bn ──` marker, registers every new
 feature in `etqan.platform.features` (off by default), and never runs `git submodule update` in its
 worktree. A switch is read only through `etqan.platform.features` and written only by
