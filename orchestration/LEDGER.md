@@ -66,7 +66,7 @@ In flight: **B6c** · Queue: B5e, B4a, B7a · Next plan number: 56 · Conductor:
 | B4d | B4 | plan | 55 | B4b |  | 0 |
 | B7a | B7 | queued | 49 |  |  | 0 |
 | B7b | B7 | plan | 51 | B7a |  | 0 |
-| B7c | B7 | plan | 50 |  |  | 0 |
+| B7c | B7 | build | 50 |  |  | 0 |
 | B7d | B7 | spec |  | B7c |  | 0 |
 | B7e | B7 | plan | 52 | B7a,  B7b |  | 0 |
 | B7f | B7 | spec |  | B7c,  B7d |  | 0 |
