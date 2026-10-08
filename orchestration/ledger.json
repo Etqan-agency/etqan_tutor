@@ -586,13 +586,13 @@
     },
     "B4d": {
       "phase": "B4",
-      "status": "spec",
+      "status": "plan",
       "requires": [
         "B4b"
       ],
       "plan_number": 55,
       "spec": "docs/superpowers/specs/2026-10-08-b4d-salary-projections-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-08-plan-55-salary-projections.md",
       "prs": null,
       "bounces": 0
     },
