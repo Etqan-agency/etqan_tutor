@@ -33,10 +33,10 @@
       ],
       "slot": 1,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b4",
-      "branch": "feat/b4a-pay-rules",
+      "branch": "feat/b4c-balance-payouts",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
-      "current_slice": "B4a",
-      "current_task": "B4a PRs open (be#36 da#38 meta#51) on trunk bb369aa; gates: test 0, lint+secrets 0, e2e 64 pass + people-catalogue stream-DB data fail; awaiting conductor merge",
+      "current_slice": "B4c",
+      "current_task": "B4c (Plan 53) starting off trunk 6abc9f2",
       "session": "1862018a"
     },
     "B5": {
