@@ -42,6 +42,17 @@ Integrations (codes `integration.view` / `integration.update`) and Etqan's defau
 admin. Next: slice 2 (metering through `integrations.services.email.meter_email`, prices, Etqan
 invoices, the suspend switch in the admin); B5c builds WhatsApp on the resolver (D41).
 
+Deploy note (slice 1):
+- Email is now queued as `integrations.send_email`. Restart the Celery workers (`celery_worker`,
+  `celery_beat`) after the deploy and after every pull. A worker left running from the old code drops
+  these messages as unregistered tasks.
+- `etqan/platform/tasks.py::send_email_message` stays for one release only, so messages the old
+  release queued still send. Nothing may call it. Delete it in the next release.
+- During the blue-green overlap, new web → old worker cannot be covered in code. Mail queued in that
+  window can be lost.
+- An academy's own SMTP server must be a public host on port 25, 465, 587 or 2525.
+  `INTEGRATIONS_ALLOW_PRIVATE_SMTP` turns that off (True only in local and test settings).
+
 ## Follow-ups (from Plans 4–9)
 
 - Phone reset codes (B9c, Twilio): set `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` and `TWILIO_FROM` in
