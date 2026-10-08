@@ -78,3 +78,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B5e** (chat, plan 44) merged 2026-10-08: backend#34 → main 3b68c94, dashboard#36 → main 6d2714b, meta#49 (branches feat/b5e-chat-r2); pointers bumped on master 0a1bcb2. Meta CI green incl. staging-sim, 0 bounces.
 
 **B6d** (certificates, plan 39; B6 last slice) merged 2026-10-08: backend#35 → main 2f0daa4, dashboard#37 → main 074b1fe, meta#50; pointers bumped on master bb369aa. Meta CI green, 0 bounces. Learning migration 0004_certificates. Phase B6 complete (B6a to B6d). R8 (SubjectCertificate, by B7) can now start.
+
+**B4a** (pay rules, plan 46; B4 first slice) merged 2026-10-08: backend#36 → main c6037a0, dashboard#38 → main 77c40fe, meta#51; pointers bumped on master 6abc9f2. Meta CI green incl. staging-sim, 0 bounces. Payroll rules behind payroll_rules, off by default (D48).
