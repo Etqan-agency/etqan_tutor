@@ -31,7 +31,7 @@
         "B2",
         "B3"
       ],
-      "slot": null,
+      "slot": 1,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b4",
       "branch": "feat/b4-spec",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
