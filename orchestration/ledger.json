@@ -675,14 +675,14 @@
         " B6d",
         " B3f"
       ],
-      "plan_number": null,
+      "plan_number": 59,
       "spec": "docs/superpowers/specs/2026-10-08-b7g-recorded-certificates-codes-design.md",
       "plan": null,
       "prs": null,
       "bounces": 0
     }
   },
-  "next_plan_number": 59,
+  "next_plan_number": 60,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
