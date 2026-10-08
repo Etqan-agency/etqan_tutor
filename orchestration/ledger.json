@@ -116,7 +116,7 @@
       "branch": "feat/b10a-ai-drafts",
       "spec": "docs/superpowers/specs/2026-10-08-b10-ai-design.md",
       "current_slice": "B10a",
-      "current_task": "B10a: Plan 47 Task 4 (registry, prompts)",
+      "current_task": "B10a: Plan 47 Task 5 (services, worker)",
       "session": "d923ac07"
     },
     "B11": {
