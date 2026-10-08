@@ -113,10 +113,10 @@
       ],
       "slot": 3,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b10",
-      "branch": "feat/b10-spec2",
+      "branch": "feat/b10a-ai-drafts",
       "spec": "docs/superpowers/specs/2026-10-08-b10-ai-design.md",
       "current_slice": "B10a",
-      "current_task": "B10a: branching, Plan 47 preflight",
+      "current_task": "B10a: Plan 47 Task 0 preflight",
       "session": "d923ac07"
     },
     "B11": {
