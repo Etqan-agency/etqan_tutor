@@ -55,11 +55,11 @@
     },
     "B6": {
       "title": "Learning",
-      "status": "build",
+      "status": "merged",
       "requires": [
         "B2"
       ],
-      "slot": 3,
+      "slot": null,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b6",
       "branch": "feat/b6d-certificates",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
