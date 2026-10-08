@@ -57,6 +57,19 @@ Deploy note (slice 1):
 - An academy's own SMTP server must be a public host on port 25, 465, 587 or 2525.
   `INTEGRATIONS_ALLOW_PRIVATE_SMTP` turns that off (True only in local and test settings).
 
+Deploy note (integrations slice 2):
+- Run `migrate_schemas` (`etqan_billing` 0001 and 0002, public schema) before the new web and
+  worker code takes traffic. Email is metered after each send; without the tables the use is lost
+  (logged, the email still goes out).
+- Restart `celery_beat` (it loads the two new entries, `etqan_billing.build_month` and
+  `etqan_billing.issue_due`) and the Celery workers (`celery_worker`), which run the new tasks.
+- Before the first run, set `ETQAN_BILLING_CURRENCY` and `ETQAN_BILLING_PAYMENT_INSTRUCTIONS` (the
+  real bank details; the default is a placeholder that goes on every PDF and email).
+- Create the `Price` rows in the platform admin before the 1st (use with no price is listed at 0),
+  or void the drafts within their 24 hours, before they are issued and emailed.
+- The first run is on the 1st at 03:00 UTC: drafts for every academy that used Etqan's defaults
+  the month before (nearly all of them, through email), issued and emailed 24 hours later.
+
 ## Follow-ups (from Plans 4–9)
 
 - Phone reset codes (B9c, Twilio): set `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` and `TWILIO_FROM` in
