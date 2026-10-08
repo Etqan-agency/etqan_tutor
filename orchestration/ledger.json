@@ -36,7 +36,7 @@
       "branch": "feat/b4-spec",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4a",
-      "current_task": "spec-only: B4a/B4b/B4c specs reviewed; plans 46 (B4a), 54 (B4b), 53 (B4c) written; B4d spec next; waiting for a slot (B4a buildable)",
+      "current_task": "spec-only: all four slices specced+reviewed and planned (46 B4a, 54 B4b, 53 B4c, 55 B4d); waiting for a slot — B4a buildable now",
       "session": "b9940c56"
     },
     "B5": {
