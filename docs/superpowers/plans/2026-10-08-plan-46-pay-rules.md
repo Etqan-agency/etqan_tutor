@@ -719,9 +719,7 @@ def test_the_people_must_be_a_teacher_and_a_student(world):
 
 def test_update_saves_in_the_current_currency_and_delete_removes(world):
     rate = student_rate(world.teacher, world.student, 900)
-    identity_services.update_teacher_profile(
-        world.teacher.teacher_profile, pay_currency="EGP"
-    )
+    identity_services.update_person(world.teacher, profile={"pay_currency": "EGP"})
     updated = services.update_student_rate(rate, hourly_rate_minor=1100)
     assert (updated.hourly_rate_minor, updated.currency) == (1100, "EGP")
     services.delete_student_rate(updated)
@@ -737,7 +735,7 @@ def test_current_student_rates_leave_out_an_old_currency(world):
         world.student.student_profile.pk: 900,
         other.student_profile.pk: 950,
     }
-    identity_services.update_teacher_profile(profile, pay_currency="EGP")
+    identity_services.update_person(profile.user, profile={"pay_currency": "EGP"})
     profile.refresh_from_db()
     assert rules.current_student_rates(profile) == {}
 
@@ -755,7 +753,7 @@ def test_rate_precedence(rates, student, expected):
     assert rules.rate_for(rates, 7, student) == expected
 ```
 
-Before writing `test_update_saves_in_the_current_currency_and_delete_removes`, check the trunk name of identity's teacher-profile update service (`grep -n "def update_teacher" backend/etqan/identity/services.py`). If the name differs, use the trunk name; never add one.
+The teacher's currency is changed with trunk's `identity_services.update_person(user, profile={...})`.
 
 Add to the payroll conftest:
 
@@ -1558,9 +1556,7 @@ def test_a_rate_for_another_course_is_untouched(world):
 
 def test_mixed_currencies_are_refused_and_nothing_is_written(world):
     other = make_teacher("Hamza")
-    identity_services.update_teacher_profile(
-        other.teacher_profile, pay_currency="EGP"
-    )
+    identity_services.update_person(other, profile={"pay_currency": "EGP"})
     with pytest.raises(ValidationError) as caught:
         services.assign_rates(
             teacher_ids=[world.teacher.id, other.id],
@@ -2076,7 +2072,7 @@ def test_bulk_mixed_currencies_is_400_with_its_code(world, api_for, all_on):
     from etqan.scheduling.tests.conftest import make_teacher  # noqa: PLC0415
 
     other = make_teacher("Hamza")
-    identity_services.update_teacher_profile(other.teacher_profile, pay_currency="EGP")
+    identity_services.update_person(other, profile={"pay_currency": "EGP"})
     response = api_for("admin").post(
         f"{P}rates/bulk/",
         {"teachers": [world.teacher.id, other.id],
