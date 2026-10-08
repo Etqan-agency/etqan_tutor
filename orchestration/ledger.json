@@ -26,7 +26,7 @@
     },
     "B4": {
       "title": "Payroll depth",
-      "status": "build",
+      "status": "review",
       "requires": [
         "B2",
         "B3"
@@ -36,7 +36,7 @@
       "branch": "feat/b4a-pay-rules",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4a",
-      "current_task": "B4a build: Tasks 1-13/14 done (be 0cb4ad0, da 6571c61); Task 14 (e2e + gates) in progress",
+      "current_task": "B4a: all 14 tasks done + per-task reviews; gates green (be 98.34%, e2e pass); final whole-slice review running; then merge trunk + rerun gates + queue",
       "session": "b9940c56"
     },
     "B5": {
