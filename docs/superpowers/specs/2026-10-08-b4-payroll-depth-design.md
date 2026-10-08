@@ -68,7 +68,7 @@ amount an academy already sees.
 |---|---|---|---|---|---|---|
 | **B4a** | pay rules & rates | Per-student rates; bulk rate assignment; payroll settings (a weight for absent and for excused students, `at_disposal` pay, group-class pay); the session class, weight and group role copied onto every payslip line; per-class counters on payslips (TH's board columns) | PAY-001, PAY-002, PAY-003, PAY-011; D6/D15; B2-6 | `student_teacher_rate` (flipped), `payroll_rules` (new), `bulk_teacher_rates` (new) | B2a, B2e, B2f (merged) | M |
 | **B4b** | incentives, report deductions, fixed salary | See the notes after this table | PAY-005, PAY-008, PAY-009, PAY-002; BR-33 | `incentives_deductions` (flipped; it gates percentages only, and fixed bonuses and deductions stay always on as in Plan 7), `report_deductions` (flipped; requires `session_reports`), `fixed_teacher_salary` (flipped) | B4a | M |
-| **B4c** | balance & payouts | See the notes after this table | PAY-006, PAY-007, PAY-010, PAY-013; BR-23, BR-24 | `teacher_balance` (new), `payslip_acknowledgement` (new), `salary_expenses` (new; requires `expenses`) | B4a, B3a (merged) | M |
+| **B4c** | balance & payouts | See the notes after this table | PAY-006, PAY-007, PAY-010, PAY-013; BR-23, BR-24 | `teacher_balance` (new), `payslip_acknowledgement` (new), `salary_expenses` (new; requires nothing, so it posts even while `expenses` is off, B3a A-8) | B4a, B3a (merged) | M |
 | **B4d** | projections & board export | See the notes after this table | EXP-005, EXP-002 (salaries), PAY-001 | `salary_projections` (new) | B4b | S |
 
 **B4b contents.**
@@ -97,10 +97,10 @@ amount an academy already sees.
 - **Withdrawal requests.**
   - The teacher or the office creates one.
   - It runs under review → approved → paid, or ends rejected. The teacher may cancel it while it is under
-    review.
+    review, and the office may cancel it while it is under review or approved (B4c C-4).
   - The amount must be no more than the available balance, and this is hard-enforced. Available means the
     balance minus requests under review or approved.
-  - Every create, approve and pay first takes a payroll-owned lock row, `BalanceLock(teacher, currency)`,
+  - Every create, approve, reject, pay and cancel first takes a payroll-owned lock row, `BalanceLock(teacher, currency)`,
     `FOR UPDATE` (created if missing). Nothing in identity is locked.
 - **Receipt acknowledgement.** The teacher acknowledges a paid payslip.
 - **Expenses.**
@@ -110,8 +110,9 @@ amount an academy already sees.
   - A payslip with a net of 0 is not posted.
   - Withdrawals never post an expense.
 - **Read service.** `payroll.services.balances_of(teacher_user_id)`.
-- **Import contract.** B4c adds `etqan.finance.models` and `etqan.finance.api` to the payroll contract's
-  forbidden modules.
+- **Import contract.** None is needed: B3's contract already keeps every app out of finance's models, api
+  and clock.
+- **Impersonation.** Every B4c write route refuses a quick-login session (D19).
 
 **B4d contents.**
 - **Salary projection** for the current or a future month. Per teacher it shows:
@@ -121,7 +122,8 @@ amount an academy already sees.
   - the fixed salary;
   - pending fixed adjustments.
 - Per-currency totals, plus a converted estimate (D31).
-- The payslip board CSV gains B4b's counter columns. B4a adds its own.
+- The CSV already carries every counter (B4a, B4b and B4c add their own). B4d adds the projection export
+  only.
 
 Order: B4a → B4b → B4c → B4d. B4c needs only B4a, so it may be built before B4b if B4b is blocked.
 
@@ -137,7 +139,8 @@ Order: B4a → B4b → B4c → B4d. B4c needs only B4a, so it may be built befor
   [assumed]
 - **A report deduction is a share of the session's pay**, not a fixed amount, so it needs no currency.
   TutorHamster's settings-tab fields were never captured (TH §2.6). [assumed]
-- **A percentage incentive is a share of the month's gross session pay** on the payslip that uses it.
+- **A percentage incentive is a share of the month's gross pay** (session lines plus a fixed salary) on the
+  payslip that uses it.
   [assumed]
 - **A fixed salary is paid in full for every month the teacher is active**, with no pro-rating. [assumed]
 - **"Excused sessions"** (P1 PAY-002, الحصص المعتذر عنها) is read as *student*-excused (B4a A-4). Teacher-excused
@@ -148,7 +151,8 @@ Order: B4a → B4b → B4c → B4d. B4c needs only B4a, so it may be built befor
 
 - **Teacher profit margins** (the EXP-002 export): they belong to consultations (B7).
 - **Excel files:** exports stay CSV (v1 §6.3; EXP-002 is PARTIAL by design).
-- **Manual balance top-ups or corrections:** not observed. Corrections stay adjustments (P7-4).
+- **Manual balance top-ups or corrections:** TutorHamster shows "current balance" as a field on the teacher
+  form, but whether it can be edited is unknown. Not built; corrections stay adjustments (P7-4).
 - **PAY-006's "cancelled" receipt status:** a payslip that should not be paid is never issued, and its draft
   is removed by the next generate once it has no activity. Plan 7's draft → issued → paid stays.
 - **Teacher payout method and details** (PEOPLE-005): already on `TeacherProfile` (Plan 3). B4c shows them on
@@ -166,7 +170,7 @@ Order: B4a → B4b → B4c → B4d. B4c needs only B4a, so it may be built befor
   - the dashboard's `NAV_ITEMS`.
   - `TENANT_APPS` and `config/api_router.py` are unchanged, because `etqan.payroll` and `payroll/` already
     exist.
-- **`pyproject.toml`.** B4 owns the payroll import contract and edits it in B4c (§3).
+- **`pyproject.toml`.** No change: B3's finance contract already covers payroll (B4c §3).
 - **Requests to other phases:** none. Every read B4 needs exists in `scheduling.services` or is a field path
   on the querysets those services return (B4-1).
 - **Shared decisions to record** (`decide`):
