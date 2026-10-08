@@ -14,9 +14,9 @@
     },
     "B3": {
       "title": "Money depth",
-      "status": "build",
+      "status": "merged",
       "requires": [],
-      "slot": 2,
+      "slot": null,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b3",
       "branch": "feat/b3h-exchange-rates",
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
