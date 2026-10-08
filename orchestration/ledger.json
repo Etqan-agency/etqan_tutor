@@ -502,7 +502,7 @@
     },
     "B5e": {
       "phase": "B5",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [],
       "plan_number": 44,
       "spec": "docs/superpowers/specs/2026-10-07-b5e-chat-design.md",
@@ -1442,11 +1442,10 @@
     }
   ],
   "queue": [
-    "B5e",
     "B4a",
     "B7a"
   ],
-  "in_flight": null,
+  "in_flight": "B5e",
   "main_heads": {
     "backend": "57f9ea6d41265e5ef7be4b3d65c845de7a5e80c2",
     "dashboard": "eab34a1b4e46e998c2d8a061559beb6f29706b29",
