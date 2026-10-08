@@ -565,7 +565,7 @@
       "requires": [
         "B4a"
       ],
-      "plan_number": null,
+      "plan_number": 54,
       "spec": "docs/superpowers/specs/2026-10-08-b4b-incentives-reports-fixed-design.md",
       "plan": null,
       "prs": null,
@@ -681,7 +681,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 54,
+  "next_plan_number": 55,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
