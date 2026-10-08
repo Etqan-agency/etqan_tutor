@@ -64,7 +64,7 @@
       "branch": "feat/b6d-certificates",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
       "current_slice": "B6d",
-      "current_task": "B6c in flight: refreshed onto 1fca58f, gates green, pushed (be c0c5fe5, da 0e0a531, meta fa695d1); awaiting merge; then B6d",
+      "current_task": "B6d queued (be#35, da#37, meta#50) — last B6 slice",
       "session": "49b08672"
     },
     "B7": {

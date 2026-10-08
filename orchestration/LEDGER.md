@@ -12,7 +12,7 @@ In flight: **B5e** · Queue: B4a, B7a, B6d · Next plan number: 56 · Conductor:
 | B3 | Money depth | merged |  | B3h | B3f CI green (meta#46), awaiting merge; then B3 complete |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | 6fb32127 |
 | B4 | Payroll depth | queued | 1 | B4a | B4a queued (next). Prior e2e failures diagnosed: stale celery worker lacked integrations.send_email (env, not code); trunk re-merged (be e0d1e7c, da 85d7d74), worker restarted; gates rerunning, then push | B2, B3 | docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md | b9940c56 |
 | B5 | Communication | review | 4 | B5e | B5e PRs open, awaiting merge; then resume B5b gates | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
-| B6 | Learning | build | 3 | B6d | B6c in flight: refreshed onto 1fca58f, gates green, pushed (be c0c5fe5, da 0e0a531, meta fa695d1); awaiting merge; then B6d | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
+| B6 | Learning | build | 3 | B6d | B6d queued (be#35, da#37, meta#50) — last B6 slice | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
 | B7 | Add-on sales | build | 2 | B7c | B7a queued; B7c plan 50 Task 10 of 20 (request API) | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | b2d9309e |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
