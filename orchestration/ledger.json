@@ -523,7 +523,7 @@
     },
     "B10a": {
       "phase": "B10",
-      "status": "spec",
+      "status": "plan",
       "requires": [],
       "plan_number": 47,
       "spec": "docs/superpowers/specs/2026-10-08-b10-ai-design.md",
