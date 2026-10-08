@@ -93,3 +93,17 @@ The original request text follows for reference.
   playlist with batches cannot be deleted.
 - **e2e:** the demo student watches the last video of a certificate playlist and opens the certificate. A
   generated code enrols another student.
+
+## 6. Rulings from planning (plan 59)
+
+- **G-3 wording.** Students reach a recorded-course certificate from the course player link and the print
+  page. B6's certificate list does not show it, because `certificates_of` excludes subject certificates
+  (D58).
+- **`CertificateRef`** is `(id, code, issued_on, revoked)`, which G-4 needs.
+- **Subject names.** A playlist has one title (B7a A-3), so `subject_en` and `subject_ar` are both set
+  to it.
+- **G-6 status.** A playlist code while `recorded_courses` is off reuses B3f's existing
+  `vouchers.unavailable` error, at whatever status B3f gives it.
+- **Concurrency.** The completion race is guarded by the enrolment row lock. It is tested with
+  captured-SQL lock order plus an idempotent second issue, not a true two-transaction test:
+  `transaction=True` leaks rows under django-tenants (as in B7a and B7c).
