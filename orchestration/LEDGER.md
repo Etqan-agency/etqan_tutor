@@ -16,7 +16,7 @@ In flight: **B6c** · Queue: B5e, B4a · Next plan number: 56 · Conductor: 4ddf
 | B7 | Add-on sales | build | 2 | B7a | B7a: backend done; dashboard Tasks 11–14 done, Task 15 enrolments tab | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | b2d9309e |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
-| B10 | AI | waiting-deps |  | B10a | spec-only done: specs + Plans 47/48 on meta feat/b10-spec2 (159e804; replaces feat/b10-spec, gitleaks history). Waiting: slot (D45), integrations slice 1 on main (B10a); B10b also B6c, B6d | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | 8b6b7142 |
+| B10 | AI | waiting-deps |  | B10a | spec-only done: specs + Plans 47/48 on meta feat/b10-spec2; Plan 47 re-checked vs merged integrations (D59). B10a deps met; waiting only for a slot (D45). B10b also needs B6c, B6d | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | 8b6b7142 |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 
 ## Slices

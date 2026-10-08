@@ -116,7 +116,7 @@
       "branch": "feat/b10-spec2",
       "spec": "docs/superpowers/specs/2026-10-08-b10-ai-design.md",
       "current_slice": "B10a",
-      "current_task": "spec-only done: specs + Plans 47/48 on meta feat/b10-spec2 (159e804; replaces feat/b10-spec, gitleaks history). Waiting: slot (D45), integrations slice 1 on main (B10a); B10b also B6c, B6d",
+      "current_task": "spec-only done: specs + Plans 47/48 on meta feat/b10-spec2; Plan 47 re-checked vs merged integrations (D59). B10a deps met; waiting only for a slot (D45). B10b also needs B6c, B6d",
       "session": "8b6b7142"
     },
     "B11": {
