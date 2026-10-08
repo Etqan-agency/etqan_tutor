@@ -19,10 +19,10 @@ is designed from the audits, unobserved behaviour marked `[assumed]`.
 
 ## Next
 
-Phases run in parallel on slots 1–4: B4 payroll depth (1), B7 add-on sales (2), B6 learning (3),
-B5 communication (4). Complete: B2 scheduling depth (B2a–B2g), B3 money depth (B3a–B3h), B8 marketing
-extras (B8a–B8e), B9 platform extras (B9a–B9d). B10 has specs and plans on feat/b10-spec2 and waits
-for a slot. Details in the ledger and `orchestration/MERGES.md`. Restart a session with `bash
+Phases run in parallel on slots 1–4: B4 payroll depth (1), B7 add-on sales (2), B10 AI (3),
+B5 communication (4). Complete: B2 scheduling depth, B3 money depth, B6 learning, B8 marketing
+extras, B9 platform extras; integrations slice 1 is merged. B11 apps waits for B4 and B5. Details in
+the ledger and `orchestration/MERGES.md`. Restart a session with `bash
 scripts/orchestration/start-session.sh <CODE|conductor>` or from `just orchestra`.
 Each phase adds lines to shared lists only under its own `── phase Bn ──` marker, registers every new
 feature in `etqan.platform.features` (off by default), and never runs `git submodule update` in its
