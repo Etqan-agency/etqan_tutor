@@ -74,3 +74,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B5a** (communication, plan 42; B5 first slice) merged 2026-10-08: backend#33 → main 7d60f5b, dashboard#35 → main 5468068, meta#48 (branches feat/b5a-communication-r2, because the rebased tips could not fast-forward the old branches); pointers bumped on master a0aa014. Meta CI green incl. staging-sim, 0 bounces.
 
 **B6c** (reviews and honour board, plan 38) merged 2026-10-08: backend#25 → main 57f9ea6, dashboard#26 → main eab34a1, meta#39; pointers bumped on master 08af0ca. Meta CI green. 1 bounce (honour dialog opened before academy settings loaded on the preview build; fixed). Learning migration 0003.
+
+**B5e** (chat, plan 44) merged 2026-10-08: backend#34 → main 3b68c94, dashboard#36 → main 6d2714b, meta#49 (branches feat/b5e-chat-r2); pointers bumped on master 0a1bcb2. Meta CI green incl. staging-sim, 0 bounces.
