@@ -1329,7 +1329,7 @@
       "app": "scheduling",
       "to_owner": "B2",
       "what": "R-B5d-1 (B5d more notices, spec docs/superpowers/specs/2026-10-07-b5d-more-notices-design.md §4 R6): additive read-only services exported from etqan.scheduling.services, each a fixed query count, returning Session objects with student__user, teacher__user, course selected: (a) teacher_absences_marked(*, since) — non-cancelled sessions with teacher_attendance='absent' and marked_at>=since; (b) sessions_ended(*, now, after, give_up) — status scheduled, both attendances not_set, ENDS_AT in (now-give_up, now-after]; (c) postponements(*, since, until) -> list[Postponement(entry_id, session, previous_starts_at, new_starts_at, by_user_id, at)] from B2c POSTPONE activity entries (moves back included); (d) sessions_booked(*, kind, since, now) — sessions of kind created >= since, starts_at > now, not cancelled; (e) after B2g: substitutions(*, since, until) -> list[Substitution(id, subscription_id, student, course, regular_teacher_user, substitute_user, starts_on, ends_on, created_at)]. Non-blocking: each B5d notice is built only when its service exists.",
-      "status": "open"
+      "status": "done"
     },
     {
       "id": "R7",
