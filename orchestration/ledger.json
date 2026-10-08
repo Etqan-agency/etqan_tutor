@@ -78,7 +78,7 @@
       "branch": "feat/b7a-recorded-courses",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7a",
-      "current_task": "B7a: Tasks 1–16 done; Task 17 e2e",
+      "current_task": "B7a: all 17 tasks done; final review + just test running; lint green",
       "session": "b2d9309e"
     },
     "B8": {
