@@ -8,7 +8,7 @@ In flight: **B2g** · Queue: B5a, B6c, B5e, B3f · Next plan number: 55 · Condu
 
 | Phase | Title | Status | Slot | Slice | Task | Requires | Spec | Session |
 |---|---|---|---|---|---|---|---|---|
-| B2 | Scheduling depth | build | 1 | B2g | B2g ready (R6e built, gates green: be 6213+, da 2282, lint/secrets clean, e2e 53+2 order-dependent pass alone); waiting for B3e merge, then merge trunk + rerun |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | edb38e65 |
+| B2 | Scheduling depth | build | 1 | B2g | B2g PRs open (be#30 da#32 meta#45); R6 done; last slice — awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | edb38e65 |
 | B3 | Money depth | build | 2 | B3h | B3f queued (all gates green on trunk); push/PRs when in flight |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | 6fb32127 |
 | B4 | Payroll depth | waiting-deps |  | B4a | spec-only: phase spec + B4a spec reviewed, plan 46 written; waiting for a slot (B4a deps merged) | B2, B3 | docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md | b9940c56 |
 | B5 | Communication | waiting-deps | 4 | B5a | B5a, B5e queued; B5b plan ready; B5d spec done (R6/R7 filed); waiting for B5a merge | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
