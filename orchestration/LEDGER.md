@@ -13,7 +13,7 @@ In flight: **B5a** · Queue: B6c, B5e · Next plan number: 56 · Conductor: 4ddf
 | B4 | Payroll depth | review | 1 | B4a | B4a: final review clean (fix wave applied); trunk merged (be e999606, da 105a4c8); rerunning just test/lint/e2e before queue | B2, B3 | docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md | b9940c56 |
 | B5 | Communication | waiting-deps | 4 | B5a | B5a, B5e queued; B5b plan ready; B5d spec done (R6/R7 filed); waiting for B5a merge | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
 | B6 | Learning | build | 3 | B6d | B6c next in queue: pre-rebased on main (B2g), gates running | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
-| B7 | Add-on sales | build | 2 | B7a | B7a: plan 49 Tasks 1–5 done (models, embeds, playlist/video/enrolment services); Task 6 office API | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | b2d9309e |
+| B7 | Add-on sales | build | 2 | B7a | B7a: plan 49 Tasks 1–6 done; Task 7 enrolments API | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | b2d9309e |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
 | B10 | AI | waiting-deps |  | B10a | spec-only done: specs + Plans 47/48 on meta feat/b10-spec2 (159e804; replaces feat/b10-spec, gitleaks history). Waiting: slot (D45), integrations slice 1 on main (B10a); B10b also B6c, B6d | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | 8b6b7142 |
