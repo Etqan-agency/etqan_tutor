@@ -78,7 +78,7 @@
       "branch": "feat/b7a-recorded-courses",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7a",
-      "current_task": "B7a: plan 49 Tasks 1–8 done; Task 9 student/parent API",
+      "current_task": "B7a: plan 49 Tasks 1–9 done (backend API complete); Task 10 seed",
       "session": "b2d9309e"
     },
     "B8": {
