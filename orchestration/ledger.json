@@ -26,7 +26,7 @@
     },
     "B4": {
       "title": "Payroll depth",
-      "status": "build",
+      "status": "queued",
       "requires": [
         "B2",
         "B3"
@@ -36,7 +36,7 @@
       "branch": "feat/b4c-balance-payouts",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4c",
-      "current_task": "B4c built (Plan 53), final review + fix wave clean, trunk merged (be 78d0bed, da 7d4e539, pushed); slice gates running",
+      "current_task": "B4c queued: be a4b5f08, da 7d4e539 pushed (trunk merged). Gates on fresh stack: e2e 66/66, test 0 (7809 be, 292 marketing/dashboard vitest, 46 contracts), lint+secrets 0",
       "session": "1862018a"
     },
     "B5": {
