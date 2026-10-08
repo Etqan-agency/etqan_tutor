@@ -671,9 +671,7 @@
       "phase": "B7",
       "status": "spec",
       "requires": [
-        "B7a",
-        " B6d",
-        " B3f"
+        "B7a"
       ],
       "plan_number": 59,
       "spec": "docs/superpowers/specs/2026-10-08-b7g-recorded-certificates-codes-design.md",
