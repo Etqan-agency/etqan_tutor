@@ -1367,6 +1367,19 @@
         "conductor"
       ],
       "source": "integrations slice 2 final review"
+    },
+    {
+      "id": "D63",
+      "phase": "B5",
+      "decision": "Integrations slice 2 (not a phase; PRs backend #37, dashboard #39, meta #52) merges NEXT on master as soon as #52's CI is green (supervisor merges it, then bumps pointers). Conductor: after the slice now in flight merges, hold the next queued slice until it lands, then rebase the queue as usual.",
+      "affects": [
+        "conductor",
+        "B5",
+        "B7",
+        "B4",
+        "B10"
+      ],
+      "source": "owner"
     }
   ],
   "requests": [
