@@ -36,7 +36,7 @@
       "branch": "feat/b4a-pay-rules",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4a",
-      "current_task": "B4a queued; merged trunk again per D59 (be b451c9e, da 89252ca; conflicts were B4/B5 shared-list neighbours, kept both); gates rerunning, then push",
+      "current_task": "B4a queued; trunk re-merged (be b451c9e, da 89252ca, meta merged — NOT pushed yet). Gates: test 0, lint 0; e2e FAILED: b2-postpone, b3-codes, b3-online-payments, b3-paypal, b3-wallet (+ run cut short, 37 passed) — not yet diagnosed (likely env after reboot / trunk B5 changes); must investigate before push",
       "session": "b9940c56"
     },
     "B5": {
