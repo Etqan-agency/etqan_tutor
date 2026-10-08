@@ -690,7 +690,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "etqan.integrations",
+      "phase": "B10",
+      "reason": "B10a: the Claude provider (spec §4)",
+      "since": "2026-10-08T18:37:34+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
