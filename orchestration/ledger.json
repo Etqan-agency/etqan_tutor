@@ -41,16 +41,16 @@
     },
     "B5": {
       "title": "Communication",
-      "status": "waiting-deps",
+      "status": "build",
       "requires": [
         "B2"
       ],
       "slot": 4,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b5",
-      "branch": "feat/b5e-chat-r2",
+      "branch": "feat/b5f-chat-extras",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
-      "current_slice": "B5e",
-      "current_task": "B5e in flight; B5b queued; plans ready: 56 B5d, 57 B5c, 58 B5f (each waits on B5b/B5e merge)",
+      "current_slice": "B5f",
+      "current_task": "B5e merged; building B5f (Plan 58) off main; B5b queued",
       "session": "4b5b7034"
     },
     "B6": {
