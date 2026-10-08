@@ -21,7 +21,7 @@
       "branch": "feat/b3h-exchange-rates",
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
       "current_slice": "B3h",
-      "current_task": "B3f queued; PRs open early (owner go-ahead); merge when conductor reaches it",
+      "current_task": "B3f CI green (meta#46), awaiting merge; then B3 complete",
       "session": "6fb32127"
     },
     "B4": {
