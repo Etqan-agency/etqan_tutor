@@ -1300,6 +1300,17 @@
         "B7"
       ],
       "source": "R9; conductor ruling 2026-10-08"
+    },
+    {
+      "id": "D57",
+      "phase": "B6",
+      "decision": "Ownership: etqan.learning (created by B6) is owned by B6 while B6 is active, like any phase-created app; requests to learning (R7 from B5, R8 from B7) go to B6.",
+      "affects": [
+        "B5",
+        "B6",
+        "B7"
+      ],
+      "source": "spec 2026-10-02 §4.3; conductor ruling 2026-10-08"
     }
   ],
   "requests": [
