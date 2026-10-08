@@ -169,3 +169,18 @@ schedule with a one-week substitution. Idempotent; `other` gets nothing.
 ## 12. Out of scope
 
 WhatsApp group routing per schedule course and substitution notices (B5); substitute pay rules (B4).
+
+## Amendments from plan 41 (2026-10-06)
+
+The shipped contract where it differs from the sections above (plan 41 rulings):
+
+- **D1** — §4 "Bundle rows": actions apply to the bundle's **schedule members — current or still live** (not only current), so an old link with a pending renewal stops too; teacher change and substitution apply to the live ones among them (none live → 409 `scheduling.not_allowed_in_status`); the row's status is computed over the same members. A subscription id naming a member acts on that member alone.
+- **D3** — §4: stop and activate refuse a deleted schedule; restore changes only deleted ones; the same status is a no-op; the bulk teacher change and a substitution refuse a deleted schedule; `delete_slot` stays allowed.
+- **D5** — §4: `skipped_stopped` counts schedules (live, unarchived, with an active slot), not dates.
+- **D9** — §4 `add_substitution`: the range regenerated is `max(from_date, today)` to the later of `min(to_date, today + horizon)` and the last deleted date.
+- **D11** — §4: `remove_substitution(substitution)` takes no `by`.
+- **D13** — §5: a schedule is a subscription with a slot that is **current or still live** — D1's rule for plain subscriptions too (review I-3), so a renewed link leaves the list once it has ended; filter `q` (student name) added; the kind filter is `kind=single|multi_course|family|group`; the default tab is `active`; rows newest first.
+- **D15** — a route added to §7: `GET schedules/candidates/?q=` (code `weekly_schedule.update`, feature `weekly_schedules`), up to 20 live subscriptions without a slot whose schedule is not deleted; "Add" opens the chosen subscription's page.
+- **D16** — §7: session `substitute_for` is `{id, full_name}` and appears only on substituted sessions (Today rows and My supervision's rows too); a **Today row's `teacher` follows its session** (the substitute on a substituted lesson; the subscription's teacher only for a row without a session) — B5 and B11 reading Today should know; the office's subscription detail adds `substitutions` (current and future), `schedule_changed_at`, `schedule_changed_by`.
+- **D17** — §7 answers: status actions `{subscriptions}`; bulk teacher `{subscriptions, conflicts, outside_availability?}`; substitution 201 `{substitutions, conflicts, outside_availability?}`; remove 204.
+- **D24 / ledger R2, D35:** `create_subscription` gains `schedule_status=` and `substitutions_from=` (additive), passed by `renew_subscription` and `add_to_group_bundle`; B3d keeps both slices' keyword arguments on rebase.
