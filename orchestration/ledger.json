@@ -488,7 +488,7 @@
     },
     "B5d": {
       "phase": "B5",
-      "status": "spec",
+      "status": "plan",
       "requires": [
         "B5a",
         "B5b",
@@ -496,7 +496,7 @@
       ],
       "plan_number": 56,
       "spec": "docs/superpowers/specs/2026-10-07-b5d-more-notices-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-08-plan-56-more-notices.md",
       "prs": null,
       "bounces": 0
     },
