@@ -21,7 +21,7 @@
       "branch": "feat/b3h-exchange-rates",
       "spec": "docs/superpowers/specs/2026-10-03-b3-money-depth-design.md",
       "current_slice": "B3h",
-      "current_task": "B3f queued (all gates green on trunk); push/PRs when in flight",
+      "current_task": "B3f queued; PRs open early (owner go-ahead); merge when conductor reaches it",
       "session": "6fb32127"
     },
     "B4": {
