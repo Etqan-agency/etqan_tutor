@@ -437,7 +437,7 @@
       "plan_number": 39,
       "spec": "docs/superpowers/specs/2026-10-05-b6d-certificates-design.md",
       "plan": "docs/superpowers/plans/2026-10-05-plan-39-certificates.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/35 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/37 https://github.com/Etqan-agency/etqan_tutor/pull/50",
       "bounces": 0
     },
     "B3afix": {
