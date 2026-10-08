@@ -16,7 +16,7 @@ In flight: **B4a** · Queue: B7a, B5b, B5f · Next plan number: 59 · Conductor:
 | B7 | Add-on sales | build | 2 | B7c | B7a queued; B7c final review clean, test+lint green; full e2e + dashboard coverage pending (gate run killed by low memory) | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | b2d9309e |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
-| B10 | AI | waiting-deps | 3 | B10a | spec-only done: specs + Plans 47/48 on meta feat/b10-spec2; Plan 47 re-checked vs merged integrations (D59). B10a deps met; waiting only for a slot (D45). B10b also needs B6c, B6d | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | d923ac07 |
+| B10 | AI | build | 3 | B10a | B10a: branching, Plan 47 preflight | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | d923ac07 |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 
 ## Slices
