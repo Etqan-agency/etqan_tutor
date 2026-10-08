@@ -12,7 +12,7 @@ In flight: **B5a** · Queue: B6c, B5e · Next plan number: 56 · Conductor: 4ddf
 | B3 | Money depth | merged |  | B3h | B3f CI green (meta#46), awaiting merge; then B3 complete |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | 6fb32127 |
 | B4 | Payroll depth | review | 1 | B4a | B4a: all 14 tasks done + per-task reviews; gates green (be 98.34%, e2e pass); final whole-slice review running; then merge trunk + rerun gates + queue | B2, B3 | docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md | b9940c56 |
 | B5 | Communication | waiting-deps | 4 | B5a | B5a, B5e queued; B5b plan ready; B5d spec done (R6/R7 filed); waiting for B5a merge | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
-| B6 | Learning | build | 3 | B6d | B6c queued; B6d ready (stacked on B6c, gates green, pushed) — PRs after B6c merges | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
+| B6 | Learning | build | 3 | B6d | B6c next in queue: pre-rebased on main (B2g), gates running | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
 | B7 | Add-on sales | build | 2 | B7a | B7a: branches cut off trunk (B3 complete); starting plan 49 Task 1 | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | b2d9309e |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |

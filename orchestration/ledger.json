@@ -64,7 +64,7 @@
       "branch": "feat/b6d-certificates",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
       "current_slice": "B6d",
-      "current_task": "B6c queued; B6d ready (stacked on B6c, gates green, pushed) — PRs after B6c merges",
+      "current_task": "B6c next in queue: pre-rebased on main (B2g), gates running",
       "session": "49b08672"
     },
     "B7": {
