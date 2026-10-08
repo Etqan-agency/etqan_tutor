@@ -462,7 +462,7 @@
     },
     "B5b": {
       "phase": "B5",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [
         "B5a",
         "B2f"
@@ -1479,11 +1479,10 @@
     }
   ],
   "queue": [
-    "B5b",
     "B5f",
     "B10a"
   ],
-  "in_flight": null,
+  "in_flight": "B5b",
   "main_heads": {
     "backend": "1fbb1cabe917c0a79ff48bfb98da3b60e4b1af6d",
     "dashboard": "97c6234f2f07da89dce442fc14e1cd29dad02c4d",
