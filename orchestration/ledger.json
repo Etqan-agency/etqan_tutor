@@ -116,7 +116,7 @@
       "branch": "feat/b10a-ai-drafts",
       "spec": "docs/superpowers/specs/2026-10-08-b10-ai-design.md",
       "current_slice": "B10a",
-      "current_task": "B10a: all 11 tasks reviewed; final review ready; rebasing on integrations-2 + wiring meter()",
+      "current_task": "B10a: built, final review clean, rebased on trunk; running gates",
       "session": "d923ac07"
     },
     "B11": {
