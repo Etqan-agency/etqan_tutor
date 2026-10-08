@@ -219,6 +219,30 @@ Steps:
   - fixed query counts.
 - [ ] **Implement, run** (notifications and learning suites, `lint-imports`) **and commit** `feat(notifications): homework and level-upgrade notices (B5d)`.
 
+
+### Task 5b: The chat notice (spec addendum D-CHAT; only if B5e is merged)
+
+**Files:**
+- `backend/etqan/chat/services/notices.py` (`UnreadDigest`, `unread_digest`), exported from `etqan.chat.services`;
+- notifications: `kinds` (`chat.unread`, `Kind.emails`), `finders` (`RECIPIENT` part, optional `student`, the chat finder), `recipients` (lazy parts), `text` (`sender`, `count`, conversation sample, count wording), `links` (`/chat?c=<id>`), `scan` (`FEATURE_OF`; `emails=False` → `skipped`);
+- `pyproject.toml` (C-5 ignores and forbids);
+- migration `0005_chat_unread` (choices only);
+- dashboard `schemas.ts`, settings and templates "chat" group, and the preferences card gating;
+- tests.
+
+- [ ] **Tests (RED):**
+  - `unread_digest` window and threshold;
+  - the pointer occurrence: no re-notify when a message ages out or is deleted, and one notice after reading and new unread;
+  - a hidden direct conversation is excluded;
+  - out-of-chat participants are excluded;
+  - 2 queries;
+  - `chat.unread` stored with email `skipped`;
+  - muted by the `chat` preference;
+  - the link per role;
+  - the preview with the conversation sample;
+  - the dashboard type label, settings range and preferences gating.
+- [ ] **Implement, run** (chat, notifications, `lint-imports`, dashboard) **and commit** `feat(notifications): chat unread notice (B5d)`.
+
 ### Task 6: Dashboard — new types in settings, templates, log and bell
 
 **Files:** `dashboard/src/features/notifications/schemas.ts` (`NOTIFICATION_TYPES`, `TYPE_INFO` with labels and value ranges for `session.teacher_early_reminder` (30–1440) and `session.ended` (1–55)), `NotificationSettingsForm.tsx` (groups schedule, homework, levels), `TemplatesPage.tsx` (same groups), the `PreferencesCard` category labels (exist), locales `notifications.json` en/ar, and the tests.
