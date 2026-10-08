@@ -1357,6 +1357,18 @@
         "B2"
       ],
       "source": "integrations slice 2 review"
+    },
+    {
+      "id": "D62",
+      "phase": "B5",
+      "decision": "Integrations slice 2 (metering + Etqan invoices) merges soon and touches etqan.integrations: payloads.card() gains default_prices; dashboard IntegrationCard gains default_prices (every card literal/fixture needs it or tsc fails); IntegrationsPage ServiceCard renders prices; meter_email now takes message_id; the integrations import contract is renamed. Rebase onto it rather than around it. Metering: record_usage(source=resolved.source, service, unit, quantity, source_ref, occurred_at) when the provider CONFIRMS; the key is (academy, service, unit, source_ref); usage dated in a month but recorded after 03:00 UTC on the 1st of the next month is not billed, so record on confirmation, not in a late batch.",
+      "affects": [
+        "B5",
+        "B10",
+        "B2",
+        "conductor"
+      ],
+      "source": "integrations slice 2 final review"
     }
   ],
   "requests": [
