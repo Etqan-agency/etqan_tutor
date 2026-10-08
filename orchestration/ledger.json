@@ -452,7 +452,7 @@
     },
     "B5a": {
       "phase": "B5",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 42,
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
@@ -1402,12 +1402,12 @@
     "B5e",
     "B4a"
   ],
-  "in_flight": "B5a",
+  "in_flight": null,
   "main_heads": {
-    "backend": "7c0608b93c76d63b8fb23ae359c0a46b766cbb2e",
-    "dashboard": "2b0f54ed4e5a1f68f3a2314d4b93969fbc6da0a8",
+    "backend": "7d60f5b9b1638218ca89b4db7fee226ed8cf65f1",
+    "dashboard": "5468068fc6e6c6b691a795304a0981520cc3bb3a",
     "marketing": "3d50f3c79e0133eca9dfdd48323bb22a480e2aca",
-    "meta": "2a54f2177545f05fc0fa7045364470c9acdac9df"
+    "meta": "a0aa01435872592ee6c8b649fb1f6c501f5072b4"
   },
   "escalations": [
     {
