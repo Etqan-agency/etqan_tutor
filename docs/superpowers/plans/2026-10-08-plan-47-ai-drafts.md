@@ -1,5 +1,7 @@
 # B10a — AI drafts — Implementation Plan (Plan 47)
 
+**Metering (D61):** if `etqan/etqan_billing` is on backend `origin/main` when Task 5 runs, implement `meter()`'s body as its docstring shows (import `from etqan.etqan_billing import services as billing`, add that import to the `etqan.ai` contract's allowed list) with tests: two events with refs `ai-draft-<uuid>:input_token` / `:output_token`, none for a zero count, none for `source == "academy"`, a repeat call adds nothing. Otherwise leave the seam and note it for B10b.
+
 **Requires:** integrations slice 1 — MERGED 2026-10-08 (ledger D59: backend #32, dashboard #34, meta #47). No ledger slice. Re-checked against the merged code on 2026-10-08: the Provider protocol's `clean()` gained `own: bool = True` (passed `own=False` for Etqan's default by `apply_platform_change`), which Task 7's provider accepts; the admin's test messages now start with the service's display name; `test_providers.py`'s connectable test is unchanged.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: superpowers:subagent-driven-development. The execution method for this plan is fixed: **subagent-driven development** (a fresh implementer per task, a fresh reviewer after each, a whole-slice review at the end). Steps use checkbox (`- [ ]`) syntax for tracking.
@@ -2365,10 +2367,19 @@ def _finish(draft_id, **fields) -> AiDraft:
 
 def meter(resolved, draft: AiDraft) -> None:
     """AI-9: the one place AI is metered, once per draft that got a response.
-    Integrations slice 2 fills it in: when ``resolved.source == "etqan"`` it
-    records ``draft.input_tokens`` and ``draft.output_tokens`` with
-    ``source_ref=f"ai-draft-{draft.pk}"``. The academy's own account is never
-    charged. Records nothing until then."""
+    Records nothing until integrations slice 2 (``etqan_billing``) is on
+    main; then the body is, one source_ref PER UNIT (ledger D61: record_usage
+    is idempotent on (academy, service, source_ref), the unit is not in the
+    key) and no zero quantity (record_usage refuses it)::
+
+        for unit, quantity in (("input_token", draft.input_tokens),
+                               ("output_token", draft.output_tokens)):
+            if quantity:
+                billing.record_usage(source=resolved.source, service="ai",
+                                     unit=unit, quantity=quantity,
+                                     source_ref=f"ai-draft-{draft.pk}:{unit}")
+
+    record_usage itself skips anything but ``source == "etqan"``."""
 ```
 
 `backend/etqan/ai/tasks.py`:
