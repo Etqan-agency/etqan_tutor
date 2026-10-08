@@ -1384,7 +1384,7 @@
       "app": "vouchers",
       "to_owner": "conductor",
       "what": "R-B7g-2 (B7g, spec docs/superpowers/specs/2026-10-08-b7g-recorded-certificates-codes-design.md §4): voucher kind 'playlist' via a generic redeemer registry: register_redeemer(kind, *, describe(target_id)->(name_en,name_ar), check(target_id), redeem(*, target_id, student_user_id, code_display, by)->(student_profile_id, ref_id), office_code, feature) filled from RecordedConfig.ready() (vouchers never imports recorded); batch gains generic target_id, voucher gains target_ref_id (migration on vouchers tables); family scope (in_family) before the hook; preview() lists family students; KIND_CODES gains the registered office code; generation/redeem refuse while the feature is off; lock order Voucher -> Playlist -> Enrolment; F-1 amended to allow etqan.recorded -> vouchers.services, plus a 'vouchers never imports recorded' contract; export batches_exist(kind, target_id). Non-blocking until B7g builds.",
-      "status": "open"
+      "status": "done"
     }
   ],
   "queue": [
