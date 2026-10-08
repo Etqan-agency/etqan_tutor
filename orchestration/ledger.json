@@ -512,7 +512,7 @@
     },
     "B5f": {
       "phase": "B5",
-      "status": "plan",
+      "status": "build",
       "requires": [
         "B5e"
       ],
