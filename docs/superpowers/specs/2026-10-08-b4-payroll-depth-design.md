@@ -115,12 +115,11 @@ amount an academy already sees.
 - **Impersonation.** Every B4c write route refuses a quick-login session (D19).
 
 **B4d contents.**
-- **Salary projection** for the current or a future month. Per teacher it shows:
+- **Salary projection** for the current month only (B4d P-1). Per teacher it shows:
   - the pay so far (`build`);
-  - the month's remaining `scheduled` sessions from `payroll_sessions`, priced as if completed with the
-    student present, under the current rules;
-  - the fixed salary;
-  - pending fixed adjustments.
+  - the projection: the same build with the month's `scheduled` sessions (teacher not marked absent) priced as
+    if completed with the student present, under the current rules, including the fixed salary and pending
+    adjustments (percentages on the projected gross).
 - Per-currency totals, plus a converted estimate (D31).
 - The CSV already carries every counter (B4a, B4b and B4c add their own). B4d adds the projection export
   only.
