@@ -599,7 +599,7 @@
     },
     "B7a": {
       "phase": "B7",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 49,
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
@@ -1483,12 +1483,12 @@
     "B5f",
     "B10a"
   ],
-  "in_flight": "B7a",
+  "in_flight": null,
   "main_heads": {
-    "backend": "c6037a05e55867b103b9eea8ced27bd94c52bfcb",
-    "dashboard": "77c40fe1438b5e370b6a9494fe51ec7565b9b7eb",
+    "backend": "1fbb1cabe917c0a79ff48bfb98da3b60e4b1af6d",
+    "dashboard": "97c6234f2f07da89dce442fc14e1cd29dad02c4d",
     "marketing": "3d50f3c79e0133eca9dfdd48323bb22a480e2aca",
-    "meta": "6abc9f21b87c950cdbe87359a86edec93c2a7534"
+    "meta": "ce4ff9519fb745e6ebc84643576a860cd5acbead"
   },
   "escalations": [
     {
