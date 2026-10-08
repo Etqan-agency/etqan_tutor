@@ -78,7 +78,7 @@
       "branch": "feat/b7c-consultations-office",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7a",
-      "current_task": "B7a rebasing onto B4a trunk (master 6abc9f2); fresh stack + gates running",
+      "current_task": "B7a rebased on master 6abc9f2 (be fef733f, da 3a0f329, meta 388683c); test PASS 7784/98.45%, lint+secrets PASS, dashboard vitest 372 files 95.7/91.4/85.2; e2e killed by host low-memory after 12/12 passing — needs a rerun; not pushed yet",
       "session": "09557787"
     },
     "B8": {
