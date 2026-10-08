@@ -47,10 +47,10 @@
       ],
       "slot": 4,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b5",
-      "branch": "feat/b5a-communication",
+      "branch": "feat/b5a-communication-r2",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "current_slice": "B5a",
-      "current_task": "B5a in flight: rebased, gates green (test/lint/secrets/e2e); push refused non-FF — asked conductor (force-with-lease vs -r2 branches)",
+      "current_task": "B5a PRs open (r2 branches), awaiting conductor merge",
       "session": "4b5b7034"
     },
     "B6": {
