@@ -78,7 +78,7 @@
       "branch": "feat/b7c-consultations-office",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7c",
-      "current_task": "B7a queued (2nd, B6d in flight); B7c Task 15 of 20 (request dialogs)",
+      "current_task": "B7a queued (2nd); B7c Task 16 of 20 (requests page)",
       "session": "b2d9309e"
     },
     "B8": {
