@@ -480,7 +480,7 @@
         "B5a",
         "B5b"
       ],
-      "plan_number": null,
+      "plan_number": 57,
       "spec": "docs/superpowers/specs/2026-10-08-b5c-whatsapp-design.md",
       "plan": null,
       "prs": null,
@@ -682,7 +682,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 57,
+  "next_plan_number": 58,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
