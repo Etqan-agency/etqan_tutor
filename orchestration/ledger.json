@@ -75,10 +75,10 @@
       ],
       "slot": 2,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b7",
-      "branch": "feat/b7c-consultations-office",
+      "branch": "feat/b7a-recorded-courses-r2",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7a",
-      "current_task": "B7a rebased on master 6abc9f2 (be fef733f, da 3a0f329, meta 388683c); test PASS 7784/98.45%, lint+secrets PASS, dashboard vitest 372 files 95.7/91.4/85.2; e2e killed by host low-memory after 12/12 passing — needs a rerun; not pushed yet",
+      "current_task": "B7a PRs open (be/da/meta -r2) on trunk 6abc9f2; gates: test PASS 7784/98.45%, lint+secrets PASS, vitest 372 PASS; local e2e cut at 12/12 by host memory (CI authoritative); stack stopped",
       "session": "09557787"
     },
     "B8": {
