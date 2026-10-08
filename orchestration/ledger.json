@@ -2,9 +2,9 @@
   "phases": {
     "B2": {
       "title": "Scheduling depth",
-      "status": "build",
+      "status": "merged",
       "requires": [],
-      "slot": 1,
+      "slot": null,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b2",
       "branch": "feat/b2g-schedules",
       "spec": "docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md",
