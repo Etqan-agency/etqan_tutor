@@ -16,7 +16,7 @@ In flight: **B4a** · Queue: B7a, B5b, B5f · Next plan number: 60 · Conductor:
 | B7 | Add-on sales | build | 2 | B7c | B7a queued; B7c review clean, test+lint green, e2e+coverage pending (low memory); B7g plan 59 ready | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | b2d9309e |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
-| B10 | AI | build | 3 | B10a | B10a: Plan 47 Task 7 (Claude provider, claim held) | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | d923ac07 |
+| B10 | AI | build | 3 | B10a | B10a: Plan 47 Task 8 (AI account form, claim held) | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | d923ac07 |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 
 ## Slices
