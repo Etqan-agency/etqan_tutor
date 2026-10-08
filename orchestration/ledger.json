@@ -562,7 +562,7 @@
     },
     "B4b": {
       "phase": "B4",
-      "status": "plan",
+      "status": "build",
       "requires": [
         "B4a"
       ],
