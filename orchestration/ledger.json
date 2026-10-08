@@ -107,7 +107,7 @@
     },
     "B10": {
       "title": "AI",
-      "status": "build",
+      "status": "waiting-deps",
       "requires": [
         "B6"
       ],
@@ -116,7 +116,7 @@
       "branch": "feat/b10a-ai-drafts",
       "spec": "docs/superpowers/specs/2026-10-08-b10-ai-design.md",
       "current_slice": "B10a",
-      "current_task": "B10a queued; PRs open (be/da/meta); gates green after rebase on integrations-2. Next: B10b (needs B10a merged; B6c/B6d merged)",
+      "current_task": "B10a queued (PRs be#39 da#41 meta#54, gates green). B10b (Plan 48) waits for B10a merge",
       "session": "d923ac07"
     },
     "B11": {

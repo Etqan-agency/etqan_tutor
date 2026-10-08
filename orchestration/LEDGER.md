@@ -16,7 +16,7 @@ In flight: **B7a** · Queue: B5b, B5f, B10a · Next plan number: 60 · Conductor
 | B7 | Add-on sales | build | 2 | B7a | B7a -r2 merged trunk b901eda (be 3feef7f, da 52d2d9b, meta 14c64f3), pushed; gates: test PASS 7931/98.45%, vitest 2870 PASS, lint+secrets PASS; CI is e2e gate; stack stopped | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | 5e75f8ee |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
-| B10 | AI | build | 3 | B10a | B10a queued; PRs open (be/da/meta); gates green after rebase on integrations-2. Next: B10b (needs B10a merged; B6c/B6d merged) | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | d923ac07 |
+| B10 | AI | waiting-deps | 3 | B10a | B10a queued (PRs be#39 da#41 meta#54, gates green). B10b (Plan 48) waits for B10a merge | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | d923ac07 |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 
 ## Slices
