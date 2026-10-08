@@ -599,7 +599,7 @@
     },
     "B7a": {
       "phase": "B7",
-      "status": "plan",
+      "status": "queued",
       "requires": [],
       "plan_number": 49,
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
@@ -1443,7 +1443,8 @@
   ],
   "queue": [
     "B5e",
-    "B4a"
+    "B4a",
+    "B7a"
   ],
   "in_flight": "B6c",
   "main_heads": {
