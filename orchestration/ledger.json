@@ -50,7 +50,7 @@
       "branch": "feat/b5e-chat-r2",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "current_slice": "B5e",
-      "current_task": "B5e in flight, B5b queued; writing Plans for B5d/B5c (need B5b merged)",
+      "current_task": "B5e in flight; B5b queued; plans ready: 56 B5d, 57 B5c, 58 B5f (each waits on B5b/B5e merge)",
       "session": "4b5b7034"
     },
     "B6": {
