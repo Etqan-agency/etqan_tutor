@@ -70,3 +70,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B2g** (weekly schedules and substitutions, plan 41; B2 last slice) merged 2026-10-08: backend#30 → main 0f2be83, dashboard#32 → main 642a78a, meta#45; pointers bumped on master 2234121. Meta CI green (security rerun after the b10 branch fix), 0 bounces. Scheduling migration regenerated as 0013 on top of B3e 0012; ships R6 (e). Phase B2 complete (B2a to B2g).
 
 **B3f** (plan 52s; B3 last slice) merged 2026-10-08: backend#31 → main 7c0608b, dashboard#33 → main 2b0f54e, meta#46; pointers bumped on master 2a54f21. Meta CI green, 0 bounces. Phase B3 complete (B3a to B3h, plus the B3a currency fix).
+
+**B5a** (communication, plan 42; B5 first slice) merged 2026-10-08: backend#33 → main 7d60f5b, dashboard#35 → main 5468068, meta#48 (branches feat/b5a-communication-r2, because the rebased tips could not fast-forward the old branches); pointers bumped on master a0aa014. Meta CI green incl. staging-sim, 0 bounces.
