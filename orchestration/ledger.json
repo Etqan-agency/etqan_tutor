@@ -1380,6 +1380,20 @@
         "B10"
       ],
       "source": "owner"
+    },
+    {
+      "id": "D64",
+      "phase": "B5",
+      "decision": "Integrations slice 2 is MERGED (2026-10-08: backend #37, dashboard #39, meta #52). D63's hold is over — conductor resumes the queue normally; rebase in-flight/queued slices on master. Metering is live: record_usage(source=resolved.source, service, unit, quantity, source_ref) on provider confirmation, one source_ref per unit; email is metered already.",
+      "affects": [
+        "conductor",
+        "B5",
+        "B7",
+        "B4",
+        "B10",
+        "B2"
+      ],
+      "source": "owner"
     }
   ],
   "requests": [
