@@ -1,6 +1,6 @@
 # B10a — AI drafts — Implementation Plan (Plan 47)
 
-**Requires:** integrations slice 1 merged to main (branch feat/integrations, plan docs/superpowers/plans/2026-10-07-plan-integrations-1-core.md in the integrations worktree; not a ledger slice — check that etqan/integrations exists on backend origin/main before Task 1). No ledger slice.
+**Requires:** integrations slice 1 — MERGED 2026-10-08 (ledger D59: backend #32, dashboard #34, meta #47). No ledger slice. Re-checked against the merged code on 2026-10-08: the Provider protocol's `clean()` gained `own: bool = True` (passed `own=False` for Etqan's default by `apply_platform_change`), which Task 7's provider accepts; the admin's test messages now start with the service's display name; `test_providers.py`'s connectable test is unchanged.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: superpowers:subagent-driven-development. The execution method for this plan is fixed: **subagent-driven development** (a fresh implementer per task, a fresh reviewer after each, a whole-slice review at the end). Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -2822,6 +2822,16 @@ def test_a_blank_key_keeps_the_stored_one():
     assert values == {"api_key": KEY}
 
 
+def test_etqans_default_is_cleaned_by_the_same_rules():
+    # apply_platform_change passes own=False for Etqan's default.
+    assert AI.clean({"api_key": KEY}, stored={}, own=False) == (
+        {"model": "claude-sonnet-5"},
+        {"api_key": KEY},
+    )
+    with pytest.raises(ValidationError):
+        AI.clean({"api_key": "nope"}, stored={}, own=False)
+
+
 @pytest.mark.parametrize(
     ("fields", "field"),
     [
@@ -3042,7 +3052,12 @@ class AiProvider:
     service = "ai"
     connectable = True
 
-    def clean(self, fields: dict, *, stored: dict) -> tuple[dict, dict]:
+    def clean(
+        self, fields: dict, *, stored: dict, own: bool = True
+    ) -> tuple[dict, dict]:
+        # ``own`` (merged integrations Provider protocol): False for Etqan's
+        # default set by staff. The AI rules are the same for both: a key and a
+        # model from MODELS.
         return {"model": _model(fields)}, {"api_key": _key(fields, stored)}
 
     def last4(self, values: dict) -> str:
