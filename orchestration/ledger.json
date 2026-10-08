@@ -1336,6 +1336,16 @@
         "B6"
       ],
       "source": "owner"
+    },
+    {
+      "id": "D60",
+      "phase": "B5",
+      "decision": "R10 ruling (identity is the conductor's since B9 merged): B5 builds identity.services.whatsapp_parents(user_ids) -> set[int] on B5c's branches under a claim on etqan.identity; additive and read-only, fixed query count. B5c's claim on etqan.integrations (providers/whatsapp.py, services/whatsapp.py, the SWITCHES line, NotYet test moves) is serialised with B10a's claim (D49): one holder at a time via ledger claims.",
+      "affects": [
+        "B5",
+        "B10"
+      ],
+      "source": "R10; conductor ruling 2026-10-08"
     }
   ],
   "requests": [
