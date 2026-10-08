@@ -13,7 +13,7 @@ In flight: **B6c** · Queue: B5e, B4a, B7a · Next plan number: 56 · Conductor:
 | B4 | Payroll depth | queued | 1 | B4a | B4a queued; merged trunk again per D59 (be b451c9e, da 89252ca; conflicts were B4/B5 shared-list neighbours, kept both); gates rerunning, then push | B2, B3 | docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md | b9940c56 |
 | B5 | Communication | build | 4 | B5a | B5e -r2 queued; B5b Task 6 (e2e + gates), Tasks 1-5,7 done | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
 | B6 | Learning | build | 3 | B6d | B6c in flight: refreshed onto 1fca58f, gates green, pushed (be c0c5fe5, da 0e0a531, meta fa695d1); awaiting merge; then B6d | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
-| B7 | Add-on sales | build | 2 | B7c | B7a queued (3rd); B7c plan 50 Task 2 of 20 | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | b2d9309e |
+| B7 | Add-on sales | build | 2 | B7c | B7a queued; B7c plan 50 Task 3 of 20 | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | b2d9309e |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
 | B10 | AI | waiting-deps |  | B10a | spec-only done: specs + Plans 47/48 on meta feat/b10-spec2; Plan 47 re-checked vs merged integrations (D59). B10a deps met; waiting only for a slot (D45). B10b also needs B6c, B6d | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | 8b6b7142 |
