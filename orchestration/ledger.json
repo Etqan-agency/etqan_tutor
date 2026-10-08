@@ -533,7 +533,7 @@
     },
     "B10b": {
       "phase": "B10",
-      "status": "spec",
+      "status": "plan",
       "requires": [
         "B10a",
         "B6c",
