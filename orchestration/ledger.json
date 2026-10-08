@@ -36,7 +36,7 @@
       "branch": "feat/b4a-pay-rules",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4a",
-      "current_task": "B4a build: Tasks 1-5/14 done (be 8141b12); Task 6 (bulk rates) in progress",
+      "current_task": "B4a build: backend Tasks 1-9 done (be 0cb4ad0); dashboard Task 10 in progress",
       "session": "b9940c56"
     },
     "B5": {
