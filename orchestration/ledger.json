@@ -78,7 +78,7 @@
       "branch": "feat/b7a-recorded-courses-r2",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7a",
-      "current_task": "B7a: merged trunk b901eda into -r2 (be/da/meta), clean; rerunning gates",
+      "current_task": "B7a -r2 merged trunk b901eda (be 3feef7f, da 52d2d9b, meta 14c64f3), pushed; gates: test PASS 7931/98.45%, vitest 2870 PASS, lint+secrets PASS; CI is e2e gate; stack stopped",
       "session": "5e75f8ee"
     },
     "B8": {
