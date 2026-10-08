@@ -462,7 +462,7 @@
     },
     "B5b": {
       "phase": "B5",
-      "status": "plan",
+      "status": "build",
       "requires": [
         "B5a",
         "B2f"
