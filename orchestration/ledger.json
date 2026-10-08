@@ -557,7 +557,7 @@
       "plan_number": 46,
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "plan": "docs/superpowers/plans/2026-10-08-plan-46-pay-rules.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/36 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/38 https://github.com/Etqan-agency/etqan_tutor/pull/51",
       "bounces": 0
     },
     "B4b": {
