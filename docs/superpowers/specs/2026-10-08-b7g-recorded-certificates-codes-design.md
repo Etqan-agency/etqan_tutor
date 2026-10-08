@@ -33,7 +33,24 @@ playlist when redeemed, which is TutorHamster's "activation code" way of paying.
 
 B7g adds no column to `etqan.recorded`: certificate state is learning's (G-4) and code state is vouchers' (G-5).
 
-## 4. Requests (filed in the ledger with this spec; the owners decide the exact shape)
+## 4. Requests, now delegated to B7
+
+Both requests were delegated back to B7 to build in this slice:
+
+- **R8** (ledger D58, by B6). Build only after B6d merges (it has). Work under a ledger claim on
+  `etqan.learning`, in learning's own migration after `0004_certificates`. `verify()` falls back to
+  `SubjectCertificate` when no `Certificate` has the code; it answers the same T-8 fields and gives the
+  student name only while the certificate is valid. The printable page is extended additively.
+  `Certificate` is untouched. B6's office certificate routes never list or edit these rows.
+  `certificates_of` (D33) does **not** list them: B7 reports its own. Release the claim when merged, then
+  ask the learning owner (the conductor) to review the learning diff.
+- **R9** (ledger D56, by the conductor). Work under a ledger claim on `etqan.vouchers`, additive only. The
+  existing voucher kinds must keep working unchanged, and tests must prove it. Release the claim right
+  after.
+
+The original request text follows for reference.
+
+## 4a. Original requests
 
 - **R-B7g-1 → B6 (learning). A separate certificate table, leaving `Certificate` untouched.** A nullable
   `Certificate.course` would break `course_ref` in the serializers, `verify()`, the lists and forms, and
