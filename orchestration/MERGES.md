@@ -76,3 +76,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B6c** (reviews and honour board, plan 38) merged 2026-10-08: backend#25 → main 57f9ea6, dashboard#26 → main eab34a1, meta#39; pointers bumped on master 08af0ca. Meta CI green. 1 bounce (honour dialog opened before academy settings loaded on the preview build; fixed). Learning migration 0003.
 
 **B5e** (chat, plan 44) merged 2026-10-08: backend#34 → main 3b68c94, dashboard#36 → main 6d2714b, meta#49 (branches feat/b5e-chat-r2); pointers bumped on master 0a1bcb2. Meta CI green incl. staging-sim, 0 bounces.
+
+**B6d** (certificates, plan 39; B6 last slice) merged 2026-10-08: backend#35 → main 2f0daa4, dashboard#37 → main 074b1fe, meta#50; pointers bumped on master bb369aa. Meta CI green, 0 bounces. Learning migration 0004_certificates. Phase B6 complete (B6a to B6d). R8 (SubjectCertificate, by B7) can now start.
