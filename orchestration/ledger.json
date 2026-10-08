@@ -64,7 +64,7 @@
       "branch": "feat/b6d-certificates",
       "spec": "docs/superpowers/specs/2026-10-05-b6-learning-design.md",
       "current_slice": "B6d",
-      "current_task": "B6d: rebased be/da onto B5e trunk; re-gating (test, lint+secrets, e2e)",
+      "current_task": "B6d rebased on B5e trunk (be 9b0985d, da 0c6edb8, meta 4a16431), gates green: test 0, lint+secrets 0, e2e fresh stack 62 pass + 2 flaky (journey, payroll); awaiting conductor merge — last B6 slice",
       "session": "4fbaa491"
     },
     "B7": {
