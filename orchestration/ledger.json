@@ -669,13 +669,13 @@
     },
     "B7g": {
       "phase": "B7",
-      "status": "spec",
+      "status": "plan",
       "requires": [
         "B7a"
       ],
       "plan_number": 59,
       "spec": "docs/superpowers/specs/2026-10-08-b7g-recorded-certificates-codes-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-08-plan-59-recorded-certificates-codes.md",
       "prs": null,
       "bounces": 0
     }

@@ -70,7 +70,7 @@ In flight: **B4a** · Queue: B7a, B5b, B5f · Next plan number: 60 · Conductor:
 | B7d | B7 | spec |  | B7c |  | 0 |
 | B7e | B7 | plan | 52 | B7a,  B7b |  | 0 |
 | B7f | B7 | spec |  | B7c,  B7d |  | 0 |
-| B7g | B7 | spec | 59 | B7a |  | 0 |
+| B7g | B7 | plan | 59 | B7a |  | 0 |
 
 ## Open escalations
 
