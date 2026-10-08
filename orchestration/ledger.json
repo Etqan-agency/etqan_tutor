@@ -1346,6 +1346,17 @@
         "B10"
       ],
       "source": "R10; conductor ruling 2026-10-08"
+    },
+    {
+      "id": "D61",
+      "phase": "B10",
+      "decision": "Metering refs (integrations slice 2): etqan_billing.services.record_usage is idempotent on (academy, service, source_ref) — the unit is NOT in the key. A provider event that yields several units must use one source_ref per unit, e.g. '<response_id>:input_token' and '<response_id>:output_token'; reusing one ref silently drops the second unit.",
+      "affects": [
+        "B10",
+        "B5",
+        "B2"
+      ],
+      "source": "integrations slice 2 review"
     }
   ],
   "requests": [
