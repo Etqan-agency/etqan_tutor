@@ -36,7 +36,7 @@
       "branch": "feat/b4a-pay-rules",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4a",
-      "current_task": "B4a: Plan 46 build starting (branches cut off trunk 2234121 / be 0f2be83 / da 642a78a)",
+      "current_task": "B4a build: Tasks 1-3/14 done (be e0bf703); Task 4 (build weights) in progress",
       "session": "b9940c56"
     },
     "B5": {
