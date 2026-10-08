@@ -37,7 +37,7 @@
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4a",
       "current_task": "B4a queued (next), up to date with trunk and pushed (be e0d1e7c, da 85d7d74). Gates: test 0, lint 0, e2e 61 pass + 1 flaky (b2-archive) + people-catalogue fails only from accumulated stream-DB data (package list paginated 'Page 1 of 3'; not B4a). Earlier failures were a stale celery worker lacking integrations.send_email.",
-      "session": "b9940c56"
+      "session": "1862018a"
     },
     "B5": {
       "title": "Communication",
