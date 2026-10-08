@@ -227,7 +227,9 @@ class Cli(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.dir = Path(self.tmp.name)
         subprocess.run(["git", "init", "-q", "-b", "orchestration", str(self.dir)], check=True)
-        for key, value in (("user.name", "t"), ("user.email", "t@t")):
+        # gc.auto 0: the many commits below would start a detached `git gc
+        # --auto` that still writes .git/objects/pack while tearDown deletes it.
+        for key, value in (("user.name", "t"), ("user.email", "t@t"), ("gc.auto", "0")):
             subprocess.run(["git", "-C", str(self.dir), "config", key, value], check=True)
 
     def tearDown(self):
