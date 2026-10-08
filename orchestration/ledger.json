@@ -47,10 +47,10 @@
       ],
       "slot": 4,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b5",
-      "branch": "feat/b5f-chat-extras",
+      "branch": "feat/b5b-broadcasts",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
-      "current_slice": "B5f",
-      "current_task": "B5b, B5f queued; B5d (Plan 56) and B5c (Plan 57) wait for B5b merge",
+      "current_slice": "B5b",
+      "current_task": "B5b (next in queue) merged with origin/main+master, gates running; B5f queued",
       "session": "4b5b7034"
     },
     "B6": {
