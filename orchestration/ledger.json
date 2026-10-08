@@ -26,17 +26,17 @@
     },
     "B4": {
       "title": "Payroll depth",
-      "status": "waiting-deps",
+      "status": "build",
       "requires": [
         "B2",
         "B3"
       ],
       "slot": 1,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b4",
-      "branch": "feat/b4-spec",
+      "branch": "feat/b4a-pay-rules",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4a",
-      "current_task": "spec-only: all four slices specced+reviewed and planned (46 B4a, 54 B4b, 53 B4c, 55 B4d); waiting for a slot — B4a buildable now",
+      "current_task": "B4a: Plan 46 build starting (branches cut off trunk 2234121 / be 0f2be83 / da 642a78a)",
       "session": "b9940c56"
     },
     "B5": {

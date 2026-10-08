@@ -10,7 +10,7 @@ In flight: **B3f** · Queue: B5a, B6c, B5e · Next plan number: 56 · Conductor:
 |---|---|---|---|---|---|---|---|---|
 | B2 | Scheduling depth | merged |  | B2g | B2g PRs open (be#30 da#32 meta#45); R6 done; last slice — awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | edb38e65 |
 | B3 | Money depth | build | 2 | B3h | B3f queued; PRs open early (owner go-ahead); merge when conductor reaches it |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | 6fb32127 |
-| B4 | Payroll depth | waiting-deps | 1 | B4a | spec-only: all four slices specced+reviewed and planned (46 B4a, 54 B4b, 53 B4c, 55 B4d); waiting for a slot — B4a buildable now | B2, B3 | docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md | b9940c56 |
+| B4 | Payroll depth | build | 1 | B4a | B4a: Plan 46 build starting (branches cut off trunk 2234121 / be 0f2be83 / da 642a78a) | B2, B3 | docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md | b9940c56 |
 | B5 | Communication | waiting-deps | 4 | B5a | B5a, B5e queued; B5b plan ready; B5d spec done (R6/R7 filed); waiting for B5a merge | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
 | B6 | Learning | build | 3 | B6d | B6c queued; B6d ready (stacked on B6c, gates green, pushed) — PRs after B6c merges | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
 | B7 | Add-on sales | waiting-deps |  | B7a | spec-only: specs B7a–B7g done; plans 49 (B7a), 50 (B7c), 51 (B7b) done; 52 (B7e) in progress; B7d/B7f plans next; B7g plan waits B6d/B3f/R8/R9 | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | b2d9309e |
