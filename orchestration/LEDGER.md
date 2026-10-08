@@ -148,7 +148,6 @@ In flight: **B4a** · Queue: B7a, B5b, B5f · Next plan number: 60 · Conductor:
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| etqan.integrations | B10 | B10a: the Claude provider (spec §4) | 2026-10-08T18:37:34+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
