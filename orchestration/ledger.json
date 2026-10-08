@@ -590,7 +590,7 @@
       "requires": [
         "B4b"
       ],
-      "plan_number": null,
+      "plan_number": 55,
       "spec": "docs/superpowers/specs/2026-10-08-b4d-salary-projections-design.md",
       "plan": null,
       "prs": null,
@@ -681,7 +681,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 55,
+  "next_plan_number": 56,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
