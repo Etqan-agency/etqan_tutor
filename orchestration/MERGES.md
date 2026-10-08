@@ -64,3 +64,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B2f** (bundles and groups, plan 37) merged 2026-10-07: backend#28 → main e86e418, dashboard#30 → main 0fd99ee, meta#42; pointers bumped on master 8da3fd9. Meta CI green, 0 bounces. Applies the R2 bundle currency items (D34, D35; completes B3d R2 item 4) and ships R5 study_group_members and R6 (a)-(d) notice reads for B5.
 
 **B3e** (student wallet, plan 40s) merged 2026-10-08: backend#29 → main 7b9a594, dashboard#31 → main 545d6d1, meta#43; pointers bumped on master 6b25e64. Meta CI green, 0 bounces. Carries R3 (claim_session_for_balance) and R4 (Session.compensated_by, scheduling migration 0012_session_compensated_by), both built by B3 under claims delegated by B2; D36 and D37 apply. Wallet features are off by default.
+
+**meta#44** (conductor, 2026-10-08): ledger CLI test repo sets gc.auto 0, fixing the flaky test_concurrent_writers_lose_nothing teardown that failed CI twice. Also: B10 replaced feat/b10-spec with a squashed feat/b10-spec2 after a fake key in plan 47 tripped the all-branches gitleaks scan for every meta PR.
