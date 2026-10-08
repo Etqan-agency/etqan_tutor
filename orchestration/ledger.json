@@ -26,7 +26,7 @@
     },
     "B4": {
       "title": "Payroll depth",
-      "status": "review",
+      "status": "queued",
       "requires": [
         "B2",
         "B3"
@@ -36,7 +36,7 @@
       "branch": "feat/b4a-pay-rules",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4a",
-      "current_task": "B4a: final review clean (fix wave applied); trunk merged (be e999606, da 105a4c8); rerunning just test/lint/e2e before queue",
+      "current_task": "B4a queued: final review clean, gates green (test/lint; e2e 59 pass + 1 unrelated B3 flake passing alone); branches pushed feat/b4a-pay-rules (be, da, meta). Next while waiting: B4c (plan 53) can start only after B4a merges",
       "session": "b9940c56"
     },
     "B5": {
