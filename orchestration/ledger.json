@@ -430,7 +430,7 @@
     },
     "B6d": {
       "phase": "B6",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [
         "B6a"
       ],
@@ -1442,12 +1442,11 @@
     }
   ],
   "queue": [
-    "B6d",
     "B4a",
     "B7a",
     "B5b"
   ],
-  "in_flight": null,
+  "in_flight": "B6d",
   "main_heads": {
     "backend": "3b68c9414c2a6ca615cf292deea5b1f3da6e2f0b",
     "dashboard": "6d2714b6b032c077b36b93e2e75a1b93ee12bec3",
