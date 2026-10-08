@@ -111,7 +111,7 @@
       "requires": [
         "B6"
       ],
-      "slot": null,
+      "slot": 3,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b10",
       "branch": "feat/b10-spec2",
       "spec": "docs/superpowers/specs/2026-10-08-b10-ai-design.md",
