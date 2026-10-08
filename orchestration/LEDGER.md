@@ -11,7 +11,7 @@ In flight: **B6c** · Queue: B5e, B4a, B7a · Next plan number: 56 · Conductor:
 | B2 | Scheduling depth | merged |  | B2g | B2g PRs open (be#30 da#32 meta#45); R6 done; last slice — awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-b2-scheduling-depth-design.md | edb38e65 |
 | B3 | Money depth | merged |  | B3h | B3f CI green (meta#46), awaiting merge; then B3 complete |  | docs/superpowers/specs/2026-10-03-b3-money-depth-design.md | 6fb32127 |
 | B4 | Payroll depth | queued | 1 | B4a | B4a queued: final review clean, gates green (test/lint; e2e 59 pass + 1 unrelated B3 flake passing alone); branches pushed feat/b4a-pay-rules (be, da, meta). Next while waiting: B4c (plan 53) can start only after B4a merges | B2, B3 | docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md | b9940c56 |
-| B5 | Communication | build | 4 | B5a | B5e -r2 queued; B5b Task 4/7 (dashboard broadcasts page) | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
+| B5 | Communication | build | 4 | B5a | B5e -r2 queued; B5b Task 6 (e2e + gates), Tasks 1-5,7 done | B2 | docs/superpowers/specs/2026-10-07-b5-communication-design.md | 4b5b7034 |
 | B6 | Learning | build | 3 | B6d | B6c in flight: refreshed onto 1fca58f, gates green, pushed (be c0c5fe5, da 0e0a531, meta fa695d1); awaiting merge; then B6d | B2 | docs/superpowers/specs/2026-10-05-b6-learning-design.md | 49b08672 |
 | B7 | Add-on sales | build | 2 | B7c | B7a queued; B7c building (plan 50), stacked on B7a branches | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | b2d9309e |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
