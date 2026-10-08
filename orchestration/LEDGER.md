@@ -54,7 +54,7 @@ In flight: **B5e** · Queue: B6d, B4a, B7a, B5b · Next plan number: 58 · Condu
 | B3afix | B3 | merged |  |  | https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/18 https://github.com/Etqan-agency/etqan_tutor/pull/30 | 0 |
 | B5a | B5 | merged | 42 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/33 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/35 https://github.com/Etqan-agency/etqan_tutor/pull/48 | 0 |
 | B5b | B5 | queued | 43 | B5a, B2f |  | 0 |
-| B5c | B5 | spec | 57 | B5a, B5b |  | 0 |
+| B5c | B5 | plan | 57 | B5a, B5b |  | 0 |
 | B5d | B5 | plan | 56 | B5a, B5b, B2f |  | 0 |
 | B5e | B5 | in-flight | 44 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/34 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/36 https://github.com/Etqan-agency/etqan_tutor/pull/49 | 0 |
 | B5f | B5 | spec |  | B5e |  | 0 |

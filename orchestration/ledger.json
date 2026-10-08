@@ -475,14 +475,14 @@
     },
     "B5c": {
       "phase": "B5",
-      "status": "spec",
+      "status": "plan",
       "requires": [
         "B5a",
         "B5b"
       ],
       "plan_number": 57,
       "spec": "docs/superpowers/specs/2026-10-08-b5c-whatsapp-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-08-plan-57-whatsapp.md",
       "prs": null,
       "bounces": 0
     },
