@@ -36,7 +36,7 @@
       "branch": "feat/b4a-pay-rules",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4a",
-      "current_task": "B4a queued: final review clean, gates green (test/lint; e2e 59 pass + 1 unrelated B3 flake passing alone); branches pushed feat/b4a-pay-rules (be, da, meta). Next while waiting: B4c (plan 53) can start only after B4a merges",
+      "current_task": "B4a queued; merged trunk again per D59 (be b451c9e, da 89252ca; conflicts were B4/B5 shared-list neighbours, kept both); gates rerunning, then push",
       "session": "b9940c56"
     },
     "B5": {
