@@ -350,7 +350,7 @@
     },
     "B3f": {
       "phase": "B3",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [
         "B3e"
       ],
@@ -1357,12 +1357,11 @@
     }
   ],
   "queue": [
-    "B3f",
     "B5a",
     "B6c",
     "B5e"
   ],
-  "in_flight": null,
+  "in_flight": "B3f",
   "main_heads": {
     "backend": "0f2be83074fa2de96909c9f63d1aa4c66d18d707",
     "dashboard": "642a78a9a956f6daf7b417cb462544defbaf1482",
