@@ -19,10 +19,10 @@ is designed from the audits, unobserved behaviour marked `[assumed]`.
 
 ## Next
 
-Phases run in parallel on slots 1–4: B4 payroll depth (1), B7 add-on sales (2), B6 learning (3),
-B5 communication (4). Complete: B2 scheduling depth (B2a–B2g), B3 money depth (B3a–B3h), B8 marketing
-extras (B8a–B8e), B9 platform extras (B9a–B9d). B10 has specs and plans on feat/b10-spec2 and waits
-for a slot. Details in the ledger and `orchestration/MERGES.md`. Restart a session with `bash
+Phases run in parallel on slots 1–4: B4 payroll depth (1), B7 add-on sales (2), B10 AI (3),
+B5 communication (4). Complete: B2 scheduling depth, B3 money depth, B6 learning, B8 marketing
+extras, B9 platform extras; integrations slice 1 is merged. B11 apps waits for B4 and B5. Details in
+the ledger and `orchestration/MERGES.md`. Restart a session with `bash
 scripts/orchestration/start-session.sh <CODE|conductor>` or from `just orchestra`.
 Each phase adds lines to shared lists only under its own `── phase Bn ──` marker, registers every new
 feature in `etqan.platform.features` (off by default), and never runs `git submodule update` in its
@@ -37,8 +37,14 @@ Slice 1 of `docs/superpowers/specs/2026-10-07-integrations-and-etqan-billing-des
 `integrations.services.resolve(service)` (own account → Etqan default if on, feature switch allows
 it and `Academy.etqan_defaults_suspended` is off → none), email sent only through it, Settings →
 Integrations (codes `integration.view` / `integration.update`) and Etqan's defaults in the platform
-admin. Next: slice 2 (metering through `integrations.services.email.meter_email`, prices, Etqan
-invoices, the suspend switch in the admin); B5c builds WhatsApp on the resolver (D41).
+admin. Slice 2 is built: `etqan.etqan_billing` (public schema) meters use of Etqan's defaults
+(`record_usage`, email on Etqan's default counted per message), prices it (`Price`, per-academy
+`AcademyPricing` overrides and allowances, `ConnectFee`), drafts invoices on the 1st at 03:00 UTC,
+issues them after 24 hours and emails the PDF to the academy's admins; Settings → Etqan billing
+(admins), the overdue banner, the platform admin (prices, terms, Connect fee, usage, invoices) and
+the "suspend Etqan's defaults" switch (from 30 days unpaid). Next: B5c meters WhatsApp
+conversations, B2/B10 Zoom minutes and AI tokens through `record_usage`; the B3 follow-up reads
+`connect_fee()` and records `record_collected_fee`.
 
 Deploy note (slice 1):
 - Email is now queued as `integrations.send_email`. Restart the Celery workers (`celery_worker`,
@@ -50,6 +56,19 @@ Deploy note (slice 1):
   window can be lost.
 - An academy's own SMTP server must be a public host on port 25, 465, 587 or 2525.
   `INTEGRATIONS_ALLOW_PRIVATE_SMTP` turns that off (True only in local and test settings).
+
+Deploy note (integrations slice 2):
+- Run `migrate_schemas` (`etqan_billing` 0001 and 0002, public schema) before the new web and
+  worker code takes traffic. Email is metered after each send; without the tables the use is lost
+  (logged, the email still goes out).
+- Restart `celery_beat` (it loads the two new entries, `etqan_billing.build_month` and
+  `etqan_billing.issue_due`) and the Celery workers (`celery_worker`), which run the new tasks.
+- Before the first run, set `ETQAN_BILLING_CURRENCY` and `ETQAN_BILLING_PAYMENT_INSTRUCTIONS` (the
+  real bank details; the default is a placeholder that goes on every PDF and email).
+- Create the `Price` rows in the platform admin before the 1st (use with no price is listed at 0),
+  or void the drafts within their 24 hours, before they are issued and emailed.
+- The first run is on the 1st at 03:00 UTC: drafts for every academy that used Etqan's defaults
+  the month before (nearly all of them, through email), issued and emailed 24 hours later.
 
 ## Follow-ups (from Plans 4–9)
 
