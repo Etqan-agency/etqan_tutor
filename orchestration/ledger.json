@@ -494,7 +494,7 @@
         "B5b",
         "B2f"
       ],
-      "plan_number": null,
+      "plan_number": 56,
       "spec": "docs/superpowers/specs/2026-10-07-b5d-more-notices-design.md",
       "plan": null,
       "prs": null,
@@ -682,7 +682,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 56,
+  "next_plan_number": 57,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
