@@ -41,7 +41,7 @@
     },
     "B5": {
       "title": "Communication",
-      "status": "waiting-deps",
+      "status": "review",
       "requires": [
         "B2"
       ],
@@ -50,7 +50,7 @@
       "branch": "feat/b5a-communication",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "current_slice": "B5a",
-      "current_task": "B5a, B5e queued; B5b plan ready; B5d spec done (R6/R7 filed); waiting for B5a merge",
+      "current_task": "B5a in flight: rebased, gates green (test/lint/secrets/e2e); push refused non-FF — asked conductor (force-with-lease vs -r2 branches)",
       "session": "4b5b7034"
     },
     "B6": {
