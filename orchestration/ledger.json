@@ -1271,6 +1271,15 @@
         "B3"
       ],
       "source": "spec docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md B7-3, §4"
+    },
+    {
+      "id": "D54",
+      "phase": "B4",
+      "decision": "Teacher balance (B4c): derived per currency from paid-to-balance payslips minus paid withdrawals; read only via payroll.services.balances_of(teacher_user_id) -> list[Balance(currency, balance_minor, available_minor)] (available = balance minus under_review/approved requests). Withdrawals are in the balance currency (not always USD) and sufficient balance is enforced under a payroll BalanceLock(teacher, currency). B4c write routes add NotImpersonating (D19).",
+      "affects": [
+        "B11"
+      ],
+      "source": "spec 2026-10-08-b4c-balance-payouts C-2, C-5"
     }
   ],
   "requests": [
