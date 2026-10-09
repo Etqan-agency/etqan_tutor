@@ -37,7 +37,7 @@
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4c",
       "current_task": "B4c PRs open (be#44 da#46 meta#60) on trunk be 607f39a/da 39e2465/meta 00c4aec; gates fresh stack: e2e 70 + 1 flaky (b2-archive), test 0 (8437), lint+secrets 0; B4b queued next (migration → 0004)",
-      "session": "1862018a"
+      "session": "ae268de2"
     },
     "B5": {
       "title": "Communication",
