@@ -26,17 +26,17 @@
     },
     "B4": {
       "title": "Payroll depth",
-      "status": "queued",
+      "status": "build",
       "requires": [
         "B2",
         "B3"
       ],
       "slot": 1,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b4",
-      "branch": "feat/b4b-incentives-reports",
+      "branch": "feat/b4c-balance-payouts",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
-      "current_slice": "B4b",
-      "current_task": "B4c and B4b queued (B4b be 7e8b634 / da 8b7d79c pushed; gates fresh stack: e2e 67/67, test 0 (8043 be), lint+secrets 0). Merge checklist: whichever of B4b/B4c merges second regenerates its payroll 0003 as 0004, merges BUILT/models/payloads/CSV/fixtures",
+      "current_slice": "B4c",
+      "current_task": "B4c in flight: trunk (be 607f39a, da 39e2465, meta ede990e) merged; 2 additive conflicts resolved (test_routes SELF_SERVICE, permissions FEATURE_WORDS); images rebuilt (anthropic dep); gates running on fresh stack",
       "session": "1862018a"
     },
     "B5": {
