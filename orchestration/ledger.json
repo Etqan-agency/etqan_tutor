@@ -75,10 +75,10 @@
       ],
       "slot": 2,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b7",
-      "branch": "feat/b7a-recorded-courses-r2",
+      "branch": "feat/b7c-consultations-office",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
-      "current_slice": "B7a",
-      "current_task": "B7a -r2 merged trunk b901eda (be 3feef7f, da 52d2d9b, meta 14c64f3), pushed; gates: test PASS 7931/98.45%, vitest 2870 PASS, lint+secrets PASS; CI is e2e gate; stack stopped",
+      "current_slice": "B7c",
+      "current_task": "B7c: merged trunk (be 8d2323b, da a29fbee, meta 5350995) into B7c branches (be 53e034a, da a2842c7, meta 2558abc); running gates on a fresh stack",
       "session": "5e75f8ee"
     },
     "B8": {
