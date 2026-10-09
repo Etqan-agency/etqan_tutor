@@ -50,7 +50,7 @@
       "branch": "feat/b5d-more-notices",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "current_slice": "B5d",
-      "current_task": "B5d built + reviewed (be d9f9977, da ca0dade, meta fb4169e); test/lint/secrets/vitest PASS; e2e rerun held for B4c memory window (conductor); stack stopped",
+      "current_task": "B5d merged trunks (meta 00c4aec, be 607f39a, da 39e2465) → be e57e5b3, da 1d1d8e5, meta 309faed; full gates running on rebuilt fresh stack (conductor window)",
       "session": "5d4e6f0b"
     },
     "B6": {
