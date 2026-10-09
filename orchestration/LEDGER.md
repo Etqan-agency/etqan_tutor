@@ -151,6 +151,7 @@ In flight: **B10a** · Queue: B4c, B4b, B7c · Next plan number: 60 · Conductor
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
+| marketing/src/lib/i18n.ts | B7 | B7b final F6: plural lesson counts (Intl.PluralRules) | 2026-10-09T05:47:35+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
