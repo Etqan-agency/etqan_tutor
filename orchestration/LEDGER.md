@@ -150,6 +150,7 @@ In flight: **B10a** · Queue: B4c, B4b · Next plan number: 60 · Conductor: 4dd
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
+| learning | B5 | R7 (D58): learning/services/notices.py homework_notices/upgrade_notices, B5d | 2026-10-09T03:59:06+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
