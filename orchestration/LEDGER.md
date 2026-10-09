@@ -16,7 +16,7 @@ In flight: **B4b** · Queue: B7c, B5d, B7b · Next plan number: 61 · Conductor:
 | B7 | Add-on sales | build | 2 | B7g | B7b queued (be dd7aaf9 da cea5c81 mk 6e41d36 meta 24ab705): test 8376/98.49%, lint+secrets, vitest 2970, local e2e cut by host memory after 14 specs (no fails) — CI is the e2e gate. B7g build: Tasks 1–5 done (R9 vouchers, R8 learning; claims released), resuming at Task 6. B7c queued | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | 5e75f8ee |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
-| B10 | AI | build | 3 | B10b | B10b gates held for memory window (order: B5d, B7b, B10b); meta on 00c4aec; lint + secrets green | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | d923ac07 |
+| B10 | AI | build | 3 | B10b | B10b gates held: stack stopped for B4b's window; B10b window next (conductor will message); lint+secrets green | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | d923ac07 |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 
 ## Slices
