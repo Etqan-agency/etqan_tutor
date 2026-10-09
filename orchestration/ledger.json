@@ -679,6 +679,16 @@
       "plan": "docs/superpowers/plans/2026-10-08-plan-59-recorded-certificates-codes.md",
       "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/49 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/51 https://github.com/Etqan-agency/etqan_tutor/pull/65",
       "bounces": 0
+    },
+    "B11a": {
+      "phase": "B11",
+      "status": "plan",
+      "requires": [],
+      "plan_number": null,
+      "spec": "docs/superpowers/specs/2026-10-09-b11-apps-design.md",
+      "plan": null,
+      "prs": null,
+      "bounces": 0
     }
   },
   "next_plan_number": 62,
