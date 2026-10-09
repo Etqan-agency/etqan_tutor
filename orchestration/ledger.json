@@ -50,7 +50,7 @@
       "branch": "feat/b5d-more-notices",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "current_slice": "B5d",
-      "current_task": "B5f in flight (PRs be#41 da#43 meta#56); building B5d (Plan 56) on feat/b5d-more-notices",
+      "current_task": "B5f merged; building B5d (Plan 56) Task 1 on feat/b5d-more-notices",
       "session": "5d4e6f0b"
     },
     "B6": {
