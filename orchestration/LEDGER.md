@@ -16,7 +16,7 @@ In flight: **B10b** · Queue: B7g, B4d, B5c · Next plan number: 62 · Conductor
 | B7 | Add-on sales | build | 2 | B7d | B7d (plan 60) starting code-only off trunk be ffbdecf/da cfcbf04/mk ccf982a/meta e4fa718; stack stopped per conductor; B7g queued | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | c405df7d |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
-| B10 | AI | build | 3 | B10b | B10b PRs open on trunk be 7c7fe53/da 8cb0152/meta 1fae541; fresh stack: test 0 (8542, 98.5%), lint 0, e2e 72/72; queued; last B10 slice | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | a61cece4 |
+| B10 | AI | build | 3 | B10b | B10b in flight: rebased on be ffbdecf/da cfcbf04/mk ccf982a/meta e4fa718; fresh stack + gates running | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | a61cece4 |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 
 ## Slices
