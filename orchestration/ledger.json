@@ -51,7 +51,7 @@
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "current_slice": "B5c",
       "current_task": "B5d queued (be#45 da#47 meta#61); B5c fully coded + final review done (I-2 fixed); awaiting B5c memory window: fresh stack, pytest --create-db, e2e, gates, rebase, PRs",
-      "session": "f033758e"
+      "session": "d8eed4da"
     },
     "B6": {
       "title": "Learning",
