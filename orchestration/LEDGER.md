@@ -151,7 +151,6 @@ In flight: **B10a** · Queue: B4c, B4b, B7c · Next plan number: 60 · Conductor
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| backend/etqan/site/throttling.py | B7 | B7b D65/PF32: internal exemption on site public throttles | 2026-10-09T05:06:20+00:00 |
 | backend/etqan/site/tests/test_inquiries.py | B7 | B7b D65/PF32: internal exemption on site public throttles | 2026-10-09T05:06:20+00:00 |
 
 | Id | From | App | To owner | What | Status |
