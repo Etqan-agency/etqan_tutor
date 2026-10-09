@@ -690,7 +690,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "backend/config/settings/base.py",
+      "phase": "B7",
+      "reason": "B7b final F1: gate X-Etqan-Internal on TRUST_INTERNAL_HEADER",
+      "since": "2026-10-09T05:40:20+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
