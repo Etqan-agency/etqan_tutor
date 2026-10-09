@@ -621,7 +621,7 @@
     },
     "B7c": {
       "phase": "B7",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [],
       "plan_number": 50,
       "spec": "docs/superpowers/specs/2026-10-08-b7c-consultations-office-design.md",
@@ -1491,12 +1491,11 @@
     }
   ],
   "queue": [
-    "B7c",
     "B5d",
     "B7b",
     "B10b"
   ],
-  "in_flight": null,
+  "in_flight": "B7c",
   "main_heads": {
     "backend": "d553e3e",
     "dashboard": "762d74c",
