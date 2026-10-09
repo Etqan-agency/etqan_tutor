@@ -82,3 +82,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B4a** (pay rules, plan 46; B4 first slice) merged 2026-10-08: backend#36 → main c6037a0, dashboard#38 → main 77c40fe, meta#51; pointers bumped on master 6abc9f2. Meta CI green incl. staging-sim, 0 bounces. Payroll rules behind payroll_rules, off by default (D48).
 
 **B7a** (recorded courses, plan 49; B7 first slice) merged 2026-10-09: backend#38 → main 1fbb1ca, dashboard#40 → main 97c6234, meta#53 (branches feat/b7a-recorded-courses-r2); pointers bumped on master ce4ff95. Meta CI green; local e2e was cut short (12/12 passing) by host memory, so CI e2e was the gate; one trunk update after integrations slice 2 (meta#52). 0 bounces.
+
+**B5b** (broadcasts, plan 43) merged 2026-10-09: backend#40 → main 8d2323b, dashboard#42 → main a29fbee, meta#55; pointers bumped on master 5350995. Meta CI green, 0 bounces. Uses R5 study_group_members.
