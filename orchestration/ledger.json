@@ -78,7 +78,7 @@
       "branch": "feat/b7d-consultation-booking",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7d",
-      "current_task": "B7d code complete: 22 tasks + final review + fix wave (be d367cb2, da ece700f, mk 8f085ce, pushed). Waiting on a full-stack window for gates: just rebuild (grimp ld.so crash), just test, just lint, vitest coverage, full e2e incl. unrun b7-consultation-booking. B7g queued.",
+      "current_task": "B7d queued: be#53 da#55 mk#8 meta#69 (be d367cb2, da ece700f, mk 8f085ce, meta f40c97d on trunk be 8492bb1/da aca5d2d/mk ccf982a/meta 04f071e). Gates: test 9371/98.41%, lint, vitest 3257, e2e 76/76. Stack stopped. B7g queued; B7e/B7f next.",
       "session": "c405df7d"
     },
     "B8": {
