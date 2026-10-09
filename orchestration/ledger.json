@@ -691,14 +691,7 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [
-    {
-      "target": "dashboard/src/routeTree.gen.ts",
-      "phase": "B7",
-      "reason": "route tree regen",
-      "since": "2026-10-09T09:02:05+00:00"
-    }
-  ],
+  "claims": [],
   "shared_decisions": [
     {
       "id": "D1",
