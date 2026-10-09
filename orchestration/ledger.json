@@ -69,7 +69,7 @@
     },
     "B7": {
       "title": "Add-on sales",
-      "status": "build",
+      "status": "queued",
       "requires": [
         "B3"
       ],
@@ -78,7 +78,7 @@
       "branch": "feat/b7c-consultations-office",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7c",
-      "current_task": "B7c: merged trunk (be 8d2323b, da a29fbee, meta 5350995) into B7c branches (be 53e034a, da a2842c7, meta 2558abc); running gates on a fresh stack",
+      "current_task": "B7c queued (be 53e034a, da a2842c7, meta 2558abc): test 8265/98.44%, lint+secrets, vitest 3030, e2e 67 + payroll flaky. Next: B7b build (Plan 51)",
       "session": "5e75f8ee"
     },
     "B8": {
