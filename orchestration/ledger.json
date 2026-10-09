@@ -1419,6 +1419,20 @@
         "B10"
       ],
       "source": "owner"
+    },
+    {
+      "id": "D67",
+      "phase": "B5",
+      "decision": "Integrations slice 3 is MERGED (2026-10-09: backend #51, dashboard #53, meta #67). D66's hold is over — conductor resumes the queue; rebase queued slices on master. New: meeting links come from integrations.services.create_meeting (Zoom own/Etqan pool, else Jitsi) via scheduling.provision_meetings; GET sessions/<id>/host-link/ gives the teacher's start link; online payments use B3 own keys first, else Stripe Connect (integrations.services.stripe_connect()); Etqan webhooks /api/v1/webhooks/zoom/ and /stripe-connect/ live on the base domain.",
+      "affects": [
+        "conductor",
+        "B5",
+        "B7",
+        "B4",
+        "B10",
+        "B11"
+      ],
+      "source": "owner"
     }
   ],
   "requests": [
