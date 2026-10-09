@@ -92,3 +92,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **D65 Caddy** (conductor change, not a slice) merged 2026-10-09: infra#3 → main b16332f, meta#58; infra bumped on master ce08dbc. Public academy hosts strip X-Etqan-Internal; the :8098 internal listener sets it; env examples and local compose set DJANGO_TRUST_INTERNAL_HEADER=True (B7b reads it, default False). Owner follow-up: set it in the live production and staging env files. Meta CI green incl. staging-sim.
 
 **B4c** (plan 53) merged 2026-10-09: backend#44 → main 7c7fe53, dashboard#46 → main 8cb0152, meta#60; pointers bumped on master 1fae541. Meta CI green incl. staging-sim, 0 bounces. Note: seed_dev now seeds finance before payroll. B4b next regenerates its payroll 0003 migration as 0004.
+
+**B4b** (plan 54) merged 2026-10-09: backend#47 → main d553e3e, dashboard#49 → main 762d74c, meta#63; pointers bumped on master ec96332. Payroll migration regenerated as 0004 on top of B4c 0003. Meta CI green incl. staging-sim; local e2e had 5 flaky specs under host load (b2-archive, b2-bundles, b2-trials, b9-languages, b9-registration, journey; none B4), CI e2e green. 0 bounces.
