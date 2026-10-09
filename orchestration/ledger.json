@@ -36,7 +36,7 @@
       "branch": "feat/b4d-salary-projections",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4d",
-      "current_task": "B4d (plan 55): T1-T6 done+reviewed (be 68cd2e3, da cf552f1); T7 e2e spec writing; then final review; gates need a window",
+      "current_task": "B4d (plan 55): T1-T7 coded+reviewed, pushed (be 68cd2e3, da 0698ee6); final opus review running; then need a gates window (test/lint/e2e)",
       "session": "c0892bad"
     },
     "B5": {
