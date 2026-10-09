@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Requires:** B4b (Plan 54), and through it B4a (Plan 46).
+**Requires:** B4b (Plan 54), and through it B4a (Plan 46). Not B4c (Plan 53), which is queued ahead and will probably be merged first: it touches the same shared lists and files (`features.py`, `test_features.py`, `test_routes.py`, `payslips.py`, `services/__init__.py`, `urls.py`, `views.py`, `payloads.py`, payroll `conftest.py`, `nav.ts`, `nav.test.ts`, `identity/schemas.ts`, `permissions.test.ts`, payroll `api.ts`/`queries.ts`/`index.ts`, `payroll-fixtures.ts`, `payroll.json`, `nav.json`). Where B4c's lines are there, B4d's go after them.
 **Slice:** B4d · **Phase spec:** `docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md` (§1–§4, §3 row B4d and its notes) · **Slice spec:** `docs/superpowers/specs/2026-10-08-b4d-salary-projections-design.md`
 
 **Goal:** One read-only screen answers "what will each teacher be paid for this month if every scheduled session takes place?" Per teacher it shows the pay so far beside the projection, then per-currency totals and, while exchange rates are on, one estimated total in the academy currency. The switch `salary_projections` is off by default. There is no new model and no migration, and generate and issue pay exactly what B4b pays.
@@ -55,9 +55,10 @@ It also applies these ledger and orchestration rules:
 - Never edit `STATE.md`, CI workflows, Caddyfiles or meta's submodule pointers.
 - Shared lists get lines only under `── phase B4 ──` markers. This plan's markers are in:
   - `etqan/platform/features.py`;
+  - `etqan/platform/tests/test_features.py` (`BUILT`);
   - `dashboard/src/features/shell/nav.ts`.
 
-  `salary_projections` is a new registry line (there is no `_later` line to flip). It goes last in the B4 block, after B4a's (and any B4b or B4c) lines.
+  `salary_projections` is a new registry line (there is no `_later` line to flip). It goes last in the B4 block, after B4a's `payroll_rules` and `bulk_teacher_rates` (B4b flipped its switches in place and added none to the block) and B4c's `teacher_balance`, `payslip_acknowledgement` and `salary_expenses` if B4c is merged.
 
 **Commands.** The stream stack must be up (`just dev-backend`) and `$W/.env.stream` must exist. The conductor creates it when it gives B4 a slot.
 - Load the stream's environment first: `cd $W; set -a; . ./.env.stream; set +a`.
@@ -65,7 +66,7 @@ It also applies these ledger and orchestration rules:
 - **Backend tests:** `… exec -T django pytest -q <paths>`.
 - **Backend format:** `… exec -T django ruff check --fix .`, then `… exec -T django ruff format .`.
 - **Backend verify:** `ruff check .`, `ruff format --check .`, `lint-imports`, `pytest -q --cov=etqan`, each through `… exec -T django`.
-- **No migration.** This slice adds no model and no column; `makemigrations --check` must stay clean.
+- **No migration.** This slice adds no model and no column; `makemigrations --check` must stay clean. (Should a review ever add one: payroll is at B4b's `0003_incentives_reports_fixed` and B4c's balance migration, so it takes the next free number; regenerate on a clash, never hand-renumber.)
 - **Dashboard tests:** `… exec -T dashboard pnpm exec vitest run <paths>`.
 - **Dashboard verify:** `pnpm exec tsc --noEmit`, `pnpm lint`, `pnpm test:coverage`, each through `… exec -T dashboard`. Format first with `… exec -T dashboard pnpm exec biome check --write src e2e`.
 - **New route files:** regenerate `src/routeTree.gen.ts` with `… exec -T dashboard pnpm exec vite build`. It is generated: never edit it by hand.
@@ -86,8 +87,8 @@ It also applies these ledger and orchestration rules:
 - Every task runs its new tests before the implementation and keeps the failing output (RED) for the report, then the passing output (GREEN). A report without RED evidence is sent back.
 - Trunk helpers:
   - root fixtures: `staff_for(*codes)`, `api_for("admin")`, `set_features(**switches)`, `tenants`;
-  - payroll's conftest: `clock`, `world`, `admin`, `june_sessions`, `mark`, `set_rate`, `adjust`, `JUNE`, Plan 46's `rules_on`, `student_rate`, `june_group`, and Plan 54's `pay_in`, `fixed_salary`, `percent_bonus`;
-  - scheduling's conftest: `make_teacher`, `make_student`, `hand_session`, `group_bundle`, `bundles_on`, `two_slots`, `subscription_for`.
+  - payroll's conftest: `clock`, `world`, `admin`, `english` (shared, not autouse: a module that asserts copied text takes it with `pytestmark = pytest.mark.usefixtures("english")`, never a local copy; this slice asserts no copied text), `june_sessions`, `mark`, `set_rate`, `adjust`, `JUNE`, Plan 46's `rules_on`, `student_rate`, `june_group`, and Plan 54's `pay_in`, `fixed_salary(teacher, monthly, *, starts_on=None)`, `percent_bonus(teacher, percent_bp, *, on)`. People are Users in these helpers;
+  - scheduling's conftest: `make_teacher`, `make_student`, `hand_session`, `group_bundle`, `bundles_on`, `two_slots`, `subscription_for`, `as_user(user)`.
 - This slice adds no shared payroll test helper; its fixtures are local to its test modules.
 - Every list or read that renders rows carries a query-count test that counts SELECTs only. It must give the same count for 1 row and for 3 rows (the projection's per-teacher rule is R9).
 - `etqan/platform/tests/test_features.py` `BUILT` lists every built switch **in registry order**. `salary_projections` is a new line, last under `# ── phase B4 ──`.
@@ -121,7 +122,7 @@ It also applies these ledger and orchestration rules:
 
 - [ ] **Step 1: Write the failing test**
 
-In `etqan/platform/tests/test_features.py` `BUILT`, add as the last line of the `# ── phase B4 ──` block (after `"bulk_teacher_rates": False,` and any line B4b or B4c added there):
+In `etqan/platform/tests/test_features.py` `BUILT`, add as the last line of the `# ── phase B4 ──` block (after `"bulk_teacher_rates": False,` and, if B4c is merged, its `"salary_expenses": False,`):
 
 ```python
     "salary_projections": False,
@@ -385,7 +386,10 @@ def build(  # noqa: PLR0913 -- keyword-only flags (B4d P-3, P-7)
     language = academy_services.get_settings().default_language
     sessions = _session_lines(teacher, first, last, language, pay, projected=projected)
     ...  # regroup, the fixed month, gross, adjustments, report lines: unchanged
-    counts = _counters(teacher, first, last, sessions, missing, pay) if counters else {}
+    month_rows = scheduling_services.payroll_sessions(first, last).filter(
+        teacher=teacher
+    )  # B4b's line, unchanged (lazy: never evaluated while counters=False)
+    counts = _counters(month_rows, sessions, missing, pay) if counters else {}
     return Built(
         currency=teacher.pay_currency,
         lines=(*fixed, *sessions, *adjustments, *reports),
@@ -401,7 +405,7 @@ def build(  # noqa: PLR0913 -- keyword-only flags (B4d P-3, P-7)
     )
 ```
 
-`_missing_report_ids` needs no change: `missing_reports` returns completed sessions only, so a scheduled line is never deducted. If `C901` fires on `build`, move the counters line into `_counts(teacher, first, last, sessions, missing, pay, *, counters)`; never weaken the rule.
+`_missing_report_ids` needs no change: `missing_reports` returns completed sessions only, so a scheduled line is never deducted. B4b's `_counters(month, sessions, missing, pay)` takes the teacher's month rows (`payroll_sessions(first, last).filter(teacher=teacher)`), not the teacher and bounds; keep its signature. If `C901` fires on `build`, move the `month_rows` line and the counters call into `_counts(teacher, first, last, sessions, missing, pay, *, counters)`; never weaken the rule.
 
 - [ ] **Step 6: `payslips.py`**
 
@@ -962,6 +966,7 @@ from etqan.payroll.tests.conftest import adjust
 from etqan.payroll.tests.conftest import june_sessions
 from etqan.payroll.tests.conftest import mark
 from etqan.payroll.tests.conftest import set_rate
+from etqan.scheduling.tests.conftest import as_user
 from etqan.scheduling.tests.conftest import make_teacher
 
 URL = "/api/v1/payroll/payslips/projection/"
@@ -996,10 +1001,7 @@ def test_only_the_office_reads_it(bilal, api_for, projections_on, role, query):
 
 
 def test_a_teacher_cannot_read_even_their_own(bilal, projections_on):
-    from rest_framework.test import APIClient  # noqa: PLC0415
-
-    client = APIClient()
-    client.force_login(bilal)
+    client = as_user(bilal)
     assert client.get(URL).status_code == 403
     assert client.get(URL, {"format": "csv"}).status_code == 403
 
@@ -1074,21 +1076,21 @@ def test_another_academys_teachers_are_not_projected(
 ```
 
 In `etqan/access/tests/test_routes.py`:
-- `ROUTES`, under a `# Slice B4d.` comment after the payroll block (or after B4a's/B4b's lines):
+- `ROUTES`, under a `# Slice B4d.` comment after the `# Slice B4b.` fixed-salary lines (and after B4c's `# Slice B4c.` lines if B4c is merged):
 
 ```python
     # Slice B4d.
     ("GET", "/api/v1/payroll/payslips/projection/", "payslip.view_any"),
 ```
 
-- `FEATURES`, under `# Phase B4, slice B4d.`:
+- `FEATURES`, under `# Slice B4d.` (the file's style for B4a/B4b), after the `# Slice B4b.` (and B4c's) entries:
 
 ```python
-    # Phase B4, slice B4d.
+    # Slice B4d.
     ("GET", "/api/v1/payroll/payslips/projection/"): "salary_projections",
 ```
 
-- `FEATURE_WORDS`: `"/projection/": "salary_projections",  # B4d`.
+- `FEATURE_WORDS`: `"/projection/": "salary_projections",  # B4d`, after `"/fixed-salaries/": "fixed_teacher_salary",  # B4b` (and B4c's words).
 
 If trunk's `test_routes.py` has a role-matrix test that expects every `payslip.view_any` route to admit teachers (Plan 7's `READERS`), check it lists routes explicitly; this route is `HasCode` only (P-8) and must not join any teacher-readable list.
 
@@ -1145,7 +1147,7 @@ def projection(result) -> dict:
 
 - [ ] **Step 4: The view and the route**
 
-In `views.py` (import `FeatureOn` from `etqan.platform.permissions` if Plan 46 has not already):
+In `views.py` (`CSVExportMixin`, `HasCode`, `FeatureOn`, `Response` and `APIView` are already imported):
 
 ```python
 # Slice B4d §5: the projection's CSV, one row per teacher.
@@ -1351,7 +1353,7 @@ export function projection(overrides: Partial<Projection> = {}): Projection {
 }
 ```
 
-`identity/schemas.ts` `FeatureCode`, after B4a's lines:
+`identity/schemas.ts` `FeatureCode`, after the `// Phase B4, slice B4b.` lines (and B4c's `// Phase B4, slice B4c.` lines if merged):
 
 ```ts
 	// Phase B4, slice B4d.
@@ -1430,6 +1432,7 @@ Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
 - Modify: `dashboard/src/routes/_authed/payroll.payslips.index.tsx` (the header button)
 - Modify: `dashboard/src/features/payroll/index.ts`
 - Modify: `dashboard/src/features/shell/nav.ts` (under `// ── phase B4 ──`)
+- Modify: `dashboard/src/features/shell/nav.test.ts` (it pins the item order, the feature map and the payroll group's labels)
 - Modify: `dashboard/src/routes/permissions.test.ts`
 - Generated: `dashboard/src/routeTree.gen.ts`
 
@@ -1961,7 +1964,7 @@ export const Route = createFileRoute("/_authed/payroll/projections")({
 		);
 ```
 
-`nav.ts`, under `// ── phase B4 ──`, after B4a's payroll-settings item (import `Telescope` from `lucide-react`):
+`nav.ts`, last under `// ── phase B4 ──`: after B4a's payroll-settings item and, if B4c is merged, after its `/payroll/withdrawals` and `/teaching/balance` items (import `Telescope` from `lucide-react`, alphabetically in the import list):
 
 ```ts
 	// Slice B4d: the current month's salary projection.
@@ -1975,7 +1978,10 @@ export const Route = createFileRoute("/_authed/payroll/projections")({
 	),
 ```
 
-If the nav test pins icon uniqueness or order, follow its rule.
+`nav.test.ts` (write these first, with the page test, so they are part of RED):
+- "ships the grouped admin areas in order": add `"/payroll/projections",` under a `// Slice B4d` comment after `"/payroll/settings",` (after B4c's `"/teaching/balance",` if merged);
+- "names a feature on exactly the items that belong to one": add `"/payroll/projections": "salary_projections",` under `// Slice B4d` after the B4a (and B4c) entries;
+- "groups consecutive items": the payroll group's `labelKey` list (`groups[3]`) gains `"nav.payrollProjections"` last (after `"nav.withdrawals"` if B4c is merged).
 
 `permissions.test.ts`: add `"/_authed/payroll/projections": "salary_projections",` to `FEATURE_SCREENS` under a `// Slice B4d` comment, and insert `payroll\/projections|` at the start of `FEATURE_WORDS`'s alternation.
 
@@ -1987,7 +1993,7 @@ Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git -C $W/dashboard add src/features/payroll src/routes src/features/shell/nav.ts src/routeTree.gen.ts
+git -C $W/dashboard add src/features/payroll src/routes src/features/shell/nav.ts src/features/shell/nav.test.ts src/routeTree.gen.ts
 git -C $W/dashboard commit -m "feat(payroll): salary projections page, nav item and payslips button (B4d §6)
 
 Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"

@@ -188,7 +188,7 @@ It also applies these ledger decisions:
 
 - [ ] **Step 1: Write the failing tests**
 
-Append to `backend/etqan/payroll/tests/test_models.py`. Merge the imports into the file's import block, one per line, without repeating those B4a already added (`IntegrityError`, `features`).
+Append to `backend/etqan/payroll/tests/test_models.py`. Merge the imports into the file's import block, one per line, without repeating those the file already has (`IntegrityError` and `features` from B4a, `Payslip` from trunk).
 
 ```python
 from etqan.payroll.models import BalanceLock
@@ -1873,7 +1873,7 @@ In `payloads.py` `payslip_row`, after `"updated_at"`:
 ```
 
 In `views.py`:
-- import `FeatureOn` and `NotImpersonating` from `etqan.platform.permissions`;
+- import `NotImpersonating` from `etqan.platform.permissions` (`FeatureOn`, `HasCode`, `IsTeacher` and `ReadOnly` are already imported, B4a);
 - append to `CSV_COLUMNS`, last (after B4a's `count_*`, and anything B4b added):
 
 ```python
@@ -2282,7 +2282,7 @@ In `test_routes.py`, under `# Slice B4c.` in `ROUTES`:
 
 `FEATURE_WORDS`: `"/payroll/balances/": "teacher_balance",  # B4c` and `"/withdrawals/": "teacher_balance",  # B4c`.
 
-In `test_registry.py` `test_resources_carry_the_12_verbs_and_the_role_resource_6`, after the B3e lines:
+In `test_registry.py` `test_resources_carry_the_12_verbs_and_the_role_resource_6`, after the last phase B3 lines (B3f's `voucher` asserts) and before the `# Integrations` line. B4a added no assert here for `payroll_settings`.
 
 ```python
     # Phase B4 (slice B4c, C-6).
