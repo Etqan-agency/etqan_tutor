@@ -50,7 +50,7 @@
       "branch": "feat/b5c-whatsapp",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "current_slice": "B5d",
-      "current_task": "B5d merged onto trunks be 6882ec0/da 51056d6/meta c9721b9 code-only, pushed (be 5e309be, da b74d1d3, meta feffc1b); no migration clash, routeTree unchanged, tsc+biome+B5 vitest green; awaiting window for re-gate. Stack down.",
+      "current_task": "B5d re-gated on fresh stack (be 5e309be, da b74d1d3, meta feffc1b): test killed by host memory at 95% (8508 pass, 0 fail); e2e 72 pass + 2 flaky (journey, b8-media); lint 51 contracts + secrets green. Stack stopped. Awaiting meta#61 CI + merge.",
       "session": "b31e57af"
     },
     "B6": {
