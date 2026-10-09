@@ -152,6 +152,7 @@ In flight: **B4b** · Queue: B7c, B5d, B7b · Next plan number: 61 · Conductor:
 | Target | Phase | Reason | Since |
 |---|---|---|---|
 | dashboard/src/features/vouchers | B7 | T9-11 fix round 1 | 2026-10-09T09:10:04+00:00 |
+| dashboard/src/locales/en/vouchers.json | B7 | T9-11 fix round 1 | 2026-10-09T09:10:04+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
