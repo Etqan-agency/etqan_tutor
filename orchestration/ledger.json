@@ -69,16 +69,16 @@
     },
     "B7": {
       "title": "Add-on sales",
-      "status": "queued",
+      "status": "build",
       "requires": [
         "B3"
       ],
       "slot": 2,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b7",
-      "branch": "feat/b7c-consultations-office",
+      "branch": "feat/b7b-recorded-store",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
-      "current_slice": "B7c",
-      "current_task": "B7c queued (be 53e034a, da a2842c7, meta 2558abc): test 8265/98.44%, lint+secrets, vitest 3030, e2e 67 + payroll flaky. Next: B7b build (Plan 51)",
+      "current_slice": "B7b",
+      "current_task": "B7b build started (Plan 51); B7c queued",
       "session": "5e75f8ee"
     },
     "B8": {
