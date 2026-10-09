@@ -151,7 +151,6 @@ In flight: **B10a** · Queue: B4c, B4b, B7c · Next plan number: 60 · Conductor
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| dashboard/src/features/gateways/ReturnPage.tsx | B7 | B7b S-8/S-11: recorded_course return branch + attention codes | 2026-10-09T05:22:54+00:00 |
 | dashboard/src/features/gateways/ReturnPage.test.tsx | B7 | B7b S-8/S-11: recorded_course return branch + attention codes | 2026-10-09T05:22:54+00:00 |
 | dashboard/src/features/gateways/schemas.ts | B7 | B7b S-8/S-11: recorded_course return branch + attention codes | 2026-10-09T05:22:54+00:00 |
 | dashboard/src/locales/en/gateways.json | B7 | B7b S-8/S-11: recorded_course return branch + attention codes | 2026-10-09T05:22:54+00:00 |
