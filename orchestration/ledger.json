@@ -36,7 +36,7 @@
       "branch": "feat/b4d-salary-projections",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4d",
-      "current_task": "B4d branches cut off be d553e3e/da 762d74c/meta ec96332; stack stopped (no memory window); building plan 55 code-only",
+      "current_task": "B4d building (plan 55): T1, T2 done+reviewed; T3 in progress; subset stack (pg/redis/django) for one-file tests",
       "session": "c0892bad"
     },
     "B5": {
