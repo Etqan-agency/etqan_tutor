@@ -691,14 +691,7 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [
-    {
-      "target": "dashboard/src/features/recorded",
-      "phase": "B7",
-      "reason": "T9-11 fix round 1",
-      "since": "2026-10-09T09:10:04+00:00"
-    }
-  ],
+  "claims": [],
   "shared_decisions": [
     {
       "id": "D1",
