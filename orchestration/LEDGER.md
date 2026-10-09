@@ -16,7 +16,7 @@ In flight: **B4c** · Queue: B4b, B7c · Next plan number: 61 · Conductor: 4ddf
 | B7 | Add-on sales | build | 2 | B7b | B7b built + final review clean after one fix wave (be f486a7d, da 4de13e5, mk 6e41d36; not pushed). Gates: lint+secrets PASS (47), dashboard vitest 2970 PASS 95.73/91.53/85.43, backend pytest exit 0 (counts lost: shell killed by host memory), targeted e2e b7-recorded-store PASS. Holding the full e2e + just test rerun for the conductor's memory window; stack stopped | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | 5e75f8ee |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
-| B10 | AI | build | 3 | B10b | B10b: Plan 48 Task 6 (list page, facts panel, nav) | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | d923ac07 |
+| B10 | AI | build | 3 | B10b | B10b: Plan 48 Task 7 (add/edit page, generate, copy, print) | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | d923ac07 |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 
 ## Slices
