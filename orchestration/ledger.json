@@ -697,6 +697,12 @@
       "phase": "B7",
       "reason": "R9 playlist kind (D56)",
       "since": "2026-10-09T09:05:02+00:00"
+    },
+    {
+      "target": "dashboard/src/locales/en/vouchers.json",
+      "phase": "B7",
+      "reason": "R9 playlist kind (D56)",
+      "since": "2026-10-09T09:05:02+00:00"
     }
   ],
   "shared_decisions": [
