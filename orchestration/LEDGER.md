@@ -153,7 +153,6 @@ In flight: **B10b** · Queue: B7g, B4d, B5c · Next plan number: 62 · Conductor
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| backend/pyproject.toml | B7 | B7d: consultations may import gateways.services; gateways never imports etqan.consultations (phase spec §4, D53) | 2026-10-09T17:02:17+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
