@@ -692,12 +692,6 @@
   },
   "claims": [
     {
-      "target": "dashboard/src/features/gateways/ReturnPage.test.tsx",
-      "phase": "B7",
-      "reason": "B7b S-8/S-11: recorded_course return branch + attention codes",
-      "since": "2026-10-09T05:22:54+00:00"
-    },
-    {
       "target": "dashboard/src/features/gateways/schemas.ts",
       "phase": "B7",
       "reason": "B7b S-8/S-11: recorded_course return branch + attention codes",
