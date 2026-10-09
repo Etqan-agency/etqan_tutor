@@ -692,12 +692,6 @@
   },
   "claims": [
     {
-      "target": "marketing/src/lib/i18n.ts",
-      "phase": "B7",
-      "reason": "B7b S-10: recorded-course strings, header link, sitemap, B8 test fixes (PF24/PF25)",
-      "since": "2026-10-09T05:26:30+00:00"
-    },
-    {
       "target": "marketing/src/components/Header.astro",
       "phase": "B7",
       "reason": "B7b S-10: recorded-course strings, header link, sitemap, B8 test fixes (PF24/PF25)",
