@@ -626,7 +626,7 @@
       "plan_number": 50,
       "spec": "docs/superpowers/specs/2026-10-08-b7c-consultations-office-design.md",
       "plan": "docs/superpowers/plans/2026-10-08-plan-50-consultations-office.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/42 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/44 https://github.com/Etqan-agency/etqan_tutor/pull/57",
       "bounces": 0
     },
     "B7d": {
