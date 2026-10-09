@@ -691,14 +691,7 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [
-    {
-      "target": "etqan.learning",
-      "phase": "B7",
-      "reason": "R8 SubjectCertificate (D58), slice B7g",
-      "since": "2026-10-09T07:38:05+00:00"
-    }
-  ],
+  "claims": [],
   "shared_decisions": [
     {
       "id": "D1",
