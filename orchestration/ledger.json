@@ -697,6 +697,12 @@
       "phase": "B7",
       "reason": "B7d K-13 consultations nav/permissions",
       "since": "2026-10-09T17:33:51+00:00"
+    },
+    {
+      "target": "dashboard/src/features/shell/nav.test.ts",
+      "phase": "B7",
+      "reason": "B7d K-13 consultations nav/permissions",
+      "since": "2026-10-09T17:33:51+00:00"
     }
   ],
   "shared_decisions": [
