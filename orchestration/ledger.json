@@ -698,12 +698,6 @@
       "since": "2026-10-09T05:05:33+00:00"
     },
     {
-      "target": "backend/pyproject.toml",
-      "phase": "B7",
-      "reason": "B7b: gateways contract + recorded forbidden list (PF2)",
-      "since": "2026-10-09T05:05:33+00:00"
-    },
-    {
       "target": "backend/config/settings/base.py",
       "phase": "B7",
       "reason": "B7b: throttle scope recorded_public (S-9)",
