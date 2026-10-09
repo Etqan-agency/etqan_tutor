@@ -582,7 +582,7 @@
       "plan_number": 53,
       "spec": "docs/superpowers/specs/2026-10-08-b4c-balance-payouts-design.md",
       "plan": "docs/superpowers/plans/2026-10-08-plan-53-balance-payouts.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/44 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/46 https://github.com/Etqan-agency/etqan_tutor/pull/60",
       "bounces": 0
     },
     "B4d": {
