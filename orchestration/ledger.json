@@ -36,7 +36,7 @@
       "branch": "feat/b4d-salary-projections",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4d",
-      "current_task": "B4d queued (behind B7g): PRs be#50 da#52 meta#66; meta CI all green (backend, dashboard, e2e, staging-sim) on post-B7c tree; stack stopped; will merge trunk when in flight",
+      "current_task": "B4d next in queue (after B7g): trunk pre-merged locally, not pushed (be b755c15 clean; da 9c5ea6a, permissions.test.ts additive conflict kept both); when in flight: re-merge, stack up, targeted tests + e2e, push",
       "session": "c0892bad"
     },
     "B5": {
