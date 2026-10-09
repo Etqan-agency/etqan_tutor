@@ -153,6 +153,7 @@ In flight: **B10b** · Queue: B7g, B4d, B5c · Next plan number: 62 · Conductor
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
+| dashboard/src/routes/permissions.test.ts | B7 | B7d: FEATURE_SCREENS for the family booking page | 2026-10-09T17:36:35+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|

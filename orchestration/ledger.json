@@ -691,7 +691,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "dashboard/src/routes/permissions.test.ts",
+      "phase": "B7",
+      "reason": "B7d: FEATURE_SCREENS for the family booking page",
+      "since": "2026-10-09T17:36:35+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
