@@ -107,7 +107,7 @@
     },
     "B10": {
       "title": "AI",
-      "status": "build",
+      "status": "waiting-deps",
       "requires": [
         "B6"
       ],
@@ -116,7 +116,7 @@
       "branch": "feat/b10b-student-reports",
       "spec": "docs/superpowers/specs/2026-10-08-b10-ai-design.md",
       "current_slice": "B10b",
-      "current_task": "B10b: Tasks 1-8 built+reviewed; final whole-slice review; gates wait on conductor's memory hold",
+      "current_task": "B10b built, final review clean; waiting for conductor's memory hold to lift to run gates",
       "session": "d923ac07"
     },
     "B11": {
