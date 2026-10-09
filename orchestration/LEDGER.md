@@ -152,6 +152,7 @@ In flight: **B4b** · Queue: B7c, B5d, B7b · Next plan number: 61 · Conductor:
 | Target | Phase | Reason | Since |
 |---|---|---|---|
 | dashboard/src/features/certificates | B7 | R8 print page (D58) | 2026-10-09T09:02:05+00:00 |
+| dashboard/src/locales/en/certificates.json | B7 | R8 print page (D58) | 2026-10-09T09:02:05+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
