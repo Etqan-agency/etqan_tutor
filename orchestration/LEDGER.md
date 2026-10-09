@@ -151,7 +151,6 @@ In flight: **B10a** · Queue: B4c, B4b, B7c · Next plan number: 60 · Conductor
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| marketing/test/media.test.ts | B7 | B7b S-10: recorded-course strings, header link, sitemap, B8 test fixes (PF24/PF25) | 2026-10-09T05:26:31+00:00 |
 | marketing/test/pages.test.ts | B7 | B7b S-10: recorded-course strings, header link, sitemap, B8 test fixes (PF24/PF25) | 2026-10-09T05:26:31+00:00 |
 | marketing/test/closed.test.ts | B7 | B7b S-10: recorded-course strings, header link, sitemap, B8 test fixes (PF24/PF25) | 2026-10-09T05:26:31+00:00 |
 | marketing/test/articles.test.ts | B7 | PF25: scope sitemap no-call assertion | 2026-10-09T05:27:12+00:00 |
