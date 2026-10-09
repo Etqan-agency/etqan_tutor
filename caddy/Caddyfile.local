@@ -14,6 +14,8 @@
 }
 
 (academy) {
+	# Only the production internal listener may set X-Etqan-Internal (ledger D65).
+	request_header -X-Etqan-Internal
 	@internal path /internal/*
 	respond @internal 404
 	@django path /api/* /accounts/* /health/* /media/* /__debug__/*
