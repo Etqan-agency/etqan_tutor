@@ -691,7 +691,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "backend/etqan/access/tests/test_routes.py",
+      "phase": "B7",
+      "reason": "B7d: SELF_SERVICE lines for the family consultation routes",
+      "since": "2026-10-09T17:24:38+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
