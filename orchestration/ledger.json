@@ -1476,7 +1476,7 @@
       "app": "learning",
       "to_owner": "conductor",
       "what": "R-B5d-2 (B5d more notices, spec docs/superpowers/specs/2026-10-07-b5d-more-notices-design.md §4 R7): additive, UNSCOPED (no user) read-only services exported from etqan.learning.services, fixed query count: (a) homework_notices(*, since, until) -> list[HomeworkNotice(kind 'set'|'answered'|'completed', homework_id, title, course_name_ar, course_name_en, student: StudentProfile with user selected, set_by_user_id, set_by_role, at)] (derived from homework_events); (b) upgrade_notices(*, since, until) -> list[UpgradeNotice(kind 'requested'|'decided', request_id, student: StudentProfile with user, course_name_ar, course_name_en, level_name_ar, level_name_en, status, requested_by_user_id, requested_by_role, at)]. Non-blocking: each B5d notice is built only when its service exists.",
-      "status": "open"
+      "status": "done"
     },
     {
       "id": "R8",
