@@ -16,7 +16,7 @@ In flight: **B10b** · Queue: B7g, B4d, B5c · Next plan number: 62 · Conductor
 | B7 | Add-on sales | build | 2 | B7d | B7d: all 22 tasks built and reviewed (be 9b4a0f2, da ece700f, mk 8f085ce, pushed); final whole-slice review running; then gates need a full-stack window (test, lint w/ image rebuild for grimp, e2e); B7g queued | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | c405df7d |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
-| B10 | AI | build | 3 | B10b | B10b in flight: rebased on be ffbdecf/da cfcbf04/mk ccf982a/meta e4fa718; fresh stack + gates running | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | a61cece4 |
+| B10 | AI | build | 3 | B10b | B10b ready on trunk be 8492bb1/da aca5d2d/mk ccf982a/meta 04f071e (integrations-3): full test on prior trunk 9108 pass + 1 fail (own admin-features example, fixed), targeted be 4874 pass after int-3, tsc+marketing 313, lint 0, e2e 76/76 fresh stack; PRs be#48 da#50 meta#64 force-pushed | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | a61cece4 |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 
 ## Slices
