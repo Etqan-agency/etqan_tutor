@@ -543,7 +543,7 @@
       "plan_number": 48,
       "spec": "docs/superpowers/specs/2026-10-08-b10b-student-reports-design.md",
       "plan": "docs/superpowers/plans/2026-10-08-plan-48-student-reports.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/48 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/50 https://github.com/Etqan-agency/etqan_tutor/pull/64",
       "bounces": 0
     },
     "B4a": {
