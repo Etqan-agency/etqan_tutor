@@ -79,7 +79,7 @@
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7b",
       "current_task": "B7b in flight: on trunk be 6e1b8a9/da 86271e5/meta 156d4cd, pushed (be b6f8648, da b022327, meta 553f916); CI is the gate. B7g queued; B7d next after B7b",
-      "session": "d8dae730"
+      "session": "c405df7d"
     },
     "B8": {
       "title": "Marketing extras",
