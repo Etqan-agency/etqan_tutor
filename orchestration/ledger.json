@@ -116,7 +116,7 @@
       "branch": "feat/b10b-student-reports",
       "spec": "docs/superpowers/specs/2026-10-08-b10-ai-design.md",
       "current_slice": "B10b",
-      "current_task": "B10b: Plan 48 Task 2 (month_facts)",
+      "current_task": "B10b: Plan 48 Task 3 (prompt + student_report.body task)",
       "session": "d923ac07"
     },
     "B11": {
