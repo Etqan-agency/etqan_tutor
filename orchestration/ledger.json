@@ -50,7 +50,7 @@
       "branch": "feat/b5d-more-notices",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "current_slice": "B5d",
-      "current_task": "B5d built + reviewed (be d9f9977, da ca0dade, meta fb4169e). Fresh-stack gates: test 8245/98.48%, lint (48 contracts), secrets, vitest 2963/95.73% PASS; e2e run killed mid-way by host low-memory reaper — needs rerun before queue",
+      "current_task": "B5d built + reviewed (be d9f9977, da ca0dade, meta fb4169e); test/lint/secrets/vitest PASS; e2e rerun held for B4c memory window (conductor); stack stopped",
       "session": "5d4e6f0b"
     },
     "B6": {
