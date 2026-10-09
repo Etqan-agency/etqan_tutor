@@ -78,7 +78,7 @@
       "branch": "feat/b7g-certificates-codes",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7g",
-      "current_task": "B7c on trunk be d553e3e/da 762d74c/meta ec96332 (pushed be c66cdec, da d5c0e94, meta d5f0763); B7g test PASS on old trunk, its e2e still to run",
+      "current_task": "B7g queued (be#49 da#51 meta#65): e2e 74 pass, lint, vitest, targeted pytest on trunk d553e3e. B7c pushed on trunk (in flight). B7b queued; B7d (plan 60) waits for B7b",
       "session": "d8dae730"
     },
     "B8": {
