@@ -69,7 +69,7 @@
     },
     "B7": {
       "title": "Add-on sales",
-      "status": "waiting-deps",
+      "status": "build",
       "requires": [
         "B3"
       ],
@@ -78,7 +78,7 @@
       "branch": "feat/b7g-certificates-codes",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7g",
-      "current_task": "B7g built, final review clean after one fix wave (be 4550687, da c69b813; not pushed); lint+secrets PASS (50). Needs a gate window: trunk merge, fresh stack, just test, vitest coverage, the B7g e2e spec (never run yet) + full e2e. B7b, B7c queued; B7d (plan 60) waits for B7b",
+      "current_task": "B7g gates held for memory window (after B4b, B10b). B7g built, final review clean, lint PASS; learning diff approved by conductor (D58). B7b, B7c queued; B7d (plan 60) waits for B7b",
       "session": "5e75f8ee"
     },
     "B8": {
