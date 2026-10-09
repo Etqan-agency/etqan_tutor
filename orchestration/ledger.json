@@ -690,14 +690,7 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [
-    {
-      "target": "backend/etqan/site/tests/test_inquiries.py",
-      "phase": "B7",
-      "reason": "B7b final F1: gate X-Etqan-Internal on TRUST_INTERNAL_HEADER",
-      "since": "2026-10-09T05:40:20+00:00"
-    }
-  ],
+  "claims": [],
   "shared_decisions": [
     {
       "id": "D1",
