@@ -16,6 +16,9 @@ x-django-env: &django-env
   # links must carry its port. Empty outside a stream.
   DJANGO_TENANT_URL_TEMPLATE: http://{domain}${ETQAN_URL_PORT_SUFFIX:-}
   DJANGO_FRONTEND_URL: http://etqan.localhost${ETQAN_URL_PORT_SUFFIX:-}
+  # caddy/Caddyfile.local strips X-Etqan-Internal on public hosts and sets it
+  # on the internal :8098 listener (D65), so marketing SSR skips public throttles.
+  DJANGO_TRUST_INTERNAL_HEADER: "True"
 
 services:
   caddy:
