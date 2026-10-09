@@ -88,3 +88,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B5f** (chat extras, plan 58) merged 2026-10-09: backend#41 → main d6d0739, dashboard#43 → main 405aaf4, meta#56; pointers bumped on master 33b41fc. Meta CI green incl. staging-sim, 0 bounces.
 
 **B10a** (AI drafts, plan 47; B10 first slice) merged 2026-10-09: backend#43 → main 607f39a, dashboard#45 → main 39e2465, meta#59 (branches feat/b10a-ai-drafts-r2; earlier be#39/da#41/meta#54 closed); pointers bumped on master ede990e. Meta CI green incl. staging-sim, 0 bounces.
+
+**D65 Caddy** (conductor change, not a slice) merged 2026-10-09: infra#3 → main b16332f, meta#58; infra bumped on master ce08dbc. Public academy hosts strip X-Etqan-Internal; the :8098 internal listener sets it; env examples and local compose set DJANGO_TRUST_INTERNAL_HEADER=True (B7b reads it, default False). Owner follow-up: set it in the live production and staging env files. Meta CI green incl. staging-sim.
