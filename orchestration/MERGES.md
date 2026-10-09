@@ -94,3 +94,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B4c** (plan 53) merged 2026-10-09: backend#44 → main 7c7fe53, dashboard#46 → main 8cb0152, meta#60; pointers bumped on master 1fae541. Meta CI green incl. staging-sim, 0 bounces. Note: seed_dev now seeds finance before payroll. B4b next regenerates its payroll 0003 migration as 0004.
 
 **B4b** (plan 54) merged 2026-10-09: backend#47 → main d553e3e, dashboard#49 → main 762d74c, meta#63; pointers bumped on master ec96332. Payroll migration regenerated as 0004 on top of B4c 0003. Meta CI green incl. staging-sim; local e2e had 5 flaky specs under host load (b2-archive, b2-bundles, b2-trials, b9-languages, b9-registration, journey; none B4), CI e2e green. 0 bounces.
+
+**B7c** (consultations office, plan 50) merged 2026-10-09: backend#42 → main 6882ec0, dashboard#44 → main 51056d6, meta#57; pointers bumped on master c9721b9. Brought onto post-B4b trunk (union conflicts in test_routes/test_features, routeTree regenerated, no migration clash); targeted re-gates green; full gates green earlier (test 8265, e2e 67+1 flaky). Meta CI green incl. staging-sim, 0 bounces.
