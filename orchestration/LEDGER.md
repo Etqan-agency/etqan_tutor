@@ -78,6 +78,7 @@ In flight: **B7g** · Queue: B4d, B5c, B7d · Next plan number: 62 · Conductor:
 
 | Id | Phase | Kind | Question |
 |---|---|---|---|
+| E4 | B11 | money | Approve a native mobile app for B11 (slices B11c-B11g)? It needs a new private repo Etqan-agency/etqan_tutor_mobile (Expo/React Native), an Apple Developer account, a Google Play developer account and a Firebase project (FCM push) owned by Etqan; store submission stays an owner action. Without it B11 ships the installable web app (desktop + phone home screen, B11a) and web push (B11b), then stops. Spec: docs/superpowers/specs/2026-10-09-b11-apps-design.md §3, B11-3. |
 
 ## Shared decisions
 

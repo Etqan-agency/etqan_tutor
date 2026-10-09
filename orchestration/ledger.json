@@ -1585,6 +1585,14 @@
       "question": "WhatsApp provider for B5c (spec 2026-10-07-b5-communication §3, B5-5): which WhatsApp sending service/account should academies use (e.g. WhatsApp Cloud API / Twilio / a linked-number gateway like TutorHamster's, which also posts to group IDs)? Not blocking: B5c ships a provider interface with an outbox stub that sends nothing; a real provider is a later one-file change once you choose and supply test credentials.",
       "status": "resolved",
       "answer": "Owner (2026-10-07): use the official WhatsApp Cloud API (Meta). Build the B5c provider against the Cloud API; keep the stub as the default until the owner supplies test credentials (phone number id + access token). Note: the Cloud API does not post to WhatsApp groups — group messaging is out unless a later decision adds a gateway."
+    },
+    {
+      "id": "E4",
+      "phase": "B11",
+      "kind": "money",
+      "question": "Approve a native mobile app for B11 (slices B11c-B11g)? It needs a new private repo Etqan-agency/etqan_tutor_mobile (Expo/React Native), an Apple Developer account, a Google Play developer account and a Firebase project (FCM push) owned by Etqan; store submission stays an owner action. Without it B11 ships the installable web app (desktop + phone home screen, B11a) and web push (B11b), then stops. Spec: docs/superpowers/specs/2026-10-09-b11-apps-design.md §3, B11-3.",
+      "status": "open",
+      "answer": null
     }
   ],
   "conductor_session": "4ddff076"
