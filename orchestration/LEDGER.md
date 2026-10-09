@@ -151,7 +151,6 @@ In flight: **B10a** · Queue: B4c, B4b, B7c · Next plan number: 60 · Conductor
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| dashboard/src/locales/en/gateways.json | B7 | B7b final F4: purpose-neutral reference_missing / purpose_refused | 2026-10-09T05:45:34+00:00 |
 | dashboard/src/locales/ar/gateways.json | B7 | B7b final F4: purpose-neutral reference_missing / purpose_refused | 2026-10-09T05:45:34+00:00 |
 
 | Id | From | App | To owner | What | Status |
