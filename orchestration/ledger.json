@@ -609,7 +609,7 @@
     },
     "B7b": {
       "phase": "B7",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [
         "B7a"
       ],
@@ -1509,12 +1509,12 @@
     "B4d",
     "B5c"
   ],
-  "in_flight": "B7b",
+  "in_flight": null,
   "main_heads": {
-    "backend": "6e1b8a9",
-    "dashboard": "86271e5",
-    "marketing": "3d50f3c79e0133eca9dfdd48323bb22a480e2aca",
-    "meta": "156d4cd"
+    "backend": "ffbdecf",
+    "dashboard": "cfcbf04",
+    "marketing": "ccf982a",
+    "meta": "e4fa718"
   },
   "escalations": [
     {
