@@ -153,7 +153,6 @@ In flight: **B10b** · Queue: B7g, B4d, B5c · Next plan number: 62 · Conductor
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| dashboard/src/features/gateways/schemas.ts | B7 | B7d K-6: consultation attention codes | 2026-10-09T17:41:02+00:00 |
 | dashboard/src/locales/en/gateways.json | B7 | B7d K-6: consultation attention codes | 2026-10-09T17:41:02+00:00 |
 | dashboard/src/locales/ar/gateways.json | B7 | B7d K-6: consultation attention codes | 2026-10-09T17:41:02+00:00 |
 

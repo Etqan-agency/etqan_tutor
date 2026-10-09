@@ -693,12 +693,6 @@
   },
   "claims": [
     {
-      "target": "dashboard/src/features/gateways/schemas.ts",
-      "phase": "B7",
-      "reason": "B7d K-6: consultation attention codes",
-      "since": "2026-10-09T17:41:02+00:00"
-    },
-    {
       "target": "dashboard/src/locales/en/gateways.json",
       "phase": "B7",
       "reason": "B7d K-6: consultation attention codes",
