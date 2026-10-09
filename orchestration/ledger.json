@@ -78,7 +78,7 @@
       "branch": "feat/b7g-certificates-codes",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7g",
-      "current_task": "B7g gates held for memory window (after B4b, B10b). B7g built, final review clean, lint PASS; learning diff approved by conductor (D58). B7b, B7c queued; B7d (plan 60) waits for B7b",
+      "current_task": "B7g gates: trunk merged (be 7c7fe53, da 8cb0152, meta 1fae541), fresh stack up; running test, coverage, e2e",
       "session": "d8dae730"
     },
     "B8": {
