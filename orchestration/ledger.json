@@ -75,10 +75,10 @@
       ],
       "slot": 2,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b7",
-      "branch": "feat/b7b-recorded-store",
+      "branch": "feat/b7g-certificates-codes",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
-      "current_slice": "B7b",
-      "current_task": "B7b built, final review clean (fix wave done); trunk merged (be dd7aaf9, da cea5c81, mk 6e41d36, meta 24ab705 on master 00c4aec); images rebuilt. Waiting for the conductor's memory window to run full just test + just e2e, then PRs/queue. Plan 60 (B7d) written (995aef1), requires B7c,B7b",
+      "current_slice": "B7g",
+      "current_task": "B7g build started (Plan 59) while B7b waits for its gate window (B7b heads be dd7aaf9 da cea5c81 mk 6e41d36 meta 24ab705); B7c queued",
       "session": "5e75f8ee"
     },
     "B8": {
