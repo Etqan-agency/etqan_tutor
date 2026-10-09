@@ -78,7 +78,7 @@
       "branch": "feat/b7d-consultation-booking",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7d",
-      "current_task": "B7d (plan 60) starting code-only off trunk be ffbdecf/da cfcbf04/mk ccf982a/meta e4fa718; stack stopped per conductor; B7g queued",
+      "current_task": "B7d build: T1-T5 done and reviewed, trunk integrations-3 merged (be 85971f0 pushed); T6 in progress; partial stack (pg+redis); B7g queued",
       "session": "c405df7d"
     },
     "B8": {
