@@ -78,7 +78,7 @@
       "branch": "feat/b7g-certificates-codes",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7g",
-      "current_task": "B7c in flight; B7b, B7g queued; B7d waits for B7b (stack stopped, volumes kept)",
+      "current_task": "B7c merged (be 6882ec0, da 51056d6, master c9721b9). B7b, B7g queued; B7d (plan 60) starts code-only once B7b merges; stack down",
       "session": "d8dae730"
     },
     "B8": {
