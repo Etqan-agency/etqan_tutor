@@ -151,6 +151,7 @@ In flight: **B4c** · Queue: B4b, B7c, B5d · Next plan number: 61 · Conductor:
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
+| integrations | B5 | B5c WhatsApp provider + send path (D60), Plan 57 Task 1 | 2026-10-09T08:14:30+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
