@@ -670,7 +670,7 @@
     },
     "B7g": {
       "phase": "B7",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [
         "B7a"
       ],
@@ -1518,12 +1518,11 @@
     }
   ],
   "queue": [
-    "B7g",
     "B4d",
     "B5c",
     "B7d"
   ],
-  "in_flight": null,
+  "in_flight": "B7g",
   "main_heads": {
     "backend": "e475b76",
     "dashboard": "ee1cc6b",
