@@ -36,7 +36,7 @@
       "branch": "feat/b4b-incentives-reports",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4b",
-      "current_task": "B4b in flight: trunk (B4c) merged into be/da, payroll migration regenerated as 0004; targeted tests running, then gates in conductor's window",
+      "current_task": "B4b PRs open (be#47 da#49 meta#63) on trunk be 7c7fe53/da 8cb0152/meta 1fae541; fresh stack: e2e 66 + 5 flaky + b2-archive timeout (passes alone), test 0 (8549, 98.5%), lint 0; B4d next",
       "session": "ae268de2"
     },
     "B5": {
