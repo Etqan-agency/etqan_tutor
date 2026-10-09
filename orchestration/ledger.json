@@ -26,7 +26,7 @@
     },
     "B4": {
       "title": "Payroll depth",
-      "status": "waiting-deps",
+      "status": "build",
       "requires": [
         "B2",
         "B3"
@@ -36,7 +36,7 @@
       "branch": "feat/b4d-salary-projections",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4d",
-      "current_task": "B4d code-complete (be 4cde579, da 0698ee6, pushed); stack stopped; waiting for conductor's gates window (fresh stack: test, lint, e2e), then PRs + queue",
+      "current_task": "B4d gates window: fresh stack up, migrated+seeded; running just test, lint, e2e",
       "session": "c0892bad"
     },
     "B5": {
