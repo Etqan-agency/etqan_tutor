@@ -151,7 +151,6 @@ In flight: **B4c** · Queue: B4b, B7c · Next plan number: 61 · Conductor: 4ddf
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| etqan.vouchers | B7 | R9 redeemer registry (D56), slice B7g | 2026-10-09T07:28:56+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
