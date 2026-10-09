@@ -79,7 +79,7 @@
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7g",
       "current_task": "B7g gates held for memory window (after B4b, B10b). B7g built, final review clean, lint PASS; learning diff approved by conductor (D58). B7b, B7c queued; B7d (plan 60) waits for B7b",
-      "session": "5e75f8ee"
+      "session": "d8dae730"
     },
     "B8": {
       "title": "Marketing extras",
