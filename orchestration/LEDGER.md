@@ -157,7 +157,6 @@ In flight: **B7g** · Queue: B4d, B5c, B7d · Next plan number: 63 · Conductor:
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| site | B11 | B11a Task 1: additive read service site.services.branding_snapshot (one commit; conductor-approved) | 2026-10-09T19:46:29+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
