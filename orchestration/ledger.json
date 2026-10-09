@@ -690,7 +690,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "backend/etqan/site/throttling.py",
+      "phase": "B7",
+      "reason": "B7b D65/PF32: internal exemption on site public throttles",
+      "since": "2026-10-09T05:06:20+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
