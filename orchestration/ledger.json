@@ -697,6 +697,12 @@
       "phase": "B7",
       "reason": "B7g final fixes M1/M4: recorded code redeem link and empty-family text",
       "since": "2026-10-09T09:24:37+00:00"
+    },
+    {
+      "target": "dashboard/src/features/vouchers/RedeemCodePage.test.tsx",
+      "phase": "B7",
+      "reason": "B7g final fixes M1/M4: recorded code redeem link and empty-family text",
+      "since": "2026-10-09T09:24:38+00:00"
     }
   ],
   "shared_decisions": [
