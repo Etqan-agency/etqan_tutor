@@ -36,7 +36,7 @@
       "branch": "feat/b4d-salary-projections",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4d",
-      "current_task": "B4d building (plan 55): T1, T2 done+reviewed; T3 in progress; subset stack (pg/redis/django) for one-file tests",
+      "current_task": "B4d (plan 55): T1-T6 done+reviewed (be 68cd2e3, da cf552f1); T7 e2e spec writing; then final review; gates need a window",
       "session": "c0892bad"
     },
     "B5": {
