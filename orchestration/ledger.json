@@ -693,12 +693,6 @@
   },
   "claims": [
     {
-      "target": "marketing/src/lib/i18n.ts",
-      "phase": "B7",
-      "reason": "B7d K-14: consultation link/strings/sitemap",
-      "since": "2026-10-09T17:43:46+00:00"
-    },
-    {
       "target": "marketing/src/components/Header.astro",
       "phase": "B7",
       "reason": "B7d K-14: consultation link/strings/sitemap",
