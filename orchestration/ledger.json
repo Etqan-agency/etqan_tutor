@@ -693,12 +693,6 @@
   },
   "claims": [
     {
-      "target": "dashboard/src/features/certificates",
-      "phase": "B7",
-      "reason": "R8 print page (D58)",
-      "since": "2026-10-09T09:02:05+00:00"
-    },
-    {
       "target": "dashboard/src/locales/en/certificates.json",
       "phase": "B7",
       "reason": "R8 print page (D58)",
