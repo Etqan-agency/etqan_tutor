@@ -569,7 +569,7 @@
       "plan_number": 54,
       "spec": "docs/superpowers/specs/2026-10-08-b4b-incentives-reports-fixed-design.md",
       "plan": "docs/superpowers/plans/2026-10-08-plan-54-incentives-reports-fixed.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/47 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/49 https://github.com/Etqan-agency/etqan_tutor/pull/63",
       "bounces": 0
     },
     "B4c": {
