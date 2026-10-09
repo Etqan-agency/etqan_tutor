@@ -662,7 +662,7 @@
         "B7c",
         " B7d"
       ],
-      "plan_number": null,
+      "plan_number": 61,
       "spec": "docs/superpowers/specs/2026-10-08-b7f-consultation-reports-design.md",
       "plan": null,
       "prs": null,
@@ -681,7 +681,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 61,
+  "next_plan_number": 62,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
