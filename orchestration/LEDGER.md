@@ -153,7 +153,6 @@ In flight: **B10b** · Queue: B7g, B4d, B5c · Next plan number: 62 · Conductor
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| backend/etqan/access/tests/test_routes.py | B7 | B7d: SELF_SERVICE lines for the family consultation routes | 2026-10-09T17:24:38+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
