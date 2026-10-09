@@ -483,7 +483,7 @@
       "plan_number": 57,
       "spec": "docs/superpowers/specs/2026-10-08-b5c-whatsapp-design.md",
       "plan": "docs/superpowers/plans/2026-10-08-plan-57-whatsapp.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/52 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/54 https://github.com/Etqan-agency/etqan_tutor/pull/68",
       "bounces": 0
     },
     "B5d": {
