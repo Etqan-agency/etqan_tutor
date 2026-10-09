@@ -152,6 +152,7 @@ In flight: **B10a** · Queue: B4c, B4b, B7c · Next plan number: 60 · Conductor
 | Target | Phase | Reason | Since |
 |---|---|---|---|
 | marketing/src/lib/i18n.ts | B7 | B7b S-10: recorded-course strings, header link, sitemap, B8 test fixes (PF24/PF25) | 2026-10-09T05:26:30+00:00 |
+| marketing/src/components/Header.astro | B7 | B7b S-10: recorded-course strings, header link, sitemap, B8 test fixes (PF24/PF25) | 2026-10-09T05:26:30+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
