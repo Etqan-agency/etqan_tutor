@@ -534,7 +534,7 @@
     },
     "B10b": {
       "phase": "B10",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [
         "B10a",
         "B6c",
@@ -1523,12 +1523,12 @@
     "B5c",
     "B7d"
   ],
-  "in_flight": "B10b",
+  "in_flight": null,
   "main_heads": {
-    "backend": "ffbdecf",
-    "dashboard": "cfcbf04",
+    "backend": "e475b76",
+    "dashboard": "ee1cc6b",
     "marketing": "ccf982a",
-    "meta": "e4fa718"
+    "meta": "f0915f7"
   },
   "escalations": [
     {
