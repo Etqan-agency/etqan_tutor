@@ -691,14 +691,7 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [
-    {
-      "target": "dashboard/src/routes/permissions.test.ts",
-      "phase": "B7",
-      "reason": "B7d K-13 consultations nav/permissions",
-      "since": "2026-10-09T17:33:51+00:00"
-    }
-  ],
+  "claims": [],
   "shared_decisions": [
     {
       "id": "D1",
