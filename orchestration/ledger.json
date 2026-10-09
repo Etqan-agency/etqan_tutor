@@ -633,7 +633,8 @@
       "phase": "B7",
       "status": "spec",
       "requires": [
-        "B7c"
+        "B7c",
+        "B7b"
       ],
       "plan_number": 60,
       "spec": "docs/superpowers/specs/2026-10-08-b7d-consultation-booking-design.md",
