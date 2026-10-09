@@ -153,7 +153,6 @@ In flight: **B10b** · Queue: B7g, B4d, B5c · Next plan number: 62 · Conductor
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| dashboard/src/features/gateways/ReturnPage.tsx | B7 | B7d K-15: consultation branch | 2026-10-09T17:41:15+00:00 |
 | dashboard/src/features/gateways/ReturnPage.test.tsx | B7 | B7d K-15: consultation branch | 2026-10-09T17:41:15+00:00 |
 
 | Id | From | App | To owner | What | Status |
