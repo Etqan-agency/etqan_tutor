@@ -470,7 +470,7 @@
       "plan_number": 43,
       "spec": "docs/superpowers/specs/2026-10-07-b5b-broadcasts-design.md",
       "plan": "docs/superpowers/plans/2026-10-07-plan-43-broadcasts.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/40 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/42 https://github.com/Etqan-agency/etqan_tutor/pull/55",
       "bounces": 0
     },
     "B5c": {
