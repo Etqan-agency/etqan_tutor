@@ -155,6 +155,7 @@ In flight: **B10b** · Queue: B7g, B4d, B5c · Next plan number: 62 · Conductor
 |---|---|---|---|
 | marketing/src/lib/i18n.ts | B7 | B7d K-14: consultation link/strings/sitemap | 2026-10-09T17:43:46+00:00 |
 | marketing/src/components/Header.astro | B7 | B7d K-14: consultation link/strings/sitemap | 2026-10-09T17:43:47+00:00 |
+| marketing/src/pages/sitemap.xml.ts | B7 | B7d K-14: consultation link/strings/sitemap | 2026-10-09T17:43:47+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
