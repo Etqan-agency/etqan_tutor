@@ -78,7 +78,7 @@
       "branch": "feat/b7g-certificates-codes",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7g",
-      "current_task": "B7g gates: trunk merged (be 7c7fe53, da 8cb0152, meta 1fae541), fresh stack up; running test, coverage, e2e",
+      "current_task": "B7c on trunk be d553e3e/da 762d74c/meta ec96332 (pushed be c66cdec, da d5c0e94, meta d5f0763); B7g test PASS on old trunk, its e2e still to run",
       "session": "d8dae730"
     },
     "B8": {
