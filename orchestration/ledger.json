@@ -534,7 +534,7 @@
     },
     "B10b": {
       "phase": "B10",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [
         "B10a",
         "B6c",
@@ -1504,12 +1504,11 @@
     }
   ],
   "queue": [
-    "B10b",
     "B7g",
     "B4d",
     "B5c"
   ],
-  "in_flight": null,
+  "in_flight": "B10b",
   "main_heads": {
     "backend": "ffbdecf",
     "dashboard": "cfcbf04",
