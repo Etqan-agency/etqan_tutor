@@ -697,6 +697,12 @@
       "phase": "B7",
       "reason": "B7d K-15: consultation branch",
       "since": "2026-10-09T17:41:15+00:00"
+    },
+    {
+      "target": "dashboard/src/features/gateways/ReturnPage.test.tsx",
+      "phase": "B7",
+      "reason": "B7d K-15: consultation branch",
+      "since": "2026-10-09T17:41:15+00:00"
     }
   ],
   "shared_decisions": [
