@@ -78,7 +78,7 @@
       "branch": "feat/b7b-recorded-store",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7b",
-      "current_task": "B7b build: Tasks 1-12 done and reviewed (backend + dashboard); Tasks 13-14 marketing in progress; then e2e (15) and gates. B7c queued",
+      "current_task": "B7b built + final review clean after one fix wave (be f486a7d, da 4de13e5, mk 6e41d36; not pushed). Gates: lint+secrets PASS (47), dashboard vitest 2970 PASS 95.73/91.53/85.43, backend pytest exit 0 (counts lost: shell killed by host memory), targeted e2e b7-recorded-store PASS. Holding the full e2e + just test rerun for the conductor's memory window; stack stopped",
       "session": "5e75f8ee"
     },
     "B8": {
