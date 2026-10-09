@@ -153,6 +153,7 @@ In flight: **B10b** · Queue: B7g, B4d, B5c · Next plan number: 62 · Conductor
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
+| backend/config/settings/base.py | B7 | B7d K-7: beat entry consultations.cancel_unpaid | 2026-10-09T17:11:36+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|

@@ -691,7 +691,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "backend/config/settings/base.py",
+      "phase": "B7",
+      "reason": "B7d K-7: beat entry consultations.cancel_unpaid",
+      "since": "2026-10-09T17:11:36+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
