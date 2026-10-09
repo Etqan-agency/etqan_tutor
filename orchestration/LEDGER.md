@@ -152,6 +152,7 @@ In flight: **B10a** · Queue: B4c, B4b, B7c · Next plan number: 60 · Conductor
 | Target | Phase | Reason | Since |
 |---|---|---|---|
 | backend/config/settings/base.py | B7 | B7b final F1: gate X-Etqan-Internal on TRUST_INTERNAL_HEADER | 2026-10-09T05:40:20+00:00 |
+| backend/etqan/platform/throttling.py | B7 | B7b final F1: gate X-Etqan-Internal on TRUST_INTERNAL_HEADER | 2026-10-09T05:40:20+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
