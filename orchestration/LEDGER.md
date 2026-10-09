@@ -70,7 +70,7 @@ In flight: **B7c** · Queue: B5d, B7b, B10b · Next plan number: 61 · Conductor
 | B7d | B7 | spec | 60 | B7c, B7b |  | 0 |
 | B7e | B7 | plan | 52 | B7a,  B7b |  | 0 |
 | B7f | B7 | spec |  | B7c,  B7d |  | 0 |
-| B7g | B7 | plan | 59 | B7a |  | 0 |
+| B7g | B7 | plan | 59 | B7a | https://github.com/Etqan-agency/etqan_tutor_backend/pull/49 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/51 https://github.com/Etqan-agency/etqan_tutor/pull/65 | 0 |
 
 ## Open escalations
 
