@@ -151,7 +151,6 @@ In flight: **B10a** · Queue: B4c, B4b, B7c · Next plan number: 60 · Conductor
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| marketing/test/articles.test.ts | B7 | PF25: scope sitemap no-call assertion | 2026-10-09T05:27:12+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|

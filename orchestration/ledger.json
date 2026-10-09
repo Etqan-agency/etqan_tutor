@@ -690,14 +690,7 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [
-    {
-      "target": "marketing/test/articles.test.ts",
-      "phase": "B7",
-      "reason": "PF25: scope sitemap no-call assertion",
-      "since": "2026-10-09T05:27:12+00:00"
-    }
-  ],
+  "claims": [],
   "shared_decisions": [
     {
       "id": "D1",
