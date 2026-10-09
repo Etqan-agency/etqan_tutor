@@ -151,7 +151,6 @@ In flight: **B10a** · Queue: B4c, B4b, B7c · Next plan number: 60 · Conductor
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| dashboard/src/locales/ar/gateways.json | B7 | B7b S-8/S-11: recorded_course return branch + attention codes | 2026-10-09T05:22:54+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
