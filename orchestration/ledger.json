@@ -77,8 +77,8 @@
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b7",
       "branch": "feat/b7g-certificates-codes",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
-      "current_slice": "B7g",
-      "current_task": "B7f plan 61 written (meta feat/b7f-consultation-reports 4145b65). B7b, B7g queued; B7d (plan 60) starts once B7b merges, then B7f; stack down",
+      "current_slice": "B7b",
+      "current_task": "B7b in flight: on trunk be 6e1b8a9/da 86271e5/meta 156d4cd, pushed (be b6f8648, da b022327, meta 553f916); CI is the gate. B7g queued; B7d next after B7b",
       "session": "d8dae730"
     },
     "B8": {
