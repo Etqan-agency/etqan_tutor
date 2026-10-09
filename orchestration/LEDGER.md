@@ -155,6 +155,7 @@ In flight: **B10b** · Queue: B7g, B4d, B5c · Next plan number: 62 · Conductor
 |---|---|---|---|
 | dashboard/src/features/shell/nav.ts | B7 | B7d K-13 consultations nav/permissions | 2026-10-09T17:33:51+00:00 |
 | dashboard/src/features/shell/nav.test.ts | B7 | B7d K-13 consultations nav/permissions | 2026-10-09T17:33:51+00:00 |
+| dashboard/src/routes/permissions.test.ts | B7 | B7d K-13 consultations nav/permissions | 2026-10-09T17:33:51+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
