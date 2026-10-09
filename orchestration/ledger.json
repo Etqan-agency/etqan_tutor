@@ -691,7 +691,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "backend/pyproject.toml",
+      "phase": "B7",
+      "reason": "B7d: consultations may import gateways.services; gateways never imports etqan.consultations (phase spec §4, D53)",
+      "since": "2026-10-09T17:02:17+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
