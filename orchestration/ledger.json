@@ -41,7 +41,7 @@
     },
     "B5": {
       "title": "Communication",
-      "status": "waiting-deps",
+      "status": "build",
       "requires": [
         "B2"
       ],
@@ -49,8 +49,8 @@
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b5",
       "branch": "feat/b5b-broadcasts",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
-      "current_slice": "B5b",
-      "current_task": "B5b PRs open (be#40 da#42 meta#55), gates green on ce4ff95 (test 8004/98.5%, vitest 2917/95.7%, e2e 67, lint+secrets); awaiting conductor merge; B5f queued",
+      "current_slice": "B5f",
+      "current_task": "B5f merged origin/main + master 5350995 (be 734faa6, da 0b45b85, meta 07df5fb); fresh stack + gates running",
       "session": "5d4e6f0b"
     },
     "B6": {
