@@ -50,7 +50,7 @@
       "branch": "feat/b5c-whatsapp",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "current_slice": "B5c",
-      "current_task": "B5c rebased on B5d trunks (be c2eda35, da 01b4c83); 0006_whatsapp regenerated; in-app-only types never on WhatsApp (ruling). just test green (9097, 98.5%); e2e running; then dashboard coverage, lint, PRs, queue.",
+      "current_task": "B5c queued (be#52 da#54 meta#68; be c2eda35, da 01b4c83, meta 58ac99d on trunk 156d4cd). Gates green: test 9097/98.5%, vitest 3199/95.73%, e2e 75/75, lint+secrets. Stack stopped. Last B5 slice.",
       "session": "b31e57af"
     },
     "B6": {
