@@ -19,9 +19,9 @@ is designed from the audits, unobserved behaviour marked `[assumed]`.
 
 ## Next
 
-Phases run in parallel on slots 1–4: B4 payroll depth (1), B7 add-on sales (2), B10 AI (3),
+Phases run in parallel on slots 1–4: B4 payroll depth (1), B7 add-on sales (2), B11 apps (3),
 B5 communication (4). Complete: B2 scheduling depth, B3 money depth, B6 learning, B8 marketing
-extras, B9 platform extras; integrations slices 1–2 are merged; B10a, B4c and B4b merged. B11 apps waits for B4 and B5. Details in
+extras, B9 platform extras, B10 AI; integrations slices 1–2 are merged; B10a, B4c and B4b merged. Details in
 the ledger and `orchestration/MERGES.md`. Restart a session with `bash
 scripts/orchestration/start-session.sh <CODE|conductor>` or from `just orchestra`.
 Each phase adds lines to shared lists only under its own `── phase Bn ──` marker, registers every new
@@ -42,9 +42,18 @@ admin. Slice 2 is built: `etqan.etqan_billing` (public schema) meters use of Etq
 `AcademyPricing` overrides and allowances, `ConnectFee`), drafts invoices on the 1st at 03:00 UTC,
 issues them after 24 hours and emails the PDF to the academy's admins; Settings → Etqan billing
 (admins), the overdue banner, the platform admin (prices, terms, Connect fee, usage, invoices) and
-the "suspend Etqan's defaults" switch (from 30 days unpaid). Next: B5c meters WhatsApp
-conversations, B2/B10 Zoom minutes and AI tokens through `record_usage`; the B3 follow-up reads
-`connect_fee()` and records `record_collected_fee`.
+the "suspend Etqan's defaults" switch (from 30 days unpaid). Slice 3 is built: Zoom Server-to-Server meetings on the resolver (an academy's own app, or Etqan's
+under a free host from its pool, `HostBooking`; `zoom_api` built), a Jitsi room when none resolves
+or no host is free, the teacher's fresh host link (`sessions/<id>/host-link/`), `scheduling.provision_meetings` every 5 minutes
+(one meeting per class, never replacing a typed link), Zoom minutes metered on `meeting.ended` to
+Etqan's app; Stripe Connect as the payments default (Express onboarding from Settings →
+Integrations, `application_fee` from `connect_fee()`, `record_collected_fee` on
+`application_fee.created`), B3's own keys first; Etqan's webhooks at `/api/v1/webhooks/zoom/`
+and `/api/v1/webhooks/stripe-connect/` on the base domain. Go-live needs the owner's Zoom
+Server-to-Server app and Stripe platform keys in the platform admin (see the slice 3 plan's
+"Owner actions"); check the `CONNECT_COUNTRIES` list against Stripe's current Express-supported
+countries before go-live; the Zoom app needs the meeting-read permission for host links. B10a meters AI tokens. Next: B5c meters WhatsApp
+conversations through `record_usage`.
 
 Deploy note (slice 1):
 - Email is now queued as `integrations.send_email`. Restart the Celery workers (`celery_worker`,
@@ -69,6 +78,27 @@ Deploy note (integrations slice 2):
   or void the drafts within their 24 hours, before they are issued and emailed.
 - The first run is on the 1st at 03:00 UTC: drafts for every academy that used Etqan's defaults
   the month before (nearly all of them, through email), issued and emailed 24 hours later.
+
+Deploy note (integrations slice 3):
+- Run `migrate_schemas` before the new web and worker code takes traffic: public
+  `integrations` 0003 (`WebhookRoute`) and 0004 (`HostBooking`); every academy `scheduling` 0014
+  (`meeting_provider`, `meeting_ref`) and `gateways` 0004 (Connect checkouts). All additive.
+- Restart `celery_worker` and `celery_beat`: the new task `scheduling.provision_meetings` and its
+  beat entry (every 5 minutes). An old worker drops it as an unregistered task.
+- Configure Zoom in the platform admin (video): a Server-to-Server OAuth app with the
+  `meeting:read` and `meeting:write` (create) scopes; the pool's licensed host users
+  (`host_users`); its Secret Token as the webhook secret, and the app's End Meeting event
+  subscription pointed at `/api/v1/webhooks/zoom/` on the base domain.
+- Configure Stripe in the platform admin (payments): Connect with Express accounts; two webhook
+  endpoints (Connected accounts, and Your account for `application_fee.created`), both at
+  `/api/v1/webhooks/stripe-connect/` on the base domain; paste the secret key and both `whsec_`
+  signing secrets. Start in test mode (`sk_test_`) and switch to live keys only after a test
+  payment works end to end (Connect fee events from the other mode are ignored).
+- Check `CONNECT_COUNTRIES` (`integrations/services/onboarding.py`) against Stripe's current list of
+  Express-supported countries and against what Etqan's own Stripe account country allows
+  (cross-border Express is region-limited).
+- `JITSI_BASE_URL` is optional (default `https://meet.jit.si`, whose rooms ask the first person to
+  sign in).
 
 ## Follow-ups (from Plans 4–9)
 
