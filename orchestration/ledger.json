@@ -1455,6 +1455,16 @@
         "B11"
       ],
       "source": "owner"
+    },
+    {
+      "id": "D68",
+      "phase": "B11",
+      "decision": "Narrow exception to D39: etqan.devices (B11, new app) alone may import etqan.notifications.services, read-only, to push each new in-app Notification row (title/body as rendered) to the recipient's devices on its own beat job (B11b). notifications never imports devices; D39's pull-based finders are unchanged. B11b files R-B11b-1 for notifications.services.created_after(*, after_id, limit) -> list[PushNote(id, recipient_id, title, body, created_at)] and latest_id(). Web push VAPID keys are env settings (no outside account, unmetered); native FCM push goes through integrations.resolve('push'), Etqan default only (B11c).",
+      "affects": [
+        "B5",
+        "conductor"
+      ],
+      "source": "spec 2026-10-09-b11-apps B11-6, B11-7"
     }
   ],
   "requests": [
