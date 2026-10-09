@@ -691,7 +691,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "etqan.vouchers",
+      "phase": "B7",
+      "reason": "R9 redeemer registry (D56), slice B7g",
+      "since": "2026-10-09T07:28:56+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
