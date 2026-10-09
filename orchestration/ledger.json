@@ -78,7 +78,7 @@
       "branch": "feat/b7g-certificates-codes",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7g",
-      "current_task": "B7g build started (Plan 59) while B7b waits for its gate window (B7b heads be dd7aaf9 da cea5c81 mk 6e41d36 meta 24ab705); B7c queued",
+      "current_task": "B7b queued (be dd7aaf9 da cea5c81 mk 6e41d36 meta 24ab705): test 8376/98.49%, lint+secrets, vitest 2970, local e2e cut by host memory after 14 specs (no fails) — CI is the e2e gate. B7g build: Tasks 1–5 done (R9 vouchers, R8 learning; claims released), resuming at Task 6. B7c queued",
       "session": "5e75f8ee"
     },
     "B8": {
