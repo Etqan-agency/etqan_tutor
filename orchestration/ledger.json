@@ -635,7 +635,7 @@
       "requires": [
         "B7c"
       ],
-      "plan_number": null,
+      "plan_number": 60,
       "spec": "docs/superpowers/specs/2026-10-08-b7d-consultation-booking-design.md",
       "plan": null,
       "prs": null,
@@ -680,7 +680,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 60,
+  "next_plan_number": 61,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
