@@ -690,7 +690,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "backend/etqan/platform/throttling.py",
+      "phase": "B7",
+      "reason": "B7b D65: is_internal_request + PublicScopedRateThrottle",
+      "since": "2026-10-09T05:05:33+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
