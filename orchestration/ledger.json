@@ -69,7 +69,7 @@
     },
     "B7": {
       "title": "Add-on sales",
-      "status": "waiting-deps",
+      "status": "build",
       "requires": [
         "B3"
       ],
@@ -78,7 +78,7 @@
       "branch": "feat/b7g-certificates-codes",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7g",
-      "current_task": "Stack stopped (volumes kept) for B4d's window. B7c in flight (be#42 da#44 meta#57); B7g, B7b queued; B7d (plan 60) starts code-only once B7b merges",
+      "current_task": "B7c in flight; B7b, B7g queued; B7d waits for B7b (stack stopped, volumes kept)",
       "session": "d8dae730"
     },
     "B8": {
