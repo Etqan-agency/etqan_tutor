@@ -121,7 +121,7 @@
     },
     "B11": {
       "title": "Apps",
-      "status": "spec",
+      "status": "plan",
       "requires": [
         "B2",
         "B3",
@@ -131,9 +131,9 @@
       "slot": 3,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b11",
       "branch": "feat/b11a-scope",
-      "spec": null,
-      "current_slice": null,
-      "current_task": "phase spec + B11a spec drafted; spec review running",
+      "spec": "docs/superpowers/specs/2026-10-09-b11-apps-design.md",
+      "current_slice": "B11a",
+      "current_task": "spec self-approved after review (2C/7I/8M fixed); planning B11a",
       "session": "9e6e76f0"
     }
   },
