@@ -113,10 +113,10 @@
       ],
       "slot": 3,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b10",
-      "branch": "feat/b10a-ai-drafts",
+      "branch": "feat/b10a-ai-drafts-r2",
       "spec": "docs/superpowers/specs/2026-10-08-b10-ai-design.md",
       "current_slice": "B10a",
-      "current_task": "B10a in flight: rebased on backend d6d0739 / dashboard 405aaf4 / master 33b41fc (test_routes conflict with B7a resolved, both kept); gates rerunning",
+      "current_task": "B10a in flight: rebased on d6d0739/405aaf4/33b41fc, PRs reopened on -r2; gates green except b5-broadcasts e2e (trunk selector clash, not B10a)",
       "session": "d923ac07"
     },
     "B11": {
