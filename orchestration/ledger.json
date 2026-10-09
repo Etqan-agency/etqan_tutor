@@ -78,7 +78,7 @@
       "branch": "feat/b7g-certificates-codes",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7g",
-      "current_task": "Writing B7f plan 61 (plan-only; B7f needs B7d). B7b, B7g queued; B7d (plan 60) starts once B7b merges; stack down",
+      "current_task": "B7f plan 61 written (meta feat/b7f-consultation-reports 4145b65). B7b, B7g queued; B7d (plan 60) starts once B7b merges, then B7f; stack down",
       "session": "d8dae730"
     },
     "B8": {
