@@ -33,10 +33,10 @@
       ],
       "slot": 1,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b4",
-      "branch": "feat/b4b-incentives-reports",
+      "branch": "feat/b4d-salary-projections",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
-      "current_slice": "B4b",
-      "current_task": "B4b PRs open (be#47 da#49 meta#63) on trunk be 7c7fe53/da 8cb0152/meta 1fae541; fresh stack: e2e 66 + 5 flaky + b2-archive timeout (passes alone), test 0 (8549, 98.5%), lint 0; B4d next",
+      "current_slice": "B4d",
+      "current_task": "B4d branches cut off be d553e3e/da 762d74c/meta ec96332; stack stopped (no memory window); building plan 55 code-only",
       "session": "c0892bad"
     },
     "B5": {
