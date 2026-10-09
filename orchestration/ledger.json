@@ -26,7 +26,7 @@
     },
     "B4": {
       "title": "Payroll depth",
-      "status": "build",
+      "status": "queued",
       "requires": [
         "B2",
         "B3"
@@ -36,7 +36,7 @@
       "branch": "feat/b4b-incentives-reports",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4b",
-      "current_task": "B4c queued; B4b (Plan 54) built, final review + fix wave clean, pushed; gates running on fresh stack",
+      "current_task": "B4c and B4b queued (B4b be 7e8b634 / da 8b7d79c pushed; gates fresh stack: e2e 67/67, test 0 (8043 be), lint+secrets 0). Merge checklist: whichever of B4b/B4c merges second regenerates its payroll 0003 as 0004, merges BUILT/models/payloads/CSV/fixtures",
       "session": "1862018a"
     },
     "B5": {
