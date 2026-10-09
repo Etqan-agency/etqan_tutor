@@ -691,7 +691,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "dashboard/src/features/certificates",
+      "phase": "B7",
+      "reason": "R8 print page (D58)",
+      "since": "2026-10-09T09:02:05+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
