@@ -691,14 +691,7 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [
-    {
-      "target": "integrations",
-      "phase": "B5",
-      "reason": "B5c dashboard WhatsApp account form (D60), Plan 57 Task 5",
-      "since": "2026-10-09T08:50:41+00:00"
-    }
-  ],
+  "claims": [],
   "shared_decisions": [
     {
       "id": "D1",

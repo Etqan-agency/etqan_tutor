@@ -151,7 +151,6 @@ In flight: **B4b** · Queue: B7c, B5d, B7b · Next plan number: 61 · Conductor:
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| integrations | B5 | B5c dashboard WhatsApp account form (D60), Plan 57 Task 5 | 2026-10-09T08:50:41+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
