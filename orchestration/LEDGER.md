@@ -16,7 +16,7 @@ In flight: **B4b** · Queue: B7c, B5d, B7b, B10b · Next plan number: 61 · Cond
 | B7 | Add-on sales | build | 2 | B7g | B7g gates held for memory window (after B4b, B10b). B7g built, final review clean, lint PASS; learning diff approved by conductor (D58). B7b, B7c queued; B7d (plan 60) waits for B7b | B3 | docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md | 5e75f8ee |
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
-| B10 | AI | build | 3 | B10b | B10b rebased on be 7c7fe53/da 8cb0152/meta 1fae541; gates window open: dev-backend, test, e2e | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | a61cece4 |
+| B10 | AI | build | 3 | B10b | B10b PRs open on trunk be 7c7fe53/da 8cb0152/meta 1fae541; fresh stack: test 0 (8542, 98.5%), lint 0, e2e 72/72; queued; last B10 slice | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | a61cece4 |
 | B11 | Apps | waiting-deps |  |  |  | B2, B3, B4, B5 |  |  |
 
 ## Slices
