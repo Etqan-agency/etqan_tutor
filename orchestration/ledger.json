@@ -693,12 +693,6 @@
   },
   "claims": [
     {
-      "target": "backend/etqan/access/registry.py",
-      "phase": "B7",
-      "reason": "B7d K-16: resource consultation_review",
-      "since": "2026-10-09T17:27:44+00:00"
-    },
-    {
       "target": "backend/etqan/access/tests/test_routes.py",
       "phase": "B7",
       "reason": "B7d: ROUTES and FEATURES lines for consultation reviews",
