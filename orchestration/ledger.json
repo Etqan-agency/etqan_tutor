@@ -690,7 +690,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "dashboard/src/locales/en/gateways.json",
+      "phase": "B7",
+      "reason": "B7b final F4: purpose-neutral reference_missing / purpose_refused",
+      "since": "2026-10-09T05:45:34+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
