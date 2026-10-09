@@ -33,7 +33,24 @@ playlist when redeemed, which is TutorHamster's "activation code" way of paying.
 
 B7g adds no column to `etqan.recorded`: certificate state is learning's (G-4) and code state is vouchers' (G-5).
 
-## 4. Requests (filed in the ledger with this spec; the owners decide the exact shape)
+## 4. Requests, now delegated to B7
+
+Both requests were delegated back to B7 to build in this slice:
+
+- **R8** (ledger D58, by B6). Build only after B6d merges (it has). Work under a ledger claim on
+  `etqan.learning`, in learning's own migration after `0004_certificates`. `verify()` falls back to
+  `SubjectCertificate` when no `Certificate` has the code; it answers the same T-8 fields and gives the
+  student name only while the certificate is valid. The printable page is extended additively.
+  `Certificate` is untouched. B6's office certificate routes never list or edit these rows.
+  `certificates_of` (D33) does **not** list them: B7 reports its own. Release the claim when merged, then
+  ask the learning owner (the conductor) to review the learning diff.
+- **R9** (ledger D56, by the conductor). Work under a ledger claim on `etqan.vouchers`, additive only. The
+  existing voucher kinds must keep working unchanged, and tests must prove it. Release the claim right
+  after.
+
+The original request text follows for reference.
+
+## 4a. Original requests
 
 - **R-B7g-1 → B6 (learning). A separate certificate table, leaving `Certificate` untouched.** A nullable
   `Certificate.course` would break `course_ref` in the serializers, `verify()`, the lists and forms, and
@@ -76,3 +93,17 @@ B7g adds no column to `etqan.recorded`: certificate state is learning's (G-4) an
   playlist with batches cannot be deleted.
 - **e2e:** the demo student watches the last video of a certificate playlist and opens the certificate. A
   generated code enrols another student.
+
+## 6. Rulings from planning (plan 59)
+
+- **G-3 wording.** Students reach a recorded-course certificate from the course player link and the print
+  page. B6's certificate list does not show it, because `certificates_of` excludes subject certificates
+  (D58).
+- **`CertificateRef`** is `(id, code, issued_on, revoked)`, which G-4 needs.
+- **Subject names.** A playlist has one title (B7a A-3), so `subject_en` and `subject_ar` are both set
+  to it.
+- **G-6 status.** A playlist code while `recorded_courses` is off reuses B3f's existing
+  `vouchers.unavailable` error, at whatever status B3f gives it.
+- **Concurrency.** The completion race is guarded by the enrolment row lock. It is tested with
+  captured-SQL lock order plus an idempotent second issue, not a true two-transaction test:
+  `transaction=True` leaks rows under django-tenants (as in B7a and B7c).

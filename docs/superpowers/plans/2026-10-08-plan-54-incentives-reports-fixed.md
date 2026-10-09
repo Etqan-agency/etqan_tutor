@@ -53,7 +53,8 @@ It also applies these ledger and orchestration rules:
 
 **Repos and branches**
 - The meta worktree is `/home/abdulkhalek/Projects/etqan_tutor-wt/b4`, written `$W` below.
-- The branch is `feat/b4b-incentives-reports-fixed`. Meta is cut from `origin/master`; `backend/` and `dashboard/` are cut from `origin/main`. `marketing/` is untouched.
+- The branch is `feat/b4b-incentives-reports` (already checked out in meta, `backend/` and `dashboard/`). Meta is cut from `origin/master`; `backend/` and `dashboard/` are cut from `origin/main`. `marketing/` is untouched.
+- B4c (Plan 53) is not merged when this plan is written, and nothing here depends on it. Where a step below replaces a whole function or file (`generate`, `PayslipBody`, `seeds/b4.py`, `effective_settings`), first compare it with trunk: if trunk has moved past B4a's version (B4c merged first, say), merge this plan's changes into trunk's version instead of replacing it. Shared lists (`CSV_COLUMNS`, payloads, the `BUILT` test) get B4b's lines after whatever trunk already has.
 - Commit in the submodule that owns each file (`git -C $W/backend …`, `git -C $W/dashboard …`).
 - Never run `git submodule update`, or any other `git submodule` subcommand that writes.
 - Commit messages are Conventional Commits and end with exactly `Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>`.
@@ -95,9 +96,11 @@ It also applies these ledger and orchestration rules:
   - root fixtures: `staff_for(*codes)`, `api_for("admin")`, `set_features(**switches)`, `tenants`;
   - payroll's conftest: `clock`, `world`, `admin`, `june_sessions`, `mark`, `set_rate`, `adjust`, `JUNE`, and Plan 46's `rules_on`, `student_rate`, `june_group`;
   - scheduling's conftest: `make_teacher`, `make_student`, `hand_session`, `group_bundle`, `bundles_on`, `two_slots`.
-- New shared payroll test helpers go once in `etqan/payroll/tests/conftest.py`: `pay_in` and `fixed_salary` (Task 2), `percent_bonus` (Task 3).
+- New shared payroll test helpers go once in `etqan/payroll/tests/conftest.py`: `pay_in` and `fixed_salary` (Task 2), `percent_bonus` (Task 3). `pay_in` already exists as a local helper in trunk's `test_rates_adjustments.py` (same body): Task 2 moves it to the conftest and that file imports it, so it exists once.
 - Every list or read that renders rows carries a query-count test that counts SELECTs only. It must give the same count for 1 row and for 3 rows.
-- `etqan/platform/tests/test_features.py` `BUILT` lists every built switch **in registry order**. All three B4b switches are flipped in place: `incentives_deductions` between `payment_links` and `homework`; `report_deductions` and `fixed_teacher_salary` between `session_archive` and `registration_waitlist`.
+- `etqan/platform/tests/test_features.py` `BUILT` lists every built switch **in registry order**. All three B4b switches are flipped in place: `incentives_deductions` between `verified_certificates` and `homework` (the registry has `payment_links`, `verified_certificates`, `incentives_deductions`, `free_sessions`, `homework`); `report_deductions` and `fixed_teacher_salary` between `session_archive` and `registration_waitlist`.
+- Three trunk tests use `report_deductions` as their example of an unbuilt switch held by `session_reports`. Flipping it to built with `requires=("session_reports", "payroll_rules")` changes what they see; Task 1 updates them.
+- The test academy's default language is **Arabic** (`AcademySettings.default_language` defaults to `ar`), so copied text is Arabic unless a test sets `academy_services.update_settings(default_language="en")`, as trunk's `test_group_pay.py` does.
 - `etqan/access/tests/test_routes.py`:
   - every new route joins `ROUTES`, and every gated route joins `FEATURES`, under a `# Slice B4b.` comment;
   - `FEATURE_WORDS` gains `"/fixed-salaries/": "fixed_teacher_salary"`.
@@ -121,7 +124,8 @@ It also applies these ledger and orchestration rules:
 
 **Files:**
 - Modify: `backend/etqan/platform/features.py`. Flip `incentives_deductions`, `report_deductions` and `fixed_teacher_salary` in place.
-- Modify: `backend/etqan/platform/tests/test_features.py` (`BUILT`, the `requires` assertion, the prerequisite test).
+- Modify: `backend/etqan/platform/tests/test_features.py` (`BUILT`, the `requires` assertion, the prerequisite test, `test_describe_lists_every_feature_for_the_academy_admin`).
+- Modify: `backend/etqan/academy/tests/test_features_api.py`, `backend/etqan/tenants/tests/test_admin_features.py` (their `report_deductions` expectations).
 - Modify: `backend/etqan/payroll/models.py`.
 - Create: `backend/etqan/payroll/migrations/0003_incentives_reports_fixed.py` (generated; `0004_…` if B4c merged first).
 - Test: `backend/etqan/payroll/tests/test_models.py` (append).
@@ -137,7 +141,7 @@ It also applies these ledger and orchestration rules:
 
 - [ ] **Step 1: Write the failing tests**
 
-Append to `backend/etqan/payroll/tests/test_models.py` (merge the imports into the file's import block; `date`, `pytest`, `IntegrityError`, `transaction`, `PayAdjustment`, `make_teacher` and the `teacher`/`payslip` helpers are already there):
+Append to `backend/etqan/payroll/tests/test_models.py` (merge the imports into the file's import block; `date`, `pytest`, `IntegrityError`, `transaction`, `PayAdjustment`, `PayrollSettings`, `PayslipLine`, `features`, `make_teacher` and the `teacher`/`payslip` helpers are already there, so only `FixedSalary` is a new import):
 
 ```python
 from etqan.payroll.models import FixedSalary
@@ -224,7 +228,7 @@ def test_the_b4b_switches_are_built_and_off():
 ```
 
 In `etqan/platform/tests/test_features.py`:
-- In `BUILT`, add `"incentives_deductions": False` between `"payment_links"` and `"homework"`, and `"report_deductions": False, "fixed_teacher_salary": False` between `"session_archive"` and `"registration_waitlist"`. Extend the "Flipped in place" comment with "B4b's incentives_deductions, report_deductions and fixed_teacher_salary".
+- In `BUILT`, add `"incentives_deductions": False` between `"verified_certificates"` and `"homework"`, and `"report_deductions": False, "fixed_teacher_salary": False` between `"session_archive"` and `"registration_waitlist"`. Extend the "Flipped in place" comment with "B4b's incentives_deductions, report_deductions and fixed_teacher_salary".
 - Replace `assert features.get("report_deductions").requires == ("session_reports",)` with:
 
 ```python
@@ -250,6 +254,12 @@ def test_a_prerequisite_switched_off_holds_a_feature_off():
     # Nothing holds a feature whose own switch is off.
     assert features.held_by("report_deductions", {"session_reports": False}) == []
 ```
+
+- In `test_describe_lists_every_feature_for_the_academy_admin` (it sets `report_deductions=True, session_reports=False`), the expected `rows["report_deductions"]` becomes `"built": True` and `"held_by": ["session_reports", "payroll_rules"]` (`payroll_rules` is off by default).
+
+Trunk's other two `report_deductions` examples (an expected change):
+- `etqan/academy/tests/test_features_api.py::test_the_admin_reads_every_feature_in_registry_order`: `by_code["report_deductions"]["held_by"]` becomes `["session_reports", "payroll_rules"]`.
+- `etqan/tenants/tests/test_admin_features.py::test_the_change_page_shows_the_features_by_group`: the switch is now built, so its help text loses "Takes effect when built." and becomes `"Held off: needs Session reports, Payroll rules."` (read `tenants/admin.py`'s `held_by` note to confirm the exact join). `test_the_command_prints_the_switch_not_the_effective_state` needs no change.
 
 - [ ] **Step 2: Run the tests to verify they fail**
 
@@ -407,13 +417,13 @@ Run `… exec -T django python manage.py makemigrations payroll --name incentive
 
 - [ ] **Step 6: Run the tests to verify they pass**
 
-Run: `… exec -T django pytest -q --create-db etqan/payroll etqan/platform/tests/test_features.py etqan/access`
+Run: `… exec -T django pytest -q --create-db etqan/payroll etqan/platform/tests/test_features.py etqan/access etqan/academy/tests/test_features_api.py etqan/tenants/tests/test_admin_features.py`
 Expected: PASS. `test_the_database_refuses_an_adjustment_of_nothing` (Plan 7) still passes under the new constraint.
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git -C $W/backend add etqan/platform/features.py etqan/platform/tests/test_features.py etqan/payroll/models.py etqan/payroll/migrations etqan/payroll/tests/test_models.py
+git -C $W/backend add etqan/platform/features.py etqan/platform/tests/test_features.py etqan/academy/tests/test_features_api.py etqan/tenants/tests/test_admin_features.py etqan/payroll/models.py etqan/payroll/migrations etqan/payroll/tests/test_models.py
 git -C $W/backend commit -m "feat(payroll): B4b switches, percentage adjustments, fixed salary, counters
 
 Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
@@ -429,6 +439,7 @@ Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
 - Create: `backend/etqan/payroll/services/fixed_salaries.py`
 - Modify: `backend/etqan/payroll/services/__init__.py`
 - Modify: `backend/etqan/payroll/tests/conftest.py` (`pay_in`, `fixed_salary`)
+- Modify: `backend/etqan/payroll/tests/test_rates_adjustments.py` (drop its local `pay_in`, import the conftest's)
 - Test: `backend/etqan/payroll/tests/test_pay_rules.py` (append), `backend/etqan/payroll/tests/test_fixed_salaries.py` (new)
 
 **Interfaces:**
@@ -442,7 +453,7 @@ Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
 
 - [ ] **Step 1: Write the failing tests**
 
-Add to `backend/etqan/payroll/tests/conftest.py` (import `from etqan.identity import services as identity_services`):
+Add to `backend/etqan/payroll/tests/conftest.py` (import `from etqan.identity import services as identity_services`). `pay_in` is moved here from `test_rates_adjustments.py`, which then imports it from the conftest instead of defining it:
 
 ```python
 def pay_in(teacher, currency):
@@ -825,7 +836,7 @@ Expected: PASS. Plan 46's `test_settings_are_todays_rule_while_payroll_rules_is_
 - [ ] **Step 7: Commit**
 
 ```bash
-git -C $W/backend add etqan/payroll/services/settings.py etqan/payroll/services/rules.py etqan/payroll/services/fixed_salaries.py etqan/payroll/services/__init__.py etqan/payroll/tests/conftest.py etqan/payroll/tests/test_pay_rules.py etqan/payroll/tests/test_fixed_salaries.py
+git -C $W/backend add etqan/payroll/services/settings.py etqan/payroll/services/rules.py etqan/payroll/services/fixed_salaries.py etqan/payroll/services/__init__.py etqan/payroll/tests/conftest.py etqan/payroll/tests/test_rates_adjustments.py etqan/payroll/tests/test_pay_rules.py etqan/payroll/tests/test_fixed_salaries.py
 git -C $W/backend commit -m "feat(payroll): B4b settings snapshot and fixed-salary service
 
 Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
@@ -842,6 +853,7 @@ Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
 - Modify: `backend/etqan/payroll/services/payslips.py` (`_pending_teacher_ids`, `_other_currency_teachers`, `issue`)
 - Modify: `backend/etqan/payroll/tests/conftest.py` (`percent_bonus`)
 - Modify: `backend/etqan/tenants/seeds/b4.py`
+- Modify: `backend/etqan/payroll/tests/test_build.py` and `backend/etqan/payroll/tests/test_generate.py` (trunk callers of the changed signatures, below)
 - Test: `backend/etqan/payroll/tests/test_percentages.py` (new), `backend/etqan/tenants/tests/test_seed_b4.py` (append)
 
 **Interfaces:**
@@ -1186,11 +1198,14 @@ def _other_currency_teachers(last, pay) -> list:
 ```
 
 - `generate()` calls `_pending_teacher_ids(last, pay)` and `_other_currency_teachers(last, pay)` with the `pay` Plan 46 already reads there.
+- Trunk tests that call the old signatures (an expected change):
+  - `test_build.py::test_a_pay_currency_change_drops_old_rates_and_adjustments` calls `rules.other_currency_adjustments(date(2026, 6, 30))`; it becomes `rules.other_currency_adjustments(date(2026, 6, 30), percentages=False)`.
+  - `test_generate.py`'s `phantom` fixture patches `_pending_teacher_ids` with `lambda last: found(last) | {…}`; it becomes `lambda last, pay: found(last, pay) | {…}`.
 - In `issue()`, move `pay = effective_settings()` to just after the `payroll.month_not_over` check, before the adjustment lock (plan R4), and lock with `rules.pending_adjustments(last, percentages=pay.percentages)`. The `build(..., settings=pay)` call is unchanged.
 
 - [ ] **Step 5: The seed**
 
-Rewrite `backend/etqan/tenants/seeds/b4.py`, keeping Plan 46's student-rate body and its `_user(role, name)` lookup exactly as Plan 46 wrote them:
+Rewrite `backend/etqan/tenants/seeds/b4.py`, keeping Plan 46's student-rate body and its `_user(role, name)` lookup exactly as Plan 46 wrote them. Trunk's `_user` is defined above `seed_b4` and uses `identity_services` (kept in the import block below); keep `_user` where it is:
 
 ```python
 """Phase B4 demo data. Slice B4a: one per-student rate. Slice B4b: one
@@ -1202,6 +1217,7 @@ from datetime import timedelta
 
 from django.utils import timezone
 
+from etqan.identity import services as identity_services
 from etqan.payroll import services as payroll_services
 from etqan.platform.exceptions import ConflictError
 from etqan.platform.exceptions import ValidationError
@@ -1266,7 +1282,7 @@ def _percentage_bonus(name: str) -> None:
         print(f"skip: B4 percentage bonus — {exc}")  # noqa: T201
 ```
 
-`_user` stays below, as Plan 46 defined it.
+`_user` stays as Plan 46 defined it (above `seed_b4` in trunk).
 
 - [ ] **Step 6: Run the tests to verify they pass**
 
@@ -1276,7 +1292,7 @@ Expected: PASS. Every Plan 7 adjustment test passes unchanged (`test_an_unused_a
 - [ ] **Step 7: Commit**
 
 ```bash
-git -C $W/backend add etqan/payroll/services/adjustments.py etqan/payroll/services/rules.py etqan/payroll/services/build.py etqan/payroll/services/payslips.py etqan/payroll/tests/conftest.py etqan/payroll/tests/test_percentages.py etqan/tenants/seeds/b4.py etqan/tenants/tests/test_seed_b4.py
+git -C $W/backend add etqan/payroll/services/adjustments.py etqan/payroll/services/rules.py etqan/payroll/services/build.py etqan/payroll/services/payslips.py etqan/payroll/tests/conftest.py etqan/payroll/tests/test_build.py etqan/payroll/tests/test_generate.py etqan/payroll/tests/test_percentages.py etqan/tenants/seeds/b4.py etqan/tenants/tests/test_seed_b4.py
 git -C $W/backend commit -m "feat(payroll): percentage bonuses, UNSET edits, pending filter, demo seed (B4b I-1..I-3)
 
 Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
@@ -1311,6 +1327,7 @@ from datetime import datetime
 
 import pytest
 
+from etqan.academy import services as academy_services
 from etqan.payroll import services
 from etqan.payroll.models import Payslip
 from etqan.payroll.services import rules
@@ -1329,6 +1346,12 @@ from etqan.scheduling.tests.conftest import make_student
 JULY_FIRST = datetime(2026, 7, 1, 9, tzinfo=UTC)
 JUNE_1 = date(2026, 6, 1)
 JUNE_15 = date(2026, 6, 15)
+
+
+@pytest.fixture(autouse=True)
+def english(db):
+    """Copied text in English: the test academy's default language is Arabic."""
+    academy_services.update_settings(default_language="en")
 
 
 @pytest.fixture
@@ -1389,8 +1412,6 @@ def test_a_percentage_is_a_share_of_the_weighted_gross(
 def test_a_percentage_is_copied_in_the_academys_language(
     world, sessions, percentages_on
 ):
-    from etqan.academy import services as academy_services  # noqa: PLC0415
-
     academy_services.update_settings(default_language="ar")
     set_rate(world.teacher, 1000)
     mark(sessions[0], world.teacher)
@@ -1502,7 +1523,7 @@ def test_per_class_then_the_fixed_salary(
     assert (built.gross_minor, built.missing_rate) == (50000, False)
 ```
 
-Before writing `test_a_percentage_is_copied_in_the_academys_language`, read how trunk's `test_build.py::test_copied_text_is_in_the_academys_language` switches the academy's language, and use the same call.
+The academy's language is switched with `academy_services.update_settings(default_language=…)`, as in trunk's `test_build.py::test_copied_text_is_in_the_academys_language`. The autouse `english` fixture makes this file's copied text English (the test academy defaults to Arabic); the Arabic test switches back to `ar` itself.
 
 - [ ] **Step 2: Run the tests to verify they fail**
 
@@ -1674,6 +1695,7 @@ from datetime import time
 
 import pytest
 
+from etqan.academy import services as academy_services
 from etqan.payroll import services
 from etqan.payroll.models import Payslip
 from etqan.payroll.services.build import build
@@ -1691,6 +1713,12 @@ from etqan.scheduling.tests.conftest import make_student
 
 JULY_FIRST = datetime(2026, 7, 1, 9, tzinfo=UTC)
 JUNE_15 = date(2026, 6, 15)
+
+
+@pytest.fixture(autouse=True)
+def english(db):
+    """Copied text in English: the test academy's default language is Arabic."""
+    academy_services.update_settings(default_language="en")
 
 
 @pytest.fixture
@@ -1864,7 +1892,7 @@ def test_report_counters_are_null_while_session_reports_is_off(
     )
 ```
 
-Before writing `test_the_counters`, check that trunk's `place_at_disposal` takes a scheduled session whose student attendance is not set (B2a A-11), and that the office may then mark its teacher attendance (Plan 46 Task 4 relies on the same two calls). If the `at_disposal` step needs its switch, add `set_features(disposal_status=True)` to the test.
+Trunk's `place_at_disposal(session, *, reason="", by=None)` takes a scheduled session whose student attendance is not set (B2a A-11) and asks no switch, and `mark_attendance` then accepts its teacher attendance (only its student attendance is refused), so `test_the_counters` needs no `disposal_status`.
 
 - [ ] **Step 2: Run the tests to verify they fail**
 
@@ -2701,9 +2729,10 @@ In `FEATURES`, under `# Slice B4b.`:
 In `FEATURE_WORDS`: `"/fixed-salaries/": "fixed_teacher_salary",  # B4b`.
 
 Update the expected rows that now describe the B4b payload (an expected change):
-- `test_api.py::test_the_csv_is_for_admins`: the header gains, at its end, `"Reports sent", "Reports not sent", "Teacher absences", "Report deductions (minor units)"`. Bilal's issued June row gains `"0", "2", "0", "0"`: both of his sessions owe a report and have none (it is 1 July, so both ended over 24 hours before), the share is 0 while `report_deductions` is off, and he missed none.
+- `test_api.py::test_the_csv_is_for_admins`: the header gains, at its end, `"Reports sent", "Reports not sent", "Teacher absences", "Report deductions (minor units)"`. Bilal's issued June row gains `"0", "2", "0", "0"`: both of his sessions owe a report and have none (it is 1 July, so both ended over 24 hours before), the share is 0 while `report_deductions` is off, and he missed none. "At its end" means after whatever trunk has at build time (B4c's two columns, if it merged first).
+- `test_api.py::test_generate_answers_the_counts_and_names` is the one exact generate-result dict; trunk has no exact payslip-row or adjustment-row dict.
 - `test_api.py`: every exact payslip-row dict gains `reports_sent`, `reports_missing`, `teacher_absences` and `report_deductions_minor`; every exact generate-result dict gains `"stale_fixed_salary": []`; every exact adjustment-row dict gains `"percent_bp": None`.
-- Plan 46's `test_counts.py::test_the_csv_has_the_counter_columns` row now ends `",1,0,0,0,0,1,0,0,0,0,0,0"`: its one line's student was absent, so it owes no report.
+- Plan 46's `test_counts.py::test_the_csv_has_the_counter_columns` asserts `row.endswith(",1,0,0,0,0,1,0,0")`, which no longer holds once columns follow B4a's. Keep its meaning without depending on what comes after B4a's columns (B4c's two, if it merged first): parse the two lines with `csv.reader`, zip header with row, and assert the eight B4a counter columns by name (`Regular sessions` "1" … `Group members` "0") plus B4b's four (`Reports sent` "0", `Reports not sent` "0", `Teacher absences` "0", `Report deductions (minor units)` "0"): its one line's student was absent, so it owes no report.
 
 - [ ] **Step 2: Run the tests to verify they fail**
 
@@ -3746,40 +3775,43 @@ Import `bpToPercent` from `./schemas`. The amount cell becomes:
 
 - [ ] **Step 5: `SettingsPage.tsx`**
 
-In Plan 46's settings page:
-- Add `const has = useHasFeature();` and `const reportsOn = has("report_deductions");`.
-- Its zod schema gains `report_deduction: z.coerce.number().int().min(0).max(100)`, a whole percentage like the two weights.
-- Its form values gain `report_deduction: settings.report_deduction_bp / 100`.
-- Its submit body gains `...(reportsOn ? { report_deduction_bp: values.report_deduction * 100 } : {})`.
-- Its server-error mapping gains `report_deduction_bp` → `report_deduction`.
-- After the student-excused weight, add:
+In Plan 46's settings page (`SettingsPage` loads; `SettingsForm({ initial, readOnly })` holds the form, whose field names are the API's, in %, so `applyServerErrors` maps a 400 onto them unchanged):
+- Import `useHasFeature` next to `useCan` (`@/features/identity/permissions`). In `SettingsForm`, add `const has = useHasFeature();` and `const reportsOn = has("report_deductions");`.
+- `settingsFormSchema` gains `report_deduction_bp: percent`, the same `percent` preprocessor as the two weights (0 to 100, at most two decimals, an empty input refused rather than saved as 0).
+- Its form `values` gain `report_deduction_bp: initial.report_deduction_bp / 100`.
+- Its submit body gains `...(reportsOn ? { report_deduction_bp: toBp(values.report_deduction_bp) } : {})`.
+- No server-error mapping is needed: the form field has the API's name.
+- After the student-excused weight (inside the same `Card` as the weights, after the `.map(...)`), add:
 
 ```tsx
 					{reportsOn ? (
-						<>
+						<div className="flex flex-col gap-1.5">
 							<Field
 								id="settings-report_deduction"
 								label={t("payroll.settings.reportDeduction")}
-								error={fieldError(errors.report_deduction?.message)}
+								error={fieldError(errors.report_deduction_bp?.message)}
 							>
 								<Input
 									type="number"
+									inputMode="decimal"
 									min={0}
 									max={100}
-									step={1}
+									step={0.01}
 									dir="ltr"
-									disabled={!canUpdate}
-									{...register("report_deduction")}
+									disabled={readOnly}
+									aria-describedby="settings-report_deduction-hint"
+									{...register("report_deduction_bp")}
 								/>
 							</Field>
-							<p className="text-sm text-muted-foreground">
+							<p
+								id="settings-report_deduction-hint"
+								className="text-sm text-muted-foreground"
+							>
 								{t("payroll.settings.reportDeductionHint")}
 							</p>
-						</>
+						</div>
 					) : null}
 ```
-
-Use the read-only flag's real name in Plan 46's `SettingsPage` (written `canUpdate` above). Keep the field inside the same `Card` as the weights.
 
 - [ ] **Step 6: Run the tests to verify they pass**
 
@@ -3976,7 +4008,7 @@ describe("FixedSalaryRow", () => {
 
 In `RatesPage.test.tsx`:
 - Add `fixedSalaries: vi.fn()` to the `payrollApi` mock, and `vi.mocked(payrollApi.fixedSalaries).mockResolvedValue([])` in `beforeEach`.
-- Import `adminWith` and `fixedSalaryRow`.
+- Import `fixedSalaryRow` (`adminWith` and `CanProvider` are already imported).
 - Add:
 
 ```tsx
@@ -4449,7 +4481,7 @@ describe("PayslipBody", () => {
 });
 ```
 
-Append to `PayslipPrint.test.tsx` (import `lineRow`):
+Append to `PayslipPrint.test.tsx` (`lineRow` is already imported):
 
 ```tsx
 	it("prints the report deductions too", async () => {
@@ -4540,6 +4572,7 @@ Keep Plan 46's `LineBadges` component as it is. Replace the rest of the file:
 import { Fragment, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Money } from "@/features/billing";
+import { StatusChip } from "@/ui"; // LineBadges (kept) uses it
 import { type PayslipDetail, type PayslipLine, REPORT_COUNT_KEYS } from "./schemas";
 
 function LineList({
@@ -4682,7 +4715,7 @@ export function PayslipBody({ payslip }: { payslip: PayslipDetail }) {
 }
 ```
 
-If Plan 46 placed `LineBadges` in the description cell differently, keep its placement. The `payslip[key] !== null` filter also hides a counter that the teacher's payload left out: every counter is a staff and teacher field, never staff-only.
+Trunk places `LineBadges` inside the description cell, after the text, as above; keep it so. Trunk's member-line rate cell (`"—"` before `noRate`) is the rule `rateOf` extends. The `payslip[key] !== null` filter also hides a counter that the teacher's payload left out: every counter is a staff and teacher field, never staff-only.
 
 - [ ] **Step 4: `PayslipsList.tsx`**
 
@@ -4707,7 +4740,7 @@ If Plan 46 placed `LineBadges` in the description cell differently, keep its pla
 					))}
 ```
 
-  Both sit inside the same "counts shown" condition, so they are the last cells of the row.
+  Both sit inside the same "counts shown" condition, so they are the last cells of the row. Trunk writes that condition as `{showCounts ? COUNT_KEYS.map(…) : null}` in both `<thead>` and `<tbody>`; wrap each branch in a fragment (`<>{COUNT_KEYS.map(…)}{REPORT_COUNT_KEYS.map(…)}</>`).
 - In `GenerateSummary`, after the `other_currency` paragraph:
 
 ```tsx
@@ -4748,7 +4781,7 @@ Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>"
 - Create: `dashboard/e2e/b4-report-deductions.spec.ts`
 
 **Interfaces:**
-- Consumes: `login`, `DEMO_URL`, `DEMO_ADMIN`, `expectLoggedIn`, `postAsAdmin` (`e2e/fixtures.ts`); `manage` (`e2e/manage.ts`); the request bodies of Plan 46's `b4-pay-rules.spec.ts` (people, course, extra session, attendance, rate).
+- Consumes: `login`, `DEMO_URL`, `DEMO_ADMIN`, `expectLoggedIn`, `gotoApp`, `postAsAdmin` (`e2e/fixtures.ts`); `manage` (`e2e/manage.ts`); the request bodies of Plan 46's `b4-pay-rules.spec.ts` (people, course, extra session, attendance, rate), which the bodies below already match.
 
 - [ ] **Step 1: Write the E2E**
 
@@ -4758,6 +4791,7 @@ import {
 	DEMO_ADMIN,
 	DEMO_URL,
 	expectLoggedIn,
+	gotoApp,
 	login,
 	postAsAdmin,
 } from "./fixtures";
@@ -4855,14 +4889,21 @@ test("a missing report costs its share and a percentage bonus its share of the g
 	});
 
 	// The rule: half a session's pay for a missing report
-	await page.goto(`${DEMO_URL}/app/payroll/settings`);
-	await page.getByLabel(/missing report deduction/i).fill("50");
+	const share = page.getByLabel(/missing report deduction/i);
+	await gotoApp(page, `${DEMO_URL}/app/payroll/settings`, share);
+	await share.fill("50");
 	await page.getByRole("button", { name: /save rules/i }).click();
-	await expect(page.getByText(/payroll rules saved/i)).toBeVisible();
+	// Exact: the toast's live region briefly repeats it (as in b4-pay-rules).
+	await expect(
+		page.getByText("Payroll rules saved.", { exact: true }),
+	).toBeVisible();
 
-	// Generate last month and open the teacher's payslip
+	// Generate last month and open the teacher's payslip. The payslips list
+	// keeps its month in the page's picker, not the URL, so pick it there.
 	await created("payroll/payslips/generate/", { year, month });
-	await page.goto(`${DEMO_URL}/app/payroll/payslips?year=${year}&month=${month}`);
+	await page.goto(`${DEMO_URL}/app/payroll/payslips`);
+	await page.getByLabel("Year").selectOption(String(year));
+	await page.getByLabel("Month").selectOption(String(month));
 	await page
 		.getByRole("row", { name: new RegExp(`E2E Reports ${stamp}`) })
 		.getByRole("link")
@@ -4883,8 +4924,8 @@ test("a missing report costs its share and a percentage bonus its share of the g
 });
 ```
 
-- Read Plan 46's `b4-pay-rules.spec.ts` as merged, and use its exact bodies for people, courses, the extra session and attendance if any differ from the ones above. Never guess a body.
-- The payslips list reads its month from the URL if trunk supports it. If it does not, pick the month with the page's month picker, as `e2e/payroll.spec.ts` does.
+- The bodies for people, courses, the extra session and attendance match Plan 46's merged `b4-pay-rules.spec.ts`. Never guess a body.
+- The payslips list keeps its month in the page's Year/Month pickers, not the URL (as `b4-pay-rules.spec.ts` picks it).
 
 - [ ] **Step 2: Run the E2E**
 
