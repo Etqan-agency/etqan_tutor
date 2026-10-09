@@ -86,3 +86,5 @@ Earlier the same day: meta#11 (`80d6b09`) made `just` gate recipes match CI.
 **B5b** (broadcasts, plan 43) merged 2026-10-09: backend#40 → main 8d2323b, dashboard#42 → main a29fbee, meta#55; pointers bumped on master 5350995. Meta CI green, 0 bounces. Uses R5 study_group_members.
 
 **B5f** (chat extras, plan 58) merged 2026-10-09: backend#41 → main d6d0739, dashboard#43 → main 405aaf4, meta#56; pointers bumped on master 33b41fc. Meta CI green incl. staging-sim, 0 bounces.
+
+**B10a** (AI drafts, plan 47; B10 first slice) merged 2026-10-09: backend#43 → main 607f39a, dashboard#45 → main 39e2465, meta#59 (branches feat/b10a-ai-drafts-r2; earlier be#39/da#41/meta#54 closed); pointers bumped on master ede990e. Meta CI green incl. staging-sim, 0 bounces.
