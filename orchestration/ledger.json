@@ -107,16 +107,16 @@
     },
     "B10": {
       "title": "AI",
-      "status": "build",
+      "status": "merged",
       "requires": [
         "B6"
       ],
-      "slot": 3,
+      "slot": null,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b10",
       "branch": "feat/b10b-student-reports",
       "spec": "docs/superpowers/specs/2026-10-08-b10-ai-design.md",
       "current_slice": "B10b",
-      "current_task": "B10b ready on trunk be 8492bb1/da aca5d2d/mk ccf982a/meta 04f071e (integrations-3): full test on prior trunk 9108 pass + 1 fail (own admin-features example, fixed), targeted be 4874 pass after int-3, tsc+marketing 313, lint 0, e2e 76/76 fresh stack; PRs be#48 da#50 meta#64 force-pushed",
+      "current_task": "B10 complete: B10a, B10b merged; torn down",
       "session": "a61cece4"
     },
     "B11": {
