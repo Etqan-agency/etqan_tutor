@@ -41,7 +41,7 @@
     },
     "B5": {
       "title": "Communication",
-      "status": "build",
+      "status": "queued",
       "requires": [
         "B2"
       ],
@@ -50,7 +50,7 @@
       "branch": "feat/b5d-more-notices",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "current_slice": "B5d",
-      "current_task": "B5d merged trunks (meta 00c4aec, be 607f39a, da 39e2465) → be e57e5b3, da 1d1d8e5, meta 309faed; full gates running on rebuilt fresh stack (conductor window)",
+      "current_task": "B5d queued: pushed be e57e5b3, da 1d1d8e5, meta 309faed on trunks meta 00c4aec/be 607f39a/da 39e2465; fresh-stack gates: test 8416/98.50%, vitest 3005/95.76%, e2e 71/71, lint (48 contracts) + secrets",
       "session": "5d4e6f0b"
     },
     "B6": {
