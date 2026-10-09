@@ -154,6 +154,7 @@ In flight: **B10b** · Queue: B7g, B4d, B5c · Next plan number: 62 · Conductor
 | Target | Phase | Reason | Since |
 |---|---|---|---|
 | backend/etqan/access/registry.py | B7 | B7d K-16: resource consultation_review | 2026-10-09T17:27:44+00:00 |
+| backend/etqan/access/tests/test_routes.py | B7 | B7d: ROUTES and FEATURES lines for consultation reviews | 2026-10-09T17:27:45+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
