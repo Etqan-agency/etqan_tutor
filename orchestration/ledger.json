@@ -121,19 +121,19 @@
     },
     "B11": {
       "title": "Apps",
-      "status": "waiting-deps",
+      "status": "spec",
       "requires": [
         "B2",
         "B3",
         "B4",
         "B5"
       ],
-      "slot": null,
-      "worktree": null,
-      "branch": null,
+      "slot": 3,
+      "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b11",
+      "branch": "feat/b11a-scope",
       "spec": null,
       "current_slice": null,
-      "current_task": null,
+      "current_task": "launched in slot 3; scope spike + phase spec",
       "session": null
     }
   },
