@@ -621,7 +621,7 @@
     },
     "B7c": {
       "phase": "B7",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 50,
       "spec": "docs/superpowers/specs/2026-10-08-b7c-consultations-office-design.md",
@@ -1496,12 +1496,12 @@
     "B10b",
     "B7g"
   ],
-  "in_flight": "B7c",
+  "in_flight": null,
   "main_heads": {
-    "backend": "d553e3e",
-    "dashboard": "762d74c",
+    "backend": "6882ec0",
+    "dashboard": "51056d6",
     "marketing": "3d50f3c79e0133eca9dfdd48323bb22a480e2aca",
-    "meta": "ec96332"
+    "meta": "c9721b9"
   },
   "escalations": [
     {
