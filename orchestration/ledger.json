@@ -657,14 +657,14 @@
     },
     "B7f": {
       "phase": "B7",
-      "status": "spec",
+      "status": "plan",
       "requires": [
         "B7c",
         " B7d"
       ],
       "plan_number": 61,
       "spec": "docs/superpowers/specs/2026-10-08-b7f-consultation-reports-design.md",
-      "plan": null,
+      "plan": "61",
       "prs": null,
       "bounces": 0
     },
