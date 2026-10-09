@@ -713,7 +713,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "site",
+      "phase": "B11",
+      "reason": "B11a Task 1: additive read service site.services.branding_snapshot (one commit; conductor-approved)",
+      "since": "2026-10-09T19:46:29+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
