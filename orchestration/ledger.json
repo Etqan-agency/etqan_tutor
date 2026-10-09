@@ -41,16 +41,16 @@
     },
     "B5": {
       "title": "Communication",
-      "status": "queued",
+      "status": "build",
       "requires": [
         "B2"
       ],
       "slot": 4,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b5",
-      "branch": "feat/b5d-more-notices",
+      "branch": "feat/b5c-whatsapp",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
-      "current_slice": "B5d",
-      "current_task": "B5d queued, PRs open (be#45 da#47 meta#61) for warm CI; gates green on 00c4aec/607f39a/39e2465",
+      "current_slice": "B5c",
+      "current_task": "B5d queued (PRs be#45 da#47 meta#61); building B5c (Plan 57) on feat/b5c-whatsapp",
       "session": "5d4e6f0b"
     },
     "B6": {
