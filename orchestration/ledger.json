@@ -78,7 +78,7 @@
       "branch": "feat/b7b-recorded-store",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7b",
-      "current_task": "B7b build started (Plan 51); B7c queued",
+      "current_task": "B7b build: Tasks 1-6 done and reviewed (backend services, purpose, contract/throttles + D65 exemption); Task 7 store API in progress. B7c queued",
       "session": "5e75f8ee"
     },
     "B8": {
