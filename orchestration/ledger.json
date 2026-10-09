@@ -36,7 +36,7 @@
       "branch": "feat/b4d-salary-projections",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4d",
-      "current_task": "B4d gates window: fresh stack up, migrated+seeded; running just test, lint, e2e",
+      "current_task": "B4d gates: just test killed by host low memory at 95% backend (8163 pass, 0 fail); stack up; awaiting conductor go to rerun",
       "session": "c0892bad"
     },
     "B5": {
