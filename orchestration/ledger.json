@@ -117,7 +117,7 @@
       "spec": "docs/superpowers/specs/2026-10-08-b10-ai-design.md",
       "current_slice": "B10b",
       "current_task": "B10b gates held: stack stopped for B4b's window; B10b window next (conductor will message); lint+secrets green",
-      "session": "d923ac07"
+      "session": "a61cece4"
     },
     "B11": {
       "title": "Apps",
