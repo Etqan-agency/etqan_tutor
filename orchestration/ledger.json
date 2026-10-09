@@ -51,7 +51,7 @@
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "current_slice": "B5b",
       "current_task": "B5b PRs open (be#40 da#42 meta#55), gates green on ce4ff95 (test 8004/98.5%, vitest 2917/95.7%, e2e 67, lint+secrets); awaiting conductor merge; B5f queued",
-      "session": "4b5b7034"
+      "session": "5d4e6f0b"
     },
     "B6": {
       "title": "Learning",
