@@ -691,14 +691,7 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [
-    {
-      "target": "marketing/src/pages/sitemap.xml.ts",
-      "phase": "B7",
-      "reason": "B7d K-14: consultation link/strings/sitemap",
-      "since": "2026-10-09T17:43:47+00:00"
-    }
-  ],
+  "claims": [],
   "shared_decisions": [
     {
       "id": "D1",
