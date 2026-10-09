@@ -65,7 +65,7 @@ In flight: **B4b** · Queue: B7c, B5d · Next plan number: 61 · Conductor: 4ddf
 | B4c | B4 | merged | 53 | B4a, B3a | https://github.com/Etqan-agency/etqan_tutor_backend/pull/44 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/46 https://github.com/Etqan-agency/etqan_tutor/pull/60 | 0 |
 | B4d | B4 | plan | 55 | B4b |  | 0 |
 | B7a | B7 | merged | 49 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/38 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/40 https://github.com/Etqan-agency/etqan_tutor/pull/53 | 0 |
-| B7b | B7 | plan | 51 | B7a |  | 0 |
+| B7b | B7 | plan | 51 | B7a | https://github.com/Etqan-agency/etqan_tutor_backend/pull/46 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/48 https://github.com/Etqan-agency/etqan_tutor_marketing/pull/7 https://github.com/Etqan-agency/etqan_tutor/pull/62 | 0 |
 | B7c | B7 | queued | 50 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/42 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/44 https://github.com/Etqan-agency/etqan_tutor/pull/57 | 0 |
 | B7d | B7 | spec | 60 | B7c, B7b |  | 0 |
 | B7e | B7 | plan | 52 | B7a,  B7b |  | 0 |
