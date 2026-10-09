@@ -152,6 +152,7 @@ In flight: **B10a** · Queue: B4c, B4b, B7c · Next plan number: 60 · Conductor
 | Target | Phase | Reason | Since |
 |---|---|---|---|
 | backend/etqan/platform/throttling.py | B7 | B7b D65: is_internal_request + PublicScopedRateThrottle | 2026-10-09T05:05:33+00:00 |
+| backend/pyproject.toml | B7 | B7b: gateways contract + recorded forbidden list (PF2) | 2026-10-09T05:05:33+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
