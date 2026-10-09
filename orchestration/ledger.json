@@ -684,7 +684,7 @@
       "phase": "B11",
       "status": "plan",
       "requires": [],
-      "plan_number": null,
+      "plan_number": 62,
       "spec": "docs/superpowers/specs/2026-10-09-b11-apps-design.md",
       "plan": null,
       "prs": null,
@@ -703,7 +703,7 @@
       "bounces": 0
     }
   },
-  "next_plan_number": 62,
+  "next_plan_number": 63,
   "ownership": {
     "scheduling": "B2",
     "billing": "B3",
