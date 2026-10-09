@@ -151,7 +151,6 @@ In flight: **B4b** · Queue: B7c, B5d, B7b · Next plan number: 61 · Conductor:
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| dashboard/src/locales/ar/vouchers.json | B7 | R9 playlist kind (D56) | 2026-10-09T09:05:02+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
