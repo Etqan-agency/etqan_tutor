@@ -90,7 +90,7 @@
 - **`send_whatsapp_now(*, to: str, language: str, params: list[str]) -> SentWhatsApp(source: str, message_id: str)`:**
   1. `resolve("whatsapp")`, raising `NotSetUpError` when it is None;
   2. `provider.send`;
-  3. `meter_whatsapp(resolved, message_id=…)`, a no-op;
+  3. `meter_whatsapp(resolved, message_id=…)`, which calls `etqan_billing.services.record_usage(source=resolved.source, service="whatsapp", unit="conversation", quantity=1, source_ref=message_id)` (D64; it mirrors `meter_email`; check the integrations→etqan_billing import contract, which slice 2 renamed);
   4. return.
 - **`build_params(academy_name, title, body) -> list[str]`:** the collapse-and-budget helper of X-4, exported for notifications.
 
@@ -104,7 +104,7 @@ Steps:
   - send: success → wamid; 5xx and 131056 → `retry=True`; 131026 and 132000 → `retry=False`; a read timeout → `retry=False`.
   - the token never appears in the request URL or in caplog text;
   - `build_params` collapses newlines and keeps the 1024 budget;
-  - `send_whatsapp_now` resolves, calls the provider and the meter hook, and raises `NotSetUpError` when nothing resolves;
+  - `send_whatsapp_now` resolves, calls the provider and records one usage event per wamid only when the source is Etqan (assert a second call with the same wamid records nothing), and raises `NotSetUpError` when nothing resolves;
   - `SWITCHES["whatsapp"]` gates the Etqan default.
 - [ ] **Implement; run** `S django pytest etqan/integrations -q`, ruff and `lint-imports`.
 - [ ] **Commit** `feat(integrations): WhatsApp Cloud API provider and send path (B5c)`.

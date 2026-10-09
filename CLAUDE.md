@@ -39,6 +39,10 @@ submodule pointers here.
   `etqan.integrations.services.resolve(service)`; no app stores keys of its own. Email goes out
   only through `integrations.services.queue_email` / `send_email_now`. Secrets go through
   `etqan.platform.secrets`.
+- Use of an Etqan default is metered on the provider's confirmation with
+  `etqan.etqan_billing.services.record_usage(source=resolved.source, service, unit, quantity,
+  source_ref)`; it records only `source == "etqan"`, once per (service, unit, `source_ref`). A
+  provider event that yields several units records each unit under the provider's one id.
 - Keep it simple: this is a CRUD-first product. Check the spec's non-goals before adding
   anything.
 
