@@ -1406,6 +1406,19 @@
         "B11"
       ],
       "source": "B7 S-9 risk report; conductor ruling 2026-10-09"
+    },
+    {
+      "id": "D66",
+      "phase": "B5",
+      "decision": "Integrations slice 3 (not a phase; PRs backend #51, dashboard #53, meta #67: Zoom meetings + Stripe Connect) merges NEXT on master as soon as #67's CI is green (supervisor merges, then bumps pointers). Conductor: after the slice now in flight merges, hold the next queued slice until it lands, then rebase the queue as usual. It touches etqan.integrations (providers map, admin, onboarding), etqan.gateways (checkouts/webhooks), etqan.scheduling (meeting links, host-link endpoint) and dashboard integrations/scheduling — rebase onto it rather than around it.",
+      "affects": [
+        "conductor",
+        "B5",
+        "B7",
+        "B4",
+        "B10"
+      ],
+      "source": "owner"
     }
   ],
   "requests": [
