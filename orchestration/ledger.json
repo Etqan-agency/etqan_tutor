@@ -133,7 +133,7 @@
       "branch": "feat/b11a-scope",
       "spec": "docs/superpowers/specs/2026-10-09-b11-apps-design.md",
       "current_slice": "B11a",
-      "current_task": "Plan 62 written (5 tasks); waiting for conductor memory window to build images + run TDD loops",
+      "current_task": "B11a Task 1 (devices app, switch, branding_snapshot under site claim, manifest)",
       "session": "9e6e76f0"
     }
   },
