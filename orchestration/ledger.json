@@ -691,7 +691,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "dashboard/src/features/vouchers",
+      "phase": "B7",
+      "reason": "T9-11 fix round 1",
+      "since": "2026-10-09T09:10:04+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
