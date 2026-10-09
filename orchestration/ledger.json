@@ -497,7 +497,7 @@
       "plan_number": 56,
       "spec": "docs/superpowers/specs/2026-10-07-b5d-more-notices-design.md",
       "plan": "docs/superpowers/plans/2026-10-08-plan-56-more-notices.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/45 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/47 https://github.com/Etqan-agency/etqan_tutor/pull/61",
       "bounces": 0
     },
     "B5e": {
