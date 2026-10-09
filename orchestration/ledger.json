@@ -631,7 +631,7 @@
     },
     "B7d": {
       "phase": "B7",
-      "status": "spec",
+      "status": "build",
       "requires": [
         "B7c",
         "B7b"
