@@ -151,7 +151,6 @@ In flight: **B4c** · Queue: B4b, B7c, B5d · Next plan number: 61 · Conductor:
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| identity | B5 | R10 whatsapp_parents (D60), B5c Plan 57 Task 2 | 2026-10-09T08:26:09+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|

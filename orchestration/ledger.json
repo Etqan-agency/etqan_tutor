@@ -691,14 +691,7 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [
-    {
-      "target": "identity",
-      "phase": "B5",
-      "reason": "R10 whatsapp_parents (D60), B5c Plan 57 Task 2",
-      "since": "2026-10-09T08:26:09+00:00"
-    }
-  ],
+  "claims": [],
   "shared_decisions": [
     {
       "id": "D1",
