@@ -151,6 +151,7 @@ In flight: **B4c** · Queue: B4b, B7c · Next plan number: 61 · Conductor: 4ddf
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
+| etqan.learning | B7 | R8 SubjectCertificate (D58), slice B7g | 2026-10-09T07:38:05+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
