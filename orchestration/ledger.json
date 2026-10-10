@@ -713,7 +713,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "notifications",
+      "phase": "B11",
+      "reason": "R12 per D70: new notifications/services/push.py created_since, exported from notifications.services; one commit",
+      "since": "2026-10-10T14:18:35+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
