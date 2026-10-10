@@ -75,10 +75,10 @@
       ],
       "slot": 2,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b7",
-      "branch": "feat/b7d-consultation-booking",
+      "branch": "feat/b7e-recorded-feedback",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
-      "current_slice": "B7g",
-      "current_task": "B7g on trunk be e475b76/da ee1cc6b/mk ccf982a/meta 9b294bb: be b2656eb, da 872f10e, meta 52507b4 pushed. Gates fresh stack: test 9376/98.4% (1 B10 skip), lint 52 contracts, vitest 3291, e2e 73+3 flaky, 2 load-flakes passed on isolated rerun. Stack stopped. B7d queued; B7e/B7f next.",
+      "current_slice": "B7e",
+      "current_task": "B7e (plan 52) starting, code-only, stack stopped; B7g in flight (ready), B7d queued",
       "session": "c405df7d"
     },
     "B8": {
