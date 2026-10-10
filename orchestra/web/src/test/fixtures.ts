@@ -39,6 +39,7 @@ export function makeLedger(): Ledger {
 		requests: [],
 		queue: [],
 		in_flight: null,
+		in_flight_extra: null,
 		main_heads: {},
 		escalations: [],
 		conductor_session: null,

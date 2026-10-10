@@ -169,6 +169,17 @@ Slices merge one at a time, in queue order:
 
 Other phases rebase at their next task boundary after `main_heads` moves, and always before queuing.
 
+Amended 2026-10-10 (owner decision: "Merge two slices at a time"): the queue has a second slot. The
+ledger keeps `in_flight` (always the older slice, so ledger code that predates the slot still reads it)
+and adds `in_flight_extra`; a slice in either is `in-flight`. `ledger.py next --parallel` fills the
+second slot only while the first is taken; plain `next` refuses as before, and a third is refused.
+`merged` and `bounce` take either; when the older leaves, the extra is promoted to `in_flight`. The
+conductor takes a second slice only when the two touch disjoint backend apps, migration apps, dashboard
+feature folders and shared list blocks, and do not both migrate one Django app. That phase rebases and
+runs only its targeted tests locally; the meta PR's CI is the gate. Whichever goes green first merges;
+the other merges `origin/master` into its meta branch, re-points its gitlinks and waits for green again.
+A red `master` reverts the most recent merge first. Rules in `scripts/orchestration/CONDUCTOR.md` step 2.
+
 ## 6. Waves and conflict rules
 
 ### 6.1 Wave 0 — preparation (conductor, in order)

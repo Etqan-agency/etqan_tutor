@@ -116,6 +116,30 @@ describe("QueuePage", () => {
 		expect(dialog).toHaveTextContent(JSON.stringify('say "hi"'));
 	});
 
+	it("shows two slices in flight, each with its own actions", async () => {
+		const two = state();
+		two.ledger.in_flight_extra = "B3b";
+		two.ledger.slices.B3b.status = "in-flight";
+		two.ledger.queue = ["B8a"];
+		const calls = mockApi({
+			...base,
+			"GET /api/state": { body: two },
+			"POST /api/queue/bounce": { body: { ok: true } },
+		});
+		renderAt("/queue");
+		expect(await screen.findByText("In flight: B3a + B3b")).toBeInTheDocument();
+		const extra = screen.getByRole("region", { name: "B3b" });
+		expect(extra).toHaveTextContent("No PRs recorded yet.");
+		const user = userEvent.setup();
+		await user.click(within(extra).getByRole("button", { name: "Bounce" }));
+		const dialog = screen.getByRole("dialog");
+		await user.type(within(dialog).getByLabelText("Reason"), "red");
+		await user.click(within(dialog).getByRole("button", { name: "Confirm" }));
+		await waitFor(() =>
+			expect(lastPost(calls)?.body).toEqual({ slice: "B3b", reason: "red" }),
+		);
+	});
+
 	it("warns while the conductor is running", async () => {
 		mockApi({ ...base, "GET /api/state": { body: state("busy") } });
 		renderAt("/queue");
