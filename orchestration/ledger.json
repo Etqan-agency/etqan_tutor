@@ -587,7 +587,7 @@
     },
     "B4d": {
       "phase": "B4",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [
         "B4b"
       ],
@@ -1603,12 +1603,12 @@
     "B7d",
     "B11a"
   ],
-  "in_flight": "B4d",
+  "in_flight": null,
   "main_heads": {
-    "backend": "4236f9a",
-    "dashboard": "9548aca",
+    "backend": "f5d33cb",
+    "dashboard": "ffb85ce",
     "marketing": "ccf982a",
-    "meta": "2c7cbd1"
+    "meta": "bea36f7"
   },
   "escalations": [
     {
