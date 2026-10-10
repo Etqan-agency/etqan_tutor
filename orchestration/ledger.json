@@ -78,7 +78,7 @@
       "branch": "feat/b7e-recorded-feedback",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7e",
-      "current_task": "B7e (plan 52): 12 tasks built+reviewed (be 88097da, da f049f82, mk 7ab2ea5, pushed); final review running; then gates need a window (e2e spec unrun). B7g in flight, B7d queued.",
+      "current_task": "B7e code complete: 12 tasks + final review + fix wave (be ead011f, da cee7a54, mk 7ab2ea5, pushed). Needs a full-stack window for gates (test, lint, coverage, e2e incl. unrun b7-recorded-feedback). Partial stack stopped. B7g in flight, B7d queued.",
       "session": "c405df7d"
     },
     "B8": {
