@@ -631,7 +631,7 @@
     },
     "B7d": {
       "phase": "B7",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [
         "B7c",
         "B7b"
@@ -1599,7 +1599,6 @@
     }
   ],
   "queue": [
-    "B7d",
     "B11a",
     "B7e"
   ],
@@ -1644,5 +1643,6 @@
       "answer": "Owner (2026-10-10): hold native mobile apps for now. B11 ships the installable web app (B11a) and web push (B11b), then stops; B11c–B11g are deferred until the owner reopens them (no new repo, no Apple/Google/Firebase accounts)."
     }
   ],
-  "conductor_session": "4ddff076"
+  "conductor_session": "4ddff076",
+  "in_flight_extra": "B7d"
 }
