@@ -133,7 +133,7 @@
       "branch": "feat/b11b-web-push",
       "spec": "docs/superpowers/specs/2026-10-09-b11-apps-design.md",
       "current_slice": "B11b",
-      "current_task": "B11b Tasks 1-3 (code + partial stack), stacked on B11a (queued); Task 4 R12 waits for B5c (D70)",
+      "current_task": "B11b Tasks 1,2,3,5 done (be 08d23cc, da 810bc76; stacked on B11a); Task 4 (R12 + push job) waits for B5c to merge (D70); B11a queued",
       "session": "9e6e76f0"
     }
   },
