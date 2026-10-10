@@ -159,7 +159,6 @@ In flight: **B7d + B11a** · Queue: B7e · Next plan number: 64 · Conductor: 4d
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| notifications | B11 | R12 per D70: new notifications/services/push.py created_since, exported from notifications.services; one commit | 2026-10-10T14:18:35+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
