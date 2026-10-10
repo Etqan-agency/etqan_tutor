@@ -74,10 +74,9 @@ recorded as ledger slices. B11-7's native-push half (FCM via `integrations.resol
 
 **Requests and claims across the phase:**
 
-- **R-B11b-1 → B5 (notifications), filed 2026-10-09; B11b builds on it only after B5 confirms:** additive, unscoped, read-only `notifications.services.created_after(*,
-  after_id: int, limit: int) -> list[PushNote(id, recipient_id, title, body, created_at)]`, ordered by id,
-  one query; plus `notifications.services.latest_id() -> int` (0 when empty). Filed when B11b's spec is
-  written; B11b builds against it only once it is done.
+- **R-B11b-1 → B5 (notifications)**, filed 2026-10-09 (R11), amended 2026-10-10 by the B11b spec §3 (a time-window
+  read `created_since(*, since, after_id=0, limit=200)` replaces the id cursor); B11b's push job builds on it only
+  after B5 confirms.
 - **B11a claim on `etqan.site`** (conductor's since B8 merged): additive read service
   `site.services.branding_snapshot() -> BrandingSnapshot(name_ar, name_en, primary_color, primary_text,
   logo_name, updated_at)`, one query, no model change (§7.2).
