@@ -17,7 +17,7 @@ In flight: **B7g** · Queue: B4d, B5c, B7d · Next plan number: 64 · Conductor:
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
 | B10 | AI | merged |  | B10b | B10 complete: B10a, B10b merged; torn down | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | a61cece4 |
-| B11 | Apps | build | 3 | B11a | B11a reviewed (final review + fix wave clean; be 5a40e90, da 6a4b6b8); waiting for conductor full window to run gates + first e2e run | B2, B3, B4, B5 | docs/superpowers/specs/2026-10-09-b11-apps-design.md | 9e6e76f0 |
+| B11 | Apps | build | 3 | B11a | B11a gates: test+lint green; full e2e running | B2, B3, B4, B5 | docs/superpowers/specs/2026-10-09-b11-apps-design.md | 9e6e76f0 |
 
 ## Slices
 
