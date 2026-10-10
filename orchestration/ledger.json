@@ -713,14 +713,7 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [
-    {
-      "target": "dashboard-shell",
-      "phase": "B11",
-      "reason": "B11b P-12: one additive call in features/shell/AppShell.tsx onSignOut (stop pushes to this browser), one commit",
-      "since": "2026-10-10T10:17:28+00:00"
-    }
-  ],
+  "claims": [],
   "shared_decisions": [
     {
       "id": "D1",
