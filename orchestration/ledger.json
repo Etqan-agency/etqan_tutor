@@ -587,7 +587,7 @@
     },
     "B4d": {
       "phase": "B4",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [
         "B4b"
       ],
@@ -1586,12 +1586,11 @@
     }
   ],
   "queue": [
-    "B4d",
     "B5c",
     "B7d",
     "B11a"
   ],
-  "in_flight": null,
+  "in_flight": "B4d",
   "main_heads": {
     "backend": "4236f9a",
     "dashboard": "9548aca",
