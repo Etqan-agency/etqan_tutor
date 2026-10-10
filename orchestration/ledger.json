@@ -698,7 +698,7 @@
       ],
       "plan_number": 63,
       "spec": "docs/superpowers/specs/2026-10-10-b11b-web-push-design.md",
-      "plan": null,
+      "plan": "docs/superpowers/plans/2026-10-10-plan-63-web-push.md",
       "prs": null,
       "bounces": 0
     }
