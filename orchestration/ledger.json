@@ -713,7 +713,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "backend/config/settings/base.py",
+      "phase": "B7",
+      "reason": "B7e E-8: throttle scopes recorded_comment, recorded_review",
+      "since": "2026-10-10T09:19:29+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
