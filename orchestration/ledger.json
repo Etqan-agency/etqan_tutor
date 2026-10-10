@@ -133,7 +133,7 @@
       "branch": "feat/b11b-web-push",
       "spec": "docs/superpowers/specs/2026-10-09-b11-apps-design.md",
       "current_slice": "B11b",
-      "current_task": "B11a re-gated on trunk be f5d33cb/da ffb85ce/meta bea36f7 (merged be 5582491 da 1b86317 meta 74ff6cb; lint + b11 e2e green, backend 95% before memory kill — conductor waived rest to CI); pushed; B11b restacked (be 09db2a2 da 37906bd); Task 4 waits B5c",
+      "current_task": "B11a in flight (pushed on B5c trunks, be d280a82 da 1797498); B11b Task 4 (R12 under notifications claim + push job) building",
       "session": "9e6e76f0"
     }
   },
