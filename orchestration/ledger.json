@@ -1498,6 +1498,15 @@
         "B4"
       ],
       "source": "owner"
+    },
+    {
+      "id": "D72",
+      "phase": "B11",
+      "decision": "R13 (Notification(created_at, id) index for created_since) is deferred, not built in the phases: B5 is complete and torn down, and the index only matters at scale. It is listed as a STATE.md follow-up next to the SessionActivity (action, created_at) index; R13 stays open until that fix lands. Conductor ruling.",
+      "affects": [
+        "B11"
+      ],
+      "source": "request R13; D70"
     }
   ],
   "requests": [
