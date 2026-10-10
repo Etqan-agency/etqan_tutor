@@ -90,6 +90,8 @@ export type Ledger = {
 	requests: LedgerRequest[];
 	queue: string[];
 	in_flight: string | null;
+	/** The second merge slot; absent in ledgers written before 2026-10-10. */
+	in_flight_extra?: string | null;
 	main_heads: Record<string, string>;
 	escalations: Escalation[];
 	conductor_session: string | null;
