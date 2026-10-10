@@ -158,7 +158,6 @@ In flight: **B7g** · Queue: B4d, B5c, B7d · Next plan number: 64 · Conductor:
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| marketing/src/lib/i18n.ts | B7 | B7e E-5: recorded-course review strings | 2026-10-10T09:33:50+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
