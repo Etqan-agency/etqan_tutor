@@ -78,7 +78,7 @@
       "branch": "feat/b7e-recorded-feedback",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7e",
-      "current_task": "B7g merged. B7e merged trunk (be 4236f9a/da 9548aca/meta 2c7cbd1): be 4108fd6, da 58744a9, mk 7ab2ea5 pushed; recorded+vouchers pytest 538, vitest 133, tsc, 52 contracts. Waiting for gate window (after B4d, B5c). B7d queued; B7f after B7d.",
+      "current_task": "B7d brought onto trunk code-only (be 4236f9a/da 9548aca/meta 2c7cbd1): be 0148b14, da 1a9f3fe, meta 6b0b85a pushed; pytest consultations+access+recorded+gateways 3123, vitest 681, tsc, 52 contracts; full gates still needed in its window. B7e code complete (be 4108fd6, da 58744a9) awaiting window. Worktree on B7d branches.",
       "session": "c405df7d"
     },
     "B8": {
