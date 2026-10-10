@@ -78,7 +78,7 @@
       "branch": "feat/b7e-recorded-feedback",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7e",
-      "current_task": "B7e code complete: 12 tasks + final review + fix wave (be ead011f, da cee7a54, mk 7ab2ea5, pushed). Needs a full-stack window for gates (test, lint, coverage, e2e incl. unrun b7-recorded-feedback). Partial stack stopped. B7g in flight, B7d queued.",
+      "current_task": "B7g merged. B7e merged trunk (be 4236f9a/da 9548aca/meta 2c7cbd1): be 4108fd6, da 58744a9, mk 7ab2ea5 pushed; recorded+vouchers pytest 538, vitest 133, tsc, 52 contracts. Waiting for gate window (after B4d, B5c). B7d queued; B7f after B7d.",
       "session": "c405df7d"
     },
     "B8": {
