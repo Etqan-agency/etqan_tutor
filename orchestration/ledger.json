@@ -78,7 +78,7 @@
       "branch": "feat/b7e-recorded-feedback",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7e",
-      "current_task": "B7d gated on trunk 2c7cbd1 (be 0148b14, da 1a9f3fe, mk 8f085ce, meta 6b0b85a, pushed): test 9565/98.4%, lint, vitest 3324, full e2e killed by host memory after 12 passing (B11 stack also up), all 6 b7-* specs pass; CI is the full e2e gate. Stack stopped. B7e next for gates.",
+      "current_task": "B7e queued: be#55 da#57 mk#9 meta#72 (be cfb5a94, da 0bae902, mk 7ab2ea5, meta 2c3c58f on trunk be f5d33cb/da ffb85ce/meta cdbd89e). Gates: test 9485/98.4%, lint, vitest 3328, full e2e killed by host memory after 15 passing; b7-* 6/6. B7d ready (B4d trunk merged; B5c trunk pending). Stack stopped. B7f after B7d.",
       "session": "c405df7d"
     },
     "B8": {
