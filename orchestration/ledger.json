@@ -36,7 +36,7 @@
       "branch": "feat/b4d-salary-projections",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4d",
-      "current_task": "B4d gates (conductor window): trunks merged (be e475b76, da ee1cc6b, meta 9b294bb); fresh stack migrated+seeded; just test running",
+      "current_task": "B4d in flight: merged B7g trunk (be 400ecc1, da 6ac3491, meta d7b7afb), pushed; just test 0 (9329, 98.4%), lint 0, targeted green; just e2e killed by host low memory at 22/22 pass — awaiting conductor",
       "session": "c0892bad"
     },
     "B5": {
