@@ -1555,6 +1555,14 @@
       "to_owner": "B5",
       "what": "R-B11b-1 (B11b web push, spec docs/superpowers/specs/2026-10-09-b11-apps-design.md B11-6, ledger D68): additive, UNSCOPED, read-only services exported from etqan.notifications.services, one query each: (a) created_after(*, after_id: int, limit: int) -> list[PushNote(id, recipient_id, title, body, created_at)] — Notification rows with id > after_id, ordered by id, at most limit; (b) latest_id() -> int (max Notification id, 0 when none). Plus the import-linter change D68 allows: etqan.devices may import etqan.notifications.services (add to 'no app imports notifications' as an ignore or B11 adds it under its marker — B5's call); notifications never imports devices. Non-blocking for B11a; B11b builds only after B5 confirms. B11 can build it under a one-commit claim if B5 prefers.",
       "status": "open"
+    },
+    {
+      "id": "R12",
+      "from": "B11",
+      "app": "notifications",
+      "to_owner": "B5",
+      "what": "R-B11b-1 AMENDED (supersedes R11, which B5 has not started; spec docs/superpowers/specs/2026-10-10-b11b-web-push-design.md §3, P-4): ONE additive, UNSCOPED, read-only service exported from etqan.notifications.services, one query: created_since(*, since: datetime, after_id: int = 0, limit: int = 200) -> list[PushNote(id, recipient_id, title, body, created_at)] — Notification rows with created_at >= since and id > after_id, ordered by id, at most limit. (An id cursor would skip rows committed out of id order by atomic scans/broadcasts; B11 reads a 60-minute window and dedupes on its side.) No change to the 'no app imports notifications' contract: B11 adds 'etqan.devices.** -> etqan.notifications.services' to its own devices contract (D68). Non-blocking for B11a; B11b's push job builds only after B5 confirms. B11 can build it under a one-commit claim if B5 prefers.",
+      "status": "open"
     }
   ],
   "queue": [
