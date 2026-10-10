@@ -71,7 +71,7 @@ In flight: **B7g** · Queue: B4d, B5c, B7d, B11a · Next plan number: 64 · Cond
 | B7e | B7 | build | 52 | B7a, B7b |  | 0 |
 | B7f | B7 | plan | 61 | B7c, B7d |  | 0 |
 | B7g | B7 | in-flight | 59 | B7a | https://github.com/Etqan-agency/etqan_tutor_backend/pull/49 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/51 https://github.com/Etqan-agency/etqan_tutor/pull/65 | 0 |
-| B11a | B11 | queued | 62 |  |  | 0 |
+| B11a | B11 | queued | 62 |  | https://github.com/Etqan-agency/etqan_tutor_backend/pull/54 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/56 https://github.com/Etqan-agency/etqan_tutor/pull/70 | 0 |
 | B11b | B11 | plan | 63 | B11a |  | 0 |
 
 ## Open escalations
