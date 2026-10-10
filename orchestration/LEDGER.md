@@ -159,6 +159,7 @@ In flight: **B7g** · Queue: B4d, B5c, B7d · Next plan number: 64 · Conductor:
 | Target | Phase | Reason | Since |
 |---|---|---|---|
 | backend/config/settings/base.py | B7 | B7e E-8: throttle scopes recorded_comment, recorded_review | 2026-10-10T09:19:29+00:00 |
+| backend/etqan/access/tests/test_routes.py | B7 | B7e SELF_SERVICE entries | 2026-10-10T09:19:29+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
