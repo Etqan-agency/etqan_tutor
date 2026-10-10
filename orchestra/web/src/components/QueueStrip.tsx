@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { inFlightLabel } from "@/api/inFlight";
 import type { Ledger } from "@/api/types";
 import { Card } from "@/ui/Card";
 
@@ -12,7 +13,7 @@ export function QueueStrip({ ledger }: { ledger: Ledger }) {
 				</Link>
 			}
 		>
-			<p className="text-sm font-medium">{`In flight: ${ledger.in_flight ?? "—"}`}</p>
+			<p className="text-sm font-medium">{`In flight: ${inFlightLabel(ledger)}`}</p>
 			{ledger.queue.length === 0 ? (
 				<p className="mt-2 text-sm text-muted-foreground">Nothing queued.</p>
 			) : (

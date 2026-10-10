@@ -33,6 +33,22 @@ Loop (use /loop or ScheduleWakeup, about every 20 minutes, sooner while a slice 
       git -C <ledger> commit -q -m "merges: <slice>" -- orchestration/MERGES.md'`; then
       `git -C <ledger> push origin orchestration`.
    Red: `ledger.py bounce <slice> --reason "<failing job>"`.
+
+   Second slot (owner decision 2026-10-10): while one slice is in flight, take the queue head as a
+   second with `ledger.py next --parallel` (it lands in `in_flight_extra`; `show` reads
+   "In flight: B4d + B5c") only when both hold:
+   1. its PRs touch no backend app, migration app, dashboard feature folder or shared list block
+      (`── phase Bn ──` markers) that the slice in flight touches — compare
+      `git diff --stat origin/main...<branch>` per repo for the two;
+   2. they do not both carry a migration in the same Django app.
+   Otherwise wait, or `reorder` a slice that does fit to the head first. The second slice's phase
+   rebases onto trunk and runs only the targeted tests for its changed apps/features locally (no full
+   local stack or e2e); the meta PR's CI is the gate. Merge whichever goes green first, as in 1–5. The
+   other then merges `origin/master` into its meta branch, re-points its gitlinks at its PR branch tips
+   (gitlink conflicts are expected) and waits for green again before it merges. After each merge the
+   main-checkout pointer bump (3) runs as today. `merged`/`bounce` take either slice; when the older
+   one leaves, the extra becomes `in_flight`. If `master` goes red, revert the most recent merge first
+   (step 3).
 3. If `master` CI goes red after a merge, revert that merge in every repo, bump the pointers, push, and
    return the slice. Never fix forward on a red trunk. `bounce` only takes an in-flight slice, so for a
    merged one run `ledger.py slice <id> --status build` (the phase fixes it and queues it again) and
