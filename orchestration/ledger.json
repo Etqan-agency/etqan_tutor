@@ -78,7 +78,7 @@
       "branch": "feat/b7e-recorded-feedback",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7e",
-      "current_task": "B7d in flight (merge slot 2): meta a30e8e7 on master c9190df, be 4236877, da 6ad6670, mk 8f085ce pushed; targeted vitest 571 + earlier pytest consultations/access/payroll 2804 on these heads; meta#69 CI is the gate. After B5c merges: merge master, re-point gitlinks. B7e queued.",
+      "current_task": "B7d in flight: B5c trunk merged (be ea9f153/da 82c7bf6/meta 4562535): be bb985ff, da 7f067ef, meta e1aa935, pushed; targeted pytest consultations+notifications+access 2761, vitest 693, tsc, 52 contracts. Waiting on meta#69 CI. B7e queued next.",
       "session": "c405df7d"
     },
     "B8": {
