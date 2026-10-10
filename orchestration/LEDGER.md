@@ -158,6 +158,7 @@ In flight: **B7g** · Queue: B4d, B5c, B7d, B11a · Next plan number: 64 · Cond
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
+| dashboard-shell | B11 | B11b P-12: one additive call in features/shell/AppShell.tsx onSignOut (stop pushes to this browser), one commit | 2026-10-10T10:17:28+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
