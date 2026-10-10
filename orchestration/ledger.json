@@ -647,7 +647,7 @@
       "status": "plan",
       "requires": [
         "B7a",
-        " B7b"
+        "B7b"
       ],
       "plan_number": 52,
       "spec": "docs/superpowers/specs/2026-10-08-b7e-recorded-comments-reviews-design.md",
