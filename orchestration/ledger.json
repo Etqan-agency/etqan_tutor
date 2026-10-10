@@ -133,7 +133,7 @@
       "branch": "feat/b11b-web-push",
       "spec": "docs/superpowers/specs/2026-10-09-b11-apps-design.md",
       "current_slice": "B11b",
-      "current_task": "B11a in flight (pushed on B5c trunks, be d280a82 da 1797498); B11b Task 4 (R12 under notifications claim + push job) building",
+      "current_task": "B11b code-complete + reviewed (be 5e5d234, da 183a156; R12 done; R13 index request filed); needs gate window; B11a in flight",
       "session": "9e6e76f0"
     }
   },
