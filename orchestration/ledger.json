@@ -631,7 +631,7 @@
     },
     "B7d": {
       "phase": "B7",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [
         "B7c",
         "B7b"
@@ -1618,12 +1618,12 @@
   "queue": [
     "B7e"
   ],
-  "in_flight": "B7d",
+  "in_flight": "B11a",
   "main_heads": {
-    "backend": "ea9f153",
-    "dashboard": "82c7bf6",
-    "marketing": "ccf982a",
-    "meta": "4562535"
+    "backend": "8a9ba78",
+    "dashboard": "53c9db4",
+    "marketing": "1d7a112",
+    "meta": "63e760e"
   },
   "escalations": [
     {
@@ -1660,5 +1660,5 @@
     }
   ],
   "conductor_session": "4ddff076",
-  "in_flight_extra": "B11a"
+  "in_flight_extra": null
 }
