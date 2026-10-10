@@ -652,7 +652,7 @@
       "plan_number": 52,
       "spec": "docs/superpowers/specs/2026-10-08-b7e-recorded-comments-reviews-design.md",
       "plan": "docs/superpowers/plans/2026-10-08-plan-52-recorded-comments-reviews.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/55 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/57 https://github.com/Etqan-agency/etqan_tutor_marketing/pull/9 https://github.com/Etqan-agency/etqan_tutor/pull/72",
       "bounces": 0
     },
     "B7f": {
