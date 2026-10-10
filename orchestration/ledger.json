@@ -682,7 +682,7 @@
     },
     "B11a": {
       "phase": "B11",
-      "status": "plan",
+      "status": "queued",
       "requires": [],
       "plan_number": 62,
       "spec": "docs/superpowers/specs/2026-10-09-b11-apps-design.md",
@@ -1588,7 +1588,8 @@
   "queue": [
     "B4d",
     "B5c",
-    "B7d"
+    "B7d",
+    "B11a"
   ],
   "in_flight": "B7g",
   "main_heads": {
