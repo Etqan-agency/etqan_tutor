@@ -1485,6 +1485,19 @@
         " B11"
       ],
       "source": "request R12; D58; D68; D69"
+    },
+    {
+      "id": "D71",
+      "phase": "B5",
+      "decision": "Owner (2026-10-10): use the free memory — about 10 GiB is free. Conductor: allow TWO full-stack memory windows at once (two phases may run just test / just e2e on their own stacks simultaneously) as long as `free -g` shows ≥ 4 GiB available before opening the second; never three. Combined with the coming two-in-flight merge queue (meta PR 'Merge queue: two slices in flight'), this lets B5c/B7d/B11a/B7e/B11b gate in parallel.",
+      "affects": [
+        "conductor",
+        "B5",
+        "B7",
+        "B11",
+        "B4"
+      ],
+      "source": "owner"
     }
   ],
   "requests": [
