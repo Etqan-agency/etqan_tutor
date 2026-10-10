@@ -715,12 +715,6 @@
   },
   "claims": [
     {
-      "target": "backend/config/settings/base.py",
-      "phase": "B7",
-      "reason": "B7e E-8: throttle scopes recorded_comment, recorded_review",
-      "since": "2026-10-10T09:19:29+00:00"
-    },
-    {
       "target": "backend/etqan/access/tests/test_routes.py",
       "phase": "B7",
       "reason": "B7e SELF_SERVICE entries",
