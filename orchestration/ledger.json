@@ -682,7 +682,7 @@
     },
     "B11a": {
       "phase": "B11",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [],
       "plan_number": 62,
       "spec": "docs/superpowers/specs/2026-10-09-b11-apps-design.md",
@@ -1599,7 +1599,6 @@
     }
   ],
   "queue": [
-    "B11a",
     "B7e"
   ],
   "in_flight": "B7d",
@@ -1644,5 +1643,5 @@
     }
   ],
   "conductor_session": "4ddff076",
-  "in_flight_extra": null
+  "in_flight_extra": "B11a"
 }
