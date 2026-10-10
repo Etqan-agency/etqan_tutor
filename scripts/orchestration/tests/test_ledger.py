@@ -172,6 +172,119 @@ class SlicesAndQueue(unittest.TestCase):
         self.assertEqual(kinds, ["queue-failures"])
 
 
+
+class TwoInFlight(unittest.TestCase):
+    """A second merge slot (owner decision 2026-10-10): `in_flight_extra`."""
+
+    def setUp(self):
+        self.data = L.empty()
+        for sid in ("B3a", "B3b", "B3c"):
+            L.add_slice(self.data, sid, phase="B3", requires=[])
+            L.enqueue(self.data, sid)
+
+    def test_a_new_ledger_has_no_extra(self):
+        self.assertIsNone(L.empty()["in_flight_extra"])
+
+    def test_parallel_takes_the_head_into_the_extra_slot(self):
+        self.assertEqual(L.take_next(self.data, parallel=True), "B3a")
+        self.assertEqual(self.data["in_flight"], "B3a")
+        self.assertIsNone(self.data["in_flight_extra"])
+        self.assertEqual(L.take_next(self.data, parallel=True), "B3b")
+        self.assertEqual(self.data["in_flight_extra"], "B3b")
+        self.assertEqual(self.data["slices"]["B3b"]["status"], "in-flight")
+        self.assertEqual(self.data["queue"], ["B3c"])
+
+    def test_without_parallel_a_taken_primary_refuses(self):
+        L.take_next(self.data)
+        with self.assertRaisesRegex(L.LedgerError, "B3a is in flight"):
+            L.take_next(self.data)
+
+    def test_a_third_is_refused(self):
+        L.take_next(self.data)
+        L.take_next(self.data, parallel=True)
+        with self.assertRaisesRegex(L.LedgerError, "two slices are in flight"):
+            L.take_next(self.data, parallel=True)
+        self.assertEqual(self.data["queue"], ["B3c"])
+
+    def test_an_empty_queue_takes_nothing(self):
+        data = L.empty()
+        L.add_slice(data, "B3a", phase="B3", requires=[])
+        L.enqueue(data, "B3a")
+        L.take_next(data)
+        self.assertIsNone(L.take_next(data, parallel=True))
+        self.assertIsNone(data["in_flight_extra"])
+
+    def test_merging_the_extra_clears_only_it(self):
+        L.take_next(self.data)
+        L.take_next(self.data, parallel=True)
+        L.mark_merged(self.data, "B3b", {"backend": "abc"})
+        self.assertEqual(self.data["in_flight"], "B3a")
+        self.assertIsNone(self.data["in_flight_extra"])
+        self.assertEqual(self.data["slices"]["B3b"]["status"], "merged")
+
+    def test_merging_the_primary_promotes_the_extra(self):
+        L.take_next(self.data)
+        L.take_next(self.data, parallel=True)
+        L.mark_merged(self.data, "B3a", {})
+        self.assertEqual(self.data["in_flight"], "B3b")
+        self.assertIsNone(self.data["in_flight_extra"])
+        self.assertEqual(L.take_next(self.data, parallel=True), "B3c")
+        self.assertEqual(self.data["in_flight_extra"], "B3c")
+
+    def test_bouncing_the_primary_promotes_the_extra(self):
+        L.take_next(self.data)
+        L.take_next(self.data, parallel=True)
+        L.bounce(self.data, "B3a", "CI red")
+        self.assertEqual(self.data["in_flight"], "B3b")
+        self.assertIsNone(self.data["in_flight_extra"])
+        self.assertEqual(self.data["slices"]["B3a"]["status"], "build")
+
+    def test_bouncing_the_extra_clears_only_it(self):
+        L.take_next(self.data)
+        L.take_next(self.data, parallel=True)
+        L.bounce(self.data, "B3b", "CI red")
+        self.assertEqual(self.data["in_flight"], "B3a")
+        self.assertIsNone(self.data["in_flight_extra"])
+        with self.assertRaisesRegex(L.LedgerError, "B3c is not in flight"):
+            L.mark_merged(self.data, "B3c", {})
+
+    def test_enqueue_refuses_a_slice_in_either_slot(self):
+        L.take_next(self.data)
+        L.take_next(self.data, parallel=True)
+        for sid in ("B3a", "B3b"):
+            with self.assertRaisesRegex(L.LedgerError, f"{sid} is already queued"):
+                L.enqueue(self.data, sid)
+
+    def test_reorder_never_moves_an_in_flight_slice(self):
+        L.take_next(self.data)
+        L.take_next(self.data, parallel=True)
+        for sid in ("B3a", "B3b"):
+            with self.assertRaisesRegex(L.LedgerError, f"{sid} is not queued"):
+                L.reorder(self.data, sid, "down")
+
+    def test_render_shows_both(self):
+        L.take_next(self.data)
+        self.assertIn("In flight: **B3a** ·", L.render(self.data))
+        L.take_next(self.data, parallel=True)
+        self.assertIn("In flight: **B3a + B3b** · Queue: B3c", L.render(self.data))
+
+    def test_an_older_ledger_without_the_key_still_works(self):
+        del self.data["in_flight_extra"]
+        L.take_next(self.data)
+        self.assertIn("In flight: **B3a**", L.render(self.data))
+        L.mark_merged(self.data, "B3a", {})
+        self.assertEqual(L.take_next(self.data, parallel=True), "B3b")
+        self.assertIsNone(self.data.get("in_flight_extra"))
+
+    def test_load_backfills_the_extra(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            old = L.empty()
+            del old["in_flight_extra"]
+            (directory / "orchestration").mkdir()
+            (directory / "orchestration" / "ledger.json").write_text(json.dumps(old))
+            self.assertIsNone(L.load(directory)["in_flight_extra"])
+
 class ClaimsDecisionsEscalations(unittest.TestCase):
     def test_a_claim_held_by_another_phase_is_refused(self):
         data = L.empty()
@@ -578,6 +691,22 @@ class OrchestraCli(unittest.TestCase):
         self.assertEqual(self._data()["claims"], [])
         self.assertNotEqual(cli(self.dir, "reorder", "B3a", "left").returncode, 0)
 
+
+    def test_next_parallel_and_show_json(self):
+        for sid in ("B3a", "B3b", "B3c"):
+            cli(self.dir, "slice", sid, "--phase", "B3")
+            cli(self.dir, "queue", sid)
+        self.assertEqual(cli(self.dir, "next").stdout.strip(), "B3a")
+        refused = cli(self.dir, "next")
+        self.assertEqual(refused.returncode, 1)
+        self.assertIn("B3a is in flight", refused.stderr)
+        self.assertEqual(cli(self.dir, "next", "--parallel").stdout.strip(), "B3b")
+        self.assertEqual(cli(self.dir, "next", "--parallel").returncode, 1)
+        shown = json.loads(cli(self.dir, "show", "--json").stdout)
+        self.assertEqual((shown["in_flight"], shown["in_flight_extra"]), ("B3a", "B3b"))
+        self.assertIn("In flight: **B3a + B3b**", cli(self.dir, "show").stdout)
+        self.assertEqual(cli(self.dir, "merged", "B3a").returncode, 0)
+        self.assertEqual((self._data()["in_flight"], self._data()["in_flight_extra"]), ("B3b", None))
 
 if __name__ == "__main__":
     unittest.main()
