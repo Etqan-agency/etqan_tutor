@@ -713,7 +713,14 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [],
+  "claims": [
+    {
+      "target": "marketing/src/lib/i18n.ts",
+      "phase": "B7",
+      "reason": "B7e E-5: recorded-course review strings",
+      "since": "2026-10-10T09:33:50+00:00"
+    }
+  ],
   "shared_decisions": [
     {
       "id": "D1",
