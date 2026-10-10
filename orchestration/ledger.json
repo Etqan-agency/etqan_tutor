@@ -1475,6 +1475,16 @@
         " B11"
       ],
       "source": "requests R11, R12; D68; spec 2026-10-10-b11b-web-push"
+    },
+    {
+      "id": "D70",
+      "phase": "B5",
+      "decision": "R12 (etqan.notifications, owned by B5) is delegated to its requester B11, built under a short ledger claim on etqan.notifications (D58 pattern), only on a trunk that already has B5c merged. Scope: new module notifications/services/push.py exported from notifications.services; additive, unscoped, read-only, ONE query (created_at >= since AND id > after_id ORDER BY id LIMIT limit) read with values() into PushNote(id, recipient_id, title, body, created_at); title/body as stored. No model, migration, or change to existing services or contracts (the devices import-contract line is B11's per D68/D69). Tests: since window, after_id cursor, limit, order, query count, tenant isolation across two schemas. B5 reviews the notifications diff on request.",
+      "affects": [
+        "B5",
+        " B11"
+      ],
+      "source": "request R12; D58; D68; D69"
     }
   ],
   "requests": [
