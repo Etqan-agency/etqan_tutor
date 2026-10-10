@@ -475,7 +475,7 @@
     },
     "B5c": {
       "phase": "B5",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [
         "B5a",
         "B5b"
@@ -1602,12 +1602,12 @@
     "B11a",
     "B7e"
   ],
-  "in_flight": "B5c",
+  "in_flight": "B7d",
   "main_heads": {
-    "backend": "f5d33cb",
-    "dashboard": "ffb85ce",
+    "backend": "ea9f153",
+    "dashboard": "82c7bf6",
     "marketing": "ccf982a",
-    "meta": "bea36f7"
+    "meta": "4562535"
   },
   "escalations": [
     {
@@ -1644,5 +1644,5 @@
     }
   ],
   "conductor_session": "4ddff076",
-  "in_flight_extra": "B7d"
+  "in_flight_extra": null
 }
