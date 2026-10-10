@@ -52,7 +52,9 @@ Facts that set the shape of the phase (surveyed 2026-10-09 on trunk `f0915f7`):
 
 Desktop needs no further slice: the installed web app (B11a) is the desktop app (B11-2).
 
-If the owner declines E-B11-1, the phase ends after B11b and B11c–B11g are dropped from the ledger.
+**E-B11-1 answered (ledger E4, owner, 2026-10-10): hold the native mobile app.** B11 ships B11a and B11b, then stops;
+B11c–B11g are deferred until the owner reopens them (no new repo, no Apple/Google/Firebase accounts) and are not
+recorded as ledger slices. B11-7's native-push half (FCM via `integrations.resolve('push')`) is deferred with them.
 
 ## 4. Phase decisions
 
