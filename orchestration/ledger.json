@@ -692,7 +692,7 @@
     },
     "B11b": {
       "phase": "B11",
-      "status": "plan",
+      "status": "build",
       "requires": [
         "B11a"
       ],
