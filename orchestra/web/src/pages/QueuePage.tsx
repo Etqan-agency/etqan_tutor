@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { post } from "@/api/client";
+import { flying, inFlightLabel } from "@/api/inFlight";
 import { useOrchestraState } from "@/api/queries";
 import { ActionDialog } from "@/ui/ActionDialog";
 import { Card } from "@/ui/Card";
@@ -78,19 +79,24 @@ export function QueuePage() {
 		conductor === "busy" || conductor === "idle"
 			? "The conductor is running and may act on this too."
 			: undefined;
-	const inFlight = ledger.in_flight;
+	const inFlight = flying(ledger);
 	return (
 		<div className="space-y-6">
-			<Card title={`In flight: ${inFlight ?? "—"}`}>
-				{inFlight ? (
-					<div className="space-y-3 text-sm">
-						<p className="text-muted-foreground">
-							{ledger.slices[inFlight]?.prs ?? "No PRs recorded yet."}
-						</p>
-						<div className="flex gap-2">
-							<MarkMerged sid={inFlight} warning={warning} />
-							<Bounce sid={inFlight} warning={warning} />
-						</div>
+			<Card title={`In flight: ${inFlightLabel(ledger)}`}>
+				{inFlight.length > 0 ? (
+					<div className="space-y-4">
+						{inFlight.map((sid) => (
+							<section key={sid} aria-label={sid} className="space-y-3 text-sm">
+								{inFlight.length > 1 && <p className="font-medium">{sid}</p>}
+								<p className="text-muted-foreground">
+									{ledger.slices[sid]?.prs ?? "No PRs recorded yet."}
+								</p>
+								<div className="flex gap-2">
+									<MarkMerged sid={sid} warning={warning} />
+									<Bounce sid={sid} warning={warning} />
+								</div>
+							</section>
+						))}
 					</div>
 				) : (
 					<ActionDialog
