@@ -1596,6 +1596,14 @@
       "to_owner": "B5",
       "what": "R-B11b-1 AMENDED (supersedes R11, which B5 has not started; spec docs/superpowers/specs/2026-10-10-b11b-web-push-design.md §3, P-4): ONE additive, UNSCOPED, read-only service exported from etqan.notifications.services, one query: created_since(*, since: datetime, after_id: int = 0, limit: int = 200) -> list[PushNote(id, recipient_id, title, body, created_at)] — Notification rows with created_at >= since and id > after_id, ordered by id, at most limit. (An id cursor would skip rows committed out of id order by atomic scans/broadcasts; B11 reads a 60-minute window and dedupes on its side.) No change to the 'no app imports notifications' contract: B11 adds 'etqan.devices.** -> etqan.notifications.services' to its own devices contract (D68). Non-blocking for B11a; B11b's push job builds only after B5 confirms. B11 can build it under a one-commit claim if B5 prefers.",
       "status": "done"
+    },
+    {
+      "id": "R13",
+      "from": "B11",
+      "app": "notifications",
+      "to_owner": "B5",
+      "what": "R-B11b-2 (B11b, final review): add an index serving notifications.services.created_since (D70): models.Index(fields=['created_at', 'id']) on notifications.Notification (additive migration). Without it the push job's read (created_at >= now-60min AND id > after_id ORDER BY id LIMIT 200) scans the table every minute per academy; fine at today's volumes, grows with history. Non-blocking for B11b's merge. Owner: conductor (B5 merged). B11 can build it under a one-commit claim if preferred.",
+      "status": "open"
     }
   ],
   "queue": [
