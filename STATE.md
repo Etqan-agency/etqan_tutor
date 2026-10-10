@@ -113,6 +113,8 @@ Deploy note (integrations slice 3):
   never set it behind an edge that does not strip the header.
 - SessionActivity has only a (session, created_at) index; B5d's per-minute postponements read
   (R6c) filters on (action, created_at). Add that index in a small scheduling fix (B2 is complete).
+- R13 (from B11): add an index on Notification(created_at, id) for the web-push read
+  notifications.services.created_since (B11b). Matters only at scale; one small migration.
 - e2e specs flaky under host memory load (timeouts, pass alone): b2-archive, b2-bundles, b2-trials,
   b9-languages, b9-registration, journey. CI e2e is green; harden their waits if they spread.
 - Staging uploads are linked at the S3 store's in-network address (`http://s3:9000/...`), so
