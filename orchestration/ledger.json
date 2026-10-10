@@ -26,17 +26,17 @@
     },
     "B4": {
       "title": "Payroll depth",
-      "status": "build",
+      "status": "merged",
       "requires": [
         "B2",
         "B3"
       ],
-      "slot": 1,
+      "slot": null,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b4",
       "branch": "feat/b4d-salary-projections",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4d",
-      "current_task": "B4d ready: in flight, pushed (be 400ecc1, da 6ac3491, meta d7b7afb on B7g trunk); test 0 (9329, 98.4%), lint 0, targeted green, b4-projections e2e pass; full e2e via CI meta#66 (local run killed by low memory 22/22); stack stopped",
+      "current_task": "B4 complete: B4a to B4d merged; torn down",
       "session": "c0892bad"
     },
     "B5": {
