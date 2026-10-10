@@ -1138,7 +1138,7 @@ self.addEventListener("fetch", (event) => {
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `just _compose run --rm dashboard sh -euc 'pnpm vitest run src/features/apps && pnpm tsc --noEmit && pnpm lint'`
+Run, one command at a time (`just` splits quoted `sh -c` strings): `just _compose run --rm dashboard pnpm vitest run src/features/apps`, `just _compose run --rm dashboard pnpm tsc --noEmit`, `just _compose run --rm dashboard pnpm lint`
 Expected: PASS. (Regenerate nothing: `_authed.tsx` keeps its route path, so `routeTree.gen.ts` is unchanged.)
 
 - [ ] **Step 5: Commit**
@@ -1540,7 +1540,7 @@ export function InstallAppCard() {
 
 - [ ] **Step 4: Run tests to verify they pass**
 
-Run: `just _compose run --rm dashboard sh -euc 'pnpm vitest run src/features/apps src/routes/_authed/account src/locales src/lib && pnpm tsc --noEmit && pnpm lint'`
+Run, one command at a time: `just _compose run --rm dashboard pnpm vitest run src/features/apps src/routes/_authed/account src/locales src/lib`, `just _compose run --rm dashboard pnpm tsc --noEmit`, `just _compose run --rm dashboard pnpm lint`
 Expected: PASS (including the ar/en key-equality test over `locales`).
 
 - [ ] **Step 5: Commit**
