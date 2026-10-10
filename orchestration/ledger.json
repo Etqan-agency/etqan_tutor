@@ -713,14 +713,7 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [
-    {
-      "target": "backend/etqan/access/tests/test_routes.py",
-      "phase": "B7",
-      "reason": "B7e SELF_SERVICE entries",
-      "since": "2026-10-10T09:19:29+00:00"
-    }
-  ],
+  "claims": [],
   "shared_decisions": [
     {
       "id": "D1",
