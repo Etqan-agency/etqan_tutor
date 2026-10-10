@@ -36,7 +36,7 @@
       "branch": "feat/b4d-salary-projections",
       "spec": "docs/superpowers/specs/2026-10-08-b4-payroll-depth-design.md",
       "current_slice": "B4d",
-      "current_task": "B4d in flight: merged B7g trunk (be 400ecc1, da 6ac3491, meta d7b7afb), pushed; just test 0 (9329, 98.4%), lint 0, targeted green; just e2e killed by host low memory at 22/22 pass — awaiting conductor",
+      "current_task": "B4d ready: in flight, pushed (be 400ecc1, da 6ac3491, meta d7b7afb on B7g trunk); test 0 (9329, 98.4%), lint 0, targeted green, b4-projections e2e pass; full e2e via CI meta#66 (local run killed by low memory 22/22); stack stopped",
       "session": "c0892bad"
     },
     "B5": {
