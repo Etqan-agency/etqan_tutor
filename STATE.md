@@ -19,9 +19,9 @@ is designed from the audits, unobserved behaviour marked `[assumed]`.
 
 ## Next
 
-Phases run in parallel on slots 1–4: B4 payroll depth (1), B7 add-on sales (2), B11 apps (3),
-B5 communication (4). Complete: B2 scheduling depth, B3 money depth, B6 learning, B8 marketing
-extras, B9 platform extras, B10 AI; integrations slices 1–2 are merged; B10a, B4c and B4b merged. Details in
+Phases run in parallel: B7 add-on sales (slot 2), B11 apps (3; web app + web push only, native
+apps held by the owner, E4), B5 communication (4); slot 1 free. Complete: B2 scheduling depth, B3
+money depth, B4 payroll depth, B6 learning, B8 marketing extras, B9 platform extras, B10 AI; integrations slices 1–2 are merged; B7g and B4d merged. Details in
 the ledger and `orchestration/MERGES.md`. Restart a session with `bash
 scripts/orchestration/start-session.sh <CODE|conductor>` or from `just orchestra`.
 Each phase adds lines to shared lists only under its own `── phase Bn ──` marker, registers every new
