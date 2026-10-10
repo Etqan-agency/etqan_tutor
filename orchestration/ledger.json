@@ -41,16 +41,16 @@
     },
     "B5": {
       "title": "Communication",
-      "status": "build",
+      "status": "merged",
       "requires": [
         "B2"
       ],
-      "slot": 4,
+      "slot": null,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b5",
       "branch": "feat/b5c-whatsapp",
       "spec": "docs/superpowers/specs/2026-10-07-b5-communication-design.md",
       "current_slice": "B5c",
-      "current_task": "B5c in flight: B4d trunk merged code-only clean (be c78c743, da d764555, meta d477e23); targeted tests 3968 (access routes, features, notifications, integrations, identity, payroll), vitest 3326, tsc/biome/ruff clean. Pushed; awaiting meta#68 CI + merge. Last B5 slice.",
+      "current_task": "B5 complete: B5a to B5f merged; torn down",
       "session": "b31e57af"
     },
     "B6": {
