@@ -130,10 +130,10 @@
       ],
       "slot": 3,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b11",
-      "branch": "feat/b11a-scope",
+      "branch": "feat/b11b-web-push",
       "spec": "docs/superpowers/specs/2026-10-09-b11-apps-design.md",
-      "current_slice": "B11a",
-      "current_task": "B11a queued: PRs be#54 da#56 meta#70 (be ed71ddb, da 2c802bc, meta 4756031 on master 9b294bb); gates green (test be 9319/98.41%, vitest 3294/95.62%, lint, e2e 76 + 1 flaky b3); stack stopped. B11b next after merge.",
+      "current_slice": "B11b",
+      "current_task": "B11b Tasks 1-3 (code + partial stack), stacked on B11a (queued); Task 4 R12 waits for B5c (D70)",
       "session": "9e6e76f0"
     }
   },
