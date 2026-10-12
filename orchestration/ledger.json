@@ -699,7 +699,7 @@
       "plan_number": 63,
       "spec": "docs/superpowers/specs/2026-10-10-b11b-web-push-design.md",
       "plan": "docs/superpowers/plans/2026-10-10-plan-63-web-push.md",
-      "prs": null,
+      "prs": "https://github.com/Etqan-agency/etqan_tutor_backend/pull/56 https://github.com/Etqan-agency/etqan_tutor_dashboard/pull/58 https://github.com/Etqan-agency/etqan_tutor/pull/73",
       "bounces": 0
     }
   },
