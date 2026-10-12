@@ -160,7 +160,6 @@ In flight: **B11a + B7e** · Queue: — · Next plan number: 64 · Conductor: 4d
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| backend/etqan/access/tests/test_routes.py | B7 | B7f fix: narrow /report word | 2026-10-12T21:30:59+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
