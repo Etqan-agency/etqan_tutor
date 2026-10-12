@@ -160,7 +160,6 @@ In flight: **B11a + B7e** · Queue: — · Next plan number: 64 · Conductor: 4d
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| backend/pyproject.toml | B7 | B7f: consultations may import finance.services (convert_estimate) | 2026-10-12T21:23:33+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
