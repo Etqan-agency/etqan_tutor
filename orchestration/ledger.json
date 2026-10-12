@@ -715,12 +715,6 @@
   },
   "claims": [
     {
-      "target": "backend/etqan/access/tests/test_routes.py",
-      "phase": "B7",
-      "reason": "B7f: reports/margins/ in ROUTES, NEEDS_ALL_CODES, FEATURES",
-      "since": "2026-10-12T21:27:04+00:00"
-    },
-    {
       "target": "backend/etqan/access/registry.py",
       "phase": "B7",
       "reason": "B7f: consultation_request in_use export_margins",
