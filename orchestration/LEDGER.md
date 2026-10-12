@@ -160,7 +160,6 @@ In flight: **B11a + B7e** · Queue: — · Next plan number: 64 · Conductor: 4d
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
-| backend/etqan/access/tests/test_registry.py | B7 | B7f F-5: verb assertions | 2026-10-12T21:24:50+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
