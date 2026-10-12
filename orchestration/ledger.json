@@ -713,14 +713,7 @@
     "site": "B8",
     "identity.auth": "B9"
   },
-  "claims": [
-    {
-      "target": "backend/etqan/access/registry.py",
-      "phase": "B7",
-      "reason": "B7f: consultation_request in_use export_margins",
-      "since": "2026-10-12T21:27:04+00:00"
-    }
-  ],
+  "claims": [],
   "shared_decisions": [
     {
       "id": "D1",
