@@ -17,7 +17,7 @@ In flight: **B11a + B7e** · Queue: B11b · Next plan number: 64 · Conductor: 4
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
 | B10 | AI | merged |  | B10b | B10 complete: B10a, B10b merged; torn down | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | a61cece4 |
-| B11 | Apps | build | 3 | B11b | B11a in flight: merged B7d trunks (be b18fbb3, da e4aa0a5, meta merge, mk 1d7a112), targeted tests green, pushed, meta#70 MERGEABLE. B11b gates partial (test/lint/b11 e2e green; full e2e invalid: stale celery images) — rerun e2e in next window | B2, B3, B4, B5 | docs/superpowers/specs/2026-10-09-b11-apps-design.md | 9e6e76f0 |
+| B11 | Apps | build | 3 | B11b | B11b queued: PRs be#56 da#58 meta#73 (stacked on B11a, merge after #70); gates green (test 9723/98.40%, vitest 3379/95.64%, lint, e2e 81 + 2 flaky B9); stack stopped. Last B11 slice. | B2, B3, B4, B5 | docs/superpowers/specs/2026-10-09-b11-apps-design.md | 9e6e76f0 |
 
 ## Slices
 
