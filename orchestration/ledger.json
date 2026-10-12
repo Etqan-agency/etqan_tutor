@@ -133,7 +133,7 @@
       "branch": "feat/b11b-web-push",
       "spec": "docs/superpowers/specs/2026-10-09-b11-apps-design.md",
       "current_slice": "B11b",
-      "current_task": "B11b code-complete + reviewed (be 5e5d234, da 183a156; R12 done; R13 index request filed); needs gate window; B11a in flight",
+      "current_task": "B11a in flight: merged B7d trunks (be b18fbb3, da e4aa0a5, meta merge, mk 1d7a112), targeted tests green, pushed, meta#70 MERGEABLE. B11b gates partial (test/lint/b11 e2e green; full e2e invalid: stale celery images) — rerun e2e in next window",
       "session": "9e6e76f0"
     }
   },

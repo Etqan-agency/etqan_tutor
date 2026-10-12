@@ -17,7 +17,7 @@ In flight: **B11a + B7e** · Queue: — · Next plan number: 64 · Conductor: 4d
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
 | B10 | AI | merged |  | B10b | B10 complete: B10a, B10b merged; torn down | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | a61cece4 |
-| B11 | Apps | build | 3 | B11b | B11b code-complete + reviewed (be 5e5d234, da 183a156; R12 done; R13 index request filed); needs gate window; B11a in flight | B2, B3, B4, B5 | docs/superpowers/specs/2026-10-09-b11-apps-design.md | 9e6e76f0 |
+| B11 | Apps | build | 3 | B11b | B11a in flight: merged B7d trunks (be b18fbb3, da e4aa0a5, meta merge, mk 1d7a112), targeted tests green, pushed, meta#70 MERGEABLE. B11b gates partial (test/lint/b11 e2e green; full e2e invalid: stale celery images) — rerun e2e in next window | B2, B3, B4, B5 | docs/superpowers/specs/2026-10-09-b11-apps-design.md | 9e6e76f0 |
 
 ## Slices
 
