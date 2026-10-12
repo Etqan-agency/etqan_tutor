@@ -692,7 +692,7 @@
     },
     "B11b": {
       "phase": "B11",
-      "status": "build",
+      "status": "queued",
       "requires": [
         "B11a"
       ],
@@ -1615,7 +1615,9 @@
       "status": "open"
     }
   ],
-  "queue": [],
+  "queue": [
+    "B11b"
+  ],
   "in_flight": "B11a",
   "main_heads": {
     "backend": "8a9ba78",
