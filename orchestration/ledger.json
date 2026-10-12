@@ -719,6 +719,12 @@
       "phase": "B7",
       "reason": "B7f F-5: EXPORT_MARGINS in VERB_LABELS (outside the phase markers)",
       "since": "2026-10-12T21:24:50+00:00"
+    },
+    {
+      "target": "backend/etqan/access/tests/test_registry.py",
+      "phase": "B7",
+      "reason": "B7f F-5: verb assertions",
+      "since": "2026-10-12T21:24:50+00:00"
     }
   ],
   "shared_decisions": [
