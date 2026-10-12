@@ -160,6 +160,7 @@ In flight: **B11a + B7e** · Queue: — · Next plan number: 64 · Conductor: 4d
 
 | Target | Phase | Reason | Since |
 |---|---|---|---|
+| backend/etqan/access/tests/test_routes.py | B7 | B7f: reports/margins/ in ROUTES, NEEDS_ALL_CODES, FEATURES | 2026-10-12T21:27:04+00:00 |
 
 | Id | From | App | To owner | What | Status |
 |---|---|---|---|---|---|
