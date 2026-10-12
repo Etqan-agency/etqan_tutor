@@ -43,6 +43,13 @@ submodule pointers here.
   `etqan.etqan_billing.services.record_usage(source=resolved.source, service, unit, quantity,
   source_ref)`; it records only `source == "etqan"`, once per (service, unit, `source_ref`). A
   provider event that yields several units records each unit under the provider's one id.
+- Video meeting links come only from `integrations.services.create_meeting(...)` (Zoom on the
+  academy's account, or Etqan's under a free host from its pool, else a Jitsi room);
+  `scheduling.provision_meetings` fills blank links for the next day's sessions. A Zoom start
+  link is a host credential: only `GET sessions/<id>/host-link/` gives it, to the session's
+  teacher, read fresh from Zoom; never store, log or list it. Online payments: B3's own keys first, else the academy's
+  Stripe Connect account (`integrations.services.stripe_connect()`); Etqan's own webhooks live on
+  the base domain (`config/urls_public.py`).
 - Keep it simple: this is a CRUD-first product. Check the spec's non-goals before adding
   anything.
 
