@@ -78,7 +78,7 @@
       "branch": "feat/b7f-consultation-reports",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7f",
-      "current_task": "B7f (plan 61): 9 tasks built+reviewed (be 65d103f, da 50016cea, pushed; no marketing); final review running; gates need a window (e2e step unrun). B7e in flight (meta#72).",
+      "current_task": "B7f code complete: 9 tasks + final review + fix wave (be 93a062d, da ccd467ba, pushed; no marketing). Needs a gate window (test, lint, coverage, e2e incl. unrun margins step). B7e in flight (meta#72).",
       "session": "c405df7d"
     },
     "B8": {
