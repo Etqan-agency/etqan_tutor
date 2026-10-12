@@ -644,7 +644,7 @@
     },
     "B7e": {
       "phase": "B7",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [
         "B7a",
         "B7b"
@@ -1615,9 +1615,7 @@
       "status": "open"
     }
   ],
-  "queue": [
-    "B7e"
-  ],
+  "queue": [],
   "in_flight": "B11a",
   "main_heads": {
     "backend": "8a9ba78",
@@ -1660,5 +1658,5 @@
     }
   ],
   "conductor_session": "4ddff076",
-  "in_flight_extra": null
+  "in_flight_extra": "B7e"
 }
