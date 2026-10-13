@@ -19,10 +19,12 @@ is designed from the audits, unobserved behaviour marked `[assumed]`.
 
 ## Next
 
-Phases still running: B7 add-on sales (slot 2), B11 apps (3; web app + web push only, native
-apps held by the owner, E4); slots 1 and 4 free. Complete: B2 scheduling depth, B3 money depth,
-B4 payroll depth, B5 communication, B6 learning, B8 marketing extras, B9 platform extras, B10 AI; integrations slices 1–2 are merged; B7g, B4d and B5c merged. The merge queue takes two slices in flight
-when they are disjoint (CONDUCTOR.md step 2). Details in
+All parallel phases B2–B11 are complete and merged (2026-10-13): B2 scheduling depth, B3 money
+depth, B4 payroll depth, B5 communication, B6 learning, B7 add-on sales, B8 marketing extras, B9
+platform extras, B10 AI, B11 apps (installable web app + web push; native apps held by the owner,
+E4). Integrations slices 1–3 are merged. Every phase is torn down and all four slots are free. What
+remains is the follow-ups below; the merge queue (two disjoint slices in flight, CONDUCTOR.md step 2)
+is ready for any new slice. Details in
 the ledger and `orchestration/MERGES.md`. Restart a session with `bash
 scripts/orchestration/start-session.sh <CODE|conductor>` or from `just orchestra`.
 Each phase adds lines to shared lists only under its own `── phase Bn ──` marker, registers every new
@@ -115,6 +117,10 @@ Deploy note (integrations slice 3):
   (R6c) filters on (action, created_at). Add that index in a small scheduling fix (B2 is complete).
 - R13 (from B11): add an index on Notification(created_at, id) for the web-push read
   notifications.services.created_since (B11b). Matters only at scale; one small migration.
+- On a fresh database, start celery_beat only after `migrate_schemas` (it needs the
+  django_celery_beat tables); in a fresh stream stack, restart it after `just migrate`.
+- Deploy order and one-time effects per slice are in `orchestration/MERGES.md` (B5d: backend before
+  dashboard, first-deploy resend; B11b: set the VAPID keys through etqan.platform.secrets).
 - e2e specs flaky under host memory load (timeouts, pass alone): b2-archive, b2-bundles, b2-trials,
   b9-languages, b9-registration, journey. CI e2e is green; harden their waits if they spread.
 - Staging uploads are linked at the S3 store's in-network address (`http://s3:9000/...`), so
