@@ -134,7 +134,7 @@
       "spec": "docs/superpowers/specs/2026-10-09-b11-apps-design.md",
       "current_slice": "B11b",
       "current_task": "B11b queued: PRs be#56 da#58 meta#73 (stacked on B11a, merge after #70); gates green (test 9723/98.40%, vitest 3379/95.64%, lint, e2e 81 + 2 flaky B9); stack stopped. Last B11 slice.",
-      "session": "9e6e76f0"
+      "session": "247815cc"
     }
   },
   "slices": {
