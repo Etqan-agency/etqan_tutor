@@ -121,19 +121,19 @@
     },
     "B11": {
       "title": "Apps",
-      "status": "build",
+      "status": "merged",
       "requires": [
         "B2",
         "B3",
         "B4",
         "B5"
       ],
-      "slot": 3,
+      "slot": null,
       "worktree": "/home/abdulkhalek/Projects/etqan_tutor-wt/b11",
       "branch": "feat/b11b-web-push",
       "spec": "docs/superpowers/specs/2026-10-09-b11-apps-design.md",
       "current_slice": "B11b",
-      "current_task": "B11b on B7e trunks (be bff74c9, da 36684c8, meta 3adf259): meta#73 CI fully green, all PRs mergeable; awaiting conductor merge. Last B11 slice; worktree clean+pushed.",
+      "current_task": "B11 complete: B11a, B11b merged (native apps held, E4); torn down",
       "session": "247815cc"
     }
   },
