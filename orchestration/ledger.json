@@ -78,7 +78,7 @@
       "branch": "feat/b7f-consultation-reports",
       "spec": "docs/superpowers/specs/2026-10-08-b7-add-on-sales-design.md",
       "current_slice": "B7f",
-      "current_task": "B7e in flight: B11a trunk merged (be 30ef110/da aed0733/meta 5bdbb9f) -> be 993e3f5, da 0298169, mk a166f86, meta 133cba3 pushed, no conflicts; #72 needs green. B7f gate window running (just test).",
+      "current_task": "B7f gated (fresh rebuilt stack, trunk be 8a9ba78/da 53c9db4/meta 63e760e): test 9823/98.4%, lint, vitest 3375, e2e 81/81 incl. new margins step; queued (be#57 da#59 meta#74). B7e in flight (#72, B11a trunk merged). Stack stopped.",
       "session": "c405df7d"
     },
     "B8": {
