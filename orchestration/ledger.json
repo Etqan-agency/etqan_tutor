@@ -682,7 +682,7 @@
     },
     "B11a": {
       "phase": "B11",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [],
       "plan_number": 62,
       "spec": "docs/superpowers/specs/2026-10-09-b11-apps-design.md",
@@ -1619,12 +1619,12 @@
     "B11b",
     "B7f"
   ],
-  "in_flight": "B11a",
+  "in_flight": "B7e",
   "main_heads": {
-    "backend": "8a9ba78",
-    "dashboard": "53c9db4",
+    "backend": "30ef110",
+    "dashboard": "aed0733",
     "marketing": "1d7a112",
-    "meta": "63e760e"
+    "meta": "5bdbb9f"
   },
   "escalations": [
     {
@@ -1661,5 +1661,5 @@
     }
   ],
   "conductor_session": "4ddff076",
-  "in_flight_extra": "B7e"
+  "in_flight_extra": null
 }
