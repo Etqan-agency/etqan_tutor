@@ -133,7 +133,7 @@
       "branch": "feat/b11b-web-push",
       "spec": "docs/superpowers/specs/2026-10-09-b11-apps-design.md",
       "current_slice": "B11b",
-      "current_task": "B11b queued: PRs be#56 da#58 meta#73 (stacked on B11a, merge after #70); gates green (test 9723/98.40%, vitest 3379/95.64%, lint, e2e 81 + 2 flaky B9); stack stopped. Last B11 slice.",
+      "current_task": "B11b ready: merged new trunks code-only, no conflicts (be d520d99, da f37930a, meta 1552eb3 pointers at tips); PRs be#56 da#58 meta#73 mergeable on main/master; meta#73 CI is the gate. Last B11 slice; worktree clean+pushed.",
       "session": "247815cc"
     }
   },
