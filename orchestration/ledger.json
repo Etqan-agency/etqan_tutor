@@ -692,7 +692,7 @@
     },
     "B11b": {
       "phase": "B11",
-      "status": "in-flight",
+      "status": "merged",
       "requires": [
         "B11a"
       ],
@@ -1616,12 +1616,12 @@
     }
   ],
   "queue": [],
-  "in_flight": "B11b",
+  "in_flight": "B7f",
   "main_heads": {
-    "backend": "1f7a91f",
-    "dashboard": "2f89cc6",
+    "backend": "a63d276",
+    "dashboard": "3915f6c",
     "marketing": "26d1bd8",
-    "meta": "36eefc7"
+    "meta": "7784917"
   },
   "escalations": [
     {
@@ -1658,5 +1658,5 @@
     }
   ],
   "conductor_session": "4ddff076",
-  "in_flight_extra": "B7f"
+  "in_flight_extra": null
 }
