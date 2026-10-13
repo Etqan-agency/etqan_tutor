@@ -17,7 +17,7 @@ In flight: **B11b + B7f** · Queue: — · Next plan number: 64 · Conductor: 4d
 | B8 | Marketing extras | merged |  | B8e | B8e PRs open |  | docs/superpowers/specs/2026-10-03-marketing-extras-design.md | 0196e293 |
 | B9 | Platform extras | merged |  | B9d | B9d in flight; up to date with trunks, meta #35 CI green; awaiting conductor merge |  | docs/superpowers/specs/2026-10-03-platform-extras-design.md | a0268b17 |
 | B10 | AI | merged |  | B10b | B10 complete: B10a, B10b merged; torn down | B6 | docs/superpowers/specs/2026-10-08-b10-ai-design.md | a61cece4 |
-| B11 | Apps | build | 3 | B11b | B11b re-merged onto B7e trunks code-only, gitlink-only conflicts (be bff74c9, da 36684c8, meta 3adf259); pushed; awaiting meta#73 CI green, then conductor merges. Last B11 slice. | B2, B3, B4, B5 | docs/superpowers/specs/2026-10-09-b11-apps-design.md | 247815cc |
+| B11 | Apps | build | 3 | B11b | B11b on B7e trunks (be bff74c9, da 36684c8, meta 3adf259): meta#73 CI fully green, all PRs mergeable; awaiting conductor merge. Last B11 slice; worktree clean+pushed. | B2, B3, B4, B5 | docs/superpowers/specs/2026-10-09-b11-apps-design.md | 247815cc |
 
 ## Slices
 
