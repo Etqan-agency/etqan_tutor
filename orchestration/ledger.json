@@ -692,7 +692,7 @@
     },
     "B11b": {
       "phase": "B11",
-      "status": "queued",
+      "status": "in-flight",
       "requires": [
         "B11a"
       ],
@@ -1616,7 +1616,6 @@
     }
   ],
   "queue": [
-    "B11b",
     "B7f"
   ],
   "in_flight": "B7e",
@@ -1661,5 +1660,5 @@
     }
   ],
   "conductor_session": "4ddff076",
-  "in_flight_extra": null
+  "in_flight_extra": "B11b"
 }
