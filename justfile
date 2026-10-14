@@ -227,7 +227,7 @@ new-module name:
     @echo "Module scaffolded. Remember to:"
     @echo "  1. Add 'etqan.{{name}}' to TENANT_APPS under your phase's '── phase Bn ──' marker"
     @echo "  2. Add import-linter contracts in pyproject.toml under your phase's marker, and the app to the platform contract's forbidden list"
-    @echo "  3. Create docs/architecture/{{name}}.md"
+    @echo "  3. Mount its api/urls.py in config/api_router.py, then follow docs/guide/adding-a-feature.md (feature page in docs/features/)"
 
 # ─── Orchestra (the parallel-phases dashboard) ────────────────
 
