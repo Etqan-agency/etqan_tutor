@@ -23,7 +23,7 @@ is in [online-payments.md](online-payments.md), the wallet in [wallet.md](wallet
 - On the dashboard, `src/lib/money.ts` (`toMinor`, `toMajor`, `formatMoney`) converts what a
   user types to and from minor units. The dashboard (`src/lib/money.ts`) and the marketing site
   (`src/lib/money.ts`) each keep a copy of `MINOR_DIGITS`. They never ask the browser's `Intl`,
-  which disagrees for IQD, IDR, HUF and COP. **Change all three together.**
+  which disagrees for 17 codes (IQD, IDR, PKR, LBP, SYP, YER…). **Change all three together.**
 
 ## Concepts
 
