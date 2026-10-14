@@ -1,21 +1,21 @@
-# Contributing to kaleem
+# Contributing to etqan_tutor
 
-## Process
+Start with the [developer guide](docs/guide/README.md). The short version:
 
-Every feature follows this lifecycle (no exceptions):
-
-1. **Spec** — write a spec in `docs/superpowers/specs/` from the template
-2. **Plan** — write an implementation plan in `docs/superpowers/plans/`
-3. **Tests** — write failing tests first
-4. **Code** — make tests pass
-5. **Review** — self-review against the spec + boundary check
-6. **Ship** — merge to main, deploy to staging
-7. **Journal** — one-paragraph entry for the week
+1. **Spec**: a design in `docs/superpowers/specs/` for anything beyond a small fix. Check the
+   product spec's non-goals first.
+2. **Plan**: an implementation plan in `docs/superpowers/plans/`.
+3. **Tests first**: write failing tests, then the code (TDD).
+4. **Check**: `just test` and `just lint` pass locally; CI must be green before merge.
+5. **Document**: update the feature's page in `docs/features/` in the same PR.
+6. **Merge**: submodule PR (trunk `main`) first, then the meta repo PR (trunk `master`) that
+   bumps the pointer. A green `master` deploys to staging.
 
 ## Rules
 
-- One feature branch at a time (D6)
-- CI must be green before merge (D5)
-- No `--no-verify`, no `--force` (D5)
-- Module boundaries enforced by import-linter — no cross-module model imports
-- See CLAUDE.md for the full operating manual
+- Branch `feat/<topic>` or `fix/<topic>` in every repo you touch; Conventional Commits.
+- No `--no-verify`, no force-push to shared branches.
+- Apps talk to each other only through `services`; `lint-imports` enforces the boundaries.
+- Migrations are backward-compatible (expand first, contract later): deploys are blue/green
+  and migrations are never reversed.
+- The binding rules are in [CLAUDE.md](CLAUDE.md).

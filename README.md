@@ -31,6 +31,11 @@ Create an academy from the CLI:
 
 ## Docs
 
-- Product spec: `docs/superpowers/specs/2026-09-23-etqan-tutor-v1-design.md`
-- Plans: `docs/superpowers/plans/`
-- Source analysis: `docs/PHASE_1_SYSTEM_AUDIT.md`, `docs/PHASE_2_SYSTEM_DESIGN.md`
+- [Developer guide](docs/guide/README.md): onboarding, architecture, adding a feature,
+  testing, deploy and operations runbooks.
+- [Feature reference](docs/features/README.md): how each feature works today.
+- Design history: product spec `docs/superpowers/specs/2026-09-23-etqan-tutor-v1-design.md`,
+  every slice's spec in `docs/superpowers/specs/` and plan in `docs/superpowers/plans/`.
+- Source analysis: `docs/PHASE_1_SYSTEM_AUDIT.md`, `docs/PHASE_2_SYSTEM_DESIGN.md`,
+  `docs/TUTORHAMSTER_FEATURE_AUDIT_2026-09-24.md`.
+- [Contributing](CONTRIBUTING.md).
