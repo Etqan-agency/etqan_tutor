@@ -134,7 +134,8 @@ Beat schedule in `backend/config/settings/base.py`:
   - prices, academy pricing and Connect fees are editable;
   - `UsageEvent` and `CollectedFee` are read-only;
   - invoices have actions to issue, email again, mark paid and void, and inline manual or credit lines on
-    drafts.
+    drafts. Each action needs the invoice change permission: a staff member who may only view sees none,
+    and a forged action POST is refused (ETQAN-QA-013).
 - The suspend switch is in the tenants admin (`Academy.etqan_defaults_suspended`).
 - The PDF is rendered by `etqan_billing/pdf.py` (fpdf2 with bundled DejaVu fonts, for Arabic shaping).
 

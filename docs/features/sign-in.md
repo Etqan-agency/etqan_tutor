@@ -16,7 +16,7 @@ All tables are in the academy schema unless noted otherwise.
 | `identity.GoogleSignIn` | The academy's own Google OAuth client (single row, pk 1). The secret is a Fernet token and write-only. |
 | `identity.GoogleLink` | The Google `sub` a person first signed in with. A different `sub` is refused afterwards. |
 
-Sessions are Django DB sessions (`django.contrib.sessions`, in each schema). DRF uses `identity/authentication.py:SessionAuthentication`. Cookies are HTTP-only. The `csrftoken` cookie is readable by JavaScript, and the dashboard's axios client (`dashboard/src/lib/api.ts`) sends it back as `X-CSRFToken`. Public pages call `GET identity/csrf/` before they POST.
+Sessions are Django DB sessions (`django.contrib.sessions`, in each schema). DRF uses `identity/authentication.py:SessionAuthentication`. Cookies are HTTP-only. The `csrftoken` cookie is readable by JavaScript, and the dashboard's axios client (`dashboard/src/lib/api.ts`) sends it back as `X-CSRFToken`. Public pages call `GET identity/csrf/` before they POST. DRF itself checks CSRF only for a signed-in session, so the views that sign someone in (`login/`, `login/2fa/`, `quick-login/`) add `platform/permissions.py:CsrfChecked`: without the token, or from another origin, they answer 403 `CSRF Failed: …` (login CSRF, ETQAN-QA-006). The dashboard fetches `identity/csrf/` before each of them.
 
 allauth's server-rendered pages are **not** mounted (`config/urls.py`). Everything goes through `/api/v1/identity/`. `CeleryAccountAdapter.is_open_for_signup` returns `False`. The adapter also sends allauth's emails through `queue_email` and points verification links at `/app/verify-email?key=…`.
 

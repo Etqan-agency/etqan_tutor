@@ -58,7 +58,9 @@ default.
    (`tenants/admin.py:AcademyChangeForm`). There is one checkbox per feature, grouped. Each checkbox
    shows the feature's own switch, notes an unbuilt feature, and shows "Held off: needs …" when a
    prerequisite blocks it. Only changed checkboxes are written, so an untouched feature keeps
-   following its default. The "Copy features from another academy" action
+   following its default. "Changed" means changed on that page: each field carries the value the
+   page showed (a hidden initial), so a page opened before a feature was switched elsewhere (for
+   example by `set_features`) leaves that newer switch alone (ETQAN-QA-014). The "Copy features from another academy" action
    (`services.copy_features`) copies one academy's stored map onto the selected academies.
 6. **Scripts**: `manage.py set_features <subdomain> --on a b --off c`
    (`tenants/services.py:set_features`). An unknown code is an error. Dev seeds call

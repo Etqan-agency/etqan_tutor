@@ -49,6 +49,10 @@ Schema layout (`backend/config/settings/base.py`):
    `RESERVED_SUBDOMAINS` (`www`, `admin`, `api`, `app`, `public`, `static`, `media`, `mail`, `flower`,
    `sites`, `etqan`). It also refuses a subdomain that is taken, or whose schema or domain still
    exists from a deleted academy.
+   Then the timezone and currency pass the same checks as the academy's own settings
+   (`platform/validators.py:clean_timezone`, `clean_currency`, which upper-cases the code): an
+   unknown zone or a code that is not three letters is refused and nothing is created. The admin
+   form shows them as field errors.
 2. Saves the `Academy`. This creates and migrates the schema. It then creates the primary `Domain`.
 3. Inside `tenant_context(academy)`, it creates `AcademySettings` (`academy_services.ensure_settings`),
    the site defaults (`site_services.ensure_site_defaults`: `Branding`, `LandingContent`,
@@ -63,6 +67,17 @@ There are two entry points. Etqan staff use the Django admin "add academy" form 
 
 - `tenants/services.py:set_status(ids, "suspended" | "active")`, from the admin actions "Suspend /
   Reactivate selected academies". The public row is never touched.
+- Every academy and domain admin action (suspend, reactivate, copy features, check DNS, make
+  primary, disable) needs the model's change permission (`permissions=["change"]`). A staff member
+  who may only view sees no actions, and a forged action POST is refused (ETQAN-QA-002). The same rule
+  holds for every admin on the Etqan console (ETQAN-QA-013): Etqan's own actions say
+  `permissions=["change"]`, and `platform/admin.py` registers django-celery-beat's task admin and
+  allauth's email-address admin again so that their actions need the change permission too.
+- The academy change page writes only the fields its user changed on that page. Each field carries
+  the value the page showed (`show_hidden_initial`), and an untouched field keeps the row's current
+  value. A page opened before the academy was suspended, had Etqan's defaults suspended or a feature
+  switched off elsewhere therefore undoes none of it (ETQAN-QA-014). Status still changes on the page
+  when its user picks a different one; the Suspend / Reactivate actions remain the usual way.
 - Academies cannot be deleted from the admin (`has_delete_permission` is False): a delete would
   orphan the schema.
 - Background jobs skip suspended academies (`platform/tenancy.py:for_each_academy` filters

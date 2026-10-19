@@ -46,7 +46,7 @@ Etqan staff (public-schema `is_staff` users) aren't part of this system. They on
 **Anti-escalation rules for staff editors** (`access/services.py`). These apply only when `by` is a staff account; admins are never limited.
 
 1. In a role's codes, staff can add **and remove** only codes they hold themselves.
-2. Staff can restore a retired role only if they hold every code it grants.
+2. Staff can retire or restore a role only if they hold every code it grants: retiring removes all of its codes from every member at once (ETQAN-QA-021). Renaming is not limited: it changes no one's access.
 3. Staff can grant or remove a role only if they hold all of its codes. For removal, retired roles count too (`_roles_to_assign`, `_guard_removed_roles`).
 4. Staff can change another staff account's email or active state only if they outrank it: they must hold every code that account's roles grant, retired roles included (`_guard_stronger_account`).
 5. Staff can never change their own roles or deactivate themselves.

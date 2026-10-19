@@ -29,6 +29,9 @@ academy is created. After that, code reads `AcademySettings`, for example in
   the `Academy` row ("self-healed").
 - `update_settings(**fields)` validates through `platform.validators` (`clean_timezone`,
   `clean_currency`, `clean_language`) and the bounds above.
+- A timezone change does not move sessions already generated: they keep their UTC instant, and
+  only sessions generated afterwards use the new wall clock (ETQAN-QA-041). The settings form warns
+  about this while a new timezone is selected; re-anchoring existing sessions is an open proposal.
 - `postpone_limit_minutes` is hidden from the payload and refused on write unless the
   `postponement` feature is on. `supervision_enabled` in the payload is read-only and reflects
   `features.enabled("supervision")`.

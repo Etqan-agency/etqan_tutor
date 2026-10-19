@@ -180,7 +180,8 @@ are non-atomic:
 - `EMAIL_*`: Etqan's built-in sending when the email default has no config.
 - Platform admin (`integrations/admin.py`):
   - The `PlatformAccount` form takes `enabled`, `config` as JSON, and a write-only secret JSON. It has a
-    "Remove the stored secrets" checkbox and a "Test" action, and shows the webhook URL for video and payments.
+    "Remove the stored secrets" checkbox and a "Test" action (it needs the change permission,
+    ETQAN-QA-013), and shows the webhook URL for video and payments.
   - `WebhookRoute` and `HostBooking` are read-only.
 - The suspend switch is `Academy.etqan_defaults_suspended` (tenants admin). It can be turned on only when
   `etqan_billing.may_suspend` allows it.

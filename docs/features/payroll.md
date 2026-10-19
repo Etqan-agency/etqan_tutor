@@ -78,7 +78,7 @@ report share.
     (`scheduling.hold_sessions`), then rebuilds from fresh data.
   - Refuses with 409 `payroll.not_allowed_in_status`, `month_not_over`, `missing_rate` or `negative_net`.
   - On success it marks the adjustments as used and calls `scheduling.lock_sessions` on the paid sessions.
-- `mark_paid` / `pay_to_balance`: allowed only from `issued`. `paid_on` can't be in the future. Both go
+- `mark_paid` / `pay_to_balance`: allowed only from `issued`. `paid_on` can't be in the future, nor before the first day of the month the payslip pays (400 on `paid_on`, ETQAN-QA-029). Both go
   through `_pay`, the only code that makes a payslip paid. In the same transaction it posts a `salaries`
   expense through `finance.services.post_expense` (`services/salary_expenses.py:post_salary`). This happens
   only while `salary_expenses` is on and net ≠ 0. The post is idempotent by payslip id, and if it fails

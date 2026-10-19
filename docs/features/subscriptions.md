@@ -95,9 +95,9 @@ parent scoped to their own rows by `scheduling/scopes.py`. Out-of-scope rows ret
 
 | Method | Path | Who | Purpose |
 |---|---|---|---|
-| GET, POST | `/api/v1/subscriptions/` | `subscription.view_any` / `.create`; own rows read-only | List (filters `status`, `student`, `teacher`, `course`, `q`, created/archived dates, `bundle`, `bundle_kind`, `archived`; CSV for office) / create (optional `trial_id`) |
+| GET, POST | `/api/v1/subscriptions/` | `subscription.view_any` / `.create`; own rows read-only | List (filters `status`, `student`, `teacher`, `course`, `q`, created/archived dates, `bundle`, `bundle_kind`, `archived`; CSV for office) / create (optional `trial_id`; the 201 answer adds `conflicts`, the new sessions' teacher double-bookings, never blocked) |
 | GET, PATCH, DELETE | `/api/v1/subscriptions/<id>/` | `subscription.view` / `.update` / `.delete` | Detail with derived values / edit (incl. `supervisor_id`) / delete |
-| POST | `/api/v1/subscriptions/<id>/renew/` | `subscription.update` | Renew (also invoices) |
+| POST | `/api/v1/subscriptions/<id>/renew/` | `subscription.update` | Renew (also invoices); like create, the 201 answer adds `conflicts` (the new sessions' teacher double-bookings, P4-9) |
 | POST | `/api/v1/subscriptions/<id>/cancel/` | `subscription.update` | Cancel |
 | POST, DELETE | `/api/v1/subscriptions/<id>/archive/` | `subscription.delete` / `.restore`; office; feature `subscription_archive` | Archive / restore |
 | GET, POST | `/api/v1/subscriptions/<id>/pauses/` | `subscription.view` / `.update` | List / add a pause |
@@ -133,6 +133,9 @@ parent scoped to their own rows by `scheduling/scopes.py`. Out-of-scope rows ret
      (`rules.expire`). This sets `expired_at` and deletes the untouched `regular`
      sessions.
   3. `generation.generate_horizon()`: today through today + `generation_horizon_days`.
+     A date whose student or teacher (the substitute's inside a substitution) is
+     deactivated is skipped (`skipped_inactive`, `rules.person_inactive`), and the Today
+     board shows no missing row for it; reactivating fills the horizon again.
 - Notifications reads `services.notices.subscriptions_running_low` /
   `subscriptions_expired` in its own scan.
 
