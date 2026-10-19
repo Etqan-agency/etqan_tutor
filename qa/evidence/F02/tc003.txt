@@ -1,0 +1,11 @@
+## TC-003
+a: {"non_field_errors":["Invalid credentials."]} 400  137ms
+b: {"non_field_errors":["Invalid credentials."]} 400  149ms
+e: {"non_field_errors":["Invalid credentials."]} 400  151ms
+f: {"non_field_errors":["Invalid credentials."]} 400  147ms
+last_login unchanged: yes
+c: {"id":8,"email":"f02-a@qa.etqan.test","full_name":"F02 Student a","phone":"+201000000001","preferred_language":"ar","effective_language":"ar","timezone":"Africa/Cairo","role":"student","profiles":["student"],"profile":{"date_of_birth":null,"gender":"","country":"","status":"active","xp":0,"age_group":null,"tags":[],"account_type":"individual","family":null},"permissions":[],"is_super_admin":false,"features":["families","parents","session_reports","invoices","auto_notifications","teacher_attendance","export","online_payments","two_factor","phone_login","quick_login","code_reset"],"impersonator":null} 200  145ms
+d: {"id":8,"email":"f02-a@qa.etqan.test","full_name":"F02 Student a","phone":"+201000000001","preferred_language":"ar","effective_language":"ar","timezone":"Africa/Cairo","role":"student","profiles":["student"],"profile":{"date_of_birth":null,"gender":"","country":"","status":"active","xp":0,"age_group":null,"tags":[],"account_type":"individual","family":null},"permissions":[],"is_super_admin":false,"features":["families","parents","session_reports","invoices","auto_notifications","teacher_attendance","export","online_payments","two_factor","phone_login","quick_login","code_reset"],"impersonator":null} 200  119ms
+g: {"id":8,"email":"f02-a@qa.etqan.test","full_name":"F02 Student a","phone":"+201000000001","preferred_language":"ar","effective_language":"ar","timezone":"Africa/Cairo","role":"student","profiles":["student"],"profile":{"date_of_birth":null,"gender":"","country":"","status":"active","xp":0,"age_group":null,"tags":[],"account_type":"individual","family":null},"permissions":[],"is_super_admin":false,"features":["families","parents","session_reports","invoices","auto_notifications","teacher_attendance","export","online_payments","two_factor","phone_login","quick_login","code_reset"],"impersonator":null} 200  132ms
+h: {"password":["This field may not be blank."]} 400  76ms
+i: {"identifier":["This field is required."]} 400  78ms

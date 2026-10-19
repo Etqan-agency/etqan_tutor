@@ -1,0 +1,13 @@
+
+Running 3 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f08-sessions-attendance.spec.ts:31:1 › TC-001 teacher marks the student present: session completes, package consumed (3.9s)
+  ✓  2 [chromium] › e2e/qa/f08-sessions-attendance.spec.ts:57:1 › TC-001/TC-020 admin sees the completed session and its activity entry by the teacher (3.0s)
+  ✓  3 [chromium] › e2e/qa/f08-sessions-attendance.spec.ts:68:1 › TC-011 student sees own sessions read-only (no attendance controls, no activity) (2.7s)
+
+  3 passed (10.2s)
+post-PW DB:
+309|completed|present|not_set|not_set|regular|f||7|||f|f|t
+Sub C: (1, 7)
+140|309|1|attendance|{"status": ["completed", "scheduled"], "student_attendance": ["present", "not_set"]}|
+141|309|7|attendance|{"status": ["scheduled", "completed"], "student_attendance": ["not_set", "present"]}|

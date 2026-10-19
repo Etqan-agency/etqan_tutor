@@ -1,0 +1,40 @@
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toBeTruthy()
+
+    Received: undefined
+
+      100 | 	const mine = await api(page, "/payroll/payslips/");
+      101 | 	const paid = mine.json.results.find((p: { status: string; acknowledged_at: string | null }) => p.status === "paid" && !p.acknowledged_at);
+    > 102 | 	expect(paid).toBeTruthy();
+          | 	             ^
+      103 | 	expect(mine.json.results.every((p: { status: string }) => p.status !== "draft")).toBe(true);
+      104 | 	await page.goto(`${QA}/app/teaching/payslips/${paid.id}`);
+      105 | 	await page.getByRole("button", { name: "Confirm receipt" }).click();
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f10-payroll.spec.ts:102:15
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › e2e/qa/f10-payroll.spec.ts:53:1 › TC-025 office generates, issues and pays a month in the dashboard 
+    [chromium] › e2e/qa/f10-payroll.spec.ts:98:1 › TC-026 teacher confirms receipt, requests and cancels a withdrawal 
+  1 passed (20.1s)
+error: Recipe `e2e` failed with exit code 1

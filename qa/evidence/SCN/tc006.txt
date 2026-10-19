@@ -1,0 +1,41 @@
+== TC-006
+tea sessions API=170 DB=170 idsets_equal=False
+[200] GET sessions/354/ :: {"id":354,"subscription_id":85,"slot_id":96,"occurs_on":"2026-10-19","starts_at":"2026-10-19T15:00:0
+[404] GET sessions/361/ :: {"detail":"No Session matches the given query."}
+tea students: [403] {'detail': 'You do not have permission to perform this action.'}
+tea subs: [200] [(85, 'SCN Student A1')]
+[403] GET billing/invoices/ :: {"detail":"You do not have permission to perform this action."}
+tea payslips [200] teachers: [7]
+[403] GET schedule/today/ :: {"detail":"You do not have permission to perform this action."}
+t2 sessions API=6 DB=6 idsets_equal=True
+[200] GET sessions/361/ :: {"id":361,"subscription_id":86,"slot_id":98,"occurs_on":"2026-10-20","starts_at":"2026-10-20T14:00:0
+[404] GET sessions/354/ :: {"detail":"No Session matches the given query."}
+t2 students: [403] {'detail': 'You do not have permission to perform this action.'}
+t2 subs: [200] [(86, 'SCN Student A2')]
+[403] GET billing/invoices/ :: {"detail":"You do not have permission to perform this action."}
+t2 payslips [200] teachers: []
+[403] GET schedule/today/ :: {"detail":"You do not have permission to perform this action."}
+0
+== TC-007 data: U1..U3 regular yesterday on SUB1, U4 extra
+[400] POST sessions/regular/ :: {"occurs_on":["Choose a day inside the subscription's term and outside its pauses."]}
+[400] POST sessions/regular/ :: {"occurs_on":["Choose a day inside the subscription's term and outside its pauses."]}
+[400] POST sessions/regular/ :: {"occurs_on":["Choose a day inside the subscription's term and outside its pauses."]}
+[201] POST sessions/extra/ :: {"session":{"id":382,"subscription_id":85,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T10:00:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendanc
+U1= U2= U3= U4=382
+R before: (0, 8)
+T1 results len=100 next=http://qa.etqan.localhost/api/v1/sessions/?page=2&page_size=1000
+T1 paged union equals DB: False (n=     100)
+SA2-owned ids in T1 union: []
+== TC-007 data (today, before now): U1..U3
+[201] POST sessions/regular/ :: {"session":{"id":383,"subscription_id":85,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T07:00:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendanc
+[201] POST sessions/regular/ :: {"session":{"id":384,"subscription_id":85,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T08:00:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendanc
+[201] POST sessions/regular/ :: {"session":{"id":385,"subscription_id":85,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T09:00:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendanc
+U1=383 U2=384 U3=385 U4=382
+382|scheduled|not_set|not_set|not_set|extra|f|||||f|f|t
+383|scheduled|not_set|not_set|not_set|regular|f|||||f|f|t
+384|scheduled|not_set|not_set|not_set|regular|f|||||f|f|t
+385|scheduled|not_set|not_set|not_set|regular|f|||||f|f|t
+page 1 [200] n=100
+page 2 [200] n=74
+page 3 [404] n=0
+T1 paged union equals DB: True (n=     174)

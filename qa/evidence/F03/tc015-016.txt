@@ -1,0 +1,87 @@
+== TC-015
+before: Asia/Riyadh|USD|en|21|3|10|t|f|t|90|2026-10-19 00:11:23.869658+00
+{"timezone":"Asia/Riyadh","default_currency":"SAR","default_language":"en","generation_horizon_days":21,"renewal_grace_days":3,"absent_consumes_session":true,"excused_consumes_session":false,"auto_invoice_on_subscription":true,"invoice_due_days":10,"postpone_limit_minutes":90,"supervision_enabled":true,"updated_at":"2026-10-19T00:11:34.792055Z"} [200] 
+DB: Asia/Riyadh|SAR|en|21|3|10|t|f|t|90|2026-10-19 00:11:34.792055+00  rows=1
+teacher GET: {"timezone":"Asia/Riyadh","default_currency":"SAR","default_language":"en","generation_horizon_days":21,"renewal_grace_d
+system-status: {'timezone': 'Asia/Riyadh', 'academy_now': '2026-10-19T03:11:34.911776+03:00', 'server_now': '2026-10-19T00:11:34.911776+00:00', 'subdomain': 'qa', 'version': 'dev', 'features_on': 22}
+public.tenants_academy (S3): Africa/Cairo|EGP
+[400]
+new user preferred_language: en
+new invite subject (lang): ['[Etqan QA Academy] Set your password']
+== TC-016 money
+invoice 1: {'amount_minor': 150000, 'currency': 'EGP', 'status': 'unpaid', 'balance_minor': 150000, 'paid_minor': 0}
+usd -> {"timezone":"Asia/Riyadh","default_currency":"USD","default_language":"en","generation_horizon_days":21,"renewal_grace_days":3,"absent_consumes_session":true,"e
+invoice 1 after USD: {'amount_minor': 150000, 'currency': 'EGP'} DB: 1|150000|EGP 2|150000|EGP 
+new invoice no currency: {"detail":"JSON parse error - Extra data: line 1 column 10 (char 9)"} [400]  new invoice no currency: {"detail":"JSON parse error - Extra data: line 1 column 15 (char 14)"} [400]  new invoice no currency: {"detail":"JSON parse error - Extra data: line 1 column 9 (char 8)"} [400]  new invoice no currency: {"detail":"JSON parse error - Extra data: line 1 column 14 (char 13)"} [400] 
+1|1|150000|EGP
+2|2|150000|EGP
+summary: {"revenue_this_month":[],"overdue":[]}
+amount 1500.5 -> {"detail":"JSON parse error - Extra data: line 1 column 10 (char 9)"} [400]  amount 1500.5 -> {"detail":"JSON parse error - Extra data: line 1 column 15 (char 14)"} [400]  amount 1500.5 -> {"detail":"JSON parse error - Extra data: line 1 column 9 (char 8)"} [400]  amount 1500.5 -> {"detail":"JSON parse error - Extra data: line 1 column 14 (char 13)"} [400] 
+amount "150000.00" -> {"detail":"JSON parse error - Extra data: line 1 column 10 (char 9)"} [400]  amount "150000.00" -> {"detail":"JSON parse error - Extra data: line 1 column 15 (char 14)"} [400]  amount "150000.00" -> {"detail":"JSON parse error - Extra data: line 1 column 9 (char 8)"} [400]  amount "150000.00" -> {"detail":"JSON parse error - Extra data: line 1 column 14 (char 13)"} [400] 
+amount -100 -> {"detail":"JSON parse error - Extra data: line 1 column 10 (char 9)"} [400]  amount -100 -> {"detail":"JSON parse error - Extra data: line 1 column 15 (char 14)"} [400]  amount -100 -> {"detail":"JSON parse error - Extra data: line 1 column 9 (char 8)"} [400]  amount -100 -> {"detail":"JSON parse error - Extra data: line 1 column 14 (char 13)"} [400] 
+amount 0 -> {"detail":"JSON parse error - Extra data: line 1 column 10 (char 9)"} [400]  amount 0 -> {"detail":"JSON parse error - Extra data: line 1 column 15 (char 14)"} [400]  amount 0 -> {"detail":"JSON parse error - Extra data: line 1 column 9 (char 8)"} [400]  amount 0 -> {"detail":"JSON parse error - Extra data: line 1 column 14 (char 13)"} [400] 
+explicit currency xyz lower: {"detail":"JSON parse error - Extra data: line 1 column 10 (char 9)"} [400]  explicit currency xyz lower: {"detail":"JSON parse error - Extra data: line 1 column 15 (char 14)"} [400]  explicit currency xyz lower: {"detail":"JSON parse error - Extra data: line 1 column 11 (char 10)"} [400]  explicit currency xyz lower: {"detail":"JSON parse error - Extra data: line 1 column 9 (char 8)"} [400]  explicit currency xyz lower: {"detail":"JSON parse error - Extra data: line 1 column 14 (char 13)"} [400] 
+currency "US" -> {"default_currency":["Use a three-letter currency code, like EGP."]} [400] 
+currency "USDD" -> {"default_currency":["Ensure this field has no more than 3 characters."]} [400] 
+currency "U$D" -> {"default_currency":["Use a three-letter currency code, like EGP."]} [400] 
+currency "123" -> {"default_currency":["Use a three-letter currency code, like EGP."]} [400] 
+currency "" -> {"default_currency":["This field may not be blank."]} [400] 
+currency null -> {"default_currency":["This field may not be null."]} [400] 
+currency " usd " -> {"timezone":"Asia/Riyadh","default_currency":"USD","default_language":"en","generation_horizon_days":21,"renewal_grace_days":3,"absent_consumes_session":true,"e
+currency "ZZZ" -> {"timezone":"Asia/Riyadh","default_currency":"ZZZ","default_language":"en","generation_horizon_days":21,"renewal_grace_days":3,"absent_consumes_session":true,"e
+currency "XXX" -> {"timezone":"Asia/Riyadh","default_currency":"XXX","default_language":"en","generation_horizon_days":21,"renewal_grace_days":3,"absent_consumes_session":true,"e
+DB currency now: XXX
+== TC-016 (rerun of invoice parts; academy currency currently XXX -> set USD first)
+200
+new invoice no currency: {"id":3,"number":"INV-000003","status":"unpaid","is_overdue":false,"student":{"id":5,"full_name":"QA student"},"payer":{"id":5,"full_name":"QA student"},"subscription_id":null,"description":"F03 USD inv","amount_minor":2500,"paid_minor":0,"balance_minor":2500,"currency":"USD","issued_on":"2026-10-19
+1|1|150000|EGP
+2|2|150000|EGP
+3|1|2500|USD
+summary: {"revenue_this_month":[],"overdue":[]}
+amount 1500.5 -> {"amount_minor":["A valid integer is required."]} [400] 
+amount "150000.00" -> {"id":4,"number":"INV-000004","status":"unpaid","is_overdue":false,"student":{"id":5,"full_name":"QA student"},"payer":{"id":5,"full_name":"
+amount -100 -> {"amount_minor":["Ensure this value is greater than or equal to 1."]} [400] 
+amount 0 -> {"amount_minor":["Ensure this value is greater than or equal to 1."]} [400] 
+amount "abc" -> {"amount_minor":["A valid integer is required."]} [400] 
+explicit lower egp: {"id":5,"number":"INV-000005","status":"unpaid","is_overdue":false,"student":{"id":5,"full_name":"QA student"},"payer":{"id":5,"full_name":"QA student"},"subscription_id":null,"description":"F03 egp","amount_minor":100,"paid_minor":0,"balance_minor":100,"curre
+explicit ZZZ: {"id":6,"number":"INV-000006","status":"unpaid","is_overdue":false,"student":{"id":5,"full_name":"QA student"},"payer":{"id":5,"full_name":"QA student"},"subscription_id":null,"description":"F03 zzz","amount_minor":100,"paid_minor":0,"balance_minor":100,"curre
+1|1|150000|EGP|F03 قرآن — F03 باقة
+2|2|150000|EGP|F03 قرآن — F03 باقة
+3|1|2500|USD|F03 USD inv
+4|1|150000|USD|F03 bad
+5|1|100|EGP|F03 egp
+6|1|100|ZZZ|F03 zzz
+subscription default currency check (package currency EGP): new package without currency:
+  nojson: {"currency":["This field is required."]} [400] 
+== TC-016 S6 mixed-currency summary
+pay inv1 EGP 50000: [400] pay inv1 EGP 50000: [400] pay inv1 EGP 50000: [400]
+pay inv3 USD 2500: [400] pay inv3 USD 2500: [400] pay inv3 USD 2500: [400]
+overdue inv2 EGP: 400 inv4 USD: 400
+summary: {"revenue_this_month":[],"overdue":[]}
+ERROR:  column "paid_minor" does not exist
+LINE 1: ...public; select currency,count(*),sum(amount_minor-paid_minor...
+                                                             ^
+ERROR:  column "paid_minor" does not exist
+LINE 1: ...ch_path=academy_qa,public; select id,amount_minor,paid_minor...
+                                                             ^
+== TC-016 S6 mixed-currency summary (rerun, bash3.2 quoting fixed)
+pay inv1 EGP 50000: {"id":1,"number":"INV-000001","status":"partial","is_overdue":false,"student":{"id":5,"full_name":"QA student"},"payer":{"id":5,"full_name":"QA student"},"subscription_id":1,"description":"F03 قرآن — 
+pay inv3 USD 2500: {"id":3,"number":"INV-000003","status":"paid","is_overdue":false,"student":{"id":5,"full_name":"QA student"},"payer":{"id":5,"full_name":"QA student"},"subscription_id":null,"description":"F03 USD inv
+overdue inv2 EGP: 400 inv4 USD: 400
+summary: {"revenue_this_month":[{"currency":"EGP","amount_minor":50000},{"currency":"USD","amount_minor":2500}],"overdue":[]}
+EGP|50000
+USD|2500
+1|150000|EGP|partial|2026-10-26
+2|150000|EGP|unpaid|2026-10-26
+3|2500|USD|paid|2026-10-26
+4|150000|USD|unpaid|2026-10-26
+5|100|EGP|unpaid|2026-10-26
+6|100|ZZZ|unpaid|2026-10-26
+-- overdue via SQL due_on backdate (inv 2 EGP, 4 USD, 6 ZZZ)
+ERROR:  new row for relation "billing_invoice" violates check constraint "billing_invoice_due_after_issue"
+DETAIL:  Failing row contains (2, INV-000002, 2, F03 قرآن — F03 باقة, 150000, EGP, 2026-10-19, 2026-10-09, unpaid, , null, 2026-10-19 00:06:47.290535+00, 2026-10-19 00:06:47.29054+00, 1, 8, 2, null).
+summary: {"revenue_this_month":[{"currency":"EGP","amount_minor":50000},{"currency":"USD","amount_minor":2500}],"overdue":[]}
+UPDATE 3
+UPDATE 3
+summary: {"revenue_this_month":[{"currency":"EGP","amount_minor":50000},{"currency":"USD","amount_minor":2500}],"overdue":[{"currency":"EGP","count":1,"balance_minor":150000},{"currency":"USD","count":1,"balance_minor":150000},{"currency":"ZZZ","count":1,"balance_minor":100}]}
+UPDATE 3

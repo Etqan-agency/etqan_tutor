@@ -1,0 +1,8 @@
+{
+  "meAfterLogin": 200,
+  "sessionHttpOnly": true,
+  "csrfHttpOnly": false,
+  "meAfterLogout": 403,
+  "urlAfterBack": "http://qa.etqan.localhost/app/login",
+  "adminNameVisibleAfterBack": false
+}

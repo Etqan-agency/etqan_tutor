@@ -1,0 +1,22 @@
+==== secD2 re-runs (staff login fixed: new users' emails were unverified -> verified via SQL) 2026-10-19T04:07:07.372777
+s_pay login 200
+OK  TC-013 staff payroll_settings.update PATCH 200 :: 200
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+BAD TC-013 rules off -> T2 absent/excused at 100% :: 21583
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+BAD rules on -> 26491 again
+report PUT 200 {"session": 61, "behaviour": 4, "participation": 4, "notes": "F10", "written_by": {"id": 1, "full_name": "QA Admin"}, "c
+OK  TC-014 2 report lines -600, ded 1200, net 16800, sent 1 missing 2 :: [(62, -600), (63, -600)] {"deductions_minor": 1200, "net_minor": 16800, "reports_sent": 1, "reports_missing": 2}
+OK  reported session has no report line
+OK  TC-014 issue rebuilds same 16800 :: 200 16800
+ratecreate login 200
+OK  TC-016 create-only staff 403 :: 403 {"detail": "You do not have permission to perform this action."}
+OK  TC-016 full staff bulk 200 :: 200 {"created": 0, "updated": 1}
+settings 1|10000|10000|f|per_student|2026-10-19 01:07:14.419137+00|1|0
+==== secD3 TC-013 rules-off recheck (T2 rate back to 12345; earlier 21583 = 100% of a 7000 rate left by TC-016 bulk)
+rate 12345
+OK  rules on 26491
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  rules off 100%: 38065 :: 38065
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  rules on again 26491

@@ -1,0 +1,56 @@
+........................................................................ [  5%]
+........................................................................ [ 10%]
+........................................................................ [ 15%]
+........................................................................ [ 20%]
+........................................................................ [ 26%]
+........................................................................ [ 31%]
+........................................................................ [ 36%]
+........................................................................ [ 41%]
+........................................................................ [ 46%]
+........................................................................ [ 52%]
+........................................................................ [ 57%]
+........................................................................ [ 62%]
+........................................................................ [ 67%]
+........................................................................ [ 73%]
+........................................................................ [ 78%]
+........................................................................ [ 83%]
+........................................................................ [ 88%]
+........................................................................ [ 93%]
+........................................................................ [ 99%]
+............                                                             [100%]
+=============================== warnings summary ===============================
+etqan/scheduling/tests/test_activity_subscription_wide.py: 1 warning
+etqan/scheduling/tests/test_activity_tracking.py: 3 warnings
+etqan/scheduling/tests/test_api_activity.py: 14 warnings
+etqan/scheduling/tests/test_api_archive_lists.py: 13 warnings
+etqan/scheduling/tests/test_api_archive_routes.py: 10 warnings
+etqan/scheduling/tests/test_api_availability.py: 12 warnings
+etqan/scheduling/tests/test_api_bundle_labels.py: 7 warnings
+etqan/scheduling/tests/test_api_bundles.py: 28 warnings
+etqan/scheduling/tests/test_api_groups.py: 12 warnings
+etqan/scheduling/tests/test_api_schedule.py: 40 warnings
+etqan/scheduling/tests/test_api_schedules.py: 24 warnings
+etqan/scheduling/tests/test_api_session_classes.py: 14 warnings
+etqan/scheduling/tests/test_api_session_writes.py: 30 warnings
+etqan/scheduling/tests/test_api_sessions.py: 24 warnings
+etqan/scheduling/tests/test_api_subscriptions.py: 29 warnings
+etqan/scheduling/tests/test_api_supervision.py: 14 warnings
+etqan/scheduling/tests/test_api_times_postponement.py: 28 warnings
+etqan/scheduling/tests/test_api_trials.py: 19 warnings
+etqan/scheduling/tests/test_api_trials_links.py: 7 warnings
+etqan/scheduling/tests/test_bundles_country_pricing.py: 2 warnings
+etqan/scheduling/tests/test_bundles_members.py: 1 warning
+etqan/scheduling/tests/test_country_pricing.py: 5 warnings
+etqan/scheduling/tests/test_features.py: 1 warning
+etqan/scheduling/tests/test_generation_guards.py: 4 warnings
+etqan/scheduling/tests/test_host_link.py: 7 warnings
+etqan/scheduling/tests/test_schedules_generation.py: 1 warning
+etqan/scheduling/tests/test_schedules_payloads.py: 5 warnings
+etqan/scheduling/tests/test_staff_scope.py: 4 warnings
+etqan/scheduling/tests/test_times_postponement_board.py: 1 warning
+etqan/scheduling/tests/test_trials_pays_teacher.py: 6 warnings
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+1380 passed, 366 warnings in 107.43s (0:01:47)

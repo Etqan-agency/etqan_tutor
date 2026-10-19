@@ -1,0 +1,16 @@
+{
+  "before": "qa-tmp-1.etqan.localhost\nالعربية\nWelcome back\n\nSign in to continue your studies.\n\nEmail\n*\nPassword\n*\nSign in\n\nNew here? Ask your academy for an account\n\nForgot your password?",
+  "after": "qa-tmp-1.etqan.localhost\nالعربية\nWelcome back\n\nSign in to continue your studies.\n\nEmail\n*\nPassword\n*\nThis academy is suspended. Please contact Etqan.\nSign in\n\nNew here? Ask your academy for an account\n\nForgot your password?",
+  "alerts": [
+    "This academy is suspended. Please contact Etqan."
+  ],
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "console: Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "console: Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "console: Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "console: Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "console: Failed to load resource: the server responded with a status of 403 (Forbidden)"
+  ],
+  "url": "http://qa-tmp-1.etqan.localhost/app/login"
+}

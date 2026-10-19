@@ -1,0 +1,83 @@
+== TC-016
+t16.sh: line 3: /tmp/..//private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/scn/jars/sept_before.txt: No such file or directory
+payslip counter 39, payroll expense sum 967065
+[200] POST payroll/payslips/generate/ :: {"created":1,"replaced":3,"removed":0,"missing_rate":[],"other_currency":[{"id":45,"full_name":"F10 Teacher Eleven"}],"unpaid_sessions":[{"id":7,"full_name":"QA teacher"}],"stale_fixed_salary":[]}
+T3 slip 43
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;d=json.loads(sys.argv[1]);print(eval(sys.argv[2]))
+                                                    ~~~~^^^^^^^^^^^^^
+  File "<string>", line 1
+    k:d.get(k) for k in ('number'
+     ^
+SyntaxError: invalid syntax
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;d=json.loads(sys.argv[1]);print(eval(sys.argv[2]))
+                                                    ~~~~^^^^^^^^^^^^^
+  File "<string>", line 1
+    'currency')
+              ^
+SyntaxError: unmatched ')'
+slip:  slip: status slip: gross_minor slip: net_minor slip: 
+lines: [('session', 388, 60, 6000, 6000), ('session', 389, 60, 6000, 6000), ('session', 390, 60, 6000, 6000), ('session', 391, 60, 6000, 6000), ('session', 392, 60, 6000, 6000), ('session', 393, 60, 6000, 6000), ('session', 394, 45, 6000, 4500), ('session', 395, 60, 6000, 3000), ('session', 396, 60, 6000, 1500)]
+[200] POST payroll/payslips/43/issue/ :: {"id":43,"number":"PAY-000040","status":"issued","teacher":{"id":220,"full_name":"SCN Payroll Teacher"},"year":2026,"month":9,"currency":"EGP","sessions":9,"minutes":525,"counts":{"regular":9,"compensation":0,"extra":0,"trial":0,"at_disposal":0,"student_absent":1,"student_excused":1,"group_members":
+[409] POST sessions/388/attendance/ :: {"detail":"This session is on an issued payslip.","code":"payroll.payslip_issued"}
+[200] POST payroll/payslips/43/mark-paid/ :: {"id":43,"number":"PAY-000040","status":"paid","teacher":{"id":220,"full_name":"SCN Payroll Teacher"},"year":2026,"month":9,"currency":"EGP","sessions":9,"minutes":525,"counts":{"regular":9,"compensat
+T3 own list: [(43, 220, 'paid')]
+[200] POST payroll/payslips/43/acknowledge/ :: {"id":43,"number":"PAY-000040","status":"paid","teacher":{"id":220,"full_name":"SCN Payroll Teacher"},"year":2026,"month":9,"currency":"EGP","sessions":9,"minutes":525,"counts":{"regular":9,"compensat
+[404] GET payroll/payslips/43/ :: {"detail":"No Payslip matches the given query."}
+[200] POST payroll/payslips/generate/ :: {"created":0,"replaced":3,"removed":0,"missing_rate":[],"other_currency":[{"id":45,"full_name":"F10 Teacher Eleven"}],"unpaid_sessions":[{"id":7,"full_name":"QA teacher"}],"stale_fixed_salary":[]}
+-- DB
+SET
+43|PAY-000040|paid|45000|45000|EGP|t
+SET
+session|9|45000
+SET
+388|60|6000|6000
+389|60|6000|6000
+390|60|6000|6000
+391|60|6000|6000
+392|60|6000|6000
+393|60|6000|6000
+394|45|6000|4500
+395|60|6000|3000
+396|60|6000|1500
+SET
+388|t
+389|t
+390|t
+391|t
+392|t
+393|t
+394|t
+395|t
+396|t
+397|f
+398|f
+SET
+18|payroll.payslip|43|45000|EGP|2026-10-19
+SET id title type amount_minor currency spent_on notes source source_id created_at updated_at created_by_id 
+SET
+40
+other teachers' Sept payslips unchanged: NO
+payroll expense delta: 45000
+-- TC-016 other Sept payslips after generate
+SET
+1|PAY-000001|1|paid|13500|13500|EGP|2026-10-19 01:02:26.469152+00
+2|PAY-000002|3|paid|38065|38065|EGP|2026-10-19 01:16:51.520047+00
+3|PAY-000003|4|draft|12000|12000|EGP|2026-10-19 17:14:46.575808+00
+4|PAY-000004|8|paid|6000|6000|EGP|2026-10-19 01:08:31.88451+00
+5|PAY-000005|9|paid|500000|500000|EGP|2026-10-19 01:19:17.650965+00
+6|PAY-000006|10|paid|300000|300000|EGP|2026-10-19 01:19:54.887713+00
+7|PAY-000007|11|paid|18000|16200|EGP|2026-10-19 01:17:39.799832+00
+8|PAY-000008|12|paid|6000|6000|USD|2026-10-19 01:08:32.021558+00
+15|PAY-000014|16|draft|6000|6000|EGP|2026-10-19 17:14:46.596278+00
+21|PAY-000019|6|draft|0|700|EGP|2026-10-19 17:14:46.585342+00
+43|PAY-000040|22|paid|45000|45000|EGP|2026-10-19 17:14:46.431853+00
+4:monthly salary. It generates a draft payslip per teacher and month from the sessions the teacher taught,
+19:| `Payslip` | Unique per (teacher, year, month). Number `PAY-000123`. Status `draft → issued → paid`. Holds totals (gross, bonuses, deductions, net), `missing_rate`, report/absence counters, `paid_to_balance` and `acknowledged_at`. |
+71:  - Creates or rebuilds their drafts and deletes drafts with nothing left.
+76:  - Allowed only for a draft whose month is over.
+122:- A teacher sees their own issued and paid payslips (never drafts) and their own withdrawals.
+145:| POST | `/api/v1/payroll/payslips/generate/` | `payslip.create` | Generate drafts for `{year, month}` |

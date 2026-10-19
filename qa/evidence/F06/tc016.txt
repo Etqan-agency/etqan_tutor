@@ -1,0 +1,19 @@
+adm renew 29 -> 201 {"detail":"This subscription was already renewed.","code":"scheduling.already_renewed"}
+codes renew 29 -> 409 {"detail":"This subscription was already renewed.","code":"scheduling.already_renewed"}
+adm renew 30 -> 201 {"id":32,"status":"active","schedule_status":"active","student":{"id":215,"full_name":"QA6
+codes renew 30 -> 409 {"detail":"This subscription was already renewed.","code":"scheduling.already_renewed"}
+-- S4: cancel the renewal of X1 then race again
+[200] POST subscriptions/31/cancel/ :: {"id":31,"status":"cancelled","schedule_status":"active","student":{"id":213,"full_name":"QA6 Student 2","timezone":"Afr
+31|29|cancelled
+adm renew 29 -> 201 {"detail":"This subscription was already renewed.","code":"scheduling.already_renewed"}
+codes renew 29 -> 409 {"detail":"This subscription was already renewed.","code":"scheduling.already_renewed"}
+31||cancelled
+32|30|active
+33|29|active
+31|1
+32|1
+33|1
+0
+111|31|unpaid|150000|EGP
+113|33|unpaid|150000|EGP
+NOTE: '201 already_renewed' lines = shared .out file between parallel subshells (harness artifact); HTTP codes authoritative

@@ -1,0 +1,24 @@
+156 objects imported automatically (use -v 2 for details).
+
+registered admin classes: PeriodicTask -> (<class 'etqan.platform.admin.EtqanPeriodicTaskAdmin'>, <class 'etqan.platform.admin.ChangeToRunActions'>, <class 'django_celery_beat.admin.PeriodicTaskAdmin'>)
+== ops-view-all@qa.etqan.test 
+  admins with actions: 0 of 30
+== ops-view@qa.etqan.test 
+  admins with actions: 0 of 30
+== ops-noperm@qa.etqan.test 
+  admins with actions: 0 of 30
+== ops-change@qa.etqan.test 
+  tenants.academy: ['copy_features', 'reactivate_academies', 'suspend_academies']
+  admins with actions: 1 of 30
+== ops-domain@qa.etqan.test 
+  tenants.domain: ['check_dns', 'disable_action', 'make_primary_action']
+  admins with actions: 1 of 30
+(transient user, rolled back) view+change on 5 models:
+== qa-r2-changer@qa.etqan.test 
+  account.emailaddress: ['make_verified']
+  django_celery_beat.periodictask: ['disable_tasks', 'enable_tasks', 'run_tasks', 'toggle_tasks']
+  etqan_billing.etqaninvoice: ['email_again', 'issue_invoices', 'mark_paid', 'void_invoices']
+  identity.teacherprofile: ['send_password_set_email']
+  integrations.platformaccount: ['test_accounts']
+  admins with actions: 5 of 30
+transient exists after rollback: False

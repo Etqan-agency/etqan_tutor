@@ -1,0 +1,35 @@
+== TC-016
+[201] POST people/parents/ :: 
+[201] POST people/families/ ::
+[201] POST people/tags/ :: {"i
+qaother ids: student=5 parent=7; max qa ids user=138 family=4 tag=48
+before qaother: identity_user:02cdcfea identity_studentprofile:f2f6858f identity_teacherprofile:c4f0f7a1 identity_parentprofile:4c3b8bfa identity_family:66d42bb3 identity_tag:03d8ec91 identity_guardianship:d41d8cd9 employment_contract:d41d8cd9 
+-- qaother admin against qa-only ids (on its own host)
+GET people/students/114/ -> 404
+GET people/parents/120/ -> 404
+GET people/teachers/118/ -> 404
+GET people/families/2/ -> 404
+GET people/tags/46/ -> 405
+GET contracts/1/ -> 404
+GET contracts/1/file/ -> 404
+GET people/students/114/guardians/ -> 404
+PATCH student -> 404
+deactivate -> 404
+link qa parent to qaother student -> 404 {"detail":"No User matches the given query."}
+family with qa ids -> 400 {"student_ids":["Choose students from the list."]}
+bulk qa ids -> 200 {"updated":0}
+qa tag id on qaother student -> 400 {"profile":{"tag_ids":["Choose tags from the list."]}}
+-- qa admin: search/CSV for qaother names
+q=Other Student -> 0
+0
+-- cookie replay
+qa cookie on qaother: 403  qaother cookie on qa: 403
+qa cookie on qa (control): 200
+qa admin cookie on qaother people list: 403
+login xo 400 {"non_field_errors":["Invalid credentials."]}
+login xq 400 {"non_field_errors":["Invalid credentials."]}
+-- reset token cross-academy (qaother student invite link on qa host)
+link host=qaother.etqan.localhost
+[400] POST identity/password/reset/confirm/ :: {"token":["Invalid or expired reset link."]}
+qaother unchanged: YES
+qa unchanged: YES

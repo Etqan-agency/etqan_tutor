@@ -1,0 +1,13 @@
+
+activated qa-academy.test active 2026-10-17 20:02:29.253902+00:00 False
+TC-084 svc 254 REFUSED: Enter a domain like academy-name.com.
+TC-084 svc 68 REFUSED: Enter a domain like academy-name.com.
+## TC-089 routing on active custom domain (DNS step bypassed by service call)
+csrf: 200
+branding: {"name":{"ar":"QA Tmp One","en":"QA Tmp One"},"tagline":{"ar":"","en":""},"logo_url":"","favicon_url":"","share_image_url":"","primary_color":"#0E7C66","primary_text":"#FFFFFF","accent_color":"#C8962E","contact":{"email":"","phone":"","whatsapp":"","address":{"ar":"","en":""}},"social":{"facebook":"
+## TC-090
+QA-ACADEMY.TEST:80 csrf: 200
+www.qa-academy.test csrf: 404
+## TC-097 active custom: ok
+www row www.qa-academy.test active
+www.qa-academy.test after activate csrf: 200

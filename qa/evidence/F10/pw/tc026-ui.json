@@ -1,0 +1,36 @@
+{
+  "acknowledged": "2026-10-19T01:19:17.650885Z",
+  "teacherPayrollNavLinks": 0,
+  "request": {
+    "id": 13,
+    "teacher": {
+      "id": 7,
+      "full_name": "QA teacher"
+    },
+    "amount_minor": 1000,
+    "currency": "EGP",
+    "status": "cancelled",
+    "notes": "",
+    "office_notes": "",
+    "requested_by": {
+      "id": 7,
+      "full_name": "QA teacher"
+    },
+    "decided_by": {
+      "id": 7,
+      "full_name": "QA teacher"
+    },
+    "decided_at": "2026-10-19T01:19:20.478567Z",
+    "paid_on": null,
+    "paid_by": null,
+    "created_at": "2026-10-19T01:19:20.038777Z"
+  },
+  "balanceBefore": [
+    {
+      "currency": "EGP",
+      "balance_minor": 11900,
+      "available_minor": 11900
+    }
+  ],
+  "t2Id": 42
+}

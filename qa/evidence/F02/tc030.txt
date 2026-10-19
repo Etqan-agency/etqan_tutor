@@ -1,0 +1,19 @@
+## TC-030
+200
+add: 201 id=21
+make unverified primary: {"email":["Verify this email address before making it primary."]} 400 
+verify: 200
+S7 login with verified SECONDARY: {"id":10,"email":"f02-c@qa.etqan.test","full_name":"F02 Stud
+primary wrong pw: {"current_password":["Incorrect password."]} 400 
+primary ok: {"id":21,"email":"f02-c-new@qa.etqan.test","verified":true,"primary":true} 200 
+alert mails:
+2NQPLVvjE12IVbNR2VouoW f02-c@qa.etqan.test | [Etqan QA Academy] تنبيه أمني: تم إجراء تغيير على حسابك
+db: user.email=f02-c-new@qa.etqan.test primaries=1 rows=f02-c@qa.etqan.test:true:false f02-c-new@qa.etqan.test:true:true 
+login new: 200  S7 login OLD address: {"id":10,"email":"f02-c-new@qa.etqan.test","full_name":"F02 
+delete primary: {"email":["Set another address as primary before removing this one."]} 400 
+in use by other student: {"email":["This email is already in use."]} 400 
+qaother address: {"id":22,"email":"qaother-admin@qa.etqan.test","verified":false,"primary":false} 201 
+extra1: 201 extra2: 201 extra3: 400 extra4: 400 (total now 5)
+restore primary: 200
+del 21 204 del 22 204 del 23 204 del 24 204 
+final: f02-c@qa.etqan.test:true:true  user.email=f02-c@qa.etqan.test

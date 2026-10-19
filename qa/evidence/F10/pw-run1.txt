@@ -1,0 +1,60 @@
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog').getByRole('button', { name: 'Confirm receipt' })
+
+
+      104 | 	await page.goto(`${QA}/app/teaching/payslips/${paid.id}`);
+      105 | 	await page.getByRole("button", { name: "Confirm receipt" }).click();
+    > 106 | 	await page.getByRole("dialog").getByRole("button", { name: "Confirm receipt" }).click();
+          | 	                                                                                ^
+      107 | 	await expect(page.getByText("Receipt confirmed.")).toBeVisible();
+      108 | 	const ack = await api(page, `/payroll/payslips/${paid.id}/`);
+      109 | 	expect(ack.json.acknowledged_at).toBeTruthy();
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f10-payroll.spec.ts:106:82
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog').getByRole('button', { name: 'Confirm receipt' })
+
+
+      104 | 	await page.goto(`${QA}/app/teaching/payslips/${paid.id}`);
+      105 | 	await page.getByRole("button", { name: "Confirm receipt" }).click();
+    > 106 | 	await page.getByRole("dialog").getByRole("button", { name: "Confirm receipt" }).click();
+          | 	                                                                                ^
+      107 | 	await expect(page.getByText("Receipt confirmed.")).toBeVisible();
+      108 | 	const ack = await api(page, `/payroll/payslips/${paid.id}/`);
+      109 | 	expect(ack.json.acknowledged_at).toBeTruthy();
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f10-payroll.spec.ts:106:82
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › e2e/qa/f10-payroll.spec.ts:53:1 › TC-025 office generates, issues and pays a month in the dashboard 
+    [chromium] › e2e/qa/f10-payroll.spec.ts:98:1 › TC-026 teacher confirms receipt, requests and cancels a withdrawal 
+  1 passed (2.1m)
+error: Recipe `e2e` failed with exit code 1

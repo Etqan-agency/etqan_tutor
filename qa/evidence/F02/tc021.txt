@@ -1,0 +1,18 @@
+## TC-021 (FAKE: SMS console backend)
+sign-in-options: {"phone_login":true,"google":false,"self_registration":false,"waitlist":false,"parent_registration":false,"code_reset":{"email":true,"phone":true}}
+request:  202 
+SMS (Arabic, user language ar) code: 671114
+verify: {"accounts":[{"id":8,"full_name":"F02 Student a"},{"id":9,"full_name":"F02 Student b"}]} 200 
+reset f02-b:  204 
+reuse: {"code":["Invalid or expired code."]} 400 
+changed: a=no b=yes teacher=no
+db row: phone|+201000000001|t
+f02-b login new: 200
+f02-b@qa.etqan.test 200
+S9: phone-only student (no email) — create f02-phoneonly with phone +201000000009, no email:
+  create: {"id":19,"role":"student","two_factor":false,"user":{"full_name":"F02 Phone Only","email":null,"phone":"+201000000009","preferred_language":"ar","timezone":"Afr
+  200-SMS daily cap not executed (T test_the_academy_texts_at_most_its_daily_cap).
+S9 phone code for phone-only student: 202
+  SMS lines for +201000000009: 0
+  user 19 password usable: !
+79:        users.filter(role__in=ROLES, is_active=True, email__isnull=False)

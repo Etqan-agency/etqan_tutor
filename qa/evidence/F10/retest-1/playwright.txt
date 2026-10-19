@@ -1,0 +1,117 @@
+
+Running 3 tests using 1 worker
+
+  ✘  1 [chromium] › e2e/qa/f10-payroll.spec.ts:53:1 › TC-025 office generates, issues and pays a month in the dashboard (3.4s)
+  ✘  2 [chromium] › e2e/qa/f10-payroll.spec.ts:53:1 › TC-025 office generates, issues and pays a month in the dashboard (retry #1) (3.8s)
+  ✘  3 [chromium] › e2e/qa/f10-payroll.spec.ts:105:1 › TC-026 teacher confirms receipt, requests and cancels a withdrawal (1.8s)
+  ✘  4 [chromium] › e2e/qa/f10-payroll.spec.ts:105:1 › TC-026 teacher confirms receipt, requests and cancels a withdrawal (retry #1) (2.2s)
+  ✓  5 [chromium] › e2e/qa/f10-payroll.spec.ts:145:1 › S4 unpaid-sessions warning after Generate, and after a reload (4.0s)
+
+
+  1) [chromium] › e2e/qa/f10-payroll.spec.ts:53:1 › TC-025 office generates, issues and pays a month in the dashboard 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "draft"
+    Received: "paid"
+
+      67 | 	const list = await api(page, `/payroll/payslips/?year=2026&month=3&teacher=${T13_ID}`);
+      68 | 	const slip = list.json.results[0];
+    > 69 | 	expect(slip.status).toBe("draft");
+         | 	                    ^
+      70 | 	expect(slip.net_minor).toBe(6000);
+      71 | 	expect(slip.currency).toBe("EGP");
+      72 | 	await page.goto(`${QA}/app/payroll/payslips/${slip.id}`);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f10-payroll.spec.ts:69:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f10-payroll-TC-025-offi-dddce-ys-a-month-in-the-dashboard-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f10-payroll-TC-025-offi-dddce-ys-a-month-in-the-dashboard-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "draft"
+    Received: "paid"
+
+      67 | 	const list = await api(page, `/payroll/payslips/?year=2026&month=3&teacher=${T13_ID}`);
+      68 | 	const slip = list.json.results[0];
+    > 69 | 	expect(slip.status).toBe("draft");
+         | 	                    ^
+      70 | 	expect(slip.net_minor).toBe(6000);
+      71 | 	expect(slip.currency).toBe("EGP");
+      72 | 	await page.goto(`${QA}/app/payroll/payslips/${slip.id}`);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f10-payroll.spec.ts:69:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f10-payroll-TC-025-offi-dddce-ys-a-month-in-the-dashboard-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f10-payroll-TC-025-offi-dddce-ys-a-month-in-the-dashboard-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f10-payroll-TC-025-offi-dddce-ys-a-month-in-the-dashboard-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f10-payroll-TC-025-offi-dddce-ys-a-month-in-the-dashboard-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › e2e/qa/f10-payroll.spec.ts:105:1 › TC-026 teacher confirms receipt, requests and cancels a withdrawal 
+
+    Error: expect(received).toBeTruthy()
+
+    Received: undefined
+
+      107 | 	const mine = await api(page, "/payroll/payslips/");
+      108 | 	const paid = mine.json.results.find((p: { status: string; acknowledged_at: string | null }) => p.status === "paid" && !p.acknowledged_at);
+    > 109 | 	expect(paid).toBeTruthy();
+          | 	             ^
+      110 | 	expect(mine.json.results.every((p: { status: string }) => p.status !== "draft")).toBe(true);
+      111 | 	await page.goto(`${QA}/app/teaching/payslips/${paid.id}`);
+      112 | 	await page.getByRole("button", { name: "Confirm receipt" }).click();
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f10-payroll.spec.ts:109:15
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toBeTruthy()
+
+    Received: undefined
+
+      107 | 	const mine = await api(page, "/payroll/payslips/");
+      108 | 	const paid = mine.json.results.find((p: { status: string; acknowledged_at: string | null }) => p.status === "paid" && !p.acknowledged_at);
+    > 109 | 	expect(paid).toBeTruthy();
+          | 	             ^
+      110 | 	expect(mine.json.results.every((p: { status: string }) => p.status !== "draft")).toBe(true);
+      111 | 	await page.goto(`${QA}/app/teaching/payslips/${paid.id}`);
+      112 | 	await page.getByRole("button", { name: "Confirm receipt" }).click();
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f10-payroll.spec.ts:109:15
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › e2e/qa/f10-payroll.spec.ts:53:1 › TC-025 office generates, issues and pays a month in the dashboard 
+    [chromium] › e2e/qa/f10-payroll.spec.ts:105:1 › TC-026 teacher confirms receipt, requests and cancels a withdrawal 
+  1 passed (18.1s)
+error: Recipe `e2e` failed with exit code 1

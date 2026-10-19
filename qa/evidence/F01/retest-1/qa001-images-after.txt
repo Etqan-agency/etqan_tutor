@@ -1,0 +1,6 @@
+etqan_tutor-celery_beat:latest e659e9086230
+etqan_tutor-celery_worker:latest 21c6925a8dbb
+etqan_tutor-dashboard:latest acd191fc1df4
+etqan_tutor-django:latest 1cb20704b85b
+etqan_tutor-flower:latest 629467654caa
+etqan_tutor-marketing:latest 7ec89495a031

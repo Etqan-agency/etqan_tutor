@@ -1,0 +1,89 @@
+
+Running 5 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-invite.spec.ts:16:1 › TC-014 the invite reaches Mailpit with the qa host (43ms)
+  ✓  2 [chromium] › e2e/qa/f01-invite.spec.ts:22:1 › TC-110 qa's invite token is refused on qaother (pending admin, same pk) (129ms)
+  ✘  3 [chromium] › e2e/qa/f01-invite.spec.ts:38:1 › TC-016/017/141 the first admin sets a password and signs in (4.3s)
+  -  4 [chromium] › e2e/qa/f01-invite.spec.ts:81:1 › TC-018 the invite link is single-use and a wrong token is refused
+  -  5 [chromium] › e2e/qa/f01-invite.spec.ts:98:1 › TC-105/142 the qa admin cannot sign in on qaother; logins are branded
+  ✓  6 [chromium] › e2e/qa/f01-invite.spec.ts:16:1 › TC-014 the invite reaches Mailpit with the qa host (retry #1) (36ms)
+  ✓  7 [chromium] › e2e/qa/f01-invite.spec.ts:22:1 › TC-110 qa's invite token is refused on qaother (pending admin, same pk) (retry #1) (121ms)
+  ✘  8 [chromium] › e2e/qa/f01-invite.spec.ts:38:1 › TC-016/017/141 the first admin sets a password and signs in (retry #1) (7.5s)
+  -  9 [chromium] › e2e/qa/f01-invite.spec.ts:81:1 › TC-018 the invite link is single-use and a wrong token is refused (retry #1)
+  -  10 [chromium] › e2e/qa/f01-invite.spec.ts:98:1 › TC-105/142 the qa admin cannot sign in on qaother; logins are branded (retry #1)
+
+
+  1) [chromium] › e2e/qa/f01-invite.spec.ts:38:1 › TC-016/017/141 the first admin sets a password and signs in 
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected substring: "Etqan QA Academy"
+    Received string:    "qa.etqan.localhost
+    العربية
+    Welcome back·
+    Sign in to continue your studies.·
+    Email
+    *
+    Password
+    *
+    Sign in·
+    New here? Ask your academy for an account·
+    Forgot your password?"
+
+      75 | 	expect(me.status).toBe(200);
+      76 | 	expect((me.body as { email: string }).email).toBe(QA.adminEmail);
+    > 77 | 	expect(brand).toContain(QA.name);
+         | 	              ^
+      78 | 	await context.close();
+      79 | });
+      80 |
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-invite.spec.ts:77:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-invite-TC-016-017-1-a43a1-ets-a-password-and-signs-in-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-invite-TC-016-017-1-a43a1-ets-a-password-and-signs-in-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText(/you can now sign in/i)
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText(/you can now sign in/i)
+
+
+      59 | 		page.getByRole("button", { name: "Reset password" }).click(),
+      60 | 	]);
+    > 61 | 	await expect(page.getByText(/you can now sign in/i)).toBeVisible();
+         | 	                                                     ^
+      62 | 	save("tc016-confirm.json", { dir, lang, weakStatus: weak?.status() ?? null, alerts, status: confirm.status(), errors });
+      63 | 	expect(confirm.status()).toBe(200);
+      64 |
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-invite.spec.ts:61:55
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-invite-TC-016-017-1-a43a1-ets-a-password-and-signs-in-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-invite-TC-016-017-1-a43a1-ets-a-password-and-signs-in-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f01-invite-TC-016-017-1-a43a1-ets-a-password-and-signs-in-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f01-invite-TC-016-017-1-a43a1-ets-a-password-and-signs-in-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/qa/f01-invite.spec.ts:38:1 › TC-016/017/141 the first admin sets a password and signs in 
+  2 did not run
+  2 passed (13.9s)
+error: Recipe `e2e` failed with exit code 1

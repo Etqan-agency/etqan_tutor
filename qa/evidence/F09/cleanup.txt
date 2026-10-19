@@ -1,0 +1,26 @@
+== cleanup 2026-10-19T03:52:42.054902
+staff3 roles 200
+retire R_WC 200
+retire R_WU 200
+retire R_VONLY 200
+resolve fb804f7d-ed79-48ef-92c0-7a6c29a71557 balance_below_amount 200
+resolve d06092b5-da54-4db6-b95c-a1bc50e220f7 balance_below_amount 200
+resolve d4e7c22b-c98b-4aad-885f-686c73441d86 balance_below_amount 200
+resolve c4f0560d-71ad-458a-8c26-b19993c3d3fe balance_below_amount 200
+resolve da71c7e7-14b0-4ec3-81e1-99a4c5717b22 balance_below_amount 200
+resolve d20b6538-e31d-4124-871a-17dba4df55a6 link_closed 200
+resolve d75bda65-c0b4-4a4e-a985-9abd6eec8ccd balance_below_amount 200
+resolve eadc0c3e-0724-4783-a8f1-c75929109fe2 balance_below_amount 200
+resolve 7dfbe633-9881-4a27-abf5-e1cc807d3f5b invoice_void 200
+resolve a7445c2a-0a4f-4d36-8fac-252f6aa7196e balance_below_amount 200
+resolve 994afb0d-efdc-4335-9940-63c1ae660232 already_recorded 200
+resolve 3e01a007-0a44-4f8f-ac8b-63c417a5d0db mode_mismatch 200
+resolve ac77b073-ef2c-4e18-9112-69fa2ee9d4d8 currency_mismatch 200
+open links 
+settings {"enabled": true, "basis_points": 500} {"local_payment_enabled": true}
+features qa {"export": true, "themes": true, "parents": true, "spanish": true, "balances": true, "families": true, "invoices": true, "code_reset": true, "two_factor": true, "phone_login": true, "quick_login": true, "supervision": true, "postponement": true, "system_codes": true, "internal_chat": false, "payment_links": true, "payroll_rules": true, "system_status": true, "google_sign_in": false, "online_payments": true, "quick_translate": true, "session_reports": true, "teacher_balance": true, "payment_receipts": true, "student_teacher_rate": true}
+login admin 200
+login staffc 200
+login student 200
+login parent 200
+final counts [('billing_invoice', '92'), ('billing_payment', '65'), ('wallet_walletentry', '28'), ('vouchers_voucher', '25'), ('gateways_checkout', '36')]

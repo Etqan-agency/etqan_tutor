@@ -1,0 +1,35 @@
+# 2026-10-17T21:24:40Z ETQAN-QA-006 retest-1 (Agent 2), REAL
+## 1. Filed repro: cross-site form POST, no cookie/token, Origin evil.example
+HTTP/1.1 403 Forbidden
+{"detail":"CSRF Failed: Origin checking failed - http://evil.example does not match any trusted origins."}
+
+## 2. Filed repro variant: JSON with qa's csrftoken replayed on qaother, Origin qa
+qa csrf GET 200
+qa token len 32
+HTTP/1.1 403 Forbidden
+{"detail":"CSRF Failed: Origin checking failed - http://qa.etqan.localhost does not match any trusted origins."}
+
+## 3. JSON, no cookie, no token, same-origin Origin
+HTTP/1.1 403 Forbidden
+{"detail":"CSRF Failed: CSRF cookie not set."}
+
+## 4. Correct token, cross-site Origin
+HTTP/1.1 403 Forbidden
+{"detail":"CSRF Failed: Origin checking failed - http://evil.example does not match any trusted origins."}
+
+## 5. Wrong password with no token (CSRF checked before credentials)
+HTTP/1.1 403 Forbidden
+{"detail":"CSRF Failed: CSRF cookie not set."}
+
+## 6. Legit same-origin flow: GET csrf, POST with token + Origin qaother, then me
+HTTP/1.1 200 OK
+Set-Cookie: sessionid=REDACTED-QA; expires=Sat, 31 Oct 2026 21:24:40 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax
+{"id":1,"email":"qaother-admin@qa.etqan.test","full_name":"QA Other Admin","phone":"","preferred_language":"ar","effective_language":"ar","timezone":"UTC","role":"admin","profiles":[],"profile":{},"pe
+me -> 200
+## 7. 2FA step and quick-login exchange, no token
+{"detail":"CSRF Failed: CSRF cookie not set."} -> 403
+{"detail":"CSRF Failed: CSRF cookie not set."} -> 403
+## 8. quick-login with token (reaches link check)
+{"token":["Invalid or expired link."]} -> 400
+## 9. Regression probe: signed-in write without token still CSRF-checked (POST people/tags/)
+{"detail":"CSRF Failed: CSRF token missing."} -> 403

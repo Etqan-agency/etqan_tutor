@@ -1,0 +1,7 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-login-csrf.spec.ts:10:1 › QA-006 a fresh browser signs in through the dashboard (3.0s)
+  ✓  2 [chromium] › e2e/qa/f01-login-csrf.spec.ts:38:1 › QA-006 a form on another page cannot sign the browser in (352ms)
+
+  2 passed (4.2s)

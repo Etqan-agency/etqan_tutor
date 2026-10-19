@@ -1,0 +1,76 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › e2e/qa/f01-console.spec.ts:165:1 › TC-133 a view-only Etqan staff member can't change anything (2.2s)
+  ✘  2 [chromium] › e2e/qa/f01-console.spec.ts:165:1 › TC-133 a view-only Etqan staff member can't change anything (retry #1) (2.6s)
+
+
+  1) [chromium] › e2e/qa/f01-console.spec.ts:165:1 › TC-133 a view-only Etqan staff member can't change anything 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 5
+
+    - Array []
+    + Array [
+    +   "Suspend selected academies",
+    +   "Reactivate selected academies",
+    +   "Copy features from another academy",
+    + ]
+
+      191 | 	expect(add.status()).toBe(403);
+      192 | 	expect(domainAdd.status()).toBe(403);
+    > 193 | 	expect(actions.filter((a) => !a.startsWith("-"))).toEqual([]);
+          | 	                                                  ^
+      194 | });
+      195 |
+      196 | test("TC-134 is_staff with no permissions sees nothing", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:193:52
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-133-a-vi-9ca58-ember-can-t-change-anything-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-console-TC-133-a-vi-9ca58-ember-can-t-change-anything-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 5
+
+    - Array []
+    + Array [
+    +   "Suspend selected academies",
+    +   "Reactivate selected academies",
+    +   "Copy features from another academy",
+    + ]
+
+      191 | 	expect(add.status()).toBe(403);
+      192 | 	expect(domainAdd.status()).toBe(403);
+    > 193 | 	expect(actions.filter((a) => !a.startsWith("-"))).toEqual([]);
+          | 	                                                  ^
+      194 | });
+      195 |
+      196 | test("TC-134 is_staff with no permissions sees nothing", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:193:52
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-133-a-vi-9ca58-ember-can-t-change-anything-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-console-TC-133-a-vi-9ca58-ember-can-t-change-anything-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-133-a-vi-9ca58-ember-can-t-change-anything-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f01-console-TC-133-a-vi-9ca58-ember-can-t-change-anything-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/qa/f01-console.spec.ts:165:1 › TC-133 a view-only Etqan staff member can't change anything 
+error: Recipe `e2e` failed with exit code 1

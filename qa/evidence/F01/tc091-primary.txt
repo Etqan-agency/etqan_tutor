@@ -1,0 +1,25 @@
+## TC-091 after make primary
+etqan.localhost|1|active|t
+demo.etqan.localhost|2|active|t
+other.etqan.localhost|3|active|t
+qaother.etqan.localhost|4|active|t
+qa.etqan.localhost|5|active|t
+qa-tmp-1.etqan.localhost|6|active|f
+qa-tmp-tz.etqan.localhost|7|active|t
+qa-tmp-race-a.etqan.localhost|8|active|t
+qa-tmp-race-b.etqan.localhost|10|active|t
+qa-academy.test|6|active|f
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd.co|6|pending|f
+localtest.me|6|pending|f
+www.qa-academy.test|6|active|t
+reset POST 200
+reset link while www primary: http://www.qa-academy.test/app/reset-password?uid=MQ&token=REDACTED-QA
+## TC-091 (b) qa-academy.test made primary
+qa-tmp-1.etqan.localhost|active|f
+qa-academy.test|active|t
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd.co|pending|f
+localtest.me|pending|f
+www.qa-academy.test|active|f
+primaries of other tenants: etqan.localhost,demo.etqan.localhost,other.etqan.localhost,qaother.etqan.localhost,qa.etqan.localhost,qa-tmp-tz.etqan.localhost,qa-tmp-race-a.etqan.localhost,qa-tmp-race-b.etqan.localhost
+reset POST 200
+reset link with qa-academy.test primary: http://qa-academy.test/app/reset-password?uid=MQ&token=REDACTED-QA

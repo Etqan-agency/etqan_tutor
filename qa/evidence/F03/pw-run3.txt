@@ -1,0 +1,15 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f03-roles-settings.spec.ts:45:1 › TC-023 owner builds a role and hires staff; the staff app is narrowed and a retire bites at once (10.8s)
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+  ✓  2 [chromium] › e2e/qa/f03-roles-settings.spec.ts:109:1 › TC-024 settings save and survive reload; features are read-only; quick translate off shows FeatureOff (11.3s)
+
+  2 passed (22.7s)

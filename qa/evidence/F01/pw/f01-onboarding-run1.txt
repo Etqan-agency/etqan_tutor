@@ -1,0 +1,668 @@
+Downloading Chrome for Testing 151.0.7922.34 (playwright chromium v1234) from https://cdn.playwright.dev/builds/cft/151.0.7922.34/mac-arm64/chrome-mac-arm64.zip
+|                                                                                |   0% of 178.7 MiB
+|■■■■■■■■                                                                        |  10% of 178.7 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 178.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 178.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 178.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 178.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 178.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 178.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 178.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 178.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 178.7 MiB
+Chrome for Testing 151.0.7922.34 (playwright chromium v1234) downloaded to /Users/khaledsakr/Library/Caches/ms-playwright/chromium-1234
+Downloading Chrome Headless Shell 151.0.7922.34 (playwright chromium-headless-shell v1234) from https://cdn.playwright.dev/builds/cft/151.0.7922.34/mac-arm64/chrome-headless-shell-mac-arm64.zip
+|                                                                                |   0% of 94.7 MiB
+|■■■■■■■■                                                                        |  10% of 94.7 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 94.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 94.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 94.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 94.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 94.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 94.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 94.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 94.7 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 94.7 MiB
+Chrome Headless Shell 151.0.7922.34 (playwright chromium-headless-shell v1234) downloaded to /Users/khaledsakr/Library/Caches/ms-playwright/chromium_headless_shell-1234
+
+Running 8 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-onboarding.spec.ts:59:1 › TC-010 Etqan staff sign in to the console on the base domain (809ms)
+  ✘  2 [chromium] › e2e/qa/f01-onboarding.spec.ts:86:1 › TC-011/019-022/140 the Add-academy form: fields and every error path (5.9s)
+  -  3 [chromium] › e2e/qa/f01-onboarding.spec.ts:141:1 › TC-011 add 'Etqan QA Academy' (qa) through the Add form
+  -  4 [chromium] › e2e/qa/f01-onboarding.spec.ts:191:1 › TC-014 the invite reaches Mailpit with the qa host
+  -  5 [chromium] › e2e/qa/f01-onboarding.spec.ts:197:1 › TC-110 qa's invite token is refused on qaother (pending admin, same pk)
+  -  6 [chromium] › e2e/qa/f01-onboarding.spec.ts:213:1 › TC-016/017/141 the first admin sets a password and signs in
+  -  7 [chromium] › e2e/qa/f01-onboarding.spec.ts:255:1 › TC-018 the invite link is single-use and a wrong token is refused
+  -  8 [chromium] › e2e/qa/f01-onboarding.spec.ts:272:1 › TC-105/142 the qa admin cannot sign in on qaother; logins are branded
+  ✓  9 [chromium] › e2e/qa/f01-onboarding.spec.ts:59:1 › TC-010 Etqan staff sign in to the console on the base domain (retry #1) (456ms)
+  ✘  10 [chromium] › e2e/qa/f01-onboarding.spec.ts:86:1 › TC-011/019-022/140 the Add-academy form: fields and every error path (retry #1) (8.6s)
+  -  11 [chromium] › e2e/qa/f01-onboarding.spec.ts:141:1 › TC-011 add 'Etqan QA Academy' (qa) through the Add form (retry #1)
+  -  12 [chromium] › e2e/qa/f01-onboarding.spec.ts:191:1 › TC-014 the invite reaches Mailpit with the qa host (retry #1)
+  -  13 [chromium] › e2e/qa/f01-onboarding.spec.ts:197:1 › TC-110 qa's invite token is refused on qaother (pending admin, same pk) (retry #1)
+  -  14 [chromium] › e2e/qa/f01-onboarding.spec.ts:213:1 › TC-016/017/141 the first admin sets a password and signs in (retry #1)
+  -  15 [chromium] › e2e/qa/f01-onboarding.spec.ts:255:1 › TC-018 the invite link is single-use and a wrong token is refused (retry #1)
+  -  16 [chromium] › e2e/qa/f01-onboarding.spec.ts:272:1 › TC-105/142 the qa admin cannot sign in on qaother; logins are branded (retry #1)
+
+
+  1) [chromium] › e2e/qa/f01-onboarding.spec.ts:86:1 › TC-011/019-022/140 the Add-academy form: fields and every error path 
+
+    Error: {"subdomain":"QA2"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\.|valid “slug”/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"-qa2"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\.|valid “slug”/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"qa2-"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\.|valid “slug”/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"q_a"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\.|valid “slug”/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"q.a"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\.|valid “slug”/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"qa a"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\.|valid “slug”/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"قا"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\.|valid “slug”/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\.|valid “slug”/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"qа"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\.|valid “slug”/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"ｑａ"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\.|valid “slug”/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":""}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /required|Use 1-32/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"   "}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /required|Use 1-32/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"www"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /This subdomain is reserved\./
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"admin"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /This subdomain is reserved\./
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"api"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /This subdomain is reserved\./
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"app"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /This subdomain is reserved\./
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"public"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /This subdomain is reserved\./
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"static"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /This subdomain is reserved\./
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"media"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /This subdomain is reserved\./
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"mail"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /This subdomain is reserved\./
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"flower"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /This subdomain is reserved\./
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"sites"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /This subdomain is reserved\./
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"etqan"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /This subdomain is reserved\./
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"demo"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /This subdomain is already taken\./
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"qaother"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /This subdomain is already taken\./
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"admin_email":""}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /required|valid email/i
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"admin_email":"not-an-email"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /required|valid email/i
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"admin_email":"a@b"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /required|valid email/i
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"name":""}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /required/i
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"name":"NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /at most|characters/i
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-onboarding-TC-011-0-cbd2e-fields-and-every-error-path-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-onboarding-TC-011-0-cbd2e-fields-and-every-error-path-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: {"subdomain":"QA2"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\.|valid “slug”/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"qa2-"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\.|valid “slug”/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"ｑａ"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\.|valid “slug”/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"   "}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /required|Use 1-32/
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"admin"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /This subdomain is reserved\./
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"subdomain":"mail"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /This subdomain is reserved\./
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    Error: {"name":"NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"}
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /at most|characters/i
+    Received string:  ""
+
+      133 | 		results.push(r);
+      134 | 		expect.soft(resp.status(), JSON.stringify(c.input)).toBe(200);
+    > 135 | 		expect.soft(err, JSON.stringify(c.input)).toMatch(c.expect);
+          | 		                                          ^
+      136 | 		expect.soft(page.url(), JSON.stringify(c.input)).toContain("/academy/add/");
+      137 | 	}
+      138 | 	save("tc019-022-form-errors.json", results);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-onboarding.spec.ts:135:45
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-onboarding-TC-011-0-cbd2e-fields-and-every-error-path-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-onboarding-TC-011-0-cbd2e-fields-and-every-error-path-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f01-onboarding-TC-011-0-cbd2e-fields-and-every-error-path-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f01-onboarding-TC-011-0-cbd2e-fields-and-every-error-path-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/qa/f01-onboarding.spec.ts:86:1 › TC-011/019-022/140 the Add-academy form: fields and every error path 
+  6 did not run
+  1 passed (19.0s)
+error: Recipe `e2e` failed with exit code 1

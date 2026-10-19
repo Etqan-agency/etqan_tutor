@@ -1,0 +1,22 @@
+## TC-016 matrix (fresh login per cell; started sessions are returned)
+role     students/10 teachers/16 parents/15 admins/1 teachers/17(staff) students/99999
+admin     200 200 200 404 404 404
+ql        200 200 200 404 404 404
+qlnv      403 403 403 404 404 404
+sc        403 403 403 404 403 403
+nocode    403 403 403 404 403 403
+sup       403 403 403 404 403 403
+teacher   403 403 403 404 403 403
+student   403 403 403 404 403 403
+parent    403 403 403 404 403 403
+anon students/10: {"detail":"Authentication credentials were not provided."} 403 
+teacher self (teachers/16 as f02-teacher): {"detail":"You do not have permission to perform this action."} 403 
+impersonate events added: 6 (200 cells: 6)
+deactivated target: {"detail":"This account is not active.","code":"identity.quick_login_refused"} 400 
+qa: parents=off
+parents off -> parents/15: {"detail":"This feature is not enabled for this academy."} 404 
+qa: parents=on
+qa: quick_login=off
+quick_login off: {"detail":"This feature is not enabled for this academy."} 404 
+qa: quick_login=on
+qaother admin -> qa student id 10: {"detail":"No User matches the given query."} 404 

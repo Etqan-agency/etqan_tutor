@@ -1,0 +1,16 @@
+==== TC-020 re-run: W5 (10, lower-case 'egp' normalised to EGP) was left under_review -> cancel first
+cancel 5 200
+==== TC-020 2026-10-19T04:09:32.847760
+before [{"currency": "EGP", "balance_minor": 11900, "available_minor": 11900}]
+BAD 5 parallel 12000: exactly one 201, rest 409 :: [409, 409, 409, 409, 409] ['payroll.insufficient_balance', 'payroll.insufficient_balance', 'payroll.insufficient_balance', 'payroll.insufficient_balance', 'payroll.insufficient_balance']
+OK  sum reserved+paid <= 20000 :: 8100
+pay vs cancel [(409, 'payroll.not_allowed_in_status'), (200, 'cancelled')]
+OK  pay vs cancel one winner
+OK  available never negative :: [{"currency": "EGP", "balance_minor": 11900, "available_minor": 11900}]
+==== TC-020 re-run 2 (amount = available 11900; earlier W7 100 paid by the pay-vs-cancel thread) 2026-10-19T04:09:52.057780
+before [{"currency": "EGP", "balance_minor": 11900, "available_minor": 11900}]
+OK  5 parallel 11900: exactly one 201, rest 409 :: [201, 409, 409, 409, 409] ['payroll.insufficient_balance', 'payroll.insufficient_balance', 'payroll.insufficient_balance', 'payroll.insufficient_balance']
+OK  sum reserved+paid <= 20000 :: 20000
+approve vs reject [(409, 'payroll.not_allowed_in_status'), (200, 'rejected')]
+OK  approve vs reject one winner one 409
+OK  available never negative :: [{"currency": "EGP", "balance_minor": 11900, "available_minor": 11900}]

@@ -1,0 +1,99 @@
+$ 2026-10-18T21:06:57Z just e2e e2e/qa/f01-retest2.spec.ts --grep R2-TC-151 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-retest2.spec.ts:26:1 › R2-TC-151 view-only staff are offered no action on any console list (1.4s)
+
+  1 passed (2.2s)
+exit=0
+$ 2026-10-18T21:07:03Z just e2e e2e/qa/f01-retest2.spec.ts --grep R2-TC-152 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › e2e/qa/f01-retest2.spec.ts:58:1 › R2-TC-152 a stale change page in a second tab undoes nothing (1.8s)
+  ✘  2 [chromium] › e2e/qa/f01-retest2.spec.ts:58:1 › R2-TC-152 a stale change page in a second tab undoes nothing (retry #1) (2.1s)
+
+
+  1) [chromium] › e2e/qa/f01-retest2.spec.ts:58:1 › R2-TC-152 a stale change page in a second tab undoes nothing 
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected substring: "Suspended 1 academies."
+    Received string:    ""
+
+       97 |
+       98 | 	expect(shownA).toEqual({ status: "active", families: true });
+    >  99 | 	expect(suspendMsg).toContain("Suspended 1 academies.");
+          | 	                   ^
+      100 | 	expect(tabAMsg).toMatch(/was changed successfully/);
+      101 | 	expect(after).toEqual({ status: "suspended", families: false, planNotes: "QA-R2-UI-stale-edit" });
+      102 | 	expect(history.split("\n").find((l) => l.includes("QA-R2") || l.includes("Plan notes"))).toBeTruthy();
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-retest2.spec.ts:99:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-retest2-R2-TC-152-a-0e828-a-second-tab-undoes-nothing-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-retest2-R2-TC-152-a-0e828-a-second-tab-undoes-nothing-chromium/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-retest2-R2-TC-152-a-0e828-a-second-tab-undoes-nothing-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Object {
+    -   "families": true,
+    -   "status": "active",
+    +   "families": false,
+    +   "status": "suspended",
+      }
+
+       96 | 	await context.close();
+       97 |
+    >  98 | 	expect(shownA).toEqual({ status: "active", families: true });
+          | 	               ^
+       99 | 	expect(suspendMsg).toContain("Suspended 1 academies.");
+      100 | 	expect(tabAMsg).toMatch(/was changed successfully/);
+      101 | 	expect(after).toEqual({ status: "suspended", families: false, planNotes: "QA-R2-UI-stale-edit" });
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-retest2.spec.ts:98:17
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-retest2-R2-TC-152-a-0e828-a-second-tab-undoes-nothing-chromium-retry1/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-retest2-R2-TC-152-a-0e828-a-second-tab-undoes-nothing-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-retest2-R2-TC-152-a-0e828-a-second-tab-undoes-nothing-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f01-retest2-R2-TC-152-a-0e828-a-second-tab-undoes-nothing-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f01-retest2-R2-TC-152-a-0e828-a-second-tab-undoes-nothing-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/qa/f01-retest2.spec.ts:58:1 › R2-TC-152 a stale change page in a second tab undoes nothing 
+error: Recipe `e2e` failed with exit code 1
+exit=1
+$ 2026-10-18T21:07:31Z [harness fix: wait for messages; state reset to active/families on] just e2e e2e/qa/f01-retest2.spec.ts --grep R2-TC-152 --retries=0 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-retest2.spec.ts:58:1 › R2-TC-152 a stale change page in a second tab undoes nothing (2.2s)
+
+  1 passed (2.9s)
+exit=0
+DB after:
+suspended|f|QA-R2-UI-stale-edit|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+61|[{"changed": {"fields": ["Family accounts (\u0646\u0638\u0627\u0645 \u062d\u0633\u0627\u0628\u0627\u062a \u0627\u0644\u0639\u0627\u0626\u0644\u0627\u062a)"]}}]
+62|[{"changed": {"fields": ["Plan notes"]}}]

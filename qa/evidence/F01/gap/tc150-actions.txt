@@ -1,0 +1,56 @@
+-- before
+1|active|b29a4d4b84eae1022cd573371cbe39b9 2|active|03ad843b47c0fd471400a89ce4a013e9 3|active|b42d0b24b09b32c8e4f0559de34d8647 4|active|e2fe67cdcf433b51e58caa5d1efe959a 5|active|e627618489c574750326c1d7c9ba0750 6|suspended|d28628be25a7d06630814a40568aa1cb 7|suspended|b29ad05e67a750b895492ba6dd7c7d8f 8|suspended|fb9de5e5cc2eda1840326123c1dfc522 10|suspended|9e84f143b270195e84a5f72da308f40a 12|active|3532b0a328289e7a9f40fc0db2e7d2e1 13|active|b02d055438589a8afbab55a293fee39a 14|active|4195269b093e11f6cd538e2631f483a0 15|suspended|740cf36b88101a7a39ce54f4dacf0cda 16|active|416802cea399618cb22740a4991af074 
+8|active|t 12|disabled|f 13|disabled|f 14|disabled|f 15|disabled|f 
+33
+-- ops-change reactivate qa-tmp-1:
+302 http://etqan.localhost/admin/tenants/academy/
+"success">Reactivated 1 academies.
+"selected">
+active
+-- ops-change suspend qa-tmp-1:
+302 http://etqan.localhost/admin/tenants/academy/
+"success">Suspended 1 academies.
+"selected">
+suspended
+-- ops-change forged domain make_primary on 12 + disable on 8:
+200 
+200 
+-- ops-add forged suspend qa (5):
+200 
+-- ops-domain forged suspend qa (5) and reactivate qa-tmp-1:
+200 
+200 
+"selected">
+"selected">
+-- ops-add forged copy_features:
+200 
+-- after
+1|active|b29a4d4b84eae1022cd573371cbe39b9 2|active|03ad843b47c0fd471400a89ce4a013e9 3|active|b42d0b24b09b32c8e4f0559de34d8647 4|active|e2fe67cdcf433b51e58caa5d1efe959a 5|active|e627618489c574750326c1d7c9ba0750 6|suspended|d28628be25a7d06630814a40568aa1cb 7|suspended|b29ad05e67a750b895492ba6dd7c7d8f 8|suspended|fb9de5e5cc2eda1840326123c1dfc522 10|suspended|9e84f143b270195e84a5f72da308f40a 12|active|3532b0a328289e7a9f40fc0db2e7d2e1 13|active|b02d055438589a8afbab55a293fee39a 14|active|4195269b093e11f6cd538e2631f483a0 15|suspended|740cf36b88101a7a39ce54f4dacf0cda 16|active|416802cea399618cb22740a4991af074 
+8|active|t 12|disabled|f 13|disabled|f 14|disabled|f 15|disabled|f 
+33
+8|qa-tmp-1.etqan.localhost|active|t|f 12|qa-academy.test|disabled|f|t 13|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd.co|disabled|f|f 14|localtest.me|disabled|f|f 15|www.qa-academy.test|disabled|f|t 
+-- ops-domain check_dns 12:
+302 http://etqan.localhost/admin/tenants/domain/
+"warning">Qa-academy.test: resolves to nothing, expected sites.etqan.localhost.
+"selected">
+"selected">
+8|qa-tmp-1.etqan.localhost|active|t|f 12|qa-academy.test|disabled|f|t 13|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd.co|disabled|f|f 14|localtest.me|disabled|f|f 15|www.qa-academy.test|disabled|f|t 
+-- activate 12,15 via service (DNS bypassed, as TC-089/090)
+activated (DNS bypassed) qa-academy.test active False 2026-10-18 04:47:20.433592+00:00
+activated (DNS bypassed) www.qa-academy.test active False 2026-10-18 04:47:20.467647+00:00
+-- ops-domain make_primary 12:
+302 http://etqan.localhost/admin/tenants/domain/
+"selected">
+"selected">
+8|qa-tmp-1.etqan.localhost|active|f|f 12|qa-academy.test|active|t|t 13|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd.co|disabled|f|f 14|localtest.me|disabled|f|f 15|www.qa-academy.test|active|f|t 
+-- ops-domain disable 15 (www):
+302 http://etqan.localhost/admin/tenants/domain/
+"selected">
+"selected">
+8|qa-tmp-1.etqan.localhost|active|f|f 12|qa-academy.test|active|t|t 13|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd.co|disabled|f|f 14|localtest.me|disabled|f|f 15|www.qa-academy.test|disabled|f|t 
+-- academy rows md5 (qa-tmp-1 unchanged?)
+4|active|e2fe67cdcf433b51e58caa5d1efe959a 5|active|e627618489c574750326c1d7c9ba0750 6|suspended|d28628be25a7d06630814a40568aa1cb 
+name="_addanother" name="_continue" name="_save" name="academy" name="admin_email" name="admin_full_name" name="csrfmiddlewaretoken" name="currency" name="name" name="plan_label" name="plan_notes" name="robots" name="subdomain" name="timezone" name="viewport" 
+POST 200 
+ERR This subdomain is already taken.
+ERRNOTE Please correct the error below.

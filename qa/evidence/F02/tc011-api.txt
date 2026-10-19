@@ -1,0 +1,19 @@
+## TC-011 API (rerun; first attempt's parse failed only because zsh echo expands 
+ in qr_svg)
+setup keys ['otpauth_url', 'qr_svg', 'secret'] otpauth otpauth://totp/qa-teacher%40qa.etqan.tes qr starts <?xml version='1.0' 
+secret plain in raw session_data: f
+decoded totp_setup: gAAAAABq1U0w0lZcZzrsEKWZAE9KKb contains secret: False
+confirm wrong: {"code":["Invalid code."]} 400 
+confirm right: 200 codes=10
+2fa: {"enabled":true,"recovery_codes_left":10} 200 
+db rows: totp:plain=false recovery_codes:plain=false 
+{"secret": "REDACTED-QA
+setup while enabled: {"detail":"Two-factor sign-in is already on.","code":"identity.mfa_enabled"} 409 
+relogin: {"mfa_required":true} 200 
+me half-open: 403
+login/2fa (544171): 400 me: 403
+replay same code: {"code":["Invalid code."]} 400  now=544171
+(note: confirm consumed the window's code, so login/2fa with the same code is a replay → 400. Waiting for next 30 s window.)
+{"mfa_required":true} 200 
+login/2fa (155533): 200 me: 200
+replay same code in same window on a new pending login: {"code":["Invalid code."]} 400  now=155533

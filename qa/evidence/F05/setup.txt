@@ -1,0 +1,10 @@
+[200] GET people/tags/?kind=student :: [{"id":1,"emoji":"🎓","name_ar":"جديد","name_en":"New","kind":"student","position":1,"is_active":true,"people":0},{"id":2,"emoji":"🌟","name_ar":"متميز","name_en":"Outstanding","kind":"student","position":2,"is_active":true,"people":0},{"id":3,"emoji":"⭐","name_ar":"نجم الشهر","name_en":"Star of the month","kind":"student","position":3,"is_active":true,"people":0},{"id":4,"emoji":"💯","name_ar":"حافظ متقن","name_en":"Proficient memoriser","kind":"student","position":4,"is_active":true,"people":0},{
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import json,sys,collections;d=json.loads(sys.argv[1]);d=d.get('results',d);print(len(d),collections.Counter((t['kind'],t['is_active']) for t in d))
+                                                            ^^^^^
+AttributeError: 'list' object has no attribute 'get'
+201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 201 
+[201] POST access/roles/ :: {"id":29,"name_ar":"QA5 تحرير","name_en":"QA5 Student Edit","permissions":["student.create","student.update","student.view","student.view_any"],"is_active":true,"members":0,"created_at":"2026-10-19T04:11:01.927902Z"}
+[201] POST people/students/ :: {"id":5,"role":"student","two_factor":false,"user":{"full_name":"QA5 Other Student","email":"f05-other-stu@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"UTC","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_timezo
+60

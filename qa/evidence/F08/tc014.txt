@@ -1,0 +1,22 @@
+missing shape: {"count":12,"next":"http://qa.etqan.localhost/api/v1/reports/missing/?page=2&page_size=2","previous":null,"results":[{"id":12,"subscription_id":null,"slot_id":null,"occurs_on":"2026-08-05","starts_at":"2026-08-05T07:00:00Z","minutes":120,"status":"completed","student_attendance":"present","teacher_a
+missing (teacher) among R1..R4: [239]; (admin): [239]
+[200] PUT sessions/239/report/ :: {"session":239,"behaviour":5,"participation":4,"notes":"ok","written_by":{"id":7,"full_name":"QA teacher"},"created_at":"2026-10-19T16:41:45.447331Z","updated_at":"2026-10-19T16:41:45.447337Z"}
+[200] PUT sessions/239/report/ :: {"session":239,"behaviour":3,"participation":2,"notes":"","written_by":{"id":7,"full_name":"QA teacher"},"created_at":"2026-10-19T16:41:45.447331Z","updated_at":"2026-10-19T16:41:46.566735Z"}
+239|3|2||7|t
+[400] PUT sessions/239/report/ :: {"behaviour":["Ensure this value is greater than or equal to 1."]}
+[400] PUT sessions/239/report/ :: {"behaviour":["Ensure this value is less than or equal to 5."]}
+[400] PUT sessions/239/report/ :: {"behaviour":["A valid integer is required."]}
+[409] PUT sessions/245/report/ :: {"detail":"A report is written once the session is completed.","code":"scheduling.not_completed"}
+[200] PUT sessions/236/report/ :: {"session":236,"behaviour":3,"participation":3,"notes":"","written_by":{"id":7,"full_name":"QA teacher"},"created_at":"2026-10-19T16:41:46.995912Z","updated_at":"2026-10-19T16:41:46.995921Z"}
+GET report as stu: 404 {"detail":"Not found."}
+GET report as par: 404 {"detail":"Not found."}
+GET report as tea2: 404 {"detail":"No Session matches the given query."}
+GET report as tea: 200 {"session":239,"behaviour":3,"participation":2,"notes":"","written_by":{"id":7,"
+after PUT missing (admin): []
+qa: session_reports=off
+[404] GET sessions/239/report/ :: {"detail":"This feature is not enabled for this academy."}
+[404] GET reports/missing/ :: {"detail":"This feature is not enabled for this academy."}
+[404] PUT sessions/239/report/ :: {"detail":"This feature is not enabled for this academy."}
+has_report while off: True
+qa: session_reports=on
+1

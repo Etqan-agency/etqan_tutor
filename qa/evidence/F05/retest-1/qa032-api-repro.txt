@@ -1,0 +1,34 @@
+start 2026-10-19T04:34:13Z
+login adm 20
+== original repro step 1: 3 rounds x 5 parallel POST same email
+create race 1:    1 201    4 400  rows=1 losers-body={"user":{"email":["This email is already in use."]}}
+create race 2:    1 201    4 400  rows=1 losers-body={"user":{"email":["This email is already in use."]}}
+create race 3:    1 201    4 400  rows=1 losers-body={"user":{"email":["This email is already in use."]}}
+== case-insensitive variant: 5 parallel POST, alternating case
+   1 201 {"user":{"email":["This email is already in use."]}}
+   4 400 {"user":{"email":["This email is already in use."]}}
+rows=1
+== original repro step 2: 3 rounds x 2 parallel PATCH of two different never-signed-in people
+patch race 1 ( 200 201): 201:200 200:400  rows=1 emailaddr=200:f05-rt-p1a@qa.etqan.test:true,201:f05-rt-pn1@qa.etqan.test:true
+patch race 2 ( 202 203): 202:200 203:400  rows=1 emailaddr=203:f05-rt-p2b@qa.etqan.test:true,202:f05-rt-pn2@qa.etqan.test:true
+patch race 3 ( 204 205): 205:200 204:400  rows=1 emailaddr=204:f05-rt-p3a@qa.etqan.test:true,205:f05-rt-pn3@qa.etqan.test:true
+== related spec cases (sequential)
+[400] POST people/students/ :: {"user":{"email":["This email is already in use."]}}
+[400] PATCH people/students/200/ :: {"user":{"email":["This email is already in use."]}}
+[400] POST people/teachers/ :: {"profile":{"gender":["This field is required."]}}
+[201] POST people/students/ :: {"id":206,"role":"student","two_factor":false,"user":{"full
+[200] PATCH people/students/200/ :: {"id":200,"role":"student","two_factor":false,"user":{
+B emailaddr after valid change: f05-rt-p1a-new@qa.etqan.test:true:false
+[201] POST people/students/ :: {"id":207,"role":"student","t
+== logs since 2026-10-19T04:34:13Z
+django 500/IntegrityError lines: 0
+postgres unique-violation lines (proves the index, not only the pre-check, decided some races): 19
+   2 ERROR:  duplicate key value violates unique constraint "identity_user_email_ci_unique"
+  17 ERROR:  duplicate key value violates unique constraint "identity_user_email_key"
+invite mails per raced address:
+1 ['[Etqan QA Academy] عيّن كلمة المرور']
+1 ['[Etqan QA Academy] عيّن كلمة المرور']
+1 ['[Etqan QA Academy] عيّن كلمة المرور']
+1 ['[Etqan QA Academy] عيّن كلمة المرور']
+== note: parallel api() calls share $J/.out, so CI-variant bodies are interleaved; codes + DB rows are authoritative
+[400] POST people/teachers/ :: {"user":{"email":["This email is already in use."]}}

@@ -1,0 +1,8 @@
+
+Running 3 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f10-payroll.spec.ts:53:1 › TC-025 office generates, issues and pays a month in the dashboard (9.7s)
+  ✓  2 [chromium] › e2e/qa/f10-payroll.spec.ts:105:1 › TC-026 teacher confirms receipt, requests and cancels a withdrawal (9.8s)
+  ✓  3 [chromium] › e2e/qa/f10-payroll.spec.ts:145:1 › S4 unpaid-sessions warning after Generate, and after a reload (4.2s)
+
+  3 passed (24.3s)

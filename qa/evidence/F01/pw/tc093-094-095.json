@@ -1,0 +1,9 @@
+{
+  "ids": [
+    "12",
+    "8"
+  ],
+  "disable": "",
+  "disableSub": "Qa-tmp-1.etqan.localhost: The academy's own subdomain cannot be disabled.",
+  "recheck": "Qa-academy.test: resolves to nothing, expected sites.etqan.localhost. | Qa-tmp-1.etqan.localhost: skipped, already active."
+}

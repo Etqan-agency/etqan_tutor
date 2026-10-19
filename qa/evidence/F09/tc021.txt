@@ -1,0 +1,26 @@
+== TC-021 2026-10-19T03:41:46.724134
+act ['DEQ663SEHY', 'QR54R4ABFT', 'RQYG2T5MXS'] ren ['3N6VX212C9', 'MVCC82TQ2Q']
+check 200 {"code": "SYS-DEQ66-3SEHY", "kind": "activation", "course": {"id": 2, "name_en": "Tajweed QA", "name_ar": "تجويد"}, "package": {"id": 2, "name_en": "Monthly QA", "name_ar": "شهري"}, "sessions_total": 8, "teacher": {"id": 7, "full_name": "QA teacher"}, "discount": null, "expires_on": "2026-11-17", "s
+parent redeems ACT1 201 {"kind": "activation", "subscription_id": 9, "invoice_id": 45, "amount_minor": 150000, "currency": "EGP"}
+sub 9|1|2|2|1|2026-10-19|150000|EGP|active
+inv 45|150000|EGP|paid pay code|150000|completed
+OK  TC021 ACT1 subscription + invoice paid in full by code despite auto_invoice off
+OK  TC021 student for S2 refused 404 :: {"detail": "Student with identifier '32' not found."}
+OK  TC021 parent2 for S1 refused 404 :: {"detail": "Student with identifier '5' not found."}
+OK  TC021 sibling payer P3 refused 404 :: {"detail": "Student with identifier '5' not found."}
+race [(409, '{"detail": "This code has already been used.", "code": "vouchers.used"}'), (201, '{"kind": "activation", "subscription_id": 10, "invoice_id": 46, "amount_minor": 150000, "currency": "EGP"}')]
+OK  TC021 race exactly one 201
+OK  TC021 one subscription per code
+REN1 on SUBR 201 {"kind": "renewal", "subscription_id": 11, "invoice_id": 47, "amount_minor": 150000, "currency": "EGP"}
+renewed 11|2026-11-19|150000 paid|150000
+OK  TC021 renewal creates subscription with paid invoice
+REN on other course 409 {"detail": "This code is for another course.", "code": "vouchers.wrong_course"}
+OK  TC021 wrong course refused
+REN no subscription 400 {"subscription": ["Choose a subscription."]}
+OK  TC021 renewal without subscription refused
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+ACT3 invoices off 201 {"kind": "activation", "subscription_id": 12, "invoice_id": null, "amount_minor": 150000, "currency": "EGP"}
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  TC021 invoices off: no invoice/payment, code used
+dupe invoices per sub 
+code payments vs used vouchers w/ payment 8 9

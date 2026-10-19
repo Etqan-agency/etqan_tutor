@@ -1,0 +1,71 @@
+
+Running 3 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f10-payroll.spec.ts:53:1 › TC-025 office generates, issues and pays a month in the dashboard (9.4s)
+  ✘  2 [chromium] › e2e/qa/f10-payroll.spec.ts:98:1 › TC-026 teacher confirms receipt, requests and cancels a withdrawal (10.8s)
+  ✘  3 [chromium] › e2e/qa/f10-payroll.spec.ts:98:1 › TC-026 teacher confirms receipt, requests and cancels a withdrawal (retry #1) (2.1s)
+  ✓  4 [chromium] › e2e/qa/f10-payroll.spec.ts:136:1 › S4 unpaid-sessions warning after Generate, and after a reload (4.1s)
+
+
+  1) [chromium] › e2e/qa/f10-payroll.spec.ts:98:1 › TC-026 teacher confirms receipt, requests and cancels a withdrawal 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Request cancelled.', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText('Request cancelled.', { exact: true })
+
+
+      126 | 	await page.getByRole("button", { name: "Cancel request" }).first().click();
+      127 | 	await page.getByRole("alertdialog").getByRole("button", { name: "Cancel this request" }).click();
+    > 128 | 	await expect(page.getByText("Request cancelled.", { exact: true })).toBeVisible();
+          | 	                                                                    ^
+      129 | 	const w2 = await api(page, `/payroll/withdrawals/${req.id}/`);
+      130 | 	expect(w2.json.status).toBe("cancelled");
+      131 | 	await page.screenshot({ path: `${EVIDENCE}/tc026-balance.png`, fullPage: true });
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f10-payroll.spec.ts:128:70
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toBeTruthy()
+
+    Received: undefined
+
+      100 | 	const mine = await api(page, "/payroll/payslips/");
+      101 | 	const paid = mine.json.results.find((p: { status: string; acknowledged_at: string | null }) => p.status === "paid" && !p.acknowledged_at);
+    > 102 | 	expect(paid).toBeTruthy();
+          | 	             ^
+      103 | 	expect(mine.json.results.every((p: { status: string }) => p.status !== "draft")).toBe(true);
+      104 | 	await page.goto(`${QA}/app/teaching/payslips/${paid.id}`);
+      105 | 	await page.getByRole("button", { name: "Confirm receipt" }).click();
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f10-payroll.spec.ts:102:15
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f10-payroll-TC-026-teac-bf6d2-ts-and-cancels-a-withdrawal-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/qa/f10-payroll.spec.ts:98:1 › TC-026 teacher confirms receipt, requests and cancels a withdrawal 
+  2 passed (28.1s)
+error: Recipe `e2e` failed with exit code 1

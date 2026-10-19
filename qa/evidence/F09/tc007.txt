@@ -1,0 +1,26 @@
+== TC-007 2026-10-19T03:37:37.508267
+E4 refund 200 {"id": 22, "number": "INV-000022", "status": "unpaid", "is_overdue": false, "student": {"id": 5, "full_name": "QA student"}, "payer": {"id": 35, "full_name": "QA Parent Three"}, "subscription_id": nul
+E1 edit 200 {"amount_minor": 65000, "description": "edited", "due_on": "2026-11-02"}
+OK  TC007 E1 edit 200
+E1 due yesterday 400 {"due_on": ["Make it due on or after the issue date."]}
+OK  TC007 due before issue 400
+OK  TC007 amount 0 400 :: {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+OK  TC007 E2 amount 409 has_payments :: {"detail": "This invoice has payments.", "code": "billing.has_payments"}
+OK  TC007 E2 same amount 200 :: {"id": 20, "number": "INV-000020", "status": "partial", "is_overdue": false, "student": {"id": 5, "full_name": "QA student"}, "payer": {"id": 35, "ful
+OK  TC007 E2 desc 200
+void 20 409 {"status": null, "code": "billing.has_payments", "detail": "This invoice has payments."}
+OK  TC007 void 20 409
+void 21 409 {"status": null, "code": "billing.has_payments", "detail": "This invoice has payments."}
+OK  TC007 void 21 409
+void 22 200 {"status": "void", "code": null, "detail": null}
+void 19 200 {"status": "void", "code": null, "detail": null}
+OK  TC007 void 19 200
+OK  TC007 edit void 409 :: {"detail": "This invoice is void.", "code": "billing.invoice_void"}
+OK  TC007 second void 409 :: {"detail": "This invoice is void.", "code": "billing.invoice_void"}
+OK  TC007 pay void 409 :: {"detail": "This invoice is void.", "code": "billing.invoice_void"}
+OK  TC007 void list has E1
+E1 detail {"status": "void", "balance_minor": 0, "is_overdue": false}
+DB 19|void|t|1|65000
+20|partial|f||50000
+21|paid|f||5000
+22|void|t|1|5000

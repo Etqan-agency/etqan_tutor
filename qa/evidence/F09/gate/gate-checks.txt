@@ -1,0 +1,43 @@
+== F09 gate cheap P1 checks 2026-10-19T00:55:45.109100
+-- G1 cross-family wallet (S1 = 5)
+parent2 GET /wallet/students/5/ 404
+OK  G1 parent2 GET /wallet/students/5/ refused
+parent2 GET /wallet/students/5/entries/ 404
+OK  G1 parent2 GET /wallet/students/5/entries/ refused
+parent2 POST /wallet/students/5/top-ups/ 403
+OK  G1 parent2 POST /wallet/students/5/top-ups/ refused
+OK  G1 parent2 mine has no S1 wallet :: [{"student": {"id": 32, "name": "QA Student Two"}, "balances": [], "topup_currencies": ["EGP"]}]
+student2 GET /wallet/students/5/ 404
+OK  G1 student2 GET /wallet/students/5/ refused
+student2 GET /wallet/students/5/entries/ 404
+OK  G1 student2 GET /wallet/students/5/entries/ refused
+student2 POST /wallet/students/5/top-ups/ 403
+OK  G1 student2 POST /wallet/students/5/top-ups/ refused
+OK  G1 student2 mine has no S1 wallet :: [{"student": {"id": 32, "name": "QA Student Two"}, "balances": [], "topup_currencies": ["EGP"]}]
+parent mine 200 [{"student": {"id": 5, "name": "QA student"}, "balances": [{"currency": "EGP", "balance_minor": 72000}, {"currency": "USD", "balance_minor": 0}], "topup_currencies": ["EGP", "JPY", "KWD", "USD", "ZZZ"]}]
+OK  G1 DB unchanged :: 92|65|28|13 vs 92|65|28|13
+-- G2 feature off
+set off balances ?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+balances off GET /wallet/students/5/ 404
+OK  G2 balances off /wallet/students/5/ 404
+balances off GET /wallet/compensations/ 404
+OK  G2 balances off /wallet/compensations/ 404
+set on balances ?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  G2 balances back on /wallet/students/5/ 200 :: 200
+set off system_codes ?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+system_codes off GET /vouchers/batches/ 404
+OK  G2 system_codes off /vouchers/batches/ 404
+system_codes off GET /vouchers/codes/ 404
+OK  G2 system_codes off /vouchers/codes/ 404
+OK  G2 codes off redeem 404 :: 404
+set on system_codes ?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  G2 system_codes back on /vouchers/batches/ 200 :: 200
+set off invoices ?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+invoices off GET /billing/invoices/ 404
+OK  G2 invoices off /billing/invoices/ 404
+invoices off GET /billing/summary/ 404
+OK  G2 invoices off /billing/summary/ 404
+OK  G2 invoices off POST 404 :: 404
+set on invoices ?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  G2 invoices back on /billing/invoices/ 200 :: 200
+OK  G2 DB unchanged :: 92|65|28|13 vs 92|65|28|13

@@ -1,0 +1,990 @@
+........................................................................ [  0%]
+........................................................................ [  1%]
+........................................................................ [  2%]
+........................................................................ [  2%]
+........................................................................ [  3%]
+........................................................................ [  4%]
+........................................................................ [  5%]
+........................................................................ [  5%]
+........................................................................ [  6%]
+........................................................................ [  7%]
+........................................................................ [  7%]
+........................................................................ [  8%]
+........................................................................ [  9%]
+........................................................................ [ 10%]
+........................................................................ [ 10%]
+........................................................................ [ 11%]
+........................................................................ [ 12%]
+........................................................................ [ 12%]
+........................................................................ [ 13%]
+........................................................................ [ 14%]
+........................................................................ [ 15%]
+........................................................................ [ 15%]
+........................................................................ [ 16%]
+........................................................................ [ 17%]
+........................................................................ [ 17%]
+........................................................................ [ 18%]
+........................................................................ [ 19%]
+........................................................................ [ 20%]
+........................................................................ [ 20%]
+........................................................................ [ 21%]
+........................................................................ [ 22%]
+.............s.......................................................... [ 22%]
+........................................................................ [ 23%]
+........................................................................ [ 24%]
+........................................................................ [ 25%]
+........................................................................ [ 25%]
+........................................................................ [ 26%]
+........................................................................ [ 27%]
+........................................................................ [ 27%]
+........................................................................ [ 28%]
+........................................................................ [ 29%]
+........................................................................ [ 30%]
+........................................................................ [ 30%]
+........................................................................ [ 31%]
+........................................................................ [ 32%]
+........................................................................ [ 33%]
+........................................................................ [ 33%]
+........................................................................ [ 34%]
+........................................................................ [ 35%]
+........................................................................ [ 35%]
+........................................................................ [ 36%]
+........................................................................ [ 37%]
+........................................................................ [ 38%]
+........................................................................ [ 38%]
+........................................................................ [ 39%]
+........................................................................ [ 40%]
+........................................................................ [ 40%]
+........................................................................ [ 41%]
+........................................................................ [ 42%]
+........................................................................ [ 43%]
+........................................................................ [ 43%]
+........................................................................ [ 44%]
+........................................................................ [ 45%]
+........................................................................ [ 45%]
+........................................................................ [ 46%]
+........................................................................ [ 47%]
+........................................................................ [ 48%]
+........................................................................ [ 48%]
+........................................................................ [ 49%]
+........................................................................ [ 50%]
+........................................................................ [ 50%]
+........................................................................ [ 51%]
+........................................................................ [ 52%]
+........................................................................ [ 53%]
+........................................................................ [ 53%]
+........................................................................ [ 54%]
+........................................................................ [ 55%]
+........................................................................ [ 55%]
+........................................................................ [ 56%]
+........................................................................ [ 57%]
+........................................................................ [ 58%]
+........................................................................ [ 58%]
+........................................................................ [ 59%]
+........................................................................ [ 60%]
+........................................................................ [ 61%]
+........................................................................ [ 61%]
+........................................................................ [ 62%]
+........................................................................ [ 63%]
+........................................................................ [ 63%]
+........................................................................ [ 64%]
+........................................................................ [ 65%]
+........................................................................ [ 66%]
+........................................................................ [ 66%]
+........................................................................ [ 67%]
+........................................................................ [ 68%]
+........................................................................ [ 68%]
+........................................................................ [ 69%]
+........................................................................ [ 70%]
+........................................................................ [ 71%]
+........................................................................ [ 71%]
+........................................................................ [ 72%]
+........................................................................ [ 73%]
+........................................................................ [ 73%]
+........................................................................ [ 74%]
+........................................................................ [ 75%]
+........................................................................ [ 76%]
+........................................................................ [ 76%]
+........................................................................ [ 77%]
+........................................................................ [ 78%]
+........................................................................ [ 78%]
+........................................................................ [ 79%]
+........................................................................ [ 80%]
+........................................................................ [ 81%]
+........................................................................ [ 81%]
+........................................................................ [ 82%]
+........................................................................ [ 83%]
+........................................................................ [ 83%]
+........................................................................ [ 84%]
+........................................................................ [ 85%]
+........................................................................ [ 86%]
+........................................................................ [ 86%]
+........................................................................ [ 87%]
+........................................................................ [ 88%]
+........................................................................ [ 89%]
+........................................................................ [ 89%]
+........................................................................ [ 90%]
+........................................................................ [ 91%]
+........................................................................ [ 91%]
+........................................................................ [ 92%]
+........................................................................ [ 93%]
+........................................................................ [ 94%]
+........................................................................ [ 94%]
+........................................................................ [ 95%]
+........................................................................ [ 96%]
+........................................................................ [ 96%]
+........................................................................ [ 97%]
+........................................................................ [ 98%]
+........................................................................ [ 99%]
+........................................................................ [ 99%]
+......................                                                   [100%]
+=============================== warnings summary ===============================
+../usr/local/lib/python3.13/site-packages/coverage/inorout.py:513
+  /usr/local/lib/python3.13/site-packages/coverage/inorout.py:513: CoverageWarning: --include is ignored because --source is set (include-ignored); see https://coverage.readthedocs.io/en/7.16.2/messages.html#warning-include-ignored
+    self.warn("--include is ignored because --source is set", slug="include-ignored")
+
+etqan/site/models.py:118
+  /app/etqan/site/models.py:118: PytestCollectionWarning: cannot collect test class 'Testimonial' because it has a __init__ constructor (from: etqan/site/tests/test_admin_media.py)
+    class Testimonial(models.Model):
+
+etqan/site/models.py:118
+  /app/etqan/site/models.py:118: PytestCollectionWarning: cannot collect test class 'Testimonial' because it has a __init__ constructor (from: etqan/site/tests/test_media_models.py)
+    class Testimonial(models.Model):
+
+etqan/site/models.py:118
+  /app/etqan/site/models.py:118: PytestCollectionWarning: cannot collect test class 'Testimonial' because it has a __init__ constructor (from: etqan/site/tests/test_public_api.py)
+    class Testimonial(models.Model):
+
+etqan/site/models.py:118
+  /app/etqan/site/models.py:118: PytestCollectionWarning: cannot collect test class 'Testimonial' because it has a __init__ constructor (from: etqan/site/tests/test_public_media.py)
+    class Testimonial(models.Model):
+
+etqan/site/models.py:118
+  /app/etqan/site/models.py:118: PytestCollectionWarning: cannot collect test class 'Testimonial' because it has a __init__ constructor (from: etqan/site/tests/test_public_page_builder.py)
+    class Testimonial(models.Model):
+
+etqan/site/models.py:118
+  /app/etqan/site/models.py:118: PytestCollectionWarning: cannot collect test class 'Testimonial' because it has a __init__ constructor (from: etqan/site/tests/test_public_settings.py)
+    class Testimonial(models.Model):
+
+etqan/site/models.py:118
+  /app/etqan/site/models.py:118: PytestCollectionWarning: cannot collect test class 'Testimonial' because it has a __init__ constructor (from: etqan/site/tests/test_seed_b8b.py)
+    class Testimonial(models.Model):
+
+etqan/academy/tests/test_api.py: 30 warnings
+etqan/academy/tests/test_features_api.py: 5 warnings
+etqan/access/tests/test_access_api.py: 29 warnings
+etqan/access/tests/test_me.py: 8 warnings
+etqan/access/tests/test_routes.py: 1921 warnings
+etqan/ai/tests/reports/test_api.py: 31 warnings
+etqan/ai/tests/reports/test_draft_task.py: 12 warnings
+etqan/ai/tests/test_api.py: 19 warnings
+etqan/billing/tests/test_api.py: 22 warnings
+etqan/billing/tests/test_code_payments.py: 2 warnings
+etqan/billing/tests/test_family_payer.py: 1 warning
+etqan/billing/tests/test_features.py: 1 warning
+etqan/billing/tests/test_local_methods_api.py: 17 warnings
+etqan/billing/tests/test_online.py: 1 warning
+etqan/billing/tests/test_records.py: 23 warnings
+etqan/billing/tests/test_refunds.py: 2 warnings
+etqan/billing/tests/test_staff_scope.py: 2 warnings
+etqan/billing/tests/test_subscription_api.py: 8 warnings
+etqan/billing/tests/test_terms.py: 4 warnings
+etqan/billing/tests/test_wallet_payments.py: 1 warning
+etqan/catalogue/tests/test_api.py: 11 warnings
+etqan/catalogue/tests/test_country_prices_api.py: 10 warnings
+etqan/chat/tests/test_access.py: 4 warnings
+etqan/chat/tests/test_attachments.py: 18 warnings
+etqan/chat/tests/test_conversations.py: 7 warnings
+etqan/chat/tests/test_group_image.py: 20 warnings
+etqan/chat/tests/test_groups.py: 33 warnings
+etqan/chat/tests/test_messages.py: 14 warnings
+etqan/chat/tests/test_moderation.py: 32 warnings
+etqan/consultations/tests/test_api_manage.py: 17 warnings
+etqan/consultations/tests/test_api_margins.py: 8 warnings
+etqan/consultations/tests/test_api_my.py: 5 warnings
+etqan/consultations/tests/test_api_products.py: 8 warnings
+etqan/consultations/tests/test_api_public.py: 14 warnings
+etqan/consultations/tests/test_api_requests.py: 21 warnings
+etqan/consultations/tests/test_api_requests_csv.py: 11 warnings
+etqan/consultations/tests/test_api_reviews.py: 3 warnings
+etqan/consultations/tests/test_office_self_booked.py: 1 warning
+etqan/devices/tests/test_icons.py: 15 warnings
+etqan/devices/tests/test_manifest.py: 8 warnings
+etqan/devices/tests/test_push_api.py: 19 warnings
+etqan/employment/tests/test_api.py: 15 warnings
+etqan/etqan_billing/tests/test_admin.py: 21 warnings
+etqan/etqan_billing/tests/test_api.py: 6 warnings
+etqan/finance/tests/test_api.py: 22 warnings
+etqan/finance/tests/test_rates_api.py: 19 warnings
+etqan/gateways/tests/test_capture.py: 23 warnings
+etqan/gateways/tests/test_checkouts.py: 22 warnings
+etqan/gateways/tests/test_checkouts_csv.py: 5 warnings
+etqan/gateways/tests/test_connect_webhooks.py: 14 warnings
+etqan/gateways/tests/test_impersonation.py: 10 warnings
+etqan/gateways/tests/test_links.py: 13 warnings
+etqan/gateways/tests/test_list.py: 4 warnings
+etqan/gateways/tests/test_pay_links.py: 25 warnings
+etqan/gateways/tests/test_paypal_orders.py: 19 warnings
+etqan/gateways/tests/test_paypal_settings.py: 13 warnings
+etqan/gateways/tests/test_paypal_webhooks.py: 64 warnings
+etqan/gateways/tests/test_public_checkouts.py: 7 warnings
+etqan/gateways/tests/test_settings.py: 9 warnings
+etqan/gateways/tests/test_simulate.py: 9 warnings
+etqan/gateways/tests/test_webhooks.py: 26 warnings
+etqan/identity/tests/test_accounts_closed.py: 8 warnings
+etqan/identity/tests/test_api_auth.py: 18 warnings
+etqan/identity/tests/test_api_docs.py: 9 warnings
+etqan/identity/tests/test_api_resend_verification.py: 5 warnings
+etqan/identity/tests/test_api_versioning.py: 4 warnings
+etqan/identity/tests/test_async_email.py: 1 warning
+etqan/identity/tests/test_code_reset.py: 36 warnings
+etqan/identity/tests/test_email_branding.py: 2 warnings
+etqan/identity/tests/test_email_management.py: 7 warnings
+etqan/identity/tests/test_families_api.py: 12 warnings
+etqan/identity/tests/test_family_bulk.py: 22 warnings
+etqan/identity/tests/test_family_people.py: 9 warnings
+etqan/identity/tests/test_features.py: 8 warnings
+etqan/identity/tests/test_google.py: 61 warnings
+etqan/identity/tests/test_impersonation.py: 33 warnings
+etqan/identity/tests/test_login_2fa.py: 24 warnings
+etqan/identity/tests/test_password_management.py: 18 warnings
+etqan/identity/tests/test_people_actions_api.py: 19 warnings
+etqan/identity/tests/test_people_api.py: 35 warnings
+etqan/identity/tests/test_people_depth_lists.py: 11 warnings
+etqan/identity/tests/test_people_services.py: 8 warnings
+etqan/identity/tests/test_phone_login.py: 18 warnings
+etqan/identity/tests/test_profile_access.py: 7 warnings
+etqan/identity/tests/test_profile_depth.py: 8 warnings
+etqan/identity/tests/test_quick_login_links.py: 30 warnings
+etqan/identity/tests/test_retired.py: 11 warnings
+etqan/identity/tests/test_roles.py: 1 warning
+etqan/identity/tests/test_security_log.py: 4 warnings
+etqan/identity/tests/test_signin.py: 29 warnings
+etqan/identity/tests/test_signin_registrants.py: 8 warnings
+etqan/identity/tests/test_spanish.py: 6 warnings
+etqan/identity/tests/test_staff_scope.py: 2 warnings
+etqan/identity/tests/test_tags_api.py: 22 warnings
+etqan/identity/tests/test_twofactor_api.py: 47 warnings
+etqan/integrations/tests/test_admin.py: 12 warnings
+etqan/integrations/tests/test_ai_provider.py: 2 warnings
+etqan/integrations/tests/test_api.py: 12 warnings
+etqan/integrations/tests/test_connect.py: 8 warnings
+etqan/integrations/tests/test_email.py: 1 warning
+etqan/integrations/tests/test_video.py: 12 warnings
+etqan/integrations/tests/test_zoom.py: 1 warning
+etqan/learning/tests/test_api_certificates.py: 21 warnings
+etqan/learning/tests/test_api_content.py: 10 warnings
+etqan/learning/tests/test_api_homework.py: 20 warnings
+etqan/learning/tests/test_api_honour.py: 12 warnings
+etqan/learning/tests/test_api_levels.py: 7 warnings
+etqan/learning/tests/test_api_progress.py: 11 warnings
+etqan/learning/tests/test_api_reviews.py: 20 warnings
+etqan/learning/tests/test_subject_certificates.py: 3 warnings
+etqan/library/tests/test_api.py: 9 warnings
+etqan/notifications/tests/test_api.py: 28 warnings
+etqan/notifications/tests/test_api_b5a.py: 20 warnings
+etqan/notifications/tests/test_api_b5b.py: 19 warnings
+etqan/notifications/tests/test_features.py: 1 warning
+etqan/notifications/tests/test_whatsapp_choice.py: 7 warnings
+etqan/notifications/tests/test_whatsapp_delivery.py: 1 warning
+etqan/payroll/tests/test_api.py: 17 warnings
+etqan/payroll/tests/test_api_b4b.py: 23 warnings
+etqan/payroll/tests/test_api_pay_rules.py: 20 warnings
+etqan/payroll/tests/test_api_payslip_balance.py: 12 warnings
+etqan/payroll/tests/test_api_projections.py: 14 warnings
+etqan/payroll/tests/test_api_withdrawals.py: 19 warnings
+etqan/payroll/tests/test_counts.py: 5 warnings
+etqan/payroll/tests/test_staff_scope.py: 1 warning
+etqan/platform/tests/test_export_feature.py: 10 warnings
+etqan/platform/tests/test_feature_on.py: 1 warning
+etqan/platform/tests/test_health.py: 2 warnings
+etqan/platform/tests/test_middleware.py: 2 warnings
+etqan/recorded/tests/test_api_enrolments.py: 6 warnings
+etqan/recorded/tests/test_api_feedback.py: 6 warnings
+etqan/recorded/tests/test_api_feedback_office.py: 6 warnings
+etqan/recorded/tests/test_api_file.py: 9 warnings
+etqan/recorded/tests/test_api_my.py: 9 warnings
+etqan/recorded/tests/test_api_office.py: 11 warnings
+etqan/recorded/tests/test_api_public.py: 6 warnings
+etqan/recorded/tests/test_api_store.py: 8 warnings
+etqan/recorded/tests/test_certificates.py: 9 warnings
+etqan/recorded/tests/test_codes.py: 1 warning
+etqan/recorded/tests/test_store_ratings.py: 3 warnings
+etqan/registration/tests/test_api.py: 59 warnings
+etqan/registration/tests/test_google_prefill.py: 9 warnings
+etqan/registration/tests/test_signin_flow.py: 5 warnings
+etqan/registration/tests/test_signin_hook.py: 3 warnings
+etqan/registration/tests/test_spanish.py: 3 warnings
+etqan/scheduling/tests/test_activity_subscription_wide.py: 1 warning
+etqan/scheduling/tests/test_activity_tracking.py: 3 warnings
+etqan/scheduling/tests/test_api_activity.py: 14 warnings
+etqan/scheduling/tests/test_api_archive_lists.py: 13 warnings
+etqan/scheduling/tests/test_api_archive_routes.py: 10 warnings
+etqan/scheduling/tests/test_api_availability.py: 12 warnings
+etqan/scheduling/tests/test_api_bundle_labels.py: 7 warnings
+etqan/scheduling/tests/test_api_bundles.py: 28 warnings
+etqan/scheduling/tests/test_api_groups.py: 12 warnings
+etqan/scheduling/tests/test_api_schedule.py: 40 warnings
+etqan/scheduling/tests/test_api_schedules.py: 24 warnings
+etqan/scheduling/tests/test_api_session_classes.py: 14 warnings
+etqan/scheduling/tests/test_api_session_writes.py: 30 warnings
+etqan/scheduling/tests/test_api_sessions.py: 24 warnings
+etqan/scheduling/tests/test_api_subscriptions.py: 29 warnings
+etqan/scheduling/tests/test_api_supervision.py: 14 warnings
+etqan/scheduling/tests/test_api_times_postponement.py: 28 warnings
+etqan/scheduling/tests/test_api_trials.py: 19 warnings
+etqan/scheduling/tests/test_api_trials_links.py: 7 warnings
+etqan/scheduling/tests/test_bundles_country_pricing.py: 2 warnings
+etqan/scheduling/tests/test_bundles_members.py: 1 warning
+etqan/scheduling/tests/test_country_pricing.py: 5 warnings
+etqan/scheduling/tests/test_features.py: 1 warning
+etqan/scheduling/tests/test_host_link.py: 7 warnings
+etqan/scheduling/tests/test_schedules_generation.py: 1 warning
+etqan/scheduling/tests/test_schedules_payloads.py: 5 warnings
+etqan/scheduling/tests/test_staff_scope.py: 4 warnings
+etqan/scheduling/tests/test_times_postponement_board.py: 1 warning
+etqan/scheduling/tests/test_trials_pays_teacher.py: 6 warnings
+etqan/site/tests/test_admin_api.py: 31 warnings
+etqan/site/tests/test_admin_articles.py: 54 warnings
+etqan/site/tests/test_admin_b8b.py: 64 warnings
+etqan/site/tests/test_admin_media.py: 70 warnings
+etqan/site/tests/test_admin_page_builder.py: 44 warnings
+etqan/site/tests/test_admin_settings.py: 11 warnings
+etqan/site/tests/test_inquiries.py: 20 warnings
+etqan/site/tests/test_public_api.py: 7 warnings
+etqan/site/tests/test_public_articles.py: 40 warnings
+etqan/site/tests/test_public_b8b.py: 9 warnings
+etqan/site/tests/test_public_media.py: 32 warnings
+etqan/site/tests/test_public_page_builder.py: 14 warnings
+etqan/site/tests/test_public_settings.py: 8 warnings
+etqan/systemstatus/tests/test_api.py: 7 warnings
+etqan/tenants/tests/test_admin.py: 7 warnings
+etqan/tenants/tests/test_admin_features.py: 7 warnings
+etqan/tenants/tests/test_admin_suspend.py: 4 warnings
+etqan/tenants/tests/test_domain_admin.py: 7 warnings
+etqan/tenants/tests/test_domains.py: 10 warnings
+etqan/tenants/tests/test_isolation.py: 6 warnings
+etqan/tenants/tests/test_middleware.py: 3 warnings
+etqan/translations/tests/test_api.py: 26 warnings
+etqan/vouchers/tests/test_api.py: 37 warnings
+etqan/vouchers/tests/test_generation.py: 1 warning
+etqan/vouchers/tests/test_registry.py: 6 warnings
+etqan/wallet/tests/test_api.py: 19 warnings
+etqan/wallet/tests/test_compensation.py: 1 warning
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.13.16-final-0 _______________
+
+Name                                                            Stmts   Miss Branch BrPart  Cover   Missing
+-----------------------------------------------------------------------------------------------------------
+etqan/__init__.py                                                   0      0      0      0 100.0%
+etqan/academy/__init__.py                                           0      0      0      0 100.0%
+etqan/academy/api/__init__.py                                       0      0      0      0 100.0%
+etqan/academy/api/serializers.py                                   26      0      4      0 100.0%
+etqan/academy/api/urls.py                                           5      0      0      0 100.0%
+etqan/academy/api/views.py                                         22      0      0      0 100.0%
+etqan/academy/apps.py                                               6      0      0      0 100.0%
+etqan/academy/models.py                                            25      1      0      0  96.0%   58
+etqan/academy/services.py                                          48      0     24      0 100.0%
+etqan/access/__init__.py                                            0      0      0      0 100.0%
+etqan/access/api/__init__.py                                        0      0      0      0 100.0%
+etqan/access/api/filters.py                                        15      0      8      0 100.0%
+etqan/access/api/payloads.py                                        5      0      0      0 100.0%
+etqan/access/api/serializers.py                                    23      0      0      0 100.0%
+etqan/access/api/urls.py                                            4      0      0      0 100.0%
+etqan/access/api/views.py                                          68      0      0      0 100.0%
+etqan/access/apps.py                                               10      0      0      0 100.0%
+etqan/access/models.py                                             16      0      0      0 100.0%
+etqan/access/presets.py                                             9      0      2      0 100.0%
+etqan/access/registry.py                                           32      0      0      0 100.0%
+etqan/access/services.py                                          199      1     82      2  98.9%   160->156, 164
+etqan/ai/__init__.py                                                0      0      0      0 100.0%
+etqan/ai/api/__init__.py                                            0      0      0      0 100.0%
+etqan/ai/api/report_payloads.py                                    18      3      2      0  85.0%   30, 46, 57
+etqan/ai/api/report_views.py                                       74      0      0      0 100.0%
+etqan/ai/api/serializers.py                                         7      0      0      0 100.0%
+etqan/ai/api/throttles.py                                           4      0      0      0 100.0%
+etqan/ai/api/urls.py                                                4      0      0      0 100.0%
+etqan/ai/api/views.py                                              26      0      0      0 100.0%
+etqan/ai/apps.py                                                    7      0      0      0 100.0%
+etqan/ai/checks.py                                                  8      0      2      0 100.0%
+etqan/ai/client.py                                                 64      0     10      0 100.0%
+etqan/ai/clock.py                                                   4      0      0      0 100.0%
+etqan/ai/management/__init__.py                                     0      0      0      0 100.0%
+etqan/ai/management/commands/__init__.py                            0      0      0      0 100.0%
+etqan/ai/management/commands/ai_tasks.py                            8      0      0      0 100.0%
+etqan/ai/models.py                                                 48      2      0      0  95.8%   64, 108
+etqan/ai/prompts.py                                                25      0      6      0 100.0%
+etqan/ai/registry.py                                               46      0      0      0 100.0%
+etqan/ai/render.py                                                 40      0     12      0 100.0%
+etqan/ai/reports/__init__.py                                        0      0      0      0 100.0%
+etqan/ai/reports/crud.py                                           75      0     24      1  99.0%   129->131
+etqan/ai/reports/facts.py                                         103      0      6      0 100.0%
+etqan/ai/reports/prompt.py                                         84      0     26      0 100.0%
+etqan/ai/services.py                                              181      0     46      2  99.1%   157->159, 166->exit
+etqan/ai/tasks.py                                                   8      0      0      0 100.0%
+etqan/ai/text.py                                                   37      0     16      0 100.0%
+etqan/billing/__init__.py                                           0      0      0      0 100.0%
+etqan/billing/api/__init__.py                                       0      0      0      0 100.0%
+etqan/billing/api/payloads.py                                      47      0     14      0 100.0%
+etqan/billing/api/serializers.py                                   85      0      2      0 100.0%
+etqan/billing/api/urls.py                                           4      0      0      0 100.0%
+etqan/billing/api/views.py                                        243      0     12      0 100.0%
+etqan/billing/apps.py                                              10      0      0      0 100.0%
+etqan/billing/clock.py                                              9      0      0      0 100.0%
+etqan/billing/models.py                                           133      5      0      0  96.2%   34, 280, 294, 309, 333
+etqan/billing/scopes.py                                            15      0      6      0 100.0%
+etqan/billing/services/__init__.py                                 66      0      0      0 100.0%
+etqan/billing/services/invoices.py                                 74      0     18      0 100.0%
+etqan/billing/services/link_purpose.py                             39      0      8      0 100.0%
+etqan/billing/services/local.py                                   129      1     42      1  98.8%   182
+etqan/billing/services/notices.py                                  14      0      0      0 100.0%
+etqan/billing/services/numbering.py                                 7      0      0      0 100.0%
+etqan/billing/services/online.py                                   58      0     18      0 100.0%
+etqan/billing/services/payers.py                                   27      0     10      0 100.0%
+etqan/billing/services/payments.py                                160      0     54      0 100.0%
+etqan/billing/services/records.py                                 143      0     76      1  99.5%   194->198
+etqan/billing/services/rules.py                                    80      0     18      0 100.0%
+etqan/billing/services/subscriptions.py                            74      0     22      0 100.0%
+etqan/billing/services/summary.py                                  21      0      0      0 100.0%
+etqan/billing/services/terms.py                                    30      0      8      0 100.0%
+etqan/catalogue/__init__.py                                         0      0      0      0 100.0%
+etqan/catalogue/api/__init__.py                                     0      0      0      0 100.0%
+etqan/catalogue/api/serializers.py                                 25      0      0      0 100.0%
+etqan/catalogue/api/urls.py                                        11      0      0      0 100.0%
+etqan/catalogue/api/views.py                                      108      0     12      0 100.0%
+etqan/catalogue/apps.py                                             5      0      0      0 100.0%
+etqan/catalogue/models.py                                          57      3      0      0  94.7%   36, 67, 94
+etqan/catalogue/scopes.py                                           8      0      4      0 100.0%
+etqan/catalogue/services.py                                       183      0     38      0 100.0%
+etqan/chat/__init__.py                                              0      0      0      0 100.0%
+etqan/chat/api/__init__.py                                          0      0      0      0 100.0%
+etqan/chat/api/payloads.py                                         18      0      0      0 100.0%
+etqan/chat/api/permissions.py                                      29      0     12      0 100.0%
+etqan/chat/api/serializers.py                                      34      0      0      0 100.0%
+etqan/chat/api/urls.py                                              3      0      0      0 100.0%
+etqan/chat/api/views.py                                           218      0     14      0 100.0%
+etqan/chat/apps.py                                                  5      0      0      0 100.0%
+etqan/chat/files.py                                                54      0     14      0 100.0%
+etqan/chat/models.py                                               56      5      0      0  91.1%   42, 67, 101, 119, 132
+etqan/chat/services/__init__.py                                    25      0      2      0 100.0%
+etqan/chat/services/access.py                                      29      0      8      0 100.0%
+etqan/chat/services/attachments.py                                 11      0      2      0 100.0%
+etqan/chat/services/conversations.py                               93      1     28      1  98.3%   56
+etqan/chat/services/days.py                                        26      0      8      0 100.0%
+etqan/chat/services/groups.py                                     110      2     28      2  97.1%   108, 178
+etqan/chat/services/messages.py                                   135      0     36      1  99.4%   134->138
+etqan/chat/services/moderation.py                                  42      0     12      0 100.0%
+etqan/chat/services/notices.py                                     34      0      4      0 100.0%
+etqan/consultations/__init__.py                                     0      0      0      0 100.0%
+etqan/consultations/api/__init__.py                                 0      0      0      0 100.0%
+etqan/consultations/api/answers.py                                 24      0      0      0 100.0%
+etqan/consultations/api/booking_serializers.py                     52      0      0      0 100.0%
+etqan/consultations/api/my_views.py                                65      2      2      0  97.0%   88, 96
+etqan/consultations/api/params.py                                  20      0      4      0 100.0%
+etqan/consultations/api/public_views.py                            79      0      2      0 100.0%
+etqan/consultations/api/report_payloads.py                         24      3      2      1  84.6%   42-44
+etqan/consultations/api/report_views.py                            34      0      4      0 100.0%
+etqan/consultations/api/request_views.py                          158      0     12      0 100.0%
+etqan/consultations/api/review_views.py                            28      1      0      0  96.4%   40
+etqan/consultations/api/serializers.py                             79      0      4      0 100.0%
+etqan/consultations/api/urls.py                                     9      0      0      0 100.0%
+etqan/consultations/api/views.py                                  113      0      8      0 100.0%
+etqan/consultations/apps.py                                         7      0      0      0 100.0%
+etqan/consultations/files.py                                       27      3      6      1  81.8%   30->32, 45-47
+etqan/consultations/models.py                                     149      4      0      0  97.3%   89, 114, 253, 306
+etqan/consultations/services/__init__.py                           87      0      0      0 100.0%
+etqan/consultations/services/booking.py                           125      0     32      0 100.0%
+etqan/consultations/services/common.py                             62      0     10      0 100.0%
+etqan/consultations/services/consultants.py                        14      0      0      0 100.0%
+etqan/consultations/services/earnings.py                          156      0     16      0 100.0%
+etqan/consultations/services/manage.py                             90      0     32      0 100.0%
+etqan/consultations/services/notices.py                            26      1      6      1  93.8%   47
+etqan/consultations/services/paying.py                             50      2     12      2  93.5%   64, 68
+etqan/consultations/services/payments.py                           38      0     12      0 100.0%
+etqan/consultations/services/products.py                           97      5     30      2  94.5%   53, 83-85, 115
+etqan/consultations/services/purpose.py                            99      1     38      1  98.5%   189
+etqan/consultations/services/reads.py                              73      0     14      0 100.0%
+etqan/consultations/services/requests.py                          191      3     74      4  97.4%   73, 171, 228->232, 317
+etqan/consultations/services/reviews.py                            46      1      6      1  96.2%   38
+etqan/consultations/services/slots.py                              91      0     24      0 100.0%
+etqan/consultations/services/transitions.py                       119      1     34      2  98.0%   103, 193->195
+etqan/consultations/services/unpaid.py                             24      0      4      0 100.0%
+etqan/consultations/slot_math.py                                   78      0     30      0 100.0%
+etqan/consultations/tasks.py                                        7      0      0      0 100.0%
+etqan/devices/__init__.py                                           0      0      0      0 100.0%
+etqan/devices/api/__init__.py                                       0      0      0      0 100.0%
+etqan/devices/api/push_serializers.py                              39      2      4      0  95.3%   13-14
+etqan/devices/api/push_views.py                                    41      0      4      0 100.0%
+etqan/devices/api/urls.py                                           5      0      0      0 100.0%
+etqan/devices/api/views.py                                         18      0      0      0 100.0%
+etqan/devices/apps.py                                               7      0      0      0 100.0%
+etqan/devices/checks.py                                             9      0      2      0 100.0%
+etqan/devices/icons.py                                             55      0     10      1  98.5%   79->81
+etqan/devices/management/__init__.py                                0      0      0      0 100.0%
+etqan/devices/management/commands/__init__.py                       0      0      0      0 100.0%
+etqan/devices/management/commands/make_vapid_keys.py               12      0      0      0 100.0%
+etqan/devices/models.py                                            21      2      0      0  90.5%   27, 38
+etqan/devices/push.py                                              67      1     28      2  96.8%   77->79, 94
+etqan/devices/push_hosts.py                                        15      2      4      0  89.5%   21-22
+etqan/devices/push_keys.py                                         61      0      8      0 100.0%
+etqan/devices/sender.py                                            78      3     20      1  95.9%   76-77, 79
+etqan/devices/services.py                                          46      0      8      0 100.0%
+etqan/devices/subscriptions.py                                     25      0      4      0 100.0%
+etqan/devices/tasks.py                                             17      2      2      0  89.5%   16-17
+etqan/devices/user_agents.py                                       13      0      2      0 100.0%
+etqan/employment/__init__.py                                        0      0      0      0 100.0%
+etqan/employment/api/__init__.py                                    0      0      0      0 100.0%
+etqan/employment/api/serializers.py                                18      0      0      0 100.0%
+etqan/employment/api/urls.py                                        3      0      0      0 100.0%
+etqan/employment/api/views.py                                      77      0     10      0 100.0%
+etqan/employment/apps.py                                            4      0      0      0 100.0%
+etqan/employment/models.py                                         23      1      0      0  95.7%   48
+etqan/employment/services.py                                       73      0     26      0 100.0%
+etqan/etqan_billing/__init__.py                                     0      0      0      0 100.0%
+etqan/etqan_billing/admin.py                                      234      8     18      3  95.6%   179->185, 269, 287-288, 407-409, 431-432
+etqan/etqan_billing/api/__init__.py                                 0      0      0      0 100.0%
+etqan/etqan_billing/api/payloads.py                                 8      0      0      0 100.0%
+etqan/etqan_billing/api/urls.py                                     4      0      0      0 100.0%
+etqan/etqan_billing/api/views.py                                   25      0      0      0 100.0%
+etqan/etqan_billing/apps.py                                         6      0      0      0 100.0%
+etqan/etqan_billing/clock.py                                        4      0      0      0 100.0%
+etqan/etqan_billing/models.py                                     131      3      0      0  97.7%   64, 163, 173
+etqan/etqan_billing/pdf.py                                         69      0     20      0 100.0%
+etqan/etqan_billing/services/__init__.py                           54      0      0      0 100.0%
+etqan/etqan_billing/services/invoices.py                          191      0     38      1  99.6%   349->354
+etqan/etqan_billing/services/pricing.py                           126      1     18      2  97.9%   102, 214->231
+etqan/etqan_billing/services/usage.py                              50      0     18      0 100.0%
+etqan/etqan_billing/tasks.py                                       66      0     12      1  98.7%   46->45
+etqan/finance/__init__.py                                           0      0      0      0 100.0%
+etqan/finance/api/__init__.py                                       0      0      0      0 100.0%
+etqan/finance/api/payloads.py                                      14      0      2      0 100.0%
+etqan/finance/api/serializers.py                                   42      0      0      0 100.0%
+etqan/finance/api/urls.py                                           4      0      0      0 100.0%
+etqan/finance/api/views.py                                        129      2      4      0  98.5%   153-156
+etqan/finance/apps.py                                               8      0      0      0 100.0%
+etqan/finance/clock.py                                              9      0      0      0 100.0%
+etqan/finance/models.py                                            87      4      0      0  95.4%   72, 82, 142, 177
+etqan/finance/services/__init__.py                                 32      0      0      0 100.0%
+etqan/finance/services/convert.py                                  39      0      6      0 100.0%
+etqan/finance/services/donations.py                                34      0      4      0 100.0%
+etqan/finance/services/expenses.py                                 83      0     26      0 100.0%
+etqan/finance/services/link_purpose.py                             29      0      4      0 100.0%
+etqan/finance/services/numbering.py                                 7      0      0      0 100.0%
+etqan/finance/services/rates.py                                    60      0     10      0 100.0%
+etqan/finance/services/rules.py                                    35      0      8      0 100.0%
+etqan/finance/services/summary.py                                  41      0      6      0 100.0%
+etqan/gateways/__init__.py                                          0      0      0      0 100.0%
+etqan/gateways/api/__init__.py                                      0      0      0      0 100.0%
+etqan/gateways/api/payloads.py                                     25      0      2      0 100.0%
+etqan/gateways/api/permissions.py                                   9      0      2      0 100.0%
+etqan/gateways/api/serializers.py                                  59      0      0      0 100.0%
+etqan/gateways/api/urls.py                                          5      0      0      0 100.0%
+etqan/gateways/api/views.py                                       210      0     10      0 100.0%
+etqan/gateways/apps.py                                              7      0      0      0 100.0%
+etqan/gateways/checks.py                                            8      0      2      0 100.0%
+etqan/gateways/clock.py                                             4      0      0      0 100.0%
+etqan/gateways/models.py                                          116      5      0      0  95.7%   54, 66, 147, 174, 259
+etqan/gateways/paypal.py                                          116      1     22      2  97.8%   92, 95->97
+etqan/gateways/providers/__init__.py                               10      0      4      0 100.0%
+etqan/gateways/providers/base.py                                   17      0      0      0 100.0%
+etqan/gateways/providers/paypal.py                                 49      0     10      0 100.0%
+etqan/gateways/providers/simulator.py                               9      0      0      0 100.0%
+etqan/gateways/providers/stripe.py                                 42      0     10      0 100.0%
+etqan/gateways/services/__init__.py                                61      0      0      0 100.0%
+etqan/gateways/services/accounts.py                               125      1     64      1  98.9%   81
+etqan/gateways/services/captures.py                                98      0     22      0 100.0%
+etqan/gateways/services/checkouts.py                              160      2     50      2  98.1%   307, 337
+etqan/gateways/services/completion.py                              39      0     16      0 100.0%
+etqan/gateways/services/connect.py                                 29      0     10      0 100.0%
+etqan/gateways/services/connect_webhooks.py                        61      1     18      1  97.5%   64
+etqan/gateways/services/expiry.py                                  73      0     10      0 100.0%
+etqan/gateways/services/fees.py                                    34      1     16      1  96.0%   33
+etqan/gateways/services/links.py                                  185      0     60      0 100.0%
+etqan/gateways/services/paypal_webhooks.py                        138      0     42      0 100.0%
+etqan/gateways/services/purposes.py                                49      0      2      0 100.0%
+etqan/gateways/services/simulator.py                               45      0     12      0 100.0%
+etqan/gateways/services/webhooks.py                               107      1     28      1  98.5%   107
+etqan/gateways/tasks.py                                            12      1      4      1  87.5%   18
+etqan/identity/__init__.py                                          0      0      0      0 100.0%
+etqan/identity/adapter.py                                          20      3      0      0  85.0%   24-25, 46
+etqan/identity/admin.py                                            49      0      6      0 100.0%
+etqan/identity/ages.py                                             28      0      6      0 100.0%
+etqan/identity/api/__init__.py                                      0      0      0      0 100.0%
+etqan/identity/api/payloads.py                                     68      0     12      0 100.0%
+etqan/identity/api/people_filters.py                               60      0     34      0 100.0%
+etqan/identity/api/people_serializers.py                          101      2     16      2  96.6%   100, 142
+etqan/identity/api/people_urls.py                                   6      0      0      0 100.0%
+etqan/identity/api/people_views.py                                280      0     26      0 100.0%
+etqan/identity/api/serializers.py                                 122      0      2      0 100.0%
+etqan/identity/api/urls.py                                         32      0      0      0 100.0%
+etqan/identity/api/views.py                                       415      2     64      2  99.2%   608->611, 712, 775
+etqan/identity/apps.py                                              7      0      0      0 100.0%
+etqan/identity/authentication.py                                   11      0      2      0 100.0%
+etqan/identity/clock.py                                             9      0      0      0 100.0%
+etqan/identity/codereset.py                                       139      2     32      0  98.8%   103-104
+etqan/identity/devices.py                                          11      0      6      0 100.0%
+etqan/identity/emails.py                                           19      0      4      0 100.0%
+etqan/identity/google.py                                          175      0     40      0 100.0%
+etqan/identity/impersonation.py                                    73      3     18      2  94.5%   98-99, 119
+etqan/identity/limits.py                                           47      4     10      2  89.5%   34, 54-56
+etqan/identity/links.py                                           120      3     34      1  97.4%   48, 52-53
+etqan/identity/management/__init__.py                               0      0      0      0 100.0%
+etqan/identity/management/commands/__init__.py                      0      0      0      0 100.0%
+etqan/identity/mfa.py                                              20      0      0      0 100.0%
+etqan/identity/models.py                                          213      9     10      0  96.0%   167, 215, 253, 270, 288, 320, 345, 361, 383
+etqan/identity/presets.py                                          19      0      6      0 100.0%
+etqan/identity/scopes.py                                            5      0      2      0 100.0%
+etqan/identity/services.py                                        778      3    270      5  99.2%   122, 946->exit, 1298->1295, 1302, 1603
+etqan/identity/signals.py                                           6      0      0      0 100.0%
+etqan/identity/signin.py                                          142      2     26      0  98.8%   263-264
+etqan/identity/tasks.py                                             7      0      0      0 100.0%
+etqan/identity/twofactor.py                                       102      0     18      0 100.0%
+etqan/integrations/__init__.py                                      0      0      0      0 100.0%
+etqan/integrations/accounts/__init__.py                             0      0      0      0 100.0%
+etqan/integrations/accounts/apps.py                                 6      0      0      0 100.0%
+etqan/integrations/accounts/models.py                              10      0      0      0 100.0%
+etqan/integrations/admin.py                                        96      3     14      0  97.3%   169-171
+etqan/integrations/api/__init__.py                                  0      0      0      0 100.0%
+etqan/integrations/api/payloads.py                                 21      0      8      0 100.0%
+etqan/integrations/api/urls.py                                      4      0      0      0 100.0%
+etqan/integrations/api/views.py                                    34      0      0      0 100.0%
+etqan/integrations/api/webhooks.py                                 14      0      0      0 100.0%
+etqan/integrations/apps.py                                          6      0      0      0 100.0%
+etqan/integrations/clock.py                                         4      0      0      0 100.0%
+etqan/integrations/models.py                                       48      2      0      0  95.8%   80, 101
+etqan/integrations/providers/__init__.py                           19      0      0      0 100.0%
+etqan/integrations/providers/ai.py                                 56      1     14      0  98.6%   23
+etqan/integrations/providers/base.py                               25      0      0      0 100.0%
+etqan/integrations/providers/email.py                              99      0     26      0 100.0%
+etqan/integrations/providers/payments.py                           48      2     18      2  93.9%   31, 77
+etqan/integrations/providers/video.py                              79      3     28      4  93.5%   24, 29, 36, 102->104
+etqan/integrations/providers/whatsapp.py                          163      2     48      3  97.6%   198->197, 200, 271
+etqan/integrations/providers/zoom.py                               82      7     14      1  91.7%   125-127, 157-159, 161
+etqan/integrations/services/__init__.py                            66      0      0      0 100.0%
+etqan/integrations/services/accounts.py                            99      1     24      1  98.4%   106
+etqan/integrations/services/email.py                               44      0      8      1  98.1%   48->exit
+etqan/integrations/services/onboarding.py                         206      8     48      4  95.3%   235-236, 265, 293-294, 356-357, 391
+etqan/integrations/services/resolver.py                            75      1     22      2  96.9%   73, 85->exit
+etqan/integrations/services/routes.py                              31      1     10      1  95.1%   57
+etqan/integrations/services/video.py                              171      7     44      7  93.5%   190->exit, 211, 231, 238-239, 241, 258, 295, 297->299
+etqan/integrations/services/whatsapp.py                            49      0      4      0 100.0%
+etqan/integrations/tasks.py                                        16      0      0      0 100.0%
+etqan/learning/__init__.py                                          0      0      0      0 100.0%
+etqan/learning/api/__init__.py                                      0      0      0      0 100.0%
+etqan/learning/api/certificate_views.py                           197      1     14      1  99.1%   192
+etqan/learning/api/content_views.py                                67      0      0      0 100.0%
+etqan/learning/api/homework_views.py                               90      0      2      0 100.0%
+etqan/learning/api/honour_views.py                                 64      0      4      0 100.0%
+etqan/learning/api/params.py                                       13      0      2      0 100.0%
+etqan/learning/api/review_views.py                                 59      0      0      0 100.0%
+etqan/learning/api/serializers.py                                 172      0      2      0 100.0%
+etqan/learning/api/urls.py                                          8      0      0      0 100.0%
+etqan/learning/api/views.py                                       181      1      6      1  98.9%   124
+etqan/learning/apps.py                                              6      0      0      0 100.0%
+etqan/learning/files.py                                            46      1      8      1  96.3%   55
+etqan/learning/models.py                                          245     15      0      0  93.9%   35, 55, 70, 106, 141, 169, 226, 317, 353, 384, 417, 435, 447, 513, 564
+etqan/learning/services/__init__.py                                96      0      0      0 100.0%
+etqan/learning/services/access.py                                  33      0     12      0 100.0%
+etqan/learning/services/certificates.py                           276      0     98      0 100.0%
+etqan/learning/services/content.py                                122      1     44      1  98.8%   58
+etqan/learning/services/curriculum.py                             119      1     50      1  98.8%   47
+etqan/learning/services/homework.py                               196      1     92      1  99.3%   56
+etqan/learning/services/honour.py                                  68      1     32      1  98.0%   67
+etqan/learning/services/hooks.py                                   45      0      6      0 100.0%
+etqan/learning/services/notices.py                                 46      0     12      0 100.0%
+etqan/learning/services/progress.py                               174      1     42      1  99.1%   304
+etqan/learning/services/quran.py                                   32      0      4      0 100.0%
+etqan/learning/services/reviews.py                                154      0     60      0 100.0%
+etqan/learning/services/subject_certificates.py                    89      2     24      2  96.5%   41, 139
+etqan/learning/services/upgrades.py                                83      3     32      3  94.8%   147, 149, 156
+etqan/learning/signals.py                                          15      0      0      0 100.0%
+etqan/library/__init__.py                                           0      0      0      0 100.0%
+etqan/library/api/__init__.py                                       0      0      0      0 100.0%
+etqan/library/api/serializers.py                                   19      0      0      0 100.0%
+etqan/library/api/urls.py                                           3      0      0      0 100.0%
+etqan/library/api/views.py                                         47      0      2      0 100.0%
+etqan/library/apps.py                                               4      0      0      0 100.0%
+etqan/library/models.py                                            16      1      0      0  93.8%   30
+etqan/library/services.py                                          30      1      6      1  94.4%   25
+etqan/notifications/__init__.py                                     0      0      0      0 100.0%
+etqan/notifications/api/__init__.py                                 0      0      0      0 100.0%
+etqan/notifications/api/payloads.py                                19      0      0      0 100.0%
+etqan/notifications/api/serializers.py                             46      0      2      0 100.0%
+etqan/notifications/api/urls.py                                     5      0      0      0 100.0%
+etqan/notifications/api/views.py                                  199      0     12      0 100.0%
+etqan/notifications/apps.py                                         5      0      0      0 100.0%
+etqan/notifications/channels/__init__.py                            0      0      0      0 100.0%
+etqan/notifications/channels/email.py                              62      0      8      0 100.0%
+etqan/notifications/channels/whatsapp.py                           85      0     12      0 100.0%
+etqan/notifications/clock.py                                        4      0      0      0 100.0%
+etqan/notifications/finders.py                                    116      0      4      0 100.0%
+etqan/notifications/kinds.py                                       63      0      2      0 100.0%
+etqan/notifications/links.py                                       41      0     24      0 100.0%
+etqan/notifications/management/__init__.py                          0      0      0      0 100.0%
+etqan/notifications/management/commands/__init__.py                 0      0      0      0 100.0%
+etqan/notifications/management/commands/scan_notifications.py      11      0      4      0 100.0%
+etqan/notifications/models.py                                     101      4      0      0  96.0%   121, 141, 155, 193
+etqan/notifications/recipients.py                                  27      0     12      0 100.0%
+etqan/notifications/services/__init__.py                           30      0      0      0 100.0%
+etqan/notifications/services/broadcasts.py                         97      1     34      1  98.5%   92
+etqan/notifications/services/inbox.py                              21      0      4      0 100.0%
+etqan/notifications/services/log.py                                36      0     14      0 100.0%
+etqan/notifications/services/preferences.py                        27      0      6      0 100.0%
+etqan/notifications/services/push.py                               13      0      0      0 100.0%
+etqan/notifications/services/scan.py                              123      0     28      0 100.0%
+etqan/notifications/services/settings.py                           36      0     18      1  98.1%   58->52
+etqan/notifications/services/templates.py                          79      0     16      0 100.0%
+etqan/notifications/services/whatsapp_choice.py                    19      0      4      0 100.0%
+etqan/notifications/tasks.py                                        7      0      0      0 100.0%
+etqan/notifications/text.py                                        80      0     14      0 100.0%
+etqan/payroll/__init__.py                                           0      0      0      0 100.0%
+etqan/payroll/api/__init__.py                                       0      0      0      0 100.0%
+etqan/payroll/api/payloads.py                                      54      0     12      0 100.0%
+etqan/payroll/api/serializers.py                                  100      0      4      0 100.0%
+etqan/payroll/api/urls.py                                           4      0      0      0 100.0%
+etqan/payroll/api/views.py                                        360      1     22      1  99.5%   352
+etqan/payroll/apps.py                                               5      0      0      0 100.0%
+etqan/payroll/clock.py                                             11      0      0      0 100.0%
+etqan/payroll/models.py                                           177      9      0      0  94.9%   26, 58, 90, 147, 211, 239, 370, 438, 459
+etqan/payroll/scopes.py                                            15      2      8      2  82.6%   16, 26
+etqan/payroll/services/__init__.py                                 48      0      0      0 100.0%
+etqan/payroll/services/adjustments.py                              56      0     14      0 100.0%
+etqan/payroll/services/balances.py                                 33      0      4      0 100.0%
+etqan/payroll/services/build.py                                   164      0     40      1  99.5%   171->170
+etqan/payroll/services/fixed_salaries.py                           55      0      8      0 100.0%
+etqan/payroll/services/numbering.py                                 9      0      0      0 100.0%
+etqan/payroll/services/payslips.py                                181      1     44      1  99.1%   81
+etqan/payroll/services/projections.py                              62      0      6      0 100.0%
+etqan/payroll/services/rates.py                                    86      1     18      1  98.1%   99
+etqan/payroll/services/rules.py                                   123      1     18      0  99.3%   316
+etqan/payroll/services/salary_expenses.py                          16      0      2      0 100.0%
+etqan/payroll/services/settings.py                                 38      0      4      0 100.0%
+etqan/payroll/services/student_rates.py                            43      2      2      0  95.6%   55-56
+etqan/payroll/services/withdrawals.py                              99      2     26      0  98.4%   47-48
+etqan/platform/__init__.py                                          0      0      0      0 100.0%
+etqan/platform/apps.py                                              7      0      0      0 100.0%
+etqan/platform/checks.py                                           14      0      4      0 100.0%
+etqan/platform/csv.py                                              64      0     18      0 100.0%
+etqan/platform/currency.py                                         22      0      6      0 100.0%
+etqan/platform/drf.py                                              43      0     16      0 100.0%
+etqan/platform/exceptions.py                                       31      0      0      0 100.0%
+etqan/platform/features.py                                         46      0      2      0 100.0%
+etqan/platform/frontend.py                                         13      1      4      1  88.2%   15
+etqan/platform/logging.py                                          12      1      4      1  87.5%   21
+etqan/platform/management/__init__.py                               0      0      0      0 100.0%
+etqan/platform/management/commands/__init__.py                      0      0      0      0 100.0%
+etqan/platform/middleware.py                                       13      0      0      0 100.0%
+etqan/platform/pagination.py                                       14      1      0      0  92.9%   20
+etqan/platform/params.py                                            6      0      0      0 100.0%
+etqan/platform/permissions.py                                      94      0     20      0 100.0%
+etqan/platform/secrets.py                                          44      0      8      0 100.0%
+etqan/platform/sms.py                                              41      0     16      0 100.0%
+etqan/platform/stripe.py                                           39      0     10      0 100.0%
+etqan/platform/tasks.py                                             8      0      2      0 100.0%
+etqan/platform/tenancy.py                                          33      0      4      0 100.0%
+etqan/platform/throttling.py                                       21      0      6      0 100.0%
+etqan/platform/uploads.py                                         100      3     20      3  95.0%   111, 113, 116
+etqan/platform/validators.py                                       47      0     18      1  98.5%   72->75
+etqan/platform/views.py                                            15      2      0      0  86.7%   18-19
+etqan/recorded/__init__.py                                          0      0      0      0 100.0%
+etqan/recorded/api/__init__.py                                      0      0      0      0 100.0%
+etqan/recorded/api/feedback_views.py                              154     14      2      0  91.0%   60, 74-75, 89, 103-104, 119-120, 139-140, 188-189, 205-206
+etqan/recorded/api/file_views.py                                   30      0      8      0 100.0%
+etqan/recorded/api/my_views.py                                     60      0      8      0 100.0%
+etqan/recorded/api/params.py                                        4      0      0      0 100.0%
+etqan/recorded/api/public_views.py                                 24      0      0      0 100.0%
+etqan/recorded/api/serializers.py                                 113      0     10      0 100.0%
+etqan/recorded/api/store_views.py                                  80      0      4      0 100.0%
+etqan/recorded/api/urls.py                                          9      0      0      0 100.0%
+etqan/recorded/api/views.py                                       154      2      4      0  98.7%   171-172
+etqan/recorded/apps.py                                             10      0      0      0 100.0%
+etqan/recorded/embeds.py                                           54      1     22      1  97.4%   56
+etqan/recorded/files.py                                            41      0      8      1  98.0%   65->64
+etqan/recorded/models.py                                          173      7      0      0  96.0%   61, 133, 208, 228, 277, 320, 370
+etqan/recorded/services/__init__.py                                76      0      0      0 100.0%
+etqan/recorded/services/certificates.py                            44      0     14      1  98.3%   98->exit
+etqan/recorded/services/codes.py                                   23      0      6      0 100.0%
+etqan/recorded/services/comments.py                               105      2     28      2  97.0%   99, 127
+etqan/recorded/services/enrolments.py                             153      0     50      0 100.0%
+etqan/recorded/services/playlists.py                              157      0     64      0 100.0%
+etqan/recorded/services/progress.py                                15      0      0      0 100.0%
+etqan/recorded/services/purchases.py                               55      0     14      0 100.0%
+etqan/recorded/services/purpose.py                                 88      2     28      2  96.6%   118, 160
+etqan/recorded/services/reviews.py                                 97      3     22      2  95.8%   93-94, 108->112, 123
+etqan/recorded/services/scope.py                                   38      0     10      0 100.0%
+etqan/recorded/services/serving.py                                 73      1     18      1  97.8%   44
+etqan/recorded/services/store.py                                   74      0      8      0 100.0%
+etqan/recorded/services/videos.py                                 162      2     70      2  98.3%   43, 152
+etqan/recorded/services/watching.py                                25      0      6      0 100.0%
+etqan/recorded/signals.py                                          13      0      4      0 100.0%
+etqan/registration/__init__.py                                      0      0      0      0 100.0%
+etqan/registration/api/__init__.py                                  0      0      0      0 100.0%
+etqan/registration/api/serializers.py                             108      7     26      4  91.8%   23, 78, 95-96, 98, 101->107, 104-105
+etqan/registration/api/urls.py                                      3      0      0      0 100.0%
+etqan/registration/api/views.py                                   149      2     24      0  98.8%   35-36
+etqan/registration/apps.py                                         10      0      0      0 100.0%
+etqan/registration/limits.py                                       31      3      4      1  88.6%   40-41, 43
+etqan/registration/models.py                                       49      2      0      0  95.9%   20, 85
+etqan/registration/services.py                                    297      7    110      7  96.6%   113, 121, 146, 182, 298, 302, 596, 601->603
+etqan/registration/tasks.py                                         7      0      0      0 100.0%
+etqan/scheduling/__init__.py                                        0      0      0      0 100.0%
+etqan/scheduling/api/__init__.py                                    0      0      0      0 100.0%
+etqan/scheduling/api/activity_views.py                             37      1      4      1  95.1%   26
+etqan/scheduling/api/archive_views.py                              37      0      0      0 100.0%
+etqan/scheduling/api/archived.py                                   22      0      8      0 100.0%
+etqan/scheduling/api/availability_views.py                         54      1      8      1  96.8%   32
+etqan/scheduling/api/bundle_payloads.py                            26      0      2      0 100.0%
+etqan/scheduling/api/bundle_views.py                              139      0      6      0 100.0%
+etqan/scheduling/api/group_views.py                                62      0      0      0 100.0%
+etqan/scheduling/api/payloads.py                                  179      0     54      0 100.0%
+etqan/scheduling/api/schedule_payloads.py                          41      0      4      0 100.0%
+etqan/scheduling/api/schedule_views.py                             95      0      2      0 100.0%
+etqan/scheduling/api/serializers.py                               290      0     20      0 100.0%
+etqan/scheduling/api/session_views.py                             241      0     16      0 100.0%
+etqan/scheduling/api/supervision_views.py                          44      0      0      0 100.0%
+etqan/scheduling/api/trial_views.py                                78      0      2      0 100.0%
+etqan/scheduling/api/urls.py                                       13      0      0      0 100.0%
+etqan/scheduling/api/views.py                                     239      0     24      0 100.0%
+etqan/scheduling/apps.py                                            5      0      0      0 100.0%
+etqan/scheduling/dates.py                                          35      0      8      0 100.0%
+etqan/scheduling/models.py                                        306     12      0      0  96.1%   33, 50, 126, 247, 269, 296, 334, 430, 711, 750, 818, 850
+etqan/scheduling/scopes.py                                         16      1      8      1  91.7%   23
+etqan/scheduling/services/__init__.py                             197      0      0      0 100.0%
+etqan/scheduling/services/activity.py                              96      0     28      0 100.0%
+etqan/scheduling/services/activity_feed.py                         60      0     10      0 100.0%
+etqan/scheduling/services/archive.py                              100      0     20      0 100.0%
+etqan/scheduling/services/attendance.py                           188      2     60      1  98.8%   95, 350
+etqan/scheduling/services/availability.py                         105      0     32      0 100.0%
+etqan/scheduling/services/board.py                                 54      0      6      0 100.0%
+etqan/scheduling/services/bundle_actions.py                       112      0     20      0 100.0%
+etqan/scheduling/services/bundle_reads.py                          88      0     12      0 100.0%
+etqan/scheduling/services/bundles.py                              139      2     40      2  97.8%   141, 203
+etqan/scheduling/services/conversion.py                            18      0      8      0 100.0%
+etqan/scheduling/services/generation.py                            96      0     30      0 100.0%
+etqan/scheduling/services/groups.py                               110      0     36      0 100.0%
+etqan/scheduling/services/lifecycle.py                             19      0      2      0 100.0%
+etqan/scheduling/services/manual.py                               131      5     42      6  93.6%   80-81, 107, 225->232, 229->232, 234, 236, 299->301
+etqan/scheduling/services/meetings.py                              80      0     26      0 100.0%
+etqan/scheduling/services/notice_reads.py                          44      0      0      0 100.0%
+etqan/scheduling/services/notices.py                               23      0      0      0 100.0%
+etqan/scheduling/services/paylock.py                               21      0      2      0 100.0%
+etqan/scheduling/services/postpone.py                             135      1     44      1  98.9%   111
+etqan/scheduling/services/reports.py                               43      0      8      0 100.0%
+etqan/scheduling/services/revert.py                               107      0     12      0 100.0%
+etqan/scheduling/services/rules.py                                305      0     78      0 100.0%
+etqan/scheduling/services/schedule_reads.py                       146      0     40      0 100.0%
+etqan/scheduling/services/schedules.py                            116      1     18      1  98.5%   80
+etqan/scheduling/services/subscriptions.py                        322      0    102      0 100.0%
+etqan/scheduling/services/substitute_teachers.py                   90      1     20      1  98.2%   100
+etqan/scheduling/services/suggest.py                               47      1      4      1  96.1%   64
+etqan/scheduling/services/supervision.py                          113      2     38      3  96.7%   73, 125->127, 133
+etqan/scheduling/services/times.py                                 60      0     24      0 100.0%
+etqan/scheduling/services/trials.py                               140      3     32      3  96.5%   73, 135, 175
+etqan/scheduling/tasks.py                                          11      0      0      0 100.0%
+etqan/site/__init__.py                                              0      0      0      0 100.0%
+etqan/site/api/__init__.py                                          0      0      0      0 100.0%
+etqan/site/api/admin_serializers.py                               536     18    152      9  96.1%   149-150, 155, 226-227, 379-380, 432, 443->445, 603-604, 718, 780, 796-797, 911, 928, 941-942, 957->965, 981->980
+etqan/site/api/admin_views.py                                     242      0     28      1  99.6%   241->exit
+etqan/site/api/serializers.py                                      35      0      0      0 100.0%
+etqan/site/api/urls.py                                             15      0      0      0 100.0%
+etqan/site/api/views.py                                           219      0     38      0 100.0%
+etqan/site/apps.py                                                  5      0      0      0 100.0%
+etqan/site/blocks.py                                              245      2     86      2  98.8%   91, 144
+etqan/site/colors.py                                               23      0      6      0 100.0%
+etqan/site/emails.py                                               34      3     10      1  86.4%   60-62
+etqan/site/images.py                                               52      2     14      2  93.9%   37, 70
+etqan/site/management/__init__.py                                   0      0      0      0 100.0%
+etqan/site/management/commands/__init__.py                          0      0      0      0 100.0%
+etqan/site/management/commands/set_site_status.py                  14      0      2      0 100.0%
+etqan/site/models.py                                              260     14      2      1  94.3%   17-18, 51, 75, 111, 150, 191, 202, 236, 254, 277, 293, 311, 345
+etqan/site/payloads.py                                             22      0      8      0 100.0%
+etqan/site/redirects.py                                            70      1     28      1  98.0%   121
+etqan/site/sanitize.py                                             10      0      0      0 100.0%
+etqan/site/services.py                                            346      1    100      1  99.6%   196
+etqan/site/throttling.py                                           22      0      4      0 100.0%
+etqan/site/uploads.py                                              40      0      0      0 100.0%
+etqan/site/youtube.py                                              33      0     16      0 100.0%
+etqan/systemstatus/__init__.py                                      0      0      0      0 100.0%
+etqan/systemstatus/api/__init__.py                                  0      0      0      0 100.0%
+etqan/systemstatus/api/serializers.py                              12      0      0      0 100.0%
+etqan/systemstatus/api/urls.py                                      3      0      0      0 100.0%
+etqan/systemstatus/api/views.py                                    25      0      0      0 100.0%
+etqan/systemstatus/apps.py                                          4      0      0      0 100.0%
+etqan/systemstatus/models.py                                       25      1      0      0  96.0%   47
+etqan/systemstatus/services.py                                     33      0      0      0 100.0%
+etqan/systemstatus/tasks.py                                        43      0      6      0 100.0%
+etqan/tenants/__init__.py                                           0      0      0      0 100.0%
+etqan/tenants/admin.py                                            212     13     42      4  92.5%   296-299, 325, 362->364, 396, 422-423, 435-436, 442-446
+etqan/tenants/apps.py                                               5      0      0      0 100.0%
+etqan/tenants/management/__init__.py                                0      0      0      0 100.0%
+etqan/tenants/management/commands/__init__.py                       0      0      0      0 100.0%
+etqan/tenants/management/commands/bootstrap_platform.py            10      0      0      0 100.0%
+etqan/tenants/management/commands/create_academy.py                21      2      0      0  90.5%   34-35
+etqan/tenants/management/commands/seed_dev.py                     319     26     96      7  92.0%   363-364, 451-452, 476-477, 511-513, 525-526, 555, 606-607, 612-613, 650-651, 658-659, 666-667, 677-678, 695-696
+etqan/tenants/management/commands/seed_staging.py                  24      0      4      0 100.0%
+etqan/tenants/management/commands/set_features.py                  31      0      6      0 100.0%
+etqan/tenants/middleware.py                                        18      0      2      0 100.0%
+etqan/tenants/models.py                                            31      0      0      0 100.0%
+etqan/tenants/seeds/__init__.py                                     0      0      0      0 100.0%
+etqan/tenants/seeds/b2.py                                         241     36     76     10  85.5%   65-66, 72-73, 85-86, 113->123, 121-122, 134-135, 158-160, 182-183, 218-219, 245-246, 303-304, 336, 392-393, 474, 490, 508-509, 514-515, 523-524, 565-566, 595-596
+etqan/tenants/seeds/b4.py                                          40      8     10      2  80.0%   40-41, 46-47, 61-62, 75-76
+etqan/tenants/seeds/b5.py                                           7      0      4      0 100.0%
+etqan/tenants/seeds/b6.py                                         120      1     52      3  97.7%   134->150, 152, 164->exit
+etqan/tenants/seeds/b7.py                                          86      0     28      0 100.0%
+etqan/tenants/seeds/b8.py                                          30      0      8      0 100.0%
+etqan/tenants/seeds/b9.py                                          23      2      8      0  93.5%   35-36
+etqan/tenants/seeds/countries.py                                   27      0     12      0 100.0%
+etqan/tenants/seeds/finance.py                                     17      0     10      0 100.0%
+etqan/tenants/seeds/gateways.py                                    38      3     20      1  93.1%   104, 108-109
+etqan/tenants/seeds/vouchers.py                                    16      0      4      1  95.0%   26->37
+etqan/tenants/seeds/wallet.py                                      12      1      4      1  87.5%   21
+etqan/tenants/services.py                                         129      5     38      4  94.6%   165, 188, 201-202, 216, 248->251
+etqan/tenants/views.py                                              7      0      2      0 100.0%
+etqan/translations/__init__.py                                      0      0      0      0 100.0%
+etqan/translations/api/__init__.py                                  0      0      0      0 100.0%
+etqan/translations/api/serializers.py                               3      0      0      0 100.0%
+etqan/translations/api/urls.py                                      3      0      0      0 100.0%
+etqan/translations/api/views.py                                    33      0      0      0 100.0%
+etqan/translations/apps.py                                          4      0      0      0 100.0%
+etqan/translations/models.py                                       17      1      0      0  94.1%   35
+etqan/translations/services.py                                     48      0     16      0 100.0%
+etqan/vouchers/__init__.py                                          0      0      0      0 100.0%
+etqan/vouchers/api/__init__.py                                      0      0      0      0 100.0%
+etqan/vouchers/api/payloads.py                                     22      0      2      0 100.0%
+etqan/vouchers/api/serializers.py                                  35      0      0      0 100.0%
+etqan/vouchers/api/urls.py                                          4      0      0      0 100.0%
+etqan/vouchers/api/views.py                                       146      0     14      0 100.0%
+etqan/vouchers/apps.py                                              5      0      0      0 100.0%
+etqan/vouchers/models.py                                           66      2      0      0  97.0%   145, 227
+etqan/vouchers/services/__init__.py                                34      0      0      0 100.0%
+etqan/vouchers/services/batches.py                                128      0     56      0 100.0%
+etqan/vouchers/services/codes.py                                   40      0     10      1  98.0%   62->exit
+etqan/vouchers/services/errors.py                                  26      0      0      0 100.0%
+etqan/vouchers/services/reads.py                                  132      2     40      2  97.7%   163, 202
+etqan/vouchers/services/redeem.py                                 192      2     74      2  98.5%   64, 179
+etqan/vouchers/services/registry.py                                22      0      4      0 100.0%
+etqan/vouchers/throttling.py                                       12      0      0      0 100.0%
+etqan/wallet/__init__.py                                            0      0      0      0 100.0%
+etqan/wallet/api/__init__.py                                        0      0      0      0 100.0%
+etqan/wallet/api/payloads.py                                       20      0      4      0 100.0%
+etqan/wallet/api/serializers.py                                    41      0      2      0 100.0%
+etqan/wallet/api/urls.py                                            5      0      0      0 100.0%
+etqan/wallet/api/views.py                                         160      0     12      0 100.0%
+etqan/wallet/apps.py                                                8      0      0      0 100.0%
+etqan/wallet/models.py                                             62      2      0      0  96.8%   43, 84
+etqan/wallet/services/__init__.py                                  18      0      0      0 100.0%
+etqan/wallet/services/compensation.py                              29      0      4      0 100.0%
+etqan/wallet/services/ledger.py                                   109      0     34      0 100.0%
+etqan/wallet/services/online.py                                    27      0      6      0 100.0%
+etqan/wallet/services/reads.py                                     63      1     14      1  97.4%   91
+etqan/wallet/services/topup_purpose.py                             60      0     18      0 100.0%
+-----------------------------------------------------------------------------------------------------------
+TOTAL                                                           35489    465   6864    217  98.4%
+Required test coverage of 80.0% reached. Total coverage: 98.38%
+10029 passed, 1 skipped, 4738 warnings in 3633.85s (1:00:33)
+EXIT=0

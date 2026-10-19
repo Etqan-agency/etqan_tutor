@@ -1,0 +1,10 @@
+FAILED etqan/tenants/tests/test_services.py::test_bad_timezone_or_currency_is_rejected_and_nothing_is_created[timezone-values0]
+FAILED etqan/tenants/tests/test_services.py::test_bad_timezone_or_currency_is_rejected_and_nothing_is_created[timezone-values1]
+FAILED etqan/tenants/tests/test_services.py::test_bad_timezone_or_currency_is_rejected_and_nothing_is_created[currency-values2]
+FAILED etqan/tenants/tests/test_services.py::test_bad_timezone_or_currency_is_rejected_and_nothing_is_created[currency-values3]
+FAILED etqan/tenants/tests/test_services.py::test_create_academy_stores_the_currency_upper_case
+FAILED etqan/tenants/tests/test_commands.py::test_create_academy_command_refuses_an_unknown_timezone
+FAILED etqan/tenants/tests/test_admin.py::test_admin_rejects_a_bad_timezone_or_currency[Mars/Phobos-USD-Unknown timezone.]
+FAILED etqan/tenants/tests/test_admin.py::test_admin_rejects_a_bad_timezone_or_currency[UTC-US-Use a three-letter currency code, like EGP.]
+FAILED etqan/tenants/tests/test_admin.py::test_admin_rejects_a_bad_timezone_or_currency[UTC-U$D-Use a three-letter currency code, like EGP.]
+9 failed, 35 deselected, 3 warnings in 102.17s (0:01:42)

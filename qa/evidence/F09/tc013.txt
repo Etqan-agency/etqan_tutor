@@ -1,0 +1,88 @@
+== TC-013 2026-10-19T03:47:04.529061
+student list 200 n 71 count 71 expected 71
+OK  TC013 student list == scoped SQL set and count :: extra [] missing []
+OK  TC013 student detail 7 200 :: 200
+OK  TC013 student no notes/created_by in family payload
+OK  TC013 student detail 30 200 :: 200
+OK  TC013 student no notes/created_by in family payload
+OK  TC013 student detail 15 404 :: 404
+OK  TC013 student detail 76 404 :: 404
+OK  TC013 student detail 77 200 :: 200
+OK  TC013 student no notes/created_by in family payload
+OK  TC013 student PATCH 403/404 :: 403
+OK  TC013 student void 403/404 :: 403
+OK  TC013 student payment 403/404 :: 403
+OK  TC013 student csv 403 :: 403
+OK  TC013 student filter student=5 does not widen
+OK  TC013 student filter payer=6 does not widen
+OK  TC013 student payers 403 :: 403
+OK  TC013 student payment detail 403/404 :: 403
+parent list 200 n 71 count 71 expected 71
+OK  TC013 parent list == scoped SQL set and count :: extra [] missing []
+OK  TC013 parent detail 7 200 :: 200
+OK  TC013 parent no notes/created_by in family payload
+OK  TC013 parent detail 30 200 :: 200
+OK  TC013 parent no notes/created_by in family payload
+OK  TC013 parent detail 15 404 :: 404
+OK  TC013 parent detail 76 404 :: 404
+OK  TC013 parent detail 77 200 :: 200
+OK  TC013 parent no notes/created_by in family payload
+OK  TC013 parent PATCH 403/404 :: 403
+OK  TC013 parent void 403/404 :: 403
+OK  TC013 parent payment 403/404 :: 403
+OK  TC013 parent csv 403 :: 403
+OK  TC013 parent filter student=5 does not widen
+OK  TC013 parent filter payer=6 does not widen
+OK  TC013 parent payers 403 :: 403
+OK  TC013 parent payment detail 403/404 :: 403
+parent3 list 200 n 65 count 65 expected 65
+OK  TC013 parent3 list == scoped SQL set and count :: extra [] missing []
+OK  TC013 parent3 detail 7 200 :: 200
+OK  TC013 parent3 no notes/created_by in family payload
+OK  TC013 parent3 detail 30 200 :: 200
+OK  TC013 parent3 no notes/created_by in family payload
+OK  TC013 parent3 detail 15 404 :: 404
+OK  TC013 parent3 detail 76 200 :: 200
+OK  TC013 parent3 no notes/created_by in family payload
+OK  TC013 parent3 detail 77 404 :: 404
+OK  TC013 parent3 PATCH 403/404 :: 403
+OK  TC013 parent3 void 403/404 :: 403
+OK  TC013 parent3 payment 403/404 :: 403
+OK  TC013 parent3 csv 403 :: 403
+OK  TC013 parent3 filter student=5 does not widen
+OK  TC013 parent3 filter payer=6 does not widen
+OK  TC013 parent3 payers 403 :: 403
+OK  TC013 parent3 payment detail 403/404 :: 403
+parent2 list 200 n 4 count 4 expected 4
+OK  TC013 parent2 list == scoped SQL set and count :: extra [] missing []
+OK  TC013 parent2 detail 7 404 :: 404
+OK  TC013 parent2 detail 30 404 :: 404
+OK  TC013 parent2 detail 15 200 :: 200
+OK  TC013 parent2 no notes/created_by in family payload
+OK  TC013 parent2 detail 76 404 :: 404
+OK  TC013 parent2 detail 77 404 :: 404
+OK  TC013 parent2 PATCH 403/404 :: 403
+OK  TC013 parent2 void 403/404 :: 403
+OK  TC013 parent2 payment 403/404 :: 403
+OK  TC013 parent2 csv 403 :: 403
+OK  TC013 parent2 filter student=5 does not widen
+OK  TC013 parent2 filter payer=6 does not widen
+OK  TC013 parent2 payers 403 :: 403
+OK  TC013 parent2 payment detail 403/404 :: 403
+student2 list 200 n 4 count 4 expected 4
+OK  TC013 student2 list == scoped SQL set and count :: extra [] missing []
+OK  TC013 student2 detail 7 404 :: 404
+OK  TC013 student2 detail 30 404 :: 404
+OK  TC013 student2 detail 15 200 :: 200
+OK  TC013 student2 no notes/created_by in family payload
+OK  TC013 student2 detail 76 404 :: 404
+OK  TC013 student2 detail 77 404 :: 404
+OK  TC013 student2 PATCH 403/404 :: 403
+OK  TC013 student2 void 403/404 :: 403
+OK  TC013 student2 payment 403/404 :: 403
+OK  TC013 student2 csv 403 :: 403
+OK  TC013 student2 filter student=5 does not widen
+OK  TC013 student2 filter payer=6 does not widen
+OK  TC013 student2 payers 403 :: 403
+OK  TC013 student2 payment detail 403/404 :: 403
+OK  TC013 teacher list 403 :: 403

@@ -1,0 +1,25 @@
+## TC-014
+200
+student enables 2fa: 200
+ql -> teacher7: {"detail":"You do not have permission to perform this action."} 403   student8: 403
+sc -> teacher7: {"detail":"You do not have permission to perform this action."} 403   student8: 403
+sup -> teacher7: {"detail":"You do not have permission to perform this action."} 403   student8: 403
+tt -> teacher7: {"detail":"You do not have permission to perform this action."} 403   student8: 403
+stu -> teacher7: {"detail":"You do not have permission to perform this action."} 403   student8: 403
+anon: {"detail":"Authentication credentials were not provided."} 403 
+admin own: {"detail":"Use your recovery codes to turn off your own."} 400 
+qaother admin on id 7/8: {"detail":"No User matches the given query."} 404  / {"detail":"No User matches the given query."} 404 
+rows after refusals: teacher 2 student 2 events +0
+admin -> teacher:  204 
+admin -> student:  204 
+rows: teacher 0 student 0
+ERROR:  column "created_at" does not exist
+LINE 1: ...=academy_qa; select id,kind,actor_id,target_id,ip,created_at...
+                                                             ^
+teacher login now: {"id":7,"email":"qa-teacher@qa
+qa: two_factor=off
+switch off route: 404
+qa: two_factor=on
+2|mfa_disabled|192.168.65.1|2026-10-18 22:55:59.119782+00|1|8
+1|mfa_disabled|192.168.65.1|2026-10-18 22:55:59.082137+00|1|7
+1|qaother-admin@qa.etqan.test

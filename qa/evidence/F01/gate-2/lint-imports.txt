@@ -1,0 +1,5 @@
+# 2026-10-18T22:39:45Z lint-imports (gate 2)
+devices reaches other apps only through their services KEPT (27 ignored imports)
+no app imports devices KEPT
+
+Contracts: 54 kept, 0 broken.

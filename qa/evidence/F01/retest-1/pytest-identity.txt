@@ -1,0 +1,55 @@
+$ 2026-10-18T00:34:03Z dc.sh exec -T django pytest etqan/identity -q -p no:cacheprovider
+........................................................................ [  8%]
+........................................................................ [ 16%]
+........................................................................ [ 25%]
+........................................................................ [ 33%]
+........................................................................ [ 42%]
+........................................................................ [ 50%]
+........................................................................ [ 59%]
+........................................................................ [ 67%]
+........................................................................ [ 76%]
+........................................................................ [ 84%]
+........................................................................ [ 93%]
+...........................................................              [100%]
+=============================== warnings summary ===============================
+etqan/identity/tests/test_accounts_closed.py: 8 warnings
+etqan/identity/tests/test_api_auth.py: 18 warnings
+etqan/identity/tests/test_api_docs.py: 9 warnings
+etqan/identity/tests/test_api_resend_verification.py: 5 warnings
+etqan/identity/tests/test_api_versioning.py: 4 warnings
+etqan/identity/tests/test_async_email.py: 1 warning
+etqan/identity/tests/test_code_reset.py: 36 warnings
+etqan/identity/tests/test_email_branding.py: 2 warnings
+etqan/identity/tests/test_email_management.py: 7 warnings
+etqan/identity/tests/test_families_api.py: 12 warnings
+etqan/identity/tests/test_family_bulk.py: 22 warnings
+etqan/identity/tests/test_family_people.py: 9 warnings
+etqan/identity/tests/test_features.py: 8 warnings
+etqan/identity/tests/test_google.py: 61 warnings
+etqan/identity/tests/test_impersonation.py: 33 warnings
+etqan/identity/tests/test_login_2fa.py: 24 warnings
+etqan/identity/tests/test_login_csrf.py: 8 warnings
+etqan/identity/tests/test_password_management.py: 18 warnings
+etqan/identity/tests/test_people_actions_api.py: 19 warnings
+etqan/identity/tests/test_people_api.py: 35 warnings
+etqan/identity/tests/test_people_depth_lists.py: 11 warnings
+etqan/identity/tests/test_people_services.py: 8 warnings
+etqan/identity/tests/test_phone_login.py: 18 warnings
+etqan/identity/tests/test_profile_access.py: 7 warnings
+etqan/identity/tests/test_profile_depth.py: 8 warnings
+etqan/identity/tests/test_quick_login_links.py: 30 warnings
+etqan/identity/tests/test_retired.py: 11 warnings
+etqan/identity/tests/test_roles.py: 1 warning
+etqan/identity/tests/test_security_log.py: 4 warnings
+etqan/identity/tests/test_signin.py: 29 warnings
+etqan/identity/tests/test_signin_registrants.py: 8 warnings
+etqan/identity/tests/test_spanish.py: 6 warnings
+etqan/identity/tests/test_staff_scope.py: 2 warnings
+etqan/identity/tests/test_tags_api.py: 22 warnings
+etqan/identity/tests/test_twofactor_api.py: 47 warnings
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+851 passed, 551 warnings in 21.81s
+exit=0 at 2026-10-18T00:34:29Z

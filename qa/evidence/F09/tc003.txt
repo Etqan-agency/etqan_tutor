@@ -1,0 +1,21 @@
+== TC-003 2026-10-19T03:36:49.103310
+sub {"student": 5, "course": 2, "teacher": 7, "package": 2, "starts_on": "2026-10-19"} 201 {"id": 3, "price_minor": 150000, "currency": "EGP", "status": "active", "payment_status": "unpaid"}
+sub {"student": 32, "course": 2, "teacher": 7, "package": 2, "starts_on": "2026-10-19", "price_minor": 99950, "currency": "USD"} 400 {"price_minor": ["The price for this student is now in EGP. Check the price and try again."], "code": "catalogue.price_currency_changed"}
+sub {"student": 5, "course": 2, "teacher": 7, "package": 2, "starts_on": "2026-10-19", "price_minor": 0} 201 {"id": 4, "price_minor": 0, "currency": "EGP", "status": "active", "payment_status": "none"}
+off 200
+sub {"student": 33, "course": 2, "teacher": 7, "package": 2, "starts_on": "2026-10-19"} 201 {"id": 5, "price_minor": 150000, "currency": "EGP", "status": "active", "payment_status": "none"}
+on 200
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+sub {"student": 33, "course": 1, "teacher": 7, "package": 1, "starts_on": "2026-10-19"} 201 {"id": 6, "price_minor": 150000, "currency": "EGP", "status": "active", "payment_status": null}
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+DB inv per sub 3|1|150000|EGP تجويد — شهري due 2026-10-26 iss 2026-10-19 payer 35
+DB subs 3|150000|EGP|active
+4|0|EGP|active
+5|150000|EGP|active
+6|150000|EGP|active
+inv by sub 200 {"count": 1, "next": null, "previous": null, "results": [{"id": 13, "number": "INV-000013", "status": "unpaid", "is_overdue": false, "student": {"id": 5, "full_name": "QA student"}, "payer": {"id": 35, "full_name": "QA Parent Three"}, "subscription_id": 3, "description": "تجويد — شهري", "amount_minor": 150000, "paid_minor": 0, "balance_minor": 150000, "currency": "EGP", "issued_on": "2026-10-19", "due_on": "2026-10-26", "voided_at": null, "created_at": "2026-10-19T00:36:49.180901Z", "notes": "",
+subs list 200 [[1, "partial"], [4, "none"], [3, "unpaid"]]
+dupe check 
+== TC-003 SUB2 retry (price override, package currency) 2026-10-19T03:37:06.726234
+SUB2 201 {"id": 8, "price_minor": 99950, "currency": "EGP", "payment_status": "unpaid"}
+SUB2 inv 15|99950|EGP|unpaid|34

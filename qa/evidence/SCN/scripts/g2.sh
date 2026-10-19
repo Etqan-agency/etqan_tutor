@@ -1,0 +1,17 @@
+. ./lib.sh; . ./ids.env
+V(){ QQ "$1" | grep -v '^SET$'; }; VO(){ QO "$1" | grep -v '^SET$'; }
+echo "== GATE G2 invariant re-check at gate time $(date -u +%FT%TZ)"
+echo "paid-status mismatches (paid but sum<>amount): $(V "select count(*) from billing_invoice i where i.status='paid' and i.amount_minor <> (select coalesce(sum(amount_minor),0) from billing_payment p where p.invoice_id=i.id and p.status in ('completed','credited'))")"
+echo "open-status mismatches (unpaid/partial but fully paid): $(V "select count(*) from billing_invoice i where i.status in ('unpaid','partial') and i.amount_minor <= (select coalesce(sum(amount_minor),0) from billing_payment p where p.invoice_id=i.id and p.status in ('completed','credited'))")"
+echo "overpaid invoices: $(V "select count(*) from billing_invoice i where i.amount_minor < (select coalesce(sum(amount_minor),0) from billing_payment p where p.invoice_id=i.id and p.status in ('completed','credited'))")"
+echo "INV1: $(V "select i.status,i.amount_minor,(select sum(amount_minor) from billing_payment p where p.invoice_id=i.id and p.status in ('completed','credited')) from billing_invoice i where id=$INV1")"
+echo "wallets with balance<>entries: $(V "select count(*) from wallet_wallet w where w.balance_minor <> (select coalesce(sum(amount_minor),0) from wallet_walletentry e where e.wallet_id=w.id)")"
+echo "payslip $PS3: $(V "select status,gross_minor,net_minor,(select sum(amount_minor) from payroll_payslipline l where l.payslip_id=p.id),(select count(*) from payroll_payslipline l where l.payslip_id=p.id and kind='session') from payroll_payslip p where id=$PS3")"
+echo "payslips gross<>line sum (all): $(V "select count(*) from payroll_payslip p where p.gross_minor <> coalesce((select sum(amount_minor) from payroll_payslipline l where l.payslip_id=p.id and l.amount_minor>0),0) and p.gross_minor<>0")"
+echo "payroll expense for $PS3: $(V "select count(*),sum(amount_minor) from finance_expense where source='payroll.payslip' and source_id='$PS3'" 2>&1 | tail -1)"
+echo "M1..M11 locked: $(V "select string_agg(id||':'||payroll_locked,',' order by id) from scheduling_session where subscription_id=$SUB3")"
+api adm qa GET subscriptions/$SUB3/; echo "SUB3 used/remaining API $(j "(d['sessions_used'],d['sessions_remaining'])") vs SQL consuming $(V "select count(*) from scheduling_session where subscription_id=$SUB3 and status='completed' and student_attendance='present' and teacher_attendance<>'absent' and kind in ('regular','compensation') and compensated=false")"
+api adm qa GET subscriptions/$SUB1/; echo "SUB1 used/remaining API $(j "(d['sessions_used'],d['sessions_remaining'])")"
+echo "qaother cross-schema leak (rows with qa SCN names): $(VO "select count(*) from identity_user where email like 'scn-%@qa.etqan.test'")"
+echo "renewal G1 cleanup: subs renewed_from SUB2 $(V "select count(*) from scheduling_subscription where renewed_from_id=$SUB2"), invoice 153 $(V "select status from billing_invoice where id=153")"
+echo "django 5xx since gate start:"; $DC logs --since 15m django 2>&1 | grep -E '" 5[0-9]{2} | 50[0-9] ' | head -5; echo "(end)"

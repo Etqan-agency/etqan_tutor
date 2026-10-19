@@ -1,0 +1,22 @@
+[200] PATCH catalogue/packages/3/ :: {"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":60,"duration_value":2,"duration_unit":"month","freeze_days_allowed":7,"pr
+[200] GET subscriptions/17/ :: {"id":17,"status":"active","schedule_status":"active","student":{"id":212,"full_name":"QA6 Student 1","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m"},"starts_on":
+   old: (150000, 'EGP', 45, '2026-11-18', 8)
+[201] POST subscriptions/17/renew/ :: {"id":20,"status":"active","schedule_status":"active","student":{"id":212,"full_name":"QA6 Student 1","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":3,"name_ar":
+   renewal: (150000, 'EGP', 60, '2026-11-19', '2027-01-18', 16)
+[200] PUT catalogue/packages/3/country-prices/ :: [{"country":"SA","price_minor":1400,"currency":"USD"}]
+[201] POST subscriptions/16/renew/ :: {"id":21,"status":"active","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m"},"starts_on"
+   SA renewal: (1400, 'USD')
+[200] PATCH catalogue/packages/3/ :: {"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":60,"duration_value":2,"duration_unit":"month","freeze_days_allowed":7,"price_minor":3000,"currency":"USD","is_active":true,"created_at":"2026-10-19T04:40:25.022852Z","update
+[201] POST subscriptions/18/renew/ :: {"id":22,"status":"active","schedule_status":"active","student":{"id":213,"full_name":"QA6 Student 2","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m"},"starts_on":
+   S8 renewal: (3000, 'USD')
+[200] PATCH catalogue/packages/3/ :: {"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":45,"duration_value":1,"duration_unit":"month","freeze_days_allowed":7,"price_minor":150000,"currency":"EGP","is_active":true,"created_at":"2026-10-19T04:40:25.022852Z","upda
+[200] PUT catalogue/packages/3/country-prices/ :: [{"country":"SA","price_minor":5000,"currency":"SAR"}]
+16||5000|SAR|45|1|month|8|2026-10-19|2026-11-18|active
+17||150000|EGP|45|1|month|8|2026-10-19|2026-11-18|active
+18||120000|EGP|45|1|month|8|2026-10-19|2026-11-18|active
+20|17|150000|EGP|60|2|month|16|2026-11-19|2027-01-18|active
+21|16|1400|USD|60|2|month|16|2026-11-19|2027-01-18|active
+22|18|3000|USD|60|2|month|16|2026-11-19|2027-01-18|active
+20|EGP|150000|unpaid
+21|USD|1400|unpaid
+22|USD|3000|unpaid

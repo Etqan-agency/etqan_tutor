@@ -1,0 +1,7 @@
+## TC-119 (qa features before: {}, supervision_enabled=f)
+POST academy/features/ -> HTTP 405
+PUT academy/features/ -> HTTP 405
+PATCH academy/features/ -> HTTP 405
+DELETE academy/features/ -> HTTP 405
+PATCH settings with features: {"timezone":"Africa/Cairo","default_currency":"EGP","default_language":"ar","generation_horizon_days":14,"renewal_grace_days":7,"absent_consumes_session":true,"excused_consumes_session":false,"auto_invoice_on_subscription":true,"invoice_due_days":7,"
+after: features={} supervision_enabled=f me.features has chat: 0

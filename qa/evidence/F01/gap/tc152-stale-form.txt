@@ -1,0 +1,20 @@
+FIXTURE 7 ETQ-2025-03-0001 may_suspend True
+-- 1. ops@ reactivate qa-tmp-1
+302 http://etqan.localhost/admin/tenants/academy/
+active|f||{"families": true, "invoices": true, "internal_chat": false, "online_payments": true}
+-- tab A: GET change page (saved)
+GET 200
+-- 2a. tab B: suspend via action
+302 http://etqan.localhost/admin/tenants/academy/
+-- 2b. set_features qa-tmp-1 --off families
+qa-tmp-1: families=off
+-- 2c. tab B: turn on defaults flag (fresh form)
+POST 302 /admin/tenants/academy/
+-- state before tab A save:
+suspended|t||{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+-- 3. tab A (stale) saves with only plan_notes changed
+POST 302 /admin/tenants/academy/
+-- state after:
+active|f|QA-TC152-stale-edit|{"families": true, "invoices": true, "internal_chat": false, "online_payments": true}
+-- admin log since:
+36|[{"changed": {"fields": ["Status", "Plan notes", "Suspend Etqan's defaults", "Family accounts (\u0646\u0638\u0627\u0645 \u062d\u0633\u0627\u0628\u0627\u062a \u0627\u0644\u0639\u0627\u0626\u0644\u0627\u062a)"]}}]

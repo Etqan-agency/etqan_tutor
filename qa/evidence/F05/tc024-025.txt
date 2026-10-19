@@ -1,0 +1,54 @@
+== TC-024 student 103 before: QA5 Bulk 50|+20100005000|ar|0|2007-06-15|EG|trial|
+profile "xp":1000001 -> 400 {"profile":{"xp":["Ensure this value is less than or equal to 1000000."]}}
+profile "xp":-1 -> 400 {"profile":{"xp":["Ensure this value is greater than or equal to 0."]}}
+profile "date_of_birth":"0001-01-01" -> 200 {"id":103,"role":"student","two_factor":false,"user":{"full_name":"QA5 Bulk 50","email":"f05-racep3@qa.etqan.t
+profile "date_of_birth":"2012-02-30" -> 400 {"profile":{"date_of_birth":["Date has wrong format. Use one of these formats instead: YYYY-MM-DD."]}}
+profile "country":"egy" -> 400 {"profile":{"country":["Ensure this field has no more than 2 characters."]}}
+profile "country":"e" -> 400 {"profile":{"country":["Use a two-letter country code, like EG."]}}
+profile "status":"nope" -> 400 {"profile":{"status":["\"nope\" is not a valid choice."]}}
+profile "gender":"x" -> 400 {"profile":{"gender":["\"x\" is not a valid choice."]}}
+profile "notes":null -> 400 {"profile":{"notes":["This field may not be null."]}}
+profile "bogus":1 -> 200 {"id":103,"role":"student","two_factor":false,"user":{"full_name":"QA5 Bulk 50","email":"f05-racep3@qa.etqan.t
+future DOB -> 200 age_group=child
+country ' eg ' -> 200 EG {"id":103,"role":"student","two_factor":false,"user":{"full_name":"QA5 Bulk 50",
+user "phone":"+201 005 550 505" -> 200 "full_name":"QA5 Bulk 50","email":"f05-racep3@qa.etqan.test","phone":"+201005550505"
+user "phone":"+2010055505051234" -> 400 {"user":{"phone":["Use international format, like +201001234567."]}
+user "phone":"+20100555050512345" -> 400 {"user":{"phone":["Use international format, like +201001234567."]}
+user "timezone":"UTC+2" -> 400 {"user":{"timezone":["Unknown timezone."]}
+user "full_name":"   QA5 Spaced  " -> 200 "full_name":"QA5 Spaced","email":"f05-racep3@qa.etqan.test","phone":"+201005550505"
+user "full_name":"QA5 عربي 🌟" -> 200 "full_name":"QA5 عربي 🌟","email":"f05-racep3@qa.etqan.test","phone":"+201005550505"
+user "bogus":1 -> 200 "full_name":"QA5 عربي 🌟","email":"f05-racep3@qa.etqan.test","phone":"+201005550505"
+user "full_name":null -> 400 {"user":{"full_name":["This field may not be null."]}
+255 -> 200
+256 -> 400
+qa: spanish=off
+es spanish-off -> 400 {"user":{"preferred_language":["Choose Arabic or English."]}}
+me es off -> 200 {"id":114,"email":"f05-pend@qa.etqan.test","full_name":"QA5 Sami","phone":"+201005550303","preferred
+s1 stored es, effective_language with spanish off: ('es', 'en')
+qa: spanish=on
+es spanish-on -> 200
+-- teacher fields (TG=118)
+teacher "default_meeting_url":"javascript:alert(1)" -> 400 {"profile":{"default_meeting_url":["Enter a valid URL."]}} | stored=USD
+teacher "default_meeting_url":"https://x.test/aaaaaaa -> 400 {"profile":{"default_meeting_url":["Ensure this field has no more than 200 characters."]}} | stored=USD
+teacher "payout_method":"nope" -> 400 {"profile":{"payout_method":["\"nope\" is not a valid choice."]}} | stored=USD
+teacher "pay_currency":"XXX" -> 200 {"id":118,"role":"teacher","two_factor":false,"user":{"full_name":"QA5 Teacher G","email":"f05-tg@qa | stored=XXX
+teacher "pay_currency":"eg" -> 400 {"profile":{"pay_currency":["Use a three-letter currency code, like EGP."]}} | stored=XXX
+teacher "pay_currency":"EGPP" -> 400 {"profile":{"pay_currency":["Ensure this field has no more than 3 characters."]}} | stored=XXX
+teacher "pay_currency":"" -> 400 {"profile":{"pay_currency":["This field may not be blank."]}} | stored=XXX
+teacher "pay_currency":"EGB" -> 200 {"id":118,"role":"teacher","two_factor":false,"user":{"full_name":"QA5 Teacher G","email":"f05-tg@qa | stored=EGB
+teacher "pay_currency":"123" -> 400 {"profile":{"pay_currency":["Use a three-letter currency code, like EGP."]}} | stored=EGB
+admin profile -> 400 {"profile":["Admins have no profile."]}
+after: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|+201005550505|es|0|2030-01-01|EG|trial|
+users 140 -> 140
+32
+== TC-025
+academy today=2026-10-19
+13today dob=2013-10-19 -> teen
+13tomorrow dob=2013-10-20 -> child
+18today dob=2008-10-19 -> adult
+18tomorrow dob=2008-10-20 -> teen
+child api=17
+teen api=28
+adult api=20
+minor api=45
+SQL child=17 teen=28 adult=20

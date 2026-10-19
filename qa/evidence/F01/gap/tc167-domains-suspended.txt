@@ -1,0 +1,32 @@
+-- suspend qa-tmp-1
+302 http://etqan.localhost/admin/tenants/academy/
+suspended
+-- add qa-tmp1-susp.test via Domain add form:
+POST 302 /admin/tenants/domain/
+8|qa-tmp-1.etqan.localhost|active|f 12|qa-academy.test|active|t 15|www.qa-academy.test|active|f 21|qa-tmp1-susp.test|pending|f 
+-- check DNS:
+302 http://etqan.localhost/admin/tenants/domain/
+"success">Suspended 1 academies.
+"warning">Qa-tmp1-susp.test: resolves to nothing, expected sites.etqan.localhost.
+-- activate via service (DNS bypassed):
+ACT qa-tmp1-susp.test active False
+-- make primary:
+302 http://etqan.localhost/admin/tenants/domain/
+8|qa-tmp-1.etqan.localhost|active|f 12|qa-academy.test|active|f 15|www.qa-academy.test|active|f 21|qa-tmp1-susp.test|active|t 
+API on qa-tmp1-susp.test: {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"} HTTP 403
+TLS ask direct :8000: ok HTTP 200
+-- disable:
+302 http://etqan.localhost/admin/tenants/domain/
+8|qa-tmp-1.etqan.localhost|active|t 12|qa-academy.test|active|f 15|www.qa-academy.test|active|f 21|qa-tmp1-susp.test|disabled|f 
+-- reactivate and request reset (subdomain host)
+302 http://etqan.localhost/admin/tenants/academy/
+grep: /private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/jars/r7x: No such file or directory
+ HTTP 200
+reset link host: http://qa-tmp-1.etqan.localhost
+302 http://etqan.localhost/admin/tenants/domain/
+8|qa-tmp-1.etqan.localhost|active|t
+12|qa-academy.test|disabled|f
+13|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd.co|disabled|f
+14|localtest.me|disabled|f
+15|www.qa-academy.test|disabled|f
+21|qa-tmp1-susp.test|disabled|f

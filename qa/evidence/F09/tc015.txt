@@ -1,0 +1,47 @@
+== TC-015 2026-10-19T03:38:44.713173
+T1 201 {"id": 1, "kind": "topup", "currency": "EGP", "amount_minor": 50000, "balance_after_minor": 50000, "note": "Cash · T1", "invoice_id": null, "payment_id": 17, "session_id": null, "created_at": "2026-10-19T00:38:44.735720Z", "reversed": false, "created_by": {"id": 1, "full_name": "QA Admin"}}
+OK  TC015 T1 201
+T2 201 {"id": 2, "kind": "topup", "currency": "USD", "amount_minor": 2500, "balance_after_minor": 2500, "note": "Zelle", "invoice_id": null, "payment_id": 18, "session_id": null, "created_at": "2026-10-19T00:38:44.803966Z", "reversed": false, "created_by": {"id": 1, "full_name": "QA Admin"}}
+OK  TC015 T2 USD 201
+OK  TC015 MAX 201 :: {"id": 3, "kind": "topup", "currency": "EGP", "amount_minor": 100000000, "balance_after_minor": 100050000, "note": "Cash", "invoice_id": null, "paymen
+amt 100000001 400 {"amount_minor": ["Ensure this value is less than or equal to 100000000."]}
+OK  TC015 amt 100000001 400
+amt 0 400 {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+OK  TC015 amt 0 400
+amt -1 400 {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+OK  TC015 amt -1 400
+amt 1.5 400 {"amount_minor": ["A valid integer is required."]}
+OK  TC015 amt 1.5 400
+amt True 400 {"amount_minor": ["A valid integer is required."]}
+OK  TC015 amt True 400
+amt '5' 201 {"id": 4, "kind": "topup", "currency": "EGP", "amount_minor": 5, "balance_after_minor": 100050005, "note": "Cash", "invoice_id": null, "payment_id": 2
+BAD TC015 amt '5' 400
+method stripe 400 {"method": ["\"stripe\" is not a valid choice."]}
+OK  TC015 method=stripe 400
+method wallet 400 {"method": ["\"wallet\" is not a valid choice."]}
+OK  TC015 method=wallet 400
+method code 400 {"method": ["\"code\" is not a valid choice."]}
+OK  TC015 method=code 400
+currency E 400 {"currency": ["Use a three-letter currency code, like EGP."]}
+OK  TC015 currency=E 400
+currency 123 400 {"currency": ["Use a three-letter currency code, like EGP."]}
+OK  TC015 currency=123 400
+paid_on 2026-10-20 400 {"paid_on": ["A payment can't be dated in the future."]}
+OK  TC015 paid_on=2026-10-20 400
+wallet 200 {"student": {"id": 5, "name": "QA student"}, "balances": [{"currency": "EGP", "balance_minor": 100050005}, {"currency": "USD", "balance_minor": 2500}]}
+entries 200 {"count": 3, "next": null, "previous": null, "results": [{"id": 4, "kind": "topup", "currency": "EGP", "amount_minor": 5, "balance_after_minor": 100050005, "note": "Cash", "invoice_id": null, "payment_id": 20, "session_id": null, "created_at": "2026-10-19T00:38:45.252961Z", "reversed": false, "creat
+OK  TC015 unknown 404 :: 404
+mine 200 [{"student": {"id": 5, "name": "QA student"}, "balances": [{"currency": "EGP", "balance_minor": 100050005}, {"currency": "USD", "balance_minor": 2500}], "topup_currencies": ["EGP", "USD", "ZZZ"]}]
+OK  TC015 mine 200
+OK  TC015 parent2 403/404 :: 404
+inv 1|EGP|100050005|100050005
+2|USD|2500|2500
+chain 1|1|topup|50000|50000|50000
+1|3|topup|100000000|100050000|100050000
+1|4|topup|5|100050005|100050005
+2|2|topup|2500|2500|2500
+topup payments 17|50000|EGP|cash|t||student|1|completed
+18|2500|USD|zelle|t||student|1|completed
+19|100000000|EGP|cash|t||student|1|completed
+20|5|EGP|cash|t||student|1|completed
+summary {"revenue_this_month": [{"currency": "EGP", "amount_minor": 100136006}, {"currency": "USD", "amount_minor": 13000}], "overdue": []}

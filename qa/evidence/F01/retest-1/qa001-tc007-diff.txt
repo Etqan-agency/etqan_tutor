@@ -1,0 +1,4 @@
+# 2026-10-17T21:55:39Z TC-007 diff (docker ps before vs after)
+docker ps identical
+# stack images before vs after
+etqan_tutor-* images identical

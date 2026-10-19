@@ -1,0 +1,12 @@
+migrations applied before kill: 45
+schema visible to other sessions mid-run: 0
+pid in container: 3955
+kill exit=0
+create exit=130
+after kill:
+academy rows: 0
+domain rows: 0
+schema: 0
+idle in txn: 0
+mails to kill admin: 0
+validate_subdomain(qa-tmp-kill) -> qa-tmp-kill

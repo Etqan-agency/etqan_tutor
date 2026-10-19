@@ -1,0 +1,15 @@
+etqan/scheduling/tests/test_generation_guards.py::test_reactivating_fills_the_horizon_again PASSED [ 66%]
+etqan/scheduling/tests/test_generation_guards.py::test_create_reports_the_teachers_double_booking PASSED [ 77%]
+etqan/scheduling/tests/test_generation_guards.py::test_create_without_a_clash_reports_none PASSED [ 88%]
+etqan/scheduling/tests/test_generation_guards.py::test_renew_reports_the_teachers_double_booking PASSED [100%]
+
+=============================== warnings summary ===============================
+etqan/scheduling/tests/test_generation_guards.py::test_a_renewal_over_a_kept_lesson_reports_the_overlap
+etqan/scheduling/tests/test_generation_guards.py::test_create_reports_the_teachers_double_booking
+etqan/scheduling/tests/test_generation_guards.py::test_create_without_a_clash_reports_none
+etqan/scheduling/tests/test_generation_guards.py::test_renew_reports_the_teachers_double_booking
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 9 passed, 4 warnings in 2.52s =========================

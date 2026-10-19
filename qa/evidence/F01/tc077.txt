@@ -1,0 +1,9 @@
+
+create ETQ-QA-TMP-0001 qa-tmp-1 issued 250 2026-09-17 21:11:54.703161+00:00 29 days, 23:00:00
+TC-077a EXIT=0   ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:96:1 ›
+flag: f
+
+age ETQ-QA-TMP-0001 qa-tmp-1 issued 250 2026-09-17 20:11:02.783776+00:00 30 days, 0:01:00
+TC-077b EXIT=0   ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:103:1 
+flag: t
+admin log: 1|[{"changed": {"fields": ["Suspend Etqan's defaults"]}}]

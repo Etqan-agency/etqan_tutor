@@ -1,0 +1,66 @@
+[400] POST people/families/ :: {"payer_id":["Choose one of the family's students or their parents."]}
+== TC-001
+[201] POST catalogue/courses/ :: {"id":3,"name_ar":"قرآن","name_en":"QA6 Quran","description_ar":"","description_en":"","language":"ar","is_active":true,"created_at":"2026-10-19T04:40:24.819953Z","updated_at":"2026-10-19T04:40:24.819962Z","teacher_ids":[7,217]}
+[201] POST catalogue/courses/ :: {"id":4,"name_ar":"عربي","name_en":"QA6 Arabic","description_ar":"","description_en":"","language":"ar","is_active":true,"created_at":"2026-10-19T04:40:24.958522Z","updated_at":"2026-10-19T04:40:24.958528Z","teacher_ids":[7]}
+[201] POST catalogue/packages/ :: {"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":45,"duration_value":1,"duration_unit":"month","freeze_days_allowed":7,"price_minor":150000,"currency":"EGP","is_active":true,"created_at":"2026-10-19T04:40:25.022852Z","updated_at":"2026-10-19T04:40:25.022859Z","sessions_total":8}
+[201] POST catalogue/packages/ :: {"id":4,"name_ar":"ب2","name_en":"QA6 Pkg 3x10d","description_ar":"","description_en":"","sessions_per_week":3,"session_minutes":45,"duration_value":10,"duration_unit":"day","freeze_days_allowed":7,"price_minor":99999,"currency":"EGP","is_active":true,"created_at":"2026-10-19T04:40:25.080712Z","updated_at":"2026-10-19T04:40:25.080719Z","sessions_total":6}
+C1=3 C2=4 P1=3 P2=4
+[200] GET catalogue/packages/3/ :: {"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":45,"duration_value":1,"duration_unit":"month","freeze_days_allowed":7,"price_minor":150000,"currency":"EGP","is_active":true,"created_at":"2026-10-19T04:40:25.022852Z","updated_at":"2026-10-19T04:40:25.022859Z","sessions_total":8}
+sessions_total P1=8 type=int
+[200] GET catalogue/packages/4/ :: {"id":4,"name_ar":"ب2","name_en":"QA6 Pkg 3x10d","description_ar":"","description_en":"","sessions_per_week":3,"session_minutes":45,"duration_value":10,"duration_unit":"day","freeze_days_allowed":7,"price_minor":99999,"currency":"EGP","is_active":true,"created_at":"2026-10-19T04:40:25.080712Z","updated_at":"2026-10-19T04:40:25.080719Z","sessions_total":6}
+sessions_total P2=6
+[200] GET catalogue/courses/?q=QA6 :: {"count":2,"next":null,"previous":null,"results":[{"id":4,"name_ar":"عربي","name_en":"QA6 Arabic","description_ar":"","description_en":"","language":"ar","is_active":true,"created_at":"2026-10-19T04:40:24.958522Z","updated_at":"2026-10-19T04:40:24.958528Z","teacher_ids":[7]},{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran","description_ar":"","description_en":"","language":"ar","is_active":true,"cre
+[200] PATCH catalogue/packages/3/ :: {"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":45,"duration_value":1,"duration_unit":"month","freeze_days_allowed":7,"price_minor":160000,"currency":"EGP","is_active":true,"created_at":"2026-10-19T04:40:25.022852Z","updated_at":"2026-10-19T04:40:25.322368Z","sessions_total":8}
+[200] PATCH catalogue/packages/3/ :: {"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":45,"duration_value":1,"duration_unit":"month","freeze_days_allowed":7,"price_minor":160000,"currency":"EGP","is_active":true,"created_at":"2026-10-19T04:40:25.022852Z","updated_at":"2026-10-19T04:40:25.399549Z","sessions_total":8}
+after sessions_total patch: 8
+3|160000|EGP
+2
+[200] PATCH catalogue/packages/3/ :: {"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":45,"duration_value":1,"duration_unit":"month","freeze_days_allowed":7,"price_minor":150000,"currency":"EGP","is_active":true,"created_at":"2026-10-19T04:40:25.022852Z","updated_at":"2026-10-19T04:40:25.608172Z","sessions_total":8}
+== TC-002
+[400] POST catalogue/packages/ :: {"price_minor":["A valid biginteger is required."]}
+   price=15.5
+[201] POST catalogue/packages/ :: {"id":5,"name_ar":"x","name_en":"QA6 Bad","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":45,"duration_value":1,"duration_unit":
+   price="1500"
+   created id 5 price=1500
+[400] POST catalogue/packages/ :: {"price_minor":["Ensure this value is greater than or equal to 0."]}
+   price=-1
+[400] POST catalogue/packages/ :: {"price_minor":["A valid biginteger is required."]}
+   price=true
+[400] POST catalogue/packages/ :: {"price_minor":["This field may not be null."]}
+   price=null
+[400] POST catalogue/packages/ :: {"price_minor":["Ensure this value is less than or equal to 9223372036854775807."]}
+   price=9223372036854775808
+[201] POST catalogue/packages/ :: {"id":6,"name_ar":"x","name_en":"QA6 Bad","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":45,"duration_value":1,"duration_unit":
+   price=0
+   created id 6 price=0
+[201] POST catalogue/packages/ :: {"id":7,"name_ar":"x","name_en":"QA6 Bad","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":45,"duration_value":1,"duration_unit":
+   currency="egp"
+   created currency=EGP
+[400] POST catalogue/packages/ :: {"currency":["Use a three-letter currency code, like EGP."]}
+   currency="EG"
+[400] POST catalogue/packages/ :: {"currency":["Ensure this field has no more than 3 characters."]}
+   currency="EGPP"
+[400] POST catalogue/packages/ :: {"currency":["This field may not be blank."]}
+   currency=""
+[201] POST catalogue/packages/ :: {"id":8,"name_ar":"x","name_en":"QA6 Bad","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":45,"duration_value":1,"duration_unit":
+   currency="XXX"
+   created currency=XXX
+[201] POST catalogue/packages/ :: {"id":9,"name_ar":"x","name_en":"QA6 Bad","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":45,"duration_value":1,"duration_unit":
+   currency="ZZZ"
+   created currency=ZZZ
+[400] POST catalogue/packages/ :: {"sessions_per_week":["Ensure this value is greater than or equal to 1."]}
+   "sessions_per_week":0
+[400] POST catalogue/packages/ :: {"sessions_per_week":["Ensure this value is less than or equal to 14."]}
+   "sessions_per_week":15
+[400] POST catalogue/packages/ :: {"session_minutes":["Ensure this value is greater than or equal to 15."]}
+   "session_minutes":14
+[400] POST catalogue/packages/ :: {"session_minutes":["Ensure this value is less than or equal to 240."]}
+   "session_minutes":241
+[400] POST catalogue/packages/ :: {"duration_value":["Ensure this value is greater than or equal to 1."]}
+   "duration_value":0
+[400] POST catalogue/packages/ :: {"duration_value":["Ensure this value is less than or equal to 365."]}
+   "duration_value":366
+[400] POST catalogue/packages/ :: {"freeze_days_allowed":["Ensure this value is less than or equal to 365."]}
+   "freeze_days_allowed":366
+count before=4 after=9 created=       5
+0

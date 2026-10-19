@@ -1,0 +1,26 @@
+## TC-117 GET academy/features/ as qa admin
+HTTP 200
+items: 88
+keys: ['built', 'code', 'group', 'held_by', 'label_ar', 'label_en', 'on']
+group order: ['people', 'teaching', 'money', 'communication', 'platform', 'content']
+on: ['families', 'parents', 'session_reports', 'invoices', 'auto_notifications', 'teacher_attendance', 'export']
+unbuilt: ['free_sessions', 'public_links']
+held: {}
+## TC-118 role matrix
+qa-admin: 200
+qa-staff-nocode: 403
+qa-staff-codes: 403
+qa-supervisor: 403
+qa-teacher: 403
+qa-student: 403
+qa-parent: 403
+anonymous: {"detail":"Authentication credentials were not provided."} 403
+Etqan staff cookie: 403
+## TC-120 me.features per role
+qa-admin: ['families', 'parents', 'session_reports', 'invoices', 'auto_notifications', 'teacher_attendance', 'export']
+qa-staff-nocode: ['families', 'parents', 'session_reports', 'invoices', 'auto_notifications', 'teacher_attendance', 'export']
+qa-staff-codes: ['families', 'parents', 'session_reports', 'invoices', 'auto_notifications', 'teacher_attendance', 'export']
+qa-supervisor: ['families', 'parents', 'session_reports', 'invoices', 'auto_notifications', 'teacher_attendance', 'export']
+qa-teacher: ['families', 'parents', 'session_reports', 'invoices', 'auto_notifications', 'teacher_attendance', 'export']
+qa-student: ['families', 'parents', 'session_reports', 'invoices', 'auto_notifications', 'teacher_attendance', 'export']
+qa-parent: ['families', 'parents', 'session_reports', 'invoices', 'auto_notifications', 'teacher_attendance', 'export']

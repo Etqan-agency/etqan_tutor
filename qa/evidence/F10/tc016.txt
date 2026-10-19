@@ -1,0 +1,17 @@
+==== TC-016 2026-10-19T04:06:21.923705
+OK  bulk ok created 3 updated 3 :: 200 {"created": 3, "updated": 3} rows 15->18
+OK  bulk unknown course 400, nothing written :: 400 {"rates": ["Choose a course."]}
+OK  bulk student id 400, nothing written :: 400 {"teachers": ["Choose a teacher."]}
+OK  bulk dup course 400, nothing written :: 400 {"rates": ["Give each course one rate."]}
+OK  bulk 201 teachers 400, nothing written :: 400 {"teachers": ["Ensure this field has no more than 200 elements."]}
+OK  create-only staff 403 :: 403
+BAD full staff bulk 200 :: 403 {"detail": "Authentication credentials were not provided."}
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  switch off 403/404 :: 404
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+delete C1 rate T1 204
+delete C1 rate T2 204
+delete C1 rate T3 204
+rates now 1||6000|EGP
+3||7000|EGP
+4||6000|EGP

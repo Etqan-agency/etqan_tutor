@@ -1,0 +1,35 @@
+== TC-006 2026-10-19T03:37:36.124533
+amount 10001 400 {"amount_minor": ["That is more than the balance."]}
+OK  TC006 amt 10001 400
+amount 0 400 {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+OK  TC006 amt 0 400
+amount -1 400 {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+OK  TC006 amt -1 400
+amount 2.5 400 {"amount_minor": ["A valid integer is required."]}
+OK  TC006 amt 2.5 400
+amount 'abc' 400 {"amount_minor": ["A valid integer is required."]}
+OK  TC006 amt 'abc' 400
+method stripe 400 {"method": ["\"stripe\" is not a valid choice."]}
+OK  TC006 method stripe 400
+method paypal 400 {"method": ["\"paypal\" is not a valid choice."]}
+OK  TC006 method paypal 400
+method wallet 400 {"method": ["\"wallet\" is not a valid choice."]}
+OK  TC006 method wallet 400
+method code 400 {"method": ["\"code\" is not a valid choice."]}
+OK  TC006 method code 400
+method bitcoin 400 {"method": ["\"bitcoin\" is not a valid choice."]}
+OK  TC006 method bitcoin 400
+paid_on 2026-10-20 400 {"paid_on": ["A payment can't be dated in the future."]}
+OK  TC006 paid_on 2026-10-20 400
+paid_on 31/12/2026 400 {"paid_on": ["Date has wrong format. Use one of these formats instead: YYYY-MM-DD."]}
+OK  TC006 paid_on 31/12/2026 400
+pay 4000 201 {"status": "partial", "paid_minor": 4000, "balance_minor": 6000}
+pay 6001 400 {"amount_minor": ["That is more than the balance."]}
+OK  TC006 over balance 400
+race [(201, '{"status": "paid", "paid_minor": 10000, "balance_minor": 0}'), (400, '{"amount_minor": ["That is more than the balance."]}')]
+OK  TC006 race exactly one 201 :: [201, 400]
+B DB 10000|2 paid|10000
+void V 200
+pay void 409 {"detail": "This invoice is void.", "code": "billing.invoice_void"}
+OK  TC006 void 409 billing.invoice_void
+OK  TC006 no payment on V

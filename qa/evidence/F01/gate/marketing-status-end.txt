@@ -1,0 +1,35 @@
+ M Dockerfile
+ M src/components/About.astro
+ M src/components/ArticleCard.astro
+ M src/components/BlockButton.astro
+ M src/components/BlockImage.astro
+ M src/components/ContactForm.astro
+ M src/components/FaqList.astro
+ M src/components/Footer.astro
+ M src/components/Header.astro
+ M src/components/Hero.astro
+ M src/components/IntroVideo.astro
+ M src/components/Offers.astro
+ M src/components/PageBlocks.astro
+ M src/components/PageBody.astro
+ M src/components/Testimonials.astro
+ M src/components/VideoCard.astro
+ M src/components/VideoPlayer.astro
+ M src/layouts/Layout.astro
+ M src/lib/i18n.ts
+ M src/pages/[lang]/articles/[slug].astro
+ M src/pages/[lang]/articles/c/[category].astro
+ M src/pages/[lang]/articles/index.astro
+ M src/pages/[lang]/consultations/[id].astro
+ M src/pages/[lang]/consultations/index.astro
+ M src/pages/[lang]/faq.astro
+ M src/pages/[lang]/index.astro
+ M src/pages/[lang]/recorded-courses/[slug].astro
+ M src/pages/[lang]/recorded-courses/index.astro
+ M src/pages/[lang]/videos/[slug].astro
+ M src/pages/[lang]/videos/index.astro
+ M src/styles/global.css
+?? src/components/ConsultationCard.astro
+?? src/components/CourseCard.astro
+?? src/components/PageHero.astro
+?? src/components/SectionHeader.astro

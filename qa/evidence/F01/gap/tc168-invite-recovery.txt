@@ -1,0 +1,31 @@
+mails before:
+1
+2026-10-17T21:56:18.146Z [QA Tmp R1 OK] عيّن كلمة المرور
+original invite link: http://qa-tmp-r1ok.etqan.localhost/app/reset-password?uid=MQ&token=<redacted>
+-- reactivate qa-tmp-r1ok
+302 http://etqan.localhost/admin/tenants/academy/
+password before: !
+1. Forgot password (POST identity/password/reset/ after GET csrf, as the SPA does): HTTP 200
+mails after:
+2
+2026-10-18T05:03:34.256Z [QA Tmp R1 OK] إعادة تعيين كلمة المرور
+2026-10-17T21:56:18.146Z [QA Tmp R1 OK] عيّن كلمة المرور
+new link host: http://qa-tmp-r1ok.etqan.localhost same-as-invite: no
+2. confirm with new link:  HTTP 200 
+   sign in: 200 me: HTTP 200
+3. original invite link again: {"token":["Invalid or expired reset link."]} HTTP 400 
+   new link reused: {"token":["Invalid or expired reset link."]} HTTP 400 
+console: actions offered on academies to ops@: "" "suspend_academies" "reactivate_academies" "copy_features" ""   (no resend-invite action)
+PASSWORD_RESET_TIMEOUT= s
+4a. token aged TIMEOUT+60s (FAKE time): {"token":["This field may not be blank."]} HTTP 400 
+4b. control: token aged TIMEOUT-1h (still valid) -> sets password back to QA-R1ok-2026!: {"token":["This field may not be blank."]} HTTP 400 
+sign in with QA-R1ok-2026!: 200
+
+4a. token aged TIMEOUT+60s (FAKE time): {"token":["This field may not be blank."]} HTTP 400 
+4b. control: token aged TIMEOUT-1h: {"token":["This field may not be blank."]} HTTP 400 
+sign in QA-R1ok-2026!: 200
+PASSWORD_RESET_TIMEOUT=259200 s
+4a. token aged TIMEOUT+60s (FAKE time): {"token":["Invalid or expired reset link."]} HTTP 400 
+4b. control: token aged TIMEOUT-1h:  HTTP 200 
+sign in QA-R1ok-2026!: 200
+(note: the two earlier 'This field may not be blank' lines were a harness error - the token generator call failed so an empty token was sent; the final 4a/4b block is the result of record)

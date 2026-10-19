@@ -1,0 +1,32 @@
+== 2026-10-18T21:04:13Z positive control: superuser ops@
+302 http://etqan.localhost/admin/
+etqan_billing/etqaninvoice: ["" "issue_invoices" "email_again" "mark_paid" "void_invoices" "" "bank_transfer" "cash" "card" "other" ]
+account/emailaddress: ["" "delete_selected" "make_verified" ]
+django_celery_beat/periodictask: ["" "delete_selected" "enable_tasks" "disable_tasks" "toggle_tasks" "run_tasks" ]
+integrations/platformaccount: ["" "test_accounts" ]
+identity/teacherprofile: ["" "delete_selected" "send_password_set_email" ]
+-- ops@ mark_paid on etqan_billing/etqaninvoice id=10
+HTTP 200
+   messages: · ETQ-2025-01-0002: marked paid.|
+-- ops@ issue_invoices on etqan_billing/etqaninvoice id=11
+HTTP 200
+   messages: · ETQ-2025-02-0002: issued; the PDF goes to its admins.|
+-- ops@ make_verified on account/emailaddress id=2
+HTTP 200
+   messages: Marked ops-view-all@qa.etqan.test as verified.|
+-- ops@ enable_tasks on django_celery_beat/periodictask id=11
+HTTP 200
+   messages: 1 task was successfully enabled|
+10|ETQ-2025-01-0002|paid|2026-10-01|cash|f|f
+11|ETQ-2025-02-0002|issued|||f|t
+email|2|t
+task|11|t
+-- ops@ disable_tasks on django_celery_beat/periodictask id=11
+HTTP 200
+   messages: 1 task was successfully disabled|
+10|ETQ-2025-01-0002|paid|2026-10-01|cash|f|f
+11|ETQ-2025-02-0002|issued|||f|t
+email|2|t
+task|11|f
+mailpit total 1
+2026-10-18T21:04:13.805Z ['qa-admin@qa.etqan.test'] [Etqan] Invoice ETQ-2025-02-0002 for February 2025

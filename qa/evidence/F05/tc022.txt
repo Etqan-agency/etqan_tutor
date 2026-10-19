@@ -1,0 +1,39 @@
+qaother: families=on, parents=on, contracts=on
+== TC-022
+[201] POST access/roles/ :: {"
+[201] POST access/roles/ :: {"
+[201] POST access/st
+[201] POST access/st
+login cva 200 {"id":137,"email":"f05-cva@qa.etqan.test","full_name":"QA5 CVA","phone":"","preferred_language":"ar","effective_language
+login cv 200 {"id":138,"email":"f05-cv@qa.etqan.test","full_name":"QA5 CV","phone":"","preferred_language":"ar","effective_language":
+login tb 200 {
+CT=1
+jar      list   det  file  post patch   del
+adm     200(1)   200   200   201   200  skip
+nocode  403()   403   403   403   403   403
+cva     200(2)   403   403   403   403   403
+cv      200(2)   200   200   403   403   403
+tch     200(2)   200   200   403   403   403
+tb      200(0)   404   404   403   403   403
+stu     403()   403   403   403   403   403
+par     403()   403   403   403   403   403
+anon    403()   403   403   403   403   403
+0
+1|EMP-1|perm
+4|PERM|x
+-- direct media URL probes
+/media/tenants/academy_qa/employment/9216d74a3e6e46ac97905d1db6044712.pdf -> 404
+/private_media/tenants/academy_qa/employment/9216d74a3e6e46ac97905d1db6044712.pdf -> 404
+/private/tenants/academy_qa/employment/9216d74a3e6e46ac97905d1db6044712.pdf -> 404
+/media/../private_media/tenants/academy_qa/employment/9216d74a3e6e46ac97905d1db6044712.pdf -> 404
+-- qaother admin on qa contract id (own host):
+oth 404 file 404
+-- switch off
+qa: contracts=off
+adm list 404 file 404 ; tch file 404
+qa: contracts=on
+-- deactivated teacher A old session
+[200] POST p
+tch file 403
+[200] POST p
+login tch 20

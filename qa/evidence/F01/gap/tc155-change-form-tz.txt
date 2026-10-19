@@ -1,0 +1,14 @@
+-- before
+Asia/Riyadh|USD
+d8f4a9a6d5500dca47ecb9bc6a1883c2
+-- change form Mars/Phobos + usd:
+POST 302 /admin/tenants/academy/
+-- after
+Mars/Phobos|usd
+d8f4a9a6d5500dca47ecb9bc6a1883c2
+-- change form "Africa/Cairo" + "egp" (valid, lowercase):
+POST 302 /admin/tenants/academy/
+Africa/Cairo|egp
+SELFHEAL settings.timezone='Mars/Phobos' default_currency='usd'
+SELFHEAL rolled back
+SELFHEAL after rollback academy Africa/Cairo egp

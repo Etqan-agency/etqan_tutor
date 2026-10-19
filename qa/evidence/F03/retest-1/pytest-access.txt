@@ -1,0 +1,8 @@
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED etqan/access/tests/test_routes.py::test_every_route_declares_its_code_or_is_named_exempt
+1 failed, 2054 passed, 1959 warnings in 42.43s
+

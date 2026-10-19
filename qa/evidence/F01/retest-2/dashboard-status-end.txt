@@ -1,0 +1,21 @@
+ M Dockerfile
+ M src/features/identity/api.test.ts
+ M src/features/identity/api.ts
+ M src/features/quicklogin/api.ts
+ M src/features/shell/nav.ts
+ M src/features/website/api.ts
+ M src/features/website/index.ts
+ M src/features/website/queries.ts
+ M src/features/website/schemas.ts
+ M src/locales/ar/website.json
+ M src/locales/en/website.json
+ M src/routeTree.gen.ts
+ M src/routes/_authed/website.guard.test.tsx
+ M src/routes/_authed/website.home.tsx
+ M src/routes/_authed/website.index.test.tsx
+?? e2e/qa/
+?? src/features/quicklogin/api.test.ts
+?? src/features/website/HeroSlidesManager.tsx
+?? src/features/website/SetupGuide.test.tsx
+?? src/features/website/SetupGuide.tsx
+?? src/routes/_authed/website.setup.tsx

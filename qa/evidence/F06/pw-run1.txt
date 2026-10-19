@@ -1,0 +1,60 @@
+      - waiting for getByRole('link', { name: 'Open the renewal' }).or(getByRole('button', { name: 'Open the renewal' }))
+
+
+      101 | 	await expect(dlg.getByRole("heading", { name: "Renew subscription" })).toBeVisible();
+      102 | 	await dlg.getByRole("button", { name: "Renew", exact: true }).click();
+    > 103 | 	await expect(page.getByRole("link", { name: "Open the renewal" }).or(page.getByRole("button", { name: "Open the renewal" }))).toBeVisible();
+          | 	                                                                                                                              ^
+      104 | 	const after1 = await api(page, `/subscriptions/${id}/`);
+      105 | 	const r1 = after1.json.renewal?.id ?? after1.json.renewal;
+      106 | 	expect(r1).toBeTruthy();
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f06-catalogue-scheduling.spec.ts:103:128
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f06-catalogue-schedulin-79803--again-archive-an-ended-one-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f06-catalogue-schedulin-79803--again-archive-an-ended-one-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('link', { name: 'Open the renewal' }).or(getByRole('button', { name: 'Open the renewal' }))
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByRole('link', { name: 'Open the renewal' }).or(getByRole('button', { name: 'Open the renewal' }))
+
+
+      101 | 	await expect(dlg.getByRole("heading", { name: "Renew subscription" })).toBeVisible();
+      102 | 	await dlg.getByRole("button", { name: "Renew", exact: true }).click();
+    > 103 | 	await expect(page.getByRole("link", { name: "Open the renewal" }).or(page.getByRole("button", { name: "Open the renewal" }))).toBeVisible();
+          | 	                                                                                                                              ^
+      104 | 	const after1 = await api(page, `/subscriptions/${id}/`);
+      105 | 	const r1 = after1.json.renewal?.id ?? after1.json.renewal;
+      106 | 	expect(r1).toBeTruthy();
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f06-catalogue-scheduling.spec.ts:103:128
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f06-catalogue-schedulin-79803--again-archive-an-ended-one-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f06-catalogue-schedulin-79803--again-archive-an-ended-one-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f06-catalogue-schedulin-79803--again-archive-an-ended-one-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f06-catalogue-schedulin-79803--again-archive-an-ended-one-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/qa/f06-catalogue-scheduling.spec.ts:89:1 › TC-014 renew, cancel the renewal, renew again, archive an ended one 
+  1 did not run
+  1 passed (27.8s)
+error: Recipe `e2e` failed with exit code 1

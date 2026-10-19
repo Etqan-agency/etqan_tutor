@@ -1,0 +1,37 @@
+qa.etqan.localhost -> {"ok":true} HTTP 201
+qaother.etqan.localhost -> {"ok":true} HTTP 201
+etqan.localhost -> have <code>DEBUG = True</code> in
+      your Django settings file. Change that to <code>False</code>, and Django
+      will display a standard 404 page.
+    </p>
+  </footer>
+</body>
+</html>
+ HTTP 404
+qa-tmp-1.etqan.localhost -> {"ok":true} HTTP 201
+nope-qa161.etqan.localhost -> have <code>DEBUG = True</code> in
+      your Django settings file. Change that to <code>False</code>, and Django
+      will display a standard 404 page.
+    </p>
+  </footer>
+</body>
+</html>
+ HTTP 404
+-- DB rows per schema:
+academy_qa: tc161-qa@qa.etqan.test@qa.etqan.localhost
+academy_qaother: tc161-qaother@qa.etqan.test@qaother.etqan.localhost
+academy_qa_tmp_1: tc161-qa-tmp-1@qa.etqan.test@qa-tmp-1.etqan.localhost
+academy_demo: 
+academy_other: 
+200
+200
+qa admin list sees: tc161-qa@ 
+qaother admin list sees: tc161-qaother@ 
+(note: qa-tmp-1 was still active from TC-166 at the first probe -> 201 is correct for an active academy). Suspending and re-probing:
+302 http://etqan.localhost/admin/tenants/academy/
+suspended
+qa-tmp-1 (suspended) -> {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"} HTTP 403
+rows in academy_qa_tmp_1 for tc161-susp: 0
+DELETE 1
+DELETE 1
+DELETE 1

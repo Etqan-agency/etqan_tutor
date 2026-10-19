@@ -1,0 +1,82 @@
+-- TC-004 cleanup: void SA3 invoice 148 (cancel kept it unpaid)
+[200] POST billing/invoices/148/void/ :: {"id":148,"number":"INV-000148","status":"void","is_overdue":false,"student":{"id":227,"full_name":"SCN Student A3"},"payer":{"id":224,"full_name":"SCN Parent A"},"subscription_id":87,"description":"s
+== TC-005
+SET
+12|qa6-other-teacher@qa.etqan.test
+4|qo-teacher@qa.etqan.test
+6|f05-dup@qa.etqan.test
+[201] POST people/students/ :: {"id":14,"role":"student","two_factor":false,"user":{"full_name":"SCN Other Student","email":"scn-other-s@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"UTC","is_active":true,"account
+[201] POST catalogue/courses/ :: {"id":3,"name_ar":"oscn","name_en":"SCN Other Course","description_ar":"","description_en":"","language":"ar","is_active":true,"created_at":"2026-10-19T17:06:22.241300Z","updated_at":"2026-10-19T17:06
+[201] POST catalogue/packages/ :: {"id":2,"name_ar":"o","name_en":"SCN Other Pkg","description_ar":"","description_en":"","sessions_per_week":1,"session_minutes":30,"duration_value":1,"duration_unit":"month","freeze_days_allowed":0,"p
+[201] POST subscriptions/ :: {"id":2,"status":"active","schedule_status":"active","student":{"id":14,"full_name":"SCN Other Student","timezone":"UTC"},"teacher":{"id":4,"full_name":"QO Teacher F10"},"course":{"id":3,"name_ar":"os
+OT=4 OINV=4 OSES=6
+SET
+4|9900|USD|unpaid
+-- qa admin on qaother ids
+[200] GET people/students/14/ :: {"id":14,"role":"student","two_factor":false,"user":{"full_name":"F02 Student new2","email":"f02-new2@qa.etqan.test","ph
+[200] PATCH people/students/14/ :: {"id":14,"role":"student","two_factor":false,"user":{"full_name":"F02 Student new2","email":"f02-new2@qa.etqan.test","ph
+[200] GET subscriptions/2/ :: {"id":2,"status":"active","schedule_status":"active","student":{"id":8,"full_name":"F02 Student a","timezone":"Africa/Ca
+[200] PATCH subscriptions/2/ :: {"id":2,"status":"active","schedule_status":"active","student":{"id":8,"full_name":"F02 Student a","timezone":"Africa/Ca
+[200] GET sessions/6/ :: {"id":6,"subscription_id":2,"slot_id":3,"occurs_on":"2026-10-27","starts_at":"2026-10-27T08:00:00Z","minutes":30,"status
+[200] PATCH sessions/6/ :: {"id":6,"subscription_id":2,"slot_id":3,"occurs_on":"2026-10-27","starts_at":"2026-10-27T08:00:00Z","minutes":30,"status
+[200] GET billing/invoices/4/ :: {"id":4,"number":"INV-000004","status":"void","is_overdue":false,"student":{"id":5,"full_name":"QA student"},"payer":{"i
+[409] PATCH billing/invoices/4/ :: {"detail":"This invoice is void.","code":"billing.invoice_void"}
+[400] POST subscriptions/ :: {"teacher":["Choose an active teacher."]}
+[200] POST schedule/generate/ :: {"created":5,"skipped_existing":6,"skipped_paused":0,"skipped_out_of_term":1,"skipped_stopped":0,"skipped_inactive":0,"conflicts":[]}
+[409] POST billing/invoices/4/payments/ :: {"detail":"This invoice is void.","code":"billing.invoice_void"}
+-- qaother admin on qa ids
+[404] GET people/students/222/ :: {"detail":"No User matches the given query."}
+[404] PATCH people/students/222/ :: {"detail":"No User matches the given query."}
+[404] GET subscriptions/85/ :: {"detail":"No Subscription matches the given query."}
+[404] PATCH subscriptions/85/ :: {"detail":"No Subscription matches the given query."}
+[404] GET sessions/354/ :: {"detail":"No Session matches the given query."}
+[404] PATCH sessions/354/ :: {"detail":"This feature is not enabled for this academy."}
+[404] GET billing/invoices/146/ :: {"detail":"No Invoice matches the given query."}
+[404] PATCH billing/invoices/146/ :: {"detail":"No Invoice matches the given query."}
+[404] GET people/families/11/ :: {"detail":"Family with identifier '11' not found."}
+[404] PATCH people/families/11/ :: {"detail":"Family with identifier '11' not found."}
+[400] POST subscriptions/ :: {"course":["Choose an active course."]}
+[404] POST schedule/generate/ :: {"detail":"No Subscription matches the given query."}
+qa search Other: 127
+qaother search SCN Student: 5
+[200] GET billing/summary/ :: {"revenue_this_month":[{"currency":"EGP","amount_minor":747856},{"currency":"KWD","amount_minor":12345},{"currency":"USD","amount_minor":23300}],"overdue":[]}
+[200] GET billing/summary/ :: {"revenue_this_month":[{"currency":"USD","amount_minor":4000}],"overdue":[]}
+SET
+USD|4000
+qa counts before=311/148/78 after=316/148/78
+SET
+0
+0
+== TC-005 test-side correction: the qa->qaother probe used qaother ids (14,2,6,4) that also exist in qa, so it hit qa's own rows (F02 fixtures).
+Restoring: sub 2 notes 'x' -> '' (assumed empty before), deleting the 5 sessions 377-381 my generate added to qa sub 2.
+[200] PATCH subscriptions/2/ :: {"id":2,"status":"active","schedule_status":"active","student":{"id":8,"full_name":"F02 Student a","timezone":"Africa/Cairo"},"teacher":{"id":16,"full
+[409] DELETE sessions/377/ :: {"detail":"A generated session can't be deleted. Cancel it instead.","code":"scheduling.session_gene
+[409] DELETE sessions/378/ :: {"detail":"A generated session can't be deleted. Cancel it instead.","code":"scheduling.session_gene
+[409] DELETE sessions/379/ :: {"detail":"A generated session can't be deleted. Cancel it instead.","code":"scheduling.session_gene
+[409] DELETE sessions/380/ :: {"detail":"A generated session can't be deleted. Cancel it instead.","code":"scheduling.session_gene
+[409] DELETE sessions/381/ :: {"detail":"A generated session can't be deleted. Cancel it instead.","code":"scheduling.session_gene
+SET
+5
+-- proper qa->qaother probes: qaother ids that do NOT exist in qa, plus cross-host cookie
+SET
+227
+SET
+87
+qaother max ids: 14/2/7/4
+-- payload identity check: qa GET people/students/14 returns qa's own 'F02 Student new2', never 'SCN Other Student'
+qa id14 name: F02 Student new2
+qaother id14 name: SCN Other Student
+-- qa admin cookie against the qaother host (cross-host)
+[403] GET people/students/14/ :: {"detail":"Authentication credentials were not provided."}
+[403] GET subscriptions/2/ :: {"detail":"Authentication credentials were not provided."}
+[403] GET sessions/6/ :: {"detail":"Authentication credentials were not provided."}
+[403] GET billing/invoices/4/ :: {"detail":"Authentication credentials were not provided."}
+[403] GET billing/summary/ :: {"detail":"Authentication credentials were not provided."}
+[403] POST schedule/generate/ :: {"detail":"Authentication credentials were not provided."}
+-- list contents
+qa list has SCN Other Student: False
+qaother list has SCN Student A/B: []
+qaother invoices EGP rows: 0 total 4
+SET
+4
+0

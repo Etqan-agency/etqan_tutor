@@ -1,0 +1,7 @@
+==== TC-005 2026-10-19T04:02:27.780913
+gen jul 200 {"created": 1, "replaced": 0, "removed": 0, "missing_rate": [{"id": 46, "full_name": "F10 Teacher Twelve"}], "other_currency": [], "unpaid_sessions": [], "stale_fixed_salary": []}
+OK  missing_rate lists T12 :: [{"id": 46, "full_name": "F10 Teacher Twelve"}]
+OK  payslip missing_rate, net 0 :: {"missing_rate": true, "net_minor": 0, "status": "draft"}
+OK  issue 409 missing_rate :: 409 {"detail": "A session has no rate. Set the teacher's rate first.", "code": "payroll.missing_rate"}
+after 409 draft| f
+OK  issue after rate 200 priced 6000 :: 200 {"status": "issued", "net_minor": 6000, "missing_rate": false}

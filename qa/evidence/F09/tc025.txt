@@ -1,0 +1,47 @@
+== TC-025 2026-10-19T03:44:07.249483
+L1 201 {"id": 1, "kind": "payment", "title": "Registration fee", "description": "", "payer": {"type": "student", "student_id": 5, "name": "QA student", "email": "", "phone": ""}, "provider": "stripe", "amount_minor": 25000, "currency": "EGP", "add_fee": true, "fee_minor": 1250, "status": "open", "url": "http://qa.etqan.localhost/app/pay/link/CFQfOhgO917UhPs61Ez-Tw", "checkout_id": null, "paid_at": null, "created_by": {"id": 1, "full_name": "QA Admin"}, "created_at": "2026-10-19T00:44:07.326847Z"}
+L2 201 {"id": 2, "kind": "payment", "title": "Walk-in", "description": "", "payer": {"type": "unregistered", "student_id": null, "name": "Walk In", "email": "w@qa.etqan.test", "phone": "01000000000"}, "provider": "stripe", "amount_minor": 10050, "currency": "EGP", "add_fee": false, "fee_minor": 0, "status": "open", "url": "http://qa.etqan.localhost/app/pay/link/WcVGyq8lhuAyALmGjAnJEg", "checkout_id": nul
+donation off 400 {"kind": ["Donations are switched off."]}
+OK  TC025 donation off 400/404
+both 400 {"payer_name": ["Choose a student or name the payer, not both."]}
+OK  TC025 refuse both 400
+neither 400 {"student": ["Choose a student or name the payer."]}
+OK  TC025 refuse neither 400
+amount 0 400 {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+OK  TC025 refuse amount 0 400
+bad email 400 {"payer_email": ["Enter a valid email address."]}
+OK  TC025 refuse bad email 400
+paypal EGP 400 {"provider": ["This payment method cannot take this amount."]}
+OK  TC025 refuse paypal EGP 400
+tokens 22 CFQfOh… 22
+BAD TC025 tokens 32+ chars url-safe distinct
+public L1 200 {"academy_name":"Etqan QA Academy","kind":"payment","title":"Registration fee","description":"","payer_name":"QA","amount_minor":25000,"fee_minor":1250,"currency":"EGP","provider":"stripe","status":"open","payable":true}
+OK  TC025 public page: no email/phone/ids, first name only
+public L2 200 {"academy_name":"Etqan QA Academy","kind":"payment","title":"Walk-in","description":"","payer_name":"Walk In","amount_minor":10050,"fee_minor":0,"currency":"EGP","provider":"stripe","status":"open","payable":true}
+OK  TC025 public L2 no PII
+bad token wrongtoken 404
+OK  TC025 bad token wrongt 404
+bad token AAAAAAAAAA 404
+OK  TC025 bad token AAAAAA 404
+bad token abc%00def 404
+OK  TC025 bad token abc%00 404
+throttle 65 55 10
+OK  TC025 public throttle 429 appears
+L1 checkout 201 {"id": "f633100e-d468-4a32-a2a4-a7d9d2d6ed1f", "redirect_url": "http://qa.etqan.localhost/app/pay/simulate/f633100e-d468-4a32-a2a4-a7d9d2d6ed1f", "amount_minor": 25000, "fee_minor": 1250, "currency": "EGP"}
+OK  TC025 L1 fee 1250
+simulate 200 {"status": "completed"}
+pay again 409 {"detail": "This link is closed.", "code": "gateways.link_closed"}
+OK  TC025 paid link 409 link_closed
+L1 DB paid|t|f633100e-d468-4a32-a2a4-a7d9d2d6ed1f
+L1 payment 53||student|1||25000|1250|stripe|EGP|completed
+OK  TC025 standalone payment for L1
+L2 checkout 201 {"id": "d20b6538-e31d-4124-871a-17dba4df55a6", "redirect_url": "http://qa.etqan.localhost/app/pay/simulate/d20b6538-e31d-4124-871a-17dba4df55a6", "amount_minor": 10050, "fee_minor": 0, "currency": "EG
+OK  TC025 L2 fee 0
+cancel L2 200 {"status": "cancelled"}
+pay after cancel 200 {"status": "completed"}
+k2 completed|f|link_closed
+OK  TC025 cancelled link money -> attention link_closed
+public cancelled 200 {"academy_name":"Etqan QA Academy","kind":"payment","title":"Walk-in","description":"","payer_name":"Walk In","amount_minor":10050,"fee_minor":0,"curr
+standalone list 200 10
+links 200 [(2, 'cancelled'), (1, 'paid')]
+OK  TC025 revenue +26250 :: 539756->566006

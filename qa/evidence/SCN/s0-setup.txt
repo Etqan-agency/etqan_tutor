@@ -1,0 +1,40 @@
+== features
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+qa: families=on, parents=on, invoices=on, payment_receipts=on, balances=on, system_codes=on, supervision=on, session_reports=on, teacher_attendance=on, manual_sessions=on, extra_sessions=on, activity_log=on, payroll_rules=on, salary_projections=on, report_deductions=on, salary_expenses=on, payslip_acknowledgement=on, weekly_schedules=on, postponement=on, auto_notifications=on, notification_preferences=on
+{"export": true, "themes": true, "parents": true, "spanish": true, "balances": true, "expenses": true, "families": true, "invoices": true, "zoom_api": false, "contracts": true, "code_reset": true, "two_factor": true, "phone_login": true, "quick_login": true, "supervision": true, "activity_log": true, "postponement": true, "study_groups": true, "system_codes": true, "internal_chat": false, "payment_links": true, "payroll_rules": true, "session_times": true, "system_status": true, "exchange_rates": true, "extra_sessions": true, "google_sign_in": false, "trial_sessions": true, "country_pricing": true, "disposal_status": true, "manual_sessions": true, "online_payments": true, "quick_translate": true, "salary_expenses": true, "session_archive": true, "session_reports": true, "teacher_balance": true, "payment_receipts": true, "weekly_schedules": true, "report_deductions": true, "auto_notifications": true, "bulk_teacher_rates": true, "salary_projections": true, "teacher_attendance": true, "group_subscriptions": true, "family_subscriptions": true, "fixed_teacher_salary": true, "student_teacher_rate": true, "subscription_archive": true, "teacher_availability": true, "compensation_sessions": true, "incentives_deductions": true, "payslip_acknowledgement": true, "notification_preferences": true, "multi_course_subscriptions": true}
+== logins
+login adm 200 {"id":1,"email":"qa-admin@qa.etqan.test","full_name":"QA Admin","phone":"","preferred_language":"ar","effective_language
+login sup 200 {"id":4,"email":"qa-supervisor@qa.etqan.test","full_name":"QA Supervisor","phone":"","preferred_language":"ar","effectiv
+login tea 200 {"id":7,"email":"qa-teacher@qa.etqan.test","full_name":"QA teacher","phone":"","preferred_language":"ar","effective_lang
+login par 200 {"id":6,"email":"qa-parent@qa.etqan.test","full_name":"QA parent","phone":"","preferred_language":"ar","effective_langua
+login oadm 200 {"id":1,"email":"qaother-admin@qa.etqan.test","full_name":"QA Other Admin","phone":"","preferred_language":"ar","effecti
+== settings before
+[200] GET academy/settings/ :: {"timezone":"Africa/Cairo","default_currency":"EGP","default_language":"ar","generation_horizon_days":14,"renewal_grace_days":7,"absent_consumes_session":true,"excused_consumes_session":false,"auto_invoice_on_subscription":true,"invoice_due_days":7,"postpone_limit_minutes":120,"supervision_enabled":true,"updated_at":"2026-10-19T16:37:03.919850Z"}
+[200] GET payroll/settings/ :: {"student_absent_pay_bp":10000,"student_excused_pay_bp":10000,"at_disposal_pays":false,"group_pay":"per_student","report_deduction_bp":0,"updated_at":"2026-10-19T01:07:30.428777Z","updated_by":{"id":1,"full_name":"QA Admin"}}
+[200] GET billing/settings/ :: {"local_payment_enabled":true}
+== snapshot
+SET
+invoice|145
+payment|67
+walletentry|28
+session|257
+payslip|38
+expense|17
+notif|280
+SET
+145
+SET
+967065
+SET
+KWD|12345
+EGP|747856
+USD|23300
+[200] GET billing/summary/ :: {"revenue_this_month":[{"currency":"EGP","amount_minor":747856},{"currency":"KWD","amount_minor":12345},{"currency":"USD","amount_minor":23300}],"overdue":[]}
+[200] GET finance/summary/ :: {"expenses_this_month":[{"currency":"EGP","amount_minor":939065},{"currency":"USD","amount_minor":6000}],"net_profit_this_month":[{"currency":"EGP","amount_minor":-191209},{"currency":"KWD","amount_minor":12345},{"currency":"USD","amount_minor":17300}],"net_profit_estimate":{"currency":"EGP","amount_minor":null,"missing":["KWD","USD"],"as_of":null}}
+SET
+4|qa-supervisor@qa.etqan.test|staff
+6|qa-parent@qa.etqan.test|parent
+7|qa-teacher@qa.etqan.test|teacher

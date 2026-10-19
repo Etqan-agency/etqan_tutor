@@ -1,0 +1,38 @@
+$ 2026-10-18T21:42:11Z playwright test e2e/qa/f01-gap.spec.ts --grep TC-159 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › e2e/qa/f01-gap.spec.ts:44:1 › TC-159 CSRF token after sign-in, sign-out and a second sign-in in the same SPA page (1.6s)
+
+
+  1) [chromium] › e2e/qa/f01-gap.spec.ts:44:1 › TC-159 CSRF token after sign-in, sign-out and a second sign-in in the same SPA page 
+
+    Error: locator.fill: value: expected string, got undefined
+
+      15 |
+      16 | async function uiLogin(page: Page, who: { email: string; password: string }) {
+    > 17 | 	await page.getByRole("textbox", { name: /email|البريد/i }).fill(who.email);
+         | 	                                                           ^
+      18 | 	await page.getByRole("textbox", { name: /password|كلمة المرور/i }).fill(who.password);
+      19 | 	const [resp] = await Promise.all([
+      20 | 		page.waitForResponse((r) => r.url() === `${API}identity/login/` && r.request().method() === "POST"),
+        at uiLogin (/Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-gap.spec.ts:17:61)
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-gap.spec.ts:50:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/g2-pwout/qa-f01-gap-TC-159-CSRF-tok-8a373-ign-in-in-the-same-SPA-page-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/g2-pwout/qa-f01-gap-TC-159-CSRF-tok-8a373-ign-in-in-the-same-SPA-page-chromium/error-context.md
+
+  1 failed
+    [chromium] › e2e/qa/f01-gap.spec.ts:44:1 › TC-159 CSRF token after sign-in, sign-out and a second sign-in in the same SPA page 
+exit=1 2026-10-18T21:42:14Z
+$ 2026-10-18T21:42:33Z [run 2, harness fix QA.adminEmail] playwright test --grep TC-159 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-gap.spec.ts:44:1 › TC-159 CSRF token after sign-in, sign-out and a second sign-in in the same SPA page (5.5s)
+
+  1 passed (6.4s)
+exit=0 2026-10-18T21:42:40Z

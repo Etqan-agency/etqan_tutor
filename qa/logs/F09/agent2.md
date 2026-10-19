@@ -1,0 +1,17 @@
+# F09 Agent 2 log (Execution & Quality Gate, LEAN)
+- 2026-10-19 03:33 Start. Read README (lean + scope cut), environment, spec F09 (27 cases, S1–S12). Stack up, ready 200. Helpers: python urllib client with cookie jars + CSRF and psql (`evidence/F09/scripts/qa.py`).
+- 2026-10-19 03:34 Setup 1: set_features qa on parents families invoices payment_receipts online_payments payment_links balances system_codes export; qaother on invoices payment_receipts online_payments payment_links balances system_codes parents. REAL.
+- 2026-10-19 03:35 Setup 2–10: S2 32, S3 33, P2 34, P3 35 created; guardians S1–P1, S2–P2, S3–P3; family 1 → {S1,S3} payer P3; roles QA Billing 20, Narrow 21; staff 3 → [3,20]; course 2, package 2 (150000 EGP); settings, Stripe test + fee 500 bp, local payments on, cache cleared. New users needed `account_emailaddress.verified=true` (SQL QA data edit) before login.
+- 2026-10-19 03:36–03:39 TC-001..TC-011, TC-015..TC-018 executed (REAL). Test-artefact reruns: TC-001 payers shape, TC-003 SUB2 currency override, TC-016 overdraw (balance > MAX), TC-018 wallet prep.
+- 2026-10-19 03:40–03:42 TC-019..TC-021 (REAL). Expiry test used an SQL edit of `vouchers_voucherbatch.expires_on` (QA data, as the spec says).
+- 2026-10-19 03:42–03:45 TC-022..TC-027 (SIMULATED, hand-signed Stripe events with the QA secret).
+- 2026-10-19 03:46–03:48 TC-012 matrix (35 endpoints × 9 roles), TC-013, TC-014. TC-014 id-collision touched qa's own invoice 1 (qa admin acting on qa rows); restored through the API (one SQL restore of payment 1; a second SQL update was refused by the permission classifier, so the invoice status was recomputed with an API add+delete). All invoice statuses consistent afterwards.
+- 2026-10-19 03:49 TC-009 reconciliation (revenue and open balance per currency equal SQL; CSV minor units; injection defused).
+- 2026-10-19 03:50 S9: `pytest etqan/gateways/tests/test_checks.py` 3 passed.
+- 2026-10-19 03:50–03:51 Playwright `dashboard/e2e/qa/f09-billing.spec.ts`: run 1 2/3 (spec print path wrong, toast selector strict-mode); run 2 3/3. 8 UI invoices INV-000080..87 left (retries).
+- 2026-10-19 03:52 Added TC-028 (P1 mixed-source race) PASS.
+- 2026-10-19 03:52 Cleanup: staff 3 back to [QA Student View]; test roles 22–24 retired (QA Billing/Narrow kept); 13 attention rows resolved; PayPal disabled; fee 500 bp; logins 200.
+- 2026-10-19 03:55 Filed ETQAN-QA-025 (S8, P3), 026 (S6, P3), 027 (S1 docs, P4), 028 (token docs, P4); Next ID 029. Spec § Results + S verdicts, execution-progress (TESTING), test-matrix updated. Totals 28 executed / 28 PASS / 0 FAIL / 0 BLOCKED. No commits.
+- 2026-10-19 00:55Z Gate (agent 2). Coverage checklist: no untested role/isolation/money/state gap; ran cheap checks G1 (cross-family wallet) and G2 (feature off→on for balances, system_codes, invoices): 12/12 OK, DB counts unchanged, switches restored (`evidence/F09/gate/gate-checks.txt`, script `scripts/gate.py`). REAL.
+- 2026-10-19 00:57Z Regression: pytest billing+wallet+vouchers+gateways 1094 passed (`gate/pytest-regression.txt`); Playwright f09-billing 3/3 workers=1 (`gate/playwright.txt`). No F09 product code modified.
+- 2026-10-19 01:00Z Decision PASSED, all 12 gates hold. Wrote § F09 gate decision, updated row, test-matrix, coverage-gaps § F09. Open carried: QA-025/026 (P3), QA-027/028 (P4). No commits.

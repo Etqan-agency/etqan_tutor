@@ -1,0 +1,31 @@
+[201] POST catalogue/courses/ :: {"id":2,"name_ar":"س","name_en":"QA6OTHER Course","description_ar":"","description_en":"","language":"ar","is_active":true,"created_at":"2026-10-19T04:42:02.110548Z","updated_at":"2026-10-19T04:42:02.
+[201] POST catalogue/packages/ :: {"id":1,"name_ar":"س","name_en":"QA6OTHER Pkg","description_ar":"","description_en":"","sessions_per_week":1,"session_minutes":30,"duration_value":1,"duration_unit":"month","freeze_days_allowed":0,"pr
+before: qa=5/2026-10-19 04:41:39.156205+00 other=1/2026-10-19 04:42:02.171044+00
+qa admin -> pkg 1
+[200] GET catalogue/packages/1/ :: {"id":1,"name_ar":"F03 باقة","name_en":"F03 Pack","description_ar":"","description_en":"","sessions_per_week":2,"session
+[200] PATCH catalogue/packages/1/ :: {"id":1,"name_ar":"F03 باقة","name_en":"HACK","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":30,"duration_value":1,"duration_unit":"month","freeze_days_allowed":0,"price_minor":150000,"currency":"EGP","is_active":true,"created_at":"2026-10-19T00:06:47.062992Z","updat
+[201] POST catalogue/packages/1/duplicate/ :: {"id":15,"name_ar":"F03 باقة (نسخة)","name_en":"HACK (copy)","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":30,"duration_value":1,"duration_unit":"month","freeze_days_allowed":0,"price_minor":150000,"currency":"EGP","is_active":false,"created_at":"2026-10-19T04:42:02
+[200] GET catalogue/packages/1/country-prices/ :: []
+[409] DELETE catalogue/packages/1/ :: {"detail":"This package is used by subscriptions or system codes. Deactivate it instead.","code":"catalogue.in_use"}
+qa admin -> pkg 99
+[404] GET catalogue/packages/99/ :: {"detail":"No Package matches the given query."}
+[404] PATCH catalogue/packages/99/ :: {"detail":"No Package matches the given query."}
+[404] POST catalogue/packages/99/duplicate/ :: {"detail":"No Package matches the given query."}
+[404] GET catalogue/packages/99/country-prices/ :: {"detail":"No Package matches the given query."}
+[404] DELETE catalogue/packages/99/ :: {"detail":"No Package matches the given query."}
+qa admin -> course 2
+[200] GET catalogue/courses/2/ :: {"id":2,"name_ar":"تجويد","name_en":"Tajweed QA","description_ar":"","description_en":"","language":"ar","is_active":tru
+qaother admin -> qa P1=3 / C1=3
+[404] GET catalogue/packages/3/ :: {"detail":"No Package matches the given query."}
+[404] PATCH catalogue/packages/3/ :: {"detail":"No Package matches the given query."}
+[404] GET catalogue/packages/3/country-prices/ :: {"detail":"This feature is not enabled for this academy."}
+[404] POST catalogue/packages/3/duplicate/ :: {"detail":"No Package matches the given query."}
+[404] GET catalogue/courses/3/ :: {"detail":"No Course matches the given query."}
+qaother list names: ['QA6OTHER Pkg']
+qa list names: ['HACK', 'HACK (copy)', 'Monthly QA', 'QA6 Inactive', 'QA6 Pkg 2x1m', 'QA6 Pkg 3x10d']
+cross-host cookies:
+[403] GET catalogue/packages/ :: {"detail":"Authentication credentials were not provided."}
+[403] GET catalogue/packages/ :: {"detail":"Authentication credentials were not provided."}
+after: qa=6/2026-10-19 04:42:02.407004+00 other=1/2026-10-19 04:42:02.171044+00
+1|QA6OTHER Pkg|777|USD
+reverted qa pkg1 name to F03 Pack, deleted copy 15

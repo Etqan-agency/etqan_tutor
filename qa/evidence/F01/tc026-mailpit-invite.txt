@@ -1,0 +1,17 @@
+count 1 1
+2026-10-17T19:44:29.06Z [Etqan QA Other] عيّن كلمة المرور {'Name': 'Etqan QA Other', 'Address': 'noreply@etqan.academy'} ['qaother-admin@qa.etqan.test']
+Etqan QA Other · Etqan QA Other
+
+مرحبًا QA Other Admin،
+
+أُنشئ لك حساب. عيّن كلمة المرور للبدء:
+
+http://qaother.etqan.localhost/app/reset-password?uid=MQ&token=REDACTED-QA
+
+إن لم تكن تتوقع هذه الرسالة فيمكنك تجاهلها.
+
+--
+Etqan QA Other · Etqan QA Other
+
+http://qaother.etqan.localhost/
+

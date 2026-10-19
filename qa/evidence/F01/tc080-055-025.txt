@@ -1,0 +1,10 @@
+TC-080 EXIT=0   ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:110:1 
+flag (invoice still unpaid): f
+
+deleted (1, {'etqan_billing.EtqanInvoice': 1})
+## TC-055
+TC-055 EXIT=0   ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:116:1 
+tenants_academy.timezone: Asia/Riyadh | academysettings.timezone: UTC | API settings: {"timezone":"UTC","default_currency":"US
+## TC-025
+TC-025 EXIT=0   ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:125:1 
+qa: qa|academy_qa domain: qa.etqan.localhost|t (before qa.etqan.localhost) features: {"families": true, "invoices": true, "internal_chat": false, "online_payments": true}

@@ -1,0 +1,23 @@
+==== TC-022 2026-10-19T04:11:19.180512
+T2 withdrawal (no balance) 400 {"currency": ["This teacher has no balance in that currency."]}
+DB T1 payslips 1:paid
+10:draft
+16:paid
+25:draft
+28:draft
+OK  T1 list = own issued/paid only, no draft :: [1, 16] vs {16, 1}
+OK  ?teacher=T2 still own :: []
+OK  T2 payslip detail 404 :: 404
+OK  T1 detail hides notes/issued_by/paid_by :: []
+OK  T1 own draft detail 404 :: 404
+OK  teacher CSV 403 :: 403
+OK  teacher Accept text/csv 403 or JSON-own :: 403 {"detail":"CSV export is for admins and staff only."}
+OK  withdrawals own only :: 10
+T1 withdrawal keys ['id', 'teacher', 'amount_minor', 'currency', 'status', 'notes', 'office_notes', 'requested_by', 'decided_by', 'decided_at', 'paid_on', 'paid_by', 'created_at']
+OK  balances ?teacher=T2 returns own :: [{"currency": "EGP", "balance_minor": 11900, "available_minor": 11900}]
+OK  teacher GET /payroll/payslips/projection/ 403 :: 403
+OK  teacher GET /payroll/settings/ 403 :: 403
+OK  teacher GET /payroll/rates/ 403 :: 403
+OK  teacher GET /payroll/adjustments/ 403 :: 403
+OK  teacher GET /payroll/fixed-salaries/ 403 :: 403
+OK  teacher GET /payroll/student-rates/ 403 :: 403

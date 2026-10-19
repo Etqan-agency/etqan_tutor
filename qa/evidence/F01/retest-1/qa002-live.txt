@@ -1,0 +1,64 @@
+# 2026-10-17T21:25:30Z ETQAN-QA-002 retest-1 (Agent 2), REAL, live stack
+## DB before
+academy|4|qaother|active|ffd0acf3d5e0c28c8bdc467bb94fc772
+academy|5|qa|active|2cd120437a5115cd42062cb0f95e6cda
+academy|6|qa-tmp-1|suspended|70ef04a174e120f5bce4e6d416bb32ae
+domain|6|qaother.etqan.localhost|active|t
+domain|8|qa-tmp-1.etqan.localhost|active|t
+domain|12|qa-academy.test|disabled|f
+admin_log_count|22
+## A. view-only ops-view@
+login ops-view@qa.etqan.test -> 302 http://etqan.localhost/admin/
+GET /admin/tenants/academy/: http=200; action options:
+   row checkboxes: 0
+GET /admin/tenants/domain/: http=200; action options:
+   row checkboxes: 0
+-- forged POSTs (filed step 4 used qa id 5; here qaother id 4 for suspend, qa-tmp-1 id 6 otherwise)
+POST /admin/tenants/academy/ action=suspend_academies id=4 : HTTP/1.1 200 OK 
+POST /admin/tenants/academy/ action=suspend_academies id=5 : HTTP/1.1 200 OK 
+POST /admin/tenants/academy/ action=reactivate_academies id=6 : HTTP/1.1 200 OK 
+POST /admin/tenants/academy/ action=copy_features id=6 copy_from=4: HTTP/1.1 200 OK 
+POST /admin/tenants/domain/ action=check_dns id=12 : HTTP/1.1 200 OK 
+POST /admin/tenants/domain/ action=make_primary_action id=12 : HTTP/1.1 200 OK 
+POST /admin/tenants/domain/ action=disable_action id=8 : HTTP/1.1 200 OK 
+-- change view still refused
+GET /admin/tenants/academy/6/change/ -> 500
+## DB after view-only attempts
+academy|4|qaother|active|ffd0acf3d5e0c28c8bdc467bb94fc772
+academy|5|qa|active|2cd120437a5115cd42062cb0f95e6cda
+academy|6|qa-tmp-1|suspended|70ef04a174e120f5bce4e6d416bb32ae
+domain|6|qaother.etqan.localhost|active|t
+domain|8|qa-tmp-1.etqan.localhost|active|t
+domain|12|qa-academy.test|disabled|f
+admin_log_count|22
+## B. no-permission ops-noperm@
+login ops-noperm@qa.etqan.test -> 302 http://etqan.localhost/admin/
+GET /admin/tenants/academy/ -> 403
+POST /admin/tenants/academy/ action=suspend_academies id=4 : HTTP/1.1 403 Forbidden 
+## C. superuser ops@ still has every action and they work (round trip on suspended qa-tmp-1)
+login ops@qa.etqan.test -> 302 http://etqan.localhost/admin/
+GET /admin/tenants/academy/: http=200; action options:
+   <option value="suspend_academies">Suspend selected academies
+   <option value="reactivate_academies">Reactivate selected academies
+   <option value="copy_features">Copy features from another academy
+   row checkboxes: 11
+GET /admin/tenants/domain/: http=200; action options:
+   <option value="check_dns">Check DNS and activate
+   <option value="make_primary_action">Make primary
+   <option value="disable_action">Disable
+   row checkboxes: 15
+POST /admin/tenants/academy/ action=reactivate_academies id=6 : HTTP/1.1 302 Found Location: /admin/tenants/academy/
+   message: class="success">Reactivated 1 academies.
+qa-tmp-1 status after reactivate|active
+POST /admin/tenants/academy/ action=suspend_academies id=6 : HTTP/1.1 302 Found Location: /admin/tenants/academy/
+   message: class="success">Reactivated 1 academies.
+   message: class="success">Suspended 1 academies.
+qa-tmp-1 status after suspend|suspended
+## DB final
+academy|4|qaother|active|ffd0acf3d5e0c28c8bdc467bb94fc772
+academy|5|qa|active|2cd120437a5115cd42062cb0f95e6cda
+academy|6|qa-tmp-1|suspended|70ef04a174e120f5bce4e6d416bb32ae
+domain|6|qaother.etqan.localhost|active|t
+domain|8|qa-tmp-1.etqan.localhost|active|t
+domain|12|qa-academy.test|disabled|f
+admin_log_count|22

@@ -1,0 +1,7 @@
+FAILED etqan/tenants/tests/test_admin_permissions.py::test_view_only_staff_is_offered_no_academy_action
+FAILED etqan/tenants/tests/test_admin_permissions.py::test_view_only_staff_is_offered_no_domain_action
+FAILED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_status_action_changes_nothing[suspend_academies]
+FAILED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_status_action_changes_nothing[reactivate_academies]
+FAILED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_copy_features_changes_nothing
+FAILED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_domain_action_changes_nothing
+6 failed, 2 passed, 8 warnings in 3.10s

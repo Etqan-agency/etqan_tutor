@@ -1,0 +1,19 @@
+==== TC-021 2026-10-19T04:09:33.277823
+OK  ack draft 404 :: 404
+OK  ack issued 409 not_allowed_in_status :: 409 {"detail": "Not allowed while the payslip is issued.", "code": "payroll.not_allowed_in_status"}
+OK  T2 acks T1's 404 :: 404
+OK  own paid ack 200 :: 200
+OK  again 409 already_acknowledged :: 409 {"detail": "Receipt of this payslip is already confirmed.", "code": "payroll.already_acknowledged"}
+OK  admin ack 403 :: 403
+OK  s_pay ack 403 :: 403
+OK  student ack 403 :: 403
+OK  parent ack 403 :: 403
+OK  anon 401/403 :: 403
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  switch off 403/404 :: 404
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+DB 1|2026-10-19 01:02:26.469094+00|13500
+16|2026-10-19 01:09:33.925427+00|20000
+BAD acknowledged_at in CSV header :: ﻿Number,Teacher,Year,Month,Sessions,Minutes,Gross (minor units),Bonuses (minor units),Deductions (minor units),Net (minor units),Currency,Status,Missing rate,Paid on,Regular sessions,Compensation sessions,Extra sessions,Trial sessions,At disposal,Student absent,Student excused,Group members,Paid to 
+CSV header ﻿Number,Teacher,Year,Month,Sessions,Minutes,Gross (minor units),Bonuses (minor units),Deductions (minor units),Net (minor units),Currency,Status,Missing rate,Paid on,Regular sessions,Compensation sessions,Extra sessions,Trial sessions,At disposal,Student absent,Student excused,Group members,Paid to balance,Receipt confirmed at,Reports sent,Reports not sent,Teacher absences,Report deductions (minor units)
+BAD TC-021 acknowledgement column in CSV :: tra sessions,Trial sessions,At disposal,Student absent,Student excused,Group members,Paid to balance,Receipt confirmed at,Reports sent,Reports not sent,Teacher absences,Report deductions (minor units)

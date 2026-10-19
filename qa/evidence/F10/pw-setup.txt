@@ -1,0 +1,4 @@
+pre-UI: mark T10 Sept paid via API 200
+pre-UI run4: mark T3 Aug paid via API 35 200
+pre-UI run5: mark T8 Sept (fixed 500000) paid via API 5 200
+T13 March rows 0

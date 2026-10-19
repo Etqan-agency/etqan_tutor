@@ -1,0 +1,35 @@
+== TC-023
+[400] POST sessions/regular/ :: {"occurs_on":["Choose a day inside the subscription's term and outside its pauses."]}
+[409] POST sessions/regular/ :: {"detail":"This is archived. Restore it first.","code":"scheduling.archived"}
+[400] POST sessions/extra/ :: {"minutes":["Ensure this value is greater than or equal to 15."]}
+[400] POST sessions/extra/ :: {"minutes":["Ensure this value is less than or equal to 240."]}
+[400] POST sessions/extra/ :: {"minutes":["This field is required."]}
+[400] POST sessions/extra/ :: {"teacher":["This teacher does not teach the course."]}
+O1=304 (overlaps session 1 at 07:00Z) created; conflicts in create response checked below
+[201] POST sessions/extra/ :: {"session":{"id":305,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-26","starts_at":"2026-10-26T07:00:00Z","
+conflicts: 2
+-- delete rules
+[409] DELETE sessions/236/ :: {"detail":"Attendance is marked on this session.","code":"scheduling.session_marked"}
+[409] DELETE sessions/3/ :: {"detail":"A generated session can't be deleted. Cancel it instead.","code":"scheduling.session_generated"}
+[409] DELETE sessions/243/ :: {"detail":"This session was made up or compensated, so it can't change.","code":"scheduling.has_compensation"}
+-- S4: activity of an unmarked hand-added session disappears on delete
+O2 activity rows before delete: 2
+qa: manual_sessions=off, extra_sessions=off
+[204] DELETE sessions/305/ :: 
+O2 rows after delete: session=0 activity=0
+[404] POST sessions/extra/ :: {"detail":"This feature is not enabled for this academy."}
+qa: manual_sessions=on, extra_sessions=on
+3|t||1
+235|f|1|82
+248|f|1|82
+== TC-025
+ambiguous 10-29 23:30 -> 2026-10-29T20:30:00Z (first occurrence = 20:30Z)
+10-30 00:30 -> 2026-10-29T22:30:00Z (UTC+2 = 22:30Z on 10-29)
+G1=308 starts_at=2026-10-19T16:48:00Z has_started=False now=16:47:44
+[409] POST sessions/308/attendance/ :: {"detail":"Attendance opens when the session starts.","code":"scheduling.not_started"}
+[409] POST sessions/308/attendance/ :: {"detail":"Attendance opens when the session starts.","code":"scheduling.not_started"}
+[409] POST sessions/308/times/ :: {"detail":"Times open when the session starts.","code":"scheduling.not_started"}
+[200] POST sessions/bulk/ :: {"done":[],"skipped":[{"id":308,"code":"scheduling.not_started"}]}
+after wait now=16:48:00 has_started=True
+[200] POST sessions/308/attendance/ :: {"id":308,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T16:48:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"fu
+308|completed|present|not_set|not_set|extra|f||7|||f|f|t

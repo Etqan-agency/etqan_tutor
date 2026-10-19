@@ -1,0 +1,24 @@
+p1 exit=0
+p2 exit=1
+--- proc1 tail
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+Created QA Tmp Race B1 at qa-tmp-race-b.etqan.localhost
+--- proc2 tail
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/psycopg/cursor.py", line 117, in execute
+    raise ex.with_traceback(None)
+django.db.utils.IntegrityError: duplicate key value violates unique constraint "tenants_academy_schema_name_key"
+DETAIL:  Key (schema_name)=(academy_qa_tmp_race_b) already exists.
+proc2 migrations applied: 0
+5:Traceback (most recent call last):
+16:Traceback (most recent call last):
+rows: 10|QA Tmp Race B1|qa-tmp-race-b
+domains: qa-tmp-race-b.etqan.localhost|10
+schemas: 1
+users in schema: qa-tmp-race-b1-admin@qa.etqan.test
+b1 mails: 1 b2 mails: 0

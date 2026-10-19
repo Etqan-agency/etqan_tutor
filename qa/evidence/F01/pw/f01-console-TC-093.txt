@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:275:1 › TC-093/094 disable the primary custom domain; the subdomain can't be disabled (2.4s)
+
+  1 passed (3.4s)

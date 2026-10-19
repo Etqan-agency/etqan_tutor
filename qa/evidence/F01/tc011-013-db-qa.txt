@@ -1,0 +1,17 @@
+## schema academy_qa
+tables: 143
+django_migrations: 171
+academysettings: Africa/Cairo|EGP|ar
+branding: Etqan QA Academy|Etqan QA Academy
+landing rows: 1
+landing: {"id":1,"hero_title_ar":"تعلّم مع أفضل المعلمين","hero_title_en":"Learn with great teachers","hero_subtitle_ar":"حصص مباشرة فردية بجدول يناسبك.","hero_subtitle_en":"Live one-to-one lessons on a schedule that fits you.","hero_image":"","cta_label_ar":"احجز حصة تجريبية","cta_label_en":"Book a free trial","about_ar":"","about_en":"","show_courses":false,"show_packages":false,"show_teachers":false,"sh
+sitesettings rows: 1
+tags by kind: student|21 teacher|22 
+staffrole: Supervisor|20|e2ec5bd1fc37e15a1961dc01359d540e 
+users: 1|qa-admin@qa.etqan.test|QA Admin|admin|t|ar|Africa/Cairo|!TJHA8q|f 
+emailaddress: qa-admin@qa.etqan.test|t|t 
+sessions: 0
+7|qa.etqan.localhost|5|active|t|f|
+public qa-admin rows: 0
+public sessions: 10
+2026-10-17 19:49:37.357541+00|1|1|Etqan QA Academy|[{"added": {}}]

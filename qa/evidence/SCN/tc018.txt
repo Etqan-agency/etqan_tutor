@@ -1,0 +1,139 @@
+== TC-018 (snapshot from s0: revenue EGP 747856, expenses EGP 939065, payroll.payslip expense 967065, invoices 145, payments 67, wallet entries 28, payslips 38)
+[200] GET billing/summary/ :: {"revenue_this_month":[{"currency":"EGP","amount_minor":1047856},{"currency":"KWD","amount_minor":12345},{"currency":"USD","amount_minor":23300}],"overdue":[]}
+[200] GET finance/summary/ :: {"expenses_this_month":[{"currency":"EGP","amount_minor":984065},{"currency":"USD","amount_minor":6000}],"net_profit_this_month":[{"currency":"EGP","amount_minor":63791},{"currency":"KWD","amount_minor":12345},{"currency":"USD","amount_minor":17300}],"net_profit_estimate":{"currency":"EGP","amount_minor":null,"missing":["KWD","USD"],"as_of":null}}
+-- 1 revenue (DB)
+SET
+EGP|1047856
+KWD|12345
+USD|23300
+SET
+cash|300000|7
+wallet|70000|2
+-- 2 receivables
+SET
+146|INV-000146|150000|paid|2026-10-26
+147|INV-000147|150000|paid|2026-10-26
+148|INV-000148|150000|void|2026-10-26
+149|INV-000149|5000|unpaid|2026-10-26
+150|INV-000150|150000|void|2026-10-26
+151|INV-000151|20000|unpaid|2026-10-19
+152|INV-000152|10000|void|2026-10-19
+SET
+2|25000
+SET
+0
+SET
+0
+-- 3 payroll/finance
+SET
+1012065
+SET
+EGP|984065
+USD|6000
+SET
+944565|11
+SET
+43|45000|45000
+-- 4 attendance
+SET
+88|7
+85|1
+SUB1 used 1
+SUB3 used 7
+-- wallet
+SET
+72000|72000
+SET
+0
+-- 5 CSV
+[200] billing/invoices/?format=csv text/csv; charset=utf-8
+rows=152 head: ﻿Number,Student,Payer,Description,Amount (minor units),Paid (minor units),Balance (minor units),Currency,Issued on,Due on,Status,Overdue
+INV-000152,SCN Student A2,SCN Parent A,SCN void me,10000,0,0,EGP,2026-10-19,2026-10-19,void,no
+[200] billing/payments/?format=csv text/csv; charset=utf-8
+rows=76 head: ﻿Date,Customer,Customer type,Invoice,Method,Transaction number,Amount (minor units),Fee (minor units),Currency,Status
+2026-10-19,SCN Student A1,student,INV-000146,cash,,29899,0,EGP,completed
+[200] sessions/?format=csv text/csv; charset=utf-8
+rows=334 head: ﻿ID,Date,Starts at (UTC),Ends at (UTC),Minutes,Student,Teacher,Course,Kind,Status,Student attendance,Teacher attendance,Report,Cancel reason,Archived at (UTC)
+68,2026-02-16,2026-02-16 07:00:00+00:00,2026-02-16 08:00:00+00:00,60,QA student,F10 Teacher Thirteen,F03 Quran,extra,completed,present,present,no,,
+invoices API count 152
+payments API count 76
+sessions API count 334
+-- 6 projection
+[200] GET payroll/payslips/projection/ :: {"year":2026,"month":10,"rows":[{"teacher":{"id":16,"full_name":"F02 Teacher"},"currency":"EGP","paid_so_far_minor":0,"projected_minor":0,"scheduled_sessions":4,"scheduled_minutes":120,"missing_rate":true},{"teacher":{"id":42,"full_name":"F10 Teacher Eight"},"currency":"EGP","paid_so_far_minor":500000,"projected_minor":500000,"scheduled_sessions":0,"scheduled_minutes":0,"missing_rate":false},{"teacher":{"id":45,"full_name":"F10 Teacher Eleven"},"currency":"USD","paid_so_far_minor":100,"projected_minor":100,"scheduled_sessions":0,"scheduled_minutes":0,"missing_rate":false},{"teacher":{"id":39,"full_name":"F10 Teacher Five"},"currency":"EGP","paid_so_far_minor":6700,"projected_minor":6700,"scheduled_sessions":0,"scheduled_minutes":0,"missing_rate":false},{"teacher":{"id":43,"full_name":"F10 Teacher Nine"},"currency":"EGP","paid_so_far_minor":300000,"projected_minor":300000,"scheduled_sessions":0,"scheduled_minutes":0,"missing_rate":false},{"teacher":{"id":41,"full_name":"F10 Teacher Seven"},"currency":"EGP","paid_so_far_minor":6000,"projected_minor":6000,"scheduled_sessions":0,"scheduled_minutes":0,"missing_rate":false},{"teacher":{"id":37,"full_name":"F10 Teacher Three"},"currency":"EGP","paid_so_far_minor":6000,"projected_minor":6000,"scheduled_sessions":0,"scheduled_minutes":0,"missing_rate":false},{"teacher":{"id":36,"full_name":"F10 Teacher Two"},"currency":"EGP","paid_so_far_minor":12346,"projected_minor":55557,"scheduled_sessions":7,"scheduled_minutes":210,"missing_rate"
+T1 row: [{'teacher': {'id': 7, 'full_name': 'QA teacher'}, 'currency': 'EGP', 'paid_so_far_minor': 106500, 'projected_minor': 424500, 'scheduled_sessions': 77, 'scheduled_minutes': 3180, 'missing_rate': False}]
+T3 row: []
+-- SQL estimate of T1 October paid-so-far (completed, pays_teacher, teacher not absent, Oct Cairo dates, rate 6000/h, absent 50%, excused 25%, single-student sessions only)
+SET
+29|100500
+SET
+50|2026-10-12|60|present|present|extra|t|f
+121|2026-10-19|45|present|present|regular|t|f
+163|2026-10-19|30|present|present|trial|t|f
+204|2026-10-19|45|present|present|regular|t|f
+222|2026-10-19|45|present|present|regular|t|f
+236|2026-10-12|30|absent|not_set|regular|t|f
+237|2026-10-13|30|excused|not_set|regular|t|f
+238|2026-10-14|30|present|absent|regular|t|f
+239|2026-10-15|30|present|not_set|regular|t|f
+240|2026-10-07|30|present|not_set|regular|t|f
+241|2026-10-08|30|present|present|regular|t|f
+244|2026-10-04|30|excused|not_set|regular|t|f
+248|2026-10-18|60|present|not_set|extra|t|f
+249|2026-10-18|30|present|not_set|extra|t|f
+250|2026-10-18|45|present|not_set|extra|t|f
+266|2026-10-06|30|present|not_set|extra|t|f
+274|2026-10-19|30|present|not_set|extra|t|f
+276|2026-10-19|60|present|not_set|extra|t|f
+277|2026-10-17|30|present|present|extra|t|f
+278|2026-10-16|30|present|absent|regular|t|f
+281|2026-10-19|60|present|not_set|extra|t|f
+295|2026-10-10|30|present|not_set|extra|t|f
+299|2026-10-14|30|present|not_set|extra|t|f
+308|2026-10-19|30|present|not_set|extra|t|f
+309|2026-10-19|30|present|not_set|regular|t|f
+382|2026-10-18|60|present|present|extra|t|f
+383|2026-10-19|60|present|not_set|regular|t|f
+384|2026-10-19|60|absent|not_set|regular|t|f
+385|2026-10-19|60|excused|not_set|regular|t|f
+399|2026-10-19|30|absent|not_set|extra|t|f
+400|2026-10-19|30|absent|not_set|extra|t|f
+SET
+77
+SET
+1|12000|EGP|2026-10-19 01:03:01.572584+00|2026-10-19 01:03:01.57259+00|10|5
+SET
+ERROR:  column "counts" does not exist
+LINE 1: ...d,teacher_id,course_id,hourly_rate_minor,currency,counts fro...
+                                                             ^
+SET
+ERROR:  column "year" does not exist
+LINE 1: ...emy_qa; select * from payroll_payadjustment where year=2026 ...
+                                                             ^
+-- delta probe: U4 pays_teacher off -> projection, then back on
+[200] PATCH sessions/382/ :: {"id":382,"subscription_id":85,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T10:00:00Z","minutes":60,"status":"completed","student_attendance":"present","teacher_attendance":"present
+[200] PATCH sessions/382/ :: {"id":382,"subscription_id":85,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T10:00:00Z","minutes":60,"status":"completed","student_attendance":"present","teacher_attendance":"present
+T1 paid_so_far: before 106500, U4 off 106500 (delta 0), restored 106500
+SET
+t
+Sept sessions in Oct projection? T3 (Sept only) row absent from projection: see T3 row [] above
+P0 106500
+[200] PATCH sessions/382/ :: {"id":382,"subscription_id":85,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T10:00:00Z","minutes":60,"status":"completed","student_attendance":"present","teacher_attendance":"present","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":222,"fu
+DB pays_teacher after PATCH false: t
+P1 106500
+P1 after cache clear 106500
+/Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/backend/etqan/scheduling/api/serializers.py:219:    pays_teacher = serializers.BooleanField(required=False)
+/Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/backend/etqan/scheduling/api/serializers.py:246:    pays_teacher = serializers.BooleanField()
+/Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/backend/etqan/scheduling/api/serializers.py:319:    pays_teacher = serializers.BooleanField(required=False)
+(PATCH pays_teacher is not a PATCH field - ignored, as DRF does; the route is POST sessions/<id>/pays-teacher/)
+P0 106500
+[200] POST sessions/382/pays-teacher/ :: {"id":382,"subscription_id":85,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T10:00:00Z","minutes":60,"status":"completed","student_a
+U4 off: 100500 delta 6000
+[200] POST sessions/382/pays-teacher/ :: {"id":382,"subscription_id":85,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T10:00:00Z","minutes":60,"status":"completed","student_a
+U4 on: 106500
+[200] POST sessions/383/pays-teacher/ :: {"id":383,"subscription_id":85,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T07:00:00Z","minutes":60,"status":"completed","student_a
+U1 off: 100500 delta 6000
+[200] POST sessions/383/pays-teacher/ :: {"id":383,"subscription_id":85,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T07:00:00Z","minutes":60,"status":"completed","student_a
+U1 on: 106500
+SET
+382|t
+383|t

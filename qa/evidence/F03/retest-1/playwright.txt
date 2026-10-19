@@ -1,0 +1,8 @@
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+  ✓  2 [chromium] › e2e/qa/f03-roles-settings.spec.ts:109:1 › TC-024 settings save and survive reload; features are read-only; quick translate off shows FeatureOff (11.6s)
+
+  2 passed (23.4s)

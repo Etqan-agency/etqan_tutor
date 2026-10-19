@@ -1,0 +1,9 @@
+{
+  "dir": "rtl",
+  "lang": "ar",
+  "afterTab": "BUTTON:إظهار كلمة المرور",
+  "afterTab2": "BUTTON:إعادة تعيين كلمة المرور",
+  "alerts": [
+    "Too small: expected string to have >=8 characters"
+  ]
+}

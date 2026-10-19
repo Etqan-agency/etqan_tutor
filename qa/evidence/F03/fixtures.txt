@@ -1,0 +1,16 @@
+== fixtures
+{"id":1,"name_ar":"F03 قرآن","name_en":"F03 Quran","description_ar":"","description_en":"","language":"ar","is_active":true,"created_at":"2026-10-19T00:06:46.985433Z","updated_at":"2026-10-19T00:06:46
+
+{"id":1,"name_ar":"F03 باقة","name_en":"F03 Pack","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":30,"duration_value":1,"duration_unit":"month","freeze_days_allowed":0,"price_minor":150000,"currency":"EGP","is_active":true,"created_at":"2026-10-19T00:06:47.062992Z","u
+
+CID=1 PID=1
+{"id":1,"status":"active","schedule_status":"active","student":{"id":5,"full_name":"QA student","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":1,"name_ar":"F03 قرآن","name_en":"F03 Quran"},"package":{"id":1,"name_ar":"F03 باقة","name_en":"F03 Pack"},"starts_on":"2026-10-20","term_ends_on":"2026-11-19","ends_on":"2026-11-19","grace_ends_on":"2026-11-26","in_gr
+
+{"id":2,"status":"active","schedule_status":"active","student":{"id":8,"full_name":"F02 Student a","timezone":"Africa/Cairo"},"teacher":{"id":16,"full_name":"F02 Teacher"},"course":{"id":1,"name_ar":"F03 قرآن","name_en":"F03 Quran"},"package":{"id":1,"name_ar":"F03 باقة","name_en":"F03 Pack"},"start
+
+1|1|1|4|150000|EGP
+2|2|2||150000|EGP
+8|1|8
+ERROR:  trailing junk after numeric literal at or near "1769academy_qa1769"
+LINE 1: ...rom information_schema.columns where table_schema=1769academ...
+                                                             ^

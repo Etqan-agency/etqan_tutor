@@ -1,0 +1,16 @@
+adm S=257 S2=258: disp=200 rest=200 pays=200 times=200 att=200 attS2=200 rep=200 bulk=200{"done":[257],"skipped":[]} cancel=200 arch=200{"done":[258],"skipped":[]} del=409 extra=204(deleted 259: 204)
+257|cancelled|present|t|f|1|f 258|completed|present|f|t|1|t 
+codes S=260 S2=261: disp=403 rest=403 pays=403 times=403 att=403 attS2=403 rep=403 bulk=403{"detail":"You do not have permission to perform this action."} cancel=403 arch=403{"detail":"You do not have permission to perform this action."} del=403 extra=403
+260|scheduled|not_set|f|t||f 261|scheduled|not_set|f|t||f 
+nocode S=262 S2=263: disp=403 rest=403 pays=403 times=403 att=403 attS2=403 rep=403 bulk=403{"detail":"You do not have permission to perform this action."} cancel=403 arch=403{"detail":"You do not have permission to perform this action."} del=403 extra=403
+262|scheduled|not_set|f|t||f 263|scheduled|not_set|f|t||f 
+sup S=264 S2=265: disp=200 rest=200 pays=200 times=200 att=200 attS2=200 rep=200 bulk=200{"done":[264],"skipped":[]} cancel=200 arch=403{"detail":"You do not have permission to perform this action."} del=403 extra=403
+264|cancelled|present|t|f|4|f 265|completed|present|f|t|4|f 
+tea S=266 S2=267: disp=403 rest=403 pays=403 times=200 att=200 attS2=404 rep=200 bulk=403{"detail":"You do not have permission to perform this action."} cancel=403 arch=404{"detail":"Not found."} del=403 extra=403
+266|completed|present|t|t|7|f 267|scheduled|not_set|f|t||f 
+stu S=268 S2=269: disp=403 rest=403 pays=403 times=403 att=403 attS2=403 rep=404 bulk=403{"detail":"You do not have permission to perform this action."} cancel=403 arch=404{"detail":"Not found."} del=403 extra=403
+268|scheduled|not_set|f|t||f 269|scheduled|not_set|f|t||f 
+par S=270 S2=271: disp=403 rest=403 pays=403 times=403 att=403 attS2=403 rep=404 bulk=403{"detail":"You do not have permission to perform this action."} cancel=403 arch=404{"detail":"Not found."} del=403 extra=403
+270|scheduled|not_set|f|t||f 271|scheduled|not_set|f|t||f 
+anon S=272 S2=273: disp=403 rest=403 pays=403 times=403 att=403 attS2=403 rep=403 bulk=403{"detail":"Authentication credentials were not provided."} cancel=403 arch=403{"detail":"Authentication credentials were not provided."} del=403 extra=403
+272|scheduled|not_set|f|t||f 273|scheduled|not_set|f|t||f 

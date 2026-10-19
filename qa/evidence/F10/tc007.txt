@@ -1,0 +1,14 @@
+==== TC-007 2026-10-19T04:02:59.028672
+gen x2 200 {"created": 0, "replaced": 8, "removed": 0, "missing_rate": [], "other_currency": [], "unpaid_sessions": [], "stale_fixed_salary": []} 200 {"created": 0, "replaced": 8, "removed": 0, "missing_rate": [], "other_currency": [], "unpaid_sessions": [], "stale_fixed_salary": []}
+OK  same ids/numbers after 2 generates
+OK  paid T1 row untouched
+OK  4 parallel generates all 200 :: [200, 200, 200, 200]
+OK  no duplicate (teacher,year,month)
+OK  DB unique violation on duplicate :: ERROR:  null value in column "notes" of relation "payroll_payslip" violates not-null constraint
+DETAIL:  Failing row contains (14, PAY-DUPTEST, 2026, 9, draft, EGP, 0, 0, 0, 0, f, null, null, null, 20
+cancel TX 200
+OK  draft removed when nothing left :: {"created": 0, "replaced": 7, "removed": 1, "missing_rate": [], "other_currency": [], "unpaid_sessions": [], "stale_fixed_salary": []}
+restore TX 200 {"status": "completed"}
+S7: TX draft number before PAY-000009 after re-create PAY-000014 counter 14
+ERROR:  duplicate key value violates unique constraint "payroll_one_payslip_per_teacher_month"
+DETAIL:  Key (teacher_id, year, month)=(1, 2026, 9) already exists.

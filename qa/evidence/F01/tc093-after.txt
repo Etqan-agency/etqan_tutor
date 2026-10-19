@@ -1,0 +1,13 @@
+## after disable
+qa-tmp-1.etqan.localhost|active|t
+qa-academy.test|disabled|f
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd.co|pending|f
+localtest.me|pending|f
+www.qa-academy.test|active|f
+Host qa-academy.test csrf: 404
+tls ask disabled: 404
+reset POST 200
+reset link after disable: http://qa-tmp-1.etqan.localhost/app/reset-password?uid=MQ&token=REDACTED-QA
+cleanup disabled aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+cleanup disabled localtest.me
+cleanup disabled www.qa-academy.test

@@ -1,0 +1,31 @@
+== TC-009
+[200] PATCH sessions/354/ :: {"id":354,"subscription_id":85,"slot_id":96,"occurs_on":"2026-10-19","starts_at":"2026-10-19T15:00:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":true,"student":{"id":222,"full_
+[200] sup list ids: [354, 279, 280, 3, 1, 4, 2, 336, 319] {"count":9,"next":null,"previous":null,"results":[{"id":354,"subscription_id":85,"slot_id":96,"occurs_on":"2026-10-19","starts_at":"2026-10-19T15:00:00Z","minutes":60,"status":"scheduled","student_att
+SET
+10
+[409] POST supervision/354/open/ :: {"detail":"This session has ended.","code":"scheduling.session_ended"}
+[400] POST supervision/354/attendance/ :: {"status":["This field is required."]}
+[403] GET supervision/ :: {"detail":"You do not have permission to perform this action."}
+[200] GET sessions/?page_size=5 :: {"count":319,"next":"http://qa.etqan.localhost/api/v1/sessions/?page=2&page_size=5","previous":null,"results":[{"id":68,"subscription_id":null,"slot_id":null,"occurs_on":"2026-02-16","starts_at":"2026
+[403] POST subscriptions/ :: {"detail":"You do not have permission to perform this action."}
+[403] DELETE sessions/384/ :: {"detail":"You do not have permission to perform this action."}
+SET
+354|4|not_set|not_set|scheduled
+SET
+354|1|supervision|{"supervisor_id": [null, 4]}
+[200] PATCH sessions/354/ :: {"id":354,"subscription_id":85,"slot_id":96,"occurs_on":"2026-10-19","starts_at":"2026-10-19T15:00:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set",
+SET
+|not_set
+[201] POST sessions/extra/ :: {"session":{"id":386,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T16:59:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attenda
+[200] PATCH sessions/386/ :: {"id":386,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T16:59:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_s
+[200] POST supervision/386/open/ :: {"meeting_url":""}
+[200] POST supervision/386/attendance/ :: {"id":386,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T16:59:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":222,"
+SET
+386|4|present|not_set|scheduled
+SET
+386|1|supervision|{"supervisor_id": [null, 4]}
+386|4|supervisor_attendance|{"supervisor_attendance": ["not_set", "present"]}
+SET
+10|1
+[200] PATCH sessions/386/ :: {"id":386,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T16:59:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_s
+[200] POST sessions/386/cancel/ :: {"id":386,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T16:59:00Z","minutes":60,"status":"cancelled","student_attendance":"not_set","teacher_attendance":"not_s

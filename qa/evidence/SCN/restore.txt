@@ -1,0 +1,3 @@
+== restore settings to the s0 values
+[200] PATCH academy/settings/ :: {"timezone":"Africa/Cairo","default_currency":"EGP","default_language":"ar","generation_horizon_days":14,"renewal_grace_days":7,"absent_consumes_session":true,"excused_consumes_session":false,"auto_invoice_on_subscription":true,"invoice_due_days":7,"postpone_limit_minutes":120,"supervision_enabled":true,"updated_at":"2026-10-19T17:17:20.967910Z"}
+[200] PATCH payroll/settings/ :: {"student_absent_pay_bp":10000,"student_excused_pay_bp":10000,"at_disposal_pays":false,"group_pay":"per_student","report_deduction_bp":0,"updated_at":"2026-10-19T17:17:21.003998Z","updated_by":{"id":1,"full_name":"QA Admin"}}

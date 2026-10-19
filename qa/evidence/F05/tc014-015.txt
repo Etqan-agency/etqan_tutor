@@ -1,0 +1,63 @@
+4 F02 QL Full 7
+5 F02 QL NoView 1
+10 F03 Ed ok 1
+15 F03 Everything 881
+6 F03 Front desk 4
+13 F03 Iso 1
+12 F03 Matrix 0
+9 F03 Money 3
+11 F03 Partial 4
+14 F03 QL Teacher 2
+8 F03 Role editor 9
+7 F03 Trim 2
+== TC-014
+[201] POST access/staff/ :: {"id":134,"full_name":"QA5 St Edit","email":"f05-st-edit@qa.etqan.test","is_active":true,"roles":[{"id":29,"name_ar":"QA5 
+accept 200 
+login ed 200 {"id":134,"email":"f05-st-edit@qa.etqan.test","full_name":"QA5 St Edit","phone":"","preferred_language":"ar","effective_
+ed perms: ['student.create', 'student.update', 'student.view', 'student.view_any']
+[201] POST people/students/ ::
+[200] PATCH people/students/13
+[403] POST people/students/bulk/ :: {"action":["You also need permission to create families."]}
+[200] POST people/students/bulk/ :: {"updated":1,"skipped":[]}
+2
+[200] POST people/students/bulk/ :: {"up
+families 4 -> 4
+-- S3: link a parent without parent.view
+[201] POST people/students/135/guardians/ :: [{"id":121,"full_name":"QA5 Parent Two","email":"f05-par2@qa.etqan.test","phone":""}]
+[200] GET people/students/135/guardians/ :: [{"id":121,"full_name":"QA5 Parent Two","email":"f05-par2@qa.etqan.test","phone":""}]
+[403] GET people/parents/121/ :: {"detail":"You do not have permission to perform this action."}
+[200] GET people/families/payers/?students=122 :: [{"id":122,"full_name":"QA5 Kid Zed","role":"student"},{"id":120,"full_name":"QA5 Parent One","role":"parent"},{"id":121,"full_name":"QA5 Parent Two","role":"parent"}]
+[204] DELETE people/students/135/guardians/121/ :: 
+[403] POST people/tags/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST people/teachers/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST people/students/135/quick-login/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST people/admins/1/deactivate/ :: {"detail":"You do not have permission to perform this action."}
+== TC-015
+[201] POST access/staff/ :: {"id":136,"full_name":"QA5 Staffer","email":"f05-staff@qa.etqan.test","is_active":true,"roles":[{"id":29,"name_ar":"QA5 تحرير","name_en":"QA5 Student Edit"}],"invited":true
+[400] POST access/staff/ :: {"email":["This email is already in use."]}
+[400] POST access/staff/ :: {"email":["This field is required."]}
+accept 200 
+login sf 200 {"id":136,"email":"f05-staff@qa.etqan.test","full_name":"QA5 Staffer","phone":"","preferred_language":"ar","effective_la
+sf perms: ['student.create', 'student.update', 'student.view', 'student.view_any']
+staff|0
+supervisor role 1
+[200] PATCH access/staff/136/ :: {"id":1
+sf perms after role change: 20 teacher.view_any in: True
+[200] GET people/teachers/ :: 
+[403] PATCH access/staff/136/ :: {"detail":"You do not have permission to perform this action."}
+[403] PATCH access/staff/136/ :: {"detail":"You do not have permission to perform this action."}
+[200] PATCH access/staff/136/ :: {"id":1
+[403] GET identity/me/ :: {"detail":"Authentication credenti
+[200] PATCH access/staff/136/ :: {"id":1
+staff in admins list: []
+[404] GET people/staff/ :: <!DOCTYPE htm
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" conten
+  <title>Page not found at /api/v1/peopl
+  <meta name="robots" content="NONE,NOAR
+  <style>
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    b
+20

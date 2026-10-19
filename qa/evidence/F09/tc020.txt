@@ -1,0 +1,49 @@
+== TC-020 2026-10-19T03:41:13.409798
+check 200 {"code": "SYS-6FJZA-SHXHJ", "kind": "discount", "course": null, "package": null, "sessions_total": null, "teacher": null, "discount": {"kind": "percent", "value": 15, "currency": ""}, "expires_on": "2026-11-17", "students": [], "subscriptions": []}
+redeem 15% D1 201 {"kind": "discount", "subscription_id": null, "invoice_id": 36, "amount_minor": 1508, "currency": "EGP"}
+D1 {"status": "partial", "paid_minor": 1508, "balance_minor": 8542}
+D1 payment 35|code|1508|0|SYS-6FJZA-SHXHJ|completed
+OK  TC020 15% of 10050 = 1508 half-up, partial 8542
+voucher row used|36|35|1|6
+OK  TC020 redeem used code again refused :: {"detail": "This code has already been used.", "code": "vouchers.used"}
+variant ' sys 6fjza shxhj ' 409 {"detail": "This code has already been used.", "code": "vouchers.used"}
+OK  TC020 normalised variant hits same (used) code
+OK  TC020 lower/no-dash variant valid :: {"code": "SYS-9Y5EC-TM14E", "kind": "discount", "course": null, "package": null, "sessions_total": null, "teacher": null, "discount": {"kind": "percen
+second code D1 409 {"detail": "This invoice already has a discount code.", "code": "vouchers.invoice_discounted"}
+OK  TC020 second discount refused invoice_discounted, rolled back
+1% on 50 201 {"kind": "discount", "subscription_id": null, "invoice_id": 37, "amount_minor": 1, "currency": "EGP"}
+OK  TC020 1% of 50 -> min 1
+fixed on D3 201 {"kind": "discount", "subscription_id": null, "invoice_id": 38, "amount_minor": 5000, "currency": "EGP"}
+OK  TC020 fixed capped at balance 5000, paid
+EGP fixed on USD 409 {"detail": "This code is in another currency.", "code": "vouchers.wrong_currency"}
+OK  TC020 wrong currency refused
+OK  TC020 parent other family 404 :: {"detail": "Invoice with identifier '40' not found."}
+OK  TC020 student other family 404 :: {"detail": "Invoice with identifier '40' not found."}
+P3 redeems on invoice it pays 404 {"detail": "Invoice with identifier '41' not found."}
+P3 on S1 invoice it does not pay 404 {"detail": "Invoice with identifier '36' not found."}
+expired check 409 {"detail": "This code has expired.", "code": "vouchers.expired"}
+OK  TC020 expired refused
+expired state expired
+OK  TC020 last valid day redeems (expires_on=today) :: {"kind": "discount", "subscription_id": null, "invoice_id": 42, "amount_minor": 20000, "currency": "EGP"}
+office redeem by id 201 {"kind": "discount", "subscription_id": null, "invoice_id": 43, "amount_minor": 3000, "currency": "EGP"}
+OK  TC020 office redeem by id (QA Billing)
+remaining pct ['']
+office redeem by text 201 {"kind": "discount", "subscription_id": null, "invoice_id": 44, "amount_minor": 2000, "currency": "EGP"}
+OK  TC020 office redeem by text
+remove 200 {"id": 15, "code": "SYS-49E58-QAK9Q", "kind": "discount", "state": "void", "batch": {"id": 8, "note": ""}, "course": null, "package": null, "teacher": null, "sessions_total": null, "discount": {"kind"
+OK  TC020 remove: payment gone, invoice unpaid, code void+reason
+OK  TC020 second removal 409 :: {"detail": "This code hasn't been used.", "code": "vouchers.not_used"}
+OK  TC020 remove unused 409 :: {"detail": "This code hasn't been used.", "code": "vouchers.not_used"}
+OK  TC020 refund code payment 409 billing.code_payment :: {"detail": "A system code's payment can't be refunded, deleted or moved.", "code": "billing.code_payment"}
+OK  TC020 delete code payment 409 billing.code_payment :: {"detail": "A system code's payment can't be refunded, deleted or moved.", "code": "billing.code_payment"}
+revenue before [{'currency': 'EGP', 'amount_minor': 207006}, {'currency': 'USD', 'amount_minor': 13000}] after [{'currency': 'EGP', 'amount_minor': 252006}, {'currency': 'USD', 'amount_minor': 13000}]
+OK  TC020 revenue unchanged by codes
+S10 family view payments [{"id": 35, "customer": {"type": "student", "name": "QA student", "student_id": 5, "email": "", "phone": ""}, "invoice": {"id": 36, "number": "INV-000036"}, "transaction_number": "", "reference": "SYS-6FJZA-SHXHJ", "method": "code", "amount_minor": 1508, "fee_minor": 0, "currency": "EGP", "status": "completed", "paid_on": "2026-10-19", "refunded_at": null, "created_at": "2026-10-19T00:41:14.466916
+S10 keys ['amount_minor', 'balance_minor', 'can_pay_online', 'created_at', 'currency', 'description', 'due_on', 'id', 'is_overdue', 'issued_on', 'local_methods', 'number', 'paid_minor', 'payer', 'payments', 'status', 'student', 'subscription_id', 'voided_at']
+DB vouchers 1|6FJZASHXHJ|used|36|35|6|
+2|9Y5ECTM14E|used|43|40|3|
+3|XB0YF46DWY|void||||qa
+4|4S0J1NA56D|used|38|38|6|
+5|7RRJ1XHT89|used|42|39|6|
+11|4J46A2M8P7|used|37|37|6|
+15|49E58QAK9Q|void|44|41|3|mistake

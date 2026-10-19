@@ -1,0 +1,17 @@
+## TC-008
+200
+known:  200 
+unknown:  200 
+unverified f02-d:  200 
+2O53weX3jdLGzkzSmfMZq1 f02-a@qa.etqan.test | [Etqan QA Academy] إعادة تعيين كلمة المرور
+confirm:  200 
+reuse: {"token":["Invalid or expired reset link."]} 400 
+hash changed: yes primary verified: t
+old pw: 400 new pw: 200
+a1 session: 403
+alert mails:
+4UsCGiTF9sqoTSZJPbuGac f02-a@qa.etqan.test | [Etqan QA Academy] تنبيه أمني: تم إجراء تغيير على حسابك
+#1 200 #2 200 #3 200 #4 200 #5 200 #6 429 (unknown address, 6 in an hour)
+qaother token at qa: {"token":["Invalid or expired reset link."]} 400 
+qaother admin still logs in with own pw: 200
+restore f02-a: f02-a@qa.etqan.test 200

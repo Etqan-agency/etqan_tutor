@@ -1,0 +1,37 @@
+reset request on qa-academy.test:  HTTP 200
+link: http://qa-academy.test/app/reset-password?uid=MQ&token=...
+-- snapshot before
+active|{"families": true, "invoices": true, "internal_chat": false, "online_payments": true}|f|||Asia/Riyadh|USD
+qa-tmp-1.etqan.localhost|active|f|
+qa-academy.test|active|t|2026-10-18 04:47:20.433592+00
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd.co|disabled|f|
+localtest.me|disabled|f|
+www.qa-academy.test|active|f|2026-10-18 04:53:28.957236+00
+d8f4a9a6d5500dca47ecb9bc6a1883c2
+-- suspend
+302 http://etqan.localhost/admin/tenants/academy/
+"success">Reactivated 1 academies.
+"success">Suspended 1 academies.
+confirm while suspended: {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"} HTTP 403
+API me on custom domain: {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"} HTTP 403
+API csrf on custom domain: {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"} HTTP 403
+/ on custom domain: HTTP 503
+-- suspend again
+302 http://etqan.localhost/admin/tenants/academy/
+"success">Suspended 1 academies.
+-- reactivate
+302 http://etqan.localhost/admin/tenants/academy/
+"success">Reactivated 1 academies.
+confirm after reactivation:  HTTP 200
+-- reactivate again
+302 http://etqan.localhost/admin/tenants/academy/
+"success">Reactivated 1 academies.
+-- snapshot after
+active|{"families": true, "invoices": true, "internal_chat": false, "online_payments": true}|f|||Asia/Riyadh|USD
+qa-tmp-1.etqan.localhost|active|f|
+qa-academy.test|active|t|2026-10-18 04:47:20.433592+00
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd.co|disabled|f|
+localtest.me|disabled|f|
+www.qa-academy.test|active|f|2026-10-18 04:53:28.957236+00
+d8f4a9a6d5500dca47ecb9bc6a1883c2
+identical (status aside): yes

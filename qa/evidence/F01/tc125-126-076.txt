@@ -1,0 +1,11 @@
+TC-125.feature EXIT=0   ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:24:1 ›
+qaother features: {"internal_chat": true}
+qaother api internal_chat: [True]
+admin log: [{"changed": {"fields": ["Internal chat (نظام المحادثات الداخلية)"]}}]
+TC-125b EXIT=0   ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:50:1 ›
+qaother features after untick: {"internal_chat": false}
+TC-126 EXIT=0   ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:59:1 ›
+qa: {"families": true, "invoices": true, "internal_chat": false, "online_payments": true} | qa-tmp-1: {"families": true, "invoices": true, "internal_chat": false, "online_payments": true}
+admin log tmp1: 1|Copied features from Etqan QA Academy.
+TC-076 EXIT=0   ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:89:1 ›
+defaults_suspended: f

@@ -1,0 +1,85 @@
+## ETQAN-QA-017 retest 2026-10-18T23:51:27Z (REAL, academy qa)
+features: qa: quick_login=on / qa: parents=on
+### (1) admin quick-login, quick_login switch (original repro steps 1-3, 6)
+admin login: 200
+start: 200
+K=kld05t... me=200 "impersonator":{"id":1,"full_name":"QA Admin"}
+off: qa: quick_login=off
+replay K while off: 403
+row count after 403: 0
+on: qa: quick_login=on
+replay K after on: 403
+row count: 0
+### (2) staff actor, role code removed (repro step 4)
+role4 before: {"detail":"Authentication credentials were not provided."}
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import json,sys;print(json.dumps(json.load(sys.stdin)["permissions"]))
+                                     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+KeyError: 'permissions'
+staff login: 200
+start: 200
+S=fl0s26... me=200
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import json,sys;print(json.dumps([p for p in json.load(sys.stdin) if p!="quick_login.create"]))
+                                                 ~~~~~~~~~^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py", line 298, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 2 column 1 (char 1)
+remove quick_login.create: 403
+replay S: 200
+row count after 403: 1
+restore role: 403
+replay S after restore: 200
+role4 after: {"detail":"Authentication credentials were not provided."}
+### (3) parent, parents switch (repro step 5)
+parent login: 200
+P me=200
+off: qa: parents=off
+replay P: 403
+row count: 0
+on: qa: parents=on
+replay P after on: 403
+fresh parent login after on: 200 me=200
+### (4) controls: admin own session survives the quick-login refusal; normal stop + logout
+admin jar me (own session after impersonation K ended): 403
+staff logout: 200
+seeded logins: demo 400 qaother 400
+### (5) a refused session on an AllowAny endpoint (no rollback path) and a GET-only endpoint
+parent login: 200
+off: qa: parents=off
+sign-in-options with P3: 200
+row count: 0
+on: qa: parents=on
+replay P3: 403
+leftover impersonation rows: 171
+## ETQAN-QA-017 retest part 2 2026-10-18T23:52:08Z (REAL). Note: part (1) ended the admin's own jar session because quick-login replaces the actor's session (expected, same as TC-017 'stop=403'); re-login here.
+admin login: 200
+role4 before: {"id":4,"name_ar":"F02 دخول سريع كامل","name_en":"F02 QL Full","permissions":["parent.view","parent.view_any","quick_login.create","student.view","student.view_any","teacher.view","teacher.view_any"],"is_active":true,"members":1,"created_at":"2026-10-18T22:43:34.852920Z"}
+staff login: 200
+start: 200
+S=pm2lqq... me=200
+remove quick_login.create: 200
+replay S: 403
+row count after 403: 0
+restore role: 200
+replay S after restore: 403
+role4 after: {"id":4,"name_ar":"F02 دخول سريع كامل","name_en":"F02 QL Full","permissions":["parent.view","parent.view_any","quick_login.create","student.view","student.view_any","teacher.view","teacher.view_any"],"is_active":true,"members":1,"created_at":"2026-10-18T22:43:34.852920Z"}
+staff fresh login + start again works: 200 200 me=200
+normal logout ends it: 200 replay=403
+admin session unaffected by staff flows: 200
+demo login: 400 demo login: 400
+qaother login: 400 qaother login: 400
+controls (corrected command): demo admin login 200 (body omitted), qaother admin login 200

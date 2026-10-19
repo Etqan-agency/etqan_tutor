@@ -1,0 +1,45 @@
+PASSED etqan/tenants/tests/test_admin_stale_change.py::test_a_stale_page_writes_only_what_its_user_changed
+PASSED etqan/tenants/tests/test_admin_stale_change.py::test_what_the_user_did_change_on_a_stale_page_is_saved
+PASSED etqan/tenants/tests/test_admin_stale_change.py::test_a_fresh_page_still_reactivates_and_lifts_the_suspension
+PASSED etqan/tenants/tests/test_admin_stale_change.py::test_an_untouched_stale_suspend_box_is_not_checked_again
+PASSED etqan/tenants/tests/test_admin_features.py::test_the_change_page_shows_the_features_by_group
+PASSED etqan/tenants/tests/test_admin_features.py::test_etqan_switches_a_feature_and_the_history_records_it
+PASSED etqan/tenants/tests/test_admin_features.py::test_etqan_copies_features_from_another_academy
+PASSED etqan/tenants/tests/test_admin_features.py::test_copying_needs_an_academy_to_copy_from[-Choose the academy to copy the features from.]
+PASSED etqan/tenants/tests/test_admin_features.py::test_copying_needs_an_academy_to_copy_from[x-No action selected.]
+PASSED etqan/tenants/tests/test_admin_features.py::test_copying_needs_an_academy_to_copy_from[0-No action selected.]
+PASSED etqan/tenants/tests/test_admin_features.py::test_copying_needs_an_academy_to_copy_from[1000000000000000000000000000000-No action selected.]
+PASSED etqan/tenants/tests/test_admin_features.py::test_the_command_switches_features_by_subdomain
+PASSED etqan/tenants/tests/test_admin_features.py::test_the_command_takes_every_repeated_flag
+PASSED etqan/tenants/tests/test_admin_features.py::test_the_command_prints_the_switch_not_the_effective_state
+PASSED etqan/tenants/tests/test_admin_features.py::test_the_command_refuses_what_it_cannot_do[args0-No academy has the subdomain 'nowhere'.]
+PASSED etqan/tenants/tests/test_admin_features.py::test_the_command_refuses_what_it_cannot_do[args1-Name at least one feature with --on or --off.]
+PASSED etqan/tenants/tests/test_admin_features.py::test_the_command_refuses_what_it_cannot_do[args2-A feature can't be switched both on and off.]
+PASSED etqan/tenants/tests/test_admin_features.py::test_the_command_refuses_what_it_cannot_do[args3-Unknown feature: olovix.]
+PASSED etqan/tenants/tests/test_admin_suspend.py::test_etqan_suspends_an_academys_defaults_from_30_days_unpaid
+PASSED etqan/tenants/tests/test_admin_suspend.py::test_suspending_before_30_days_is_refused
+PASSED etqan/tenants/tests/test_admin_suspend.py::test_a_zero_invoice_never_allows_suspending
+PASSED etqan/tenants/tests/test_admin_suspend.py::test_lifting_a_suspension_is_always_allowed
+PASSED etqan/tenants/tests/test_admin.py::test_admin_is_served_on_the_public_host
+PASSED etqan/tenants/tests/test_admin.py::test_admin_is_not_served_on_an_academy_host
+PASSED etqan/tenants/tests/test_admin.py::test_adding_an_academy_through_admin_creates_it
+PASSED etqan/tenants/tests/test_admin.py::test_admin_rejects_a_reserved_subdomain
+PASSED etqan/tenants/tests/test_admin.py::test_suspend_action
+PASSED etqan/tenants/tests/test_admin.py::test_academies_cannot_be_deleted_from_admin
+PASSED etqan/tenants/tests/test_admin.py::test_changelist_offers_no_delete_action
+PASSED etqan/tenants/tests/test_admin.py::test_admin_rejects_a_bad_timezone_or_currency[Mars/Phobos-USD-Unknown timezone.]
+PASSED etqan/tenants/tests/test_admin.py::test_admin_rejects_a_bad_timezone_or_currency[UTC-US-Use a three-letter currency code, like EGP.]
+PASSED etqan/tenants/tests/test_admin.py::test_admin_rejects_a_bad_timezone_or_currency[UTC-U$D-Use a three-letter currency code, like EGP.]
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_view_only_staff_is_offered_no_academy_action
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_view_only_staff_is_offered_no_domain_action
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_status_action_changes_nothing[suspend_academies]
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_status_action_changes_nothing[reactivate_academies]
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_copy_features_changes_nothing
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_domain_action_changes_nothing
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_staff_with_change_permission_is_offered_every_action
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_staff_with_change_permission_can_suspend
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_view_only_staff_is_offered_no_action_on_any_registered_admin
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_periodic_task_action_changes_nothing
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_make_verified_changes_nothing
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_staff_with_change_permission_keeps_the_third_party_actions
+44 passed, 35 warnings in 15.75s

@@ -1,0 +1,103 @@
+admin login 200
+features 404 "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">\n  <title>Page not found at /api/v1/features/</title>\n  <meta name=\"robots\" c
+role QA Payroll Full 201 {"id": 25, "name_ar": "QA Payroll Full", "name_en": "QA Payroll Full", "permissions": ["payroll_adjustment.create", "payroll_adjustment.delete", "payr
+staff qa-staff-pay@qa.etqan.test 201 {"id": 50, "full_name": "QA Staff pay", "email": "qa-staff-pay@qa.etqan.test", "is_active": true, "roles": [{"id": 25, "name_ar": "QA Payroll Full", "
+role QA Payroll Read 201 {"id": 26, "name_ar": "QA Payroll Read", "name_en": "QA Payroll Read", "permissions": ["payslip.view", "payslip.view_any"], "is_active": true, "member
+staff qa-staff-payread@qa.etqan.test 201 {"id": 51, "full_name": "QA Staff payread", "email": "qa-staff-payread@qa.etqan.test", "is_active": true, "roles": [{"id": 26, "name_ar": "QA Payroll 
+role QA Rate Create Only 201 {"id": 27, "name_ar": "QA Rate Create Only", "name_en": "QA Rate Create Only", "permissions": ["payroll_rate.create", "payroll_rate.view_any"], "is_ac
+staff qa-staff-ratecreate@qa.etqan.test 201 {"id": 52, "full_name": "QA Staff ratecreate", "email": "qa-staff-ratecreate@qa.etqan.test", "is_active": true, "roles": [{"id": 27, "name_ar": "QA Ra
+role QA Payslip Update NoView 201 {"id": 28, "name_ar": "QA Payslip Update NoView", "name_en": "QA Payslip Update NoView", "permissions": ["payslip.update"], "is_active": true, "member
+staff qa-staff-updnoview@qa.etqan.test 201 {"id": 53, "full_name": "QA Staff updnoview", "email": "qa-staff-updnoview@qa.etqan.test", "is_active": true, "roles": [{"id": 28, "name_ar": "QA Pays
+probe 201 {"session": {"id": 9, "subscription_id": null, "slot_id": null, "occurs_on": "2026-09-03", "starts_at": "2026-09-03T07:00:00Z", "minutes": 60, "status": "scheduled", "student_attendance": "not_set", "teacher_attendance": "not_set", "has_started": true, "meeting_url": "", "meeting_host": false, "generated": false, "student": {"id": 5, "full_name": "QA student", "timezone": "Africa/Cairo"}, "teacher": {"id": 7, "full_name": "QA teacher"}, "course": {"id": 1, "name_ar": "F03 قرآن", "name_en": "F03 Quran"}, "notes": "", "cancel_reason": "", "has_report": false, "payroll_locked": false, "kind": "ex
+mark 9 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T1_0910 10 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T1_0917 11 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T1_0805 12 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T1_0812 13 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T2_a 14 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T2_b 15 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T2_c 16 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T2_abs 17 mark 200 {"status": "completed", "student_attendance": "absent", "teacher_attendance": "present"}
+T2_exc 18 mark 200 {"status": "completed", "student_attendance": "excused", "teacher_attendance": "present"}
+T3_a 19 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T3_b 20 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T3_c 21 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "absent"}
+T3_d 22 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "excused"}
+T3_e 23 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "not_set"}
+T3_f 24 created scheduled
+T3_g 25 created scheduled
+T3_h 26 created scheduled
+T3_i 27 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T4_11 28 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T4_12 29 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T4_21 30 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T4_22 31 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T5_a 32 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T6_a 33 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T6_b 34 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T6_c 35 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T7_s 36 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T7_o 37 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T8_s 38 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T9_s 39 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T10_a 40 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T10_b 41 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T10_c 42 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T11_aug 43 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T11_sep 44 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T12_jul 45 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T13_a 46 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T13_b 47 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T14_a 48 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T14_b 49 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T1_oct_done 50 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+T1_oct_stale 51 created scheduled
+T1_oct_future 52 created scheduled
+TX_sep 53 mark 200 {"status": "completed", "student_attendance": "present", "teacher_attendance": "present"}
+cancel g 200 {"id": 25, "subscription_id": null, "slot_id": null, "occurs_on": "2026-09-09", "starts_at": "2026-09-09T09:00:00Z", "minutes": 60, "status": "cancell
+disposal h 200 {"id": 26, "subscription_id": null, "slot_id": null, "occurs_on": "2026-09-11", "starts_at": "2026-09-11T09:00:00Z", "minutes": 60, "status": "at_disp
+9|1|2026-09-03|2026-09-03 07:00:00+00|60|completed|present|present|t|f
+10|1|2026-09-10|2026-09-10 07:00:00+00|45|completed|present|present|t|f
+11|1|2026-09-17|2026-09-17 07:00:00+00|30|completed|present|present|t|f
+12|1|2026-08-05|2026-08-05 07:00:00+00|120|completed|present|present|t|f
+13|1|2026-08-12|2026-08-12 07:00:00+00|80|completed|present|present|t|f
+14|3|2026-09-02|2026-09-02 08:00:00+00|45|completed|present|present|t|f
+15|3|2026-09-04|2026-09-04 08:00:00+00|30|completed|present|present|t|f
+16|3|2026-09-06|2026-09-06 08:00:00+00|20|completed|present|present|t|f
+17|3|2026-09-08|2026-09-08 08:00:00+00|45|completed|absent|present|t|f
+18|3|2026-09-09|2026-09-09 08:00:00+00|45|completed|excused|present|t|f
+19|4|2026-09-30|2026-09-30 20:30:00+00|60|completed|present|present|t|f
+20|4|2026-10-01|2026-09-30 21:30:00+00|60|completed|present|present|t|f
+21|4|2026-09-05|2026-09-05 09:00:00+00|60|completed|present|absent|t|f
+22|4|2026-09-06|2026-09-06 09:00:00+00|60|completed|present|excused|t|f
+23|4|2026-09-07|2026-09-07 09:00:00+00|60|completed|present|not_set|t|f
+24|4|2026-09-08|2026-09-08 09:00:00+00|60|scheduled|not_set|not_set|t|f
+25|4|2026-09-09|2026-09-09 09:00:00+00|60|cancelled|not_set|not_set|t|f
+26|4|2026-09-11|2026-09-11 09:00:00+00|60|at_disposal|not_set|not_set|t|f
+27|4|2026-09-12|2026-09-12 09:00:00+00|60|completed|present|present|f|f
+28|5|2026-08-03|2026-08-03 10:00:00+00|60|completed|present|present|t|f
+29|5|2026-08-04|2026-08-04 10:00:00+00|60|completed|present|present|t|f
+30|5|2026-08-05|2026-08-05 10:00:00+00|60|completed|present|present|t|f
+31|5|2026-08-06|2026-08-06 10:00:00+00|60|completed|present|present|t|f
+32|6|2026-08-10|2026-08-10 11:00:00+00|120|completed|present|present|t|f
+33|7|2026-06-02|2026-06-02 12:00:00+00|60|completed|present|present|t|f
+34|7|2026-06-03|2026-06-03 12:00:00+00|45|completed|present|present|t|f
+35|7|2026-06-04|2026-06-04 12:00:00+00|30|completed|present|present|t|f
+36|8|2026-09-15|2026-09-15 13:00:00+00|60|completed|present|present|t|f
+37|8|2026-10-05|2026-10-05 13:00:00+00|60|completed|present|present|t|f
+38|9|2026-09-15|2026-09-15 14:00:00+00|60|completed|present|present|t|f
+39|10|2026-09-15|2026-09-15 15:00:00+00|60|completed|present|present|t|f
+40|11|2026-09-02|2026-09-02 16:00:00+00|60|completed|present|present|t|f
+41|11|2026-09-03|2026-09-03 16:00:00+00|60|completed|present|present|t|f
+42|11|2026-09-04|2026-09-04 16:00:00+00|60|completed|present|present|t|f
+43|12|2026-08-10|2026-08-10 17:00:00+00|60|completed|present|present|t|f
+44|12|2026-09-10|2026-09-10 17:00:00+00|60|completed|present|present|t|f
+45|13|2026-07-10|2026-07-10 06:00:00+00|60|completed|present|present|t|f
+46|14|2026-05-10|2026-05-10 06:00:00+00|60|completed|present|present|t|f
+47|14|2026-05-11|2026-05-11 06:00:00+00|45|completed|present|present|t|f
+48|15|2026-04-10|2026-04-10 07:00:00+00|60|completed|present|present|t|f
+49|15|2026-04-11|2026-04-11 07:00:00+00|60|completed|present|present|t|f
+50|1|2026-10-12|2026-10-12 07:00:00+00|60|completed|present|present|t|f
+51|1|2026-10-10|2026-10-10 07:00:00+00|60|scheduled|not_set|not_set|t|f
+52|1|2026-10-28|2026-10-28 07:00:00+00|60|scheduled|not_set|not_set|t|f
+53|16|2026-09-20|2026-09-20 06:00:00+00|60|completed|present|present|t|f

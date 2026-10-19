@@ -1,0 +1,232 @@
+diff --git a/config/settings/base.py b/config/settings/base.py
+index 8ccbd46f..e60f68b3 100644
+--- a/config/settings/base.py
++++ b/config/settings/base.py
+@@ -168,6 +168,8 @@ MIDDLEWARE = [
+     "django.middleware.common.CommonMiddleware",
+     "django.middleware.csrf.CsrfViewMiddleware",
+     "django.contrib.auth.middleware.AuthenticationMiddleware",
++    # ETQAN-QA-017: ends, outside ATOMIC_REQUESTS, a session the API refused.
++    "etqan.identity.authentication.EndRefusedSessionMiddleware",
+     "django.contrib.messages.middleware.MessageMiddleware",
+     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+     "allauth.account.middleware.AccountMiddleware",
+diff --git a/etqan/identity/api/serializers.py b/etqan/identity/api/serializers.py
+index f0e15153..56f71b64 100644
+--- a/etqan/identity/api/serializers.py
++++ b/etqan/identity/api/serializers.py
+@@ -134,7 +134,7 @@ class SetPrimaryEmailSerializer(serializers.Serializer):
+ 
+ class ChangePasswordSerializer(serializers.Serializer):
+     current_password = serializers.CharField(write_only=True)
+-    new_password = serializers.CharField(write_only=True, min_length=8)
++    new_password = serializers.CharField(write_only=True, min_length=8, max_length=128)
+ 
+ 
+ class PasswordResetSerializer(serializers.Serializer):
+@@ -144,7 +144,7 @@ class PasswordResetSerializer(serializers.Serializer):
+ class PasswordResetConfirmSerializer(serializers.Serializer):
+     uid = serializers.CharField()
+     token = serializers.CharField()
+-    new_password = serializers.CharField(write_only=True, min_length=8)
++    new_password = serializers.CharField(write_only=True, min_length=8, max_length=128)
+ 
+ 
+ class CodeRequestSerializer(serializers.Serializer):
+diff --git a/etqan/identity/authentication.py b/etqan/identity/authentication.py
+index 6c009fd8..58c42905 100644
+--- a/etqan/identity/authentication.py
++++ b/etqan/identity/authentication.py
+@@ -1,7 +1,13 @@
+ """The API's session authentication (Plan 13 §5.3): a signed-in account the
+ academy no longer lets in (a parent, once parents are switched off) is
+ signed out on its next request, and treated as anonymous. So is a quick-login
+-session whose impersonator no longer passes S-9a's re-checks."""
++session whose impersonator no longer passes S-9a's re-checks.
++
++Signed out for good (ETQAN-QA-017): the view runs inside the request's
++transaction (``ATOMIC_REQUESTS``), and the 403 it then answers rolls that
++back, the session row's delete with it. So the refused session's key is kept
++on the request, and `EndRefusedSessionMiddleware` deletes the row again once
++the transaction is over."""
+ 
+ from django.contrib.auth import logout
+ from rest_framework import authentication
+@@ -9,6 +15,8 @@ from rest_framework import authentication
+ from etqan.identity import impersonation
+ from etqan.identity import services
+ 
++REFUSED_SESSION_KEY = "etqan_refused_session_key"
++
+ 
+ class SessionAuthentication(authentication.SessionAuthentication):
+     def authenticate(self, request):
+@@ -18,6 +26,25 @@ class SessionAuthentication(authentication.SessionAuthentication):
+             or not impersonation.session_valid(request)
+         ):
+             # The Django request holds the session; DRF's wraps it.
+-            logout(request._request)  # noqa: SLF001
++            django_request = request._request  # noqa: SLF001
++            setattr(
++                django_request, REFUSED_SESSION_KEY, django_request.session.session_key
++            )
++            logout(django_request)
+             return None
+         return result
++
++
++class EndRefusedSessionMiddleware:
++    """Delete the session `SessionAuthentication` refused, after the view's
++    transaction: a rolled-back request would otherwise bring it back."""
++
++    def __init__(self, get_response):
++        self.get_response = get_response
++
++    def __call__(self, request):
++        response = self.get_response(request)
++        key = getattr(request, REFUSED_SESSION_KEY, None)
++        if key:
++            request.session.delete(key)
++        return response
+diff --git a/etqan/identity/services.py b/etqan/identity/services.py
+index 90d8ea20..ad78f596 100644
+--- a/etqan/identity/services.py
++++ b/etqan/identity/services.py
+@@ -310,6 +310,7 @@ def change_password(user_id: int, current_password: str, new_password: str) -> U
+     user = get_user(user_id)
+     if not user.check_password(current_password):
+         raise ValidationError("Incorrect password.", field="current_password")
++    _validate_new_password(user, new_password)
+     user.set_password(new_password)
+     user.save(update_fields=["password"])
+     _send_email_security_alert(
+@@ -356,6 +357,7 @@ def confirm_password_reset(uid: str, token: str, new_password: str) -> User:
+         raise invalid from None
+     if not default_token_generator.check_token(user, token):
+         raise invalid
++    _validate_new_password(user, new_password)
+     # Read BEFORE the update below, which is what makes a child's activation
+     # distinguishable from an adult's reset: this same endpoint serves both, and
+     # a child's primary address is unverified until they follow the link. Telling
+@@ -736,6 +738,15 @@ def _new_user(  # noqa: PLR0913 -- keyword-only, shared by check and build
+     )
+ 
+ 
++def _validate_new_password(user: User, password: str) -> None:
++    """`AUTH_PASSWORD_VALIDATORS` for a password the person chose (ETQAN-QA-018),
++    as reset by code and account creation already check."""
++    try:
++        validate_password(password, user)
++    except DjangoValidationError as exc:
++        raise ValidationError(exc.messages[0], field="new_password") from exc
++
++
+ def _set_new_password(user: User, password: str | None) -> None:
+     """The chosen password, validated; none means a login-less person."""
+     if password is None:
+diff --git a/etqan/identity/tests/test_features.py b/etqan/identity/tests/test_features.py
+index 267238b8..466f02dd 100644
+--- a/etqan/identity/tests/test_features.py
++++ b/etqan/identity/tests/test_features.py
+@@ -7,6 +7,7 @@ import csv
+ import io
+ 
+ import pytest
++from django.contrib.sessions.models import Session
+ from django.db import connection
+ from django.test.utils import CaptureQueriesContext
+ from rest_framework.test import APIClient
+@@ -118,6 +119,19 @@ class TestParentsOff:
+         set_features(parents=True)
+         assert client.get(ME).status_code == 403
+ 
++    def test_the_old_session_cookie_stays_signed_out(self, set_features):
++        """ETQAN-QA-017: the refusal's 403 rolled the request back, the
++        session row with it, so replaying the old cookie signed back in."""
++        parent("Zainab", "zainab@x.test", student("Yusuf"))
++        client, _ = signed_in("zainab@x.test")
++        key = client.cookies["sessionid"].value
++        set_features(parents=False)
++        assert client.get(ME).status_code == 403
++        assert not Session.objects.filter(pk=key).exists()
++        set_features(parents=True)
++        client.cookies["sessionid"] = key
++        assert client.get(ME).status_code == 403
++
+     def test_everyone_else_still_signs_in_and_me_has_no_children(
+         self, api_for, set_features
+     ):
+diff --git a/etqan/identity/tests/test_impersonation.py b/etqan/identity/tests/test_impersonation.py
+index 076c3f00..091df424 100644
+--- a/etqan/identity/tests/test_impersonation.py
++++ b/etqan/identity/tests/test_impersonation.py
+@@ -343,6 +343,20 @@ def test_the_switch_off_logs_the_session_out(api_for, set_features):
+     _logged_out(admin)
+ 
+ 
++def test_a_refused_session_does_not_come_back(api_for, set_features):
++    """ETQAN-QA-017: the 403 rolled the request back, the session row's
++    delete with it, so the old cookie signed in again once switched on."""
++    admin = api_for("admin")
++    sign_in_as(admin, person(api_for))
++    key = admin.cookies["sessionid"].value
++    set_features(quick_login=False)
++    _logged_out(admin)
++    assert not Session.objects.filter(pk=key).exists()
++    set_features(quick_login=True)
++    admin.cookies["sessionid"] = key
++    assert admin.get(ME).status_code == 403
++
++
+ def test_staff_losing_the_code_logs_the_session_out(staff_for, api_for):
+     staff = staff_for("quick_login.create", "teacher.view")
+     sign_in_as(staff, person(api_for))
+diff --git a/etqan/identity/tests/test_password_management.py b/etqan/identity/tests/test_password_management.py
+index ff4ee32b..ba7dbd1c 100644
+--- a/etqan/identity/tests/test_password_management.py
++++ b/etqan/identity/tests/test_password_management.py
+@@ -287,3 +287,44 @@ class TestPasswordChangeSecurityAlerts:
+             services._send_email_security_alert(  # noqa: SLF001
+                 to_email="u@example.com", action="passwrod_changed", language="en"
+             )
++
++
++WEAK = ["12345678", "password", "u@example.com", "x" * 129]
++
++
++@pytest.mark.django_db
++class TestNewPasswordsAreValidated:
++    """ETQAN-QA-018: change and reset-by-link take the same password rules as
++    reset-by-code and account creation (`AUTH_PASSWORD_VALIDATORS`, at most
++    128 characters); a refused password changes nothing."""
++
++    @pytest.mark.parametrize("weak", WEAK)
++    def test_change_refuses_a_weak_password(self, api, weak):
++        user = _user()
++        api.force_authenticate(user=user)
++        resp = api.post(
++            "/api/v1/identity/me/password/",
++            {"current_password": "old-secret-pw", "new_password": weak},
++            format="json",
++        )
++        assert resp.status_code == 400, resp.data
++        assert "new_password" in resp.data
++        user.refresh_from_db()
++        assert user.check_password("old-secret-pw")
++
++    @pytest.mark.parametrize("weak", WEAK)
++    def test_reset_by_link_refuses_a_weak_password(self, api, weak):
++        user = _verified_user()
++        resp = api.post(
++            "/api/v1/identity/password/reset/confirm/",
++            {
++                "uid": urlsafe_base64_encode(force_bytes(user.pk)),
++                "token": default_token_generator.make_token(user),
++                "new_password": weak,
++            },
++            format="json",
++        )
++        assert resp.status_code == 400, resp.data
++        assert "new_password" in resp.data
++        user.refresh_from_db()
++        assert user.check_password("old-secret-pw")

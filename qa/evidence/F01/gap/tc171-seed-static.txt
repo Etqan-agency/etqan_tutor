@@ -1,0 +1,4 @@
+seed_dev.py:825 create_academy(name, subdomain, admin_email, admin_full_name, admin_password) -> default timezone='UTC', currency='USD' (no tz/currency passed)
+seed_staging.py:37 same call, defaults UTC/USD
+Cited test: backend/etqan/tenants/tests/test_seed_staging.py::test_seed_staging_creates_the_demo_academy_with_the_dev_data (call_command('seed_staging') against the validated services.create_academy, test DB). Part of etqan/tenants run at the gate with the QA-003 fix: evidence/F01/gate/pytest-tenants.txt 189 passed, exit 0.
+18:189 passed, 55 warnings in 2181.17s (0:36:21)

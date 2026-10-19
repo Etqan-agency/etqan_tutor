@@ -1,0 +1,8 @@
+
+Running 3 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f02-signin.spec.ts:66:1 › TC-001 admin signs in, signs out, Back shows no data (3.7s)
+  ✓  2 [chromium] › e2e/qa/f02-signin.spec.ts:95:1 › TC-011 teacher turns on 2FA in Account and signs in with a code (49.7s)
+  ✓  3 [chromium] › e2e/qa/f02-signin.spec.ts:149:1 › TC-015 admin signs in as a student, sees the banner, and returns (2.6s)
+
+  3 passed (56.7s)

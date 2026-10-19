@@ -1,0 +1,10 @@
+DB totals: all=214 teacher1=103 student1=82
+adm: list=200 count=214 own=200 foreign=200 csvAccept=200 csvFormat=200(lines      215) activity=200 missing=200 | keys: cancel_reason,notes,has_report,payroll_locked,pays_teacher,created_by,disposal_reason,supervisor,meeting_host,postponed_by,compensated
+codes: list=403 count= own=403 foreign=403 csvAccept=403 csvFormat=403(lines        0) activity=403 missing=403 | keys: 
+nocode: list=403 count= own=403 foreign=403 csvAccept=403 csvFormat=403(lines        0) activity=403 missing=403 | keys: 
+sup: list=200 count=214 own=200 foreign=200 csvAccept=200 csvFormat=200(lines      215) activity=200 missing=200 | keys: cancel_reason,notes,has_report,payroll_locked,pays_teacher,created_by,disposal_reason,supervisor,meeting_host,postponed_by,compensated
+tea: list=200 count=103 own=200 foreign=404 csvAccept=403 csvFormat=403(lines        0) activity=404 missing=200 | keys: has_report,payroll_locked,meeting_host
+stu: list=200 count=82 own=200 foreign=404 csvAccept=403 csvFormat=403(lines        0) activity=404 missing=403 | keys: meeting_host
+par: list=200 count=82 own=200 foreign=404 csvAccept=403 csvFormat=403(lines        0) activity=404 missing=403 | keys: meeting_host
+anon: list=403 count= own=403 foreign=403 csvAccept=403 csvFormat=403(lines        0) activity=403 missing=403 | keys: 
+{"detail":"Authentication credentials were not provided."}

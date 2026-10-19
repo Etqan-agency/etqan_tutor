@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:24:1 › TC-125 feature fieldsets on qaother; tick only Chat (1.6s)
+
+  1 passed (3.0s)

@@ -1,0 +1,14 @@
+1|etqan.localhost|1|active|t|f|
+2|localhost|1|active|f|f|
+3|127.0.0.1|1|active|f|f|
+4|demo.etqan.localhost|2|active|t|f|
+5|other.etqan.localhost|3|active|t|f|
+6|qaother.etqan.localhost|4|active|t|f|
+7|qa.etqan.localhost|5|active|t|f|
+8|qa-tmp-1.etqan.localhost|6|active|t|f|
+9|qa-tmp-tz.etqan.localhost|7|active|t|f|
+10|qa-tmp-race-a.etqan.localhost|8|active|t|f|
+11|qa-tmp-race-b.etqan.localhost|10|active|t|f|
+12|qa-academy.test|6|pending|f|t|
+13|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd.co|6|pending|f|t|
+14|localtest.me|6|pending|f|t|

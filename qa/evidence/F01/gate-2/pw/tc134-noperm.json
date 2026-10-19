@@ -1,0 +1,10 @@
+{
+  "index": "Site administration\n\nYou don't have permission to view or edit anything.\n\nRecent actions\nMy actions\n\nNone available\n\n\n",
+  "statuses": {
+    "http://etqan.localhost/admin/tenants/academy/": 403,
+    "http://etqan.localhost/admin/tenants/academy/add/": 403,
+    "http://etqan.localhost/admin/tenants/academy/5/change/": 403,
+    "http://etqan.localhost/admin/tenants/domain/": 403,
+    "http://etqan.localhost/admin/tenants/domain/add/": 403
+  }
+}

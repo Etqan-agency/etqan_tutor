@@ -1,0 +1,107 @@
+diff --git a/Dockerfile b/Dockerfile
+index 0477ae8..21b79e1 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -51,9 +51,14 @@ RUN --mount=type=secret,id=tokens_token sh -euc '\
+ # Recreate the default node user as the host UID/GID and own /app, so the
+ # node_modules named volume (which inherits this path's ownership when first
+ # populated) and any bind-mounted writes are owned by the developer.
+-RUN deluser node 2>/dev/null || true; \
+-    addgroup -g ${GID} app && adduser -u ${UID} -G app -D app && \
+-    chown -R app:app /app
++# The host's GID may already be a group in the image (macOS `staff` is 20,
++# Alpine's `dialout`): the app user then joins that group (ETQAN-QA-001).
++RUN set -eu; \
++    deluser node 2>/dev/null || true; \
++    group="$(awk -F: -v gid="${GID}" '$3 == gid { print $1; exit }' /etc/group)"; \
++    if [ -z "$group" ]; then addgroup -g "${GID}" app; group=app; fi; \
++    adduser -u "${UID}" -G "$group" -D app; \
++    chown -R "${UID}:${GID}" /app
+ USER app
+ EXPOSE 5173
+ CMD ["pnpm", "dev"]
+diff --git a/src/features/identity/api.test.ts b/src/features/identity/api.test.ts
+index ed1863b..d0b6dbd 100644
+--- a/src/features/identity/api.test.ts
++++ b/src/features/identity/api.test.ts
+@@ -185,3 +185,34 @@ describe("identityApi Google", () => {
+ 		expect(result).toEqual(settings);
+ 	});
+ });
++
++// ETQAN-QA-006: signing in is CSRF-checked, so each step fetches the cookie.
++describe("identityApi sign-in steps", () => {
++	beforeEach(() => vi.clearAllMocks());
++
++	it("fetches a CSRF token before POSTing the password", async () => {
++		await identityApi.login({
++			identifier: "admin@demo.test",
++			password: "pw",
++		});
++		expect(api.get).toHaveBeenCalledWith("identity/csrf/");
++		expect(api.post).toHaveBeenCalledWith("identity/login/", {
++			identifier: "admin@demo.test",
++			password: "pw",
++		});
++		const getOrder = vi.mocked(api.get).mock.invocationCallOrder[0];
++		const postOrder = vi.mocked(api.post).mock.invocationCallOrder[0];
++		expect(getOrder).toBeLessThan(postOrder);
++	});
++
++	it("fetches a CSRF token before POSTing the second factor", async () => {
++		await identityApi.loginTwoFactor({ code: "123456" });
++		expect(api.get).toHaveBeenCalledWith("identity/csrf/");
++		expect(api.post).toHaveBeenCalledWith("identity/login/2fa/", {
++			code: "123456",
++		});
++		const getOrder = vi.mocked(api.get).mock.invocationCallOrder[0];
++		const postOrder = vi.mocked(api.post).mock.invocationCallOrder[0];
++		expect(getOrder).toBeLessThan(postOrder);
++	});
++});
+diff --git a/src/features/identity/api.ts b/src/features/identity/api.ts
+index d224fd1..b75cdda 100644
+--- a/src/features/identity/api.ts
++++ b/src/features/identity/api.ts
+@@ -72,10 +72,18 @@ export function parseApiError(error: unknown): ParsedApiError {
+ }
+ 
+ export const identityApi = {
++	// ETQAN-QA-006: the server checks CSRF on every step that signs in, so
++	// each fetches the CSRF cookie first (nothing has set it on a fresh visit).
+ 	login: (input: LoginInput) =>
+-		api.post<LoginResult>("identity/login/", input).then((r) => r.data),
++		api
++			.get("identity/csrf/")
++			.then(() => api.post<LoginResult>("identity/login/", input))
++			.then((r) => r.data),
+ 	loginTwoFactor: (input: TwoFactorInput) =>
+-		api.post<Me>("identity/login/2fa/", input).then((r) => r.data),
++		api
++			.get("identity/csrf/")
++			.then(() => api.post<Me>("identity/login/2fa/", input))
++			.then((r) => r.data),
+ 	signInOptions: () =>
+ 		api.get<SignInOptions>("identity/sign-in-options/").then((r) => r.data),
+ 	logout: () => api.post("identity/logout/").then(() => undefined),
+diff --git a/src/features/quicklogin/api.ts b/src/features/quicklogin/api.ts
+index 71b3c3c..af64fab 100644
+--- a/src/features/quicklogin/api.ts
++++ b/src/features/quicklogin/api.ts
+@@ -15,10 +15,14 @@ export const quickLoginApi = {
+ 		api
+ 			.post<LinksResult>("people/quick-login-links/", { user_ids: userIds })
+ 			.then((r) => r.data),
+-	/** `timezone` is the browser's zone, recorded with the sign-in (S-8). */
++	/** `timezone` is the browser's zone, recorded with the sign-in (S-8).
++	 * Signs in, so it fetches the CSRF cookie first (ETQAN-QA-006). */
+ 	exchange: (token: string, timezone: string) =>
+ 		api
+-			.post<ExchangeResult>("identity/quick-login/", { token, timezone })
++			.get("identity/csrf/")
++			.then(() =>
++				api.post<ExchangeResult>("identity/quick-login/", { token, timezone }),
++			)
+ 			.then((r) => r.data),
+ 	securityLog: (page: number) =>
+ 		api

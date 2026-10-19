@@ -1,0 +1,54 @@
+........................................................................ [  6%]
+........................................................................ [ 13%]
+........................................................................ [ 19%]
+........................................................................ [ 26%]
+........................................................................ [ 32%]
+........................................................................ [ 39%]
+........................................................................ [ 46%]
+........................................................................ [ 52%]
+........................................................................ [ 59%]
+........................................................................ [ 65%]
+........................................................................ [ 72%]
+........................................................................ [ 78%]
+........................................................................ [ 85%]
+........................................................................ [ 92%]
+........................................................................ [ 98%]
+..............                                                           [100%]
+=============================== warnings summary ===============================
+etqan/billing/tests/test_api.py: 22 warnings
+etqan/billing/tests/test_code_payments.py: 2 warnings
+etqan/billing/tests/test_family_payer.py: 1 warning
+etqan/billing/tests/test_features.py: 1 warning
+etqan/billing/tests/test_local_methods_api.py: 17 warnings
+etqan/billing/tests/test_online.py: 1 warning
+etqan/billing/tests/test_records.py: 23 warnings
+etqan/billing/tests/test_refunds.py: 2 warnings
+etqan/billing/tests/test_staff_scope.py: 2 warnings
+etqan/billing/tests/test_subscription_api.py: 8 warnings
+etqan/billing/tests/test_terms.py: 4 warnings
+etqan/billing/tests/test_wallet_payments.py: 1 warning
+etqan/wallet/tests/test_api.py: 19 warnings
+etqan/wallet/tests/test_compensation.py: 1 warning
+etqan/vouchers/tests/test_api.py: 37 warnings
+etqan/vouchers/tests/test_generation.py: 1 warning
+etqan/vouchers/tests/test_registry.py: 6 warnings
+etqan/gateways/tests/test_capture.py: 23 warnings
+etqan/gateways/tests/test_checkouts.py: 22 warnings
+etqan/gateways/tests/test_checkouts_csv.py: 5 warnings
+etqan/gateways/tests/test_connect_webhooks.py: 14 warnings
+etqan/gateways/tests/test_impersonation.py: 10 warnings
+etqan/gateways/tests/test_links.py: 13 warnings
+etqan/gateways/tests/test_list.py: 4 warnings
+etqan/gateways/tests/test_pay_links.py: 25 warnings
+etqan/gateways/tests/test_paypal_orders.py: 19 warnings
+etqan/gateways/tests/test_paypal_settings.py: 13 warnings
+etqan/gateways/tests/test_paypal_webhooks.py: 64 warnings
+etqan/gateways/tests/test_public_checkouts.py: 7 warnings
+etqan/gateways/tests/test_settings.py: 9 warnings
+etqan/gateways/tests/test_simulate.py: 9 warnings
+etqan/gateways/tests/test_webhooks.py: 26 warnings
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+1094 passed, 411 warnings in 37.93s

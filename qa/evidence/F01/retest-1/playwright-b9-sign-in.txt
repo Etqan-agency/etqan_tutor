@@ -1,0 +1,19 @@
+$ 2026-10-18T00:34:49Z E2E_MANAGE=manage-wrap.sh just e2e e2e/b9-sign-in.spec.ts (workers=1)
+
+Running 4 tests using 1 worker
+
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+  ✓  1 [chromium] › e2e/b9-sign-in.spec.ts:143:2 › B9b sign-in › a student by phone › a student signs in by phone (8.2s)
+  ✓  2 [chromium] › e2e/b9-sign-in.spec.ts:177:2 › B9b sign-in › a student by phone › an admin signs in as a student and returns (2.9s)
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+  ✓  3 [chromium] › e2e/b9-sign-in.spec.ts:57:2 › B9b sign-in › a teacher turns on two-factor and signs in with a code (21.1s)
+  ✓  4 [chromium] › e2e/b9-sign-in.spec.ts:197:2 › B9b sign-in › an emailed sign-in link works once (8.4s)
+
+  4 passed (48.5s)
+exit=0

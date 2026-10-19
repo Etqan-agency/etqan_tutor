@@ -1,0 +1,15 @@
+==== TC-010 2026-10-19T04:04:10.477751
+OK  percent bonus 201 :: 201 {"id": 6, "teacher": {"id": 40, "full_name": "F10 Teacher Six"}, "kind": "bonus", "amount_minor": null, "percent_bp": 1250, "currency": "EGP", "effective_on": "2026-06-10", "reason": "target", "payslip": null, "created_by": {"id": 1, "full_name": "QA Admin"}, "created_at": "2026-10-19T01:04:10.496218Z"}
+OK  bonus 1688 (1687.5 half-up) net 15188 :: {"gross_minor": 13500, "bonuses_minor": 1688, "net_minor": 15188}
+line text ['مكافأة — 12.5 ٪ — target']
+OK  {'kind': 'deduction', 'percent_bp': 500} 400 on kind :: 400 {"kind": ["Only a bonus can be a percentage."]}
+OK  {'kind': 'bonus', 'percent_bp': 500, 'amount_minor': 5} 400 on amount_minor :: 400 {"amount_minor": ["Give either an amount or a percentage."]}
+OK  {'kind': 'bonus', 'percent_bp': 0} 400 on percent_bp :: 400 {"percent_bp": ["Ensure this value is greater than or equal to 1."]}
+OK  {'kind': 'bonus', 'percent_bp': 10001} 400 on percent_bp :: 400 {"percent_bp": ["Ensure this value is less than or equal to 10000."]}
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  percent with switch off 400 :: 400 {"percent_bp": ["Percentage bonuses are switched off."]}
+OK  off: skipped :: {"bonuses_minor": 0, "net_minor": 13500}
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  on again applied
+gross-0 percent: payslip None | adj used 
+DB 6|bonus||1250|EGP

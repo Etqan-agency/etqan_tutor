@@ -1,0 +1,26 @@
+## BEFORE fix (services.py reverted) 2026-10-19T00:23:30Z
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+error = <class 'etqan.platform.exceptions.ForbiddenError'>, field = 'is_active'
+call = <function update_role at 0xffff7a19dc60>
+args = (<StaffRole: StaffRole<Theirs>>,)
+kwargs = {'fields': {'is_active': False}, 'by': <User: sara@x.test>}
+
+    def refused(error, field, call, *args, **kwargs):
+>       with pytest.raises(error) as exc:
+             ^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ForbiddenError
+
+etqan/access/tests/test_roles.py:52: Failed
+=============================== warnings summary ===============================
+etqan/access/tests/test_access_api.py: 2 warnings
+etqan/access/tests/test_routes.py: 473 warnings
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED etqan/access/tests/test_access_api.py::TestRoles::test_a_staff_editor_retires_only_a_role_whose_codes_it_holds
+FAILED etqan/access/tests/test_roles.py::TestEscalation::test_staff_retire_a_role_only_if_they_hold_all_its_codes
+2 failed, 483 passed, 1570 deselected, 475 warnings in 11.73s
+

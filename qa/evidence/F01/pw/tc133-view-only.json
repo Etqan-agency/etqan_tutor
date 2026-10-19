@@ -1,0 +1,16 @@
+{
+  "actions": [
+    "---------",
+    "Suspend selected academies",
+    "Reactivate selected academies",
+    "Copy features from another academy"
+  ],
+  "addLink": 0,
+  "saveButtons": 0,
+  "checkboxes": 0,
+  "forgedChange": 403,
+  "add": 403,
+  "forgedAction": 200,
+  "forgedActionMsg": "<ul class=\"messagelist\">\n              <li class=\"success\">Suspended 1 academies.</li>\n            </ul>",
+  "domainAdd": 403
+}

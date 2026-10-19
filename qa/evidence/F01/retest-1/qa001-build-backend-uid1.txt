@@ -1,0 +1,42 @@
+$ 2026-10-17T21:55:14Z docker build --progress=plain --target dev --build-arg UID=1 --build-arg GID=20  -t etqan-qa001-r1/backend:uid1 backend  (host id: uid=501(khaledsakr) gid=20(staff) groups=20(staff),12(everyone),61(localaccounts),79(_appserverusr),80(admin),81(_appserveradm),98(_lpadmin),702(com.apple.sharepoint.group.2),33(_appstore),100(_lpoperator),204(_developer),250(_analyticsusers),395(com.apple.access_ftp),398(com.apple.access_screensharing),399(com.apple.access_ssh),400(com.apple.access_remote_ae),701(com.apple.sharepoint.group.1))
+
+#4 [base 1/4] FROM docker.io/library/python:3.13-slim@sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f
+#4 resolve docker.io/library/python:3.13-slim@sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 597.42kB 0.3s done
+#5 DONE 0.3s
+
+#6 [base 3/4] RUN apt-get update && apt-get install -y --no-install-recommends     build-essential     libpq-dev     curl     && rm -rf /var/lib/apt/lists/*
+#6 CACHED
+
+#7 [base 4/4] COPY requirements/ requirements/
+#7 CACHED
+
+#8 [base 2/4] WORKDIR /app
+#8 CACHED
+
+#9 [dev 1/3] RUN pip install --no-cache-dir -r requirements/local.txt
+#9 CACHED
+
+#10 [dev 2/3] RUN set -eu;     getent group "20" >/dev/null || groupadd -g "20" app;     useradd -u "1" -g "20" -m app;     chown -R "1:20" /app
+#10 0.183 useradd: UID 1 is not unique
+#10 ERROR: process "/bin/sh -c set -eu;     getent group \"${GID}\" >/dev/null || groupadd -g \"${GID}\" app;     useradd -u \"${UID}\" -g \"${GID}\" -m app;     chown -R \"${UID}:${GID}\" /app" did not complete successfully: exit code: 4
+------
+ > [dev 2/3] RUN set -eu;     getent group "20" >/dev/null || groupadd -g "20" app;     useradd -u "1" -g "20" -m app;     chown -R "1:20" /app:
+0.183 useradd: UID 1 is not unique
+------
+Dockerfile:25
+--------------------
+  24 |     ARG GID=1000
+  25 | >>> RUN set -eu; \
+  26 | >>>     getent group "${GID}" >/dev/null || groupadd -g "${GID}" app; \
+  27 | >>>     useradd -u "${UID}" -g "${GID}" -m app; \
+  28 | >>>     chown -R "${UID}:${GID}" /app
+  29 |     COPY --chown=${UID}:${GID} . .
+--------------------
+ERROR: failed to solve: process "/bin/sh -c set -eu;     getent group \"${GID}\" >/dev/null || groupadd -g \"${GID}\" app;     useradd -u \"${UID}\" -g \"${GID}\" -m app;     chown -R \"${UID}:${GID}\" /app" did not complete successfully: exit code: 4
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/ko59vw61mplktwsdllxormqbx
+build exit=1

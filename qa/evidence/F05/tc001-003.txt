@@ -1,0 +1,41 @@
+== TC-001
+[201] POST people/students/ :: {"id":114,"role":"student","two_factor":false,"user":{"full_name":"QA5 Sami","email":"f05-stu1@qa.etqan.test","phone":"+201005550101","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_timezone":""},"profile":{"date_of_birth":"2012-03-01","gender":"male","country":"EG","status":"trial","notes":"private note","xp":0,"nationality":"arab","age_group":"teen","tags":[{"id":1,"emoji":"🎓","name_ar":"جديد","name_en":"New"}],"account_type":"individual","family":null}}
+114|student|t|t
+f05-stu1@qa.etqan.test|t|f
+1
+1
+1 ['[Etqan QA Academy] عيّن كلمة المرور']
+link: http://qa.etqan.localhost/app/reset-password?uid=MTE0&token=REDACTED-QA
+accept 200 
+login s1 200 {"id":114,"email":"f05-stu1@qa.etqan.test","full_name":"QA5 Sami","phone":"+201005550101","preferred_language":"ar","eff
+[200] GET identity/me/ :: {"id":114,"email":"f05-stu1@qa.etqan.test","full_name":"QA5 Sami","phone":"+201005550101","preferred_language":"ar","effective_language":"ar","timezone":"Africa/Cairo","role":"student","profiles":["student"],"profile":{"date_of_birth":"2012-03-01","gender":"male","country":"EG","status":"trial","xp":0,"age_group":"teen","tags":[{"id":1,"emoji":"🎓","name_ar":"جديد","name_en":"New"}],"account_type":"individual","family":null},"permissions":[],"is_super_admin":false,"features":["families","parents","supervision","session_reports","invoices","auto_notifications","teacher_attendance","export","payment_links","incentives_deductions","study_groups","balances","student_teacher_rate","contracts","report_deductions","fixed_teacher_salary","payment_receipts","manual_sessions","extra_sessions","disposal_status","postponement","group_subscriptions","expenses","online_payments","exchange_rates","syste
+f
+t
+== TC-002
+[201] POST people/students/ :: {"id":115,"role":"student","two_factor":false,"user":{"full_name":"QA5 NoMail A","email":null,"phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"no_login","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_timezone":""},"profile":
+[201] POST people/students/ :: {"id":116,"role":"student","two_factor":false,"user":{"full_name":"QA5 NoMail B","email":null,"phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"no_login","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_timezone":""},"profile":
+115|t|
+116|t|
+[400] POST people/students/115/invite/ :: {"email":["Only someone who has not set a password yet can be re-invited."]}
+[400] POST people/students/115/password-reset/ :: {"email":["Add an email address first."]}
+[200] PATCH people/students/115/ :: {"id":115,"role":"student","two_factor":false,"user":{"full_name":"QA5 NoMail A","email":"f05-nomail@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_tim
+1 ['[Etqan QA Academy] عيّن كلمة المرور']
+[400] PATCH people/students/115/ :: {"user":{"email":["An email cannot be removed once set."]}}
+[200] PATCH people/students/115/ :: {"id":115,"role":"student","two_factor":false,"user":{"full_name":"QA5 NoMail A","email":"f05-nomail2@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_ti
+1 ['[Etqan QA Academy] عيّن كلمة المرور']
+f05-nomail2@qa.etqan.test
+f05-nomail2@qa.etqan.test
+[400] POST identity/password/reset/confirm/ :: {"token":["Invalid or expired reset link."]}
+== TC-003
+[400] POST people/teachers/ :: {"profile":{"gender":["This field is required."]}}
+[400] POST people/teachers/ :: {"profile":{"payout_details":["Enter the payout details for this method."]}}
+count before=116 after=116
+0 []
+[201] POST people/teachers/ :: {"id":118,"role":"teacher","two_factor":false,"user":{"full_name":"QA5 Teacher G","email":"f05-tg@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_timezone":""},"profile":{"gender":"female","date_of_birth":null,"bio":"","default_meeting_url":"","pay_currency":"USD","payout_method":"vodafone_cash","payout_details":"+201005550202","course_ids":[],"tags":[{"id":22,"emoji":"👑","name_ar":"متميز في التدريس","name_en":"Excellent at teaching"}]}}
+[200] PATCH people/teachers/118/ :: {"id":118,"role":"teacher","two_factor":false,"user":{"full_name":"QA5 Teacher G","email":"f05-tg@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_timezo
+[200] PATCH people/teachers/118/ :: {"id":118,"role":"teacher","two_factor":false,"user":{"full_name":"QA5 Teacher G","email":"f05-tg@qa.etqan.test","phone":"+201005550203","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last
+[201] POST people/teachers/ :: {"id":119,"role":"teacher","two_factor":false,"user":{"full_name":"QA5 Teacher H","email":"f05-th@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_timezo
+118|USD||+201005550202
+119|EGP||
+1 ['[Etqan QA Academy] عيّن كلمة المرور']
+1 ['[Etqan QA Academy] عيّن كلمة المرور']

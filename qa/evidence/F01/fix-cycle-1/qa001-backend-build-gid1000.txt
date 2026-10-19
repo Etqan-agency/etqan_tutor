@@ -1,0 +1,5 @@
+2026-10-17T21:16:10Z
+## Linux default (UID/GID 1000) still gets its own app group
+sha256:714183bc517a062a526e29d8d58b801516af162752bc41317b1d3fda0cd8f244
+uid=1000(app) gid=1000(app) groups=1000(app)
+/app/manage.py 1000:1000

@@ -1,0 +1,5 @@
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+890 passed, 576 warnings in 18.98s
+$DC exec -T django pytest etqan/identity etqan/employment -q -p   0.09s user 0.10s system 0% cpu 22.265 total

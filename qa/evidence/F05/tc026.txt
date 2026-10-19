@@ -1,0 +1,14 @@
+== TC-026 before d4511329553d8991b583682a4d2e22e1/f940b986732fac06786c452a38f4bfe3
+qa: families=off
+[404] GET people/families/ :: {"detail":"This feature is not enabled for this academy."}
+[404] POST people/families/ :: {"detail":"This feature is not enabled for this academy."}
+[404] GET people/families/payers/?students=122 :: {"detail":"This feature is not enabled f
+[404] POST people/students/bulk/ :: {"detail":"This feature is not enabled for this academ
+[404] POST people/students/bulk/ :: {"detail":"This feature is not enabled for this academ
+[403] POST people/students/bulk/ :: {"detail":"You do not have permission to perform this 
+student keys has account_type/family: (False, False)
+?account_type=family [200] count=92 (all students=92)
+﻿ID,Name,Email,Phone,Language,Account,Active,Status,Gender,Country,Date of birth,Age group,Nationality,XP,Tags
+qa: families=on
+after d4511329553d8991b583682a4d2e22e1/f940b986732fac06786c452a38f4bfe3  identical: YES
+family 2 [200] students=[123, 122]

@@ -1,0 +1,18 @@
+ id |       subdomain       |          schema_name          |  status   |   timezone   | currency | etqan_defaults_suspended 
+----+-----------------------+-------------------------------+-----------+--------------+----------+--------------------------
+  1 |                       | public                        | active    | UTC          | USD      | f
+  2 | demo                  | academy_demo                  | active    | UTC          | USD      | f
+  3 | other                 | academy_other                 | active    | UTC          | USD      | f
+  4 | qaother               | academy_qaother               | active    | UTC          | USD      | f
+  5 | qa                    | academy_qa                    | active    | Africa/Cairo | EGP      | f
+  6 | qa-tmp-1              | academy_qa_tmp_1              | suspended | Asia/Riyadh  | USD      | f
+  7 | qa-tmp-tz             | academy_qa_tmp_tz             | suspended | Mars/Phobos  | usd      | f
+  8 | qa-tmp-race-a         | academy_qa_tmp_race_a         | suspended | UTC          | USD      | f
+ 10 | qa-tmp-race-b         | academy_qa_tmp_race_b         | suspended | UTC          | USD      | f
+ 12 | journey-1792270407267 | academy_journey_1792270407267 | active    | UTC          | USD      | f
+ 13 | journey-1792270459368 | academy_journey_1792270459368 | active    | UTC          | USD      | f
+ 14 | journey-1792270543395 | academy_journey_1792270543395 | active    | UTC          | USD      | f
+ 15 | qa-tmp-r1ok           | academy_qa_tmp_r1ok           | suspended | Africa/Cairo | EGP      | f
+ 16 | khaled                | academy_khaled                | active    | Africa/Cairo | EGP      | f
+(14 rows)
+

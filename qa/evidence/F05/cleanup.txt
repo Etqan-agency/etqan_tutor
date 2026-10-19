@@ -1,0 +1,7 @@
+teacher7 200 {"id":7,"role":"teacher","two_factor":false,"user":{"full_name":"QA teacher","email":"qa-teacher@qa.etqan.test","phone":
+QA parent||ar|t
+QA student||ar|t
+QA teacher||ar|t
+QA Admin||ar|t
+active
+||EGP

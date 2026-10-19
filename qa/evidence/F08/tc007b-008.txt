@@ -1,0 +1,41 @@
+== TC-007 daily job
+Hourly (spec §7): pauses, expiry and generation in every academy. One
+academy's failure is logged and rolled back; the others still run.
+{'academy_demo': 'ok', 'academy_journey_1792270407267': 'ok', 'academy_journey_1792270459368': 'ok', 'academy_journey_1792270543395': 'ok', 'academy_khaled': 'ok', 'academy_other': 'ok', 'academy_qa': 'ok', 'academy_qaother': 'ok'}
+242|at_disposal|not_set|present|not_set|regular|f||7||again|f|f|t
+== TC-008
+remB0 (1, 7)
+[200] POST sessions/243/cancel/ :: {"id":243,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-03","starts_at":"2026-10-03T05:00:00Z","minutes":30,"status":"cancelled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+[200] POST sessions/244/attendance/ :: {"id":244,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-04","starts_at":"2026-10-04T05:00:00Z","minutes":30,"status":"completed","student_attendance":"excused","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+remB pre (1, 7)
+[201] POST sessions/compensation/ :: {"session":{"id":251,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-23","starts_at":"2026-10-23T07:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full_name":"QA student","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher
+[409] POST sessions/compensation/ :: {"detail":"This session was already made up or compensated.","code":"scheduling.already_compensated"}
+[201] POST sessions/compensation/ :: {"session":{"id":252,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-24","starts_at":"2026-10-24T08:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendanc
+[409] POST sessions/compensation/ :: {"detail":"Only a session that did not use up the package can be made up.","code":"scheduling.not_compensable"}
+[409] POST sessions/compensation/ :: {"detail":"Only a session that did not use up the package can be made up.","code":"scheduling.not_compensable"}
+[409] POST sessions/compensation/ :: {"detail":"Only a session that did not use up the package can be made up.","code":"scheduling.not_compensable"}
+243|cancelled|not_set|not_set|not_set|regular|t|||student travel||f|f|t
+244|completed|excused|not_set|not_set|regular|t||1|||f|f|t
+251|scheduled|not_set|not_set|not_set|compensation|f|243||||f|f|t
+252|scheduled|not_set|not_set|not_set|compensation|f|244||||f|f|t
+remB after make-ups (1, 7)
+[409] POST sessions/243/attendance/ :: {"detail":"This session was made up or compensated, so it can't change.","code":"scheduling.has_compensation"}
+[409] POST sessions/243/restore/ :: {"detail":"This session was made up or compensated, so it can't change.","code":"scheduling.has_compensation"}
+[409] POST sessions/244/cancel/ :: {"detail":"This session was made up or compensated, so it can't change.","code":"scheduling.has_compensation"}
+[409] POST sessions/244/disposal/ :: {"detail":"This session was made up or compensated, so it can't change.","code":"scheduling.has_compensation"}
+[409] POST sessions/244/attendance/ :: {"detail":"This session was made up or compensated, so it can't change.","code":"scheduling.has_compensation"}
+[200] POST sessions/251/cancel/ :: {"id":251,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-23","starts_at":"2026-10-23T07:00:00Z","minutes":30,"status":"cancelled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"ful
+243|cancelled|not_set|not_set|not_set|regular|f|||student travel||f|f|t
+251|cancelled|not_set|not_set|not_set|compensation|f|243||makeup cancelled||f|f|t
+[201] POST sessions/compensation/ :: {"session":{"id":253,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-25","starts_at":"2026-10-25T07:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":false,"student":{
+[409] POST sessions/251/restore/ :: {"detail":"This session was already made up or compensated.","code":"scheduling.already_compensated"}
+243|cancelled|not_set|not_set|not_set|regular|t|||student travel||f|f|t
+251|cancelled|not_set|not_set|not_set|compensation|f|243||makeup cancelled||f|f|t
+253|scheduled|not_set|not_set|not_set|compensation|f|243||||f|f|t
+remB (1, 7)
+0
+244|t|makeup
+243|t|makeup
+CHECK (((((kind)::text = 'compensation'::text) AND (compensates_id IS NOT NULL)) OR ((NOT ((kind)::text = 'compensation'::text)) AND (compensates_id IS NULL))))|scheduling_compensation_has_original
+CREATE UNIQUE INDEX scheduling_one_live_compensation ON academy_qa.scheduling_session USING btree (compensates_id) WHERE ((compensates_id IS NOT NULL) AND (NOT ((status)::text = 'cancelled'::text)))
+CREATE INDEX scheduling_session_compensates_id_55334170 ON academy_qa.scheduling_session USING btree (compensates_id)

@@ -1,0 +1,5 @@
+==== TC-011 2026-10-19T04:04:16.940153
+OK  draft net -3000 :: -3000
+OK  issue 409 negative_net :: 409 {"detail": "The deductions are more than the pay.", "code": "payroll.negative_net"}
+after 409  f draft
+OK  issue 200 net 4000 :: 200 {"net_minor": 4000, "status": "issued"}

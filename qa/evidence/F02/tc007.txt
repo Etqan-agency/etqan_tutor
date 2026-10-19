@@ -1,0 +1,41 @@
+## TC-007
+200
+add wrong pw: {"current_password":["Incorrect password."]} 400 
+add: {"id":19,"email":"f02-a-second@qa.etqan.test","verified":false,"primary":false} 201 
+3n41jEmRFopwgq3jqeOsJg f02-a-second@qa.etqan.test | [Etqan QA Academy] [Etqan] تأكيد عنوان البريد الإلكتروني
+1prD7YhgZtkaXxdTpHx19B f02-a@qa.etqan.test | [Etqan QA Academy] تنبيه أمني: تم إجراء تغيير على حسابك
+key=REDACTED-QA
+emailconfirmation rows: 1
+verify: {"detail":"JSON parse error - Invalid control character at: line 1 column 73 (char 72)"} 400 
+verify again: {"detail":"JSON parse error - Invalid control character at: line 1 column 73 (char 72)"} 400 
+garbage: {"non_field_errors":["Invalid or expired verification key."]} 400 
+emails: [{"id":8,"email":"f02-a@qa.etqan.test","verified":true,"primary":true},{"id":19,"email":"f02-a-second@qa.etqan.test","verified":false,"primary":false}]
+user.email: f02-a@qa.etqan.test
+resend unknown:  200 
+resend verified:  200 
+resend unverified #1:  200  | resend unverified #2:  200  | resend unverified #3:  200  | resend unverified #4:  200  | resend unverified #5:  200  | resend unverified #6: {"detail":"Request was throttled. Expected available in 3600 seconds."} 429  | 
+mails after resends:
+3lTd0pfINCkoEE1U9PccgH f02-a-third@qa.etqan.test | [Etqan QA Academy] [Etqan] تأكيد عنوان البريد الإلكتروني
+7AhkrMuxNkJqfHPKvuoFfk f02-a-third@qa.etqan.test | [Etqan QA Academy] [Etqan] تأكيد عنوان البريد الإلكتروني
+5cshhyN0DJGdg5PPaREGV2 f02-a-third@qa.etqan.test | [Etqan QA Academy] [Etqan] تأكيد عنوان البريد الإلكتروني
+4lp9ZkjBG60XcdryNMKEbX f02-a-third@qa.etqan.test | [Etqan QA Academy] [Etqan] تأكيد عنوان البريد الإلكتروني
+4Nbv8x3618N65xv36uVK3A f02-a-third@qa.etqan.test | [Etqan QA Academy] [Etqan] تأكيد عنوان البريد الإلكتروني
+## TC-007 part 2 (key extracted from HTML; text part has a CR inside the key line)
+key=REDACTED-QA
+verify:  200 
+verify again: {"non_field_errors":["Invalid or expired verification key."]} 400 
+emails: [{"id":8,"email":"f02-a@qa.etqan.test","verified":true,"primary":true},{"id":19,"email":"f02-a-second@qa.etqan.test","verified":true,"primary":false},{"id":20,"email":"f02-a-third@qa.etqan.test","verified":false,"primary":false}]
+emailconfirmation rows for addr: 3
+user.email unchanged: f02-a@qa.etqan.test
+one mail per resend: count of confirm mails to f02-a-second = 1
+200
+qo add: 201
+qaother key at qa: {"non_field_errors":["Invalid or expired verification key."]} 400 
+unverified primary login:
+  {"non_field_errors":["Email address is not verified."]} 400 
+  wrong pw: {"non_field_errors":["Invalid credentials."]} 400 
+  S6 phone login with unverified primary (f02-a shares phone with f02-b, f02-c has its own):
+  f02-c by phone: 200
+cleanup: remove second/third
+204
+204

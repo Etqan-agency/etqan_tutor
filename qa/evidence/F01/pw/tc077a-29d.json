@@ -1,0 +1,6 @@
+{
+  "help": "Suspend Etqan's defaults\nStops this academy's use of Etqan's default accounts (email, WhatsApp, video, AI); its own accounts keep working. Allowed once an Etqan invoice is unpaid 30 days after issue; never automatic. Oldest unpaid Etqan invoice: issued 29 days ago.",
+  "messages": "",
+  "errors": "Etqan's defaults may be suspended only once an Etqan invoice is unpaid 30 days after issue.",
+  "errornote": "Please correct the error below."
+}

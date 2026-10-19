@@ -1,0 +1,7 @@
+qa host POST /api/v1/webhooks/zoom/ -> HTTP 404
+base host POST /api/v1/webhooks/zoom/ (reference) -> HTTP 400
+qa host POST /api/v1/webhooks/stripe-connect/ -> HTTP 404
+base host POST /api/v1/webhooks/stripe-connect/ (reference) -> HTTP 400
+localhost:8000 Host qa.etqan.localhost /internal/tls-allowed?domain=qa.etqan.localhost -> HTTP 404
+localhost:8000 (public, reference) -> ok HTTP 200
+webhook tables before|after: 0|0 | 0|0

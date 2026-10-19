@@ -1,0 +1,12 @@
+from qa import *
+a = S(); a.login(*PW["admin"]); a2 = S(); a2.login(*PW["admin"])
+log("==== TC-030 (added by Agent 2, P1): double-submit races on issue / mark-paid / pay-to-balance", datetime.datetime.now().isoformat())
+a.post("/payroll/payslips/generate/", {"year": 2026, "month": 9})
+pid = int(q("select id from payroll_payslip where teacher_id=10 and year=2026 and month=9")); log("T9 Sept", q(f"select status,net_minor from payroll_payslip where id={pid}"))
+r = par([lambda: a.post(f"/payroll/payslips/{pid}/issue/"), lambda: a2.post(f"/payroll/payslips/{pid}/issue/")])
+log("issue x2", [(c, j.get("status") or j.get("code")) for c, j in r]); chk("parallel issue: one 200 one 409", sorted(c for c, _ in r) == [200, 409])
+r = par([lambda: a.post(f"/payroll/payslips/{pid}/mark-paid/", {"paid_on": TODAY.isoformat()}), lambda: a2.post(f"/payroll/payslips/{pid}/pay-to-balance/", {"paid_on": TODAY.isoformat()})])
+log("mark-paid vs pay-to-balance", [(c, j.get("status") or j.get("code"), j.get("paid_to_balance")) for c, j in r]); chk("one winner one 409", sorted(c for c, _ in r) == [200, 409])
+chk("exactly one salary expense = net", q(f"select count(*)||'|'||sum(amount_minor) from finance_expense where source='payroll.payslip' and source_id={pid}") == "1|" + q(f"select net_minor from payroll_payslip where id={pid}"), q(f"select count(*), sum(amount_minor) from finance_expense where source='payroll.payslip' and source_id={pid}"))
+log("DB", q(f"select status,paid_on,paid_to_balance,net_minor from payroll_payslip where id={pid}"), "| locked sessions", q("select id,payroll_locked from scheduling_session where teacher_id=10"))
+save("tc030.txt")

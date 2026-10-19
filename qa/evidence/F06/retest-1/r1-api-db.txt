@@ -1,0 +1,88 @@
+login adm 200 {"id":1,"email":"qa-admin@qa.etqan.test","full_name":"QA Admin","phone":"","preferred_language":"ar","effective_language
+===== QA-042 create with a clash (teacher 7 Thu 18:00 already held by subs 16-19/35)
+[201] POST subscriptions/ :: {"id":73,"status":"active","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":7,"f
+n_conflicts= 9
+  session 216 2026-10-22 2026-10-22T15:00:00Z | other 72 16 2026-10-22T15:00:00Z
+  session 216 2026-10-22 2026-10-22T15:00:00Z | other 82 18 2026-10-22T15:00:00Z
+  session 216 2026-10-22 2026-10-22T15:00:00Z | other 87 19 2026-10-22T15:00:00Z
+  session 216 2026-10-22 2026-10-22T15:00:00Z | other 150 35 2026-10-22T15:00:00Z
+  session 217 2026-10-29 2026-10-29T15:00:00Z | other 73 16 2026-10-29T15:00:00Z
+  session 217 2026-10-29 2026-10-29T15:00:00Z | other 78 17 2026-10-29T15:00:00Z
+  session 217 2026-10-29 2026-10-29T15:00:00Z | other 83 18 2026-10-29T15:00:00Z
+  session 217 2026-10-29 2026-10-29T15:00:00Z | other 88 19 2026-10-29T15:00:00Z
+DB check: teacher-7 non-cancelled sessions overlapping sub 73
+216|2026-10-22|72|16
+216|2026-10-22|82|18
+216|2026-10-22|87|19
+216|2026-10-22|150|35
+217|2026-10-29|73|16
+217|2026-10-29|78|17
+217|2026-10-29|83|18
+217|2026-10-29|88|19
+217|2026-10-29|151|35
+===== QA-042 control create without clash (teacher 217 Sat 03:00)
+[201] POST subscriptions/ :: {"id":74,"status":"active","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":217,"full_name":"QA6 Teacher B"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":4,"name_ar":"ب2","name_en":"QA6 Pkg 3x10d"},"sta
+n_conflicts= 0
+===== QA-042 renew with a clash / control
+[201] POST subscriptions/73/renew/ :: {"id":75,"status":"active","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":4,"name_ar":"ب2","name_en":"QA6 Pkg 3x10d"},"starts_o
+n_conflicts= 5
+  session 220 2026-10-29 2026-10-29T15:00:00Z | other 73 16 2026-10-29T15:00:00Z
+  session 220 2026-10-29 2026-10-29T15:00:00Z | other 78 17 2026-10-29T15:00:00Z
+  session 220 2026-10-29 2026-10-29T15:00:00Z | other 83 18 2026-10-29T15:00:00Z
+  session 220 2026-10-29 2026-10-29T15:00:00Z | other 88 19 2026-10-29T15:00:00Z
+  session 220 2026-10-29 2026-10-29T15:00:00Z | other 151 35 2026-10-29T15:00:00Z
+[201] POST subscriptions/74/renew/ :: {"id":76,"status":"active","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":217,"full_name":"QA6 Teacher B"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":4,"name_ar":"ب2","name_en":"QA6 Pkg 3x10d"},"sta
+n_conflicts= 0
+===== QA-042 GET detail has no conflicts key (create/renew only)
+[200] keys has conflicts: False
+===== QA-042 non-office cannot create (teacher jar)
+login tea 200 {"id":7,"email":"qa-teacher@qa.etqan.test","full_name":"QA teacher","phone":"","preferred_language":"ar","effective_lang
+[403] POST subscriptions/ :: {"detail":"You do not have permission to perform this action."}
+===== QA-039 original repro (early renewal over a marked session), student 215 Mon 05:00
+[201] POST subscriptions/ :: {"id":77,"status":"active","schedule_status":"active","student":{"id":215,"full_name":"QA6 Student 4","timezone":"Africa/Cairo"},"teacher":{"id":7,"fu
+n_conflicts= 0
+[200] POST schedule/generate/ :: {"created":2,"skipped_existing":1,"skipped_paused":0,"skipped_out_of_term":0,"skipped_stopped":0,"skipped_inactive":0,"conflicts":[]}
+A2=77 session 10-19=222
+[200] POST sessions/222/attendance/ :: {"id":222,"subscription_id":77,"slot_id":91,"occurs_on":"2026-10-19","starts_at":"2026-10-19T02:00:00Z","minutes":45,"st
+[201] POST subscriptions/77/renew/ :: {"id":78,"status":"active","schedule_status":"active","student":{"id":215,"full_name":"QA6 Student 4","timezone":"Africa/Cairo"},"teacher":{"id":7,"fu
+n_conflicts= 1
+  session 227 2026-10-19 2026-10-19T02:00:00Z | other 222 77 2026-10-19T02:00:00Z
+[200] POST schedule/generate/ :: {"created":0,"skipped_existing":3,"skipped_paused":0,"skipped_out_of_term":0,"skipped_stopped":0,"skipped_inactive":0,"conflicts":[]}
+n_conflicts= 0
+77|2026-10-12|05:00|scheduled|not_set
+77|2026-10-19|05:00|completed|present
+78|2026-10-19|05:00|scheduled|not_set
+78|2026-10-26|05:00|scheduled|not_set
+===== QA-040 original repro: deactivate teacher 218 + student 213 (sub S17=34)
+[200] POST people/teachers/218/deactivate/ :: {"id":218,"role":"teacher","two_factor":false,"user":{"full_name":"QA6 Teacher C","email":"qa6-teach
+[200] POST people/students/213/deactivate/ :: {"id":213,"role":"student","two_factor":false,"user":{"full_name":"QA6 Student 2","email":"qa6-student-2@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":false,"account_state":"inactive","pending_email":"","last_login_ip":null,"last_login_device":"","last_log
+deactivated at 2026-10-19 16:28:06.617774+00
+213|f
+218|f
+2026-10-19
+2026-10-27
+2026-10-28
+DELETE 3
+run_lifecycle:
+{'paused': 0, 'resumed': 0, 'expired': 0, 'created': 0}
+[200] POST schedule/generate/ :: {"created":0,"skipped_existing":12,"skipped_paused":0,"skipped_out_of_term":0,"skipped_stopped":0,"skipped_inactive":3,"conflicts":[]}
+created=0 skipped_inactive=3
+sessions of S17 created after deactivation: 0
+today board S17 rows (inactive): 0
+renew/create with inactive people still refused:
+[400] POST subscriptions/34/renew/ :: {"student":["Choose an active student."]}
+-- teacher only inactive (student re-activated): still skipped
+[200] POST people/students/213/activate/ :: {"id":213,"role":"student","two_factor":false,"user":{"full_name":"QA6 Student 2
+[200] POST schedule/generate/ :: {"created":0,"skipped_existing":12,"skipped_paused":0,"skipped_out_of_term":0,"skipped_stopped":0,"skipped_inactive":3,"conflicts":[]}
+created=0 skipped_inactive=3
+-- reactivate teacher -> horizon refills
+[200] POST people/teachers/218/activate/ :: {"id":218,"role":"teacher","two_factor":false,"user":{"full_name":"QA6 Teacher C
+today board S17 rows (active): [('missing', None)]
+[200] POST schedule/generate/ :: {"created":3,"skipped_existing":12,"skipped_paused":0,"skipped_out_of_term":0,"skipped_stopped":0,"skipped_inactive":0,"conflicts":[]}
+created=3 skipped_inactive=0
+2026-10-19
+2026-10-27
+2026-10-28
+===== QA-041 API unchanged: PATCH timezone keeps old instants (proposal), restored
+[200] GET academy/settings/ :: {"timezone":"Africa/Cairo","default_currency":"EGP","default_language":"ar","generation_horizon_days":14,"renewal_grace_days":7,"absent_consumes_session":true,"excused_consumes_session":false,"auto_invoice_on_subscription":true,"invoice_due_days":7,"postpone_limit_minutes":120,"supervision_enabled":
+tz=Africa/Cairo

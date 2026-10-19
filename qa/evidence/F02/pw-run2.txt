@@ -1,0 +1,25 @@
+Running 3 tests using 1 worker
+  ✓  1 [chromium] › e2e/qa/f02-signin.spec.ts:66:1 › TC-001 admin signs in, signs out, Back shows no data (3.4s)
+  ✘  2 [chromium] › e2e/qa/f02-signin.spec.ts:95:1 › TC-011 teacher turns on 2FA in Account and signs in with a code (2.5m)
+  ✓  3 [chromium] › e2e/qa/f02-signin.spec.ts:149:1 › TC-015 admin signs in as a student, sees the banner, and returns (2.6s)
+  1) [chromium] › e2e/qa/f02-signin.spec.ts:95:1 › TC-011 teacher turns on 2FA in Account and signs in with a code 
+    Test timeout of 150000ms exceeded.
+    Error: locator.fill: Test timeout of 150000ms exceeded.
+    Call log:
+      - waiting for getByLabel(/^(code|الرمز)$/i)
+      106 | 	const { secret } = await setup.json();
+      107 | 	await expect(page.getByText(secret)).toBeVisible();
+    > 108 | 	await page.getByLabel(L.code).fill(totp(secret));
+          | 	                              ^
+      109 | 	const [confirm] = await Promise.all([
+      110 | 		page.waitForResponse((r) => r.url().endsWith("/identity/me/2fa/confirm/")),
+      111 | 		page.getByRole("button", { name: L.confirm }).click(),
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f02-signin.spec.ts:108:32
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f02-signin-TC-011-teach-24501-nt-and-signs-in-with-a-code-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Error Context: test-results/qa-f02-signin-TC-011-teach-24501-nt-and-signs-in-with-a-code-chromium/error-context.md
+  1 failed
+    [chromium] › e2e/qa/f02-signin.spec.ts:95:1 › TC-011 teacher turns on 2FA in Account and signs in with a code 
+  2 passed (2.6m)
+error: Recipe `e2e` failed with exit code 1

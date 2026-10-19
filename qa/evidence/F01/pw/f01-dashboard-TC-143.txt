@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:83:1 › TC-143 the new academy's public site renders with defaults (416ms)
+
+  1 passed (1.2s)

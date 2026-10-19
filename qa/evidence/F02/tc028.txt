@@ -1,0 +1,15 @@
+## TC-028 (Google: live OAuth BLOCKED; settings REAL)
+note: TC-026 admin PATCH stored client_id 'x'; docs (sign-in.md:113) gate google/settings on admins only, not on the switch -> spec expectation corrected.
+db now: 1|x||2026-10-18 23:06:19.443774+00|1
+off: start=404 settings(admin)={"client_id":"x","configured":false,"redirect_uri":"http://qa.etqan.localhost/api/v1/identity/google/callback/"} 200 
+clear client: {"client_id":"","configured":false,"redirect_uri":"http://qa.etqan.localhost/api/v1/identity/google/callback/"} 200 
+qa: google_sign_in=on
+on, no client: options.google=False start=302 -> http://qa.etqan.localhost/app/login?error=google
+save fake client: {"client_id":"qa-fake.apps.googleusercontent.com","configured":true,"redirect_uri":"http://qa.etqan.localhost/api/v1/identity/google/callback/"} 200 
+get: {"client_id":"qa-fake.apps.googleusercontent.com","configured":true,"redirect_uri":"http://qa.etqan.localhost/api/v1/identity/google/callback/"} 200 
+options.google=True  start=302 -> https://accounts.google.com/o/oauth2/v2/auth?client_id=qa-fake.apps.googleuserconte
+db: 1|qa-fake.apps.googleusercontent.com|gAAAA|f
+staff get/patch: 403/403  teacher: 403/403
+cleanup: {"client_id":"","configured":false,"redirect_uri":"http://qa.etqan.localhost/api/v1/identity/google/callback/"} 200 
+qa: google_sign_in=off
+db after: 1||0

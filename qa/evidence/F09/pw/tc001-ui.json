@@ -1,0 +1,38 @@
+{
+  "id": "93",
+  "number": "INV-000093",
+  "detail": {
+    "id": 93,
+    "number": "INV-000093",
+    "status": "unpaid",
+    "is_overdue": false,
+    "student": {
+      "id": 5,
+      "full_name": "QA student"
+    },
+    "payer": {
+      "id": 35,
+      "full_name": "QA Parent Three"
+    },
+    "subscription_id": null,
+    "description": "F09 UI 1792371430372",
+    "amount_minor": 50000,
+    "paid_minor": 0,
+    "balance_minor": 50000,
+    "currency": "EGP",
+    "issued_on": "2026-10-19",
+    "due_on": "2026-10-26",
+    "voided_at": null,
+    "created_at": "2026-10-19T00:57:13.134962Z",
+    "notes": "",
+    "created_by": {
+      "id": 1,
+      "full_name": "QA Admin"
+    },
+    "can_pay_online": [
+      "stripe"
+    ],
+    "local_methods": [],
+    "payments": []
+  }
+}

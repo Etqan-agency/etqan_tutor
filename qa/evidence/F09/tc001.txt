@@ -1,0 +1,21 @@
+== TC-001 2026-10-19T03:36:18.272479
+payers 200 {"default": 35, "choices": [{"id": 35, "full_name": "QA Parent Three", "relation": "family"}, {"id": 6, "full_name": "QA parent", "relation": "guardian"}, {"id": 5, "full_name": "QA student", "relation": "student"}]}
+create 201 {"id": 7, "number": "INV-000007", "student": {"id": 5, "full_name": "QA student"}, "payer": {"id": 35, "full_name": "QA Parent Three"}, "amount_minor": 50000, "currency": "EGP", "status": "unpaid", "paid_minor": 0, "balance_minor": 50000, "issued_on": "2026-10-19", "due_on": "2026-10-26", "subscription": null}
+OK  TC001 201 unpaid 50000 EGP balance
+OK  TC001 issued_on Cairo today :: 2026-10-19
+OK  TC001 payer == payers.default (family payer P3) :: {"id": 35, "full_name": "QA Parent Three"}
+detail 200 {"id": 7, "number": "INV-000007", "status": "unpaid", "is_overdue": false, "student": {"id": 5, "full_name": "QA student"}, "payer": {"id": 35, "full_name": "QA Parent Three"}, "subscription_id": null, "description": "Tajweed - October", "amount_minor": 50000, "paid_minor": 0, "balance_minor": 50000, "currency": "EGP", "issued_on": "2026-10-19", "due_on": "2026-10-26", "voided_at": null, "created_at": "2026-10-19T00:36:10.909684Z", "notes": "internal note", "created_by": {"id": 1, "full_name": "QA Admin"}, "can_pay_online": ["stripe"], "local_methods": [], "payments": []}
+list student 200 6
+list q 200 []
+usd 201 {"id": 8, "number": "INV-000008", "student": {"id": 5, "full_name": "QA student"}, "payer": {"id": 35, "full_name": "QA Parent Three"}, "amount_minor": 10000, "currency": "USD", "status": "unpaid", "paid_minor": 0, "balance_minor": 10000, "issued_on": "2026-10-19", "due_on": "2026-10-26", "subscription": null}
+OK  TC001 currency usd->USD
+payer=5 201 {"id": 9, "number": "INV-000009", "student": {"id": 5, "full_name": "QA student"}, "payer": {"id": 5, "full_name": "QA student"}, "amount_minor": 10000, "currency": "EGP", "status": "unpaid", "paid_minor": 0, "balance_minor": 10000, "issued_on": "2026-10-19", "due_on": "2026-10-26", "subscription": null}
+OK  TC001 payer=5 accepted
+DB 7|INV-000007|35|1|50000|EGP|2026-10-19|2026-10-26|unpaid||1
+8|INV-000008|35|1|10000|USD|2026-10-19|2026-10-26|unpaid||1
+9|INV-000009|5|1|10000|EGP|2026-10-19|2026-10-26|unpaid||1
+OK  TC001 counter +3 gap free :: 6->9
+numbers ['INV-000007', 'INV-000008', 'INV-000009']
+== TC-001 addendum q search 2026-10-19T03:36:49.013037
+q=number 200 [7]
+q=payer name 200 5

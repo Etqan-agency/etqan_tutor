@@ -1,0 +1,15 @@
+etqan_tutor-dashboard-1 85c9d0778694 etqan_tutor-dashboard Up 4 hours
+etqan_tutor-marketing-1 d8a9760f883e etqan_tutor-marketing Up 4 hours
+etqan_tutor-celery_worker-1 0082306cafbd etqan_tutor-celery_worker Up 4 hours
+etqan_tutor-celery_beat-1 0d92eff7abc9 etqan_tutor-celery_beat Up 4 hours
+etqan_tutor-flower-1 9803c4e6bcb3 etqan_tutor-flower Up 4 hours
+etqan_tutor-django-1 20294a4977c9 etqan_tutor-django Up 4 hours
+etqan_tutor-caddy-1 99b9125cb93d caddy:2-alpine Up 25 hours
+etqan_tutor-postgres-1 bd571572030f postgres:18-alpine Up 25 hours (healthy)
+etqan_tutor-redis-1 e7e1c820d5c8 redis:8-alpine Up 25 hours (healthy)
+etqan_tutor-mailpit-1 9a223f3e3ff7 axllent/mailpit:latest Up 25 hours (healthy)
+running containers unchanged (names, ids, images)
+etqan-qa001/marketing:gid20 a2d44565a190
+etqan-qa001/dashboard:gid20 8ac62a825edd
+etqan-qa001/backend:gid1000 714183bc517a
+etqan-qa001/backend:gid20 ae84f2792515

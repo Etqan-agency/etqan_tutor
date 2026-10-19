@@ -1,0 +1,4 @@
+A2-07 xn--80ak6aa92e -> xn--80ak6aa92e
+A2-07 xn--mgbh0fb -> xn--mgbh0fb
+A2-07 0 -> 0
+A2-07 00 -> 00

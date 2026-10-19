@@ -1,0 +1,31 @@
+   ✓ AcademySettingsForm > loads and saves timezone, currency and language  694ms
+   ✓ AcademySettingsForm > saves the horizon and grace days and checks their range  433ms
+   ✓ AcademySettingsForm > saves the counts-as-used switches and refreshes what they change  316ms
+   ✓ AcademySettingsForm > saves the invoice switch and due days and checks their range  400ms
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  05:13:14
+   Duration  7.95s (transform 791ms, setup 1.47s, collect 1.33s, tests 2.88s, environment 1.60s, prepare 164ms)
+
+npm notice
+npm notice New major version of npm available! 10.9.9 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
+         94 │ + → → );
+         95 │ + → → expect(
+         96 │ + → → → screen.queryByText(/keep·their·current·time/),
+         97 │ + → → ).not.toBeInTheDocument();
+     89  98 │     });
+     90  99 │   
+  
+
+Checked 5 files in 71ms. No fixes applied.
+Found 1 error.
+check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Some errors were emitted while running checks.
+  
+
+colour check: no inline colour values in src/, e2e/, scripts/

@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:118:2 › TC-141 Arabic set-password page › RTL, keyboard order, announced error (4.0s)
+
+  1 passed (4.9s)

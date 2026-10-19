@@ -1,0 +1,5 @@
+E           django.db.utils.IntegrityError: duplicate key value violates unique constraint "identity_user_email_ci_unique"
+E           django.db.utils.IntegrityError: duplicate key value violates unique constraint "identity_user_email_key"
+FAILED etqan/identity/tests/test_people_services.py::TestConcurrentEmailClaim::test_create_losing_the_race_is_a_field_error
+FAILED etqan/identity/tests/test_people_services.py::TestConcurrentEmailClaim::test_edit_losing_the_race_is_a_field_error
+2 failed, 68 deselected in 1.71s

@@ -1,0 +1,74 @@
+diff --git a/etqan/payroll/services/payslips.py b/etqan/payroll/services/payslips.py
+index c394c49c..05c6216c 100644
+--- a/etqan/payroll/services/payslips.py
++++ b/etqan/payroll/services/payslips.py
+@@ -320,7 +320,9 @@ def _pay(
+ ) -> Payslip:
+     """Spec §4.4 and slice B4c C-1, C-9. Payment is from issued only (409
+     `payroll.not_allowed_in_status`). ``paid_on`` may not be after the
+-    academy's today (400 on ``paid_on``). Plan R7: this is the only code that
++    academy's today, nor before the first day of the month the payslip pays
++    (400 on ``paid_on``), so its salary expense never lands in an earlier
++    period (ETQAN-QA-029). Plan R7: this is the only code that
+     makes a payslip paid. The caller's transaction also posts the salary
+     expense, so a failing post rolls the payment back. Locks: the payslip's
+     row, then (in finance's savepoint) the expense's row."""
+@@ -328,6 +330,10 @@ def _pay(
+     _refuse_unless(locked, ISSUED)
+     if paid_on > clock.today():
+         raise ValidationError("A payslip can't be paid in the future.", field="paid_on")
++    if paid_on < rules.month_bounds(locked.year, locked.month)[0]:
++        raise ValidationError(
++            "A payslip can't be paid before the month it pays.", field="paid_on"
++        )
+     locked.status = PAID
+     locked.paid_on = paid_on
+     locked.paid_by = by
+diff --git a/etqan/payroll/tests/test_api.py b/etqan/payroll/tests/test_api.py
+index 81317c22..51495e82 100644
+--- a/etqan/payroll/tests/test_api.py
++++ b/etqan/payroll/tests/test_api.py
+@@ -225,6 +225,14 @@ def test_refusals_are_coded_409s_and_field_400s(payroll):
+     )
+     assert future.status_code == 400
+     assert "paid_on" in future.json()
++    # ETQAN-QA-029: nor before the month it pays (June here).
++    before = payroll.admin.post(
++        f"{PAYSLIPS}{payroll.issued}/mark-paid/",
++        {"paid_on": "2026-05-31"},
++        format="json",
++    )
++    assert before.status_code == 400
++    assert "paid_on" in before.json()
+ 
+ 
+ def test_the_csv_is_for_admins(payroll):
+diff --git a/etqan/payroll/tests/test_pay_to_balance.py b/etqan/payroll/tests/test_pay_to_balance.py
+index 75fffd73..558ea2ee 100644
+--- a/etqan/payroll/tests/test_pay_to_balance.py
++++ b/etqan/payroll/tests/test_pay_to_balance.py
+@@ -71,6 +71,24 @@ def test_pay_to_balance_refuses_as_mark_paid_does(issued_slip, admin):
+     assert again.value.code == "payroll.not_allowed_in_status"
+ 
+ 
++@pytest.mark.parametrize("write", ["mark_paid", "pay_to_balance"])
++def test_a_payslip_is_not_paid_before_the_month_it_pays(
++    issued_slip, admin, salary_on, write
++):
++    # ETQAN-QA-029: a June payslip paid on 31 May (or in January) would book
++    # its salary expense into an earlier period. The month's first day is fine.
++    pay = getattr(services, write)
++    for early in (date(2026, 5, 31), date(2026, 1, 1)):
++        with pytest.raises(ValidationError) as exc:
++            pay(issued_slip, paid_on=early, by=admin)
++        assert exc.value.field == "paid_on"
++    issued_slip.refresh_from_db()
++    assert (issued_slip.status, issued_slip.paid_on) == ("issued", None)
++    assert posted() == []
++    pay(issued_slip, paid_on=date(2026, 6, 1), by=admin)
++    assert [e.spent_on for e in posted()] == [date(2026, 6, 1)]
++
++
+ # ── Salary expenses (C-9) ────────────────────────────────────────────────────
+ 
+ 

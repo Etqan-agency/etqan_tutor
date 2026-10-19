@@ -1,0 +1,60 @@
+== TC-004
+[201] POST people/parents/ :: {"id":120,"role":"parent","two_factor":false,"user":{"full_name":"QA5 Parent One","email":"f05-par1@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_time
+[201] POST people/parents/ :: {"id":121,"role":"parent","two_factor":false,"user":{"full_name":"QA5 Parent Two","email":"f05-par2@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_time
+[201] POST people/students/ :: {"id":122,"role":"student","two_factor":false,"user":{"full_name":"QA5 Kid Zed","email":null,"phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"no_login","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_timezone":""},"profile":{
+[201] POST people/students/ :: {"id":123,"role":"student","two_factor":false,"user":{"full_name":"QA5 Kid Amr","email":null,"phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"no_login","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_timezone":""},"profile":{
+[201] POST people/students/122/guardians/ :: [{"id":120,"full_name":"QA5 Parent One","email":"f05-par1@qa.etqan.test","phone":""}]
+[201] POST people/students/123/guardians/ :: [{"id":120,"full_name":"QA5 Parent One","email":"f05-par1@qa.etqan.test","phone":""}]
+[201] POST people/students/122/guardians/ :: [{"id":120,"full_name":"QA5 Parent One","email":"f05-par1@qa.etqan.test","phone":""},{"id":121,"full_name":"QA5 Parent Two","email":"f05-par2@qa.etqan.test","phone":""}]
+[201] POST people/students/122/guardians/ :: [{"id":120,"full_name":"QA5 Parent One","email":"f05-par1@qa.etqan.test","phone":""},{"id":121,"full_name":"QA5 Parent Two","email":"f05-par2@qa.etqan.test","phone":""}]
+children: [123, 122]
+guardians: [(120, 'QA5 Parent One'), (121, 'QA5 Parent Two')]
+[204] DELETE people/students/122/guardians/121/ :: 
+[204] DELETE people/students/122/guardians/121/ :: 
+[404] POST people/students/122/guardians/ :: {"detail":"No User matches the given query."}
+accept 200 
+login p1 200 {"id":120,"email":"f05-par1@qa.etqan.test","full_name":"QA5 Parent One","phone":"","preferred_language":"ar","effective_
+p1 me 200 children=[122, 123]
+qa: parents=off
+[404] GET people/parents/ :: {"detail":"This feature is not enabled for this academy."}
+[404] GET people/students/122/guardians/ :: {"detail":"This feature is not enabled for this academy."}
+[403] GET identity/me/ :: {"detail":"Authentication credentials were not provided."}
+login p1x 403 {"detail":"Parent access is not enabled for this academy."}
+qa: parents=on
+login p1 200 {"id":120,"email":"f05-par1@qa.etqan.test","full_name":"QA5 Parent One","phone":"","preferred_language":"ar","effective_
+children after on: [122, 123]
+3
+== TC-005
+[200] GET people/families/payers/?students=122,123 :: [{"id":123,"full_name":"QA5 Kid Amr","role":"student"},{"id":122,"full_name":"QA5 Kid Zed","role":"student"},{"id":120,"full_name":"QA5 Parent One","role":"parent"},{"id":121,"full_name":"QA5 Parent Two","role":"parent"}]
+[201] POST people/families/ :: {"id":2,"name":"QA5 Family A","is_active":true,"payer":{"id":120,"full_name":"QA5 Parent One","role":"parent"},"payer_needs_choosing":false,"students":[{"id":123,"full_name":"QA5 Kid Amr"},{"id":122,"full_name":"QA5 Kid Zed"}],"notes":"x","created_at":"2026-10-19T04:12:13.828488Z"}
+[400] POST people/families/ :: {"payer_id":["Choose one of the family's students or their parents."]}
+[400] POST people/families/ :: {"payer_id":["Choose one of the family's students or their parents."]}
+[400] POST people/families/ :: {"student_ids":["This list may not be empty."]}
+[400] POST people/families/ :: {"student_ids":["QA5 Kid Zed is already in another family."]}
+[400] POST people/families/ :: {"name":["Ensure this field has no more than 120 characters."]}
+[400] POST people/families/ :: {"name":["This field may not be blank."]}
+family count 2 -> 2
+[200] PATCH people/families/2/ :: {"id":2,"name":"QA5 Family A","is_active":true,"payer":{"id":122,"full_name":"QA5 Kid Zed","role":"student"},"payer_needs_choosing":false,"students":[{"id":123,"full_name":"QA5 Kid Amr"},{"id":122,"full_name":"QA5 Kid Zed"}],"notes":"x","created_at":"2026-10-19T04:12:13.828488Z"}
+[200] PATCH people/families/2/ :: {"id":2,"name":"QA5 Family A","is_active":true,"payer":{"id":120,"full_name":"QA5 Parent One","role":"parent"},"payer_needs_choosing":false,"students":[{"id":122,"full_name":"QA5 Kid Zed"}],"notes":"x","created_at":"2026-10-19T04:12:13.828488Z"}
+123|
+122|2
+family list: [33, 5, 122]
+?family: [122]
+indiv count 73 has K2: True
+re-add 200
+[200] PATCH people/families/2/ :: {"id":2,"name":"QA5 Family A","is_active":false,"payer":{"id":120,"full_name":"QA5 Parent One","role":"parent"},"payer_needs_choosing":false,"students":[{"id":123,"full_name":"QA5 Kid Amr"},{"id":122,"full_name":"QA5 Kid Zed"}],"notes":"x","created_at":"2026-10-19T04:12:13.828488Z"}
+123|2
+122|2
+retired search: [2]
+[405] DELETE people/families/2/ :: {"detail":"Method \"DELETE\" not allowed."}
+reactivate 200
+== TC-006
+fam row: 2|QA5 Family A|x|t|2026-10-19 04:12:13.828488+00|2026-10-19 04:12:15.128827+00|120
+deact 200
+flag=True payer={'id': 120, 'full_name': 'QA5 Parent One', 'role': 'parent'}
+
+payer None [121]
+after activate flag=False
+after unlink flag=False
+fam row: 2|QA5 Family A|x|t|2026-10-19 04:12:13.828488+00|2026-10-19 04:12:15.128827+00|120
+repair 200 flag=False

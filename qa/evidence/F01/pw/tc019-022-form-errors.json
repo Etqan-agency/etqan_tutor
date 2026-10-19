@@ -1,0 +1,482 @@
+[
+  {
+    "group": "TC-019",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "QA2"
+    },
+    "expect": "/Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\\.|valid “slug”/",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen.",
+    "kept": "QA2",
+    "keptOk": true
+  },
+  {
+    "group": "TC-019",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "-qa2"
+    },
+    "expect": "/Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\\.|valid “slug”/",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen.",
+    "kept": "-qa2",
+    "keptOk": true
+  },
+  {
+    "group": "TC-019",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "qa2-"
+    },
+    "expect": "/Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\\.|valid “slug”/",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen.",
+    "kept": "qa2-",
+    "keptOk": true
+  },
+  {
+    "group": "TC-019",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "q_a"
+    },
+    "expect": "/Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\\.|valid “slug”/",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen.",
+    "kept": "q_a",
+    "keptOk": true
+  },
+  {
+    "group": "TC-019",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "q.a"
+    },
+    "expect": "/Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\\.|valid “slug”/",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "Enter a valid “slug” consisting of letters, numbers, underscores or hyphens.",
+    "kept": "q.a",
+    "keptOk": true
+  },
+  {
+    "group": "TC-019",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "qa a"
+    },
+    "expect": "/Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\\.|valid “slug”/",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "Enter a valid “slug” consisting of letters, numbers, underscores or hyphens.",
+    "kept": "qa a",
+    "keptOk": true
+  },
+  {
+    "group": "TC-019",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "قا"
+    },
+    "expect": "/Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\\.|valid “slug”/",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "Enter a valid “slug” consisting of letters, numbers, underscores or hyphens.",
+    "kept": "قا",
+    "keptOk": true
+  },
+  {
+    "group": "TC-019",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "expect": "/Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\\.|valid “slug”/",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen.",
+    "kept": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "keptOk": true
+  },
+  {
+    "group": "TC-019",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "qа"
+    },
+    "expect": "/Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\\.|valid “slug”/",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "Enter a valid “slug” consisting of letters, numbers, underscores or hyphens.",
+    "kept": "qа",
+    "keptOk": true
+  },
+  {
+    "group": "TC-019",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "ｑａ"
+    },
+    "expect": "/Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen\\.|valid “slug”/",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "Enter a valid “slug” consisting of letters, numbers, underscores or hyphens.",
+    "kept": "ｑａ",
+    "keptOk": true
+  },
+  {
+    "group": "TC-019",
+    "field": "subdomain",
+    "input": {
+      "subdomain": ""
+    },
+    "expect": "/required|Use 1-32/",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen.",
+    "kept": "",
+    "keptOk": true
+  },
+  {
+    "group": "TC-019",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "   "
+    },
+    "expect": "/required|Use 1-32/",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen.",
+    "kept": "   ",
+    "keptOk": true
+  },
+  {
+    "group": "TC-020",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "www"
+    },
+    "expect": "/This subdomain is reserved\\./",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "This subdomain is reserved.",
+    "kept": "www",
+    "keptOk": true
+  },
+  {
+    "group": "TC-020",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "admin"
+    },
+    "expect": "/This subdomain is reserved\\./",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "This subdomain is reserved.",
+    "kept": "admin",
+    "keptOk": true
+  },
+  {
+    "group": "TC-020",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "api"
+    },
+    "expect": "/This subdomain is reserved\\./",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "This subdomain is reserved.",
+    "kept": "api",
+    "keptOk": true
+  },
+  {
+    "group": "TC-020",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "app"
+    },
+    "expect": "/This subdomain is reserved\\./",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "This subdomain is reserved.",
+    "kept": "app",
+    "keptOk": true
+  },
+  {
+    "group": "TC-020",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "public"
+    },
+    "expect": "/This subdomain is reserved\\./",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "This subdomain is reserved.",
+    "kept": "public",
+    "keptOk": true
+  },
+  {
+    "group": "TC-020",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "static"
+    },
+    "expect": "/This subdomain is reserved\\./",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "This subdomain is reserved.",
+    "kept": "static",
+    "keptOk": true
+  },
+  {
+    "group": "TC-020",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "media"
+    },
+    "expect": "/This subdomain is reserved\\./",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "This subdomain is reserved.",
+    "kept": "media",
+    "keptOk": true
+  },
+  {
+    "group": "TC-020",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "mail"
+    },
+    "expect": "/This subdomain is reserved\\./",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "This subdomain is reserved.",
+    "kept": "mail",
+    "keptOk": true
+  },
+  {
+    "group": "TC-020",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "flower"
+    },
+    "expect": "/This subdomain is reserved\\./",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "This subdomain is reserved.",
+    "kept": "flower",
+    "keptOk": true
+  },
+  {
+    "group": "TC-020",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "sites"
+    },
+    "expect": "/This subdomain is reserved\\./",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "This subdomain is reserved.",
+    "kept": "sites",
+    "keptOk": true
+  },
+  {
+    "group": "TC-020",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "etqan"
+    },
+    "expect": "/This subdomain is reserved\\./",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "This subdomain is reserved.",
+    "kept": "etqan",
+    "keptOk": true
+  },
+  {
+    "group": "TC-021",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "demo"
+    },
+    "expect": "/This subdomain is already taken\\./",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "This subdomain is already taken.",
+    "kept": "demo",
+    "keptOk": true
+  },
+  {
+    "group": "TC-021",
+    "field": "subdomain",
+    "input": {
+      "subdomain": "qaother"
+    },
+    "expect": "/This subdomain is already taken\\./",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "This subdomain is already taken.",
+    "kept": "qaother",
+    "keptOk": true
+  },
+  {
+    "group": "TC-022",
+    "field": "admin_email",
+    "input": {
+      "admin_email": ""
+    },
+    "expect": "/required|valid email/i",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "This field is required.",
+    "kept": "",
+    "keptOk": true
+  },
+  {
+    "group": "TC-022",
+    "field": "admin_email",
+    "input": {
+      "admin_email": "not-an-email"
+    },
+    "expect": "/required|valid email/i",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "Enter a valid email address.",
+    "kept": "not-an-email",
+    "keptOk": true
+  },
+  {
+    "group": "TC-022",
+    "field": "admin_email",
+    "input": {
+      "admin_email": "a@b"
+    },
+    "expect": "/required|valid email/i",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "Enter a valid email address.",
+    "kept": "a@b",
+    "keptOk": true
+  },
+  {
+    "group": "TC-023",
+    "field": "name",
+    "input": {
+      "name": ""
+    },
+    "expect": "/required/i",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "This field is required.",
+    "kept": "",
+    "keptOk": true
+  },
+  {
+    "group": "TC-023",
+    "field": "name",
+    "input": {
+      "name": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+    },
+    "expect": "/at most|characters/i",
+    "errornote": [
+      "Please correct the error below."
+    ],
+    "status": 200,
+    "url": "http://etqan.localhost/admin/tenants/academy/add/",
+    "error": "Ensure this value has at most 200 characters (it has 201).",
+    "kept": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+    "keptOk": true
+  }
+]

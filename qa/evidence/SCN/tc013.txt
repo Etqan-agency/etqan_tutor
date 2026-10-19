@@ -1,0 +1,64 @@
+== TC-013
+before 322/149/69/30/38/78
+-- pa
+[403] POST sessions/384/attendance/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST sessions/extra/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST subscriptions/ :: {"detail":"You do not have permission to perform this action."}
+[403] PATCH subscriptions/85/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST subscriptions/85/cancel/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST billing/invoices/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST billing/invoices/146/void/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST wallet/students/222/top-ups/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST wallet/students/222/adjustments/ :: {"detail":"You do not have permission to perform this action."}
+[403] GET payroll/payslips/ :: {"detail":"You do not have permission to perform this action."}
+[403] GET payroll/rates/ :: {"detail":"You do not have permission to perform this action."}
+[403] GET finance/summary/ :: {"detail":"You do not have permission to perform this action."}
+[403] GET notifications/log/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST people/students/ :: {"detail":"You do not have permission to perform this action."}
+[403] DELETE sessions/384/ :: {"detail":"You do not have permission to perform this action."}
+-- sa1
+[403] POST sessions/384/attendance/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST sessions/extra/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST subscriptions/ :: {"detail":"You do not have permission to perform this action."}
+[403] PATCH subscriptions/85/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST subscriptions/85/cancel/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST billing/invoices/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST billing/invoices/146/void/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST wallet/students/222/top-ups/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST wallet/students/222/adjustments/ :: {"detail":"You do not have permission to perform this action."}
+[403] GET payroll/payslips/ :: {"detail":"You do not have permission to perform this action."}
+[403] GET payroll/rates/ :: {"detail":"You do not have permission to perform this action."}
+[403] GET finance/summary/ :: {"detail":"You do not have permission to perform this action."}
+[403] GET notifications/log/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST people/students/ :: {"detail":"You do not have permission to perform this action."}
+[403] DELETE sessions/384/ :: {"detail":"You do not have permission to perform this action."}
+-- pb
+[403] POST sessions/384/attendance/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST sessions/extra/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST subscriptions/ :: {"detail":"You do not have permission to perform this action."}
+[403] PATCH subscriptions/85/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST subscriptions/85/cancel/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST billing/invoices/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST billing/invoices/146/void/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST wallet/students/222/top-ups/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST wallet/students/222/adjustments/ :: {"detail":"You do not have permission to perform this action."}
+[403] GET payroll/payslips/ :: {"detail":"You do not have permission to perform this action."}
+[403] GET payroll/rates/ :: {"detail":"You do not have permission to perform this action."}
+[403] GET finance/summary/ :: {"detail":"You do not have permission to perform this action."}
+[403] GET notifications/log/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST people/students/ :: {"detail":"You do not have permission to perform this action."}
+[403] DELETE sessions/384/ :: {"detail":"You do not have permission to perform this action."}
+-- postpone own future session (allowed exception if postponement on)
+[200] GET sessions/355/ :: {"id":355,"subscription_id":85,"slot_id":96,"occurs_on":"2026-10-26","starts_at":"2026-10-26T15:00:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set",
+-- anonymous sample
+[403] anon GET sessions/
+[403] anon GET subscriptions/
+[403] anon GET billing/invoices/
+[403] anon GET wallet/mine/
+[403] anon GET payroll/payslips/
+[403] anon POST attendance {"detail":"Authentication credentials were not provided."}
+after 322/149/69/30/38/78 unchanged=yes
+SET
+absent
+SET
+|active

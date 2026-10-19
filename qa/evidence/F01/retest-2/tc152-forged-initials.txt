@@ -1,0 +1,29 @@
+== 2026-10-18T21:06:08Z V4: the 30-day rule can't be bypassed with forged hidden initials
+-- delete fixture invoices 10,11,12 (no unpaid invoice >= 30 days left)
+DELETE 0
+DELETE 3
+may_suspend False
+active|f|QA Tmp One|QA-R2-V1|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+-- V4a forged: box ticked AND initial-etqan_defaults_suspended=True (claims unchanged)
+POST 302 /admin/tenants/academy/
+active|f|QA Tmp One|QA-R2-V1|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+-- V4b real change on a fresh page: tick the box
+POST 200 
+ERR Etqan&#x27;s defaults may be suspended only once an Etqan invoice is unpaid 30 days after issue.
+ERRNOTE Please correct the error below.
+active|f|QA Tmp One|QA-R2-V1|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+-- V4c legacy POST without any hidden initials, box ticked
+POST 200 
+ERR Etqan&#x27;s defaults may be suspended only once an Etqan invoice is unpaid 30 days after issue.
+ERRNOTE Please correct the error below.
+active|f|QA Tmp One|QA-R2-V1|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+-- V4d legacy POST without hidden initials, only plan notes changed
+POST 302 /admin/tenants/academy/
+active|f|QA Tmp One|QA-R2-V4d|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+-- V4e forged initial-status=suspended with status=suspended on the active row (claims unchanged)
+POST 302 /admin/tenants/academy/
+active|f|QA Tmp One|QA-R2-V4d|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+-- admin log:
+54|[]
+55|[{"changed": {"fields": ["Plan notes"]}}]
+56|[]

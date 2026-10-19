@@ -1,0 +1,13 @@
+# TC-169 evidence 2026-10-18T21:44:41Z (REAL, Playwright --workers=1 --retries=0; playwright-tc169.txt, pw/tc169-abort.json)
+first submit: page+context closed 3016 ms after clicking Save; runserver kept going (migration started ~21:43:20, invite task received 21:43:33,321 and succeeded = after commit); no request log line for the abandoned POST (client gone). Staff got no success message (UX recorded).
+resubmit 21:43:54 (30 s later, new context): HTTP 200 re-display, errorlist ['This subdomain is already taken.']
+academies with subdomain qa-tmp-abort: 1
+domains: qa-tmp-abort.etqan.localhost primary=true
+schemas like abort: 1
+settings rows: 1
+users: 1 user(s): qa-tmp-abort-admin@qa.etqan.test pw=! (unusable password until invite accepted)
+mailpit invites to qa-tmp-abort-admin@: 1 ['[QA Tmp Abort] عيّن كلمة المرور']
+
+## cleanup: suspend qa-tmp-abort via services.set_status (same path as the Suspend action)
+set_status -> 1
+('qa-tmp-abort', 'suspended')

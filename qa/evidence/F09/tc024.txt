@@ -1,0 +1,50 @@
+== TC-024 2026-10-19T03:43:33.189887
+start 63 201 {"id": "a7445c2a-0a4f-4d36-8fac-252f6aa7196e", "amount_minor": 50000, "fee_minor": 2500}
+sim (200, {'status': 'completed'})
+K1 completed|f|balance_below_amount|50000 X1 partial|20000
+OK  TC024/S3 stale checkout after manual payment: completed, not applied, balance_below_amount, invoice partial 20000
+start 64 201 {"id": "7dfbe633-9881-4a27-abf5-e1cc807d3f5b", "amount_minor": 50000, "fee_minor": 2500}
+sim (200, {'status': 'completed'})
+K2 completed|f|invoice_void|50000
+OK  TC024 voided invoice: attention invoice_void, no payment
+start 65 201 {"id": "21d58f28-7163-4fa2-a333-f6abf1ddb4fa", "amount_minor": 50000, "fee_minor": 2500}
+start 65 201 {"id": "eadc0c3e-0724-4783-a8f1-c75929109fe2", "amount_minor": 50000, "fee_minor": 2500}
+K3==K4? False
+sim3 (200, {'status': 'completed'})
+sim4 200 {"status": "completed"}
+K3 completed|t||50000 K4 completed|f|balance_below_amount|50000 X3 paid|50000
+OK  TC024/S11 two payers: invoice paid exactly once, never overpaid
+start 66 201 {"id": "18276f84-d7ee-45e9-a1b1-e6157d5866dd", "amount_minor": 50000, "fee_minor": 2500}
+sim (200, {'status': 'completed'})
+K5 completed|t||50000 X4 partial|50000
+OK  TC024 raised amount: old amount recorded as partial
+start 67 201 {"id": "d75bda65-c0b4-4a4e-a985-9abd6eec8ccd", "amount_minor": 50000, "fee_minor": 2500}
+sim (200, {'status': 'completed'})
+K6 completed|f|balance_below_amount|50000 X5 unpaid|0
+OK  TC024/S3 reduced amount: balance_below_amount, invoice unpaid, money held
+start 68 201 {"id": "7f1bb8dd-ea9c-4d51-8646-c415b848eab5", "amount_minor": 5000, "fee_minor": 250}
+fail (200, {'status': 'failed'}) failed|||5000
+pay after fail (200, {'status': 'completed'}) completed|t||5000 paid|5000
+OK  TC024 failed then pay completes (documented)
+start 69 201 {"id": "cbf2a76f-66fb-47ef-abf8-7968f8a25135", "amount_minor": 5000, "fee_minor": 250}
+expire (200, {'status': 'expired'}) expired|||5000
+OK  TC024 expire -> expired
+refund stripe 200 {"status": "unpaid", "paid_minor": 0, "balance_minor": 50000}
+OK  TC024/S4 refund stripe marks refunded, invoice reopens
+django log for provider call (expect none) []
+OK  TC024 delete online payment 409 billing.online_payment :: {"detail": "An online payment is refunded, never deleted.", "code": "billing.online_payment"}
+start 48 201 {"id": "c8a7b0b2-7c41-47ca-9ee4-daacfbeb3552", "amount_minor": 50000, "fee_minor": 2500}
+repay (200, {'status': 'completed'}) paid|50000
+OK  TC024 re-pay works, original checkout stays completed/applied
+cancel stripe checkout (PayPal route) 404 {"detail": "Checkout with identifier 'c8a7b0b2-7c41-47ca-9ee4-daacfbeb3552' not found."}
+OK  TC024 cancel on stripe checkout 4xx not 500
+cancel as admin 404 {"detail": "Checkout with identifier 'c8a7b0b2-7c41-47ca-9ee4-daacfbeb3552' not found."}
+limbo rows ac77b073-ef2c-4e18-9112-69fa2ee9d4d8|58|currency_mismatch|52500
+3e01a007-0a44-4f8f-ac8b-63c417a5d0db|59|mode_mismatch|52500
+994afb0d-efdc-4335-9940-63c1ae660232|62|already_recorded|52500
+a7445c2a-0a4f-4d36-8fac-252f6aa7196e|63|balance_below_amount|52500
+7dfbe633-9881-4a27-abf5-e1cc807d3f5b|64|invoice_void|52500
+eadc0c3e-0724-4783-a8f1-c75929109fe2|65|balance_below_amount|52500
+d75bda65-c0b4-4a4e-a985-9abd6eec8ccd|67|balance_below_amount|52500
+overpay check 
+S2 dashboard list attention open 200 7

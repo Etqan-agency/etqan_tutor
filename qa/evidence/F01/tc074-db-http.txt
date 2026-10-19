@@ -1,0 +1,5 @@
+## TC-074 (rerun alone)
+status: suspended
+csrf: {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"} 403
+health/live: 200
+after 074b: active csrf 200

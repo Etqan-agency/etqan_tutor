@@ -1,0 +1,14 @@
+# R2-TC-152 rerun 2026-10-18T21:49:41Z
+run 1 (21:46:17) failed its precondition only: qa-tmp-1 started suspended (kept suspended between runs) and the spec expects tab A to show active. Its flow still ran: tab A showed suspended+families on, tab B unticked families, tab A's stale Plan-notes save left families off and status suspended (pw/r2-tc152-ui.json run 1 = correct product behaviour).
+row before restore: suspended|f|{"families": true, "invoices": true, "internal_chat": false, "online_payments": true}|QA-R2-UI-stale-edit
+6|active|{"families": true, "invoices": true, "internal_chat": false, "online_payments": true}|79322d4b4d9c462091734180787d0034
+UPDATE 1
+DB after rerun: suspended|f|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}|QA-R2-UI-stale-edit
+last admin log rows:
+2026-10-18 21:49:43.768242+00|[{"changed": {"fields": ["Plan notes"]}}]
+2026-10-18 21:49:43.62572+00|[{"changed": {"fields": ["Family accounts (\u0646\u0638\u0627\u0645 \u062d\u0633\u0627\u0628\u0627\u062a \u0627\u0644\u0639\u0627\u0626\u0644\u0627\u062a)"]}}]
+2026-10-18 21:46:51.81827+00|[]
+{'shownA': {'status': 'active', 'families': True}, 'suspendMsg': 'Suspended 1 academies.', 'tabBMsg': 'The academy “QA Tmp One” was changed successfully.', 'tabAMsg': 'The academy “QA Tmp One” was changed successfully.', 'after': {'status': 'suspended', 'families': False, 'planNotes': 'QA-R2-UI-stale-edit'}}
+## restore qa-tmp-1 to baseline 2026-10-18T21:49:52Z
+suspended|79322d4b4d9c462091734180787d0034|d41d8cd98f00b204e9800998ecf8427e
+UPDATE 1

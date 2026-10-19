@@ -1,0 +1,25 @@
+{
+  "api": [
+    {
+      "id": 209,
+      "full_name": "QA5 UI Sib A 526170",
+      "role": "student"
+    },
+    {
+      "id": 210,
+      "full_name": "QA5 UI Sib B 526170",
+      "role": "student"
+    },
+    {
+      "id": 211,
+      "full_name": "QA5 UI Parent 526170",
+      "role": "parent"
+    }
+  ],
+  "ui": [
+    "—",
+    "QA5 UI Sib A 526170 (student)",
+    "QA5 UI Sib B 526170 (student)",
+    "QA5 UI Parent 526170 (parent)"
+  ]
+}

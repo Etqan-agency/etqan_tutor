@@ -1,0 +1,157 @@
+
+Running 3 tests using 1 worker
+
+  ✘  1 [chromium] › e2e/qa/f09-billing.spec.ts:43:1 › TC-001 owner creates a manual invoice, opens it and prints it (8.7s)
+  ✘  2 [chromium] › e2e/qa/f09-billing.spec.ts:43:1 › TC-001 owner creates a manual invoice, opens it and prints it (retry #1) (9.2s)
+  ✘  3 [chromium] › e2e/qa/f09-billing.spec.ts:71:1 › TC-021 parent applies a discount code from the family invoice page (5.9s)
+  ✘  4 [chromium] › e2e/qa/f09-billing.spec.ts:71:1 › TC-021 parent applies a discount code from the family invoice page (retry #1) (6.8s)
+  ✓  5 [chromium] › e2e/qa/f09-billing.spec.ts:109:1 › TC-022 parent pays an invoice online through the simulator (5.8s)
+
+
+  1) [chromium] › e2e/qa/f09-billing.spec.ts:43:1 › TC-001 owner creates a manual invoice, opens it and prints it 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('INV-000080').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText('INV-000080').first()
+
+
+      63 | 	await page.screenshot({ path: `${EVIDENCE}/tc001-detail.png`, fullPage: true });
+      64 | 	await page.goto(`${QA}/app/_print/invoices/${id}/print`);
+    > 65 | 	await expect(page.getByText(number).first()).toBeVisible();
+         | 	                                             ^
+      66 | 	await expect(page.getByText(/500\.00/).first()).toBeVisible();
+      67 | 	await page.screenshot({ path: `${EVIDENCE}/tc001-print.png`, fullPage: true });
+      68 | 	save("tc001-ui.json", { id, number, detail: detail.json });
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f09-billing.spec.ts:65:47
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f09-billing-TC-001-owne-18762-oice-opens-it-and-prints-it-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f09-billing-TC-001-owne-18762-oice-opens-it-and-prints-it-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('INV-000081').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText('INV-000081').first()
+
+
+      63 | 	await page.screenshot({ path: `${EVIDENCE}/tc001-detail.png`, fullPage: true });
+      64 | 	await page.goto(`${QA}/app/_print/invoices/${id}/print`);
+    > 65 | 	await expect(page.getByText(number).first()).toBeVisible();
+         | 	                                             ^
+      66 | 	await expect(page.getByText(/500\.00/).first()).toBeVisible();
+      67 | 	await page.screenshot({ path: `${EVIDENCE}/tc001-print.png`, fullPage: true });
+      68 | 	save("tc001-ui.json", { id, number, detail: detail.json });
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f09-billing.spec.ts:65:47
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f09-billing-TC-001-owne-18762-oice-opens-it-and-prints-it-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f09-billing-TC-001-owne-18762-oice-opens-it-and-prints-it-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f09-billing-TC-001-owne-18762-oice-opens-it-and-prints-it-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f09-billing-TC-001-owne-18762-oice-opens-it-and-prints-it-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › e2e/qa/f09-billing.spec.ts:71:1 › TC-021 parent applies a discount code from the family invoice page 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText(/Discount of .*20\.00 applied\./)
+    Expected: visible
+    Error: strict mode violation: getByText(/Discount of .*20\.00 applied\./) resolved to 2 elements:
+        1) <div class="text-muted-foreground">Discount of EGP 20.00 applied.</div> aka getByText('Discount of EGP 20.00 applied.', { exact: true })
+        2) <span role="status" aria-live="assertive">Notifications Discount of EGP 20.00 applied.</span> aka getByText('Notifications Discount of EGP')
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText(/Discount of .*20\.00 applied\./)
+
+
+       95 | 	await dialog.getByLabel(/^Code/).fill(code);
+       96 | 	await dialog.getByRole("button", { name: "Apply", exact: true }).click();
+    >  97 | 	await expect(parent.getByText(/Discount of .*20\.00 applied\./)).toBeVisible();
+          | 	                                                                 ^
+       98 | 	await expect(invoiceHeader(parent, inv.json.number).getByText("Partly paid", { exact: true })).toBeVisible();
+       99 | 	await expect(parent.locator("li").filter({ hasText: "· System code" })).toContainText(code);
+      100 | 	await parent.screenshot({ path: `${EVIDENCE}/tc021-invoice.png`, fullPage: true });
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f09-billing.spec.ts:97:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f09-billing-TC-021-pare-22ea2-rom-the-family-invoice-page-chromium/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f09-billing-TC-021-pare-22ea2-rom-the-family-invoice-page-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f09-billing-TC-021-pare-22ea2-rom-the-family-invoice-page-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText(/Discount of .*20\.00 applied\./)
+    Expected: visible
+    Error: strict mode violation: getByText(/Discount of .*20\.00 applied\./) resolved to 2 elements:
+        1) <div class="text-muted-foreground">Discount of EGP 20.00 applied.</div> aka getByText('Discount of EGP 20.00 applied.', { exact: true })
+        2) <span role="status" aria-live="assertive">Notifications Discount of EGP 20.00 applied.</span> aka getByText('Notifications Discount of EGP')
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText(/Discount of .*20\.00 applied\./)
+
+
+       95 | 	await dialog.getByLabel(/^Code/).fill(code);
+       96 | 	await dialog.getByRole("button", { name: "Apply", exact: true }).click();
+    >  97 | 	await expect(parent.getByText(/Discount of .*20\.00 applied\./)).toBeVisible();
+          | 	                                                                 ^
+       98 | 	await expect(invoiceHeader(parent, inv.json.number).getByText("Partly paid", { exact: true })).toBeVisible();
+       99 | 	await expect(parent.locator("li").filter({ hasText: "· System code" })).toContainText(code);
+      100 | 	await parent.screenshot({ path: `${EVIDENCE}/tc021-invoice.png`, fullPage: true });
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f09-billing.spec.ts:97:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f09-billing-TC-021-pare-22ea2-rom-the-family-invoice-page-chromium-retry1/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f09-billing-TC-021-pare-22ea2-rom-the-family-invoice-page-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f09-billing-TC-021-pare-22ea2-rom-the-family-invoice-page-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f09-billing-TC-021-pare-22ea2-rom-the-family-invoice-page-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f09-billing-TC-021-pare-22ea2-rom-the-family-invoice-page-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › e2e/qa/f09-billing.spec.ts:43:1 › TC-001 owner creates a manual invoice, opens it and prints it 
+    [chromium] › e2e/qa/f09-billing.spec.ts:71:1 › TC-021 parent applies a discount code from the family invoice page 
+  1 passed (39.3s)
+error: Recipe `e2e` failed with exit code 1

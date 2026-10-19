@@ -1,0 +1,20 @@
+[200] POST subscriptions/75/cancel/ :: {"id":75,"status":"cancelled","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_nam
+[200] POST billing/invoices/139/void/ :: {"id":139,"number":"INV-000139","status":"void","is_overdue":false,"student":{"id":216,"full_name":"QA6 Student SA"},"payer":{"id":216,"full_name":"QA6 Student 
+[204] DELETE subscriptions/75/ :: 
+[200] POST subscriptions/76/cancel/ :: {"id":76,"status":"cancelled","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":217,"full_n
+[200] POST billing/invoices/140/void/ :: {"id":140,"number":"INV-000140","status":"void","is_overdue":false,"student":{"id":216,"full_name":"QA6 Student SA"},"payer":{"id":216,"full_name":"QA6 Student 
+[204] DELETE subscriptions/76/ :: 
+[200] POST subscriptions/73/cancel/ :: {"id":73,"status":"cancelled","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_nam
+[200] POST billing/invoices/137/void/ :: {"id":137,"number":"INV-000137","status":"void","is_overdue":false,"student":{"id":216,"full_name":"QA6 Student SA"},"payer":{"id":216,"full_name":"QA6 Student 
+[204] DELETE subscriptions/73/ :: 
+[200] POST subscriptions/74/cancel/ :: {"id":74,"status":"cancelled","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":217,"full_n
+[200] POST billing/invoices/138/void/ :: {"id":138,"number":"INV-000138","status":"void","is_overdue":false,"student":{"id":216,"full_name":"QA6 Student SA"},"payer":{"id":216,"full_name":"QA6 Student 
+[204] DELETE subscriptions/74/ :: 
+[200] POST subscriptions/78/cancel/ :: {"id":78,"status":"cancelled","schedule_status":"active","student":{"id":215,"full_name":"QA6 Student 4","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name
+[200] POST billing/invoices/142/void/ :: {"id":142,"number":"INV-000142","status":"void","is_overdue":false,"student":{"id":215,"full_name":"QA6 Student 4"},"payer":{"id":215,"full_name":"QA6 Student 4
+[204] DELETE subscriptions/78/ :: 
+[409] POST subscriptions/77/cancel/ :: {"detail":"Not allowed while the subscription is expired.","code":"scheduling.not_allowed_in_status"}
+[200] POST billing/invoices/141/void/ :: {"id":141,"number":"INV-000141","status":"void","is_overdue":false,"student":{"id":215,"full_name":"QA6 Student 4"},"payer":{"id":215,"full_name":"QA6 Student 4
+[409] DELETE subscriptions/77/ :: {"detail":"A session of this subscription is marked, completed or cancelled.","code":"scheduling.has_marked_sessions"}
+77|expired
+77|3

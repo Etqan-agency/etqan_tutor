@@ -1,0 +1,23 @@
+== 2026-10-18T21:05:46Z variants on the stale tab A (shows active|f|families on|plan empty)
+-- row now:
+suspended|t|QA Tmp One|QA-R2-stale-edit|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+-- V1 stale page with an error (name blank): re-displayed with errors
+POST 200 
+ERR This field is required.
+ERRNOTE Please correct the error below.
+   re-rendered hidden initials: <input type="hidden" name="initial-name" value="QA Tmp One" id="initial-id_name"> <input type="hidden" name="initial-status" value="active" id="initial-id_status"> <input type="hidden" name="initial-etqan_defaults_suspended" value="False" id="initial-id_etqan_defaults_suspended"> <input type="hidden" name="initial-feature_families" value="True" id="initial-id_feature_families"> 
+suspended|t|QA Tmp One|QA-R2-stale-edit|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+-- V1b resubmit the re-displayed page with the name fixed
+POST 302 /admin/tenants/academy/
+suspended|t|QA Tmp One|QA-R2-V1|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+-- V2 stale page where the user explicitly ticks Family accounts on and changes the name
+POST 302 /admin/tenants/academy/
+suspended|t|QA Tmp One R2|QA-R2-V1|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+   (families box is shown ticked on tab A, so posting 'on' is NOT a change on that page -> expected: families stays off; name saved)
+-- V3 fresh page, user unticks the defaults suspension and sets status active (lifting is always allowed)
+POST 302 /admin/tenants/academy/
+active|f|QA Tmp One|QA-R2-V1|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+-- admin log:
+51|[{"changed": {"fields": ["Plan notes"]}}]
+52|[{"changed": {"fields": ["Name"]}}]
+53|[{"changed": {"fields": ["Name", "Status", "Suspend Etqan's defaults"]}}]

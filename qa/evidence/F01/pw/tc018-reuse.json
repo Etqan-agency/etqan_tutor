@@ -1,0 +1,18 @@
+{
+  "again": {
+    "status": 400,
+    "body": {
+      "token": [
+        "Invalid or expired reset link."
+      ]
+    }
+  },
+  "wrong": {
+    "status": 400,
+    "body": {
+      "token": [
+        "Invalid or expired reset link."
+      ]
+    }
+  }
+}

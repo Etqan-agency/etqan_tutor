@@ -1,0 +1,6 @@
+{
+  "help": "Suspend Etqan's defaults\nStops this academy's use of Etqan's default accounts (email, WhatsApp, video, AI); its own accounts keep working. Allowed once an Etqan invoice is unpaid 30 days after issue; never automatic. No unpaid Etqan invoice.",
+  "messages": "The academy “QA Tmp One” was changed successfully.",
+  "errors": "",
+  "errornote": ""
+}

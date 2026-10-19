@@ -1,0 +1,16 @@
+## TC-004
+1:400 2:400 3:400 4:400 5:400 6:400 7:400 8:400 9:400 10:400 
+11th correct:
+HTTP/1.1 429 Too Many Requests
+Retry-After: 3599
+{"detail":"Request was throttled. Expected available in 3599 seconds."}
+
+upper: {"detail":"Request was throttled. Expected available in 3599 seconds."} 429 
+qa-student: 200
+qaother same email: {"non_field_errors":["Invalid credentials."]} 400 
+redis keys:
+0
+success mid: 200
+400 400 400 400 400 400 
+after 6+6 with success between, correct: 200
+redis db1 keys (hashed, tenant-prefixed): academy_qa::1:failures:login_id:6bb3a5...; academy_qa::1:failures:login_ip:4e73a2...

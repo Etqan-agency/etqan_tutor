@@ -1,0 +1,307 @@
+$ 2026-10-18T04:27:27Z just e2e e2e/qa/f01-login-csrf.spec.ts e2e/tenant-login.spec.ts e2e/b9-sign-in.spec.ts (workers=1)
+
+Running 9 tests using 1 worker
+
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+  ✓  1 [chromium] › e2e/b9-sign-in.spec.ts:143:2 › B9b sign-in › a student by phone › a student signs in by phone (8.1s)
+  ✓  2 [chromium] › e2e/b9-sign-in.spec.ts:177:2 › B9b sign-in › a student by phone › an admin signs in as a student and returns (3.2s)
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+  ✓  3 [chromium] › e2e/b9-sign-in.spec.ts:57:2 › B9b sign-in › a teacher turns on two-factor and signs in with a code (12.4s)
+  ✓  4 [chromium] › e2e/b9-sign-in.spec.ts:197:2 › B9b sign-in › an emailed sign-in link works once (8.9s)
+  ✓  5 [chromium] › e2e/qa/f01-login-csrf.spec.ts:10:1 › QA-006 a fresh browser signs in through the dashboard (1.5s)
+  ✓  6 [chromium] › e2e/qa/f01-login-csrf.spec.ts:38:1 › QA-006 a form on another page cannot sign the browser in (357ms)
+  ✓  7 [chromium] › e2e/tenant-login.spec.ts:12:2 › academies › an academy admin signs in on their own academy (1.6s)
+  ✓  8 [chromium] › e2e/tenant-login.spec.ts:17:2 › academies › an admin of one academy cannot sign in on another (1.5s)
+  ✓  9 [chromium] › e2e/tenant-login.spec.ts:23:2 › academies › each academy keeps its own session (2.5s)
+
+  9 passed (49.5s)
+exit=0 2026-10-18T04:28:20Z
+
+$ 2026-10-18T04:28:20Z just e2e e2e/qa/f01-console.spec.ts --grep TC-064 suspend (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:63:1 › TC-064 suspend qa-tmp-1 with the admin action (899ms)
+
+  1 passed (1.4s)
+exit=0 2026-10-18T04:28:24Z
+
+$ 2026-10-18T04:28:24Z just e2e e2e/qa/f01-console.spec.ts --grep TC-071  (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:74:1 › TC-071 the suspended academy's dashboard login (5.1s)
+
+  1 passed (5.6s)
+exit=0 2026-10-18T04:28:32Z
+
+$ 2026-10-18T04:28:32Z just e2e e2e/qa/f01-console.spec.ts --grep TC-072  (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:98:1 › TC-072 reactivate qa-tmp-1 (874ms)
+
+  1 passed (1.4s)
+exit=0 2026-10-18T04:28:36Z
+
+$ 2026-10-18T04:28:36Z just e2e e2e/qa/f01-console.spec.ts --grep TC-074 suspend (workers=1)
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:108:1 › TC-074 suspend through the change form's status field (878ms)
+  ✓  2 [chromium] › e2e/qa/f01-console.spec.ts:120:1 › TC-074b reactivate through the change form (775ms)
+
+  2 passed (2.2s)
+exit=0 2026-10-18T04:28:40Z
+
+$ 2026-10-18T04:28:40Z just e2e e2e/qa/f01-console.spec.ts --grep TC-074b (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:120:1 › TC-074b reactivate through the change form (918ms)
+
+  1 passed (1.5s)
+exit=0 2026-10-18T04:28:44Z
+
+$ 2026-10-18T04:28:44Z just e2e e2e/qa/f01-console.spec.ts --grep TC-073/075 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:129:1 › TC-073/075/127/137 public rows hidden, no deletes, forged actions (1.5s)
+
+  1 passed (2.0s)
+exit=0 2026-10-18T04:28:49Z
+
+$ 2026-10-18T04:28:49Z just e2e e2e/qa/f01-console.spec.ts --grep TC-133 a view-only (workers=1)
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:167:1 › TC-133 a view-only Etqan staff member can't change anything (1.5s)
+  ✘  2 [chromium] › e2e/qa/f01-console.spec.ts:288:1 › TC-133b a view-only staff member runs Copy features and Suspend from the UI (30.1s)
+  ✘  3 [chromium] › e2e/qa/f01-console.spec.ts:288:1 › TC-133b a view-only staff member runs Copy features and Suspend from the UI (retry #1) (30.1s)
+
+
+  1) [chromium] › e2e/qa/f01-console.spec.ts:288:1 › TC-133b a view-only staff member runs Copy features and Suspend from the UI 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.check: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('input[name="_selected_action"][value="6"]')
+
+
+      39 | 	await page.goto(list);
+      40 | 	for (const id of ids) {
+    > 41 | 		await page.locator(`input[name="_selected_action"][value="${id}"]`).check();
+         | 		                                                                    ^
+      42 | 	}
+      43 | 	await page.locator('select[name="action"]').selectOption(action);
+      44 | 	if (extra) await extra(page);
+        at runAction (/Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:41:71)
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:294:15
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-133b-a-v-e2484-res-and-Suspend-from-the-UI-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-console-TC-133b-a-v-e2484-res-and-Suspend-from-the-UI-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.check: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('input[name="_selected_action"][value="6"]')
+
+
+      39 | 	await page.goto(list);
+      40 | 	for (const id of ids) {
+    > 41 | 		await page.locator(`input[name="_selected_action"][value="${id}"]`).check();
+         | 		                                                                    ^
+      42 | 	}
+      43 | 	await page.locator('select[name="action"]').selectOption(action);
+      44 | 	if (extra) await extra(page);
+        at runAction (/Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:41:71)
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:294:15
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-133b-a-v-e2484-res-and-Suspend-from-the-UI-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-console-TC-133b-a-v-e2484-res-and-Suspend-from-the-UI-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-133b-a-v-e2484-res-and-Suspend-from-the-UI-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f01-console-TC-133b-a-v-e2484-res-and-Suspend-from-the-UI-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/qa/f01-console.spec.ts:288:1 › TC-133b a view-only staff member runs Copy features and Suspend from the UI 
+  1 passed (1.1m)
+error: Recipe `e2e` failed with exit code 1
+exit=1 2026-10-18T04:29:54Z
+
+$ 2026-10-18T04:29:54Z just e2e e2e/qa/f01-console.spec.ts --grep TC-134 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:198:1 › TC-134 is_staff with no permissions sees nothing (759ms)
+
+  1 passed (1.3s)
+exit=0 2026-10-18T04:29:58Z
+
+$ 2026-10-18T04:29:58Z just e2e e2e/qa/f01-console.spec.ts --grep TC-135 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:209:1 › TC-135 anonymous admin URLs redirect to the login (39ms)
+
+  1 passed (472ms)
+exit=0 2026-10-18T04:30:01Z
+
+$ 2026-10-18T04:30:01Z just e2e e2e/qa/f01-console.spec.ts --grep TC-064 suspend (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:63:1 › TC-064 suspend qa-tmp-1 with the admin action (1.2s)
+
+  1 passed (2.0s)
+exit=0 2026-10-18T04:30:05Z
+
+$ 2026-10-18T04:30:05Z just e2e e2e/qa/f01-features-admin.spec.ts --grep TC-125 feature (workers=1)
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:24:1 › TC-125 feature fieldsets on qaother; tick only Chat (1.0s)
+  ✓  2 [chromium] › e2e/qa/f01-features-admin.spec.ts:50:1 › TC-125b untick Chat on qaother (761ms)
+
+  2 passed (2.4s)
+exit=0 2026-10-18T04:30:10Z
+
+$ 2026-10-18T04:30:10Z just e2e e2e/qa/f01-features-admin.spec.ts --grep TC-125b (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:50:1 › TC-125b untick Chat on qaother (774ms)
+
+  1 passed (1.4s)
+exit=0 2026-10-18T04:30:14Z
+
+$ 2026-10-18T04:30:14Z just e2e e2e/qa/f01-features-admin.spec.ts --grep TC-126 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:59:1 › TC-126 copy features from qa to qa-tmp-1 (1.1s)
+
+  1 passed (1.6s)
+exit=0 2026-10-18T04:30:18Z
+
+$ 2026-10-18T04:30:18Z just e2e e2e/qa/f01-features-admin.spec.ts --grep TC-076 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:89:1 › TC-076 suspending Etqan's defaults with no unpaid invoice is refused (759ms)
+
+  1 passed (1.3s)
+exit=0 2026-10-18T04:30:22Z
+
+$ 2026-10-18T04:30:22Z just e2e e2e/qa/f01-features-admin.spec.ts --grep TC-080 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:110:1 › TC-080 lifting the defaults suspension is always allowed (797ms)
+
+  1 passed (1.3s)
+exit=0 2026-10-18T04:30:26Z
+
+$ 2026-10-18T04:30:26Z just e2e e2e/qa/f01-features-admin.spec.ts --grep TC-055 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:116:1 › TC-055 edit timezone on the change page (787ms)
+
+  1 passed (1.3s)
+exit=0 2026-10-18T04:30:29Z
+
+$ 2026-10-18T04:30:29Z just e2e e2e/qa/f01-features-admin.spec.ts --grep TC-025 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:125:1 › TC-025 a forged subdomain on the change form is ignored (902ms)
+
+  1 passed (1.4s)
+exit=0 2026-10-18T04:30:33Z
+
+$ 2026-10-18T04:30:33Z just e2e e2e/qa/f01-dashboard.spec.ts --grep TC-051 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:22:1 › TC-051 Settings shows Cairo and EGP (5.1s)
+
+  1 passed (5.6s)
+exit=0 2026-10-18T04:30:41Z
+
+$ 2026-10-18T04:30:41Z just e2e e2e/qa/f01-dashboard.spec.ts --grep TC-128 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:34:1 › TC-128 Settings → Features is read-only and matches the API (25.8s)
+
+  1 passed (26.4s)
+exit=0 2026-10-18T04:31:10Z
+
+$ 2026-10-18T04:31:10Z just e2e e2e/qa/f01-dashboard.spec.ts --grep TC-129 (workers=1)
+
+Running 1 test using 1 worker
+
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:61:1 › TC-129/130 families off on qa: nav and direct URL; data kept (12.4s)
+
+  1 passed (13.0s)
+exit=0 2026-10-18T04:31:25Z
+
+$ 2026-10-18T04:31:25Z just e2e e2e/qa/f01-dashboard.spec.ts --grep TC-143 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:83:1 › TC-143 the new academy's public site renders with defaults (951ms)
+
+  1 passed (1.5s)
+exit=0 2026-10-18T04:31:29Z
+
+$ 2026-10-18T04:31:29Z just e2e e2e/qa/f01-dashboard.spec.ts --grep TC-100 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:97:1 › TC-100 the SPA on an unknown academy host (6.1s)
+
+  1 passed (6.8s)
+exit=0 2026-10-18T04:31:39Z
+
+$ 2026-10-18T04:31:39Z just e2e e2e/qa/f01-dashboard.spec.ts --grep TC-141 (workers=1)
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:118:2 › TC-141 Arabic set-password page › RTL, keyboard order, announced error (3.9s)
+
+  1 passed (4.4s)
+exit=0 2026-10-18T04:31:46Z
+
+# done 2026-10-18T04:31:46Z

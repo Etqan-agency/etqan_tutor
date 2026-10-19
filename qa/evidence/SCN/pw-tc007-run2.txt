@@ -1,0 +1,8 @@
+
+        pnpm exec playwright show-trace test-results/qa-scn-tc007-teacher-atten-86759-and-the-package-is-consumed-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/qa/scn-tc007-teacher-attendance.spec.ts:29:1 › SCN-TC-007 teacher marks U1 present in Teaching > Sessions; session completes and the package is consumed 
+error: Recipe `e2e` failed with exit code 1

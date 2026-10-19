@@ -1,0 +1,251 @@
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  Applying academy.0001_initial...
+ OK
+  Applying academy.0002_settings_from_academy...
+ OK
+  Applying academy.0003_scheduling_settings...
+ OK
+  Applying academy.0004_consumption_switches...
+ OK
+  Applying academy.0005_billing_settings...
+ OK
+  Applying academy.0006_supervision_enabled...
+ OK
+  Applying academy.0007_postpone_limit...
+ OK
+  Applying contenttypes.0001_initial...
+ OK
+  Applying contenttypes.0002_remove_content_type_name...
+ OK
+  Applying auth.0001_initial...
+ OK
+  Applying auth.0002_alter_permission_name_max_length...
+ OK
+  Applying auth.0003_alter_user_email_max_length...
+ OK
+  Applying auth.0004_alter_user_username_opts...
+ OK
+  Applying auth.0005_alter_user_last_login_null...
+ OK
+  Applying auth.0006_require_contenttypes_0002...
+ OK
+  Applying auth.0007_alter_validators_add_error_messages...
+ OK
+  Applying auth.0008_alter_user_username_max_length...
+ OK
+  Applying auth.0009_alter_user_last_name_max_length...
+ OK
+  Applying auth.0010_alter_group_name_max_length...
+ OK
+  Applying auth.0011_update_proxy_permissions...
+ OK
+  Applying auth.0012_alter_user_first_name_max_length...
+ OK
+  Applying identity.0001_initial...
+ OK
+  Applying academy_site.0001_initial...
+ OK
+  Applying academy_site.0002_sitesettings_branding_socials...
+ OK
+  Applying academy_site.0003_faqs_ads_redirects...
+ OK
+  Applying academy_site.0004_articles...
+ OK
+  Applying academy_site.0005_media...
+ OK
+  Applying academy_site.0006_page_builder...
+ OK
+  Applying access.0001_initial...
+ OK
+  Applying access.0002_supervisor_preset...
+ OK
+  Applying account.0001_initial...
+ OK
+  Applying account.0002_email_max_length...
+ OK
+  Applying account.0003_alter_emailaddress_create_unique_verified_email...
+ OK
+  Applying account.0004_alter_emailaddress_drop_unique_email...
+ OK
+  Applying account.0005_emailaddress_idx_upper_email...
+ OK
+  Applying account.0006_emailaddress_lower...
+ OK
+  Applying account.0007_emailaddress_idx_email...
+ OK
+  Applying account.0008_emailaddress_unique_primary_email_fixup...
+ OK
+  Applying account.0009_emailaddress_unique_primary_email...
+ OK
+  Applying admin.0001_initial...
+ OK
+  Applying admin.0002_logentry_remove_auto_add...
+ OK
+  Applying admin.0003_logentry_add_action_flag_choices...
+ OK
+  Applying sites.0001_initial...
+ OK
+  Applying sites.0002_alter_domain_unique...
+ OK
+  Applying identity.0002_parentprofile_parentinvite_studentprofile_and_more...
+ OK
+  Applying identity.0003_set_site_name_domain...
+ OK
+  Applying identity.0004_user_birthdate...
+ OK
+  Applying identity.0005_user_timezone...
+ OK
+  Applying identity.0006_remove_studentprofile_time_preferences...
+ OK
+  Applying identity.0007_teacherprofile_gender...
+ OK
+  Applying identity.0008_remove_teacherprofile_availability...
+ OK
+  Applying identity.0009_user_role...
+ OK
+  Applying identity.0010_people_fields...
+ OK
+  Applying identity.0011_people_data...
+ OK
+  Applying identity.0012_people_cleanup...
+ OK
+  Applying identity.0013_profile_depth...
+ OK
+  Applying identity.0014_preset_tags...
+ OK
+  Applying identity.0015_families...
+ OK
+  Applying identity.0016_alter_user_role...
+ OK
+  Applying identity.0017_user_last_login_device_user_last_login_ip_and_more...
+Traceback (most recent call last):
+  File "/app/manage.py", line 23, in <module>
+    main()
+    ~~~~^^
+  File "/app/manage.py", line 19, in main
+    execute_from_command_line(sys.argv)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/core/management/__init__.py", line 443, in execute_from_command_line
+    utility.execute()
+    ~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/django/core/management/__init__.py", line 437, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/core/management/base.py", line 420, in run_from_argv
+    self.execute(*args, **cmd_options)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/core/management/base.py", line 464, in execute
+    output = self.handle(*args, **options)
+  File "/app/etqan/tenants/management/commands/create_academy.py", line 26, in handle
+    academy = services.create_academy(
+        name=opts["name"],
+    ...<4 lines>...
+        currency=opts["currency"],
+    )
+  File "/usr/local/lib/python3.13/contextlib.py", line 85, in inner
+    return func(*args, **kwds)
+  File "/app/etqan/tenants/services.py", line 103, in create_academy
+    academy.save()
+    ~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/site-packages/django_tenants/models.py", line 118, in save
+    self.create_schema(check_if_exists=True, verbosity=verbosity)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django_tenants/models.py", line 207, in create_schema
+    call_command('migrate_schemas',
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+                 tenant=True,
+                 ^^^^^^^^^^^^
+                 schema_name=self.schema_name,
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 interactive=False,
+                 ^^^^^^^^^^^^^^^^^^
+                 verbosity=verbosity)
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/core/management/__init__.py", line 195, in call_command
+    return command.execute(*args, **defaults)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/core/management/base.py", line 464, in execute
+    output = self.handle(*args, **options)
+  File "/usr/local/lib/python3.13/site-packages/django_tenants/management/commands/migrate_schemas.py", line 84, in handle
+    executor.run_migrations(tenants=tenants)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django_tenants/migration_executors/standard.py", line 14, in run_migrations
+    run_migrations(self.args, self.options, self.codename, schema_name, idx=idx, count=len(tenants))
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django_tenants/migration_executors/base.py", line 61, in run_migrations
+    migrate_command_class(stdout=stdout, stderr=stderr).execute(*args, **options)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/core/management/base.py", line 464, in execute
+    output = self.handle(*args, **options)
+  File "/usr/local/lib/python3.13/site-packages/django/core/management/base.py", line 111, in wrapper
+    res = handle_func(*args, **kwargs)
+  File "/usr/local/lib/python3.13/site-packages/django/core/management/commands/migrate.py", line 354, in handle
+    post_migrate_state = executor.migrate(
+        targets,
+    ...<3 lines>...
+        fake_initial=fake_initial,
+    )
+  File "/usr/local/lib/python3.13/site-packages/django/db/migrations/executor.py", line 137, in migrate
+    state = self._migrate_all_forwards(
+        state, plan, full_plan, fake=fake, fake_initial=fake_initial
+    )
+  File "/usr/local/lib/python3.13/site-packages/django/db/migrations/executor.py", line 169, in _migrate_all_forwards
+    state = self.apply_migration(
+        state, migration, fake=fake, fake_initial=fake_initial
+    )
+  File "/usr/local/lib/python3.13/site-packages/django/db/migrations/executor.py", line 257, in apply_migration
+    state = migration.apply(state, schema_editor)
+  File "/usr/local/lib/python3.13/site-packages/django/db/migrations/migration.py", line 118, in apply
+    operation.state_forwards(self.app_label, project_state)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/db/migrations/operations/fields.py", line 103, in state_forwards
+    state.add_field(
+    ~~~~~~~~~~~~~~~^
+        app_label,
+        ^^^^^^^^^^
+    ...<3 lines>...
+        self.preserve_default,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/usr/local/lib/python3.13/site-packages/django/db/migrations/state.py", line 268, in add_field
+    self.reload_model(*model_key, delay=delay)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/db/migrations/state.py", line 425, in reload_model
+    self._reload(related_models)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/db/migrations/state.py", line 460, in _reload
+    self.apps.render_multiple(states_to_be_rendered)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/db/migrations/state.py", line 690, in render_multiple
+    model.render(self)
+    ~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/db/migrations/state.py", line 988, in render
+    return type(self.name, bases, body)
+  File "/usr/local/lib/python3.13/site-packages/django/db/models/base.py", line 213, in __new__
+    new_class.add_to_class(obj_name, obj)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/db/models/base.py", line 393, in add_to_class
+    value.contribute_to_class(cls, name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 1517, in contribute_to_class
+    super().contribute_to_class(cls, name, **kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 953, in contribute_to_class
+    cls._meta.add_field(self, private=private_only)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/db/models/options.py", line 366, in add_field
+    self._expire_cache(reverse=False)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/django/db/models/options.py", line 850, in _expire_cache
+    if cache_key in self.__dict__:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+

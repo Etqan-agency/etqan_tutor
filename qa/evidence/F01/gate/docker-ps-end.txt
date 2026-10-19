@@ -1,0 +1,10 @@
+etqan_tutor-dashboard-1 Up 11 hours
+etqan_tutor-marketing-1 Up 11 hours
+etqan_tutor-celery_worker-1 Up 11 hours
+etqan_tutor-celery_beat-1 Up 11 hours
+etqan_tutor-flower-1 Up 11 hours
+etqan_tutor-django-1 Up 11 hours
+etqan_tutor-caddy-1 Up 32 hours
+etqan_tutor-postgres-1 Up 32 hours (healthy)
+etqan_tutor-redis-1 Up 32 hours (healthy)
+etqan_tutor-mailpit-1 Up 32 hours (healthy)

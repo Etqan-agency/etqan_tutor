@@ -1,0 +1,8 @@
+## TC-081 defaults suspended, academy active
+csrf: 200 me: HTTP 200
+## TC-079 integrations
+{"services":[{"service":"whatsapp","using":"none","default_status":"disabled","connectable":true,"own":null,"default_prices":[]},{"service":"email","using":"none","default_status":"suspended","connectable":true,"own":null,"default_prices":[]},{"service":"payments","using":"none","default_status":"disabled","connectable":true,"own":null,"default_prices":[],"connect_countries":["AE","AT","AU","BE","BG","CA","CH","CY","CZ","DE","DK","EE","ES","FI","FR","GB","GI","GR","HK","HR","HU","IE","IT","JP","LI","LT","LU","LV","MT","MX","MY","NL","NO","NZ","PL","PT","RO","SE","SG","SI","SK","TH","US"]},{"service":"video","using":"none","default_status":"disabled","connectable":true,"own":null,"default_prices":[]},{"service":"ai","using":"none","default_status":"disabled","connectable":true,"own":null,"default_prices":[]}]}
+HTTP 200
+
+platform accounts: 5
+reset POST 200

@@ -1,0 +1,23 @@
+==== TC-012 2026-10-19T04:04:17.580660
+OK  fixed 201 snapped to 09-01 :: 201 {"id": 1, "teacher": {"id": 42, "full_name": "F10 Teacher Eight"}, "monthly_minor": 500000, "currency": "EGP", "starts_on": "2026-09-01", "current": true, "created_at": "2026-10-19T01:04:17.595239Z", "updated_at": "2026-10-19T01:04:17.595244Z"}
+OK  second 409 fixed_salary_exists :: 409 {"detail": "This teacher already has a fixed salary. Edit it instead.", "code": "payroll.fixed_salary_exists"}
+OK  monthly 0 400 :: 400 {"monthly_minor": ["Ensure this value is greater than or equal to 1."]}
+OK  T8 fixed line 500000, sessions 0, gross 500000 :: [('fixed', 500000), ('session', 0)]
+deactivate T9 ok
+gen Nov {"created": 3, "replaced": 0, "removed": 0, "missing_rate": [], "other_currency": [], "unpaid_sessions": [], "stale_fixed_salary": []}
+S8 Nov drafts 1|PAY-000023|draft|0
+6|PAY-000024|draft|0
+9|PAY-000025|draft|500000
+S8 gen 2099-12 200 {"created": 3, "replaced": 0, "removed": 0, "missing_rate": [], "other_currency": [], "unpaid_sessions": [], "stale_fixed_salary": []}
+2099 drafts 1|PAY-000026|0
+6|PAY-000027|0
+9|PAY-000028|500000
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  switch off: fixed line gone, sessions priced :: 6000
+fixed rows stay 1|9|500000|2026-09-01|EGP
+2|10|300000|2026-09-01|EGP
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+issue T8 Sept 200 500000
+OK  fixed teacher late session NOT in unpaid_sessions :: [{"id": 7, "full_name": "QA teacher"}]
+OK  missing_rate false for fixed
+reactivate T9 ok

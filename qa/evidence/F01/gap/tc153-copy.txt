@@ -1,0 +1,72 @@
+-- recorded originals
+qaother|{"internal_chat": false}
+qa-tmp-1|{"families": true, "invoices": true, "internal_chat": false, "online_payments": true}
+qa-tmp-r1ok|{}
+qaother: online_payments=on, invoices=off
+qa-tmp-1: families=off
+-- preconditions
+qaother|{"invoices": false, "internal_chat": false, "online_payments": true}
+qa-tmp-1|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+qa-tmp-r1ok|{}
+-- 1. copy qaother(4) -> qa-tmp-1(6)
+302 http://etqan.localhost/admin/tenants/academy/
+"success">Reactivated 1 academies.
+"success">Suspended 1 academies.
+"success">Suspended 1 academies.
+"success">Copied the features of Etqan QA Other to 1 academies.
+"selected">
+qaother|{"invoices": false, "internal_chat": false, "online_payments": true}
+qa-tmp-1|{"invoices": false, "internal_chat": false, "online_payments": true}
+qa-tmp-r1ok|{}
+-- 2a. forged copy_from=1 (public)
+302 http://etqan.localhost/admin/tenants/academy/
+"warning">No action selected.
+"selected">
+-- 2b. copy_from=99999
+302 http://etqan.localhost/admin/tenants/academy/
+"warning">No action selected.
+"selected">
+-- 2c. copy_from=abc
+302 http://etqan.localhost/admin/tenants/academy/
+"warning">No action selected.
+"selected">
+qaother|{"invoices": false, "internal_chat": false, "online_payments": true}
+qa-tmp-1|{"invoices": false, "internal_chat": false, "online_payments": true}
+qa-tmp-r1ok|{}
+-- 3. select qaother+qa-tmp-1, source qaother
+302 http://etqan.localhost/admin/tenants/academy/
+"success">Copied the features of Etqan QA Other to 1 academies.
+"selected">
+qaother|{"invoices": false, "internal_chat": false, "online_payments": true}
+qa-tmp-1|{"invoices": false, "internal_chat": false, "online_payments": true}
+qa-tmp-r1ok|{}
+-- admin help text on qa-tmp-1 change page for online_payments:
+   1 Held off: needs Invoices and receipts.
+-- admin log since
+37|6|Copied features from Etqan QA Other.
+38|6|Copied features from Etqan QA Other.
+302 http://etqan.localhost/admin/tenants/academy/
+login qa-tmp-1 admin: 200
+login qaother admin: 200
+tmp1 me.features list 6
+me.features identical: True | online_payments in tmp1: False | invoices: False
+-- academy/features/ online_payments entry:
+{'code': 'invoices', 'label_ar': 'نظام الفواتير والإيصالات', 'label_en': 'Invoices and receipts', 'group': 'money', 'on': False, 'built': True, 'held_by': []}
+{'code': 'online_payments', 'label_ar': 'الدفع الإلكتروني', 'label_en': 'Online payments', 'group': 'money', 'on': False, 'built': True, 'held_by': ['invoices']}
+-- gateways/settings/ as tmp1 admin:
+{"detail":"This feature is not enabled for this academy."} HTTP 404 
+-- gateways/settings/ as qaother admin:
+{"detail":"This feature is not enabled for this academy."} HTTP 404 
+tmp1 me.features: ['families', 'parents', 'session_reports', 'auto_notifications', 'teacher_attendance', 'export'] families on: True
+-- 4. copy from suspended qa-tmp-r1ok(15) to qa-tmp-1(6)
+302 http://etqan.localhost/admin/tenants/academy/
+"success">Reactivated 1 academies.
+"success">Copied the features of QA Tmp R1 OK to 1 academies.
+qaother|{"invoices": false, "internal_chat": false, "online_payments": true}
+qa-tmp-1|{}
+qa-tmp-r1ok|{}
+-- restore: qaother --on invoices --off online_payments; then remove the two keys to match original exactly?
+qaother: invoices=on, online_payments=off
+{"invoices": true, "internal_chat": false, "online_payments": false}
+4|active|e2fe67cdcf433b51e58caa5d1efe959a
+6|suspended|d28628be25a7d06630814a40568aa1cb

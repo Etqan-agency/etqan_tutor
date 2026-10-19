@@ -1,0 +1,23 @@
+
+run_lifecycle RAISED ZoneInfoNotFoundError 'No time zone found with key Mars/Phobos'
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/zoneinfo/_common.py", line 12, in load_tzdata
+    path = resources.files(package_name).joinpath(resource_name)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/importlib/resources/_common.py", line 46, in wrapper
+    return func(anchor)
+  File "/usr/local/lib/python3.13/importlib/resources/_common.py", line 56, in files
+    return from_package(resolve(anchor))
+                        ~~~~~~~^^^^^^^^
+ModuleNotFoundError: No module named 'tzdata.zoneinfo.Mars'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<string>", line 9, in <module>
+  File "/app/etqan/scheduling/services/lifecycle.py", line 32, in run_lifecycle
+    today = rules.today()
+  File "/app/etqan/scheduling/services/rules.py", line 107, in today
+    return dates.local_today(settings().timezone)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+zoneinfo._common.ZoneInfoNotFoundError: 'No time zone found with key Mars/Phobos'

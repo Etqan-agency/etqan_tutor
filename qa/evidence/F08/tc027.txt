@@ -1,0 +1,10 @@
+== TC-027 (added by Agent 2): teacher re-marks an 11-day-old session; consumption and pay follow until a payslip locks it
+start: P8 scheduled|not_set remB=(1, 7) proj=[(90000, 381000)]
+teacher present 200 remB=(2, 6) proj=[(93000, 381000)]
+teacher self-absent 200 remB=(1, 7) proj=[(90000, 378000)]
+teacher self-present 200 remB=(2, 6) proj=[(93000, 381000)]
+locked July session P6 by teacher:
+[409] POST sessions/247/attendance/ :: {"detail":"This session is on an issued payslip.","code":"payroll.payslip_issued"}
+121|241|7|attendance|{"status": ["scheduled", "completed"], "student_attendance": ["not_set", "present"]}|
+122|241|7|attendance|{"teacher_attendance": ["not_set", "absent"]}|
+123|241|7|attendance|{"teacher_attendance": ["absent", "present"]}|

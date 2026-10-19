@@ -1,0 +1,14 @@
+## TC-026 matrix
+role     csrf opts me patchme emails 2fa seclog gset gpatch impstop logout
+anon     200 200 403 403 403 403 403 403 403 403 403
+student  200 200 200 200 200 200 403 403 403 400 200
+parent   200 200 200 200 200 200 403 403 403 400 200
+teacher  200 200 200 200 200 200 403 403 403 400 200
+sup      200 200 200 200 200 200 403 403 403 400 200
+ql       200 200 200 200 200 200 403 403 403 400 200
+nocode   200 200 200 200 200 200 403 403 403 400 200
+admin    200 200 200 200 200 200 200 200 200 400 200
+anon password/code: 202
+sign-in-options body: {"phone_login":true,"google":false,"self_registration":false,"waitlist":false,"parent_registration":false,"code_reset":{"email":true,"phone":true}}
+mass assignment: {"id":5,"email":"qa-student@qa.etqan.test","full_name":"QA student","phone":"","preferred_language":"ar","effective_language":"ar","timezone":"Africa/Cairo","role":"student","profiles":["student"],"pr
+db before: student|t|qa-student@qa.etqan.test|f|f  after: student|t|qa-student@qa.etqan.test|f|f

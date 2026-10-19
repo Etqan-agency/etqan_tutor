@@ -1,0 +1,40 @@
+== TC-022 2026-10-19T03:42:28.057071
+can_pay_online 200 ['stripe']
+start O1 201 {"id": "4e3997d4-c570-4602-aaa8-b759ce18307a", "redirect_url": "http://qa.etqan.localhost/app/pay/simulate/4e3997d4-c570-4602-aaa8-b759ce18307a", "amount_minor": 50000, "fee_minor": 2500, "currency": "EGP"}
+OK  TC022 start 201 amount 50000 fee 2500 EGP
+OK  TC022 second start reuses same checkout :: 201 4e3997d4-c570-4602-aaa8-b759ce18307a
+O2 201 {"id": "725d0423-8244-465d-b48b-c82ac8a0af55", "redirect_url": "http://qa.etqan.localhost/app/pay/simulate/725d0423-8244-465d-b48b-c82ac8a0af55", "amount_minor": 10050, "fee_minor": 503, "currency": "EGP"}
+OK  TC022 O2 fee 503
+O3 201 {"id": "ef164b9c-82bf-4866-906c-74901bec1bf9", "redirect_url": "http://qa.etqan.localhost/app/pay/simulate/ef164b9c-82bf-4866-906c-74901bec1bf9", "amount_minor": 1, "fee_minor": 0, "currency": "EGP"}
+OK  TC022 O3 1 minor fee 0 (half-up of 0.05)
+checkout detail 200 {"id": "4e3997d4-c570-4602-aaa8-b759ce18307a", "status": "pending", "applied": null, "amount_minor": 50000, "fee_minor": 2500, "currency": "EGP", "provider": "stripe", "purpose": "invoice", "reference_id": 48}
+simulate pay 200 {"status": "completed"}
+simulate pay again 200 {"status": "completed"}
+simulate fail after paid 200 {"status": "completed"}
+checkout DB invoice|48|stripe|t|50000|2500|completed|t||pi_sim_c5d344ffc3f54882855702e4a7d31fa0
+payment DB 45|stripe|50000|2500|EGP|pi_sim_c5d344ffc3f54882855702e4a7d31fa0||2026-10-19|completed
+OK  TC022 invoice paid once, payment 50000+2500 stripe, txn matches
+OK  TC022 checkout completed applied
+admin checkouts 200 3
+payments stripe 200 1
+OK  TC022 revenue +52500 :: 252006->304506
+fee {'enabled': False} 201 {"amount_minor": 10050, "fee_minor": 0}
+OK  TC022 fee {'enabled': False} -> 0
+fee {'enabled': True, 'basis_points': 2000} 201 {"amount_minor": 10050, "fee_minor": 2010}
+OK  TC022 fee {'enabled': True, 'basis_points': 2000} -> 2010
+fee {'enabled': True, 'basis_points': 0} 201 {"amount_minor": 10050, "fee_minor": 0}
+OK  TC022 fee {'enabled': True, 'basis_points': 0} -> 0
+fee restored 200 {"enabled": true, "basis_points": 500}
+other family 404 {"detail": "Invoice with identifier '54' not found."}
+OK  TC022 refuse other family 4xx
+void 409 {"detail": "Nothing is due on this invoice.", "code": "gateways.nothing_due"}
+OK  TC022 refuse void 4xx
+paid 409 {"detail": "Nothing is due on this invoice.", "code": "gateways.nothing_due"}
+OK  TC022 refuse paid 4xx
+paypal EGP 400 {"provider": ["This payment method is not available."]}
+OK  TC022 refuse paypal EGP 4xx
+purpose nope 400 {"purpose": ["Unknown purpose."]}
+OK  TC022 refuse purpose nope 4xx
+ref 0 400 {"reference_id": ["Ensure this value is greater than or equal to 1."]}
+OK  TC022 refuse ref 0 4xx
+OK  TC022 staff without invoice.view refused :: 404 {"detail": "Invoice with identifier '49' not found."}

@@ -1,0 +1,117 @@
+== TC-021
+files before: 0
+[201] POST contracts/ :: {"id":1,"teacher":{"id":7,"full_name":"QA teacher"},"reference":"EMP-1","details":"","has_file":true,"file_name":"sample.pdf","created_at":"2026-10-19T04:18:01.226908Z","updated_at":"2026-10-19T04:18:01.226915Z"}
+0
+[200] GET contracts/ :: {"count":1,"next":null,"previous":null,"results":[{"id":1,"teacher":{"id":7,"full_name":"QA teacher"},"reference":"EMP-1","details":"","has_file":true,"file_name":"sample.pdf",
+teacher=7: [1]
+q=EMP: [1]
+HTTP/1.1 200 OK
+Cache-Control: private, no-store
+Content-Disposition: attachment; filename="sample.pdf"
+Content-Type: application/pdf
+X-Content-Type-Options: nosniff
+sha upload=5a838678058f6de3 dl=5a838678058f6de3
+teacher dl 200
+teacher sha=5a838678058f6de3
+1|7|EMP-1|tenants/academy_qa/employment/89bb7ed8607f4fc49963e2d7a7a5e0b2.pdf
+[200] PATCH contracts/1/ :: {"id":1,"teacher":{"id":7,"full_name":"QA teacher"},"reference":"EMP-1","details":"","has_file":true,"file_name":"sample.docx","created_at":"2026-10-19T04:18:01.226908Z","updated_at":"2026-10-19T04:18:01.674342Z"}
+old-removed
+
+[400] PATCH contracts/1/ :: {"non_field_errors":["Enter the details or attach the contract file."]}
+[200] PATCH contracts/1/ :: {"id":1,"teacher":{"id":7,"full_name":"QA teacher"},"reference":"EMP-1","details":"Signed-on-paper","has_file":false,"file_name":"","created_at":"2026-10-19T04:18:01.226908Z","updated_at":"2026-10-19T04:18:03.002663Z"}
+re-attach 200
+[400] POST contracts/ :: {"file":["This type of file is not allowed."]}
+[400] POST contracts/ :: {"file":["The file must be at most 10 MB."]}
+[400] POST contracts/ :: {"file":["The file's content does not match its type."]}
+[400] POST contracts/ :: {"teacher":["Choose a teacher."]}
+[400] POST contracts/ :: {"non_field_errors":["Enter the details or attach the contract file."]}
+[400] POST contracts/ :: {"reference":["Ensure this field has no more than 60 characters."]}
+rows 1 -> 1  files 0 -> 0
+[000] POST contracts/ :: {"reference":["Ensure this field has no more than 60 characters."]}
+ERROR:  column "none" does not exist
+LINE 1: ... file_name from academy_qa.employment_contract where id=None
+-- S8 non-docx zip as .docx
+[201] POST contracts/ :: {"id":2,"teacher":{"id":7,"full_name":"QA teacher"},"reference":"S8","details":"","has_file":true,"file_name":"notdocx.docx","created_at":"2026-10-19T04:18:04.201198Z","updated_at":"2026-10-19T04:18:04.201208Z"}
+[204] DELETE contracts/2/ :: 
+[404] DELETE contracts/None/ :: <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /api/v1/contracts/None/</title>
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <style>
+    html * { padding:0;
+CHECK ((NOT ((details = ''::text) AND ((file)::text = ''::text))))
+CHECK ((NOT ((details = ''::text) AND ((file)::text = ''::text))))
+CHECK ((NOT ((details = ''::text) AND ((file)::text = ''::text))))
+CHECK ((NOT ((details = ''::text) AND ((file)::text = ''::text))))
+CHECK ((NOT ((details = ''::text) AND ((file)::text = ''::text))))
+CHECK ((NOT ((details = ''::text) AND ((file)::text = ''::text))))
+CHECK ((NOT ((details = ''::text) AND ((file)::text = ''::text))))
+CHECK ((NOT ((details = ''::text) AND ((file)::text = ''::text))))
+CHECK ((NOT ((details = ''::text) AND ((file)::text = ''::text))))
+CHECK ((NOT ((details = ''::text) AND ((file)::text = ''::text))))
+CHECK ((NOT ((details = ''::text) AND ((file)::text = ''::text))))
+CHECK ((NOT ((details = ''::text) AND ((file)::text = ''::text))))
+CHECK ((NOT ((details = ''::text) AND ((file)::text = ''::text))))
+CHECK ((NOT ((details = ''::text) AND ((file)::text = ''::text))))
+CHECK ((NOT ((details = ''::text) AND ((file)::text = ''::text))))
+env None
+root=/app/etqan/private_media
+files now: 1 rows: 1
+current-file-on-disk
+[400] POST contracts/ :: {"file":["This type of file is not 
+[400] POST contracts/ :: {"file":["The file must be at most 
+[400] POST contracts/ :: {"file":["The file's content does n
+files after failed uploads 1 -> 1 (orphans=0)
+[201] POST contracts/ :: {"id":3,"teacher":{"id":7,"full_name":"QA teacher"},"reference":"LONG","details":"","has_file":
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import json,sys;print(json.loads(sys.argv[1]).get('id'))
+                          ~~~~~~~~~~^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;d=json.loads(sys.argv[1]);print(eval(sys.argv[2]))
+                      ~~~~~~~~~~^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;d=json.loads(sys.argv[1]);print(eval(sys.argv[2]))
+                      ~~~~~~~~~~^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+file_name len= ends=
+[404] DELETE contrac
+<html lang="en">
+<head>
+  <meta http-equiv="
+  <title>Page not fo
+  <meta name="robots
+file_name len=255 ends=nn.pdf
+66
+delete 204
+after delete 404

@@ -1,0 +1,5 @@
+2026-10-17T19:46:57Z
+4
+6
+academy_demo,academy_other,academy_qaother
+mailpit total 31

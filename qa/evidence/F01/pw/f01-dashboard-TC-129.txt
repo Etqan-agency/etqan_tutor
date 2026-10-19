@@ -1,0 +1,14 @@
+
+Running 1 test using 1 worker
+
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:61:1 › TC-129/130 families off on qa: nav and direct URL; data kept (11.1s)
+
+  1 passed (11.6s)

@@ -1,0 +1,8 @@
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED etqan/payroll/tests/test_pay_to_balance.py::test_a_payslip_is_not_paid_before_the_month_it_pays[mark_paid]
+FAILED etqan/payroll/tests/test_pay_to_balance.py::test_a_payslip_is_not_paid_before_the_month_it_pays[pay_to_balance]
+FAILED etqan/payroll/tests/test_api.py::test_refusals_are_coded_409s_and_field_400s
+3 failed, 34 deselected, 1 warning in 1.68s
+

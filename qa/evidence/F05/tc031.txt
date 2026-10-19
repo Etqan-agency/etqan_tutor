@@ -1,0 +1,15 @@
+== TC-031 impersonation cannot escalate
+login imp 20
+[200] POST people/students/114/quick-log
+imp-as-student GET people/students/ -> 403
+imp-as-student GET people/teachers/ -> 403
+imp-as-student GET access/staff/ -> 403
+imp-as-student GET contracts/ -> 403
+imp-as-student GET people/families/ -> 403
+POST admins -> 403
+nested quick-login -> 403
+quick-login while impersonating -> 403 {"detail":"You do not have permission to perform this action."}
+esc rows: 0
+[200] POST p
+imp after target deactivated -> 403
+[200] POST p

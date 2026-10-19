@@ -1,0 +1,112 @@
+"""F01 gate checks (Agent 2, out-of-repo, FAKE tag): TC-058, TC-060, TC-088 gap.
+
+Run inside the django container from /app with the repo conftest loaded as a plugin:
+    python -m pytest -p conftest /tmp/qa_gate/test_f01_gate.py -q -p no:cacheprovider
+Nothing here is added to the repository.
+"""
+
+import pytest
+from django.core import mail
+from django.db import connection
+from django_tenants.utils import schema_exists
+
+from etqan.identity.models import User
+from etqan.tenants import services
+from etqan.tenants.models import Academy
+from etqan.tenants.models import Domain
+
+PUBLIC_HOST = "etqan.localhost"
+
+
+def _boom(*_a, **_k):
+    raise RuntimeError("step exploded")
+
+
+STEPS = [
+    ("domain_create", lambda mp: mp.setattr(Domain.objects, "create", _boom)),
+    ("ensure_settings", lambda mp: mp.setattr(services.academy_services, "ensure_settings", _boom)),
+    ("ensure_site_defaults", lambda mp: mp.setattr(services.site_services, "ensure_site_defaults", _boom)),
+    ("create_academy_admin", lambda mp: mp.setattr(services.identity_services, "create_academy_admin", _boom)),
+    ("ensure_preset_tags", lambda mp: mp.setattr(services.identity_services, "ensure_preset_tags", _boom)),
+    ("ensure_supervisor_preset", lambda mp: mp.setattr(services.access_services, "ensure_supervisor_preset", _boom)),
+]
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(("step", "patch"), STEPS, ids=[s for s, _ in STEPS])
+def test_tc058_failure_at_each_step_rolls_back_everything(
+    step, patch, monkeypatch, django_capture_on_commit_callbacks
+):
+    connection.set_schema_to_public()
+    mail.outbox.clear()
+    patch(monkeypatch)
+    sub = "qagate-" + step.replace("_", "-")
+    with django_capture_on_commit_callbacks(execute=True):
+        with pytest.raises(RuntimeError, match="step exploded"):
+            services.create_academy(name="Gate", subdomain=sub, admin_email=f"a@{sub}.test")
+    connection.set_schema_to_public()
+    assert not schema_exists(services.schema_name_for(sub))
+    assert not Academy.objects.filter(subdomain=sub).exists()
+    assert not Domain.objects.filter(domain=services.domain_for(sub)).exists()
+    assert mail.outbox == []
+    # The subdomain is free again.
+    monkeypatch.undo()
+    assert services.validate_subdomain(sub) == sub
+
+
+@pytest.mark.django_db
+def test_tc060_failure_in_admin_save_path_leaves_nothing(client, monkeypatch):
+    connection.set_schema_to_public()
+    staff = User.objects.create_superuser(email="gate-ops@qa.etqan.test", password="pw-12345678")
+    client.force_login(staff)
+    client.raise_request_exception = False
+    mail.outbox.clear()
+    monkeypatch.setattr(services.access_services, "ensure_supervisor_preset", _boom)
+    resp = client.post(
+        "/admin/tenants/academy/add/",
+        {
+            "name": "Gate Save",
+            "subdomain": "qagate-save",
+            "timezone": "Africa/Cairo",
+            "currency": "EGP",
+            "plan_label": "",
+            "plan_notes": "",
+            "admin_email": "admin@qagate-save.test",
+            "admin_full_name": "",
+        },
+        HTTP_HOST=PUBLIC_HOST,
+    )
+    print("TC-060 admin save-path status:", resp.status_code)
+    assert resp.status_code in (500, 200)
+    connection.set_schema_to_public()
+    assert not schema_exists("academy_qagate_save")
+    assert not Academy.objects.filter(subdomain="qagate-save").exists()
+    assert not Domain.objects.filter(domain="qagate-save.etqan.localhost").exists()
+    assert mail.outbox == []
+
+
+def _resolver(table):
+    def fake(host, *_a, **_k):
+        return [(2, 1, 6, "", (ip, 0)) for ip in table.get(host, [])]
+
+    return fake
+
+
+@pytest.mark.parametrize(
+    ("edge", "seen", "ok"),
+    [
+        (["203.0.113.7", "203.0.113.8"], ["203.0.113.7"], True),  # subset of the edge
+        (["203.0.113.7"], ["203.0.113.7", "198.51.100.1"], False),  # superset: foreign IP
+        (["203.0.113.7"], [], False),  # resolves to nothing
+        ([], ["203.0.113.7"], False),  # edge unresolvable
+    ],
+    ids=["subset", "superset", "nothing", "no-edge"],
+)
+def test_tc088_dns_subset_superset(settings, edge, seen, ok):
+    settings.EDGE_HOSTNAME = "sites.etqan.localhost"
+    settings.EDGE_PUBLIC_IP = ""
+    d = Domain(domain="gate.example")
+    got, _ = services.check_domain_dns(
+        d, resolve=_resolver({"sites.etqan.localhost": edge, "gate.example": seen})
+    )
+    assert got is ok

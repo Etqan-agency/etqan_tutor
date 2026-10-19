@@ -1,0 +1,26 @@
+== TC-018 2026-10-19T03:39:49.605443
+move PM 201 {"id": 21, "kind": "refund", "currency": "EGP", "amount_minor": 10000, "balance_after_minor": 25000, "note": "INV-000035", "invoice_id": 35, "payment_id": 32, "session_id": null, "created_at": "2026-10-19T00:39:50.001357Z", "reversed": false, "create
+OK  TC018 move credited, wallet +10000, invoice partial
+OK  TC018 move again 409 payment_not_completed :: {"detail": "Only a completed payment is moved to the balance.", "code": "billing.payment_not_completed"}
+OK  TC018 refund credited 409 payment_credited :: {"detail": "This payment was moved to the balance.", "code": "billing.payment_credited"}
+OK  TC018 delete credited 409 payment_credited :: {"detail": "This payment was moved to the balance.", "code": "billing.payment_credited"}
+move PW 201 {"id": 22, "kind": "refund", "currency": "EGP", "amount_minor": 10000, "balance_after_minor": 35000, "note": "INV-000035", "invoice_id": 35, "payment_id": 33, "session_id": null, "created_at": "2026-1
+OK  TC018 move wallet payment credits back
+revenue EGP 197006 -> 207006 (cash 10000 recorded then moved: expect +10000)
+OK  TC018 void M after moves :: {"status": "void", "code": null}
+reverse 17 (50000) with balance 35000 409 {"detail": "The balance does not cover this.", "code": "wallet.insufficient_balance"}
+OK  TC018 short balance 409 insufficient
+OK  TC018 reverse invoice payment 409 not_topup :: {"detail": "Only a balance top-up is reversed.", "code": "wallet.not_topup"}
+POST /billing/payments/17/refund/ 409 {"detail": "A balance top-up is reversed from the balance, not refunded or deleted.", "code": "billing.wallet_topup"}
+OK  TC018 POST topup refused 409
+DELETE /billing/payments/17/ 409 {"detail": "A balance top-up is reversed from the balance, not refunded or deleted.", "code": "billing.wallet_topup"}
+OK  TC018 DELETE topup refused 409
+PATCH /billing/payments/17/ 409 {"detail": "A balance top-up is reversed from the balance, not edited.", "code": "billing.payment_not_editable"}
+OK  TC018 PATCH topup refused 409
+POST /billing/payments/22/refund/ 409 {"detail": "A payment from the balance is moved back to the balance, not refunded or deleted.", "code": "billing.wallet_payment"}
+OK  TC018 POST wallet payment 409 billing.wallet_payment
+DELETE /billing/payments/22/ 409 {"detail": "A payment from the balance is moved back to the balance, not refunded or deleted.", "code": "billing.wallet_payment"}
+OK  TC018 DELETE wallet payment 409 billing.wallet_payment
+dup kind,payment 
+inv 1|EGP|35000|35000
+2|USD|0|0

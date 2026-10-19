@@ -1,0 +1,23 @@
+2026-10-17T21:15:57Z
+$ docker build --target dev --build-arg UID=501 --build-arg GID=20 -t etqan-qa001/backend:gid20 backend
+#11 DONE 0.9s
+
+#12 exporting to image
+#12 exporting layers
+#12 exporting layers 0.7s done
+#12 exporting manifest sha256:7705378b03eaa9ad2d23cad03c0e7f5ed81cfdb2b71cf6566fbaebcbb106284b done
+#12 exporting config sha256:e42d49292c8f5255eff445fb70ecdf389770a25fd6a576d4f4967ebedb51bd4d done
+#12 exporting attestation manifest sha256:29eb613527a2c0a6fef67c9d98b6dc125aa226a39336394099905110ed18bc8c done
+#12 exporting manifest list sha256:ae84f2792515ffb032d7378ad56d04eab5190cbe70602258c07757092451caaa done
+#12 naming to docker.io/etqan-qa001/backend:gid20 done
+#12 unpacking to docker.io/etqan-qa001/backend:gid20
+#12 unpacking to docker.io/etqan-qa001/backend:gid20 0.3s done
+#12 DONE 1.1s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/uj8oxetvh1h6fg1lc9fjt6bhn
+build exit=0
+$ docker run --rm etqan-qa001/backend:gid20 sh -c "id; stat -c %u:%g /app /app/manage.py"
+uid=501(app) gid=20(dialout) groups=20(dialout)
+/app 501:20
+/app/manage.py 501:20
+dialout:x:20:

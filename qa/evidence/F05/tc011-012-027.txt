@@ -1,0 +1,109 @@
+== TC-011
+sessions table: 122
+"is_active":false,"account_state":"inactive"
+[403] GET identity/me/ :: {"detail":"Authentication credentials were not provided."}
+login s1x 400 {"non_field_errors":["Invalid credentials."]}
+[200] GET identity/me/ :: {"id
+[200] POST people/st
+"account_state":"active"
+login s1 200 {"id":114,"email":"f05-pend@qa.etqan.test","full_name":"QA5 Sami","phone":"+201005550101","preferred_language":"ar","eff
+[200] POST people/teachers/7/quick-login/ :: {"id":7,"email":"qa-teacher@qa.etqa
+[200] GET identity/me/ :: {"id":7,"email":"qa-teacher@qa.etq
+[403] POST people/te
+[200] GET identity/me/ :: {"id":7,"email":"qa-teacher@qa.etqan.test","full_name":"QA teach
+[200] GET identity/me/ :: {"id":7,"email":"qa-teacher@qa.etqan.test","full_name":"QA teach
+[403] POST people/te
+login tch 200 {"id":7,"email":"qa-teacher@qa.etqan.test","full_name":"QA teacher","phone":"","preferred_language":"ar","effective_lang
+[403] POST people/admins/1/deactivate/ :: {"detail":"Authentication credentials were not provided."}
+[403] POST people/admins/ :: {"detail":"Authentication credentials were not provided."}
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;print(json.load(sys.stdin)['messages'][0]['ID'])
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json,re;t=json.load(sys.stdin)['Text'];print(re.findall(r'https?://\S+',t)[0])
+                         ~~~~~~~~~^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py", line 298, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+accept 400 {"token":["Invalid or expired reset link."]}
+login a2 400 {"non_field_errors":["Invalid credentials."]}
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;d=json.loads(sys.argv[1]);print(eval(sys.argv[2]))
+                                                    ~~~~^^^^^^^^^^^^^
+  File "<string>", line 1, in <module>
+    import sys,json;d=json.loads(sys.argv[1]);print(eval(sys.argv[2]))
+    
+KeyError: 'results'
+blocked flags (a2 view): 
+[403] GET identity/me/ :: {"detail":"Authentication credentials were n
+[404] POST people/admins//deactivate/ :: <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /api/v1/people/admins//deactivate/</title>
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <style>
+    html * { padding:0; margin:0; }
+    body * { padding:10px 
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;d=json.loads(sys.argv[1]);print(eval(sys.argv[2]))
+                                                    ~~~~^^^^^^^^^^^^^
+  File "<string>", line 1, in <module>
+    import sys,json;d=json.loads(sys.argv[1]);print(eval(sys.argv[2]))
+    
+KeyError: 'results'
+blocked flags: 
+login adm 200 {"id":1,"email":"qa-admin@qa.etqan.test","full_name":"QA Admin","phone":"","preferred_language":"ar","effective_language
+[404] POST people/admins//deactivate/ :: <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /api/v1/people/admins//deactivate/</title>
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <style>
+    html * { padding:0; margin:0; }
+    body * { padding:10px 
+[403] GET identity/me/ :: {"detail":"Authentication credenti
+active admins: 1
+== TC-012
+[201] POST people/st
+[200] POST people/st
+[400] POST people/students/130/invite/ :: {"email":["Only someone who has not set a password yet can be re-invited."]}
+[200] POST identity/password/reset/confirm/ :: 
+f|f|t
+login invd 400 {"non_field_errors":["Invalid credentials."]}
+"is_active":false,"account_state":"inactive"
+[200] POST identity/password/reset/ :: 
+mails to inactive before=1 after=2
+login s1 200 {"id":114,"email":"f05-pend@qa.etqan.test","full_name":"QA5 Sami","phone":"+201005550101","preferred_language":"ar","eff
+active teachers has TH: False count=17 SQL=17
+inactive teachers: [119]
+login p1x 400 {"non_field_errors":["Invalid credentials."]}
+guardians still list P1: True
+login p1 200 {"id":120,"email":"f05-par1@qa.etqan.test","full_name":"QA5 Parent One","phone":"","preferred_language":"ar","effective_
+== TC-027
+par1 link uid=MTIw
+[400] POST identity/password/reset/confirm/ :: {"token":["Invalid or expired reset link."]}
+[400] POST identity/password/reset/confirm/ :: {"token":["Invalid or expired reset link."]}
+[400] POST identity/password/reset/confirm/ :: {"token":["Invalid or expired reset link."]}
+[400] POST identity/password/reset/confirm/ :: {"new_password":["This password is too common."]}
+[400] POST identity/password/reset/confirm/ :: {"new_password":["This password is too common."]}
+[400] POST identity/password/reset/confirm/ :: {"token":["Invalid or expired reset link."]}
+passwords unchanged: yes
+0

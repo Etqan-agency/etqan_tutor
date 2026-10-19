@@ -1,0 +1,58 @@
+== setup 2026-10-19T03:34:34.744427
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+qaother|{"parents": true, "balances": true, "invoices": true, "code_reset": false, "two_factor": true, "quick_login": true, "system_codes": true, "internal_chat": false, "payment_links": true, "online_payments": true, "payment_receipts": true}
+qa|{"export": true, "themes": true, "parents": true, "spanish": true, "balances": true, "families": true, "invoices": true, "code_reset": true, "two_factor": true, "phone_login": true, "quick_login": true, "supervision": true, "postponement": true, "system_codes": true, "internal_chat": false, "payment_links": true, "payroll_rules": true, "system_status": true, "google_sign_in": false, "online_payments": true, "quick_translate": true, "session_reports": true, "teacher_balance": true, "payment_receipts": true, "student_teacher_rate": true}
+login admin 200
+invoices 1|INV-000001|1|5|150000|EGP|partial|1
+2|INV-000002|2|8|150000|EGP|unpaid|2
+3|INV-000003|1|5|2500|USD|paid|
+4|INV-000004|1|5|150000|USD|void|
+5|INV-000005|1|5|100|EGP|void|
+6|INV-000006|1|5|100|ZZZ|void|
+payments 1|1|50000|cash|completed
+2|3|2500|cash|completed
+subs 1|1|1|1|150000|EGP|active
+2|2|1|1|150000|EGP|active
+pkg 1|F03 Pack|150000|EGP
+course 1|F03 Quran
+profiles ERROR:  relation "people_studentprofile" does not exist
+LINE 1: SET search_path=academy_qa; select * from people_studentprof...
+                                                  ^
+guardians S1 200 []
+families 200 {"count": 1, "next": null, "previous": null, "results": [{"id": 1, "name": "QA Family F01", "is_active": true, "payer": {"id": 5, "full_name": "QA student", "role": "student"}, "payer_needs_choosing": false, "students": [{"id": 5, "full_name": "QA student"}], "notes": "", "created_at": "2026-10-17T20:13:44.133651Z"}]}
+roles 200 [[4, "F02 QL Full", true], [5, "F02 QL NoView", true], [10, "F03 Ed ok", false], [15, "F03 Everything", false], [6, "F03 Front desk", false], [13, "F03 Iso", false], [12, "F03 Matrix", false], [9, "F03 Money", false], [11, "F03 Partial", false], [14, "F03 QL Teacher", false], [8, "F03 Role editor", false], [7, "F03 Trim", false], [16, "F03 UI Desk 1792369176028", false], [17, "F03 UI Desk 1792369180807", false], [18, "F03 UI Desk 1792369207690", false], [19, "F03 UI Desk 1792369881895", false], [2, "QA No Codes", true], [3, "QA Student View", true], [1, "Supervisor", true]]
+staff3 200 {"id": 3, "full_name": "QA Staff Codes", "email": "qa-staff-codes@qa.etqan.test", "is_active": true, "roles": [{"id": 3, "name_ar": "عرض الطلاب", "name_en": "QA Student View"}], "invited": false, "created_at": "2026-10-17T20:07:10.201341Z"}
+create students qa-student2@qa.etqan.test 201 {"id": 32, "role": "student", "two_factor": false, "user": {"full_name": "QA Student Two", "email": "qa-student2@qa.etqan.test", "phone": "", "preferred_language": "ar", "timezone": "Africa/Cairo", "is_active": true, "account_state": "invited", "pending_email": "", "last_login_ip": null, "last_login
+create students qa-student3@qa.etqan.test 201 {"id": 33, "role": "student", "two_factor": false, "user": {"full_name": "QA Student Three", "email": "qa-student3@qa.etqan.test", "phone": "", "preferred_language": "ar", "timezone": "Africa/Cairo", "is_active": true, "account_state": "invited", "pending_email": "", "last_login_ip": null, "last_log
+create parents qa-parent2@qa.etqan.test 201 {"id": 34, "role": "parent", "two_factor": false, "user": {"full_name": "QA Parent Two", "email": "qa-parent2@qa.etqan.test", "phone": "", "preferred_language": "ar", "timezone": "Africa/Cairo", "is_active": true, "account_state": "invited", "pending_email": "", "last_login_ip": null, "last_login_de
+create parents qa-parent3@qa.etqan.test 201 {"id": 35, "role": "parent", "two_factor": false, "user": {"full_name": "QA Parent Three", "email": "qa-parent3@qa.etqan.test", "phone": "", "preferred_language": "ar", "timezone": "Africa/Cairo", "is_active": true, "account_state": "invited", "pending_email": "", "last_login_ip": null, "last_login_
+ids {'S2': 32, 'S3': 33, 'P2': 34, 'P3': 35}
+guardian 5 6 201 [{"id": 6, "full_name": "QA parent", "email": "qa-parent@qa.etqan.test", "phone": ""}]
+guardian 32 34 201 [{"id": 34, "full_name": "QA Parent Two", "email": "qa-parent2@qa.etqan.test", "phone": ""}]
+guardian 33 35 201 [{"id": 35, "full_name": "QA Parent Three", "email": "qa-parent3@qa.etqan.test", "phone": ""}]
+S1 country 200 {"id": 5, "role": "student", "two_factor": false, "user": {"full_name": "QA student", "email": "qa-student@qa.etqan.test", "phone": "", "preferred_language": "ar", "timezone": "Africa/Cairo", "is_acti
+family 200 {"id": 1, "name": "QA Fam", "is_active": true, "payer": {"id": 35, "full_name": "QA Parent Three", "role": "parent"}, "payer_needs_choosing": false, "students": [{"id": 33, "full_name": "QA Student Three"}, {"id": 5, "full_name": "QA student"}], "notes": "", "created_at": "2026-10-17T20:13:44.133651Z"}
+pw 156 objects imported automatically (use -v 2 for details).
+login student2 400
+login parent2 400
+login parent3 400
+login student3 400
+role QA Billing 201 {"id": 20, "name_ar": "QA Billing ع", "name_en": "QA Billing", "permissions": ["checkout.update", "checkout.view_any", "gateway.update", "gateway.view", "invoice.create", "invoice.update", "invoice.view", "invoice.view_any", "payment.create", "payment.delete", "payment.update", "payment.view_any", "payment_link.create", "payment_link.update", "payment_link.view_any", "payment_method.create", "payment_method.delete", "payment_method.update", "payment_method.view_any", "student.view", "student.vie
+role QA Billing Narrow 201 {"id": 21, "name_ar": "QA Billing Narrow ع", "name_en": "QA Billing Narrow", "permissions": ["invoice.view", "invoice.view_any", "payment.view_any"], "is_active": true, "members": 0, "created_at": "2026-10-19T00:35:33.047662Z"}
+staff3 roles 200 {"id": 3, "full_name": "QA Staff Codes", "email": "qa-staff-codes@qa.etqan.test", "is_active": true, "roles": [{"id": 20, "name_ar": "QA Billing ع", "name_en": "QA Billing"}, {"id": 3, "name_ar": "عرض الطلاب", "name_en": "QA Student View"}], "invited": false, "created_at": "2026-10-17T20:07:10.20134
+course 201 {"id": 2, "name_ar": "تجويد", "name_en": "Tajweed QA", "description_ar": "", "description_en": "", "language": "ar", "is_active": true, "created_at": "2026-10-19T00:35:33.173772Z", "updated_at": "2026-10-19T00:35:33.173778Z", "teacher_ids": [7]}
+pkg 201 {"id": 2, "name_ar": "شهري", "name_en": "Monthly QA", "description_ar": "", "description_en": "", "sessions_per_week": 2, "session_minutes": 30, "duration_value": 1, "duration_unit": "month", "freeze_days_allowed": 0, "price_minor": 150000, "currency": "EGP", "is_active": true, "created_at": "2026-1
+acad settings 200 {"timezone": "Africa/Cairo", "default_currency": "EGP", "default_language": "ar", "generation_horizon_days": 14, "renewal_grace_days": 7, "absent_consumes_session": true, "excused_consumes_session": false, "auto_invoice_on_subscription": true, "invoice_due_days": 7, "postpone_limit_minutes": 120, "s
+gw 200 {"stripe": {"enabled": true, "mode": "test", "public_key": "pk_test_f09", "has_secret": true, "has_webhook_secret": true, "webhook_url": "http://qa.etqan.localhost/api/v1/gateways/webhooks/stripe/", "events": ["checkout.session.completed", "checkout.session.async_payment_succeeded", "checkout.session.async_payment_failed", "checkout.session.expired"], "currencies": ["AED", "AUD", "BHD", "CAD", "CHF", "DKK", "EGP", "EUR", "GBP", "IDR", "INR", "JOD", "JPY", "KWD", "MAD", "MYR", "NOK", "NZD", "OMR", "PKR", "QAR", "SAR", "SEK", "SGD", "TND", "TRY", "USD", "ZAR"], "notes": ""}, "paypal": {"enabled"
+billing settings 200 {"local_payment_enabled": true}
+156 objects imported automatically (use -v 2 for details).
+baseline billing_invoice 6
+baseline billing_payment 2
+baseline wallet_walletentry 0
+baseline vouchers_voucher 0
+baseline gateways_checkout 0
+login student2 200
+login parent2 200
+login parent3 200
+login student3 200

@@ -1,0 +1,41 @@
+== TC-021
+before: remA=(2, 6) proj=[(81000, 375000)] inv=ERROR:  column "total_minor" does not exist
+[200] POST sessions/archive/ :: {"done":[239,247,248,295],"skipped":[{"id":245,"code":"scheduling.not_allowed_in_status"}]}
+after:  remA=(2, 6) proj=[(81000, 375000)]
+default list: [] only: [239, 248, 295, 247] include: [239, 248, 295, 247]
+ERROR:  column "archived_by_id" does not exist
+LINE 1: select id,archived_at is not null,archived_by_id from academ...
+                                          ^
+[200] POST sessions/295/restore/ :: {"id":295,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-10","starts_at":"2026-10-10T18:30:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"fu
+student default list has archived? [239, 248, 295]
+== TC-026 / S1 probes on archived rows
+[200] POST sessions/239/attendance/ :: {"id":239,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-15","starts_at":"2026-10-15T04:00:00Z","minutes":30,"status":"completed","student_attendance":"excused","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+remA now (1, 7)
+[200] POST sessions/248/pays-teacher/ :: {"id":248,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T07:00:00Z","minutes":60,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+proj now [(78000, 372000)]
+[200] POST sessions/248/times/ :: {"id":248,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T07:00:00Z","minutes":60,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+[200] POST sessions/248/cancel/ :: {"id":248,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T07:00:00Z","minutes":60,"status":"cancelled","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+[200] POST sessions/248/restore/ :: {"id":248,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T07:00:00Z","minutes":60,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+[200] PUT sessions/248/report/ :: {"session":248,"behaviour":2,"participation":2,"notes":"","written_by":{"id":1,"full_name":"QA Admin"},"created_at":"2026-10-19T16:46:04.964835Z","updated_at":"2026-10-19T16:46:04.964841Z"}
+[200] POST sessions/bulk/ :: {"done":[239],"skipped":[]}
+239|completed|absent|not_set|not_set|regular|f||1|||t|f|t
+248|completed|present|not_set|not_set|extra|f||1|||t|f|f
+105|248|1|times|{"actual_minutes": [null, 20]}|
+106|248|1|cancel|{"status": ["completed", "cancelled"], "cancel_reason": ["", "archived cancel"]}|
+107|248|1|restore|{"status": ["cancelled", "completed"], "cancel_reason": ["archived cancel", ""]}|
+-- unarchive perms
+[403] POST sessions/unarchive/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST sessions/unarchive/ :: {"detail":"You do not have permission to perform this action."}
+qa: session_archive=off
+switch off default list: [239, 248, 295, 247]
+[404] POST sessions/unarchive/ :: {"detail":"This feature is not enabled for this academy."}
+qa: session_archive=on
+[200] POST sessions/unarchive/ :: {"done":[239,247,248,295],"skipped":[]}
+== TC-026 / S5: undo a completed session with report (P5)
+1
+[200] POST sessions/239/attendance/ :: {"id":239,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-15","starts_at":"2026-10-15T04:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+P5 status=scheduled has_report=True
+P5 in missing: False
+GET report 200
+[409] PUT sessions/239/report/ :: {"detail":"A report is written once the session is completed.","code":"scheduling.not_completed"}
+re-marked P5 200; remA (2, 6) proj [(84000, 378000)]

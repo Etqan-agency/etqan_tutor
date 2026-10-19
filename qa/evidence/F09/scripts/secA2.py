@@ -1,0 +1,37 @@
+from qa import *
+st = st_load(); a = S(); a.login(*PW["admin"])
+log("== TC-001 addendum q search", datetime.datetime.now().isoformat())
+c, j = a.get("/billing/invoices/?status=unpaid&q=INV-000007"); log("q=number", c, [r["id"] for r in j["results"]])
+c, j = a.get("/billing/invoices/?q=Parent%20Three"); log("q=payer name", c, j["count"])
+save("tc001.txt")
+log("== TC-003", datetime.datetime.now().isoformat())
+C, P = st["COURSE"], st["PKG"]
+def sub(body):
+    c, j = a.post("/subscriptions/", body); log("sub", short(body), c, short(j, ["id","price_minor","currency","status","payment_status"], 300) if c==201 else short(j, n=300)); return j.get("id") if c==201 else None
+n0 = int(q("select count(*) from billing_invoice"))
+st["SUB1"] = sub({"student":5,"course":C,"teacher":7,"package":P,"starts_on":d(0)})
+st["SUB2"] = sub({"student":st["S2"],"course":C,"teacher":7,"package":P,"starts_on":d(0),"price_minor":99950,"currency":"USD"})
+st["SUB0"] = sub({"student":5,"course":C,"teacher":7,"package":P,"starts_on":d(0),"price_minor":0})
+log("off", a.patch("/academy/settings/", {"auto_invoice_on_subscription": False})[0])
+st["SUB3"] = sub({"student":st["S3"],"course":C,"teacher":7,"package":P,"starts_on":d(0)})
+log("on", a.patch("/academy/settings/", {"auto_invoice_on_subscription": True})[0])
+log(features("qa", off=["invoices"]))
+st["SUB4"] = sub({"student":st["S3"],"course":1,"teacher":7,"package":1,"starts_on":d(0)})
+log(features("qa", on=["invoices"]))
+subs = [st[k] for k in ["SUB1","SUB2","SUB0","SUB3","SUB4"] if st.get(k)]
+log("DB inv per sub", q(f"select subscription_id,count(*),sum(amount_minor),string_agg(currency||' '||description||' due '||due_on||' iss '||issued_on||' payer '||payer_id, '; ') from billing_invoice where subscription_id in ({','.join(map(str,subs))}) group by 1 order by 1"))
+log("DB subs", q(f"select id,price_minor,currency,status from scheduling_subscription where id in ({','.join(map(str,subs))}) order by id"))
+c, j = a.get(f"/billing/invoices/?subscription={st['SUB1']}"); log("inv by sub", c, short(j, n=500))
+c, j = a.get("/subscriptions/?student=5"); log("subs list", c, short([(r["id"], r.get("payment_status")) for r in j["results"]], n=400) if c==200 else short(j))
+log("dupe check", q("select subscription_id,count(*) from billing_invoice where subscription_id is not null and status<>'void' group by 1 having count(*)>1"))
+st_save(st); save("tc003.txt")
+log("== TC-004", datetime.datetime.now().isoformat())
+s1 = st["SUB1"]
+c, j = a.patch(f"/subscriptions/{s1}/", {"price_minor":120000}); log("patch price", c, short(j, ["id","price_minor"]) if c==200 else short(j))
+log("inv after price edit", q(f"select id,amount_minor,status from billing_invoice where subscription_id={s1}"))
+c, j = a.post(f"/subscriptions/{s1}/renew/", {}); log("renew", c, short(j, n=400))
+log("inv after renew", q(f"select id,subscription_id,amount_minor,status from billing_invoice where subscription_id in (select id from scheduling_subscription where id={s1} or renewed_from_id={s1}) order by id") )
+c, j = a.delete(f"/subscriptions/{s1}/"); log("delete invoiced", c, short(j))
+c, j = a.post(f"/subscriptions/{st['SUB2']}/cancel/", {}); log("cancel SUB2", c, short(j, ["id","status"]) if c==200 else short(j))
+log("SUB2 inv", q(f"select id,amount_minor,currency,status from billing_invoice where subscription_id={st['SUB2']}"))
+st_save(st); save("tc004.txt")

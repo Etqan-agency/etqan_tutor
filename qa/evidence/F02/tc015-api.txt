@@ -1,0 +1,27 @@
+## TC-015 API
+ERROR:  invalid input syntax for type inet: "-"
+LINE 1: ...ast_login::text,'-')||'|'||coalesce(last_login_ip,'-') from ...
+                                                             ^
+start: 200 10 student {'id': 1, 'full_name': 'QA Admin'}
+key changed at start: yes
+me: 200
+pw change: {"detail":"Not while signed in as someone else.","code":"identity.impersonating"} 403 
+add email: {"detail":"Not while signed in as someone else.","code":"identity.impersonating"} 403 
+patch phone: {"detail":"Not while signed in as someone else.","code":"identity.impersonating"} 403 
+2fa setup: {"detail":"Not while signed in as someone else.","code":"identity.impersonating"} 403 
+nested: {"detail":"You do not have permission to perform this action."} 403 
+phone in db: +201000000003
+stop: 200 1 admin None
+key changed at stop: yes
+stop on normal: {"detail":"You are not signed in as someone else."} 400 
+ERROR:  invalid input syntax for type inet: "-"
+LINE 1: ...ast_login::text,'-')||'|'||coalesce(last_login_ip,'-') from ...
+                                                             ^
+student last_login/ip unchanged: yes
+4|return|1|10
+3|impersonate|1|10
+student 10 last_login vs impersonate event:
+ERROR:  column e.created does not exist
+LINE 1: ...y_qa; select u.last_login, u.last_login_ip::text, e.created ...
+                                                             ^
+id kind ip at actor_id target_id 2026-10-18 22:48:14.239758+00|192.168.65.1/32|2026-10-18 22:56:25.491214+00|t

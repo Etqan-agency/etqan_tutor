@@ -1,0 +1,6 @@
+2026-10-17T21:04:12Z
+## forged suspend_academies on qa-tmp-1 (pk 6, already suspended) as ops-view (view only)
+login 302
+changelist offers actions: <option value="" <option value="suspend_academies" <option value="reactivate_academies" <option value="copy_features" <option value="" 
+<li class="success">Suspended 1 academies.</li>
+POST final 200

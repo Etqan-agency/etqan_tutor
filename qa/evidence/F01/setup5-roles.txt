@@ -1,0 +1,7 @@
+## SETUP-5 roles
+{"id":2,"name_ar":"بلا صلاحيات","name_en":"QA No Codes","permissions":[],"is_active":true,"members":0,"created_at":"2026-10-17T20:07:03.602248Z"}
+HTTP 201
+{"id":3,"name_ar":"عرض الطلاب","name_en":"QA Student View","permissions":["student.view","student.view_any"],"is_active":true,"members":0,"created_at":"2026-10-17T20:07:03.657792Z"}
+HTTP 201
+{"count":3,"next":null,"previous":null,"results":[{"id":2,"name_ar":"بلا صلاحيات","name_en":"QA No Codes","permissions":[],"is_active":true,"members":0,"created_at":"2026-10-17T20:07:03.602248Z"},{"id":3,"name_ar":"عرض الطلاب","name_en":"QA Student View","permissions":["student.view","student.view_any"],"is_active":true,"members":0,"created_at":"2026-10-17T20:07:03.657792Z"},{"id":1,"name_ar":"مشرف","name_en":"Supervisor","permissions":["attendance.update","attendance.view","attendance.view_any","family.view","family.view_any","parent.view","parent.view_any","session.supervise","session.update","session.view","session.view_any","session_report.update","session_report.view","session_report.view_any","student.view","student.view_any","subscription.view","subscription.view_any","teacher.view","teacher.view_any"],"is_active":true,"members":0,"created_at":"2026-10-17T19:49:23.073486Z"}]}
+HTTP 200

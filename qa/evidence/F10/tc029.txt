@@ -1,0 +1,44 @@
+==== TC-029 (S2) 2026-10-19T04:10:10.997972
+rate int64 max 201 {"id": 21, "teacher": {"id": 48, "full_name": "F10 Teacher Fourteen"}, "course": null, "hourly_rate_minor": 9223372036854775807, "currency": "EGP", "counts": true, "created_at": "2026-10-19T01:10:11.0
+S2 generate April with huge rate 400 {"gross_minor":["Ensure this value is less than or equal to 9223372036854775807."]}
+adj int64 max 201 {"id": 13, "teacher": {"id": 47, "full_name": "F10 Teacher Thirteen"}, "kind": "bonus", "amount_minor": 9223372036854775807, "percent_bp": null, "currency": "EGP", "effective_on": "2026-05-15", "reaso
+adj int64+1 400 {"amount_minor":["Ensure this value is less than or equal to 9223372036854775807."]}
+fixed int64+1 400 {"monthly_minor":["Ensure this value is less than or equal to 9223372036854775807."]}
+rate int64+1 400 {"hourly_rate_minor":["Ensure this value is less than or equal to 9223372036854775807."]}
+withdrawal int64+1 409 {"detail":"That is more than the available balance.","code":"payroll.insufficient_balance"}
+adj amount '6000.5' 400 {"amount_minor": ["A valid integer is required."]}
+rate patch '6000.5' 400 {"hourly_rate_minor": ["A valid integer is required."]}
+adj amount 6000.5 400 {"amount_minor": ["A valid integer is required."]}
+rate patch 6000.5 400 {"hourly_rate_minor": ["A valid integer is required."]}
+adj amount 'abc' 400 {"amount_minor": ["A valid integer is required."]}
+rate patch 'abc' 400 {"hourly_rate_minor": ["A valid integer is required."]}
+adj amount None 400 {"amount_minor": ["Give either an amount or a percentage."]}
+rate patch None 400 {"hourly_rate_minor": ["This field may not be null."]}
+adj amount '1e3' 400 {"amount_minor": ["A valid integer is required."]}
+rate patch '1e3' 400 {"hourly_rate_minor": ["A valid integer is required."]}
+adj amount 1000.0 201 {"id": 14, "teacher": {"id": 47, "full_name": "F10 Teacher Thirteen"}, "kind": "bonus", "amount_minor": 1000, "percent_bp": null, "currency": "EGP", "
+rate patch 1000.0 200 {"id": 10, "teacher": {"id": 47, "full_name": "F10 Teacher Thirteen"}, "course": null, "hourly_rate_minor": 1000, "currency": "EGP", "counts": true, "
+adj amount -0.0 400 {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+rate patch -0.0 200 {"id": 10, "teacher": {"id": 47, "full_name": "F10 Teacher Thirteen"}, "course": null, "hourly_rate_minor": 0, "currency": "EGP", "counts": true, "cre
+adj amount True 400 {"amount_minor": ["A valid integer is required."]}
+rate patch True 400 {"hourly_rate_minor": ["A valid integer is required."]}
+T13 rate now 0
+fixed int64 max 201 {"id": 4, "teacher": {"id": 48, "full_name": "F10 Teacher Fourteen"}, "monthly_minor": 9223372036854775807, "currency": "EGP", "starts_on": "2026-04-0
+generate April fixed max 400 {"net_minor":["Ensure this value is less than or equal to 9223372036854775807."]}
+generate April fixed max + bonus max 400 {"bonuses_minor":["Ensure this value is less than or equal to 9223372036854775807."]}
+T14 slips 
+==== TC-029 cleanup
+T13 rate 6000 200
+del adj 7 204
+del adj 13 204
+del adj 15 204
+del fixed T14 204
+rate T14 6000 200
+generate April now 200 {"created": 1, "replaced": 0, "removed": 0, "missing_rate": [], "other_currency": [], "unpaid_sessions": [], "stale_fixed_salary": []}
+T14 April 36|12000|12000|draft
+no partial rows left 0 0
+==== TC-029b: does one teacher's overflow block the whole month?
+generate April 400 {"gross_minor": ["Ensure this value is less than or equal to 9223372036854775807."]}
+T13 April payslip rows 0
+T14 April draft (pre-existing, 12000) unchanged? 12000
+restored generate 200 {"created": 1, "replaced": 1, "removed": 0, "missing_rate": [], "other_currency": [], "unpaid_sessions": [], "stale_fixed_salary": []}

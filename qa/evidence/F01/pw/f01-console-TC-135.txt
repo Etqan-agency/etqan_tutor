@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:207:1 › TC-135 anonymous admin URLs redirect to the login (53ms)
+
+  1 passed (627ms)

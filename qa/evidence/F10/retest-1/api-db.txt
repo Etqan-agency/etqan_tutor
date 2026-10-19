@@ -1,0 +1,18 @@
+==== ETQAN-QA-029 retest-1 (REAL) 2026-10-19T04:25:29.634088 TODAY 2026-10-19
+OK  orig repro mark-paid 2026-01-01 -> 400 paid_on :: 400 {'paid_on': ["A payslip can't be paid before the month it pays."]}
+OK  DB slip 19 still issued, no expense :: issued|-|false 0:
+OK  mark-paid day before month (07-31) -> 400 :: 400 {'paid_on': ["A payslip can't be paid before the month it pays."]}
+OK  future still 400 :: 400 {'paid_on': ["A payslip can't be paid in the future."]}
+OK  month first day 08-01 -> 200 paid :: 200 {"status": "paid", "paid_on": "2026-08-01", "net_minor": 6000}
+OK  DB 19 paid + expense 6000 EGP spent_on 2026-08-01 :: paid|2026-08-01|false 1:6000|EGP|2026-08-01
+OK  pay again 409 :: 409 {'detail': 'Not allowed while the payslip is paid.', 'code': 'payroll.not_allowed_in_status'}
+balance before []
+OK  pay-to-balance 06-30 for July slip -> 400 paid_on :: 400 {'paid_on': ["A payslip can't be paid before the month it pays."]}
+OK  pay-to-balance 01-01 -> 400 :: 400 {'paid_on': ["A payslip can't be paid before the month it pays."]}
+OK  DB 24 still issued, no expense, balance unchanged :: issued|-|false 0: []
+OK  pay-to-balance 07-01 -> 200 :: 200 {"status": "paid", "paid_on": "2026-07-01", "paid_to_balance": true, "net_minor": 4000}
+OK  DB 24 paid_to_balance + expense spent_on 07-01 :: paid|2026-07-01|true 1:4000|EGP|2026-07-01
+balance after [{"currency": "EGP", "balance_minor": 4000, "available_minor": 4000}] (net 4000 expected credited)
+OK  slip 13 paid today -> 200 :: 200 {"status": "paid", "paid_on": "2026-10-19"}
+OK  DB 13 expense spent_on today :: 1:6000|EGP|2026-10-19
+OK  teacher mark-paid 403/404 :: 403

@@ -1,0 +1,16 @@
+Created QA Tmp One at qa-tmp-1.etqan.localhost
+exit=0
+Created QA Tmp One at qa-tmp-1.etqan.localhost
+exit=0
+6|academy_qa_tmp_1|qa-tmp-1|active
+qa-tmp-1.etqan.localhost|active|t
+qa admin hash before=ed34783bb059cfc3c904ae561b76e60b
+qa_tmp_1 user|1|qa-admin@qa.etqan.test|!
+accept qa-tmp-1 invite:
+
+HTTP 200
+qa hash after: ed34783bb059cfc3c904ae561b76e60b
+qa_tmp_1 hash: 634cbf05bca0b8d822b8a89ed4f556da|argon2$
+login qa with qa pw: 200
+login qa-tmp-1 with qa pw: 400
+login qa-tmp-1 with own pw: 200

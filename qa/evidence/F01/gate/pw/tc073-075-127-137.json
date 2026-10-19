@@ -1,0 +1,78 @@
+{
+  "names": [
+    "Khaled Academy",
+    "QA Tmp R1 OK",
+    "E2E Journey 1792270543395",
+    "E2E Journey 1792270459368",
+    "E2E Journey 1792270407267",
+    "QA Tmp Race B1",
+    "QA Tmp Race A",
+    "QA Tmp TZ",
+    "QA Tmp One",
+    "Etqan QA Academy",
+    "Etqan QA Other",
+    "Other Academy",
+    "Demo Academy"
+  ],
+  "actions": [
+    "---------",
+    "Suspend selected academies",
+    "Reactivate selected academies",
+    "Copy features from another academy"
+  ],
+  "copyFrom": [
+    "---------",
+    "Etqan QA Other",
+    "Other Academy",
+    "Demo Academy",
+    "QA Tmp One",
+    "Etqan QA Academy",
+    "E2E Journey 1792270407267",
+    "E2E Journey 1792270459368",
+    "E2E Journey 1792270543395",
+    "QA Tmp Race A",
+    "QA Tmp Race B1",
+    "QA Tmp TZ",
+    "QA Tmp R1 OK",
+    "Khaled Academy"
+  ],
+  "publicChange": 200,
+  "publicChangeUrl": "http://etqan.localhost/admin/",
+  "publicChangeText": "Academy with ID “1” doesn’t exist. Perhaps it was deleted?",
+  "forged": {
+    "status": 200,
+    "body": "<ul class=\"messagelist\">\n              <li class=\"success\">Suspended 0 academies.</li>\n            </ul>"
+  },
+  "academyDelete": 403,
+  "deleteLink": 0,
+  "domainRows": [
+    "\tkhaled.etqan.localhost\tKhaled Academy\tActive\t\t\t-",
+    "\tqa-tmp-r1ok.etqan.localhost\tQA Tmp R1 OK\tActive\t\t\t-",
+    "\tjourney-1792270543395.etqan.localhost\tE2E Journey 1792270543395\tActive\t\t\t-",
+    "\tjourney-1792270459368.etqan.localhost\tE2E Journey 1792270459368\tActive\t\t\t-",
+    "\tjourney-1792270407267.etqan.localhost\tE2E Journey 1792270407267\tActive\t\t\t-",
+    "\twww.qa-academy.test\tQA Tmp One\tDisabled\t\t\tOct. 17, 2026, 8:02 p.m.",
+    "\tlocaltest.me\tQA Tmp One\tDisabled\t\t\t-",
+    "\taaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd.co\tQA Tmp One\tDisabled\t\t\t-",
+    "\tqa-academy.test\tQA Tmp One\tDisabled\t\t\tOct. 17, 2026, 8:02 p.m.",
+    "\tqa-tmp-race-b.etqan.localhost\tQA Tmp Race B1\tActive\t\t\t-",
+    "\tqa-tmp-race-a.etqan.localhost\tQA Tmp Race A\tActive\t\t\t-",
+    "\tqa-tmp-tz.etqan.localhost\tQA Tmp TZ\tActive\t\t\t-",
+    "\tqa-tmp-1.etqan.localhost\tQA Tmp One\tActive\t\t\t-",
+    "\tqa.etqan.localhost\tEtqan QA Academy\tActive\t\t\t-",
+    "\tqaother.etqan.localhost\tEtqan QA Other\tActive\t\t\t-",
+    "\tother.etqan.localhost\tOther Academy\tActive\t\t\t-",
+    "\tdemo.etqan.localhost\tDemo Academy\tActive\t\t\t-"
+  ],
+  "domainActions": [
+    "---------",
+    "Check DNS and activate",
+    "Make primary",
+    "Disable"
+  ],
+  "domainDelete": 403,
+  "publicDomainChange": {
+    "status": 302,
+    "location": "/admin/"
+  }
+}

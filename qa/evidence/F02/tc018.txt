@@ -1,0 +1,34 @@
+## TC-018
+send: {"sent":4,"skipped":[{"id":1,"reason":"role"},{"id":999999,"reason":"not_found"}]} 200 
+again: {"sent":0,"skipped":[{"id":8,"reason":"recent"},{"id":10,"reason":"recent"},{"id":16,"reason":"recent"},{"id":15,"reason":"recent"},{"id":1,"reason":"role"},{"id":999999,"reason":"not_found"}]} 200 
+6WUWRY4lQ0ImIYuvpt4wNu f02-parent@qa.etqan.test | [Etqan QA Academy] رابط تسجيل الدخول الخاص بك
+6ozbG3h1r18oxfhDZ47Q49 f02-teacher@qa.etqan.test | [Etqan QA Academy] رابط تسجيل الدخول الخاص بك
+43xpySUJXqFaX71rlJr5fZ f02-c@qa.etqan.test | [Etqan QA Academy] رابط تسجيل الدخول الخاص بك
+1hNgsp0ht0eCgwR5C0oXih f02-a@qa.etqan.test | [Etqan QA Academy] رابط تسجيل الدخول الخاص بك
+link_sent events +4
+staff-ql incl admin: {"detail":"You may not send sign-in links to these people."} 403 
+staff-ql without parent.view incl parent: {"detail":"You may not send sign-in links to these people."} 403 
+staff-qlnv: {"detail":"You may not send sign-in links to these people."} 403 
+teacher: 403
+mails to f02-b (should be 0): 0
+token: MTA.dgo2jk-6...
+use: 200 10 last_login stamped: yes
+reuse: {"token":["Invalid or expired link."]} 400 
+after password sign-in, f02-a token: {"token":["Invalid or expired link."]} 400 
+link_used events: 1
+## TC-018 part 2
+f02-d 2fa on: 200
+send to f02-d: {"sent":1,"skipped":[]}
+use 2FA link: {"mfa_required":true} 200 
+same link on second browser before code (not spent?): {"mfa_required":true} 200 
+code step: 200
+link after code: {"token":["Invalid or expired link."]} 400 
+400 400 400 400 400 400 400 400 400 400 400 400 400 400 400 400 400 400 400 400 429 (21 invalid tokens)
+events:
+link_sent|1|8
+link_sent|1|10
+link_sent|1|16
+link_sent|1|15
+link_used||10
+link_sent|1|11
+link_used||11

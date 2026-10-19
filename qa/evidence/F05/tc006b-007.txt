@@ -1,0 +1,33 @@
+== TC-006 follow-up (payer P1 unlinked from both family students)
+flag after full unlink=True
+repair flag=False
+== TC-007
+[200] POST people/students/bulk/ :: {"updated":20}
+20
+[201] POST people/tags/ :: {"id":46,"emoji":"","name_ar":"QA5 وسم","name_en":"QA5 Bulk Tag","kind":"student","position":22,"is_active":true,"people":0}
+[201] POST people/tags/ :: {"id":47,"emoji":"","name_ar":"QA5 متقاعد","name_en":"QA5 Retired","kind":"student","position":23,"is_active":true,"people":0}
+[200] POST people/students/bulk/ :: {"updated":20}
+[200] POST people/students/bulk/ :: {"updated":20}
+20|20
+[200] POST people/students/bulk/ :: {"updated":5}
+15
+[400] POST people/students/bulk/ :: {"tag_id":["A retired tag can't be added."]}
+[200] POST people/students/bulk/ :: {"updated":20}
+156 objects imported automatically (use -v 2 for details).
+
+login bv 400 {"non_field_errors":["Email address is not verified."]}
+login bo 400 {"non_field_errors":["Email address is not verified."]}
+[200] POST people/students/bulk/ :: {"updated":9}
+[403] GET identity/me/ :: {"detail":"Authentication credentials were not provide
+[403] GET identity/me/ :: {"detail":"Authentication credenti
+[200] GET identity/me/ :: {"id":1,"email
+[200] POST people/students/bulk/ :: {"updated":9}
+10
+[400] POST people/students/bulk/ :: {"ids":["Ensure this field has no more than 500 elements."]}
+[400] POST people/students/bulk/ :: {"ids":["This list may not be empty."]}
+[200] POST people/students/bulk/ :: {"updated":2}
+5|trial
+54|trial
+qaother students unchanged: yes
+[200] POST people/students/bulk/ :: {"updated":2,"skipped":[{"id":122,"full_name":"QA5 Kid Zed","reason":"in_another_family"}]}
+[400] POST people/students/bulk/ :: {"name":["Enter a name."]}

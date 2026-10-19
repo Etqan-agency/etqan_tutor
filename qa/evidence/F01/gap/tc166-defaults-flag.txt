@@ -1,0 +1,47 @@
+fixture invoice 8
+-- 1. flag on:
+POST 302 /admin/tenants/academy/
+flag=t
+  email: {'using': 'none', 'default_status': 'suspended'}
+-- 2. mark_paid via admin action (ops@):
+302 http://etqan.localhost/admin/etqan_billing/etqaninvoice/
+"success">Reactivated 1 academies.
+"success">· ETQ-2025-03-0002: marked paid.
+paid
+-- 3. reopen: flag=t; help: No unpaid Etqan invoice.
+  email: {'using': 'none', 'default_status': 'suspended'}
+-- 4a. lift flag:
+POST 302 /admin/tenants/academy/
+flag=f
+  email: {'using': 'etqan', 'default_status': 'available'}
+-- 4b. turn on again:
+POST 200 
+ERR Etqan&#x27;s defaults may be suspended only once an Etqan invoice is unpaid 30 days after issue.
+ERRNOTE Please correct the error below.
+flag=f
+DELETE 0
+DELETE 1
+
+===== VOID =====
+fixture invoice 9
+-- 1. flag on:
+POST 302 /admin/tenants/academy/
+flag=t
+  email: {'using': 'none', 'default_status': 'suspended'}
+-- 2. void via admin action (ops@):
+302 http://etqan.localhost/admin/etqan_billing/etqaninvoice/
+"success">· ETQ-2025-03-0003: voided.
+void
+-- 3. reopen: flag=t; help: No unpaid Etqan invoice.
+  email: {'using': 'none', 'default_status': 'suspended'}
+-- 4a. lift flag:
+POST 302 /admin/tenants/academy/
+flag=f
+  email: {'using': 'etqan', 'default_status': 'available'}
+-- 4b. turn on again:
+POST 200 
+ERR Etqan&#x27;s defaults may be suspended only once an Etqan invoice is unpaid 30 days after issue.
+ERRNOTE Please correct the error below.
+flag=f
+DELETE 0
+DELETE 1

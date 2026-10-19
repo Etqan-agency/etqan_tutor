@@ -1,0 +1,20 @@
+==== TC-013 2026-10-19T04:06:07.042261
+OK  settings patch 200 :: {"student_absent_pay_bp": 5000, "student_excused_pay_bp": 2500, "at_disposal_pays": true, "group_pay": "per_class", "report_deduction_bp": 0, "updated_at": "2026-10-19T01:06:07.056278Z", "updated_by": {"id": 1, "full_name": "QA Admin"}}
+OK  {'student_absent_pay_bp': -1} 400 :: 400 {"student_absent_pay_bp": ["Ensure this value is greater than or equal to 0."]}
+OK  {'student_absent_pay_bp': 10001} 400 :: 400 {"student_absent_pay_bp": ["Ensure this value is less than or equal to 10000."]}
+OK  {'group_pay': 'x'} 400 :: 400 {"group_pay": ["\"x\" is not a valid choice."]}
+BAD staff payroll_settings.update PATCH 200 :: 403
+OK  per_student 3 lines x 3000 = 9000 :: {"gross_minor": 9000, "sessions": 3}
+per_class lines [(58, 'carrier', 10000, 3000, '2026-05-04 — F03 قرآن — QA Student Three'), (59, 'member', 10000, 0, '2026-05-04 — F03 قرآن — QA Student Two — حصة جماعية'), (60, 'member', 10000, 0, '2026-05-04 — F03 قرآن — QA student — حصة جماعية')]
+OK  per_class carrier lowest id 3000, 2 members 0 :: gross=3000 sessions=1
+OK  mixed attendance (1 present, 2 absent) carrier at 100% :: [(58, 10000, 3000), (59, 5000, 0), (60, 5000, 0)]
+DB lines 58|carrier|10000|1:2026-05-04T15:00:00Z:30|3000
+59|member|5000|1:2026-05-04T15:00:00Z:30|0
+60|member|5000|1:2026-05-04T15:00:00Z:30|0
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  settings GET off 403/404 :: 404
+OK  settings PATCH off 403/404 :: 404
+OK  rules off -> per_student 100% defaults: 9000 :: 9000
+BAD rules off -> T2 absent/excused at 100%: 12345*(45*3+30+20)/60 lines :: 26491
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+settings row 1|5000|2500|t|per_class|2026-10-19 01:06:08.050457+00|1|0

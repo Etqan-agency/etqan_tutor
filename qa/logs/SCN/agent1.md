@@ -1,0 +1,1 @@
+- 2026-10-19 20:02 Agent 1 (SCN): wrote specs/SCN-integrated-scenarios.md, 18 cases (P1 16, P2 2), UI smoke 007 and 012; appended row to test-matrix.md. Read-only on product/DB/stack.

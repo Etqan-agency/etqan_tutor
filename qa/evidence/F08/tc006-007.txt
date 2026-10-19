@@ -1,0 +1,44 @@
+== TC-006 (P8 on Sub B)
+remB0 (1, 7)
+[200] POST sessions/241/attendance/ :: {"id":241,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-08","starts_at":"2026-10-08T05:00:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+[200] POST sessions/241/attendance/ :: {"id":241,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-08","starts_at":"2026-10-08T05:00:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+16|241|7|attendance|{"status": ["scheduled", "completed"], "student_attendance": ["not_set", "present"]}|
+remB after 2 identical (2, 6)
+200
+200
+200
+200
+200
+241|completed|present|not_set|not_set|regular|f||7|||f|f|t
+16|241|7|attendance|{"status": ["scheduled", "completed"], "student_attendance": ["not_set", "present"]}|
+17|241|7|attendance|{"student_attendance": ["present", "absent"]}|
+18|241|7|attendance|{"student_attendance": ["absent", "present"]}|
+19|241|7|attendance|{"student_attendance": ["present", "absent"]}|
+20|241|7|attendance|{"student_attendance": ["absent", "present"]}|
+remB after race (2, 6)
+[403] POST sessions/241/attendance/ :: {"detail":"Permission denied for action: clear attendance."}
+[200] POST sessions/241/attendance/ :: {"id":241,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-08","starts_at":"2026-10-08T05:00:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+[200] POST sessions/241/attendance/ :: {"id":241,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-08","starts_at":"2026-10-08T05:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+241|scheduled|not_set|not_set|not_set|regular|f||1|||f|f|t
+remB end (1, 7)
+0
+== TC-007 (P9, F2)
+qa: disposal_status=off
+[404] POST sessions/242/disposal/ :: {"detail":"This feature is not enabled for this academy."}
+qa: disposal_status=on
+remB0 (1, 7)
+[200] POST sessions/242/disposal/ :: {"id":242,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-09","starts_at":"2026-10-09T05:00:00Z","minutes":30,"status":"at_disposal","student_attendance":"not_set","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"fu
+[409] POST sessions/242/attendance/ :: {"detail":"Not allowed while the session is at_disposal.","code":"scheduling.not_allowed_in_status"}
+[200] POST sessions/242/attendance/ :: {"id":242,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-09","starts_at":"2026-10-09T05:00:00Z","minutes":30,"status":"at_disposal","student_attendance":"not_set","teacher_attendance":"present","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"fu
+242|at_disposal|not_set|present|not_set|regular|f||7||no teacher|f|f|t
+remB (1, 7)
+[200] POST sessions/242/restore/ :: {"id":242,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-09","starts_at":"2026-10-09T05:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"present","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+scheduled||present
+[409] POST sessions/240/disposal/ :: {"detail":"Not allowed while the session is completed.","code":"scheduling.not_allowed_in_status"}
+[200] POST sessions/246/disposal/ :: {"id":246,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-22","starts_at":"2026-10-22T05:00:00Z","minutes":30,"status":"at_disposal","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"f
+[200] POST sessions/246/cancel/ :: {"id":246,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-22","starts_at":"2026-10-22T05:00:00Z","minutes":30,"status":"cancelled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"ful
+cancelled|future no teacher|cancel at disposal
+[200] POST sessions/246/restore/ :: {"id":246,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-22","starts_at":"2026-10-22T05:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"ful
+[200] POST sessions/242/disposal/ :: {"id":242,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-09","starts_at":"2026-10-09T05:00:00Z","minutes":30,"status":"at_disposal","student_attendance":"not_set","teacher_attendance":"present","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"fu
+remB (1, 7)
+['PROVISION_MEETINGS', 'RUN_DAILY', 'for_each_academy', 'provision_meetings', 'run_daily', 'services', 'shared_task']

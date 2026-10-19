@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f10-retest.spec.ts:48:1 › QA-029 UI: mark paid before the payslip's month shows the paid_on error, month start is accepted (3.6s)
+
+  1 passed (4.2s)

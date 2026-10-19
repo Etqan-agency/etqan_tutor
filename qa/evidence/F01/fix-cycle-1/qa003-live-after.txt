@@ -1,0 +1,18 @@
+2026-10-17T21:19:47Z
+## Add academy qa-tmp-v timezone=Mars/Phobos currency=USD
+errorlist" id="id_timezone_error"><li>Unknown timezone.
+HTTP 200
+## Add academy qa-tmp-v timezone=africa/cairo currency=EGP
+errorlist" id="id_timezone_error"><li>Unknown timezone.
+HTTP 200
+## Add academy qa-tmp-v timezone=UTC currency=US
+errorlist" id="id_currency_error"><li>Use a three-letter currency code, like EGP.
+HTTP 200
+## DB
+0
+0
+## 2026-10-17T21:19:55Z manage.py create_academy --subdomain qa-tmp-v --timezone Mars/Phobos
+CommandError: Unknown timezone.
+
+exit=1
+0

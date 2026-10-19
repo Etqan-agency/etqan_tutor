@@ -1,0 +1,37 @@
+before: academies=5 domains=7 schemas=4
+### create_academy --subdomain www
+
+CommandError: This subdomain is reserved.
+
+exit=
+### create_academy --subdomain qa
+
+CommandError: This subdomain is already taken.
+
+exit=
+### create_academy --subdomain Bad
+
+CommandError: Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen.
+
+exit=
+### TC-054 taken subdomain + bad timezone
+
+CommandError: This subdomain is already taken.
+
+exit=
+### TC-028 missing --admin-email
+                                [--no-color] [--force-color] [--skip-checks]
+manage.py create_academy: error: the following arguments are required: --admin-email
+
+exit=
+after: academies=5 domains=7 schemas=4
+### TC-033 bootstrap_platform x2
+
+public tenant ready: etqan.localhost, localhost, 127.0.0.1
+exit= domains=7
+
+public tenant ready: etqan.localhost, localhost, 127.0.0.1
+exit= domains=7
+www exit=1
+missing-arg exit=2
+bootstrap exit=0

@@ -1,0 +1,43 @@
+== TC-014
+login imp 200
+1 quick-login teacher 7 -> 200
+  me: teacher qa-teacher@qa.etqan.test impersonator= {'id': 1, 'full_name': 'QA Admin'}
+2 payslips GET -> 200
+  change pw -> {"detail":"Not while signed in as someone else.","code":"identity.impersonating"} [403] 
+  add email -> {"detail":"Not while signed in as someone else.","code":"identity.impersonating"} [403] 
+  PATCH me -> {"id":7,"email":"qa-teacher@qa.etqan.test","full_name":"hacked","phone":"","preferred_language":"ar","effective_language":"ar","timezone":"Africa/Cairo","role":"teacher","profiles":["teacher"],"profil
+
+  PATCH academy settings -> 403  GET roles -> 403  void inv -> 403
+  quick-login again (as teacher) -> 403
+3 stop -> {"id":1,"email":"qa-admin@qa.etqan.test","full_name":"QA Admin","phone":"","preferred_language":"ar","effective_language":"ar","timezone":"Africa/Cairo","role":"admin","profiles":[],"profile":{},"perm
+
+  me: admin qa-admin@qa.etqan.test impersonator= None
+47|impersonate|1|7
+48|return|1|7
+4 admin target -> 404  nocode -> 403
+[201]
+[201]
+link: http://qa.etqan.localhost/app/reset-password?uid=MjU&token=d...
+[200]
+login qlee 200
+  qlee -> student 5: 403
+qa: parents=off
+  adm -> parent 6 while parents off: 404
+qa: parents=on
+  deactivated target (f02-teacher 16 deactivate via people?) using staff 24 not a kind; deactivate student 14: UPDATE 1
+{"detail":"This account is not active.","code":"identity.quick_login_refused"} [400] 
+UPDATE 1
+5 qlee -> teacher 7: 200 me: teacher qa-teacher@qa.etqan.test impersonator= {'id': 25, 'full_name': 'F03 Qlee'}
+  qlee(as teacher) quick-login again -> {"detail":"You do not have permission to perform this action."} [403] 
+  A deactivates Qlee mid-impersonation -> 200
+  qlee next request me -> 403  sessions -> 403
+  1h age: login imp2, impersonate, age session
+login imp2 200
+ me: teacher qa-teacher@qa.etqan.test impersonator= {'id': 1, 'full_name': 'QA Admin'}
+{'etqan.impersonator': {'id': 1, 'hash': '42105da87b2b00c32805d2a2530713fc45da5a171eb39dab3d6533fa210eb0dd', 'since': 1792368639}}
+aged {'etqan.impersonator': {'id': 1, 'hash': '42105da87b2b00c32805d2a2530713fc45da5a171eb39dab3d6533fa210eb0dd', 'since': 1792368639}}
+  aged session me -> 200 teacher qa-teacher@qa.etqan.test impersonator= {'id': 1, 'full_name': 'QA Admin'}
+UPDATE 1
+aged since 1792364939
+aged (>3600s) impersonation me -> 403
+row for session: 0

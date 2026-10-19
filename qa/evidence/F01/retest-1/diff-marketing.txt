@@ -1,0 +1,22 @@
+diff --git a/Dockerfile b/Dockerfile
+index a7f7330..a51c195 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -45,9 +45,14 @@ RUN --mount=type=secret,id=tokens_token sh -euc '\
+   git config --global --add url."https://x-access-token:$(cat /run/secrets/tokens_token)@github.com/".insteadOf "git@github.com:"; \
+   pnpm install --frozen-lockfile; \
+   rm -f /root/.gitconfig'
+-RUN deluser node 2>/dev/null || true; \
+-    addgroup -g ${GID} app && adduser -u ${UID} -G app -D app && \
+-    chown -R app:app /app
++# The host's GID may already be a group in the image (macOS `staff` is 20,
++# Alpine's `dialout`): the app user then joins that group (ETQAN-QA-001).
++RUN set -eu; \
++    deluser node 2>/dev/null || true; \
++    group="$(awk -F: -v gid="${GID}" '$3 == gid { print $1; exit }' /etc/group)"; \
++    if [ -z "$group" ]; then addgroup -g "${GID}" app; group=app; fi; \
++    adduser -u "${UID}" -G "$group" -D app; \
++    chown -R "${UID}:${GID}" /app
+ USER app
+ EXPOSE 4321
+ CMD ["pnpm", "dev"]

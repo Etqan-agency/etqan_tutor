@@ -1,0 +1,20 @@
+now 19:38 F5 at 21:08
+[201] POST sessions/extra/ :: {"session":{"id":254,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T18:08:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attenda
+== TC-009
+3|2|2026-10-22|2026-10-22 07:00:00+00||||
+[400] POST sessions/3/postpone/ :: {"occurs_on":["Choose a time further ahead and within two weeks."]}
+[409] POST sessions/3/postpone/ :: {"detail":"The teacher has another session then.","code":"scheduling.teacher_busy"}
+[200] POST sessions/3/postpone/ :: {"session":{"id":3,"subscription_id":1,"slot_id":null,"occurs_on":"2026-10-27","starts_at":"2026-10-27T12:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":true,"student":{"id"
+3||2026-10-27|2026-10-27 12:00:00+00|2|2026-10-22|2026-10-22 07:00:00+00|t|5
+[409] POST sessions/254/postpone/ :: {"detail":"It is too late to postpone this session.","code":"scheduling.too_late_to_postpone"}
+[200] POST sessions/254/postpone/ :: {"session":{"id":254,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-26","starts_at":"2026-10-26T07:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full_name":"QA student","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":1,"name_ar":"F03 قرآن","name_en":"F03 Quran"},"notes":"","cancel_reason":"","has_report":false,"payroll_locked":false,"kind":"extra","compensates_id":null,"compensation_id":null,"t
+[404] POST sessions/3/postpone/ :: {"detail":"No Session matches the given query."}
+[200] POST sessions/3/postpone/ :: {"session":{"id":3,"subscription_id":1,"slot_id":null,"occurs_on":"2026-10-31","starts_at":"2026-10-31T13:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":true,"student":{"id"
+3||2026-10-31|2026-10-31 13:00:00+00|2|2026-10-22|2026-10-22 07:00:00+00|6
+[200] POST sessions/3/postpone/ :: {"session":{"id":3,"subscription_id":1,"slot_id":2,"occurs_on":"2026-10-22","starts_at":"2026-10-22T07:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":true,"student":{"id":5,
+3|2|2026-10-22|2026-10-22 07:00:00+00|||
+{'academy_demo': 'ok', 'academy_journey_1792270407267': 'ok', 'academy_journey_1792270459368': 'ok', 'academy_journey_1792270543395': 'ok', 'academy_khaled': 'ok', 'academy_other': 'ok', 'academy_qa': 'ok', 'academy_qaother': 'ok'}
+1
+32|3|5|postpone|{"occurs_on": ["2026-10-22", "2026-10-27"], "starts_at": ["2026-10-22T07:00:00Z", "2026-10-27T12:00:00Z"]}|
+34|3|6|postpone|{"occurs_on": ["2026-10-27", "2026-10-31"], "starts_at": ["2026-10-27T12:00:00Z", "2026-10-31T13:00:00Z"]}|
+35|3|7|postpone|{"occurs_on": ["2026-10-31", "2026-10-22"], "starts_at": ["2026-10-31T13:00:00Z", "2026-10-22T07:00:00Z"]}|

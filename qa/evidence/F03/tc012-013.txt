@@ -1,0 +1,28 @@
+== TC-012
+qa: invoices=off
+me.features(adm): ['families']
+features: 88 [('invoices', False, []), ('payment_links', False, []), ('payment_receipts', False, ['invoices']), ('online_payments', False, ['invoices'])]
+invoices GET: adm=404 stu=404 nocode=403 tch=403 part=404
+adm body: {"detail":"This feature is not enabled for this academy."}
+billing/settings adm=404 payments adm=404
+qa: invoices=on
+qa: payment_receipts=off
+invoices on, receipts off: payments adm=404 invoices adm=200
+qa: payment_receipts=on
+after on: invoices adm=200 me: ['invoices', 'online_payments', 'payment_receipts', 'families']
+invoice rows before=2 after=2
+qa: families=off
+families off: /people/families/ adm=404 nocode=403
+qa: families=on
+families on: adm=200
+== TC-013
+count 88 keys ['built', 'code', 'group', 'held_by', 'label_ar', 'label_en', 'on']
+registry len 88
+POST features -> 405 PUT features -> 405 PATCH features -> 405 DELETE features -> 405 PATCH features/invoices/ -> 404
+settings forge: {"timezone":"Africa/Cairo","default_currency":"EGP","default_language":"ar","generation_horizon_days":14,"renewal_grace_
+
+supervision_enabled DB: f features unchanged: yes
+qa: themes=off
+after set_features off themes: 88 [('themes', False, [])]
+qa: themes=on
+on: 88 [('themes', True, [])]

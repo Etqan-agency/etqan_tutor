@@ -1,0 +1,42 @@
+==== TC-024 2026-10-19T04:12:47.757762
+qo rate 201 {"id": 1, "teacher": {"id": 4, "full_name": "QO Teacher F10"}, "course": null, "hourly_rate_minor": 2000, "currency": "USD", "counts": true, "created_
+qo session 201
+qo mark 200
+qo adj 201
+qo fixed 201 {"id": 1, "teacher": {"id": 4, "full_name": "QO Teacher F10"}, "monthly_minor": 1000, "currency": "USD", "starts_on": "2
+qo generate 200 {"created": 1, "replaced": 0, "removed": 0, "missing_rate": [], "other_currency": [], "unpaid_sessions": [], "stale_fixed_salary": []}
+qo payslip {"id": 1, "number": "PAY-000001", "currency": "USD", "net_minor": 2500}
+qo pay-to-balance 200 {"status": "paid", "net_minor": 2500, "currency": "USD"}
+qo teacher login 200
+qo withdrawal 201
+qaother ids {'payslip': 1, 'rate': 1, 'adj': 1, 'wd': 1, 'fixed': 1}
+qo payslip number PAY-000001 | qa has PAY-000001
+qa max ids {'payslip': '39', 'wd': '10', 'adj': '12', 'rate': '21', 'fixed': '3'}
+OK  qa GET /payroll/payslips/1/ (id exists in both) returns qa's own row, not qaother's :: 200 {"id": 1, "number": "PAY-000001", "status": "paid", "teacher": {"id": 7, "full_name": "QA teacher"}, "year": 2026, "month": 9, "currency": "EGP", "ses
+OK  qa PATCH /payroll/adjustments/1/ (id exists in both) returns qa's own row, not qaother's :: 200 {"id": 1, "teacher": {"id": 7, "full_name": "QA teacher"}, "kind": "bonus", "amount_minor": 6000, "percent_bp": null, "currency": "EGP", "effective_on
+OK  qa PATCH /payroll/rates/1/ (id exists in both) returns qa's own row, not qaother's :: 400 {"hourly_rate_minor": ["This field is required."]}
+OK  qa GET /payroll/withdrawals/1/ (id exists in both) returns qa's own row, not qaother's :: 200 {"id": 1, "teacher": {"id": 7, "full_name": "QA teacher"}, "amount_minor": 8000, "currency": "EGP", "status": "paid", "notes": "rent", "office_notes":
+OK  qa PATCH /payroll/fixed-salaries/1/ (id exists in both) returns qa's own row, not qaother's :: 200 {"id": 1, "teacher": {"id": 42, "full_name": "F10 Teacher Eight"}, "monthly_minor": 500000, "currency": "EGP", "starts_on": "2026-09-01", "current": t
+OK  qaother GET qa payslip 1: not qa's data :: 200 {"id": 1, "number": "PAY-000001", "status": "paid", "teacher": {"id": 4, "full_name": "QO Teacher F10"}, "year": 2026, "month": 9, "currency": "USD", 
+OK  qaother GET qa wd 1: not qa's data :: 200 {"id": 1, "teacher": {"id": 4, "full_name": "QO Teacher F10"}, "amount_minor": 100, "currency": "USD", "status": "under_review", "notes": "", "office_
+OK  qaother PATCH qa adj 1: not qa's data :: 409 {"detail": "This adjustment is on an issued payslip.", "code": "payroll.adjustment_used"}
+OK  qa cookie against qaother host 401/403 :: 403
+OK  qa cookie generate on qaother refused :: 403
+OK  qaother list only own :: ['QO Teacher F10']
+OK  qa list has no qaother teacher
+qa POST rate teacher=qaother id 4 400 {"teacher": ["Choose a teacher."]}
+OK  qa POST rates with qaother teacher id does not create for qaother
+OK  qa writes changed nothing in academy_qaother :: payroll_payslip|1
+payroll_teacherrate|1
+payroll_payadjustment|1
+payroll_withdrawalrequest|1
+payroll_fixedsalary|1
+finance_expense|1
+qaother expense 1|2500|USD|2026-10-19
+OK  qaother salary expense only in qaother schema
+==== TC-024b qa-only ids from qaother host (qaother max ids are 1)
+OK  qaother GET /payroll/payslips/16/ -> 404 :: 404
+OK  qaother GET /payroll/withdrawals/7/ -> 404 :: 404
+OK  qaother PATCH /payroll/rates/5/ -> 404 :: 404
+OK  qaother PATCH adjustments/5 -> 404 :: 404
+OK  qaother PATCH fixed-salaries/2 -> 404 :: 404

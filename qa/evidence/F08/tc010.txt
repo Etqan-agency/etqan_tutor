@@ -1,0 +1,44 @@
+== TC-009 admin conflicts body (F5 moved over teacher's 07:00Z session 1)
+F5 starts_at 2026-10-26T07:00:00Z
+[200] POST sessions/254/postpone/ :: {"session":{"id":254,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-26","starts_at":"2026-10-26T07:05:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attenda
+[{'session': {'id': 254, 'subscription_id': None, 'slot_id': None, 'occurs_on': '2026-10-26', 'starts_at': '2026-10-26T07:05:00Z', 'minutes': 30, 'status': 'scheduled', 'student_attendance': 'not_set', 'teacher_attendance': 'not_set', 'has_started': False, 'meeting_url': '', 'meeting_host': False, 'generated': False, 'student': {'id': 5, 'full_name': 'QA student', 'timezone': 'Africa/Cairo'}, 'teacher': {'id': 7, 'full_name': 'QA teacher'}, 'course': {'id': 1, 'name_ar': 'F03 قرآن', 'name_en': 'F03 Quran'}, 'notes': '', 'cancel_reason': '', 'has_report': False, 'payroll_locked': False, 'kind': 'extra', 'compensates_id': None, 'compensation_id': None, 'trial_id': None, 'pays_teacher': True, 'compensated': False, 'created_by': {'id': 1, 'full_name': 'QA Admin'}, 'disposal_reason': '', 'supervisor': None, 'supervisor_attendance': 'not_set', 'opened_by_supervisor_at': None, 'teacher_in_at': None, 'teacher_out_at': None, 'student_in_at': None, 'student_out_at': None, 'actual_minutes': None, 'original_starts_at': '2026-10-19T18:08:00Z', 'postponed_at': '2026-10-19T16:39:23.634214Z', 'postponed_by': {'id': 1, 'full_name': 'QA Admin'}, 'can_postpone': True, 'archived_at': None, 'ends_at': '2026-10-26T07:35:00Z'}, 'other': {'id': 1, 'subscription_id': 1, 'slot_id': 1, 'occurs_on': '2026-10-26', 'starts_at': '2026-10-26T07:00:00Z', 'minutes': 30, 'status': 'scheduled', 'student_attendance': 'not_set', 'teacher_attendance': 'not_set', 'has_started': False, 'meeting_url': '', 'meeting_host': False, 'generated': True, 'student': {'id': 5, 'full_name': 'QA student', 'timezone': 'Africa/Cairo'}, 'teacher': {'id': 7, 'full_name': 'QA teacher'}, 'course': {'id': 1, 'name_ar': 'F03 قرآن', 'name_en': 'F03 Quran'}, 'notes': '', 'cancel_reason': '', 'has_report': False, 'payroll_locked': False, 'kind': 'regular', 'compensates_id': None, 'compensation_id': None, 'trial_id': None, 'pays_teacher': True, 'compensated': False, 'created_by': None, 'disposal_reason': '', 'supervisor': {'id': 4, 'full_name': 'QA Supervisor'}, 'supervisor_attendance': 'not_set', 'opened_by_supervisor_at': None, 'teacher_in_at': None, 'teacher_out_at': None, 'student_in_at': None, 'student_out_at': None, 'actual_minutes': None, 'original_starts_at': None, 'postponed_at': None, 'postponed_by': None, 'can_postpone': True, 'archived_at': None, 'ends_at': '2026-10-26T07:30:00Z'}}]
+== TC-010
+[200] POST sessions/241/times/ :: {"id":241,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-08","starts_at":"2026-10-08T05:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+completed(239) [409] POST sessions/239/postpone/ :: {"detail":"Not allowed while the session is completed.","code":"scheduling.not_allowed_in_status"}
+at_disposal(242) [409] POST sessions/242/postpone/ :: {"detail":"Not allowed while the session is at_disposal.","code":"scheduling.not_allowed_in_status"}
+compensated_orig(244) [409] POST sessions/244/postpone/ :: {"detail":"This session was made up or compensated, so it can't change.","code":"scheduling.has_compensation"}
+cancelled_compensated(243) [409] POST sessions/243/postpone/ :: {"detail":"This session was made up or compensated, so it can't change.","code":"scheduling.has_compensation"}
+teacher_in(241) [409] POST sessions/241/postpone/ :: {"detail":"Not allowed while the session is scheduled.","code":"scheduling.not_allowed_in_status"}
+expired_sub(226) [409] POST sessions/226/postpone/ :: {"detail":"Not allowed while the session is scheduled.","code":"scheduling.not_allowed_in_status"}
+-- cancelled plain session
+[201] POST sessions/extra/ :: {"session":{"id":255,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-26","starts_at":"2026-10-26T17:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attenda
+[200] POST sessions/255/cancel/ :: {"id":255,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-26","starts_at":"2026-10-26T17:00:00Z","minutes":30,"status":"cancelled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"f
+[409] POST sessions/255/postpone/ :: {"detail":"Not allowed while the session is cancelled.","code":"scheduling.not_allowed_in_status"}
+-- archived future session (S1/TC-021 probe)
+[201] POST sessions/extra/ :: {"session":{"id":256,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-27","starts_at":"2026-10-27T17:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attenda
+[200] POST sessions/archive/ :: {"done":[],"skipped":[{"id":256,"code":"scheduling.not_allowed_in_status"}]}
+[200] POST sessions/256/postpone/ :: {"session":{"id":256,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-28","starts_at":"2026-10-28T15:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":false,"student"
+-- regular session outside term / sub B term ends 10-31
+[200] POST sessions/246/postpone/ :: {"session":{"id":246,"subscription_id":83,"slot_id":null,"occurs_on":"2026-11-03","starts_at":"2026-11-03T08:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":false,"student":{
+226|scheduled|not_set|not_set|not_set|regular|f|||||f|f|t
+239|completed|present|not_set|not_set|regular|f||1|||f|f|t
+241|scheduled|not_set|not_set|not_set|regular|f||1|||f|f|t
+242|at_disposal|not_set|present|not_set|regular|f||7||again|f|f|t
+243|cancelled|not_set|not_set|not_set|regular|t|||student travel||f|f|t
+244|completed|excused|not_set|not_set|regular|t||1|||f|f|t
+255|cancelled|not_set|not_set|not_set|extra|f|||k||f|f|t
+256|scheduled|not_set|not_set|not_set|extra|f|||||f|f|t
+[409] POST subscriptions/83/pauses/ :: {"detail":"That is more than the freeze days allowed.","code":"scheduling.freeze_days_exceeded"}
+pause None
+[200] POST sessions/246/postpone/ :: {"session":{"id":246,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-29","starts_at":"2026-10-29T07:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":false,"student":{
+[404] DELETE pauses/None/ :: <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /api/v1/pauses/None/</title>
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <style>
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    bo
+[200] POST sessions/246/postpone/ :: {"session":{"id":246,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-22","starts_at":"2026-10-22T05:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":false,"student":{

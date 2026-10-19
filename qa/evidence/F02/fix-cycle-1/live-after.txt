@@ -1,0 +1,14 @@
+## ETQAN-QA-017 live (parents switch) 2026-10-18T23:34:37Z
+login qa-parent@qa.etqan.test: 200
+qa: parents=off
+cookie K while off: 403
+row count: 0
+qa: parents=on
+cookie K replay after on: 403
+## ETQAN-QA-018 live (change password) as qa-parent
+login qa-parent@qa.etqan.test: 200
+{"new_password":["This password is too common."]} -> 400 (len 8)
+{"new_password":["This password is too common."]} -> 400 (len 8)
+{"new_password":["The password is too similar to the email."]} -> 400 (len 23)
+{"new_password":["Ensure this field has no more than 128 characters."]} -> 400 (len 200000)
+login qa-parent@qa.etqan.test: 200

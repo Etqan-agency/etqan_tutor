@@ -1,0 +1,22 @@
+== TC-008
+[200] missing has U1: False sample: {"count":15,"next":null,"previous":null,"results":[{"id":12,"subscription_id":null,"slot_id":null,"occurs_on":"2026-08-05","starts_at":"2026-08-05T07:00:00Z","minutes":120,"status":"completed","student_attendance":"present","teacher_attendance":"present","has_started":true,"meeting_url":"","meeting_
+[200] PUT sessions/383/report/ :: {"session":383,"behaviour":5,"participation":4,"notes":"SCN good <b>bold</b>","written_by":{"id":7,"full_name":"QA teacher"},"created_at":"2026-10-19T17:09:16.527061Z","updated_at":"2026-10-19T17:09:16.527067Z"}
+[400] PUT sessions/383/report/ :: {"behaviour":["Ensure this value is greater than or equal to 1."]}
+[400] PUT sessions/383/report/ :: {"behaviour":["Ensure this value is less than or equal to 5."]}
+[400] PUT sessions/383/report/ :: {"behaviour":["A valid integer is required."]}
+[200] missing has U1 after: False
+[404] PUT sessions/383/report/ :: {"detail":"No Session matches the given query."}
+[404] GET sessions/383/report/ :: {"detail":"No Session matches the given query."}
+[404] GET sessions/383/report/ :: {"detail":"Not found."}
+[404] GET sessions/383/report/ :: {"detail":"Not found."}
+[404] GET sessions/383/report/ :: {"detail":"No Session matches the given query."}
+[404] GET sessions/383/report/ :: {"detail":"No Session matches the given query."}
+[200] GET sessions/383/report/ :: {"session":383,"behaviour":5,"participation":4,"notes":"SCN good <b>bold</b>","written_by":{"id":7,"full_name":"QA teacher"},"created_at":"2026-10-19T17:09:16.527061Z","updated_at":"2026-10-19T17:09:16.527067Z"}
+SET
+383|5|4|SCN good <b>bold</b>
+-- TC-008 addendum: U1 ended today (<24h) so by design (reports.py REPORT_DUE_AFTER=24h) it is not yet missing; U4 ended 2026-10-18 11:00Z (>24h)
+U4 in missing: True
+[200] PUT sessions/382/report/ :: {"session":382,"behaviour":4,"participation":4,"notes":"SCN U4","written_by":{"id":7,"full_name":"QA teacher"},"created_at":"2026-10-19T17:09:32.81102
+U4 in missing after report: False
+-- parent/student payload has_report? (reports are staff-only by design, can_read_report)
+PA U1 keys: ['actual_minutes', 'can_postpone', 'compensates_id', 'compensation_id', 'course', 'generated', 'has_started', 'id', 'kind', 'meeting_host', 'meeting_url', 'minutes', 'occurs_on', 'original_starts_at', 'postpone_until', 'postponed_at', 'slot_id', 'starts_at', 'status', 'student', 'student_attendance', 'student_in_at', 'student_out_at', 'subscription_id', 'teacher', 'teacher_attendance', 'teacher_in_at', 'teacher_out_at']

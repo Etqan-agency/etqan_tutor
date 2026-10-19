@@ -1,0 +1,79 @@
+== TC-017
+par children: [5]  SQL: 5
+child profile keys: ['account_type', 'age_group', 'country', 'date_of_birth', 'family', 'gender', 'status', 'tags', 'xp']
+[201] POST p
+after link K2: [5, 123]
+[204] DELETE
+after unlink 5: [123]
+[201] POST p
+[204] DELETE
+restored: [5]
+par GET people/students/123/ -> 403
+par GET people/students/5/ -> 403
+par GET people/students/5/guardians/ -> 403
+par GET people/parents/6/children/ -> 403
+par GET people/families/ -> 403
+par GET contracts/ -> 403
+par GET people/tags/ -> 403
+p1 children: [122, 123]  (disjoint from par: 5)
+qa: parents=off
+par me with parents off: 403
+qa: parents=on
+login par 20
+login p1 200
+== TC-018
+[200] PATCH id
+[200] PATCH identity/me/ :: {"id":114,"email":"f05-pend@qa.etqan.test","full_name":"QA5 New Name","phone":"+201005550303","preferred_language":"en","effective_language":"en","timezone":"Africa/Cairo","role":"student","profiles":
+  s1 mass-assign diff: none
+  s1 row: 114|student|t|f05-pend@qa.etqan.test|f|f|QA5 New Name|+201005550303|en|Africa/Cairo|private note|0|trial||
+[200] PATCH id
+[200] PATCH identity/me/ :: {"id":7,"email":"qa-teacher@qa.etqan.test","full_name":"QA5 New Name","phone":"+201005550303","preferred_language":"en","effective_language":"en","timezone":"Africa/Cairo","role":"teacher","profiles":
+  tch mass-assign diff: none
+  tch row: 7|teacher|t|qa-teacher@qa.etqan.test|f|f|QA5 New Name|+201005550303|en|Africa/Cairo|||||EGP
+[200] PATCH id
+[200] PATCH identity/me/ :: {"id":120,"email":"f05-par1@qa.etqan.test","full_name":"QA5 New Name","phone":"+201005550303","preferred_language":"en","effective_language":"en","timezone":"Africa/Cairo","role":"parent","profiles":[
+  p1 mass-assign diff: none
+  p1 row: 120|parent|t|f05-par1@qa.etqan.test|f|f|QA5 New Name|+201005550303|en|Africa/Cairo|||||
+[403] PATCH id
+[403] PATCH identity/me/ :: {"detail":"Authentication credentials were not provided."}
+  sf mass-assign diff: none
+  sf row: 136|staff|t|f05-staff@qa.etqan.test|f|f|QA5 Staffer||ar|Africa/Cairo|||||
+[400] PATCH identity/me/ :: {"phone":["Use international format, like +201001234567."]}
+[400] PATCH identity/me/ :: {"timezone":["Unknown timezone."]}
+[400] PATCH identity/me/ :: {"full_name":["This field may not be blank."]}
+[200] PATCH identity/me/ :: {"id":114,"email":"f05-pend@qa.etqan.test","full_name":"QA5 New Name","phone":"+201005550303","preferred_language":"es","effective_language"
+[400] PATCH identity/me/ :: {"full_name":["Ensure this field has no more than 255 characters."]}
+s1 row after invalid: 114|student|t|f05-pend@qa.etqan.test|f|f|QA5 New Name|+201005550303|es|Africa/Cairo|private note|0|trial||
+login imp 20
+[200] POST people/students/114
+[403] PATCH identity/me/ :: {"detail":"Not while signed in as someone else.","code":"identity.impersonating"}
+[200] PATCH identity/me/ :: {"id":114,"email":"f05-pend@qa.etqan.test","full_name":"QA5 Imp Name","phone":"+201005550303","preferred_language":"es",
+[400] POST identity/me/emails/ :: {"current_password":["This field is required."]}
+[400] POST identity/me/emails/ :: {"current_password":["Incorrect password."]}
+[200] PATCH 
+== TC-019
+[200] PATCH 
+[200] PATCH 
+[200] PATCH people/parents/120/ :: {"id"
+[201] POST p
+s1 GET identity/me/ [200] notes:0 iban:0 nationality:0 ip:0
+p1 GET identity/me/ [200] notes:0 iban:0 nationality:0 ip:0
+tch GET identity/me/ [200] notes:0 iban:1 nationality:0 ip:0
+tb GET identity/me/ [200] notes:0 iban:0 nationality:0 ip:0
+tb GET people/teachers/7/ [403] notes:0 iban:0 nationality:0 ip:0
+stu GET identity/me/ [200] notes:0 iban:0 nationality:0 ip:0
+sup GET people/teachers/7/ [200] notes:0 iban:1 nationality:0 ip:1
+sup GET people/students/114/ [200] notes:1 iban:0 nationality:1 ip:1
+sup GET people/parents/120/ [200] notes:1 iban:0 nationality:0 ip:1
+codes GET people/students/114/ [200] notes:1 iban:0 nationality:1 ip:1
+codes GET people/teachers/7/ [403] notes:0 iban:0 nationality:0 ip:0
+tb GET contracts/ [200] notes:0 iban:0 nationality:0 ip:0
+p1 GET people/students/114/ [403] notes:0 iban:0 nationality:0 ip:0
+﻿ID,Name,Email,Phone,Language,Account,Active,Gender,Pay currency,Payout method,Course IDs,Tags
+teachers.csv has IBAN: 0
+0
+IBAN QA5-SECRET
+spanish on: True
+login sf 200
+sf [200] diff: none
+admin PATCH es: 200 {"id":114,"role":"student","two_factor":false,"user":{"full_name":"QA5 Sami","email":"f05-pend@qa.et

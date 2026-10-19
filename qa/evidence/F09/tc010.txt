@@ -1,0 +1,38 @@
+== TC-010 2026-10-19T03:38:13.107744
+R1 201 {"id": 14, "customer": {"type": "student", "name": "QA student", "student_id": 5, "email": "", "phone": ""}, "amount_minor": 15000, "currency": "EGP", "method": "cash", "status": "completed", "editable": true, "refundable": true, "transaction_number": "TN-F09-1"}
+OK  TC010 R1 201 editable refundable
+R2 201 {"id": 15, "customer": {"type": "unregistered", "name": "Walk In", "student_id": null, "email": "walk@qa.etqan.test", "phone": ""}, "amount_minor": 8000, "currency": "USD", "method": "western_union", "status": "completed", "editable": true, "refundable": true, "transaction_number": ""}
+OK  TC010 R2 201 USD
+unreg no name 400 {"customer_name": ["Enter the customer's name."]}
+OK  TC010 unreg no name 400
+unreg with student 400 {"student": ["An unregistered customer has no student."]}
+OK  TC010 unreg with student 400
+student none 400 {"student": ["Choose a student."]}
+OK  TC010 student none 400
+method stripe 400 {"method": ["\"stripe\" is not a valid choice."]}
+OK  TC010 method stripe 400
+dup txn 400 {"transaction_number": ["This transaction number is already recorded."]}
+OK  TC010 dup txn 400
+amount 0 400 {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+OK  TC010 amount 0 400
+future 400 {"paid_on": ["A payment can't be dated in the future."]}
+OK  TC010 future 400
+bad email 400 {"customer_email": ["Enter a valid email address."]}
+OK  TC010 bad email 400
+OK  TC010 patch R1 200 :: {"id": 14, "customer": {"type": "student", "name": "QA student", "student_id": 5, "email": "", "phone": ""}, "amount_minor": 16000, "currency": "EGP", "method": "cash", "status": "completed", "editable": true, "refundable": true, "transaction_number": "TN-F09-1"}
+OK  TC010 patch refunded 409 not_editable :: {"detail": "Only a manual, unrefunded payment record without an invoice is edited.", "code": "billing.payment_not_editable"}
+OK  TC010 patch invoice payment 409 :: {"detail": "Only a manual, unrefunded payment record without an invoice is edited.", "code": "billing.payment_not_editable"}
+OK  TC010 refund R1 :: {"id": 14, "customer": {"type": "student", "name": "QA student", "student_id": 5, "email": "", "phone": ""}, "amount_minor": 16000, "currency": "EGP", "method": "cash", "status": "refunded", "editable": false, "refundable": false, "transaction_number": "TN-F09-1"}
+OK  TC010 patch refunded R1 409 :: {"detail": "Only a manual, unrefunded payment record without an invoice is edited.", "code": "billing.payment_not_editable"}
+OK  TC010 delete R2 204 :: 204
+R3 USD kept 201
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  TC010 list off 404 :: 404
+OK  TC010 post off 404 :: 404
+delete invoice payment with receipts off 204 null
+OK  TC010 delete invoice payment still works
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+DB standalone 14||student|1||16000|EGP|cash|TN-F09-1|refunded
+16||unregistered||Walk In 2|8000|USD|western_union||completed
+dup (method,txn) 
+summary {"revenue_this_month": [{"currency": "EGP", "amount_minor": 86001}, {"currency": "USD", "amount_minor": 10500}], "overdue": []}

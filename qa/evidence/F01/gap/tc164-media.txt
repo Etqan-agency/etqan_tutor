@@ -1,0 +1,16 @@
+logo path: /media/tenants/academy_qa/site/logo/68dda74473064d21bc43363d20d53b89.png
+GET /media/tenants/academy_qa/site/logo/68dda74473064d21bc43363d20d53b89.png on qa.etqan.localhost -> HTTP 200 image/png 80B
+GET /media/tenants/academy_qa/site/logo/68dda74473064d21bc43363d20d53b89.png on qaother.etqan.localhost -> HTTP 200 image/png 80B
+GET /media/tenants/academy_qa/site/logo/68dda74473064d21bc43363d20d53b89.png on etqan.localhost -> HTTP 404 text/html; charset=utf-8 3474B
+GET /media/tenants/academy_qa/site/logo/68dda74473064d21bc43363d20d53b89.png on qa-tmp-1.etqan.localhost -> HTTP 403 application/json 90B
+private file (relative): tenants/academy_demo/content/3480aec98f9645288bcbd38e8685e736.pdf
+qa host /media/../private_media/tenants/academy_demo/content/3480aec98f9645288bcbd38e8685e736.pdf -> HTTP 404 94308B
+  direct :8000 -> HTTP 400 83479B
+qa host /media/%2e%2e/private_media/tenants/academy_demo/content/3480aec98f9645288bcbd38e8685e736.pdf -> HTTP 404 94308B
+  direct :8000 -> HTTP 400 83479B
+qa host /media/..%2fprivate_media/tenants/academy_demo/content/3480aec98f9645288bcbd38e8685e736.pdf -> HTTP 404 94308B
+  direct :8000 -> HTTP 400 83479B
+qa host /private_media/tenants/academy_demo/content/3480aec98f9645288bcbd38e8685e736.pdf -> HTTP 404 94308B
+  direct :8000 -> HTTP 404 3091B
+qa host /media/tenants/../../private_media/tenants/academy_demo/content/3480aec98f9645288bcbd38e8685e736.pdf -> HTTP 404 94308B
+  direct :8000 -> HTTP 400 83622B

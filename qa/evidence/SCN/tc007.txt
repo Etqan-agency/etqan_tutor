@@ -1,0 +1,24 @@
+== TC-007 (after UI: U1 present by T1)
+383|completed|present|not_set|not_set|regular|f||7|||f|f|t
+(1, 7)
+[200] POST sessions/384/attendance/ :: {"id":384,"subscription_id":85,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T08:00:00Z","minutes":60,"status":"completed","student_attendance":"absent","teacher_attendance":"not_set"
+[200] POST sessions/385/attendance/ :: {"id":385,"subscription_id":85,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T09:00:00Z","minutes":60,"status":"completed","student_attendance":"excused","teacher_attendance":"not_set
+[200] POST sessions/382/attendance/ :: {"id":382,"subscription_id":85,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T10:00:00Z","minutes":60,"status":"completed","student_attendance":"present","teacher_attendance":"present
+[409] POST sessions/358/attendance/ :: {"detail":"Attendance opens when the session starts.","code":"scheduling.not_started"}
+[400] POST sessions/384/attendance/ :: {"student_attendance":["\"late\" is not a valid choice."]}
+[404] POST sessions/361/attendance/ :: {"detail":"No Session matches the given query."}
+SUB1 used/remaining/extra: (1, 7, 0)
+SET
+382|completed|present|present|extra|7|t
+383|completed|present|not_set|regular|7|t
+384|completed|absent|not_set|regular|7|t
+385|completed|excused|not_set|regular|7|t
+SET
+383|7|attendance
+384|7|attendance
+385|7|attendance
+382|7|attendance
+SET
+1
+SET
+7

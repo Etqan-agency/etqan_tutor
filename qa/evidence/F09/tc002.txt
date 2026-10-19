@@ -1,0 +1,27 @@
+== TC-002 2026-10-19T03:36:18.841827
+amount_minor=0 400 {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+amount_minor=-5 400 {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+amount_minor=1.5 400 {"amount_minor": ["A valid integer is required."]}
+amount_minor='100' 201 {"id": 10, "currency": "EGP", "amount_minor": 100}
+amount_minor=True 400 {"amount_minor": ["A valid integer is required."]}
+amount_minor=None 400 {"amount_minor": ["This field may not be null."]}
+amount_minor=9223372036854775808 400 {"amount_minor": ["Ensure this value is less than or equal to 9223372036854775807."]}
+amount_minor=99999999999999999999 400 {"amount_minor": ["Ensure this value is less than or equal to 9223372036854775807."]}
+due_on='2026-10-18' 400 {"due_on": ["Make it due on or after the issue date."]}
+due_on='2026-13-40' 400 {"due_on": ["Date has wrong format. Use one of these formats instead: YYYY-MM-DD."]}
+due_on='__MISSING__' 400 {"due_on": ["This field is required."]}
+description='__MISSING__' 400 {"description": ["This field is required."]}
+description='' 400 {"description": ["This field may not be blank."]}
+currency='EG' 400 {"currency": ["Use a three-letter currency code, like EGP."]}
+currency='EGPX' 400 {"currency": ["Ensure this field has no more than 3 characters."]}
+currency='12$' 400 {"currency": ["Use a three-letter currency code, like EGP."]}
+currency='egp' 201 {"id": 11, "currency": "EGP", "amount_minor": 10000}
+currency='ZZZ' 201 {"id": 12, "currency": "ZZZ", "amount_minor": 10000}
+student=7 400 {"student": ["Choose an active student."]}
+student=999999 400 {"student": ["Choose an active student."]}
+payer=34 400 {"payer": ["Choose the student, one of their guardians or their family's payer."]}
+payer=7 400 {"payer": ["Choose the student, one of their guardians or their family's payer."]}
+subscription of other student 400 {"subscription": ["Choose one of this student's subscriptions."]}
+USD vs EGP subscription 400 {"currency": ["Use this subscription's currency, EGP."]}
+OK  TC002 counter grows only by 201s :: 9->12 n201=3
+amount<=0 rows 0

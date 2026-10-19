@@ -1,0 +1,72 @@
+{
+  "code": "SYS-R518S-FM5Q0",
+  "invoice": {
+    "id": 94,
+    "number": "INV-000094",
+    "status": "partial",
+    "is_overdue": false,
+    "student": {
+      "id": 5,
+      "full_name": "QA student"
+    },
+    "payer": {
+      "id": 35,
+      "full_name": "QA Parent Three"
+    },
+    "subscription_id": null,
+    "description": "F09 UI code 1792371434208",
+    "amount_minor": 20000,
+    "paid_minor": 2000,
+    "balance_minor": 18000,
+    "currency": "EGP",
+    "issued_on": "2026-10-19",
+    "due_on": "2026-10-26",
+    "voided_at": null,
+    "created_at": "2026-10-19T00:57:16.061156Z",
+    "notes": "",
+    "created_by": {
+      "id": 1,
+      "full_name": "QA Admin"
+    },
+    "can_pay_online": [
+      "stripe"
+    ],
+    "local_methods": [],
+    "payments": [
+      {
+        "id": 73,
+        "customer": {
+          "type": "student",
+          "name": "QA student",
+          "student_id": 5,
+          "email": "",
+          "phone": ""
+        },
+        "invoice": {
+          "id": 94,
+          "number": "INV-000094"
+        },
+        "transaction_number": "",
+        "reference": "SYS-R518S-FM5Q0",
+        "method": "code",
+        "amount_minor": 2000,
+        "fee_minor": 0,
+        "currency": "EGP",
+        "status": "completed",
+        "paid_on": "2026-10-19",
+        "refunded_at": null,
+        "created_at": "2026-10-19T00:57:19.776686Z",
+        "notes": "",
+        "recorded_by": {
+          "id": 6,
+          "full_name": "QA parent"
+        },
+        "wallet_topup": false,
+        "editable": false,
+        "deletable": false,
+        "refundable": false,
+        "movable": false
+      }
+    ]
+  }
+}

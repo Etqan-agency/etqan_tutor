@@ -1,0 +1,26 @@
+[201] POST subscriptions/ :: {"id":60,"status":"active","schedule_status":"active","student":{"id":215,"full_name":"QA6 Student 4","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":4,"name_ar":
+F=60 inv=0 sess=2
+-- slots
+[400] POST subscriptions/60/slots/ :: {"start_time":["There is already a slot at this time."]}
+[400] POST subscriptions/60/slots/ :: {"weekdays":["This list may not be empty."]}
+[400] POST subscriptions/60/slots/ :: {"weekdays":["Ensure this field has no more than 7 elements."]}
+[400] POST subscriptions/60/slots/ :: {"minutes":["Ensure this value is greater than or equal to 15."]}
+[400] POST subscriptions/60/slots/ :: {"minutes":["Ensure this value is less than or equal to 240."]}
+[400] POST subscriptions/60/slots/ :: {"meeting_url":["Enter a valid URL."]}
+[200] PATCH slots/74/ :: {"id":60,"status":"active","schedule_status":"active","student":{"id":215,"full_name":"QA6 Student 4","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":4,"name_ar":
+2026-10-20|14:30
+2026-10-27|14:30
+[409] DELETE slots/74/ :: {"detail":"This slot has sessions. Deactivate it instead.","code":"scheduling.slot_has_sessions"}
+[400] PATCH subscriptions/60/ :: {"price_minor":["Ensure this value is greater than or equal to 0."]}
+-- clean delete
+[204] DELETE subscriptions/60/ :: 
+0 sess / 0 slots
+-- guarded deletes
+[409] DELETE subscriptions/35/ :: {"detail":"This subscription has invoices. Void them first.","code":"billing.subscription_invoiced"}
+[409] DELETE subscriptions/17/ :: {"detail":"This subscription has invoices. Void them first.","code":"billing.subscription_invoiced"}
+[201] POST subscriptions/ :: {"id":61,"status":"active","schedule_status":"active","student":{"id":215,"full_name":"QA6 Student 4","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":4,"name_ar":
+[200] POST sessions/204/attendance/ :: {"id":204,"subscription_id":61,"slot_id":75,"occurs_on":"2026-10-19","starts_at":"2026-10-19T04:00:00Z","minutes":45,"status":"completed","student_attendance":"present","teacher_attendance":"present",
+[409] DELETE subscriptions/61/ :: {"detail":"A session of this subscription is marked, completed or cancelled.","code":"scheduling.has_marked_sessions"}
+[409] PATCH subscriptions/61/ :: {"detail":"Attendance is already marked on this subscription.","code":"scheduling.has_marked_sessions"}
+0
+0

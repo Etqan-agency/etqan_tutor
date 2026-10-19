@@ -1,0 +1,42 @@
+-- create race 1
+   1 201    4 500  rows=1
+-- create race 2
+   1 201    4 500  rows=1
+-- create race 3
+   1 201    4 500  rows=1
+-- patch race 1
+500 200  rows=1
+-- patch race 2
+500 200  rows=1
+-- patch race 3
+500 200  rows=1
+--
+django-1  |   File "/usr/local/lib/python3.13/site-packages/psycopg/cursor.py", line 117, in execute
+django-1  |     raise ex.with_traceback(None)
+django-1  | django.db.utils.IntegrityError: duplicate key value violates unique constraint "identity_user_email_key"
+django-1  | DETAIL:  Key (email)=(f05-racep3@qa.etqan.test) already exists.
+django-1  | ERROR 2026-10-19 04:21:06,464 django.request Internal Server Error: /api/v1/people/students/102/
+--
+django-1  |   File "/usr/local/lib/python3.13/site-packages/psycopg/cursor.py", line 117, in execute
+django-1  |     raise ex.with_traceback(None)
+django-1  | django.db.utils.IntegrityError: duplicate key value violates unique constraint "identity_user_email_key"
+django-1  | DETAIL:  Key (email)=(f05-racep3@qa.etqan.test) already exists.
+django-1  | [19/Oct/2026 04:21:06] "PATCH /api/v1/people/students/102/ HTTP/1.1" 500 218602
+partial rows after 500s: users named QA5 RaceC=3 profiles=3 emailaddr=3
+1 ['[Etqan QA Academy] عيّن كلمة المرور']
+1 ['[Etqan QA Academy] عيّن كلمة المرور']
+1 ['[Etqan QA Academy] عيّن كلمة المرور']
+-- last-admin race: A1 vs A2 deactivate each other, 10 rounds
+[200] POST p
+login a2 200
+a2->a1:400 a1->a2:200  active=1
+a2->a1:200 a1->a2:400  active=1
+a2->a1:400 a1->a2:200  active=1
+a2->a1:200 a1->a2:400  active=1
+a2->a1:200 a1->a2:400  active=1
+a1->a2:400 a2->a1:200  active=1
+a2->a1:200 a1->a2:400  active=1
+a2->a1:200 a1->a2:400  active=1
+a2->a1:400 a1->a2:200  active=1
+a1->a2:400 a2->a1:200  active=1
+final: A2 deactivated 200; active admins=1

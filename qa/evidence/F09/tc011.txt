@@ -1,0 +1,17 @@
+== TC-011 2026-10-19T03:38:19.964556
+EG 200 {"country": "EG", "enabled": true}
+XX1 404 {"detail": "Country not found."}
+eg 404 {"detail": "Country not found."}
+m1 201 {"id": 1, "country": "EG", "name": "Vodafone Cash", "currency": "EGP", "is_active": true, "logo_url": null, "instructions": "Send to 0100 <script>alert(1)</script>", "position": 0, "updated_at": "2026-10-19T00:38:20.152721Z"}
+m2 201 {"id": 2, "country": "EG", "name": "USD Method", "currency": "USD", "is_active": true, "logo_url": null, "instructions": "usd", "position": 0, "updated_at": "2026-10-19T00:38:20.213881Z"}
+OK  TC011 empty name 400 :: {"name": ["Enter a name."]}
+student sees local_methods 200 [{"id": 1, "name": "Vodafone Cash", "logo_url": null, "instructions": "Send to 0100 <script>alert(1)</script>"}]
+OK  TC011 EGP method shown, USD not
+OK  TC011 instructions plain text
+OK  TC011 setting off -> none :: []
+OK  TC011 country off -> none :: []
+OK  TC011 paid invoice -> none :: []
+DB 1|EG|Vodafone Cash|EGP
+2|EG|USD Method|USD 1|EG|t|2026-10-19 00:38:20.881349+00
+delete method 1 204
+delete method 2 204

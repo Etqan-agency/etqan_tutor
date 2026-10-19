@@ -1,0 +1,194 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › e2e/qa/f01-console.spec.ts:234:1 › TC-082/083/084/085 add custom domains: normalised, refused, invalid, duplicate (7.8s)
+  ✘  2 [chromium] › e2e/qa/f01-console.spec.ts:234:1 › TC-082/083/084/085 add custom domains: normalised, refused, invalid, duplicate (retry #1) (8.4s)
+
+
+  1) [chromium] › e2e/qa/f01-console.spec.ts:234:1 › TC-082/083/084/085 add custom domains: normalised, refused, invalid, duplicate 
+
+    Error: TC-084 bad_host
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 500
+    Received:   500
+
+      250 | 	expect(tenants).not.toContain("Etqan");
+      251 | 	expect(help.join(" ")).toContain("sites.etqan.localhost");
+    > 252 | 	for (const r of results) expect.soft(r.status, `${r.tc} ${r.domain}`).toBeLessThan(500);
+          | 	                                                                      ^
+      253 | });
+      254 |
+      255 | test("TC-087/092 check DNS on pending domains; make primary refused", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:252:72
+
+    Error: TC-084 nodot
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 500
+    Received:   500
+
+      250 | 	expect(tenants).not.toContain("Etqan");
+      251 | 	expect(help.join(" ")).toContain("sites.etqan.localhost");
+    > 252 | 	for (const r of results) expect.soft(r.status, `${r.tc} ${r.domain}`).toBeLessThan(500);
+          | 	                                                                      ^
+      253 | });
+      254 |
+      255 | test("TC-087/092 check DNS on pending domains; make primary refused", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:252:72
+
+    Error: TC-084 -x.com
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 500
+    Received:   500
+
+      250 | 	expect(tenants).not.toContain("Etqan");
+      251 | 	expect(help.join(" ")).toContain("sites.etqan.localhost");
+    > 252 | 	for (const r of results) expect.soft(r.status, `${r.tc} ${r.domain}`).toBeLessThan(500);
+          | 	                                                                      ^
+      253 | });
+      254 |
+      255 | test("TC-087/092 check DNS on pending domains; make primary refused", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:252:72
+
+    Error: TC-084 a..com
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 500
+    Received:   500
+
+      250 | 	expect(tenants).not.toContain("Etqan");
+      251 | 	expect(help.join(" ")).toContain("sites.etqan.localhost");
+    > 252 | 	for (const r of results) expect.soft(r.status, `${r.tc} ${r.domain}`).toBeLessThan(500);
+          | 	                                                                      ^
+      253 | });
+      254 |
+      255 | test("TC-087/092 check DNS on pending domains; make primary refused", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:252:72
+
+    Error: TC-084 http://x.com
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 500
+    Received:   500
+
+      250 | 	expect(tenants).not.toContain("Etqan");
+      251 | 	expect(help.join(" ")).toContain("sites.etqan.localhost");
+    > 252 | 	for (const r of results) expect.soft(r.status, `${r.tc} ${r.domain}`).toBeLessThan(500);
+          | 	                                                                      ^
+      253 | });
+      254 |
+      255 | test("TC-087/092 check DNS on pending domains; make primary refused", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:252:72
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-082-083--e04fb-d-refused-invalid-duplicate-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-console-TC-082-083--e04fb-d-refused-invalid-duplicate-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: TC-084 bad_host
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 500
+    Received:   500
+
+      250 | 	expect(tenants).not.toContain("Etqan");
+      251 | 	expect(help.join(" ")).toContain("sites.etqan.localhost");
+    > 252 | 	for (const r of results) expect.soft(r.status, `${r.tc} ${r.domain}`).toBeLessThan(500);
+          | 	                                                                      ^
+      253 | });
+      254 |
+      255 | test("TC-087/092 check DNS on pending domains; make primary refused", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:252:72
+
+    Error: TC-084 nodot
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 500
+    Received:   500
+
+      250 | 	expect(tenants).not.toContain("Etqan");
+      251 | 	expect(help.join(" ")).toContain("sites.etqan.localhost");
+    > 252 | 	for (const r of results) expect.soft(r.status, `${r.tc} ${r.domain}`).toBeLessThan(500);
+          | 	                                                                      ^
+      253 | });
+      254 |
+      255 | test("TC-087/092 check DNS on pending domains; make primary refused", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:252:72
+
+    Error: TC-084 -x.com
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 500
+    Received:   500
+
+      250 | 	expect(tenants).not.toContain("Etqan");
+      251 | 	expect(help.join(" ")).toContain("sites.etqan.localhost");
+    > 252 | 	for (const r of results) expect.soft(r.status, `${r.tc} ${r.domain}`).toBeLessThan(500);
+          | 	                                                                      ^
+      253 | });
+      254 |
+      255 | test("TC-087/092 check DNS on pending domains; make primary refused", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:252:72
+
+    Error: TC-084 a..com
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 500
+    Received:   500
+
+      250 | 	expect(tenants).not.toContain("Etqan");
+      251 | 	expect(help.join(" ")).toContain("sites.etqan.localhost");
+    > 252 | 	for (const r of results) expect.soft(r.status, `${r.tc} ${r.domain}`).toBeLessThan(500);
+          | 	                                                                      ^
+      253 | });
+      254 |
+      255 | test("TC-087/092 check DNS on pending domains; make primary refused", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:252:72
+
+    Error: TC-084 http://x.com
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 500
+    Received:   500
+
+      250 | 	expect(tenants).not.toContain("Etqan");
+      251 | 	expect(help.join(" ")).toContain("sites.etqan.localhost");
+    > 252 | 	for (const r of results) expect.soft(r.status, `${r.tc} ${r.domain}`).toBeLessThan(500);
+          | 	                                                                      ^
+      253 | });
+      254 |
+      255 | test("TC-087/092 check DNS on pending domains; make primary refused", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:252:72
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-082-083--e04fb-d-refused-invalid-duplicate-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-console-TC-082-083--e04fb-d-refused-invalid-duplicate-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-082-083--e04fb-d-refused-invalid-duplicate-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f01-console-TC-082-083--e04fb-d-refused-invalid-duplicate-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/qa/f01-console.spec.ts:234:1 › TC-082/083/084/085 add custom domains: normalised, refused, invalid, duplicate 
+error: Recipe `e2e` failed with exit code 1

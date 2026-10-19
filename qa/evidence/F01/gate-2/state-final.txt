@@ -1,0 +1,18 @@
+# state final 2026-10-18T22:39:30Z
+1||public|active|f|99914b932bd37a50b983c5e7c90ae93b
+2|demo|academy_demo|active|f|932b90afc5a72d5ba72806df64e4224f
+3|other|academy_other|active|f|99914b932bd37a50b983c5e7c90ae93b
+4|qaother|academy_qaother|active|f|7381896dd74ac158781b0eb7a3efe700
+5|qa|academy_qa|active|f|79322d4b4d9c462091734180787d0034
+6|qa-tmp-1|academy_qa_tmp_1|suspended|f|79322d4b4d9c462091734180787d0034
+7|qa-tmp-tz|academy_qa_tmp_tz|suspended|f|99914b932bd37a50b983c5e7c90ae93b
+8|qa-tmp-race-a|academy_qa_tmp_race_a|suspended|f|99914b932bd37a50b983c5e7c90ae93b
+10|qa-tmp-race-b|academy_qa_tmp_race_b|suspended|f|99914b932bd37a50b983c5e7c90ae93b
+12|journey-1792270407267|academy_journey_1792270407267|active|f|99914b932bd37a50b983c5e7c90ae93b
+13|journey-1792270459368|academy_journey_1792270459368|active|f|99914b932bd37a50b983c5e7c90ae93b
+14|journey-1792270543395|academy_journey_1792270543395|active|f|99914b932bd37a50b983c5e7c90ae93b
+15|qa-tmp-r1ok|academy_qa_tmp_r1ok|suspended|f|99914b932bd37a50b983c5e7c90ae93b
+16|khaled|academy_khaled|active|f|932b90afc5a72d5ba72806df64e4224f
+17|qa-tmp-cmd|academy_qa_tmp_cmd|suspended|f|99914b932bd37a50b983c5e7c90ae93b
+18|qa-tmp-abort|academy_qa_tmp_abort|suspended|f|99914b932bd37a50b983c5e7c90ae93b
+ACADEMY_ROWS_SAME as state-after-e2e.txt (17 rows: id, subdomain, schema, status, defaults flag, features md5)

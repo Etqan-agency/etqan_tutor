@@ -1,0 +1,16 @@
+== GATE G2 invariant re-check at gate time 2026-10-19T17:20:46Z
+paid-status mismatches (paid but sum<>amount): 0
+open-status mismatches (unpaid/partial but fully paid): 0
+overpaid invoices: 0
+INV1: paid|150000|150000
+wallets with balance<>entries: 0
+payslip 43: paid|45000|45000|45000|9
+payslips gross<>line sum (all): 4
+payroll expense for 43: 1|45000
+M1..M11 locked: 388:true,389:true,390:true,391:true,392:true,393:true,394:true,395:true,396:true,397:false,398:false
+SUB3 used/remaining API (8, 0) vs SQL consuming 7
+SUB1 used/remaining API (2, 6)
+qaother cross-schema leak (rows with qa SCN names): 1
+renewal G1 cleanup: subs renewed_from SUB2 0, invoice 153 void
+django 5xx since gate start:
+(end)

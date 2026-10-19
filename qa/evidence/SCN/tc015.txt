@@ -1,0 +1,52 @@
+== TC-015
+counter before 150
+[201] POST billing/invoices/146/payments/ :: {"id":146,"number":"INV-000146","status":"partial","is_overdue":false,"student":{"id":222,"full_name":"SCN Student A1"},"payer":{"id":224,"full_name":"SCN Parent A"},"subscription_id":85,"description"
+  INV 146: ('partial', 150000, 80000, 70000)
+[400] POST billing/invoices/146/payments/ :: {"amount_minor":["That is more than the balance."]}
+[400] POST billing/invoices/146/payments/ :: {"amount_minor":["A valid integer is required."]}
+[201] POST billing/invoices/146/payments/ :: {"id":146,"number":"INV-000146","status":"partial","is_overdue":false,"student":{"id":222,"full_name":"SCN Student A1"},"payer":{"id":224,"full_name":"SCN Parent A"},"subscription_id":85,"description"
+[201] POST wallet/students/222/top-ups/ :: {"id":31,"kind":"topup","currency":"EGP","amount_minor":40000,"balance_after_minor":40000,"note":"Cash","invoice_id":null,"payment_id":79,"session_id":null,"created_at":"2026-10-19T17:14:15.083803Z","
+[201] POST wallet/invoices/146/pay/ :: {"id":32,"kind":"spend","currency":"EGP","amount_minor":-40000,"balance_after_minor":0,"note":"INV-000146","invoice_id":146,"payment_id":80,"session_id":null,"created_at":"2026-10-19T17:14:15.180624Z"
+  INV 146: ('partial', 150000, 120100, 29900)
+[400] POST billing/invoices/146/payments/ :: {"amount_minor":["That is more than the balance."]}
+  INV 146: ('partial', 150000, 120100, 29900)
+[201] POST billing/invoices/146/payments/ :: {"id":146,"number":"INV-000146","status":"partial","is_overdue":false,"student":{"id":222,"full_name":"SCN Student A1"},"payer":{"id":224,"full_name":"SCN Parent A"},"subscription_id":85,"description"
+[201] POST billing/invoices/147/payments/ :: {"id":147,"number":"INV-000147","status":"paid","is_overdue":false,"student":{"id":223,"full_name":"SCN Student A2"},"payer":{"id":224,"full_name":"SCN Parent A"},"subscription_id":86,"description":"s
+  INV 147: ('paid', 150000, 150000, 0)
+[409] POST billing/invoices/147/void/ :: {"detail":"This invoice has payments.","code":"billing.has_payments"}
+[201] POST billing/invoices/ :: {"id":151,"number":"INV-000151","status":"unpaid","is_overdue":false,"student":{"id":223,"full_name":"SCN Student A2"},"payer":{"id":224,"full_name":"SCN Parent A"},"subscription_id":null,"description
+[201] POST billing/invoices/ :: {"id":152,"number":"INV-000152","status":"unpaid","is_overdue":false,"student":{"id":223,"full_name":"SCN Student A2"},"payer":{"id":224,"full_name":"SCN Parent A"},"subscription_id":null,"description
+[200] POST billing/invoices/152/void/ :: {"id":152,"number":"INV-000152","status":"void","is_overdue":false,"student":{"id":223,"full_name":"SCN Student A2"},"payer":{"id":224,"full_name":"SCN Parent A"},"subscription_id":null,"description":
+-- SUB3 auto invoice (150): issued today for the Sept back-dated subscription; void it so the month fixture stays payroll-only
+[200] POST billing/invoices/150/void/ :: {"id":150,"number":"INV-000150","status":"void","is_overdue":false,"student":{"id":222,"full_name":"SCN Student A1"},"payer":{"id":224,"full_name":"SCN Parent A"},"subscription_id":88,"description":"s
+SET
+120101|cash,wallet
+SET
+150000
+SET
+76|30000|wallet|completed
+77|50000|cash|completed
+78|100|cash|completed
+80|40000|wallet|completed
+81|1|cash|completed
+SET
+0|0
+SET
+146|INV-000146|partial|150000
+147|INV-000147|paid|150000
+150|INV-000150|void|150000
+151|INV-000151|unpaid|20000
+152|INV-000152|void|10000
+SET
+152
+SET
+0
+-- TC-015 continuation: the numeric-string row "100" was accepted as 100 (known DRF coercion, F09 TC-002), so the balance was 29900 and the planned 30000 was refused (correct) and the planned 'further 1' was accepted (balance >0, correct). Close with the real balance.
+balance now 29899
+[201] POST billing/invoices/146/payments/ :: {"id":146,"number":"INV-000146","status":"paid","is_overdue":false,"student":{"id":222,"full_name":"SCN Student A1"},"payer":{"id":224,"full_name":"SCN Parent A"},"subscription_id":85,"description":"s
+INV1: ('paid', 150000, 0)
+[400] POST billing/invoices/146/payments/ :: {"amount_minor":["That is more than the balance."]}
+SET
+80000|70000|150000
+SET
+paid

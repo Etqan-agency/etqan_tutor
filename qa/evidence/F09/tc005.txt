@@ -1,0 +1,12 @@
+== TC-005 2026-10-19T03:37:35.754555
+pay 20000 cash 201 {"status": "partial", "paid_minor": 20000, "balance_minor": 30000}
+OK  TC005 after 20000
+pay 29999 bank_transfer 201 {"status": "partial", "paid_minor": 49999, "balance_minor": 1}
+OK  TC005 after 29999
+pay 1 instapay 201 {"status": "paid", "paid_minor": 50000, "balance_minor": 0}
+OK  TC005 after 1
+OK  TC005 paid not under partial
+DB 3|20000|EGP|0|1|completed|cash
+4|29999|EGP|0|1|completed|bank_transfer
+5|1|EGP|0|1|completed|instapay
+OK  TC005 sum==paid

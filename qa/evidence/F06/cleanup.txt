@@ -1,0 +1,24 @@
+57|1|11|active
+[200] POST subscriptions/57/cancel/ :: {"id":57,"status":"cancelled","schedule_status":"active","student":{"id":5,"full_name":"QA student","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA
+[200] POST billing/invoices/134/void/ :: {"id":134,"number":"INV-000134","status":"void","is_overdue":false,"student":{"id":5,"full_name":"QA student"},"payer":{"id":35,"full_name":"QA Parent Three"},"
+[204] DELETE subscriptions/57/ :: 
+59|7||active
+[200] POST subscriptions/59/cancel/ :: {"id":59,"status":"cancelled","schedule_status":"active","student":{"id":13,"full_name":"F02 Student new","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_nam
+[200] POST billing/invoices/136/void/ :: {"id":136,"number":"INV-000136","status":"void","is_overdue":false,"student":{"id":13,"full_name":"F02 Student new"},"payer":{"id":13,"full_name":"F02 Student n
+[204] DELETE subscriptions/59/ :: 
+[200] PUT schedule/availability/7/ :: {"teacher":{"id":7,"full_name":"QA teacher"},"windows":[]}
+[200] PUT schedule/availability/217/ :: {"teacher":{"id":217,"full_name":"QA6 Teacher B"},"windows":[]}
+[200] PATCH access/staff/3/ :: {"id":3,"full_name":"QA Staff Codes","email":"qa-staff-codes@qa.etqan.test","is_active":true,"roles":[{"id":3,"name_ar":"عرض الطلاب","name_en":"QA Student View"
+[200] PATCH access/roles/32/ :: {"id":32,"name_ar":"QA6 كتالوج","name_en":"QA6 Catalogue+Subs","permissions":["course.create","course.delete","course.replicate","course.update","course.view","
+[200] PATCH access/roles/21/ :: {"id":21,"name_ar":"QA Billing Narrow ع","name_en":"QA Billing Narrow","permissions":["invoice.view","invoice.view_any","payment.view_any"],"is_active":false,"m
+-- qaother rows
+[200] POST subscriptions/1/cancel/ :: {"id":1,"status":"cancelled","schedule_status":"active","student":{"id":13,"full_name":"QA6OTHER Student","timezone":"UTC"},"teacher":{"id":12,"full_name":"QA6O
+[200] POST billing/invoices/3/void/ :: {"id":3,"number":"INV-000003","status":"void","is_overdue":false,"student":{"id":13,"full_name":"QA6OTHER Student"},"payer":{"id":13,"full_name":"QA6OTHER Stude
+[204] DELETE subscriptions/1/ :: 
+[204] DELETE catalogue/packages/1/ :: 
+[204] DELETE catalogue/courses/2/ :: 
+0 subs, 0 pkgs
+Africa/Cairo|14
+[200] PATCH access/roles/21/ :: {"id":21,"name_ar":"QA Billing Narrow ع","name_en":"QA Billing Narrow","permissions":["invoice.view","invoice.view_any","payment.view_any"],
+[200] PATCH access/roles/33/ :: {"id":33,"name_ar":"QA6 باقة","name_en":"QA6 PkgViewOnly","permissions":["package.view","package.view_any"],"is_active":false,"members":0,"created_at":"2026-10-19T04:41:50.758398Z"}
+NOTE: ids.env R2 collision (role 33 vs sub 21) made cleanup PATCH role 21 inactive; restored to active (F09 created it active, never changed).

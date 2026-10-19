@@ -1,0 +1,46 @@
+== TC-020
+tags: Counter({'student': 24, 'teacher': 22})
+student positions: 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24
+[201] POST people/tags/ :: {"id":49,"emoji":"🌟","name_ar":"موهوب","name_en":"QA5 Gifted","kind":"student","position":25,"is_active":true,"pe
+[400] POST people/tags/ :: {"name_en":["A tag with this name already exists."]}
+[400] POST people/tags/ :: {"name_en":["A tag with this name already exists."]}
+[201] POST people/tags/ :: {"id":50,"emoji":"","name_ar":"مو
+[201] POST people/tags/ :: {"id":51,"emoji":"","name_ar":"مو
+[200] PATCH people/tags/49/ :: {"id":49,"emoji":"🌟","name_ar":"موهوب","name_en":"QA5 Gifted","kind":"student","position":1,"is_active":true,
+positions: 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25
+[200] PATCH people/tags/49/ :: {"id":49,"emoji":"🌟","name_ar":"موهوب","name_en":"QA5 Gifted","kind":"student","position":25,"is_active":true
+positions: 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25
+[400] PATCH people/tags/49/ :: {"position":["Ensure this value is greater than or equal to 1."]}
+[200] PATCH people/tags/49/ :: {"id":49,"emoji":"🌟","name_ar":"موهوب","name_en":"QA5 Gifted","kind":"student","position":25,"is_active":true
+student
+[200] PATCH 
+[200] PATCH people/tags/49/ :: {"id":49,"emoji":"🌟","name_ar":"موهوب","name_en":"QA5 Gifted","kind":"student","position":25,"is_active":false,"people":1}
+  code 400
+[400] PATCH people/students/84/ :: {"profile":{"tag_ids":["A retired tag can't be added."]}}
+[400] POST people/students/bulk/ :: {"tag_id":["A retired tag can't be added."]}
+filter retired tag: [83] (X1=83)
+people count on retired tag: [1]
+[400] PATCH people/students/83/ :: {"profile":{"tag_ids":["Choose tags from the list."]}}
+[405] DELETE people/tags/49/ :: {"detail":"Method \"DELETE\" not allowed."}
+-- position race: 6 parallel moves
+200 200 200 200 200 200 
+positions after race: 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25
+== TC-023 (S1)
+   5 400  rows=0
+   5 400  rows=0
+   5 400  rows=0
+-- family claim race
+201 {"student_ids":["A student joined another family meanwhile. Try again."]}
+400 {"student_ids":["A student joined another family meanwhile. Try again."]}
+1
+5
+-- parallel PATCH same email on two people
+94 200 {"id":94,"role":"student","two_factor":false,"user":{"full_n
+95 500 <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="
+1
+49
+[200] PATCH people/students/83/ :: {"id":83,"role":"student","two_factor":false,"user":{"full_name":"QA5 Bulk 30","email":null,"phone":"+201005550999","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"no_login","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_timezone":""}
+[200] PATCH people/students/83/ :: {"id":83,"role":"student","two_factor":false,"user":{"full_name":"QA5 Bulk 30","email":null,"phone":"+201005550998","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"no_login","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_timezone":""}

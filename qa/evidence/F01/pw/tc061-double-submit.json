@@ -1,0 +1,10 @@
+{
+  "posts": [
+    {
+      "status": 302,
+      "at": 1792266942775
+    }
+  ],
+  "url": "http://etqan.localhost/admin/tenants/academy/",
+  "body": "Skip to main content\nEtqan — academies\nWELCOME, OPS@QA.ETQAN.TEST. VIEW SITE / CHANGE PASSWORD / LOG OUT \nToggle theme (current theme: auto)\nHome › Tenants › Academies\nACCOUNTS\nEmail addresses\tAdd\nEmail confirmations\tAdd\nAUTHENTICATION AND AUTHORIZATION\nGroups\tAdd\nETQAN BILLING\nAcademy pricing\tAdd\nCollected fees\t\nConnect fees\tAdd\nEtqan invoice lines\tAdd\nEtqan invoices\tAdd\nPrices\tAdd\nUsage events\t\nIDENTITY\nGuardianships\tAdd\nParent profiles\tAdd\nStudent profiles\tAdd\nTeacher profiles\tAdd\nUsers\tAdd\nINTEGRATIONS\nHost bookings\t\nPlatform accounts\t\nWebhook routes\t\nMFA\nAuthenticators\tAdd\nPERIODIC TASKS\nClocked\tAdd\nCrontabs\tAdd\nIntervals\tAdd\nPeriodic tasks\tAdd\nSolar events\tAdd\nSITES\nSites\tAdd\nSOCIAL ACCOUNTS\nSocial accounts\tAdd\nSocial application tokens\tAdd\nSocial applications\tAdd\nTENANTS\nAcademies\tAdd\nDomains\tAdd\nThe academy “QA Tmp Race A” was added successfully.\nSelect academy to change\nADD ACADEMY\nFILTER\nShow counts\n By status\nAll\nActive\nSuspended\nSearch academies\n  \nAction: \n---------\nSuspend selected academies\nReactivate selected academies\nCopy features from another academy\nCopy features from \n---------\nOther Academy\nDemo Academy\nEtqan QA Other\nEtqan QA Academy\nQA Tmp One\nQA Tmp TZ\nQA Tmp Race A\n Run 0 of 7 selected\n\t\nNAME\n\t\nSUBDOMAIN\n\t\nSTATUS\n\t\nPLAN LABEL\n\t\nCURRENCY\n\t\nCREATED AT\n\n\tQA Tmp Race A\tqa-tmp-race-a\tActive\t-\tUSD\tOct. 17, 2026, 7:55 p.m.\n\tQA Tmp TZ\tqa-tmp-tz\tActive\t-\tusd\tOct. 17, 2026, 7:55 p.m.\n\tQA Tmp One\tqa-tmp-1\tActive\t-\tUSD\tOct. 17, 2026, 7:54 p.m.\n\tEtqan QA Academy\t"
+}

@@ -1,0 +1,2 @@
+$ 2026-10-17T21:20:23Z dc.sh exec -T django pytest etqan/tenants -q -p no:cacheprovider
+........................................................................ [ 38%]

@@ -1,0 +1,23 @@
+## TC-009 invite acceptance
+login before accept:
+{"non_field_errors":["Invalid credentials."]}
+400
+pw before: ERROR:  column "account_state" does not exist
+LINE 1: ...t search_path=academy_qa; select left(password,1),account_st...
+                                                             ^
+id password last_login is_superuser email full_name is_active is_staff date_joined timezone role phone preferred_language pending_email last_login_device last_login_ip last_login_timezone 
+mails to f02-new before: 1
+confirm:
+
+200
+mails to f02-new after: [Etqan QA Academy] عيّن كلمة المرور
+db: argon2$argon2i|t emailaddr: f02-new@qa.etqan.test|t|t
+login after:
+200
+re-invite active:
+{"email":["Only someone who has not set a password yet can be re-invited."]}
+400
+forgot pw on still-invited f02-new2:
+
+200
+3eom62eDrNbArLWYv2xeCV f02-new2@qa.etqan.test | [Etqan QA Academy] عيّن كلمة المرور

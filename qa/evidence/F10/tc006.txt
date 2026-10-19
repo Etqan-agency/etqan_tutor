@@ -1,0 +1,9 @@
+==== TC-006 2026-10-19T04:02:28.148721
+OK  Oct issue 409 month_not_over :: 409 {"detail": "This month hasn't ended yet.", "code": "payroll.month_not_over"}
+OK  mark-paid draft 409 not_allowed_in_status :: 409 {"detail": "Not allowed while the payslip is draft.", "code": "payroll.not_allowed_in_status"}
+OK  generate {'year': 1999, 'month': 9} 400 names field :: 400 {"year": ["Ensure this value is greater than or equal to 2000."]}
+OK  generate {'year': 2026, 'month': 13} 400 names field :: 400 {"month": ["Ensure this value is less than or equal to 12."]}
+OK  generate {'year': 2026} 400 names field :: 400 {"month": ["This field is required."]}
+OK  generate {'year': 'x', 'month': 1} 400 names field :: 400 {"year": ["A valid integer is required."]}
+OK  Oct draft rebuilt, number kept :: PAY-000012 PAY-000012
+lock f

@@ -1,0 +1,96 @@
+# gate-2 code-freeze check 2026-10-18T21:41:19Z
+backend tracked diff of 5 cycle-2 files == retest-2/diff-backend-qa013-014.txt lines 1-277: TRACKED_SAME
+new files platform/admin.py, etqan_billing/tests/test_admin_permissions.py, tenants/tests/test_admin_permissions.py, tenants/tests/test_admin_stale_change.py: byte-identical to retest-2 diff
+cycle-1 files (Dockerfile, identity/api/views.py, platform/permissions.py, tenants/services.py, tenants/tests/test_{admin,commands,services}.py): identical to retest-1/diff-backend.txt
+
+== backend qa/campaign-2026-10 adff9c9b
+ M Dockerfile
+ M etqan/etqan_billing/admin.py
+ M etqan/identity/admin.py
+ M etqan/identity/api/views.py
+ M etqan/integrations/admin.py
+ M etqan/integrations/tests/test_admin.py
+ M etqan/platform/permissions.py
+ M etqan/site/api/admin_serializers.py
+ M etqan/site/api/admin_views.py
+ M etqan/site/api/serializers.py
+ M etqan/site/api/urls.py
+ M etqan/site/blocks.py
+ M etqan/site/models.py
+ M etqan/site/services.py
+ M etqan/site/uploads.py
+ M etqan/tenants/admin.py
+ M etqan/tenants/services.py
+ M etqan/tenants/tests/test_admin.py
+ M etqan/tenants/tests/test_commands.py
+ M etqan/tenants/tests/test_services.py
+?? etqan/etqan_billing/tests/test_admin_permissions.py
+?? etqan/identity/tests/test_login_csrf.py
+?? etqan/platform/admin.py
+?? etqan/site/migrations/0007_hero_slides.py
+?? etqan/site/tests/test_hero_slides.py
+?? etqan/tenants/tests/test_admin_permissions.py
+?? etqan/tenants/tests/test_admin_stale_change.py
+== dashboard qa/campaign-2026-10 5ed775d
+ M Dockerfile
+ M src/features/identity/api.test.ts
+ M src/features/identity/api.ts
+ M src/features/quicklogin/api.ts
+ M src/features/shell/nav.ts
+ M src/features/website/api.ts
+ M src/features/website/index.ts
+ M src/features/website/queries.ts
+ M src/features/website/schemas.ts
+ M src/locales/ar/website.json
+ M src/locales/en/website.json
+ M src/routeTree.gen.ts
+ M src/routes/_authed/website.guard.test.tsx
+ M src/routes/_authed/website.home.tsx
+ M src/routes/_authed/website.index.test.tsx
+?? e2e/qa/
+?? src/features/quicklogin/api.test.ts
+?? src/features/website/HeroSlidesManager.tsx
+?? src/features/website/SetupGuide.test.tsx
+?? src/features/website/SetupGuide.tsx
+?? src/routes/_authed/website.setup.tsx
+== marketing qa/campaign-2026-10 1c87b0a
+ M Dockerfile
+ M src/components/About.astro
+ M src/components/ArticleCard.astro
+ M src/components/BlockButton.astro
+ M src/components/BlockImage.astro
+ M src/components/ContactForm.astro
+ M src/components/FaqList.astro
+ M src/components/Footer.astro
+ M src/components/Header.astro
+ M src/components/Hero.astro
+ M src/components/IntroVideo.astro
+ M src/components/Offers.astro
+ M src/components/PageBlocks.astro
+ M src/components/PageBody.astro
+ M src/components/Testimonials.astro
+ M src/components/VideoCard.astro
+ M src/components/VideoPlayer.astro
+ M src/layouts/Layout.astro
+ M src/lib/i18n.ts
+ M src/lib/site.ts
+ M src/pages/[lang]/articles/[slug].astro
+ M src/pages/[lang]/articles/c/[category].astro
+ M src/pages/[lang]/articles/index.astro
+ M src/pages/[lang]/consultations/[id].astro
+ M src/pages/[lang]/consultations/index.astro
+ M src/pages/[lang]/faq.astro
+ M src/pages/[lang]/index.astro
+ M src/pages/[lang]/recorded-courses/[slug].astro
+ M src/pages/[lang]/recorded-courses/index.astro
+ M src/pages/[lang]/videos/[slug].astro
+ M src/pages/[lang]/videos/index.astro
+ M src/styles/global.css
+ M test/fixtures.ts
+?? src/components/ConsultationCard.astro
+?? src/components/CourseCard.astro
+?? src/components/PageHero.astro
+?? src/components/SectionHeader.astro
+?? test/carousel.test.ts
+
+# post-reboot re-check 2026-10-18T22:12:03Z: TRACKED5_SAME; the 7 cycle-1 files SAME vs retest-1/diff-backend.txt; 4 new cycle-2 files SAME vs retest-2. Submodule HEADs unchanged: backend adff9c9b, dashboard 5ed775d, marketing 1c87b0a.

@@ -1,0 +1,27 @@
+==== TC-009 2026-10-19T04:04:08.551271
+A 201
+B 201
+C 201
+OK  bad {'amount_minor': 0} 400 :: 400 {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+OK  bad {'amount_minor': -5} 400 :: 400 {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+OK  bad {'amount_minor': 100, 'percent_bp': 100} 400 :: 400 {"amount_minor": ["Give either an amount or a percentage."]}
+OK  bad {} 400 :: 400 {"amount_minor": ["Give either an amount or a percentage."]}
+OK  PATCH A unused ok :: 200
+OK  DELETE B unused ok :: 204
+B again 201
+OK  Aug gross 12000 bonus 3000 ded 1000 net 14000 :: {"gross_minor": 12000, "bonuses_minor": 3000, "deductions_minor": 1000, "net_minor": 14000}
+OK  C not on August
+OK  deduction line negative :: [('session', 12000), ('adjustment', 3000), ('adjustment', -1000)]
+before issue payslip_id 2|
+4|
+5|
+issue 200 14000
+after issue payslip_id 2|18
+4|
+5|18
+OK  PATCH used 409 adjustment_used :: 409 {"detail": "This adjustment is on an issued payslip.", "code": "payroll.adjustment_used"}
+OK  DELETE used 409 :: 409 {"detail": "This adjustment is on an issued payslip.", "code": "payroll.adjustment_used"}
+OK  used=false returns C only :: [4]
+OK  Sept: C applied once, A not again :: {"bonuses_minor": 700, "net_minor": 700}
+==== TC-005b S5 (issue order moves adjustments)
+S5: Sept draft bonuses 700 | Oct draft bonuses 700 (same pending adjustment C shown on BOTH drafts)

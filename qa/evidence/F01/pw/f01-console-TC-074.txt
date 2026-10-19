@@ -1,0 +1,62 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › e2e/qa/f01-console.spec.ts:108:1 › TC-074 suspend through the change form's status field (1.4s)
+  ✘  2 [chromium] › e2e/qa/f01-console.spec.ts:108:1 › TC-074 suspend through the change form's status field (retry #1) (1.2s)
+
+
+  1) [chromium] › e2e/qa/f01-console.spec.ts:108:1 › TC-074 suspend through the change form's status field 
+
+    Error: expect(received).toMatch(expected)
+
+    Expected pattern: /was changed successfully/
+    Received string:  ""
+
+      114 | 	const message = (await page.locator(".messagelist li").allInnerTexts()).join(" | ");
+      115 | 	save("tc074-change-form-suspend.json", { id, message });
+    > 116 | 	expect(message).toMatch(/was changed successfully/);
+          | 	                ^
+      117 | });
+      118 |
+      119 | test("TC-074b reactivate through the change form", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:116:18
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-074-susp-5fb69--change-form-s-status-field-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-console-TC-074-susp-5fb69--change-form-s-status-field-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toMatch(expected)
+
+    Expected pattern: /was changed successfully/
+    Received string:  ""
+
+      114 | 	const message = (await page.locator(".messagelist li").allInnerTexts()).join(" | ");
+      115 | 	save("tc074-change-form-suspend.json", { id, message });
+    > 116 | 	expect(message).toMatch(/was changed successfully/);
+          | 	                ^
+      117 | });
+      118 |
+      119 | test("TC-074b reactivate through the change form", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:116:18
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-074-susp-5fb69--change-form-s-status-field-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-console-TC-074-susp-5fb69--change-form-s-status-field-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-074-susp-5fb69--change-form-s-status-field-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f01-console-TC-074-susp-5fb69--change-form-s-status-field-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/qa/f01-console.spec.ts:108:1 › TC-074 suspend through the change form's status field 
+error: Recipe `e2e` failed with exit code 1

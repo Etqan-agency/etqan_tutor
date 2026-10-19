@@ -1,0 +1,16 @@
+== S1 set_features
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+qa: invoices=on, payment_receipts=on, payroll_rules=on, quick_login=on, supervision=on, postponement=on, quick_translate=on, system_status=on, themes=on, spanish=on, parents=on, families=on, session_reports=on, student_teacher_rate=on, teacher_balance=on
+== S6 baseline
+SET
+ id |   timezone   | default_currency | default_language |          created_at           |          updated_at           | generation_horizon_days | renewal_grace_days | absent_consumes_session | excused_consumes_session | auto_invoice_on_subscription | invoice_due_days | supervision_enabled | postpone_limit_minutes 
+----+--------------+------------------+------------------+-------------------------------+-------------------------------+-------------------------+--------------------+-------------------------+--------------------------+------------------------------+------------------+---------------------+------------------------
+  1 | Africa/Cairo | EGP              | ar               | 2026-10-17 19:49:22.804454+00 | 2026-10-17 20:13:23.739584+00 |                      14 |                  7 | t                       | f                        | t                            |                7 | f                   |                    120
+(1 row)
+
+SET
+qa|Africa/Cairo|EGP|{"themes": true, "parents": true, "spanish": true, "families": true, "invoices": true, "code_reset": true, "two_factor": true, "phone_login": true, "quick_login": true, "supervision": true, "postponement": true, "internal_chat": false, "payroll_rules": true, "system_status": true, "google_sign_in": false, "online_payments": true, "quick_translate": true, "session_reports": true, "teacher_balance": true, "payment_receipts": true, "student_teacher_rate": true}
+qaother|UTC|USD|{"code_reset": false, "two_factor": true, "quick_login": true, "internal_chat": false}

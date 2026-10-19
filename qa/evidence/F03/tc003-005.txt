@@ -1,0 +1,51 @@
+== TC-003
+1 hana invoices -> 200
+2 retire -> 200
+3 hana invoices -> 403  me.perms=[]
+4 staff detail roles: [{'id': 6, 'name_ar': 'F03 الاستقبال', 'name_en': 'F03 Front desk'}]
+  roles?active=false: [(6, False)]
+5 staff with retired role -> {"detail":"JSON parse error - Extra data: line 1 column 12 (char 11)"} [400]  5 staff with retired role -> {"detail":"JSON parse error - Extra data: line 1 column 8 (char 7)"} [400]  5 staff with retired role -> {"detail":"JSON parse error - Extra data: line 1 column 11 (char 10)"} [400] 
+6 restore -> 200; hana invoices -> 200
+7 perms->student only -> 200; hana invoices -> 403 students -> 200
+1
+== TC-004 setup
+[201]
+[201]
+ER=8 MR=9
+[201]
+[201]
+link: http://qa.etqan.localhost/app/reset-password?uid=MjE&token=d...
+[200]
+login ed 200
+link: http://qa.etqan.localhost/app/reset-password?uid=MjI&token=d...
+[200]
+login mo 200
+EID=21 MID=22
+== TC-004
+1a ed create role w invoice.view_any -> {"permissions":["You can only add permissions you hold yourself."]} [403] 
+1b ed create role w student.view_any -> 201
+2a ed strip Money -> {"permissions":["You can only remove permissions you hold yourself."]} [403] 
+["invoice.view_any", "payment.view_any", "payslip.view_any"]
+2b ed keep+add held -> 200
+["invoice.view_any", "payment.view_any", "payslip.view_any", "student.view_any"]
+3a ed staff w Money -> {"detail":"JSON parse error - Extra data: line 1 column 12 (char 11)"} [400]  3a ed staff w Money -> {"detail":"JSON parse error - Extra data: line 1 column 8 (char 7)"} [400]  3a ed staff w Money -> {"detail":"JSON parse error - Extra data: line 1 column 11 (char 10)"} [400] 
+3b ed change Mo email -> {"email":["You can only change the email of a staff account whose permissions you hold yourself."]} [403] 
+3c ed deactivate Mo -> 403
+4a ed own roles [] -> {"role_ids":["You can't change your own roles."]} [403] 
+4b ed deactivate self -> {"is_active":["You can't deactivate yourself."]} [403] 
+5 admin retire Money -> 200; ed restore -> {"is_active":["You can only restore a role whose permissions you hold yourself."]} [403] 
+9|f|["invoice.view_any", "payment.view_any", "payslip.view_any"]
+f03-mo@qa.etqan.test|t
+200
+== TC-005 (S1)
+Mo invoices before -> 200
+1 ed RETIRE Money -> {"id":9,"name_ar":"F03 مال","name_en":"F03 Money","permissions":["invoice.view_any","payment.view_any","payslip.view_any"],"is_active":false,"members":1,"created_at":"2026-10-19T00:05:19.888780Z"} [200] 
+9|f
+2 Mo invoices after -> 403  Mo me.perms=[]
+  ed restore -> {"is_active":["You can only restore a role whose permissions you hold yourself."]} [403] 
+  ed rename Money -> {"id":9,"name_ar":"F03 أعاد","name_en":"F03 Renamed by Ed","permissions":["invoice.view_any","payment.view_any","payslip.view_any"],"is_active":false,"members":1,"created_at":"2026-10-19T00:05:19.888780Z"} [200] 
+  ed retire Supervisor preset? (not run, would break supervisor) ; admin restore+rename back -> 200
+9|F03 Money|t
+TC-003 step5 staff with retired role 6 -> {"role_ids":["A retired role can't be added."]} [400] 
+TC-004 3a ed staff w Money -> {"role_ids":["You can only grant roles whose permissions you hold yourself."]} [403] 
+0

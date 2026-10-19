@@ -1,0 +1,4 @@
+MD5 (etqan/access/services.py) = 0559b50ea9eb98bb924593aba0b0e9c0
+MD5 (etqan/access/tests/test_roles.py) = 6863743e51e0b336d6838c84e5cff69c
+MD5 (etqan/access/tests/test_access_api.py) = 6901f4072370687c39d4d3fb64997d18
+MD5 (../docs/features/roles-permissions.md) = fe9d26b5e634b41d53e5705866a51b6d

@@ -1,0 +1,40 @@
+Running 1 test using 1 worker
+  ✘  1 [chromium] › e2e/qa/scn-tc012-parent-portal.spec.ts:32:1 › SCN-TC-012 parent sees the children's sessions and attendance, the invoice with the wallet payment; FAM-B is not found (8.4s)
+  ✘  2 [chromium] › e2e/qa/scn-tc012-parent-portal.spec.ts:32:1 › SCN-TC-012 parent sees the children's sessions and attendance, the invoice with the wallet payment; FAM-B is not found (retry #1) (8.3s)
+  1) [chromium] › e2e/qa/scn-tc012-parent-portal.spec.ts:32:1 › SCN-TC-012 parent sees the children's sessions and attendance, the invoice with the wallet payment; FAM-B is not found 
+    Error: expect(locator).toBeVisible() failed
+    Locator:  getByText('SCN Student A1').first()
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText('SCN Student A1').first()
+        13 × locator resolved to <option value="222">SCN Student A1</option>
+           - unexpected value "hidden"
+      39 | 	// Sessions page
+      40 | 	await page.goto(`${QA}/app/learning/sessions`);
+    > 41 | 	await expect(page.getByText("SCN Student A1").first()).toBeVisible();
+         | 	                                                       ^
+      42 | 	await page.screenshot({ path: `${EVIDENCE}/tc012-parent-sessions.png`, fullPage: true });
+      43 | 	const bodyText = await page.locator("main").innerText();
+      44 | 	writeFileSync(`${EVIDENCE}/tc012-parent-sessions.txt`, bodyText);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/scn-tc012-parent-portal.spec.ts:41:57
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-scn-tc012-parent-portal-0bc4b--payment-FAM-B-is-not-found-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Error Context: test-results/qa-scn-tc012-parent-portal-0bc4b--payment-FAM-B-is-not-found-chromium/error-context.md
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+    Error: expect(locator).toBeVisible() failed
+    Locator:  getByText('SCN Student A1').first()
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText('SCN Student A1').first()
+        13 × locator resolved to <option value="222">SCN Student A1</option>
+           - unexpected value "hidden"
+      39 | 	// Sessions page
+      40 | 	await page.goto(`${QA}/app/learning/sessions`);
+    > 41 | 	await expect(page.getByText("SCN Student A1").first()).toBeVisible();

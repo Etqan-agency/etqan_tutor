@@ -1,0 +1,19 @@
+./ids.env: line 58: 153: command not found
+== G1b (helper fix: QQ printed 'SET'; NEW=89 NINV=153) 2026-10-19T17:20:15Z
+86|125|21|active|2026-10-19|2026-11-18|
+89|125|21|active|2026-11-19|2026-12-18|86
+payer check: invoice payer 224 vs SUB2 invoice payer 224 ; FAM-A payer 224
+renewal sessions now: 0 (starts 11-19, beyond the 21-day horizon)
+[400] POST schedule/generate/ :: {"to":["Choose at most 62 days."]}
+86|6|2026-10-20|2026-11-06
+same-instant duplicates across SUB2+NEW (non-cancelled): 0
+renewal invoice count: 1
+[200] GET billing/invoices/153/ :: {"id":153,"number":"INV-000153","status":"unpaid","is_overdue":false,"student":{"id":223,"full_name":"SCN Student A2"},"payer":{"id":224,"full_name":"SCN Parent A"},"subscription_id":89,"description":
+[404] GET billing/invoices/153/ :: {"detail":"No Invoice matches the given query."}
+[403] GET billing/invoices/153/ :: {"detail":"You do not have permission to perform this action."}
+[404] GET billing/invoices/153/ :: {"detail":"No Invoice matches the given query."}
+-- cleanup
+[200] POST billing/invoices/153/void/ :: {"id":153,"number":"INV-000153","status":"void","is_overdue":false,"student":{"id":223,"full_name":"SCN Student A2"},"payer":{"id":224,"full_name":"SCN Parent A"},"subscription_id":89,"description":"s
+[204] DELETE subscriptions/89/ :: 
+after cleanup: sub row 0 sessions 0 invoice void SUB2 renewal 0
+153|void|89

@@ -1,0 +1,20 @@
+## TC-025
+parent login: 200
+qa: parents=off
+live session: {"detail":"Authentication credentials were not provided."} 403  row still: 1
+fresh login: {"detail":"Parent access is not enabled for this academy."} 403   last_login unchanged: yes
+quick login parent: 404  links: {"sent":0,"skipped":[{"id":6,"reason":"refused"}]} 200 
+code reset parent: 202
+  mails:        1
+is_active: t
+qa: parents=on
+parents back on, ORIGINAL cookie replay: 200
+fresh login: 200
+## TC-025 add-on: resets while parents off
+qa: parents=off
+202
+200
+1cZIbdFhM4GdMeDuqYZP6T qa-parent@qa.etqan.test | [Etqan QA Academy] إعادة تعيين كلمة المرور
+1F7K3QH7v3CoQefbK7Ppfh f02-parent@qa.etqan.test | [Etqan QA Academy] رمز إعادة تعيين كلمة المرور
+verify code: {"accounts":[{"id":15,"full_name":"F02 Parent"}]} 200 
+qa: parents=on

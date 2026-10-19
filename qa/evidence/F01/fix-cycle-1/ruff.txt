@@ -1,0 +1,7 @@
+2026-10-17T21:20:15Z
+$ ruff check etqan/tenants/admin.py etqan/tenants/services.py etqan/tenants/tests/test_admin.py etqan/tenants/tests/test_admin_permissions.py etqan/tenants/tests/test_commands.py etqan/tenants/tests/test_services.py etqan/platform/permissions.py etqan/identity/api/views.py etqan/identity/tests/test_login_csrf.py
+All checks passed!
+exit=0
+$ ruff format --check etqan/tenants/admin.py etqan/tenants/services.py etqan/tenants/tests/test_admin.py etqan/tenants/tests/test_admin_permissions.py etqan/tenants/tests/test_commands.py etqan/tenants/tests/test_services.py etqan/platform/permissions.py etqan/identity/api/views.py etqan/identity/tests/test_login_csrf.py
+9 files already formatted
+exit=0

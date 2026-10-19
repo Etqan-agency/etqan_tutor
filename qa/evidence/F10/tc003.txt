@@ -1,0 +1,15 @@
+==== TC-003 2026-10-19T04:02:26.760637
+OK  Sept pays exactly a,e :: [19, 23] teacher_absences=2
+OK  teacher_absences = 2 (c,d) :: 2
+OK  (b) on October :: {"id": 11, "net_minor": 6000}
+OK  (h) included at 100% with at_disposal_pays :: {23: (10000, 6000), 26: (10000, 6000), 19: (10000, 6000)}
+OK  back to a,e
+DB sessions unlocked 19|f
+20|f
+21|f
+22|f
+23|f
+24|f
+25|f
+26|f
+27|f

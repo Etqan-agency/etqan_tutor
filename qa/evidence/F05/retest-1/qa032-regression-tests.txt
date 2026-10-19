@@ -1,0 +1,6 @@
+..                                                                       [100%]
+2 passed in 0.94s
+== mutation: _save_claiming_email -> plain user.save (bug reintroduced in memory only)
+E           django.db.utils.IntegrityError: duplicate key value violates unique constraint "identity_user_email_ci_unique"
+E           django.db.utils.IntegrityError: duplicate key value violates unique constraint "identity_user_email_key"
+2 failed in 1.30s

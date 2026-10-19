@@ -1,0 +1,50 @@
+## TC-017
+(a) start=200
+200
+   me=403 stop=403 row_auth=1
+(b) start=200
+   deactivate staff: 200
+   me=403 stop=403 row_auth=0
+200
+(c) start=200
+qa: quick_login=off
+   me=403 stop=403 row_auth=1
+qa: quick_login=on
+(d) start=200
+200
+   me=403 stop=403 row_auth=1
+200
+(e) start=200
+since moved back
+   me=403 stop=403 row_auth=1
+(f) S8 start=200
+200
+   me=200 (session of student kept although actor lost student.view)
+   new start now: 403
+   me=200 stop=200 row_auth=0
+200
+(g1) target pw changed: start=200
+   reset confirm=200
+   me=403 stop=403 row_auth=1
+   restore=200
+(g2) target deactivated: start=200
+200
+   me=403 stop=403 row_auth=0
+200
+c8z4mier exists {'_auth_user_id': '10', '_auth_user_backend': 'django.contrib.auth.backends.ModelBackend', '_auth_user_hash': 'REDACTED-QA', 'etqan.impersonator': {'id': 1, 'hash': '42105da87b2b00c32805d2a2530713fc45da5a171eb39dab3d6533fa210eb0dd', 'since': 1792364308}}
+ gone {}
+## TC-017 extra: resurrection after a refused re-check (switch back on / role restored)
+same jar after quick_login back on: me=403
+qa: quick_login=off
+off: me=403
+qa: quick_login=on
+on again, replay original cookie: ,"quick_login","code_reset"],"impersonator":{"id":1,"full_name":"QA Admin"}} 200
+--- code:
+etqan/identity/authentication.py:18:            or not impersonation.session_valid(request)
+ATOMIC True ENGINE django.contrib.sessions.backends.db
+(d) resurrection check:
+200
+200
+revoked: 403 row: 1
+200
+restored, same cookie: 200

@@ -1,0 +1,4 @@
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+1380 passed, 366 warnings in 110.90s (0:01:50)

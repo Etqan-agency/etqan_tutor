@@ -1,0 +1,22 @@
+==== TC-028 2026-10-19T04:11:55.994765
+OK  filters :: [1]
+OK  bad year=1 400 names field :: 400 {"year": ["Ensure this value is greater than or equal to 2000."]}
+OK  bad month=13 400 names field :: 400 {"month": ["Ensure this value is less than or equal to 12."]}
+OK  bad status=x 400 names field :: 400 {"status": ["\"x\" is not a valid choice."]}
+OK  bad teacher=0 400 names field :: 400 {"teacher": ["Ensure this value is greater than or equal to 1."]}
+OK  bad teacher=abc 400 names field :: 400 {"teacher": ["A valid integer is required."]}
+csv 200 11
+   ﻿Number,Teacher,Year,Month,Sessions,Minutes,Gross (minor units),Bonuses (minor units),Deductions (minor units),Net (minor units),Currency,Status,Missing rate,Paid on,Regular sessions,Compensation sessions,Extra sessions,Trial sessions,At disposal,Student absent,Student excused,Group members,Paid to balance,Receipt confirmed at,Reports sent,Reports not sent,Teacher absences,Report deductions (minor units)
+   PAY-000014,"'=HYPERLINK(""http://evil"",""x"")",2026,9,1,60,6000,0,0,6000,EGP,draft,no,,0,0,1,0,0,0,0,0,no,,0,1,0,0
+   PAY-000005,F10 Teacher Eight,2026,9,1,60,500000,0,0,500000,EGP,issued,no,,0,0,1,0,0,0,0,0,no,,0,1,0,0
+   PAY-000008,F10 Teacher Eleven,2026,9,1,60,6000,0,0,6000,USD,paid,no,2026-10-19,0,0,1,0,0,0,0,0,no,,0,1,0,0
+   PAY-000019,F10 Teacher Five,2026,9,0,0,0,700,0,700,EGP,draft,no,,0,0,0,0,0,0,0,0,no,,0,0,0,0
+   PAY-000006,F10 Teacher Nine,2026,9,1,60,300000,0,0,300000,EGP,draft,no,,0,0,1,0,0,0,0,0,no,,0,1,0,0
+   PAY-000004,F10 Teacher Seven,2026,9,1,60,6000,0,0,6000,EGP,paid,no,2026-01-01,0,0,1,0,0,0,0,0,no,,0,1,0,0
+   PAY-000007,F10 Teacher Ten,2026,9,3,180,18000,0,1800,16200,EGP,issued,no,,0,0,3,0,0,0,0,0,no,,0,3,0,1800
+   PAY-000003,F10 Teacher Three,2026,9,2,120,12000,0,0,12000,EGP,draft,no,,0,0,2,0,0,0,0,0,no,,0,2,2,0
+   PAY-000002,F10 Teacher Two,2026,9,5,185,38065,0,0,38065,EGP,paid,no,2026-10-19,0,0,5,0,0,1,1,0,no,,0,3,0,0
+   PAY-000001,QA teacher,2026,9,3,135,13500,0,0,13500,EGP,paid,no,2026-10-19,0,0,3,0,0,0,0,0,no,2026-10-19 01:02:26.469094+00:00,0,3,0,0
+OK  formula name guarded with leading ' :: PAY-000014,"'=HYPERLINK(""http://evil"",""x"")",2026,9,1,60,6000,0,0,6000,EGP,draft,no,,0,0,1,0,0,0,0,0,no,,0,1,0,0
+OK  csv net sum = DB :: 898465 vs 898465
+OK  money columns plain ints

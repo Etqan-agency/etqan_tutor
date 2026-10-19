@@ -1,0 +1,28 @@
+## schema academy_other
+tables: 143
+django_migrations: 171
+academysettings: UTC|USD|ar
+branding: أكاديمية أخرى|Other Academy
+landing rows: 1
+landing: {"id":1,"hero_title_ar":"تعلّم مع أفضل المعلمين","hero_title_en":"Learn with great teachers","hero_subtitle_ar":"حصص مباشرة فردية بجدول يناسبك.","hero_subtitle_en":"Live one-to-one lessons on a schedule that fits you.","hero_image":"","cta_label_ar":"احجز حصة تجريبية","cta_label_en":"Book a free trial","about_ar":"","about_en":"","show_courses":false,"show_packages":false,"show_teachers":false,"sh
+sitesettings rows: 1
+tags by kind: student|21 teacher|22 
+staffrole: Supervisor|20|e2ec5bd1fc37e15a1961dc01359d540e 
+users: 1|admin@other.test|Other Academy Admin|admin|t|ar|UTC|argon2$|t 2|kareem@other.test|Ustadh Kareem|teacher|t|ar|UTC|!KW4IRL|f 3|salma@other.test|Salma Nabil|parent|t|ar|UTC|!0daL3c|f 4|layla@other.test|Layla Nabil|student|t|ar|UTC|!6Ncic5|f 
+emailaddress: admin@other.test|t|t kareem@other.test|t|f salma@other.test|t|f layla@other.test|t|f 
+sessions: 1
+## schema academy_qaother
+tables: 143
+django_migrations: 171
+academysettings: UTC|USD|ar
+branding: Etqan QA Other|Etqan QA Other
+landing rows: 1
+landing: {"id":1,"hero_title_ar":"تعلّم مع أفضل المعلمين","hero_title_en":"Learn with great teachers","hero_subtitle_ar":"حصص مباشرة فردية بجدول يناسبك.","hero_subtitle_en":"Live one-to-one lessons on a schedule that fits you.","hero_image":"","cta_label_ar":"احجز حصة تجريبية","cta_label_en":"Book a free trial","about_ar":"","about_en":"","show_courses":false,"show_packages":false,"show_teachers":false,"sh
+sitesettings rows: 1
+tags by kind: student|21 teacher|22 
+staffrole: Supervisor|20|e2ec5bd1fc37e15a1961dc01359d540e 
+users: 1|qaother-admin@qa.etqan.test|QA Other Admin|admin|t|ar|UTC|!VO8Dcj|f 
+emailaddress: qaother-admin@qa.etqan.test|t|t 
+sessions: 0
+4|academy_qaother|qaother|active|UTC|USD||f|{}|2026-10-17 19:44:16.03086+00
+6|qaother.etqan.localhost|4|active|t|f|

@@ -1,0 +1,44 @@
+== TC-014 fixture SCN-MONTH
+[201] POST subscriptions/ :: {"id":88,"status":"active","schedule_status":"active","student":{"id":222,"full_name":"SCN Student A1","timezone":"Africa/Cairo"},"teacher":{"id":220,"full_name":"SCN Payroll Teacher"},"course":{"id":6,"name_ar":"scn","name_en":"SCN Quran"},"package":{"id":17,"name_ar":"س","name_en":"SCN Pkg 2x4w"},
+SET
+150|150000|unpaid|2026-10-19|2026-10-26
+SET
+0
+[201] POST sessions/regular/ :: {"session":{"id":388,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-02","starts_at":"2026-09-02T13:00:00Z","minutes":60,"status":"scheduled","student_
+[201] POST sessions/regular/ :: {"session":{"id":389,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-04","starts_at":"2026-09-04T13:00:00Z","minutes":60,"status":"scheduled","student_
+[201] POST sessions/regular/ :: {"session":{"id":390,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-09","starts_at":"2026-09-09T13:00:00Z","minutes":60,"status":"scheduled","student_
+[201] POST sessions/regular/ :: {"session":{"id":391,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-11","starts_at":"2026-09-11T13:00:00Z","minutes":60,"status":"scheduled","student_
+[201] POST sessions/regular/ :: {"session":{"id":392,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-16","starts_at":"2026-09-16T13:00:00Z","minutes":60,"status":"scheduled","student_
+[201] POST sessions/regular/ :: {"session":{"id":393,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-18","starts_at":"2026-09-18T13:00:00Z","minutes":60,"status":"scheduled","student_
+[201] POST sessions/regular/ :: {"session":{"id":394,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-23","starts_at":"2026-09-23T13:00:00Z","minutes":45,"status":"scheduled","student_
+[201] POST sessions/regular/ :: {"session":{"id":395,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-25","starts_at":"2026-09-25T13:00:00Z","minutes":60,"status":"scheduled","student_
+[201] POST sessions/regular/ :: {"session":{"id":396,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-28","starts_at":"2026-09-28T13:00:00Z","minutes":60,"status":"scheduled","student_
+[201] POST sessions/regular/ :: {"session":{"id":397,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-29","starts_at":"2026-09-29T13:00:00Z","minutes":60,"status":"scheduled","student_
+[201] POST sessions/regular/ :: {"session":{"id":398,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-30","starts_at":"2026-09-30T13:00:00Z","minutes":60,"status":"scheduled","student_
+[200] POST sessions/388/attendance/ :: {"id":388,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-02","starts_at":"2026-09-02T13:00:00Z","minutes":60,"status":"completed",
+[200] POST sessions/389/attendance/ :: {"id":389,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-04","starts_at":"2026-09-04T13:00:00Z","minutes":60,"status":"completed",
+[200] POST sessions/390/attendance/ :: {"id":390,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-09","starts_at":"2026-09-09T13:00:00Z","minutes":60,"status":"completed",
+[200] POST sessions/391/attendance/ :: {"id":391,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-11","starts_at":"2026-09-11T13:00:00Z","minutes":60,"status":"completed",
+[200] POST sessions/392/attendance/ :: {"id":392,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-16","starts_at":"2026-09-16T13:00:00Z","minutes":60,"status":"completed",
+[200] POST sessions/393/attendance/ :: {"id":393,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-18","starts_at":"2026-09-18T13:00:00Z","minutes":60,"status":"completed",
+[200] POST sessions/394/attendance/ :: {"id":394,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-23","starts_at":"2026-09-23T13:00:00Z","minutes":45,"status":"completed",
+[200] POST sessions/395/attendance/ :: {"id":395,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-25","starts_at":"2026-09-25T13:00:00Z","minutes":60,"status":"completed",
+[200] POST sessions/396/attendance/ :: {"id":396,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-28","starts_at":"2026-09-28T13:00:00Z","minutes":60,"status":"completed",
+[200] POST sessions/397/attendance/ :: {"id":397,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-29","starts_at":"2026-09-29T13:00:00Z","minutes":60,"status":"completed",
+[200] POST sessions/398/cancel/ :: {"id":398,"subscription_id":88,"slot_id":null,"occurs_on":"2026-09-30","starts_at":"2026-09-30T13:00:00Z","minutes":60,"status":"cancelled","student_attendance":"not_set","teacher_attendance":"not_set
+-- checks
+admin filtered list [200] count=11 statuses=[('cancelled', 1), ('completed', 10)]
+SUB3 used/remaining/extra: (8, 7, 1, 0)
+T3 list count=11 ids==M: True
+T3 missing: [388, 389, 390, 391, 392, 393, 394]
+SET
+cancelled|not_set|not_set|60|1
+completed|absent|present|60|1
+completed|excused|present|60|1
+completed|present|absent|60|1
+completed|present|present|45|1
+completed|present|present|60|6
+SET
+7
+SET
+0

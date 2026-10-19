@@ -1,0 +1,20 @@
+## TC-023
++201000000003: 200 10
++20 100 000 0003: 200 10
+01000000003: 400 {'non_field_errors': ['Invalid credentials.']}
+00201000000003: 400 {'non_field_errors': ['Invalid credentials.']}
+shared phone, pw A: 400 {'non_field_errors': ['Invalid credentials.']}
+   f02-b last_login untouched: yes
+shared phone, pw B: 200 9
+shared phone, neither: 400 {'non_field_errors': ['Invalid credentials.']}
+teacher f02-teacher same phone, its pw: 400 {'non_field_errors': ['Invalid credentials.']}
+  (f02-a and f02-teacher both have F02-Pass-2026! on +201000000001 — so 'shared phone pw A' above matched 2 accounts)
+deactivated phone: 400 {'non_field_errors': ['Invalid credentials.']}
+invited phone (f02-new2, no pw): 400 {'non_field_errors': ['Invalid credentials.']}
+qa: phone_login=off
+switch off: 400 {'non_field_errors': ['Invalid credentials.']}
+  options: {"phone_login":false,"google":false,"self_registration":false,"waitlist":false,"parent_registration":false,"code_reset":{"email":true,"phone":true}}
+qa: phone_login=on
+400 400 400 400 400 400 400 400 400 400 11th (correct, other spelling): 400
+400 400 400 400 400 400 400 400 400 400 11th correct pw '+201000000003' after 10 wrong in two spellings: {"detail":"Request was throttled. Expected available in 3599 seconds."} 429 
+(the earlier 11th used 01000000003, a format not accepted, so it was a plain 400)

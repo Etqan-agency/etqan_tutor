@@ -1,0 +1,56 @@
+$ 2026-10-17T21:57:06Z just e2e e2e/qa/f01-login-csrf.spec.ts e2e/tenant-login.spec.ts (workers=1)
+
+Running 5 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-login-csrf.spec.ts:10:1 › QA-006 a fresh browser signs in through the dashboard (3.4s)
+  ✓  2 [chromium] › e2e/qa/f01-login-csrf.spec.ts:38:1 › QA-006 a form on another page cannot sign the browser in (464ms)
+  ✓  3 [chromium] › e2e/tenant-login.spec.ts:12:2 › academies › an academy admin signs in on their own academy (1.7s)
+  ✓  4 [chromium] › e2e/tenant-login.spec.ts:17:2 › academies › an admin of one academy cannot sign in on another (1.5s)
+  ✓  5 [chromium] › e2e/tenant-login.spec.ts:23:2 › academies › each academy keeps its own session (2.6s)
+
+  5 passed (10.6s)
+exit=(blank: zsh, no PIPESTATUS; see pass lines)
+$ 2026-10-17T21:57:20Z just e2e e2e/qa/f01-console.spec.ts --grep 'TC-133 a view-only|TC-134' (workers=1)
+    at /private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/pw/node_modules/playwright/lib/runner/index.js:1596:42
+    at Multiplexer._wrap (/private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/pw/node_modules/playwright/lib/runner/index.js:1659:7)
+    at Multiplexer.onBegin (/private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/pw/node_modules/playwright/lib/runner/index.js:1596:12)
+    at InternalReporter.onBegin (/private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/pw/node_modules/playwright/lib/runner/index.js:1784:29)
+    at Object.setup (/private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/pw/node_modules/playwright/lib/runner/index.js:6033:33)
+    at taskLoop (/private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/pw/node_modules/playwright/lib/runner/index.js:5836:29)
+    at _TaskRunner.runDeferCleanup (/private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/pw/node_modules/playwright/lib/runner/index.js:5852:5)
+    at _TaskRunner.run (/private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/pw/node_modules/playwright/lib/runner/index.js:5816:33)
+    at runTasks (/private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/pw/node_modules/playwright/lib/runner/index.js:5981:18)
+    at Object.runAllTestsWithConfig (/private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/pw/node_modules/playwright/lib/runner/index.js:6669:18)
+    at runTests (/private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/pw/node_modules/playwright/lib/cli/testActions.js:95:18)
+    at _Command.<anonymous> (/private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/pw/node_modules/playwright/lib/program.js:55:7)
+Emitted 'error' event on Socket instance at:
+    at Socket.onerror (node:internal/streams/readable:1028:14)
+    at Socket.emit (node:events:518:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  errno: -32,
+  code: 'EPIPE',
+  syscall: 'write'
+}
+
+Node.js v22.14.0
+error: Recipe `e2e` failed with exit code 127
+exit=(blank: zsh, no PIPESTATUS; see pass lines)
+(note: the previous attempt failed in the harness: just passes {{args}} unquoted, so '|' in --grep became a shell pipe -> exit 127; rerun with one grep per test)
+$ 2026-10-17T21:57:36Z just e2e e2e/qa/f01-console.spec.ts --grep TC-133.a.view-only (workers=1)
+exit=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:167:1 › TC-133 a view-only Etqan staff member can't change anything (1.7s)
+
+  1 passed (2.4s)
+$ 2026-10-17T21:57:41Z just e2e e2e/qa/f01-console.spec.ts --grep TC-134 (workers=1)
+exit=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:198:1 › TC-134 is_staff with no permissions sees nothing (684ms)
+
+  1 passed (1.2s)

@@ -1,0 +1,223 @@
+
+Running 5 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:22:1 › TC-051 Settings shows Cairo and EGP (3.6s)
+  ✘  2 [chromium] › e2e/qa/f01-dashboard.spec.ts:34:1 › TC-128 Settings → Features is read-only and matches the API (22.3s)
+  ✘  3 [chromium] › e2e/qa/f01-dashboard.spec.ts:34:1 › TC-128 Settings → Features is read-only and matches the API (retry #1) (26.0s)
+error: Path-prefixed recipes may not be used with `--working-directory` or `--justfile`.
+error: Path-prefixed recipes may not be used with `--working-directory` or `--justfile`.
+  ✘  4 [chromium] › e2e/qa/f01-dashboard.spec.ts:63:1 › TC-129/130 families off on qa: nav and direct URL; data kept (2.0s)
+error: Path-prefixed recipes may not be used with `--working-directory` or `--justfile`.
+error: Path-prefixed recipes may not be used with `--working-directory` or `--justfile`.
+  ✘  5 [chromium] › e2e/qa/f01-dashboard.spec.ts:63:1 › TC-129/130 families off on qa: nav and direct URL; data kept (retry #1) (2.5s)
+  ✘  6 [chromium] › e2e/qa/f01-dashboard.spec.ts:85:1 › TC-143 the new academy's public site renders with defaults (708ms)
+  ✘  7 [chromium] › e2e/qa/f01-dashboard.spec.ts:85:1 › TC-143 the new academy's public site renders with defaults (retry #1) (265ms)
+  ✓  8 [chromium] › e2e/qa/f01-dashboard.spec.ts:97:1 › TC-100 the SPA on an unknown academy host (5.9s)
+
+
+  1) [chromium] › e2e/qa/f01-dashboard.spec.ts:34:1 › TC-128 Settings → Features is read-only and matches the API 
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected value: "Family accounts=On"
+    Received array: ["Family accounts=?", "Parents and guardians=?", "Contracts=?", "Student registration waiting list=?", "Honour board=?", "Quick login=?", "Self-registration=?", "General supervision=?", "Session reports=?", "Teachers record attendance=?", …]
+
+      56 | 	expect(switches).toBe(0);
+      57 | 	for (const label of ["Family accounts=On", "Invoices and receipts=On"]) {
+    > 58 | 		if (apiOn.includes(label)) expect(items).toContain(label);
+         | 		                                         ^
+      59 | 	}
+      60 | 	for (const text of Object.values(others)) expect(text).not.toContain("Managed by Etqan");
+      61 | });
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-dashboard.spec.ts:58:44
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium/test-failed-4.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium/test-failed-6.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #5: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium/test-failed-5.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #6: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium/test-failed-3.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected value: "Family accounts=On"
+    Received array: ["Family accounts=?", "Parents and guardians=?", "Contracts=?", "Student registration waiting list=?", "Honour board=?", "Quick login=?", "Self-registration=?", "General supervision=?", "Session reports=?", "Teachers record attendance=?", …]
+
+      56 | 	expect(switches).toBe(0);
+      57 | 	for (const label of ["Family accounts=On", "Invoices and receipts=On"]) {
+    > 58 | 		if (apiOn.includes(label)) expect(items).toContain(label);
+         | 		                                         ^
+      59 | 	}
+      60 | 	for (const text of Object.values(others)) expect(text).not.toContain("Managed by Etqan");
+      61 | });
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-dashboard.spec.ts:58:44
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium-retry1/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium-retry1/test-failed-4.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium-retry1/test-failed-3.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #5: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium-retry1/test-failed-5.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #6: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium-retry1/test-failed-6.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium-retry1/error-context.md
+
+    attachment #8: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f01-dashboard-TC-128-Se-ea0ee-ad-only-and-matches-the-API-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › e2e/qa/f01-dashboard.spec.ts:63:1 › TC-129/130 families off on qa: nav and direct URL; data kept 
+
+    Error: Command failed: just --justfile /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/justfile _stack-manage 'set_features' 'qa' '--on' 'families'
+    error: Path-prefixed recipes may not be used with `--working-directory` or `--justfile`.
+
+
+       at manage.ts:33
+
+      31 | 	if (REMOTE) {
+      32 | 		const [command, ...words] = REMOTE;
+    > 33 | 		return execFileSync(command, [...words, ...args.map(shellQuote)], {
+         | 		       ^
+      34 | 			encoding: "utf8",
+      35 | 			timeout: TIMEOUT_MS,
+      36 | 		});
+        at manage (/Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/manage.ts:33:10)
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-dashboard.spec.ts:76:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-129-13-09d51-av-and-direct-URL-data-kept-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-dashboard-TC-129-13-09d51-av-and-direct-URL-data-kept-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: Command failed: just --justfile /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/justfile _stack-manage 'set_features' 'qa' '--on' 'families'
+    error: Path-prefixed recipes may not be used with `--working-directory` or `--justfile`.
+
+
+       at manage.ts:33
+
+      31 | 	if (REMOTE) {
+      32 | 		const [command, ...words] = REMOTE;
+    > 33 | 		return execFileSync(command, [...words, ...args.map(shellQuote)], {
+         | 		       ^
+      34 | 			encoding: "utf8",
+      35 | 			timeout: TIMEOUT_MS,
+      36 | 		});
+        at manage (/Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/manage.ts:33:10)
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-dashboard.spec.ts:76:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-129-13-09d51-av-and-direct-URL-data-kept-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-dashboard-TC-129-13-09d51-av-and-direct-URL-data-kept-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-129-13-09d51-av-and-direct-URL-data-kept-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f01-dashboard-TC-129-13-09d51-av-and-direct-URL-data-kept-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › e2e/qa/f01-dashboard.spec.ts:85:1 › TC-143 the new academy's public site renders with defaults 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "rtl"
+    Received: "ltr"
+
+      90 | 	save("tc143-public-site.json", { status: res?.status(), dir, body: body.slice(0, 800) });
+      91 | 	expect(res?.status()).toBe(200);
+    > 92 | 	expect(dir).toBe("rtl");
+         | 	            ^
+      93 | 	expect(body).toContain("تعلّم مع أفضل المعلمين");
+      94 | 	expect(body).toContain(QA.name);
+      95 | });
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-dashboard.spec.ts:92:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-143-th-da172--site-renders-with-defaults-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-dashboard-TC-143-th-da172--site-renders-with-defaults-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "rtl"
+    Received: "ltr"
+
+      90 | 	save("tc143-public-site.json", { status: res?.status(), dir, body: body.slice(0, 800) });
+      91 | 	expect(res?.status()).toBe(200);
+    > 92 | 	expect(dir).toBe("rtl");
+         | 	            ^
+      93 | 	expect(body).toContain("تعلّم مع أفضل المعلمين");
+      94 | 	expect(body).toContain(QA.name);
+      95 | });
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-dashboard.spec.ts:92:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-143-th-da172--site-renders-with-defaults-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-dashboard-TC-143-th-da172--site-renders-with-defaults-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f01-dashboard-TC-143-th-da172--site-renders-with-defaults-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f01-dashboard-TC-143-th-da172--site-renders-with-defaults-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3 failed
+    [chromium] › e2e/qa/f01-dashboard.spec.ts:34:1 › TC-128 Settings → Features is read-only and matches the API 
+    [chromium] › e2e/qa/f01-dashboard.spec.ts:63:1 › TC-129/130 families off on qa: nav and direct URL; data kept 
+    [chromium] › e2e/qa/f01-dashboard.spec.ts:85:1 › TC-143 the new academy's public site renders with defaults 
+  2 passed (1.1m)
+error: Recipe `e2e` failed with exit code 1

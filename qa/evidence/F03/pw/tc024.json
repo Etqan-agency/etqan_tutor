@@ -1,0 +1,32 @@
+{
+  "saved": {
+    "timezone": "Africa/Cairo",
+    "default_currency": "EUR",
+    "default_language": "ar",
+    "generation_horizon_days": 14,
+    "renewal_grace_days": 5,
+    "absent_consumes_session": true,
+    "excused_consumes_session": false,
+    "auto_invoice_on_subscription": true,
+    "invoice_due_days": 7,
+    "postpone_limit_minutes": 120,
+    "supervision_enabled": true,
+    "updated_at": "2026-10-19T00:31:35.446574Z"
+  },
+  "toggles": 0,
+  "switches": 0,
+  "restored": {
+    "timezone": "Africa/Cairo",
+    "default_currency": "EGP",
+    "default_language": "ar",
+    "generation_horizon_days": 14,
+    "renewal_grace_days": 7,
+    "absent_consumes_session": true,
+    "excused_consumes_session": false,
+    "auto_invoice_on_subscription": true,
+    "invoice_due_days": 7,
+    "postpone_limit_minutes": 120,
+    "supervision_enabled": true,
+    "updated_at": "2026-10-19T00:31:44.300298Z"
+  }
+}

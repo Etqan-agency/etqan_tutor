@@ -1,0 +1,5 @@
+{
+  "status": 400,
+  "body": "{\"non_field_errors\":[\"Invalid credentials.\"]}",
+  "alert": "Invalid credentials."
+}

@@ -1,0 +1,23 @@
+== TC-011
+[201]
+ISO=13
+O roles list: [(1, 'Supervisor')]
+O GET role 13 -> 404 O PATCH -> 404
+F03 Iso
+A cookie on qaother me -> 403
+A cookie, URL qa but Host: qaother -> 403
+A cookie, X-Forwarded-Host qaother, roles -> 13 roles incl F03 Iso: True
+A cookie forged settings tz -> {"timezone":"Africa/Cairo","default_currency":"EGP","default_language":"ar","generation_horizon_days":14,"renewal_grace_days":7,"absent_consumes_session":true,"
+login xq 400
+O PATCH currency GBP: {"timezone":"UTC","default_currency":"GBP","default_language":"ar","generation_horizon_days":14,"renewal_grace_days":7,"absent_consumes_session":true,"excused_consumes_session":false,"auto_invoice_on_
+
+A GET currency: EGP
+DB qa: EGP qaother: GBP
+O revert USD: {"timezone":"UTC","default_currency":"USD","default_language":"ar","generation_horizon_days":14,"renewal_grace_days":7,"absent_consumes_session":true,"excused_consumes_session":false,"auto_invoice_on_
+
+O creates staff with qa email f03-hana: {"id":2,"full_name":"F03 Hana Other","email":"f03-hana@qa.etqan.test","is_active":true,"roles":[],"invited":true,"created_at":"2026-10-19T00:09:04.719192Z"} [201] 
+qaother users with that email: 2|staff ; qa: 20|F03 Hana
+login hana 200
+== TC-026 header forgery done above; mass assignment on staff create
+{"id":24,"full_name":"F03 Mass","email":"f03-mass@qa.etqan.test","is_active":true,"roles":[],"invited":true,"created_at":"2026-10-19T00:09:05.013597Z"} [201] 
+staff|f|f

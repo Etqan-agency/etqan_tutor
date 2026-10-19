@@ -1,0 +1,51 @@
+## AFTER fix (final, formatted) 2026-10-19T00:25:03Z
+=========================== short test summary info ============================
+FAILED etqan/access/tests/test_routes.py::test_every_route_declares_its_code_or_is_named_exempt
+1 failed, 2054 passed, 1959 warnings in 42.09s
+
+## new tests only
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+485 passed, 1570 deselected, 475 warnings in 11.51s
+## ruff
+All checks passed!
+20 files already formatted
+## lint-imports
+Contracts: 54 kept, 0 broken.
+## note: test_every_route_declares_its_code_or_is_named_exempt fails on api/v1/site/admin/* routes (owner session's uncommitted etqan/site work), unrelated to this fix
+## diff
+diff --git a/etqan/access/services.py b/etqan/access/services.py
+index ab1b690f..4a3b1bc9 100644
+--- a/etqan/access/services.py
++++ b/etqan/access/services.py
+@@ -184,7 +184,10 @@ def update_role(role: StaffRole, *, fields: dict, by) -> StaffRole:
+ 
+     Restoring a retired role is itself an escalation (§4.2): a staff user may
+     only bring one back when they hold every code it grants, so an admin's
+-    revocation can't be undone by reactivating a role a staff member is in."""
++    revocation can't be undone by reactivating a role a staff member is in.
++    Retiring is the mirror case: it removes every code from every member at
++    once, so a staff user may only retire a role whose codes they all hold
++    (the removal rule, ETQAN-QA-021)."""
+     unknown = sorted(set(fields) - ROLE_FIELDS)
+     if unknown:
+         raise ValidationError("Unknown field.", field=unknown[0])
+@@ -193,13 +196,15 @@ def update_role(role: StaffRole, *, fields: dict, by) -> StaffRole:
+         new_permissions = _clean_codes(
+             fields["permissions"], current=frozenset(role.permissions), by=by
+         )
+-    if fields.get("is_active") and not role.is_active and role_of(by) == "staff":
+-        restored = frozenset(
++    flips = "is_active" in fields and bool(fields["is_active"]) != role.is_active
++    if flips and role_of(by) == "staff":
++        affected = frozenset(
+             new_permissions if new_permissions is not None else role.permissions
+         )
+-        if not restored <= codes_of(by):
++        if not affected <= codes_of(by):
++            verb = "restore" if fields["is_active"] else "retire"
+             raise ForbiddenError(
+-                "You can only restore a role whose permissions you hold yourself.",
++                f"You can only {verb} a role whose permissions you hold yourself.",
+                 field="is_active",
+             )
+     if new_permissions is not None:

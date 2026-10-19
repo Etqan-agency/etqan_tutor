@@ -1,0 +1,18 @@
+# marketing container recovery 2026-10-18T21:48:42Z
+state: etqan_tutor-marketing-1 Exited (1) at 2026-10-18T20:24:55Z (started by the fix-cycle-2 'dc.sh up -d --no-build'): EACCES rmdir /app/node_modules/.vite/deps
+drwxr-xr-x    4 root     root          4096 Oct 18 00:27 /app/node_modules/.vite
+drwxr-xr-x    2 root     root          4096 Oct 18 00:27 /app/node_modules/.vite/deps
+removed vite cache
+ls: /app/node_modules/.vite: No such file or directory
+ Container etqan_tutor-marketing-1  Starting
+ Container etqan_tutor-marketing-1  Started
+after start: GET qa /ar/ -> 200 (2026-10-18T21:48:50Z)
+etqan_tutor-marketing-1 Up 7 seconds
+    at Object.mkdirSync (node:fs:1370:26)
+    at runOptimizeDeps (file:///app/node_modules/.pnpm/vite@7.3.6_@types+node@22.20.4_jiti@2.7.0_lightningcss@1.32.0_yaml@2.9.1/node_modules/vite/dist/node/chunks/config.js:32014:5)
+    at runOptimizer (file:///app/node_modules/.pnpm/vite@7.3.6_@types+node@22.20.4_jiti@2.7.0_lightningcss@1.32.0_yaml@2.9.1/node_modules/vite/dist/node/chunks/config.js:34251:26)
+    at rerun (file:///app/node_modules/.pnpm/vite@7.3.6_@types+node@22.20.4_jiti@2.7.0_lightningcss@1.32.0_yaml@2.9.1/node_modules/vite/dist/node/chunks/config.js:34342:3)
+    at Timeout._onTimeout (file:///app/node_modules/.pnpm/vite@7.3.6_@types+node@22.20.4_jiti@2.7.0_lightningcss@1.32.0_yaml@2.9.1/node_modules/vite/dist/node/chunks/config.js:34377:30)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7)
+21:48:50 [200] /ar/ 109ms

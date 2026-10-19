@@ -1,0 +1,6 @@
+other apps reach ai only through its services KEPT
+devices reaches other apps only through their services KEPT (27 ignored imports)
+no app imports devices KEPT
+
+Contracts: 54 kept, 0 broken.
+exit=0

@@ -1,0 +1,50 @@
+== TC-017
+[200] student_absent setting: [{'type': 'session.student_absent', 'enabled': True, 'value': None, 'whatsapp': False}, {'type': 'session.teacher_absent', 'enabled': True, 'value': None, 'whatsapp': False}]
+absent notifs before 4, PA mails before 10
+[201] POST sessions/extra/ :: {"session":{"id":399,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T16:15:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attenda
+[200] POST sessions/399/attendance/ :: {"id":399,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T16:15:00Z","minutes":30,"status":"completed","student_attendance":"absent","teacher_attendance":"not_se
+ok: academy_qa
+ok: academy_qaother
+ok: academy_qa
+ok: academy_qaother
+PA mails now 11
+SET
+ERROR:  column "user_id" does not exist
+LINE 1: set search_path=academy_qa; select id,type,user_id,email_sta...
+                                                   ^
+PA notifs: [('session.student_absent', 'غياب: SCN Student A2'), ('invoice.issued', 'فاتورة جديدة INV-000151'), ('session.teacher_absent', 'غياب المعلم: scn'), ('invoice.issued', 'فاتورة جديدة INV-000150'), ('subscription.low', 'حصص قليلة متبقية: scn')]
+[200] GET notifications/unread-count/ :: {"count":10}
+PB absent notifs: []
+qa-parent absent notifs for SA2: []
+SET
+300|session.student_absent|224|sent|session.student_absent:session:399:224|ar|2026-10-19 17:15:10.584127+00
+SET
+-- Mailpit message for PA
+mailpit id 3m45FhT13bD25ljk65jXEG
+Subject: [Etqan QA Academy] غياب: SCN Student A2
+To: ['scn-parent-a@qa.etqan.test']
+links: ['http://qa.etqan.localhost/app/learning/sessions', 'http://qa.etqan.localhost/']
+raw {{ : False
+Etqan QA Academy · Etqan QA Academy
+
+مرحبًا SCN Parent A،
+
+غاب SCN Student A2 عن حصة scn في 2026-10-19 19:15 (Africa/Cairo).
+
+افتحه من هنا:
+http://qa.etqan.localhost/app/learning/sessions
+
+--
+Etqan QA Academy · Etqan QA Academy
+
+http://qa.etqan.localhost/
+
+-- edge: PA mutes sessions category
+[200] GET notifications/preferences/ :: {"categories":[{"category":"sessions","enabled":true},{"category":"payments","enabled":true},{"category":"schedule","enabled":true},{"category":"reports_homework","enabled":true}],"notifiable":true}
+[200] PATCH notifications/preferences/ :: {"categories":[{"category":"sessions","enabled":false},{"category":"payments","enabled":true},{"category":"schedule","enabled":true},{"category":"reports_homework","enabled":true}],"notifiable":true}
+[201] POST sessions/extra/ :: {"session":{"id":400,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T16:30:00Z","minutes":30,"status":"schedule
+[200] POST sessions/400/attendance/ :: {"id":400,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T16:30:00Z","minutes":30,"status":"completed","student
+ok: academy_qaother
+SET
+PA mails: 11 ['
+[200] PATCH notifications/preferences/ :: {"categories":[{"category":"sessions","enabled":true},{"category":"payments","enabled":true},{"category":"schedule","enabled":true},{"category":"reports_homework","enabled":true}],"notifiable":true}

@@ -1,0 +1,8 @@
+
+Running 3 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/tenant-login.spec.ts:12:2 › academies › an academy admin signs in on their own academy (2.9s)
+  ✓  2 [chromium] › e2e/tenant-login.spec.ts:17:2 › academies › an admin of one academy cannot sign in on another (2.0s)
+  ✓  3 [chromium] › e2e/tenant-login.spec.ts:23:2 › academies › each academy keeps its own session (3.2s)
+
+  3 passed (9.3s)

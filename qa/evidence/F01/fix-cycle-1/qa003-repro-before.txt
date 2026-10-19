@@ -1,0 +1,6 @@
+2026-10-17T21:04:23Z
+$ manage.py shell: AcademyCreationForm(Mars/Phobos, usd).is_valid()
+155 objects imported automatically (use -v 2 for details).
+
+valid: True {}
+create_academy calls clean_timezone: False clean_currency: False

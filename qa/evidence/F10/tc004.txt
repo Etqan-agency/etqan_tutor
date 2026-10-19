@@ -1,0 +1,13 @@
+==== TC-004 2026-10-19T04:03:01.466962
+T4 default 201
+T4 C2 201
+T4 S2 201 {"id": 1, "teacher": {"id": 38, "full_name": "F10 Teacher Four"}, "student": {"id": 32, "full_name": "QA Student Two"}, "hourly_rate_minor": 12000, "currency": "EGP", "current": true, "created_at": "2
+OK  dup default 400 :: 400 {"course": ["This teacher already has this rate. Edit it instead."]}
+OK  dup course 400 :: 400 {"course": ["This teacher already has this rate. Edit it instead."]}
+OK  precedence on :: {28: 6000, 29: 9000, 30: 12000, 31: 12000}
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  student-rates gated off :: 404 {"detail": "This feature is not enabled for this academy."}
+OK  switch off falls back :: {28: 6000, 29: 9000, 30: 6000, 31: 9000}
+srate row survives 1|5|10|12000|EGP
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  on again

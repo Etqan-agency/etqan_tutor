@@ -1,0 +1,8 @@
+{
+  "ids": [
+    "12",
+    "14"
+  ],
+  "dns": "Localtest.me: resolves to 127.0.0.1, ::1, expected sites.etqan.localhost. | Qa-academy.test: resolves to nothing, expected sites.etqan.localhost.",
+  "primary": "Qa-academy.test: Only an active domain can be primary."
+}

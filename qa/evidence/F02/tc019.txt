@@ -1,0 +1,13 @@
+## TC-019
+admin: 200
+count 35 kinds ['impersonate', 'link_sent', 'link_used', 'return'] keys ['actor', 'at', 'id', 'ip', 'kind', 'target']
+first {'id': 35, 'kind': 'link_used', 'actor': None, 'target': {'id': 11, 'full_name': 'F02 Student d'}, 'ip': '192.168.65.1', 'at': '2026-10-18T23:00:32.026548Z'}
+newest first True
+db count: 35
+page=2: 200
+ql:403 sc:403 sup:403 tt:403 stu:403 
+anon: 403
+qaother admin: {"count":0,"next":null,"previous":null,"results":[]} 200   qaother db: 0
+qa: quick_login=off
+switch off: 404
+qa: quick_login=on

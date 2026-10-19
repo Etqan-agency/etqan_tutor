@@ -1,0 +1,260 @@
+[vite:react-swc] We recommend switching to `@vitejs/plugin-react` for improved performance as no swc plugins are used. More information at https://vite.dev/rolldown
+
+ RUN  v3.2.6 /app
+
+ ✓ src/features/consultations/RequestDialog.test.tsx (18 tests) 19033ms
+   ✓ RequestDialog > creates a request for an unregistered person from a free slot  4232ms
+   ✓ RequestDialog > prefills the person from a picked student and sends their user id  1328ms
+   ✓ RequestDialog > lists bookable products and opted-in teachers only  2443ms
+   ✓ RequestDialog > types a time on the academy clock instead of a slot  1857ms
+   ✓ RequestDialog > keeps a pending row's start when typing mode is opened but not used  936ms
+   ✓ RequestDialog > sends only the contact fields when the booking is unchanged  1726ms
+   ✓ RequestDialog > reschedules without a teacher when none is chosen  839ms
+   ✓ RequestDialog > opens the picker on the row's start day  449ms
+   ✓ RequestDialog > shows the read-only session and payment in edit  454ms
+   ✓ RequestDialog > sends a null start when the product becomes an email one  2097ms
+   ✓ RequestDialog > shows a full slot beside the picker  347ms
+   ✓ RequestDialog > puts field errors under their inputs  532ms
+   ✓ DeliveryDialog > records attendance and the session status, changed fields only  415ms
+   ✓ DeliveryDialog > saves the link alone before the start (PF9)  666ms
+ ✓ src/features/scheduling/BundleForm.currency.test.tsx (8 tests) 10972ms
+   ✓ BundleForm with country prices (B3d D-5) > prices a multi-course bundle for its student's country  2195ms
+   ✓ BundleForm with country prices (B3d D-5) > prices each family row for its student's country and sends the currency  2819ms
+   ✓ BundleForm with country prices (B3d D-5) > leaves a group's price to each member while their currencies differ  957ms
+   ✓ BundleForm with country prices (B3d D-5) > prefills no price for a group, and sends none while it stays empty  770ms
+   ✓ BundleForm with country prices (B3d D-5) > sends a typed group price in the members' one currency  771ms
+   ✓ BundleForm with country prices (B3d D-5) > clears a typed group price when the members' currency changes  845ms
+   ✓ BundleForm with country prices (B3d D-5) > keeps no stale currency when a row's price cannot be read  1518ms
+   ✓ BundleForm with country prices (B3d D-5) > reads the prices again when the server says the currency moved  1094ms
+ ✓ src/features/scheduling/BundleForm.test.tsx (9 tests) 14749ms
+   ✓ BundleForm > creates a multi-course bundle and opens it  3342ms
+   ✓ BundleForm > takes a family's students on its rows  2460ms
+   ✓ BundleForm > subscribes a study group with one row  941ms
+   ✓ BundleForm > puts the server's errors on the row and the owner  1514ms
+   ✓ BundleForm > puts a row's own refusal inside that row  1642ms
+   ✓ BundleForm > puts a supervisor refusal on the supervisor  1344ms
+   ✓ BundleForm > shows a row's own refusal beside its field errors  1006ms
+   ✓ BundleForm > shows a refused rule above the button  1170ms
+   ✓ BundleForm > lists the clashes it reports and links the bundle  1320ms
+stderr | src/features/website/ArticleEditor.test.tsx > ArticleEditor > names categories in Arabic when the UI is Arabic
+An update to Toaster inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to BilingualField inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DraftAction inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DraftAction inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to BilingualField inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to RichTextEditor inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DraftAction inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to RichTextEditor inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DraftAction inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DraftAction inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DraftAction inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to BilingualField inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DraftAction inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DraftAction inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to BilingualField inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DraftAction inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DraftAction inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to BilingualField inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to ArticleEditor inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/features/website/ArticleEditor.test.tsx (17 tests) 6888ms
+   ✓ ArticleEditor > creates an article with both languages and a rich body  2101ms
+   ✓ ArticleEditor > validates required fields before calling the API  378ms
+   ✓ ArticleEditor > sends JSON when no cover file is chosen on edit  406ms
+   ✓ ArticleEditor > sends multipart with the cover file  387ms
+   ✓ ArticleEditor > clears an existing cover with cover_clear in multipart  338ms
+   ✓ ArticleEditor > shows a server field error  318ms
+   ✓ ArticleEditor > choosing a cover file unticks and disables Remove cover  543ms
+   ✓ ArticleEditor > writes the Arabic draft into the Arabic summary  665ms
+   ✓ ArticleEditor > appends a body draft to the body's editor  442ms
+ ✓ src/features/consultations/BookingWizard.test.tsx (7 tests) 6257ms
+   ✓ BookingWizard > books a visitor: teacher, time, details, provider, then the total and the link  2141ms
+   ✓ BookingWizard > skips the time for an email consultation  845ms
+   ✓ BookingWizard > keeps the booking when the payment does not start  1636ms
+   ✓ BookingWizard > lets a signed-in parent book for a child  404ms
+   ✓ BookingWizard > shows the server's field errors  1188ms
+ ✓ src/routes/_authed/website.guard.test.tsx (3 tests) 171ms
+ ✓ src/features/website/FaqsManager.test.tsx (7 tests) 5946ms
+   ✓ FaqsManager > shows an empty state, requires both languages, then adds  1256ms
+   ✓ FaqsManager > edits an FAQ  1239ms
+   ✓ FaqsManager > deletes after confirming  1238ms
+   ✓ FaqsManager > shows an error toast when delete fails  731ms
+   ✓ FaqsManager > shows a server field error on the field  884ms
+   ✓ FaqsManager > is read-only for staff who may only view  365ms
+
+ Test Files  7 passed (7)
+      Tests  69 passed (69)
+   Start at  04:48:26
+   Duration  68.28s (transform 30.38s, setup 7.67s, collect 49.76s, tests 64.02s, environment 8.03s, prepare 1.04s)
+

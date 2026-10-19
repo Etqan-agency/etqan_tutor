@@ -1,0 +1,18 @@
+........................................................................ [ 36%]
+........................................................................ [ 73%]
+.....................................................                    [100%]
+=============================== warnings summary ===============================
+etqan/tenants/tests/test_admin.py: 10 warnings
+etqan/tenants/tests/test_admin_features.py: 7 warnings
+etqan/tenants/tests/test_admin_permissions.py: 10 warnings
+etqan/tenants/tests/test_admin_stale_change.py: 4 warnings
+etqan/tenants/tests/test_admin_suspend.py: 4 warnings
+etqan/tenants/tests/test_domain_admin.py: 7 warnings
+etqan/tenants/tests/test_domains.py: 10 warnings
+etqan/tenants/tests/test_isolation.py: 6 warnings
+etqan/tenants/tests/test_middleware.py: 3 warnings
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+197 passed, 61 warnings in 1699.72s (0:28:19)

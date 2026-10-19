@@ -1,0 +1,10 @@
+{
+  "dir": "ltr",
+  "lang": "en",
+  "weakStatus": "client-side only, requests sent: 1",
+  "alerts": [
+    "Too small: expected string to have >=8 characters"
+  ],
+  "status": 200,
+  "errors": []
+}

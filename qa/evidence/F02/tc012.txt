@@ -1,0 +1,15 @@
+## TC-012
+recovery login: 200
+2fa: {"enabled":true,"recovery_codes_left":9}
+reuse recovery: {"code":["Invalid code."]} 400 
+regenerate: 200 n=10 data changed: yes
+2fa: {"enabled":true,"recovery_codes_left":10}
+old code 06214956 after regen: {"code":["Invalid code."]} 400 
+disable wrong: {"code":["Invalid code."]} 400 
+disable right:  204  rows=0
+next login direct: {"id":7,"email":"qa-teacher@qa.etqan.tes
+re-enabled: 200
+qa: two_factor=off
+switch off: me/2fa 404, setup 404, login: {"id":7,"email":"qa-teacher@qa.etqan.tes, rows kept: 2
+qa: two_factor=on
+switch on: login {"mfa_required":true}

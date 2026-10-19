@@ -1,0 +1,40 @@
+== TC-011
+cache cleared
+PA invoices [200] [(148, 'SCN Student A3', 150000, 0, 'void'), (147, 'SCN Student A2', 150000, 150000, 'unpaid'), (146, 'SCN Student A1', 150000, 150000, 'unpaid')]
+[200] GET billing/invoices/146/ :: {"id":146,"number":"INV-000146","status":"unpaid","is_overdue":false,"student":{"id":222,"full_name":"SCN Student A1"},"payer":{"id":224,"full_name":"SCN Parent A"},"subscription_id":85,"description":
+[404] GET billing/invoices/SET/ :: <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /api/v1/billing/invoices/SET/</title>
+  <meta name="robots" con
+[403] GET billing/payments/ :: {"detail":"You do not have permission to perform this action."}
+[403] GET billing/summary/ :: {"detail":"You do not have permission to perform this action."}
+[200] GET wallet/mine/ :: [{"student":{"id":222,"name":"SCN Student A1"},"balances":[],"topup_currencies":["EGP"]},{"student":{"id":223,"name":"SCN Student A2"},"balances":[],"topup_currencies":["EGP"]}]
+[404] GET wallet/students/225/ :: {"detail":"Student with identifier '225' not found."}
+[403] POST billing/invoices/146/payments/ :: {"detail":"You do not have permission to perform this action."}
+[201] POST wallet/students/222/top-ups/ :: {"id":29,"kind":"topup","currency":"EGP","amount_minor":30000,"balance_after_minor":30000,"note":"Cash","invoice_id":null,"payment_id":75,"session_id":null,"created_at":"2026-10-19T17:10:39.943748Z","reversed":false,"created_by":{"id":1,"full_name":"QA Admin"}}
+[200] GET wallet/mine/ :: [{"student":{"id":222,"name":"SCN Student A1"},"balances":[{"currency":"EGP","balance_minor":30000}],"topup_currencies":["EGP"]},{"student":{"id":223,"name":"SCN Student A2"},"balances":[],"topup_currencies":["EGP"]}]
+[201] POST wallet/invoices/146/pay/ :: {"id":30,"kind":"spend","currency":"EGP","amount_minor":-30000,"balance_after_minor":0,"note":"INV-000146","invoice_id":146,"payment_id":76,"session_id":null,"created_at":"2026-10-19T17:10:40.135716Z","reversed":false,"created_by":{"id":224,"full_name":"SCN Parent A"}}
+[409] POST wallet/invoices/146/pay/ :: {"detail":"The balance does not cover this.","code":"wallet.insufficient_balance"}
+INV1 status/paid/balance: ('partial', 30000, 120000)
+SET
+3|124|EGP|0|0
+SET
+29|30000|topup|75
+30|-30000|spend|76
+SET
+ERROR:  column "payment_id" does not exist
+LINE 1: ...ing_payment where invoice_id=146 or id in (select payment_id...
+                                                             ^
+[201] POST billing/invoices/ :: {"id":149,"number":"INV-000149","status":"unpaid","is_overdue":false,"student":{"id":225,"full_name":"SCN Student B1"},"payer":{"id":226,"full_name":"SCN Parent B"},"subscription_id":null,"description":"SCN FAM-B","amount_minor":5000,"paid_minor":0,"balance_minor":5000,"currency":"EGP","issued_on":"
+  (INVB payer: SCN Parent B)
+[404] GET billing/invoices/149/ :: {"detail":"No Invoice matches the given query."}
+[404] POST wallet/invoices/149/pay/ :: {"detail":"Invoice with identifier '149' not found."}
+PB invoices: [(149, 'SCN Student B1')]
+[404] GET billing/invoices/146/ :: {"detail":"No Invoice matches the given query."}
+SET
+75||30000|0|cash|completed|2026-10-19
+76|146|30000|0|wallet|completed|2026-10-19
+SET
+30000

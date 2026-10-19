@@ -1,0 +1,22 @@
+## TC-024
+(a) qa session at qaother: {"detail":"Authentication credentials were not provided."} 403
+    Host header swap: {"detail":"Authentication credentials were not provided."} 403
+    row in academy_qaother: 0
+(b) qa-admin creds at qaother: {"non_field_errors":["Invalid credentials."]} 400 
+    qaother-admin creds at qa: {"non_field_errors":["Invalid credentials."]} 400 
+(c) ops superuser at qa: {"non_field_errors":["Invalid credentials."]} 400  at qaother: {"non_field_errors":["Invalid credentials."]} 400 
+(d) qaother reset token at qa: (TC-008) {"token":["Invalid or expired reset link."]} 400 
+    qaother verify key at qa: {"non_field_errors":["Invalid or expired verification key."]} 400 
+    qa quick-login token at qaother: {"token":["Invalid or expired link."]} 400 
+qaother: code_reset=on
+    qa reset code at qaother: {"code":["Invalid or expired code."]} 400 
+qaother: code_reset=off
+(e) qa-student locked at qa: 429; same email at qaother: 400
+(f) qaother students list: {"count":0,"next":null,"previous":null,"results":[]}
+    qaother quick-login qa id 10: {"detail":"No User matches the given query."} 404 
+(g) qa CSRF token on qaother POST (qaother jar session): {"detail":"Authentication credentials were not provided."} 403
+events in qaother: 0
+(g') qaother session + qa csrftoken cookie/header: to_notifications","teacher_attendance","export","two_factor","quick_login"],"impersonator":null} 200
+    qaother session + qa csrf header only (qaother cookie): {"detail":"CSRF Failed: CSRF token from the 'X-Csrftoken' HTTP header incorrect."} 403
+restore qaother admin name: 200 QA Other Admin
+(g') shows: a csrftoken cookie value is not host-bound (cookie set per host; an attacker that can set cookies on qaother could reuse any token) - standard Django double-submit; header must match the cookie sent to that host. Not a defect.

@@ -1,0 +1,3 @@
+   × AcademySettingsForm > warns that existing lessons keep their time when the time zone changes 579ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 10 passed (11)

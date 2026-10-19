@@ -1,0 +1,20 @@
+[201] POST trials/ :: {"id":1,"student":{"id":214,"full_name":"QA6 Student 3","timezone":"Africa/Cairo"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"source":"api","students_count":1,"preferred_gender":"any","minutes":30,"desired_at":null,"requested_on":"2026
+[200] GET trials/suggest/?course=3&occurs_on=2026-10-19&start_time=07:00&minutes=30 :: [{"teacher":{"id":218,"full_name":"QA6 Teacher C","gender":"male"},"free":true,"available":null,"gender_match":true,"week_sessions":9},{"teacher":{"id":217,"full_name":"QA6 Teacher B","gender":"male"},"free":true,"available":false,"gender_match":true,"week_sessions":6},{"teacher":{"id":7,"full_name"
+[201] POST trials/1/schedule/ :: {"trial":{"id":1,"student":{"id":214,"full_name":"QA6 Student 3","timezone":"Africa/Cairo"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"source":"api","students_count":1,"preferred_gender":"any","minutes":30,"desired_at":null,"requested_on":"2026-10-19","request_status":"accepted","hear
+[409] POST trials/1/schedule/ :: {"detail":"This trial already has a session. Change or cancel that session first.","code":"scheduling.trial_scheduled"}
+163|trial|||scheduled
+-- convert before completion
+[409] POST subscriptions/ :: {"detail":"Only a completed trial can become a subscription.","code":"scheduling.trial_not_completed"}
+[200] POST sessions/163/attendance/ :: {"id":163,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T04:00:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"present","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":214,"
+-- wrong student
+[400] POST subscriptions/ :: {"student":["Choose the trial's student."]}
+-- staff codes (no trial_session.update)
+[403] POST subscriptions/ :: {"detail":"Converting a trial needs trial_session.update."}
+[201] POST subscriptions/ :: {"id":40,"status":"active","schedule_status":"active","student":{"id":214,"full_name":"QA6 Student 3","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":4,"name_ar":"ب2","name_en":"QA6 Pkg 3x10d"},"starts_on
+[409] POST subscriptions/ :: {"detail":"This trial is already a subscription.","code":"scheduling.trial_converted"}
+ERROR:  column "status" does not exist
+LINE 1: select id,status,converted_to_id from academy_qa.scheduling_...
+                  ^
+40|99999|EGP
+[409] DELETE trials/1/ :: {"detail":"This trial is already a subscription.","code":"scheduling.trial_converted"}
+1

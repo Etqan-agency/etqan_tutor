@@ -1,0 +1,13 @@
+## cleanup 2026-10-19T00:31:54Z
+login adm 200
+deact staff 21 200
+deact staff 22 200
+retire role 10 200
+retire role 8 200
+retire role 9 200
+1|Supervisor|t 2|QA No Codes|t 3|QA Student View|t 4|F02 QL Full|t 5|F02 QL NoView|t 6|F03 Front desk|f 7|F03 Trim|f 8|F03 Role editor|f 9|F03 Money|f 10|F03 Ed ok|f 11|F03 Partial|f 12|F03 Matrix|f 13|F03 Iso|f 14|F03 QL Teacher|f 15|F03 Everything|f 16|F03 UI Desk 1792369176028|f 17|F03 UI Desk 1792369180807|f 18|F03 UI Desk 1792369207690|f 19|F03 UI Desk 1792369881895|f 
+f03-ui-1792369881895@qa.etqan.test|t
+login c1 200
+login c2 200
+deact UI staff 31 200
+0

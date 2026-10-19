@@ -1,0 +1,25 @@
+# state after-e2e 2026-10-18T21:49:52Z
+1||public|active|f|99914b932bd37a50b983c5e7c90ae93b|d41d8cd98f00b204e9800998ecf8427e
+2|demo|academy_demo|active|f|932b90afc5a72d5ba72806df64e4224f|d41d8cd98f00b204e9800998ecf8427e
+3|other|academy_other|active|f|99914b932bd37a50b983c5e7c90ae93b|d41d8cd98f00b204e9800998ecf8427e
+4|qaother|academy_qaother|active|f|7381896dd74ac158781b0eb7a3efe700|d41d8cd98f00b204e9800998ecf8427e
+5|qa|academy_qa|active|f|79322d4b4d9c462091734180787d0034|1377db1580c142d6769c79537f4068ac
+6|qa-tmp-1|academy_qa_tmp_1|suspended|f|79322d4b4d9c462091734180787d0034|d41d8cd98f00b204e9800998ecf8427e
+7|qa-tmp-tz|academy_qa_tmp_tz|suspended|f|99914b932bd37a50b983c5e7c90ae93b|d41d8cd98f00b204e9800998ecf8427e
+8|qa-tmp-race-a|academy_qa_tmp_race_a|suspended|f|99914b932bd37a50b983c5e7c90ae93b|d41d8cd98f00b204e9800998ecf8427e
+10|qa-tmp-race-b|academy_qa_tmp_race_b|suspended|f|99914b932bd37a50b983c5e7c90ae93b|d41d8cd98f00b204e9800998ecf8427e
+12|journey-1792270407267|academy_journey_1792270407267|active|f|99914b932bd37a50b983c5e7c90ae93b|d41d8cd98f00b204e9800998ecf8427e
+13|journey-1792270459368|academy_journey_1792270459368|active|f|99914b932bd37a50b983c5e7c90ae93b|d41d8cd98f00b204e9800998ecf8427e
+14|journey-1792270543395|academy_journey_1792270543395|active|f|99914b932bd37a50b983c5e7c90ae93b|d41d8cd98f00b204e9800998ecf8427e
+15|qa-tmp-r1ok|academy_qa_tmp_r1ok|suspended|f|99914b932bd37a50b983c5e7c90ae93b|d41d8cd98f00b204e9800998ecf8427e
+16|khaled|academy_khaled|active|f|932b90afc5a72d5ba72806df64e4224f|d41d8cd98f00b204e9800998ecf8427e
+17|qa-tmp-cmd|academy_qa_tmp_cmd|suspended|f|99914b932bd37a50b983c5e7c90ae93b|d41d8cd98f00b204e9800998ecf8427e
+18|qa-tmp-abort|academy_qa_tmp_abort|suspended|f|99914b932bd37a50b983c5e7c90ae93b|d41d8cd98f00b204e9800998ecf8427e
+-- domains qa-tmp-abort:
+1
+-- schema academy_qa_tmp_abort:
+1
+-- qa tags (QA159):
+-- mailpit total / abort invites:
+6
+1

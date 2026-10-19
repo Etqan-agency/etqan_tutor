@@ -1,0 +1,64 @@
+
+Running 2 tests using 1 worker
+
+  ✘  1 [chromium] › e2e/qa/f01-create-edge.spec.ts:17:1 › TC-052/053 an invalid timezone and a lowercase currency at creation (14.2s)
+  ✘  2 [chromium] › e2e/qa/f01-create-edge.spec.ts:17:1 › TC-052/053 an invalid timezone and a lowercase currency at creation (retry #1) (854ms)
+  ✓  3 [chromium] › e2e/qa/f01-create-edge.spec.ts:42:1 › TC-061 double-clicking Save creates one academy and no 500 (14.4s)
+
+
+  1) [chromium] › e2e/qa/f01-create-edge.spec.ts:17:1 › TC-052/053 an invalid timezone and a lowercase currency at creation 
+
+    Error: expect(received).toMatch(expected)
+
+    Expected pattern: /timezone|currency/i
+    Received string:  ""
+
+      37 | 	// Expected per clean_timezone/clean_currency (academy/services.py): a
+      38 | 	// form error and nothing created.
+    > 39 | 	expect(errors.join(" ")).toMatch(/timezone|currency/i);
+         | 	                         ^
+      40 | });
+      41 |
+      42 | test("TC-061 double-clicking Save creates one academy and no 500", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-create-edge.spec.ts:39:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-create-edge-TC-052--cab57-ercase-currency-at-creation-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-create-edge-TC-052--cab57-ercase-currency-at-creation-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toMatch(expected)
+
+    Expected pattern: /timezone|currency/i
+    Received string:  "This subdomain is already taken."
+
+      37 | 	// Expected per clean_timezone/clean_currency (academy/services.py): a
+      38 | 	// form error and nothing created.
+    > 39 | 	expect(errors.join(" ")).toMatch(/timezone|currency/i);
+         | 	                         ^
+      40 | });
+      41 |
+      42 | test("TC-061 double-clicking Save creates one academy and no 500", async ({ page }) => {
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-create-edge.spec.ts:39:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-create-edge-TC-052--cab57-ercase-currency-at-creation-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-create-edge-TC-052--cab57-ercase-currency-at-creation-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f01-create-edge-TC-052--cab57-ercase-currency-at-creation-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f01-create-edge-TC-052--cab57-ercase-currency-at-creation-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/qa/f01-create-edge.spec.ts:17:1 › TC-052/053 an invalid timezone and a lowercase currency at creation 
+  1 passed (31.1s)
+error: Recipe `e2e` failed with exit code 1

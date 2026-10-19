@@ -1,0 +1,82 @@
+{
+  "slip": {
+    "id": 40,
+    "number": "PAY-000037",
+    "status": "paid",
+    "teacher": {
+      "id": 47,
+      "full_name": "F10 Teacher Thirteen"
+    },
+    "year": 2026,
+    "month": 3,
+    "currency": "EGP",
+    "sessions": 1,
+    "minutes": 60,
+    "counts": {
+      "regular": 0,
+      "compensation": 0,
+      "extra": 1,
+      "trial": 0,
+      "at_disposal": 0,
+      "student_absent": 0,
+      "student_excused": 0,
+      "group_members": 0
+    },
+    "gross_minor": 6000,
+    "bonuses_minor": 0,
+    "deductions_minor": 0,
+    "net_minor": 6000,
+    "missing_rate": false,
+    "reports_sent": 0,
+    "reports_missing": 1,
+    "teacher_absences": 0,
+    "report_deductions_minor": 0,
+    "issued_at": "2026-10-19T01:19:09.871848Z",
+    "paid_on": "2026-10-19",
+    "created_at": "2026-10-19T01:19:08.003104Z",
+    "updated_at": "2026-10-19T01:19:10.213083Z",
+    "paid_to_balance": false,
+    "acknowledged_at": null,
+    "notes": "F10 UI cash",
+    "issued_by": {
+      "id": 1,
+      "full_name": "QA Admin"
+    },
+    "paid_by": {
+      "id": 1,
+      "full_name": "QA Admin"
+    },
+    "lines": [
+      {
+        "id": 671,
+        "kind": "session",
+        "session_id": 65,
+        "adjustment_id": null,
+        "description": "2026-03-15 — F03 قرآن — QA student",
+        "minutes": 60,
+        "rate_minor": 6000,
+        "amount_minor": 6000,
+        "session_kind": "extra",
+        "session_status": "completed",
+        "student_attendance": "present",
+        "pay_bp": 10000,
+        "group_key": "",
+        "group_role": ""
+      }
+    ]
+  },
+  "serious": [],
+  "pages": {
+    "rates": true,
+    "adjustments": true,
+    "settings": true
+  },
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+  ],
+  "failedResponses": [
+    "403 http://qa.etqan.localhost/api/v1/identity/me/",
+    "403 http://qa.etqan.localhost/api/v1/identity/me/"
+  ]
+}

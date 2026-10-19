@@ -1,0 +1,42 @@
+[201] POST access/roles/ :: {"id":32,"name_ar":"QA6 كتالوج","name_en":"QA6 Catalogue+Subs","permissions":["course.create","course.delete","course.replicate","course.update","course.view","course.view_any","package.create","packa
+[200] PATCH access/staff/3/ :: {"id":3,"full_name":"QA Staff Codes","email":"qa-staff-codes@qa.etqan.test","is_active":true,"roles":[{"id":3,"name_ar":"عرض الطلاب","name_en":"QA Student View"},{"id":32,"name_ar":"QA6 كتالوج","name_en":"QA6 Catalogue+Subs"}],"invited":false,"created_at":"2026-10-17T20:07:10.201341Z"}
+login codes 200 {"id":3,"email":"qa-staff-codes@qa.etqan.test","full_name":"QA Staff Codes","phone":"","preferred_language":"ar","effect
+[201] POST catalogue/packages/ :: {"id":10,"name_ar":"غ","name_en":"QA6 Inactive","description_ar":"","description_en":"","sessions_per_week":1,"session_minutes":30,"duration_value":1,"duration_unit":"month","freeze_days_allowed":0,"p
+--- adm
+GETcourses=200 GETpkgs=200 ids=[1, 2, 3, 4, 10] POST=201 PATCH=200 DUP=201 PUTcp=400 price=200 DEL=204 | {"price_minor":150000,"currency":"EGP","source":"package"}
+   pkg count/maxupd before=5/2026-10-19 04:41:38.20063+00 after=5/2026-10-19 04:41:38.521944+00
+--- codes
+GETcourses=200 GETpkgs=200 ids=[1, 2, 3, 4, 10] POST=201 PATCH=200 DUP=201 PUTcp=400 price=200 DEL=204 | {"price_minor":150000,"currency":"EGP","source":"package"}
+   pkg count/maxupd before=5/2026-10-19 04:41:38.521944+00 after=5/2026-10-19 04:41:39.156205+00
+--- nocode
+GETcourses=403 GETpkgs=403 ids= POST=403 PATCH=403 DUP=403 PUTcp=403 price=403 DEL=403 | {"detail":"You do not have permission to perform this action."}
+   pkg count/maxupd before=5/2026-10-19 04:41:39.156205+00 after=5/2026-10-19 04:41:39.156205+00
+--- sup
+GETcourses=403 GETpkgs=403 ids= POST=403 PATCH=403 DUP=403 PUTcp=403 price=403 DEL=403 | {"detail":"You do not have permission to perform this action."}
+   pkg count/maxupd before=5/2026-10-19 04:41:39.156205+00 after=5/2026-10-19 04:41:39.156205+00
+--- tea
+GETcourses=200 GETpkgs=200 ids=[1, 2, 3, 4] POST=403 PATCH=403 DUP=403 PUTcp=403 price=403 DEL=403 | {"detail":"You do not have permission to perform this action."}
+   pkg count/maxupd before=5/2026-10-19 04:41:39.156205+00 after=5/2026-10-19 04:41:39.156205+00
+--- stu
+GETcourses=403 GETpkgs=403 ids= POST=403 PATCH=403 DUP=403 PUTcp=403 price=403 DEL=403 | {"detail":"You do not have permission to perform this action."}
+   pkg count/maxupd before=5/2026-10-19 04:41:39.156205+00 after=5/2026-10-19 04:41:39.156205+00
+--- par
+GETcourses=403 GETpkgs=403 ids= POST=403 PATCH=403 DUP=403 PUTcp=403 price=403 DEL=403 | {"detail":"You do not have permission to perform this action."}
+   pkg count/maxupd before=5/2026-10-19 04:41:39.156205+00 after=5/2026-10-19 04:41:39.156205+00
+--- anon
+GETcourses=403 GETpkgs=403 ids= POST=403 PATCH=403 DUP=403 PUTcp=403 price=403 DEL=403 | {"detail":"Authentication credentials were not provided."}
+   pkg count/maxupd before=5/2026-10-19 04:41:39.156205+00 after=5/2026-10-19 04:41:39.156205+00
+1|F03 Pack|t
+2|Monthly QA|t
+3|QA6 Pkg 2x1m|t
+4|QA6 Pkg 3x10d|t
+10|QA6 Inactive|f
+[400] PUT catalogue/packages/10/country-prices/ :: {"rows":["Send the list of country prices."]}
+[200] PUT catalogue/packages/10/country-prices/ :: []
+[201] POST access/roles/ :: {"id":33,"name_ar":"QA6 باقة","name_en":"QA6 PkgViewOnly","permissions":["package.view","package.view_any"],"is_active":true,"members":0,"created_at":"2026-10-19T04:41:50.758398Z"}
+[200] PATCH access/staff/2/ :: {"id":2,"full_name":"QA Staff NoCode","email":"qa-staff-nocode@qa.etqan.test","is_active":true,"roles":[{"id":33,"name_ar":"QA6 باقة","name_en":"QA6 PkgViewOnly"}],"invited":false,"created_at":"2026-1
+login nocode 200 {"id":2,"email":"qa-staff-nocode@qa.etqan.test","full_name":"QA Staff NoCode","phone":"","preferred_language":"ar","effe
+[403] GET catalogue/packages/3/price/?student=216 :: {"detail":"A student's price needs the students list."}
+[200] GET catalogue/packages/3/price/ :: {"price_minor":150000,"currency":"EGP","source":"package"}
+[200] PATCH access/staff/2/ :: {"id":2,"full_name":"QA Staff NoCode","email":"qa-staff-nocode@qa.etqan.test","is_active":true,"roles":[],"invited":false,"created_at":"2026-10-17T20:07:10.110318Z"}
+login nocode 200 {"id":2,"email":"qa-staff-nocode@qa.etqan.test","full_name":"QA Staff NoCode","phone":"","preferred_language":"ar","effe

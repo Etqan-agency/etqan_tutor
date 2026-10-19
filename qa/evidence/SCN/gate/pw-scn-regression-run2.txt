@@ -1,0 +1,7 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/scn-tc007-teacher-attendance.spec.ts:29:1 › SCN-TC-007 teacher marks U1 present in Teaching > Sessions; session completes and the package is consumed (3.7s)
+  ✓  2 [chromium] › e2e/qa/scn-tc012-parent-portal.spec.ts:32:1 › SCN-TC-012 parent sees the children's sessions and attendance, the invoice with the wallet payment; FAM-B is not found (13.9s)
+
+  2 passed (18.3s)

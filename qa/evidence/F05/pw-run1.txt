@@ -1,0 +1,70 @@
+      137 | 	const options = (await payer.locator("option").allTextContents()).filter((o) => o.trim());
+      138 | 	save("tc029-payers.json", { api: payers, ui: options });
+    > 139 | 	for (const p of payers) expect(options.join("|")).toContain(p.full_name);
+          | 	                                                  ^
+      140 | 	await payer.selectOption({ label: `QA5 UI Parent ${stamp}` });
+      141 | 	await dialog.getByRole("button", { name: "Save family" }).click();
+      142 | 	await expect(page.getByText("Family saved.").first()).toBeVisible();
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f05-people.spec.ts:139:52
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f05-people-TC-029-famil-c2d85--needs-choosing-flag-retire-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Error Context: test-results/qa-f05-people-TC-029-famil-c2d85--needs-choosing-flag-retire-chromium/error-context.md
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+    Test timeout of 30000ms exceeded.
+    Error: locator.selectOption: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog').getByLabel(/^payer/i)
+        - locator resolved to <select name="payer_id" aria-required="true" id="new-family-payer" class="flex h-11 w-full cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 text-start">…</select>
+      - attempting select option action
+        2 × waiting for element to be visible and enabled
+          - did not find some options
+        - retrying select option action
+        - waiting 20ms
+        2 × waiting for element to be visible and enabled
+          - did not find some options
+        - retrying select option action
+          - waiting 100ms
+        52 × waiting for element to be visible and enabled
+           - did not find some options
+         - retrying select option action
+           - waiting 500ms
+      138 | 	save("tc029-payers.json", { api: payers, ui: options });
+      139 | 	for (const p of payers) expect(options.join("|")).toContain(p.full_name);
+    > 140 | 	await payer.selectOption({ label: `QA5 UI Parent ${stamp}` });
+          | 	            ^
+      141 | 	await dialog.getByRole("button", { name: "Save family" }).click();
+      142 | 	await expect(page.getByText("Family saved.").first()).toBeVisible();
+      143 |
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f05-people.spec.ts:140:14
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f05-people-TC-029-famil-c2d85--needs-choosing-flag-retire-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Error Context: test-results/qa-f05-people-TC-029-famil-c2d85--needs-choosing-flag-retire-chromium-retry1/error-context.md
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f05-people-TC-029-famil-c2d85--needs-choosing-flag-retire-chromium-retry1/trace.zip
+    Usage:
+        pnpm exec playwright show-trace test-results/qa-f05-people-TC-029-famil-c2d85--needs-choosing-flag-retire-chromium-retry1/trace.zip
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+  2) [chromium] › e2e/qa/f05-people.spec.ts:53:1 › TC-028 add a student, page through the list, bulk status, deactivate and activate 
+    Error: expect(received).toBe(expected) // Object.is equality
+    Expected: true
+    Received: false
+      102 | 	await page.getByRole("button", { name: "Activate", exact: true }).click();
+      103 | 	await expect(page.getByText("Activated.").first()).toBeVisible();
+    > 104 | 	expect((await api(page, `/people/students/${sid}/`)).json.user.is_active).toBe(true);
+          | 	                                                                          ^
+      105 |
+      106 | 	await page.goto(`${QA}/app/people/students`);
+      107 | 	await expect(page.getByRole("row").nth(1)).toBeVisible();
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f05-people.spec.ts:104:76
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f05-people-TC-028-add-a-cd413-tus-deactivate-and-activate-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Error Context: test-results/qa-f05-people-TC-028-add-a-cd413-tus-deactivate-and-activate-chromium/error-context.md
+  1 failed
+    [chromium] › e2e/qa/f05-people.spec.ts:115:1 › TC-029 family with a paying parent: payer options, save, needs-choosing flag, retire 
+  1 flaky
+    [chromium] › e2e/qa/f05-people.spec.ts:53:1 › TC-028 add a student, page through the list, bulk status, deactivate and activate 
+  1 passed (59.4s)
+error: Recipe `e2e` failed with exit code 1

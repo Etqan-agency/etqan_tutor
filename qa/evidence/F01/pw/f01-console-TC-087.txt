@@ -1,0 +1,62 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › e2e/qa/f01-console.spec.ts:255:1 › TC-087/092 check DNS on pending domains; make primary refused (2.3s)
+  ✘  2 [chromium] › e2e/qa/f01-console.spec.ts:255:1 › TC-087/092 check DNS on pending domains; make primary refused (retry #1) (1.7s)
+
+
+  1) [chromium] › e2e/qa/f01-console.spec.ts:255:1 › TC-087/092 check DNS on pending domains; make primary refused 
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected substring: "qa-academy.test"
+    Received string:    "Localtest.me: resolves to 127.0.0.1, ::1, expected sites.etqan.localhost. | Qa-academy.test: resolves to nothing, expected sites.etqan.localhost."
+
+      261 | 	save("tc087-092.json", { ids: [a, b], dns, primary });
+      262 | 	await shot(page, "tc087-092-messages");
+    > 263 | 	expect(dns).toContain("qa-academy.test");
+          | 	            ^
+      264 | 	expect(dns).toContain("sites.etqan.localhost");
+      265 | 	expect(primary).toContain("Only an active domain can be primary.");
+      266 | });
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:263:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-087-092--ea34e-omains-make-primary-refused-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-console-TC-087-092--ea34e-omains-make-primary-refused-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected substring: "qa-academy.test"
+    Received string:    "Localtest.me: resolves to 127.0.0.1, ::1, expected sites.etqan.localhost. | Qa-academy.test: resolves to nothing, expected sites.etqan.localhost."
+
+      261 | 	save("tc087-092.json", { ids: [a, b], dns, primary });
+      262 | 	await shot(page, "tc087-092-messages");
+    > 263 | 	expect(dns).toContain("qa-academy.test");
+          | 	            ^
+      264 | 	expect(dns).toContain("sites.etqan.localhost");
+      265 | 	expect(primary).toContain("Only an active domain can be primary.");
+      266 | });
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:263:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-087-092--ea34e-omains-make-primary-refused-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-console-TC-087-092--ea34e-omains-make-primary-refused-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-087-092--ea34e-omains-make-primary-refused-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f01-console-TC-087-092--ea34e-omains-make-primary-refused-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/qa/f01-console.spec.ts:255:1 › TC-087/092 check DNS on pending domains; make primary refused 
+error: Recipe `e2e` failed with exit code 1

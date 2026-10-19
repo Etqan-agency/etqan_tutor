@@ -1,0 +1,25 @@
+[200] PUT catalogue/packages/3/country-prices/ :: [{"country":"SA","price_minor":5000,"currency":"SAR"}]
+[200] GET catalogue/packages/3/price/?student=216 :: {"price_minor":5000,"currency":"SAR","source":"country"}
+[200] GET catalogue/packages/3/price/?student=212 :: {"price_minor":150000,"currency":"EGP","source":"package"}
+[201] POST subscriptions/ :: {"id":16,"status":"active","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m"},"starts_on":"2026-10-19","term_ends_on":"2026-11-18","ends_on":"2026-11-18","grace_ends_on":"2026-11-25","in_grace":false,"sessions_total":8,"sessions_used":0,"carried_over_sessions":0,"sessions_remaining":8,"ex
+[201] POST subscriptions/ :: {"id":17,"status":"active","schedule_status":"active","student":{"id":212,"full_name":"QA6 Student 1","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m"},"starts_on":
+[400] POST subscriptions/ :: {"price_minor":["The price for this student is now in EGP. Check the price and try again."],"code":"catalogue.price_currency_changed"}
+   count unchanged? 17 -> 17
+[201] POST subscriptions/ :: {"id":18,"status":"active","schedule_status":"active","student":{"id":213,"full_name":"QA6 Student 2","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m"},"starts_on":
+qa: country_pricing=off
+[200] GET catalogue/packages/3/price/?student=216 :: {"price_minor":150000,"currency":"EGP","source":"package"}
+[201] POST subscriptions/ :: {"id":19,"status":"active","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m"},"starts_on"
+qa: country_pricing=on
+16|123|5000|SAR|8|45|2026-10-19|2026-11-18|active
+17|119|150000|EGP|8|45|2026-10-19|2026-11-18|active
+18|120|120000|EGP|8|45|2026-10-19|2026-11-18|active
+19|123|150000|EGP|8|45|2026-10-19|2026-11-18|active
+subscription_id|bigint|||
+currency|character varying(3)||not null|
+ERROR:  column i.total_minor does not exist
+LINE 1: select i.subscription_id,i.currency,i.status,i.total_minor,(...
+                                                     ^
+96|16|SAR|unpaid|5000|bigint
+97|17|EGP|unpaid|150000|bigint
+98|18|EGP|unpaid|120000|bigint
+99|19|EGP|unpaid|150000|bigint

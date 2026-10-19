@@ -1,0 +1,27 @@
+
+TC-024 '  qa-tmp-x  ' ACCEPTED -> 'qa-tmp-x'
+TC-036 'z' ACCEPTED -> 'z'
+TC-036 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz' ACCEPTED -> 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz'
+TC-036 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz' REFUSED: Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen.
+TC-036 'z-' REFUSED: Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen.
+TC-037 'qа' REFUSED: Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen.
+TC-037 'ｑａ' REFUSED: Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen.
+TC-037 'qa\n' REFUSED: This subdomain is already taken.
+TC-037 'zz\n' ACCEPTED -> 'zz'
+TC-037 'qa\t' REFUSED: This subdomain is already taken.
+TC-037 'qa%00' REFUSED: Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen.
+TC-037 'qa\x00' REFUSED: Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen.
+TC-038 'a--b' ACCEPTED -> 'a--b'
+TC-038 '123' ACCEPTED -> '123'
+TC-039 'WWW' REFUSED: Use 1-32 lowercase letters, digits or hyphens; it cannot start or end with a hyphen.
+TC-021 'qa' REFUSED: This subdomain is already taken.
+TC-021 'demo' REFUSED: This subdomain is already taken.
+TC-040 'status' ACCEPTED -> 'status'
+TC-040 'support' ACCEPTED -> 'support'
+TC-040 'docs' ACCEPTED -> 'docs'
+TC-040 'billing' ACCEPTED -> 'billing'
+TC-040 'staging' ACCEPTED -> 'staging'
+TC-040 'e2e' ACCEPTED -> 'e2e'
+TC-040 'grafana' ACCEPTED -> 'grafana'
+TC-040 'signoz' ACCEPTED -> 'signoz'
+TC-018 qa admin check_password(QA-Admin-2026!): True

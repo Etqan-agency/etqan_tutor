@@ -1,0 +1,24 @@
+# 2026-10-17T21:26:12Z New defect probe (Agent 2 retest-1), REAL, GET only
+ops-view@ GET /admin/tenants/academy/4/change/ -> 500
+ops-view@ GET /admin/tenants/academy/5/change/ -> 500
+ops-view@ GET /admin/tenants/academy/6/change/ -> 500
+ops-view@ GET /admin/tenants/domain/12/change/ -> 200
+ops@ (superuser) GET /admin/tenants/academy/5/change/ -> 200
+## django log excerpt
+django-1  |   File "/app/etqan/tenants/admin.py", line 125, in __init__
+django-1  | KeyError: 'etqan_defaults_suspended'
+django-1  |   File "/app/etqan/tenants/admin.py", line 125, in __init__
+django-1  | KeyError: 'etqan_defaults_suspended'
+django-1  | [17/Oct/2026 21:25:31] "GET /admin/tenants/academy/6/change/ HTTP/1.1" 500 142843
+django-1  |   File "/app/etqan/tenants/admin.py", line 125, in __init__
+django-1  | KeyError: 'etqan_defaults_suspended'
+django-1  |   File "/app/etqan/tenants/admin.py", line 125, in __init__
+django-1  | KeyError: 'etqan_defaults_suspended'
+django-1  | [17/Oct/2026 21:26:12] "GET /admin/tenants/academy/4/change/ HTTP/1.1" 500 142851
+django-1  |   File "/app/etqan/tenants/admin.py", line 125, in __init__
+django-1  | KeyError: 'etqan_defaults_suspended'
+## code at backend HEAD (unchanged by fix cycle 1)
+108:        suspend = self.fields["etqan_defaults_suspended"]
+113:            field = self.fields[feature_field(feature.code)]
+ etqan/tenants/admin.py | 34 ++++++++++++++++++++++++++++------
+ 1 file changed, 28 insertions(+), 6 deletions(-)

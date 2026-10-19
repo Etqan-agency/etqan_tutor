@@ -1,0 +1,14 @@
+# after fix: get_actions() per registered admin, live stack
+156 objects imported automatically (use -v 2 for details).
+
+== ops-view-all@qa.etqan.test perms: 32
+== ops-view@qa.etqan.test perms: 2
+156 objects imported automatically (use -v 2 for details).
+
+superuser ops@ account.emailaddress ['make_verified'] EtqanEmailAddressAdmin
+superuser ops@ django_celery_beat.periodictask ['disable_tasks', 'enable_tasks', 'run_tasks', 'toggle_tasks'] EtqanPeriodicTaskAdmin
+superuser ops@ etqan_billing.etqaninvoice ['email_again', 'issue_invoices', 'mark_paid', 'void_invoices'] EtqanInvoiceAdmin
+superuser ops@ identity.teacherprofile ['send_password_set_email'] TeacherProfileAdmin
+superuser ops@ integrations.platformaccount ['test_accounts'] PlatformAccountAdmin
+superuser ops@ tenants.academy ['copy_features', 'reactivate_academies', 'suspend_academies'] AcademyAdmin
+superuser ops@ tenants.domain ['check_dns', 'disable_action', 'make_primary_action'] DomainAdmin

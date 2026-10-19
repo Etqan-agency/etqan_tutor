@@ -1,0 +1,51 @@
+== TC-012 2026-10-19T03:46:07.765826
+row counts before/after ['74', '51', '25', '8', '2', '0'] ['74', '51', '25', '8', '2', '0']
+OK  TC012 no rows changed by the matrix
+| endpoint | admin | staffno | bill | narrow | sup | teacher | student | parent | anon |
+|---|---|---|---|---|---|---|---|---|---|
+| GET inv list | 200 | 403 | 200 | 200 | 403 | 403 | 200 | 200 | 403 |
+| GET inv detail | 200 | 403 | 200 | 200 | 403 | 403 | 200 | 200 | 403 |
+| POST inv create | 400 | 403 | 400 | 403 | 403 | 403 | 403 | 403 | 403 |
+| PATCH inv patch | 400 | 403 | 400 | 403 | 403 | 403 | 403 | 403 | 403 |
+| POST inv void | 409 | 403 | 409 | 403 | 403 | 403 | 403 | 403 | 403 |
+| GET inv payments GET | 200 | 403 | 200 | 200 | 403 | 403 | 200 | 200 | 403 |
+| POST inv payments POST | 400 | 403 | 400 | 403 | 403 | 403 | 403 | 403 | 403 |
+| GET payments list | 200 | 403 | 200 | 200 | 403 | 403 | 403 | 403 | 403 |
+| PATCH payment patch | 409 | 403 | 409 | 403 | 403 | 403 | 403 | 403 | 403 |
+| DELETE payment delete | 409 | 403 | 409 | 403 | 403 | 403 | 403 | 403 | 403 |
+| POST payment refund | 409 | 403 | 409 | 403 | 403 | 403 | 403 | 403 | 403 |
+| GET summary | 200 | 403 | 200 | 403 | 403 | 403 | 403 | 403 | 403 |
+| GET payers | 200 | 403 | 200 | 403 | 403 | 403 | 403 | 403 | 403 |
+| GET bill settings GET | 200 | 403 | 200 | 403 | 403 | 403 | 403 | 403 | 403 |
+| PATCH bill settings PATCH | 400 | 403 | 400 | 403 | 403 | 403 | 403 | 403 | 403 |
+| GET local-methods GET | 200 | 403 | 200 | 403 | 403 | 403 | 403 | 403 | 403 |
+| POST local-methods POST | 400 | 403 | 400 | 403 | 403 | 403 | 403 | 403 | 403 |
+| GET gw settings GET | 200 | 403 | 200 | 403 | 403 | 403 | 403 | 403 | 403 |
+| PATCH gw settings PATCH | 400 | 403 | 400 | 403 | 403 | 403 | 403 | 403 | 403 |
+| GET checkouts list | 200 | 403 | 200 | 403 | 403 | 403 | 403 | 403 | 403 |
+| POST checkout resolve | 409 | 403 | 409 | 403 | 403 | 403 | 403 | 403 | 403 |
+| GET links list | 200 | 403 | 200 | 403 | 403 | 403 | 403 | 403 | 403 |
+| POST links POST | 400 | 403 | 400 | 403 | 403 | 403 | 403 | 403 | 403 |
+| POST wallet topup | 400 | 403 | 400 | 403 | 403 | 403 | 403 | 403 | 403 |
+| POST wallet adjust | 400 | 403 | 400 | 403 | 403 | 403 | 403 | 403 | 403 |
+| POST wallet move | 409 | 403 | 409 | 403 | 403 | 403 | 403 | 403 | 403 |
+| GET wallet student GET | 200 | 403 | 200 | 403 | 403 | 403 | 200 | 200 | 403 |
+| GET wallet mine | 403 | 403 | 403 | 403 | 403 | 403 | 200 | 200 | 403 |
+| POST wallet pay own | 400! | 403 | 400! | 403 | 403 | 403 | 400 | 400 | 403 |
+| POST codes check | 403 | 403 | 403 | 403 | 403 | 403 | 400 | 400 | 403 |
+| POST codes redeem | 403 | 403 | 403 | 403 | 403 | 403 | 400 | 400 | 403 |
+| GET voucher batches GET | 200 | 403 | 200 | 403 | 403 | 403 | 403 | 403 | 403 |
+| POST voucher batches POST | 400 | 403 | 400 | 403 | 403 | 403 | 403 | 403 | 403 |
+| POST voucher void | 409 | 403 | 409 | 403 | 403 | 403 | 403 | 403 | 403 |
+| POST office redeem | 400 | 403 | 400 | 403 | 403 | 403 | 403 | 403 | 403 |
+deviations (! = outside expectation):
+   ('wallet pay own', 'admin', 400, '', 'D')
+   ('wallet pay own', 'bill', 400, '', 'D')
+== TC-012 second-code checks 2026-10-19T03:46:45.513237
+office redeem w/o payment.create 403 {"detail": "Redeeming this code also needs payment.create, invoice.view."}
+OK  TC012 office redeem without payment.create/invoice.view 403 naming code
+remove w/o payment.update 403 {"detail": "Removing a discount also needs payment.update."}
+OK  TC012 remove-discount without payment.update 403
+move w/o payment.update 403 {"detail": "Moving a payment also needs payment.update."}
+OK  TC012 wallet move without payment.update 403
+OK  TC012 nothing changed

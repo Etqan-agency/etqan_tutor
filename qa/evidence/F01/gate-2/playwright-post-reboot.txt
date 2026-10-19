@@ -1,0 +1,74 @@
+$ 2026-10-18T22:37:34Z [post-reboot smoke] playwright test e2e/qa/f01-login-csrf.spec.ts e2e/tenant-login.spec.ts e2e/b9-sign-in.spec.ts e2e/qa/f01-retest2.spec.ts --grep-invert R2-TC-152 --workers=1 --retries=0
+Running 10 tests using 1 worker
+Unknown command: "'set_features'". Did you mean set_features?
+Type 'manage.py help' for usage.
+  ✘   1 [chromium] › e2e/b9-sign-in.spec.ts:143:2 › B9b sign-in › a student by phone › a student signs in by phone (0ms)
+  -   2 [chromium] › e2e/b9-sign-in.spec.ts:177:2 › B9b sign-in › a student by phone › an admin signs in as a student and returns
+Unknown command: "'set_features'". Did you mean set_features?
+Type 'manage.py help' for usage.
+  ✘   3 [chromium] › e2e/b9-sign-in.spec.ts:57:2 › B9b sign-in › a teacher turns on two-factor and signs in with a code (0ms)
+  -   4 [chromium] › e2e/b9-sign-in.spec.ts:197:2 › B9b sign-in › an emailed sign-in link works once
+  ✓   5 [chromium] › e2e/qa/f01-login-csrf.spec.ts:10:1 › QA-006 a fresh browser signs in through the dashboard (1.9s)
+  ✓   6 [chromium] › e2e/qa/f01-login-csrf.spec.ts:38:1 › QA-006 a form on another page cannot sign the browser in (955ms)
+  ✓   7 [chromium] › e2e/qa/f01-retest2.spec.ts:26:1 › R2-TC-151 view-only staff are offered no action on any console list (1.1s)
+  ✓   8 [chromium] › e2e/tenant-login.spec.ts:12:2 › academies › an academy admin signs in on their own academy (1.5s)
+  ✓   9 [chromium] › e2e/tenant-login.spec.ts:17:2 › academies › an admin of one academy cannot sign in on another (1.4s)
+  ✓  10 [chromium] › e2e/tenant-login.spec.ts:23:2 › academies › each academy keeps its own session (2.3s)
+  1) [chromium] › e2e/b9-sign-in.spec.ts:57:2 › B9b sign-in › a teacher turns on two-factor and signs in with a code 
+    Error: Command failed: /Users/khaledsakr/.etqan-qa-tools/manage-wrap.sh 'set_features' 'demo' '--on' 'two_factor' '--on' 'phone_login' '--on' 'quick_login'
+    Unknown command: "'set_features'". Did you mean set_features?
+    Type 'manage.py help' for usage.
+       at manage.ts:33
+      31 | 	if (REMOTE) {
+      32 | 		const [command, ...words] = REMOTE;
+    > 33 | 		return execFileSync(command, [...words, ...args.map(shellQuote)], {
+         | 		       ^
+      34 | 			encoding: "utf8",
+      35 | 			timeout: TIMEOUT_MS,
+      36 | 		});
+        at manage (/Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/manage.ts:33:10)
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/b9-sign-in.spec.ts:54:3
+    Error Context: ../../../../../../private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/g2-post-reboot/b9-sign-in-B9b-sign-in-a-t-f99d5-or-and-signs-in-with-a-code-chromium/error-context.md
+  2) [chromium] › e2e/b9-sign-in.spec.ts:143:2 › B9b sign-in › a student by phone › a student signs in by phone 
+    Error: Command failed: /Users/khaledsakr/.etqan-qa-tools/manage-wrap.sh 'set_features' 'demo' '--on' 'two_factor' '--on' 'phone_login' '--on' 'quick_login'
+    Unknown command: "'set_features'". Did you mean set_features?
+    Type 'manage.py help' for usage.
+       at manage.ts:33
+      31 | 	if (REMOTE) {
+      32 | 		const [command, ...words] = REMOTE;
+    > 33 | 		return execFileSync(command, [...words, ...args.map(shellQuote)], {
+         | 		       ^
+      34 | 			encoding: "utf8",
+      35 | 			timeout: TIMEOUT_MS,
+      36 | 		});
+        at manage (/Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/manage.ts:33:10)
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/b9-sign-in.spec.ts:54:3
+    Error Context: ../../../../../../private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/g2-post-reboot/b9-sign-in-B9b-sign-in-a-s-0efc5-a-student-signs-in-by-phone-chromium/error-context.md
+  2 failed
+    [chromium] › e2e/b9-sign-in.spec.ts:57:2 › B9b sign-in › a teacher turns on two-factor and signs in with a code 
+    [chromium] › e2e/b9-sign-in.spec.ts:143:2 › B9b sign-in › a student by phone › a student signs in by phone 
+  2 did not run
+  6 passed (16.4s)
+exit=0 2026-10-18T22:37:51Z
+
+# --- rerun after fixing the QA harness wrapper qa/tools/manage-wrap.sh (recreated after the reboot without shell-unquoting; manage.ts shell-quotes args, ssh semantics). Product code unchanged. ---
+$ 2026-10-18T22:38:18Z playwright test e2e/qa/f01-login-csrf.spec.ts e2e/tenant-login.spec.ts e2e/b9-sign-in.spec.ts e2e/qa/f01-retest2.spec.ts --grep-invert R2-TC-152 --workers=1 --retries=0
+Running 10 tests using 1 worker
+  ✓   1 [chromium] › e2e/b9-sign-in.spec.ts:143:2 › B9b sign-in › a student by phone › a student signs in by phone (6.9s)
+  ✓   2 [chromium] › e2e/b9-sign-in.spec.ts:177:2 › B9b sign-in › a student by phone › an admin signs in as a student and returns (2.8s)
+  ✓   3 [chromium] › e2e/b9-sign-in.spec.ts:57:2 › B9b sign-in › a teacher turns on two-factor and signs in with a code (27.7s)
+  ✓   4 [chromium] › e2e/b9-sign-in.spec.ts:197:2 › B9b sign-in › an emailed sign-in link works once (7.9s)
+  ✓   5 [chromium] › e2e/qa/f01-login-csrf.spec.ts:10:1 › QA-006 a fresh browser signs in through the dashboard (1.5s)
+  ✓   6 [chromium] › e2e/qa/f01-login-csrf.spec.ts:38:1 › QA-006 a form on another page cannot sign the browser in (262ms)
+  ✓   7 [chromium] › e2e/qa/f01-retest2.spec.ts:26:1 › R2-TC-151 view-only staff are offered no action on any console list (977ms)
+  ✓   8 [chromium] › e2e/tenant-login.spec.ts:12:2 › academies › an academy admin signs in on their own academy (1.5s)
+  ✓   9 [chromium] › e2e/tenant-login.spec.ts:17:2 › academies › an admin of one academy cannot sign in on another (1.5s)
+  ✓  10 [chromium] › e2e/tenant-login.spec.ts:23:2 › academies › each academy keeps its own session (2.5s)
+  10 passed (59.6s)
+exit=0 2026-10-18T22:39:18Z
+
+$ 2026-10-18T22:39:28Z playwright test e2e/qa/f01-dashboard.spec.ts --grep TC-143 --workers=1 --retries=0
+Running 1 test using 1 worker
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:83:1 › TC-143 the new academy's public site renders with defaults (944ms)
+  1 passed (1.5s)
+exit=0 2026-10-18T22:39:30Z

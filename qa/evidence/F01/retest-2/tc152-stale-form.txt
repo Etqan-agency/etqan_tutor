@@ -1,0 +1,23 @@
+== 2026-10-18T21:05:17Z TC-152 retest (stale change page), ops@
+302 http://etqan.localhost/admin/
+FIXTURE 12 ETQ-2025-03-0004 may_suspend True
+-- 1. reactivate qa-tmp-1 (action)
+302 http://etqan.localhost/admin/tenants/academy/
+active|f|QA Tmp One|<empty>|{"families": true, "invoices": true, "internal_chat": false, "online_payments": true}
+-- tab A: GET change page and keep it
+GET 200
+   hidden initials in tab A: 95 e.g. <input type="hidden" name="initial-status" value="active" id="initial-id_status"> <input type="hidden" name="initial-etqan_defaults_suspended" value="False" aria-describedby="id_etqan_defaults_suspended_helptext" id="initial-id_etqan_defaults_suspended"> <input type="hidden" name="initial-feature_families" value="True" id="initial-id_feature_families"> 
+-- 2a. tab B: suspend (action)
+302 http://etqan.localhost/admin/tenants/academy/
+-- 2b. set_features --off families
+qa-tmp-1: families=off
+-- 2c. tab B: fresh page ticks defaults suspension
+POST 302 /admin/tenants/academy/
+-- state before stale save:
+suspended|t|QA Tmp One|<empty>|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+-- 3. tab A (stale) changes only Plan notes
+POST 302 /admin/tenants/academy/
+-- state after (expect suspended|t|...|families false):
+suspended|t|QA Tmp One|QA-R2-stale-edit|{"families": false, "invoices": true, "internal_chat": false, "online_payments": true}
+-- admin log:
+50|[{"changed": {"fields": ["Plan notes"]}}]

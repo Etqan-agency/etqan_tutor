@@ -1,0 +1,15 @@
+{"timestamp": "2026-10-18T23:22:29.104318+00:00", "level": "WARNING", "logger": "django.request", "message": "Forbidden: /api/v1/identity/me/", "module": "log", "function": "log_message", "line": 249}
+------------------------------ Captured log call -------------------------------
+WARNING  django.request:log.py:249 Forbidden: /api/v1/identity/me/
+=============================== warnings summary ===============================
+etqan/identity/tests/test_impersonation.py::test_a_refused_session_does_not_come_back
+etqan/identity/tests/test_features.py::TestParentsOff::test_the_old_session_cookie_stays_signed_out
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED etqan/identity/tests/test_impersonation.py::test_a_refused_session_does_not_come_back
+FAILED etqan/identity/tests/test_features.py::TestParentsOff::test_the_old_session_cookie_stays_signed_out
+2 failed, 44 deselected, 2 warnings in 1.31s
+

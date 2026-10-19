@@ -1,0 +1,53 @@
+## TC-096 /internal/tls-allowed through Caddy :80
+etqan.localhost /internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+etqan.localhost /INTERNAL/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+etqan.localhost //internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+etqan.localhost /internal/../internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+etqan.localhost /%69nternal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+etqan.localhost /x/../internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+etqan.localhost /internal%2Ftls-allowed?domain=qa.etqan.localhost -> 404 body=
+qa.etqan.localhost /internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+qa.etqan.localhost /INTERNAL/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+qa.etqan.localhost //internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+qa.etqan.localhost /internal/../internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+qa.etqan.localhost /%69nternal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+qa.etqan.localhost /x/../internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+qa.etqan.localhost /internal%2Ftls-allowed?domain=qa.etqan.localhost -> 404 body=
+qa-academy.test /internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+qa-academy.test /INTERNAL/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+qa-academy.test //internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+qa-academy.test /internal/../internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+qa-academy.test /%69nternal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+qa-academy.test /x/../internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+qa-academy.test /internal%2Ftls-allowed?domain=qa.etqan.localhost -> 404 body=
+localhost /internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+localhost /INTERNAL/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+localhost //internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+localhost /internal/../internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+localhost /%69nternal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+localhost /x/../internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+localhost /internal%2Ftls-allowed?domain=qa.etqan.localhost -> 404 body=
+127.0.0.1 /internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+127.0.0.1 /INTERNAL/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+127.0.0.1 //internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+127.0.0.1 /internal/../internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+127.0.0.1 /%69nternal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+127.0.0.1 /x/../internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+127.0.0.1 /internal%2Ftls-allowed?domain=qa.etqan.localhost -> 404 body=
+nope.etqan.localhost /internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+nope.etqan.localhost /INTERNAL/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+nope.etqan.localhost //internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+nope.etqan.localhost /internal/../internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+nope.etqan.localhost /%69nternal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+nope.etqan.localhost /x/../internal/tls-allowed?domain=qa.etqan.localhost -> 404 body=
+nope.etqan.localhost /internal%2Ftls-allowed?domain=qa.etqan.localhost -> 404 body=
+## TC-097 direct to Django :8000 (dev-only port)
+domain='qa.etqan.localhost' -> 200 ok
+domain='QA.ETQAN.LOCALHOST' -> 200 ok
+domain='qa-academy.test' -> 404 
+domain='localtest.me' -> 404 
+domain='nope.example' -> 404 
+domain='' -> 404 
+domain='qa-tmp-1.etqan.localhost' -> 200 ok
+no param -> 404
+(qa-tmp-1 is SUSPENDED now; qa-academy.test/localtest.me pending)

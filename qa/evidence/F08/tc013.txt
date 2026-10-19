@@ -1,0 +1,24 @@
+[201] POST sessions/extra/ :: {"session":{"id":5,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T10:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendanc
+Q1=5
+qa: 230/2026-10-19 16:40:38.810539+00 act=59 rep=5; qaother: 2/2026-10-19 16:41:25.26195+00 act=0 rep=0; 
+-- qaother admin on its own host against qa ids (236, activity 1)
+ sessions/236/=404 sessions/236/attendance/=404 sessions/236/cancel/=404 sessions/236/restore/=404 sessions/236/postpone/=404 sessions/236/report/=404 sessions/236/report/=404 sessions/236/activity/=404 sessions/236/activity/1/revert/=404 sessions/236/host-link/=404 supervision/236/open/=404 sessions/236/times/=404 sessions/236/disposal/=404 sessions/236/pays-teacher/=404 sessions/236/=404 sessions/236/=404
+[200] POST sessions/bulk/ :: {"done":[5],"skipped":[{"id":236,"code":"not_found"}]}
+[404] POST sessions/archive/ :: {"detail":"This feature is not enabled for this academy."}
+[404] POST sessions/unarchive/ :: {"detail":"This feature is not enabled for this academy."}
+[404] POST sessions/compensation/ :: {"detail":"This feature is not enabled for this academy."}
+qaother list count=2 ids=[1, 5]
+﻿ID,Date,Starts at (UTC),Minutes,Student,Teacher,Course,Kind,Status,Student attendance,Teacher attendance,Report,Cancel reason
+1,2026-09-05,2026-09-05 10:00:00+00:00,60,QO Student,QO Teacher F10,F10 QO Course,extra,completed,present,present,no,
+5,2026-10-18,2026-10-18 10:00:00+00:00,30,QO Student,QO Teacher F10,F10 QO Course,extra,completed,present,not_set,no,
+-- cookies across hosts
+[403] GET sessions/236/ :: {"detail":"Authentication credentials were not provided."}
+[403] POST sessions/236/attendance/ :: {"detail":"Authentication credentials were not provided."}
+[403] GET sessions/5/ :: {"detail":"Authentication credentials were not provided."}
+[403] POST sessions/5/attendance/ :: {"detail":"Authentication credentials were not provided."}
+-- qa admin on qa host with Q1's id (5) resolves to qa's own row:
+5|2|2|2026-10-20
+qa: 230/2026-10-19 16:40:38.810539+00 act=59 rep=5; qaother: 2/2026-10-19 16:41:27.028482+00 act=0 rep=0; 
+1|completed|present
+5|completed|present
+236|completed|absent|not_set|not_set|regular|f||1|||f|f|t

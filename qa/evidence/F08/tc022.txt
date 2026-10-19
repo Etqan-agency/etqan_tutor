@@ -1,0 +1,16 @@
+300|2026-10-18|2026-10-18 20:30:00+00|2026-10-18
+301|2026-10-19|2026-10-18 21:10:00+00|2026-10-19
+302|2026-10-19|2026-10-19 20:50:00+00|2026-10-19
+303|2026-10-20|2026-10-19 21:10:00+00|2026-10-20
+today/adm=200 [301, 302] cnt=34  today/tea=200 [301, 302] cnt=31  today/stu=200 [301, 302] cnt=18  
+week/adm=200 [301, 302, 303] cnt=77  week/tea=200 [301, 302, 303] cnt=56  week/stu=200 [301, 302, 303] cnt=27  
+upcoming/adm=200 [302, 303] cnt=142  upcoming/tea=200 [302, 303] cnt=84  upcoming/stu=200 [302, 303] cnt=30  
+past/adm=200 [300, 301] cnt=117  past/tea=200 [300, 301] cnt=56  past/stu=200 [300, 301] cnt=97  
+[400] GET sessions/?when=bogus :: {"when":["\"bogus\" is not a valid choice."]}
+combo filter ok=True count=62 db=62
+q=QA student count=131
+q other count=0
+[200] GET schedule/today/ :: {"date":"2026-10-19","rows":[{"slot_id":91,"subscription_id":77,"session_id":222,"date":"2026-10-19","start_time":"05:00","starts_at":"2026-10-19T02:00:00Z","minutes":45,"state":"completed","student":{"id":215,"full_name":"QA6 Student 4","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":4,"name_ar":"عربي","name_en":"QA6 Arabic"},"sessions_total":8,"sessions_used":1,"carried_over_sessions":0,"extra_sessions":0,"progress":0.125},{"slot_id":29,"subscription_id":2
+teacher today: 403 {"detail":"You do not have permission to perform this action."}
+student today: 403
+del 300=204 del 301=204 del 302=204 del 303=204 

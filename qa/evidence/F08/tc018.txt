@@ -1,0 +1,24 @@
+294|zoom|123
+UPDATE 1
+H1..H6=285 288 292 291 293 294
+tea: H1=200{"url":"https://meet.jit.si/Etqan8ae7ea58b947499da13ccdfc86ed021d","ho H2=200{"url":"https://example.test/room","host":false} H3=404 H4=404 H5=404 H6=200{"url":"https://zoom.example.test/j/123","host":false}
+tea2: H1=404 H2=404 H3=404 H4=404 H5=200{"url":"https://example.test/h5","host":false} H6=404
+adm: H1=404 H2=404 H3=404 H4=404 H5=404 H6=404
+stu: H1=404 H2=404 H3=404 H4=404 H5=404 H6=404
+par: H1=404 H2=404 H3=404 H4=404 H5=404 H6=404
+sup: H1=404 H2=404 H3=404 H4=404 H5=404 H6=404
+anon: H1=403 H2=403 H3=403 H4=403 H5=403 H6=403
+Cache-Control: no-store
+[404] GET sessions/999999/host-link/ :: {"detail":"Session with identifier '999999' not found."}
+-- impersonation
+[200] POST people/teachers/7/quick-login/ :: {"id":7,"email":"qa-teacher@qa.etqan.test","full_name":"QA teacher","phone":"","preferred_language":"ar","effective_language":"ar","timezone":"Africa/Cairo","role":"teacher","profiles":["teacher"],"profile":{"gender":"male","date_of_birth":null,"bio":"","default_meeting_url":"","pay_currency":"EGP",
+me as: qa-teacher@qa.etqan.test
+[403] GET sessions/285/host-link/ :: {"detail":"Not while signed in as someone else.","code":"identity.impersonating"}
+[200] POST identity/impersonation/stop/ :: {"id":1,"email":"qa-admin@qa.etqan.test","full_name":"QA Admin","phone":"","preferred_language":"ar","effective_language":"ar","timezone":"Africa/Cairo","role":"admin","profiles":[],"profile":{},"permissions":["academy_settings.create","academy_settings.delete","academy_settings.delete_any","academy
+-- start_url leakage
+adm H6 payload start_url? 0 meeting_url=https://zoom.example.test/j/123 host=True
+stu H6 payload start_url? 0 meeting_url=https://zoom.example.test/j/123 host=True
+tea H6 payload start_url? 0 meeting_url=https://zoom.example.test/j/123 host=True
+list contains start_url: 0
+0
+0

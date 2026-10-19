@@ -1,0 +1,1 @@
+http://qa.etqan.localhost/app/reset-password?uid=MQ&token=REDACTED-QA

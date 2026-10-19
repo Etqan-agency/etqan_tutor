@@ -1,0 +1,18 @@
+==== TC-001 2026-10-19T04:02:26.043998
+detail keys ['id', 'number', 'status', 'teacher', 'year', 'month', 'currency', 'sessions', 'minutes', 'counts', 'gross_minor', 'bonuses_minor', 'deductions_minor', 'net_minor', 'missing_rate', 'reports_sent', 'reports_missing', 'teacher_absences', 'report_deductions_minor', 'issued_at', 'paid_on', 'created_at', 'updated_at', 'paid_to_balance', 'acknowledged_at', 'notes', 'issued_by', 'paid_by', 'lines']
+lines [{"id": 1, "kind": "session", "session_id": 9, "adjustment_id": null, "description": "2026-09-03 — F03 قرآن — QA student", "minutes": 60, "rate_minor": 6000, "amount_minor": 6000, "session_kind": "extra", "session_status": "completed", "student_attendance": "present", "pay_bp": 10000, "group_key": "", "group_role": ""}, {"id": 2, "kind": "session", "session_id": 10, "adjustment_id": null, "description": "2026-09-10 — F03 قرآن — QA student", "minutes": 45, "rate_minor": 6000, "amount_minor": 4500, "session_kind": "extra", "session_status": "completed", "student_attendance": "present", "pay_bp": 10000, "group_key": "", "group_role": ""}, {"id": 3, "kind": "session", "session_id": 11, "adjustment_id": null, "description": "2026-09-17 — F03 قرآن — QA student", "minutes": 30, "rate_minor": 6000, "amount_minor": 3000, "session_kind": "extra", "session_status": "completed", "student_attendance": "present", "pay_bp": 10000, "group_key": "", "group_role": ""}]
+OK  3 session lines 6000/4500/3000 :: [(60, 6000, 6000), (45, 6000, 4500), (30, 6000, 3000)]
+OK  draft gross/net 13500 EGP
+OK  issue 200 issued :: 200 {"status": "issued", "issued_by": {"id": 1, "full_name": "QA Admin"}, "issued_at": "2026-10-19T01:02:26.180007Z", "net_minor": 13500}
+OK  mark-paid 200 paid :: 200 {"status": "paid", "paid_on": "2026-10-19", "paid_by": {"id": 1, "full_name": "QA Admin"}, "notes": "cash"}
+OK  T1 lists it :: 200 ids=[1]
+OK  ack 200 :: 200 {"acknowledged_at": "2026-10-19T01:02:26.469094Z", "status": "paid"}
+DB payslip 1|PAY-000001|paid|2026-10-19|1|1|13500|13500|EGP|t
+DB lines session|9|60|6000|6000
+session|10|45|6000|4500
+session|11|30|6000|3000
+DB locked 9|t
+10|t
+11|t
+DB expense 1|payroll.payslip|1|salaries|13500|EGP|2026-10-19|راتب المعلم – QA teacher – إيصال PAY-000001
+DB counter 1|9 | payslips 9|PAY-000009

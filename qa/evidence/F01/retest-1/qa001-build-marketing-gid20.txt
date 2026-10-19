@@ -1,0 +1,53 @@
+$ 2026-10-17T21:51:59Z docker build --progress=plain --target dev --build-arg UID=501 --build-arg GID=20 --secret id=tokens_token,env=GH_TOKEN -t etqan-qa001-r1/marketing:gid20 marketing  (host id: uid=501(khaledsakr) gid=20(staff) groups=20(staff),12(everyone),61(localaccounts),79(_appserverusr),80(admin),81(_appserveradm),98(_lpadmin),702(com.apple.sharepoint.group.2),33(_appstore),100(_lpoperator),204(_developer),250(_analyticsusers),395(com.apple.access_ftp),398(com.apple.access_screensharing),399(com.apple.access_ssh),400(com.apple.access_remote_ae),701(com.apple.sharepoint.group.1))
+#2 [internal] load metadata for docker.io/library/node:22-alpine
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 115B done
+#3 DONE 0.0s
+
+#4 [dev 1/6] FROM docker.io/library/node:22-alpine@sha256:0a7108bf6c7bf5de370ffb1a3ed6be93d405b43ff159f681a8d18c0e2bc2e402
+#4 resolve docker.io/library/node:22-alpine@sha256:0a7108bf6c7bf5de370ffb1a3ed6be93d405b43ff159f681a8d18c0e2bc2e402 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 143B done
+#5 DONE 0.0s
+
+#6 [dev 2/6] RUN npm install -g pnpm@10.28.0     && apk add --no-cache git
+#6 CACHED
+
+#7 [dev 3/6] WORKDIR /app
+#7 CACHED
+
+#8 [dev 4/6] COPY package.json pnpm-lock.yaml ./
+#8 CACHED
+
+#9 CACHED
+
+#10 [dev 6/6] RUN set -eu;     deluser node 2>/dev/null || true;     group="$(awk -F: -v gid="20" '$3 == gid { print $1; exit }' /etc/group)";     if [ -z "$group" ]; then addgroup -g "20" app; group=app; fi;     adduser -u "501" -G "$group" -D app;     chown -R "501:20" /app
+#10 CACHED
+
+#11 exporting to image
+#11 exporting layers 0.0s done
+#11 exporting manifest sha256:07a01bef1e7f62ed3f98bd81156a5bd3a0f3aa464ded5796abd5b08e1c5d55f5 done
+#11 exporting config sha256:d4c078443098a565a1c7a90cee458d937fa8df16004d19c673cc0fb95388f86a done
+#11 exporting attestation manifest sha256:543f3de03d6d5baa104670405c68f68e18ad13567b4e5fefddc24ec340f99820 0.0s done
+#11 exporting manifest list sha256:0ae61ec6d0a4569b0825bd2a4a67942802c6a1687b8a97f545b63d8353b3abbf done
+#11 naming to docker.io/etqan-qa001-r1/marketing:gid20 done
+#11 unpacking to docker.io/etqan-qa001-r1/marketing:gid20 0.0s done
+#11 DONE 0.1s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/qs96p6kwx8bdvqrwobgf78cj7
+build exit=0
+## id:
+uid=501(app) gid=20(dialout) groups=20(dialout)
+## stat /app:
+501:20 app:dialout /app
+501:20 app:dialout /app/node_modules
+dialout:x:20:root,app
+app can write /app
+## pnpm as app:
+app
+10.28.0
+12

@@ -1,0 +1,30 @@
+{
+  "status": 302,
+  "setCookie": [
+    "csrftoken=REDACTED-QA; expires=Sat, 16 Oct 2027 19:50:12 GMT; Max-Age=31449600; Path=/; SameSite=Lax",
+    "sessionid=REDACTED-QA; expires=Sat, 31 Oct 2026 19:50:12 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax"
+  ],
+  "cookies": [
+    {
+      "name": "csrftoken",
+      "value": "tLgLWJ9pg7NWIQbzA1mnQFGCI6ItXJu5",
+      "domain": "etqan.localhost",
+      "path": "/",
+      "expires": 1823716213.380205,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "sessionid",
+      "value": "cr37qg8k1y7wivgdj007vzoby65fqf9t",
+      "domain": "etqan.localhost",
+      "path": "/",
+      "expires": 1793476212.357493,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "errors": []
+}

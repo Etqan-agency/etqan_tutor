@@ -1,0 +1,21 @@
+[201] {"id":54,"status":"active","schedule_status":"active","student":{"id":215,"full_name":"QA6 Student 4","timezone":"Africa
+[201] {"id":55,"status":"active","schedule_status":"active","student":{"id":215,"full_name":"QA6 Student 4","timezone":"Africa
+E2 in_grace=True grace_ends=2026-10-21
+E1 status(api)=active grace_ends=2026-10-15
+before:
+27|expired|t|2026-11-04|3|0
+28|active|f|2026-11-18|3|2
+54|active|f|2026-10-08|0|0
+55|active|f|2026-10-14|3|3
+
+after run1:
+27|expired|t|2026-11-04|3|0
+28|active|f|2026-11-18|3|2
+54|expired|t|2026-10-08|0|0
+55|active|f|2026-10-14|3|3
+{'paused': 0, 'resumed': 0, 'expired': 0, 'created': 0}
+after run2:
+27|expired|t|2026-11-04|3|0
+28|active|f|2026-11-18|3|2
+54|expired|t|2026-10-08|0|0
+55|active|f|2026-10-14|3|3

@@ -1,0 +1,66 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › e2e/qa/f01-console.spec.ts:287:1 › TC-133b a view-only staff member runs Copy features and Suspend from the UI (2.3s)
+  ✘  2 [chromium] › e2e/qa/f01-console.spec.ts:287:1 › TC-133b a view-only staff member runs Copy features and Suspend from the UI (retry #1) (2.3s)
+
+
+  1) [chromium] › e2e/qa/f01-console.spec.ts:287:1 › TC-133b a view-only staff member runs Copy features and Suspend from the UI 
+
+    Error: a view-only staff member must not suspend
+
+    expect(received).not.toContain(expected) // indexOf
+
+    Expected substring: not "Suspended 1"
+    Received string:        "Suspended 1 academies."
+
+      298 | 	const reactivate = await runAction(page, ACADEMIES, [id], "reactivate_academies");
+      299 | 	save("tc133b-view-only-actions.json", { id, offered, copy, suspend, reactivate });
+    > 300 | 	expect(suspend, "a view-only staff member must not suspend").not.toContain("Suspended 1");
+          | 	                                                                 ^
+      301 | 	expect(copy, "a view-only staff member must not copy features").not.toContain("Copied");
+      302 | });
+      303 |
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:300:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-133b-a-v-e2484-res-and-Suspend-from-the-UI-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-console-TC-133b-a-v-e2484-res-and-Suspend-from-the-UI-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: a view-only staff member must not suspend
+
+    expect(received).not.toContain(expected) // indexOf
+
+    Expected substring: not "Suspended 1"
+    Received string:        "Suspended 1 academies."
+
+      298 | 	const reactivate = await runAction(page, ACADEMIES, [id], "reactivate_academies");
+      299 | 	save("tc133b-view-only-actions.json", { id, offered, copy, suspend, reactivate });
+    > 300 | 	expect(suspend, "a view-only staff member must not suspend").not.toContain("Suspended 1");
+          | 	                                                                 ^
+      301 | 	expect(copy, "a view-only staff member must not copy features").not.toContain("Copied");
+      302 | });
+      303 |
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-console.spec.ts:300:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-133b-a-v-e2484-res-and-Suspend-from-the-UI-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f01-console-TC-133b-a-v-e2484-res-and-Suspend-from-the-UI-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f01-console-TC-133b-a-v-e2484-res-and-Suspend-from-the-UI-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f01-console-TC-133b-a-v-e2484-res-and-Suspend-from-the-UI-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/qa/f01-console.spec.ts:287:1 › TC-133b a view-only staff member runs Copy features and Suspend from the UI 
+error: Recipe `e2e` failed with exit code 1

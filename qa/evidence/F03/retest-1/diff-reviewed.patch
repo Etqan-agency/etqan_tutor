@@ -1,0 +1,123 @@
+diff --git a/etqan/access/services.py b/etqan/access/services.py
+index ab1b690f..4a3b1bc9 100644
+--- a/etqan/access/services.py
++++ b/etqan/access/services.py
+@@ -184,7 +184,10 @@ def update_role(role: StaffRole, *, fields: dict, by) -> StaffRole:
+ 
+     Restoring a retired role is itself an escalation (§4.2): a staff user may
+     only bring one back when they hold every code it grants, so an admin's
+-    revocation can't be undone by reactivating a role a staff member is in."""
++    revocation can't be undone by reactivating a role a staff member is in.
++    Retiring is the mirror case: it removes every code from every member at
++    once, so a staff user may only retire a role whose codes they all hold
++    (the removal rule, ETQAN-QA-021)."""
+     unknown = sorted(set(fields) - ROLE_FIELDS)
+     if unknown:
+         raise ValidationError("Unknown field.", field=unknown[0])
+@@ -193,13 +196,15 @@ def update_role(role: StaffRole, *, fields: dict, by) -> StaffRole:
+         new_permissions = _clean_codes(
+             fields["permissions"], current=frozenset(role.permissions), by=by
+         )
+-    if fields.get("is_active") and not role.is_active and role_of(by) == "staff":
+-        restored = frozenset(
++    flips = "is_active" in fields and bool(fields["is_active"]) != role.is_active
++    if flips and role_of(by) == "staff":
++        affected = frozenset(
+             new_permissions if new_permissions is not None else role.permissions
+         )
+-        if not restored <= codes_of(by):
++        if not affected <= codes_of(by):
++            verb = "restore" if fields["is_active"] else "retire"
+             raise ForbiddenError(
+-                "You can only restore a role whose permissions you hold yourself.",
++                f"You can only {verb} a role whose permissions you hold yourself.",
+                 field="is_active",
+             )
+     if new_permissions is not None:
+diff --git a/etqan/access/tests/test_access_api.py b/etqan/access/tests/test_access_api.py
+index 95c2ca42..447b6b77 100644
+--- a/etqan/access/tests/test_access_api.py
++++ b/etqan/access/tests/test_access_api.py
+@@ -184,6 +184,17 @@ class TestRoles:
+             staff(f"T{n}", made)
+         assert count() == one
+ 
++    def test_a_staff_editor_retires_only_a_role_whose_codes_it_holds(self, staff_for):
++        # ETQAN-QA-021
++        editor = staff_for("role.update")
++        money = role("Money", "invoice.view_any")
++        resp = editor.patch(
++            f"{A}roles/{money.pk}/", {"is_active": False}, format="json"
++        )
++        assert resp.status_code == 403
++        assert list(resp.json()) == ["is_active"]
++        assert StaffRole.objects.get(pk=money.pk).is_active
++
+     def test_a_staff_editor_restores_only_a_role_whose_codes_it_holds(self, staff_for):
+         editor = staff_for("role.update")
+         old = role("Old", "payslip.view", active=False)
+diff --git a/etqan/access/tests/test_roles.py b/etqan/access/tests/test_roles.py
+index 39981715..b11c404b 100644
+--- a/etqan/access/tests/test_roles.py
++++ b/etqan/access/tests/test_roles.py
+@@ -331,6 +331,47 @@ class TestEscalation:
+         services.update_role(theirs, fields={"is_active": True}, by=sara)
+         assert services.get_role(theirs.pk).is_active
+ 
++    def test_staff_retire_a_role_only_if_they_hold_all_its_codes(self):
++        # ETQAN-QA-021: retiring strips every member of the role's codes, so a
++        # weaker editor must not retire a stronger role (the removal rule).
++        sara = user()
++        role("Mine", "role.update", members=[sara])
++        mo = user(name="Mo")
++        theirs = role("Theirs", "invoice.view_any", members=[mo])
++        message = refused(
++            ForbiddenError,
++            "is_active",
++            services.update_role,
++            theirs,
++            fields={"is_active": False},
++            by=sara,
++        )
++        assert (
++            message == "You can only retire a role whose permissions you hold yourself."
++        )
++        assert services.get_role(theirs.pk).is_active
++        assert "invoice.view_any" in codes_of(mo)
++
++    def test_staff_retire_a_role_whose_codes_they_hold(self):
++        sara = user()
++        role("Mine", "role.update", "payslip.view", members=[sara])
++        theirs = role("Theirs", "payslip.view")
++        services.update_role(theirs, fields={"is_active": False}, by=sara)
++        assert not services.get_role(theirs.pk).is_active
++
++    def test_a_no_op_active_flag_is_not_a_retire(self):
++        sara = user()
++        role("Mine", "role.update", members=[sara])
++        theirs = role("Theirs", "payslip.view")
++        services.update_role(theirs, fields={"is_active": True}, by=sara)
++        assert services.get_role(theirs.pk).is_active
++
++    def test_admins_retire_any_role(self):
++        boss = user("admin", "Boss")
++        theirs = role("Theirs", "payslip.view")
++        services.update_role(theirs, fields={"is_active": False}, by=boss)
++        assert not services.get_role(theirs.pk).is_active
++
+     def test_admins_restore_any_role(self):
+         boss = user("admin", "Boss")
+         theirs = role("Theirs", "payslip.view", active=False)
+diff --git a/docs/features/roles-permissions.md b/docs/features/roles-permissions.md
+index 86fd5ff5..098237d9 100644
+--- a/docs/features/roles-permissions.md
++++ b/docs/features/roles-permissions.md
+@@ -46,7 +46,7 @@ Etqan staff (public-schema `is_staff` users) aren't part of this system. They on
+ **Anti-escalation rules for staff editors** (`access/services.py`). These apply only when `by` is a staff account; admins are never limited.
+ 
+ 1. In a role's codes, staff can add **and remove** only codes they hold themselves.
+-2. Staff can restore a retired role only if they hold every code it grants.
++2. Staff can retire or restore a role only if they hold every code it grants: retiring removes all of its codes from every member at once (ETQAN-QA-021). Renaming is not limited: it changes no one's access.
+ 3. Staff can grant or remove a role only if they hold all of its codes. For removal, retired roles count too (`_roles_to_assign`, `_guard_removed_roles`).
+ 4. Staff can change another staff account's email or active state only if they outrank it: they must hold every code that account's roles grant, retired roles included (`_guard_stronger_account`).
+ 5. Staff can never change their own roles or deactivate themselves.

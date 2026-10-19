@@ -1,0 +1,9 @@
+==== TC-030 (added by Agent 2, P1): double-submit races on issue / mark-paid / pay-to-balance 2026-10-19T04:19:54.612357
+T9 Sept draft|300000
+issue x2 [(200, 'issued'), (409, 'payroll.not_allowed_in_status')]
+OK  parallel issue: one 200 one 409
+mark-paid vs pay-to-balance [(200, 'paid', False), (409, 'payroll.not_allowed_in_status', None)]
+OK  one winner one 409
+OK  exactly one salary expense = net :: 1|300000
+DB paid|2026-10-19|f|300000 | locked sessions 39|t
+56|t

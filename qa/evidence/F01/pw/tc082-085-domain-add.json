@@ -1,0 +1,166 @@
+{
+  "help": [
+    "Ask the academy to add a CNAME record pointing to sites.etqan.localhost."
+  ],
+  "tenants": [
+    "---------",
+    "Other Academy",
+    "Demo Academy",
+    "Etqan QA Other",
+    "Etqan QA Academy",
+    "QA Tmp TZ",
+    "QA Tmp Race A",
+    "QA Tmp Race B1",
+    "QA Tmp One"
+  ],
+  "fields": [
+    "csrfmiddlewaretoken",
+    "tenant",
+    "domain",
+    "_save",
+    "_addanother",
+    "_continue"
+  ],
+  "results": [
+    {
+      "tc": "TC-082",
+      "tenant": "QA Tmp One",
+      "domain": "QA-Academy.TEST.",
+      "status": 200,
+      "url": "http://etqan.localhost/admin/tenants/domain/add/",
+      "errors": "Domain with this Domain already exists.",
+      "messages": "",
+      "serverError": ""
+    },
+    {
+      "tc": "TC-083",
+      "tenant": "QA Tmp One",
+      "domain": "etqan.localhost",
+      "status": 200,
+      "url": "http://etqan.localhost/admin/tenants/domain/add/",
+      "errors": "Use the academy's own domain, not an Etqan subdomain.",
+      "messages": "",
+      "serverError": ""
+    },
+    {
+      "tc": "TC-083",
+      "tenant": "QA Tmp One",
+      "domain": "x.etqan.localhost",
+      "status": 200,
+      "url": "http://etqan.localhost/admin/tenants/domain/add/",
+      "errors": "Use the academy's own domain, not an Etqan subdomain.",
+      "messages": "",
+      "serverError": ""
+    },
+    {
+      "tc": "TC-083",
+      "tenant": "QA Tmp One",
+      "domain": "qa.etqan.localhost",
+      "status": 200,
+      "url": "http://etqan.localhost/admin/tenants/domain/add/",
+      "errors": "Use the academy's own domain, not an Etqan subdomain.",
+      "messages": "",
+      "serverError": ""
+    },
+    {
+      "tc": "TC-084",
+      "tenant": "QA Tmp One",
+      "domain": "bad_host",
+      "status": 500,
+      "url": "http://etqan.localhost/admin/tenants/domain/add/",
+      "errors": "",
+      "messages": "",
+      "serverError": "ValidationError at /admin/tenants/domain/add/\nEnter a domain like academy-name.com.\nRequest Method:\tPOST\nRequest URL:\thttp://etqan.localhost/admin/tenants/domain/add/\nDjango Version:\t6.0.9\nException Type:\tValidationError\nException Value:\t\nEnter a domain like academy-name.com.\n\nException Location:\t/a"
+    },
+    {
+      "tc": "TC-084",
+      "tenant": "QA Tmp One",
+      "domain": "nodot",
+      "status": 500,
+      "url": "http://etqan.localhost/admin/tenants/domain/add/",
+      "errors": "",
+      "messages": "",
+      "serverError": "ValidationError at /admin/tenants/domain/add/\nEnter a domain like academy-name.com.\nRequest Method:\tPOST\nRequest URL:\thttp://etqan.localhost/admin/tenants/domain/add/\nDjango Version:\t6.0.9\nException Type:\tValidationError\nException Value:\t\nEnter a domain like academy-name.com.\n\nException Location:\t/a"
+    },
+    {
+      "tc": "TC-084",
+      "tenant": "QA Tmp One",
+      "domain": "-x.com",
+      "status": 500,
+      "url": "http://etqan.localhost/admin/tenants/domain/add/",
+      "errors": "",
+      "messages": "",
+      "serverError": "ValidationError at /admin/tenants/domain/add/\nEnter a domain like academy-name.com.\nRequest Method:\tPOST\nRequest URL:\thttp://etqan.localhost/admin/tenants/domain/add/\nDjango Version:\t6.0.9\nException Type:\tValidationError\nException Value:\t\nEnter a domain like academy-name.com.\n\nException Location:\t/a"
+    },
+    {
+      "tc": "TC-084",
+      "tenant": "QA Tmp One",
+      "domain": "a..com",
+      "status": 500,
+      "url": "http://etqan.localhost/admin/tenants/domain/add/",
+      "errors": "",
+      "messages": "",
+      "serverError": "ValidationError at /admin/tenants/domain/add/\nEnter a domain like academy-name.com.\nRequest Method:\tPOST\nRequest URL:\thttp://etqan.localhost/admin/tenants/domain/add/\nDjango Version:\t6.0.9\nException Type:\tValidationError\nException Value:\t\nEnter a domain like academy-name.com.\n\nException Location:\t/a"
+    },
+    {
+      "tc": "TC-084",
+      "tenant": "QA Tmp One",
+      "domain": "http://x.com",
+      "status": 500,
+      "url": "http://etqan.localhost/admin/tenants/domain/add/",
+      "errors": "",
+      "messages": "",
+      "serverError": "ValidationError at /admin/tenants/domain/add/\nEnter a domain like academy-name.com.\nRequest Method:\tPOST\nRequest URL:\thttp://etqan.localhost/admin/tenants/domain/add/\nDjango Version:\t6.0.9\nException Type:\tValidationError\nException Value:\t\nEnter a domain like academy-name.com.\n\nException Location:\t/a"
+    },
+    {
+      "tc": "TC-084",
+      "tenant": "QA Tmp One",
+      "domain": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd.com",
+      "status": 200,
+      "url": "http://etqan.localhost/admin/tenants/domain/add/",
+      "errors": "Domain with this Domain already exists.",
+      "messages": "",
+      "serverError": ""
+    },
+    {
+      "tc": "TC-085",
+      "tenant": "QA Tmp One",
+      "domain": "qa-academy.test",
+      "status": 200,
+      "url": "http://etqan.localhost/admin/tenants/domain/add/",
+      "errors": "Domain with this Domain already exists.",
+      "messages": "",
+      "serverError": ""
+    },
+    {
+      "tc": "TC-085",
+      "tenant": "Etqan QA Academy",
+      "domain": "qa-academy.test",
+      "status": 200,
+      "url": "http://etqan.localhost/admin/tenants/domain/add/",
+      "errors": "Domain with this Domain already exists.",
+      "messages": "",
+      "serverError": ""
+    },
+    {
+      "tc": "TC-085",
+      "tenant": "QA Tmp One",
+      "domain": "localhost",
+      "status": 200,
+      "url": "http://etqan.localhost/admin/tenants/domain/add/",
+      "errors": "Domain with this Domain already exists.",
+      "messages": "",
+      "serverError": ""
+    },
+    {
+      "tc": "TC-087",
+      "tenant": "QA Tmp One",
+      "domain": "localtest.me",
+      "status": 200,
+      "url": "http://etqan.localhost/admin/tenants/domain/add/",
+      "errors": "Domain with this Domain already exists.",
+      "messages": "",
+      "serverError": ""
+    }
+  ]
+}

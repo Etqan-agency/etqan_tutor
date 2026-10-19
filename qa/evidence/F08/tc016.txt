@@ -1,0 +1,37 @@
+assign 279=200 assign 280=200 assign 281=200 assign 282=200 assign 283=200 assign V6=200
+V1..V6=279 280 281 282 283 284
+supervision list has: [279, 280, 281, 282]
+open V1: [200] POST supervision/279/open/ :: {"meeting_url":"https://example.test/V1"}
+open V2: [409] POST supervision/280/open/ :: {"detail":"The session opens 10 minutes before it starts.","code":"scheduling.supervision_not_open"}
+open V3: [200] POST supervision/281/open/ :: {"meeting_url":"https://example.test/V3"}
+open V4: [409] POST supervision/282/open/ :: {"detail":"This session has ended.","code":"scheduling.session_ended"}
+open V5: [409] POST supervision/283/open/ :: {"detail":"This session was cancelled.","code":"scheduling.session_cancelled"}
+open V6: [404] POST supervision/284/open/ :: {"detail":"No Session matches the given query."}
+279|2026-10-19 16:42:46.506375+00
+281|2026-10-19 16:42:46.654446+00
+279|2026-10-19 16:42:46.506375+00
+[200] POST supervision/281/attendance/ :: {"id":281,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T16:12:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":true,"meeting_url":"https://example.test/V3","meeting_host":false,"generated":fals
+[409] POST supervision/280/attendance/ :: {"detail":"The session opens 10 minutes before it starts.","code":"scheduling.supervision_not_open"}
+[200] POST supervision/282/attendance/ :: {"id":282,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T15:12:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":true,"meeting_url":"https://example.test/V4","meeting_host":false,"generated":fals
+[400] POST supervision/281/attendance/ :: {"status":["\"excused\" is not a valid choice."]}
+[403] POST supervision/281/open/ :: {"detail":"You do not have permission to perform this action."}
+-- S6 probe: office PATCH supervisor_attendance on future V2 and cancelled V5
+[200] PATCH sessions/280/ :: {"id":280,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T18:42:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"https://example.test/V2","meeting_host":false,"generated":fal
+[200] PATCH sessions/283/ :: {"id":283,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T16:49:00Z","minutes":30,"status":"cancelled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"https://example.test/V5","meeting_host":false,"generated":fal
+[400] PATCH sessions/247/ :: {"supervisor_attendance":["Assign a supervisor first."]}
+247|completed||not_set||t
+280|scheduled|4|present||f
+283|cancelled|4|present||f
+[200] PATCH sessions/281/ :: {"id":281,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T16:12:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":true,"meeting_url":"https://example.test/V3","meeting_host":false,"generated":fals
+281|136|not_set|
+[200] PATCH sessions/282/ :: {"id":282,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T15:12:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":true,"meeting_url":"https://example.test/V4","meeting_host":false,"generated":fals
+[400] PATCH sessions/282/ :: {"supervisor_attendance":["Assign a supervisor first."]}
+72|281|1|supervision|{"supervisor_id": [null, 4]}|
+76|281|4|supervisor_attendance|{"supervisor_attendance": ["not_set", "present"]}|
+80|281|1|supervision|{"supervisor_id": [4, 136], "supervisor_attendance": ["present", "not_set"]}|
+qa: supervision=off
+[404] GET supervision/ :: {"detail":"This feature is not enabled for this academy."}
+[404] POST supervision/279/open/ :: {"detail":"This feature is not enabled for this academy."}
+[404] POST supervision/279/attendance/ :: {"detail":"This feature is not enabled for this academy."}
+qa: supervision=on
+V=279,280,281,282,283,284

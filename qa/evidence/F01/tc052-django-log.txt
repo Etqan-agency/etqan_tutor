@@ -1,0 +1,8 @@
+django-1  | Traceback (most recent call last):
+django-1  |   File "/usr/local/lib/python3.13/zoneinfo/_common.py", line 12, in load_tzdata
+django-1  | ModuleNotFoundError: No module named 'tzdata.zoneinfo.Mars'
+django-1  | Traceback (most recent call last):
+django-1  |     return now().astimezone(ZoneInfo(academy_services.get_settings().timezone)).date()
+django-1  |   File "/usr/local/lib/python3.13/zoneinfo/_common.py", line 29, in load_tzdata
+django-1  |     raise ZoneInfoNotFoundError(f"No time zone found with key {key}")
+django-1  | zoneinfo._common.ZoneInfoNotFoundError: 'No time zone found with key Mars/Phobos'

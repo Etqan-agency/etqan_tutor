@@ -1,0 +1,25 @@
+........................................................................ [ 12%]
+........................................................................ [ 24%]
+........................................................................ [ 37%]
+........................................................................ [ 49%]
+........................................................................ [ 61%]
+........................................................................ [ 74%]
+........................................................................ [ 86%]
+........................................................................ [ 98%]
+......                                                                   [100%]
+=============================== warnings summary ===============================
+etqan/payroll/tests/test_api.py: 17 warnings
+etqan/payroll/tests/test_api_b4b.py: 23 warnings
+etqan/payroll/tests/test_api_pay_rules.py: 20 warnings
+etqan/payroll/tests/test_api_payslip_balance.py: 12 warnings
+etqan/payroll/tests/test_api_projections.py: 14 warnings
+etqan/payroll/tests/test_api_withdrawals.py: 19 warnings
+etqan/payroll/tests/test_counts.py: 5 warnings
+etqan/payroll/tests/test_staff_scope.py: 1 warning
+etqan/finance/tests/test_api.py: 22 warnings
+etqan/finance/tests/test_rates_api.py: 19 warnings
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+582 passed, 152 warnings in 28.21s

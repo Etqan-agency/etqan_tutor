@@ -1,0 +1,16 @@
+{
+  "role": {
+    "id": 19,
+    "name_ar": "استقبال 1792369881895",
+    "name_en": "F03 UI Desk 1792369881895",
+    "permissions": [
+      "student.view",
+      "student.view_any"
+    ],
+    "is_active": true,
+    "members": 0,
+    "created_at": "2026-10-19T00:31:26.101463Z"
+  },
+  "retire": 200,
+  "staffStudentsAfterRetire": 403
+}

@@ -1,0 +1,40 @@
+==== TC-019 2026-10-19T04:09:21.566459
+OK  admin balance 20000/20000 :: 200 [{"currency": "EGP", "balance_minor": 20000, "available_minor": 20000}]
+OK  teacher own balance same :: 200 [{"currency": "EGP", "balance_minor": 20000, "available_minor": 20000}]
+OK  W1 8000 201 under_review :: 201 {"id": 1, "teacher": {"id": 7, "full_name": "QA teacher"}, "amount_minor": 8000, "currency": "EGP", "status": "under_review", "notes": "rent", "office_notes": "", "requested_by": {"id": 7, "full_name": "QA teacher"}, "decided_by": null, "decided_at": null, "paid_on": null, "paid_by": null, "created_
+OK  available 12000 :: [{"currency": "EGP", "balance_minor": 20000, "available_minor": 12000}]
+OK  13000 409 insufficient :: 409 {"detail": "That is more than the available balance.", "code": "payroll.insufficient_balance"}
+OK  W2 12000 201 :: 201
+OK  1 more 409 :: 409
+OK  approve W1 :: 200 {"id": 1, "teacher": {"id": 7, "full_name": "QA teacher"}, "amount_minor": 8000, "currency": "EGP", "status": "approved", "notes": "rent", "office_notes": "", "requested_by": {"id": 7, "full_name": "Q
+OK  pay tomorrow 400 :: 400 {"paid_on": ["A request can't be paid in the future."]}
+OK  pay before request day 400 :: 400 {"paid_on": ["A request can't be paid before it was made."]}
+OK  pay W1 paid :: 200 {"id": 1, "teacher": {"id": 7, "full_name": "QA teacher"}, "amount_minor": 8000, "currency": "EGP", "status": "paid", "notes": "rent", "office_notes": "", "requested_by": {"id": 7, "full_name": "QA te
+OK  balance 12000 available 0 :: [{"currency": "EGP", "balance_minor": 12000, "available_minor": 0}]
+OK  reject blank 400 office_notes :: 400 {"office_notes": ["Say why the request is rejected."]}
+OK  reject with reason :: 200
+OK  T1 sees reason :: 200 {"id": 2, "teacher": {"id": 7, "full_name": "QA teacher"}, "amount_minor": 12000, "currency": "EGP", "status": "rejected", "notes": "", "office_notes": "Not this month", "requested_by": {"id": 7, "full_name": "QA teacher"}, "decided_by": {"id": 1, "full_name": "QA Admin"}, "decided_at": "2026-10-19T
+OK  available back 12000 :: [{"currency": "EGP", "balance_minor": 12000, "available_minor": 12000}]
+OK  T1 cancels under_review :: 200 {"id": 3, "teacher": {"id": 7, "full_name": "QA teacher"}, "amount_minor": 1000, "currency": "EGP", "status": "cancelled", "notes": "", "office_notes"
+OK  T1 cancel approved 409 :: 409 {"detail": "Not allowed while the request is approved.", "code": "payroll.not_allowed_in_status"}
+OK  admin cancels approved :: 200
+invalid 0 400 {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+OK  invalid 0 rejected 400 :: 400
+invalid -1 400 {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+OK  invalid -1 rejected 400 :: 400
+invalid USD 400 {"currency": ["This teacher has no balance in that currency."]}
+OK  invalid USD rejected 400 :: 400
+invalid egp 201 {"id": 5, "teacher": {"id": 7, "full_name": "QA teacher"}, "amount_minor": 10, "currency": "EGP", "status": "under_review", "notes": "", "office_notes": "", "requested_by": {"id": 7, "full_name": "QA teacher"}, "decided_by": null, "decided_at": null, "paid_on": null, "paid_by": null, "created_at": "2026-10-19T01:09:23.365707Z"}
+BAD invalid egp rejected 400 :: 201
+OK  admin creates for T1 :: 201 {"id": 6, "teacher": {"id": 7, "full_name": "QA teacher"}, "amount_minor": 500, "currency": "EGP", "status": "under_review", "notes": "", "office_notes": "", "requested_by": {"id": 1, "full_name": "QA
+OK  teacher passing other teacher id ignored (own) :: 201 {"id": 7, "teacher": {"id": 7, "full_name": "QA teacher"}, "amount_minor": 500, "currency": "EGP", "status": "under_review", "notes": "", "office_notes": "", "requested_by": {"id": 7, "full_name": "QA
+DB withdrawals 1|1|8000|EGP|paid|1|1|2026-10-19
+2|1|12000|EGP|rejected|1||
+3|1|1000|EGP|cancelled|7||
+4|1|1000|EGP|cancelled|1||
+5|1|10|EGP|under_review|||
+6|1|500|EGP|under_review|||
+7|1|500|EGP|under_review|||
+DB balancelock 1|EGP|1
+OK  derived balance = API :: derived 12000 api [{"currency": "EGP", "balance_minor": 12000, "available_minor": 10990}]
+OK  no expense for withdrawal pay

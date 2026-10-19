@@ -1,0 +1,68 @@
+== GATE G1 renewal chain (SUB2 86, SA2, T2, payer PA) 2026-10-19T17:20:01Z
+before: invoices SET
+152 sessions SET
+335 subs SET
+79
+SUB2 renewal_starts_on/can_renew: ('2026-11-19', None, None, '2026-11-18', 'active')
+[403] POST subscriptions/86/renew/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST subscriptions/86/renew/ :: {"detail":"You do not have permission to perform this action."}
+[403] POST subscriptions/86/renew/ :: {"detail":"Authentication credentials were not provided."}
+counts after denied: inv SET
+152 subs SET
+79
+[201] POST subscriptions/86/renew/ :: {"id":89,"status":"active","schedule_status":"active","student":{"id":223,"full_name":"SCN Student A2","timezone":"Africa/Cairo"},"teacher":{"id":219,"full_name":"SCN Teacher Two"},"course":{"id":6,"name_ar":"scn","name_en":"SCN Quran"},"package":{"id":17,"name_ar":"س","name_en":"SCN Pkg 2x4w"},"starts_on":"2026-11-19","term_ends_on":"2026-12-18","ends_on":"2026-12-18","grace_ends_on":"2026-12-25","in_grace":false,"sessions_total":8,"sessions_used":0,"carried_over_sessions":0,"sessions_remaining":8,"extra_sessions":0,"progress":0.0,"price_minor":150000,"currency":"EGP","renewed_from":86,"renewal":null,"supervisor":null,"archived_at":null,"can_archive":false,"payment_status":"unpaid","payment_overdue":false,"duration_value":1,"duration_unit":"month","session_minutes":60,"freeze_days_allowed":0,"paused_days":0,"freeze_days_left":0,"notes":"","renewal_starts_on":"2026-12-19","slots":[{"id":
+new sub 89 conflicts: []
+SET
+ERROR:  column "ends_on" does not exist
+LINE 1: ... select id,student_id,teacher_id,status,starts_on,ends_on,re...
+                                                             ^
+SET
+153|INV-000153|125|224|150000|EGP|unpaid|89
+dup sessions same student/teacher/instant across SUB2+NEW:
+SET
+SET
+86|6|2026-10-20|2026-11-06
+[409] POST subscriptions/86/renew/ :: {"detail":"This subscription was already renewed.","code":"scheduling.already_renewed"}
+after 2nd renew: invoices for SUB2-chain SET
+1 renewals SET
+1
+[404] GET billing/invoices/SET :: <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /api/v1/billing/invoices/SET</title>
+  <meta name="robots" cont
+[404] GET billing/invoices/SET :: <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /api/v1/billing/invoices/SET</title>
+  <meta name="robots" cont
+[404] GET billing/invoices/SET :: <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /api/v1/billing/invoices/SET</title>
+  <meta name="robots" cont
+ERROR:  syntax error at or near "153"
+LINE 2: 153
+        ^
+qaother row unaffected: 
+-- cleanup
+[404] POST billing/invoices/SET :: <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /api/v1/billing/invoices/SET</title>
+  <meta name="robots" cont
+[409] DELETE subscriptions/89/ :: {"detail":"This subscription has invoices. Void them first.","code":"billing.subscription_invoiced"}
+ERROR:  syntax error at or near "153"
+LINE 2: 153
+        ^
+after cleanup: sub row SET
+1 sessions SET
+0 invoice 
+final: invoices SET
+153 sessions SET
+335 subs SET
+80

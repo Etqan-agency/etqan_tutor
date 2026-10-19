@@ -1,0 +1,32 @@
+== TC-001 step5-6
+role staff perms ['invoice.view', 'invoice.view_any', 'student.view', 'student.view_any'] super False
+hana GET /people/students/ -> 200
+hana GET /billing/invoices/ -> 200
+hana POST /billing/invoices/ -> 403
+hana GET /payroll/rates/ -> 403
+hana GET /access/roles/ -> 403
+-- DB
+6|F03 Front desk|["invoice.view", "invoice.view_any", "student.view", "student.view_any"]|t
+1
+staff
+[(4, 'F02 QL Full', 1), (5, 'F02 QL NoView', 1), (6, 'F03 Front desk', 1), (2, 'QA No Codes', 1), (3, 'QA Student View', 1), (1, 'Supervisor', 1)]
+-- student ids
+[(19, None, None), (8, None, None), (9, None, None), (10, None, None), (11, None, None), (12, None, None), (13, None, None), (14, None, None), (5, None, None)]
+== TC-002
+dup_en_case -> {"name_en":["A role with this name already exists."]} [400] 
+dup_ar -> {"name_ar":["A role with this name already exists."]} [400] 
+blank -> {"name_ar":["This field may not be blank."],"name_en":["This field may not be blank."]} [400] 
+n61 -> {"name_en":["Ensure this field has no more than 60 characters."]} [400] 
+unknown -> {"permissions":["Unknown permission: nope.view."]} [400] 
+str -> {"permissions":["Expected a list of items but got type \"str\"."]} [400] 
+int -> {"permissions":["Unknown permission: 1."]} [400] 
+null -> {"permissions":["This field may not be null."]} [400] 
+supervisor_name -> {"name_en":["A role with this name already exists."]} [400] 
+role count before=6 after 4xx=6
+trim_dupes_grey -> {"id":7,"name_ar":"F03 مكرر","name_en":"F03 Trim","permissions":["student.delete","student.view"],"is_active":true,"members":0,"created_at":"2026-10-19T00:04:45.136605Z"} [201] 
+7|[F03 Trim]|[F03 مكرر]|["student.delete", "student.view"]
+patch members -> 200  patch id -> {"id":7,"name_ar":"F03 مكرر","name_en":"F03 Trim","permissions":["student.delete","student.view"],"is_active":true,"members":0,"created_at":"2026-10-19T00:04:45.136605Z"} [200] 
+PUT -> 405 DELETE -> 405 GET 999999 -> 404
+rename to supervisor -> {"name_en":["A role with this name already exists."]} [400] 
+rename to SUPERVISOR -> {"name_en":["A role with this name already exists."]} [400] 
+7|F03 Trim|t

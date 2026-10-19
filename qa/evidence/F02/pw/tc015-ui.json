@@ -1,0 +1,18 @@
+{
+  "start": 200,
+  "meAs": {
+    "id": 10,
+    "role": "student",
+    "impersonator": {
+      "id": 1,
+      "full_name": "QA Admin"
+    }
+  },
+  "stop": 200,
+  "meBack": {
+    "id": 1,
+    "role": "admin",
+    "impersonator": null
+  },
+  "urlAfter": "http://qa.etqan.localhost/app/"
+}

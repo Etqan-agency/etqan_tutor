@@ -1,0 +1,129 @@
+identity/password/reset/
+   (a) 200 sess=False 
+   (b) 200 sess=False 
+   (c) 403 sess=False CSRF Failed (CSRF Failed: CSRF token missing."})
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+identity/password/reset/confirm/
+   (a) 400 sess=False {"token":["Invalid or expired reset link."]}
+   (b) 400 sess=False {"token":["Invalid or expired reset link."]}
+   (c) 403 sess=False CSRF Failed (CSRF Failed: CSRF token missing."})
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+identity/password/code/
+   (a) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (b) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (c) 403 sess=False CSRF Failed (CSRF Failed: CSRF token missing."})
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+identity/password/code/verify/
+   (a) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (b) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (c) 403 sess=False CSRF Failed (CSRF Failed: CSRF token missing."})
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+identity/password/code/reset/
+   (a) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (b) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (c) 403 sess=False CSRF Failed (CSRF Failed: CSRF token missing."})
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+identity/resend-verification/
+   (a) 200 sess=False 
+   (b) 200 sess=False 
+   (c) 403 sess=False CSRF Failed (CSRF Failed: CSRF token missing."})
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+identity/verify-email/
+   (a) 400 sess=False {"non_field_errors":["Invalid or expired verification key."]}
+   (b) 400 sess=False {"non_field_errors":["Invalid or expired verification key."]}
+   (c) 403 sess=False CSRF Failed (CSRF Failed: CSRF token missing."})
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+registration/
+   (a) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (b) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (c) 403 sess=False CSRF Failed (CSRF Failed: CSRF token missing."})
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+site/inquiries/
+   (a) 201 sess=False {"ok":true}
+   (b) 201 sess=False {"ok":true}
+   (c) 201 sess=False {"ok":true}
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+site/articles/qa-none/view/
+   (a) 404 sess=False {"detail":"Not found."}
+   (b) 415 sess=False {"detail":"Unsupported media type \"application/x-www-form-urlencoded\" in request."}
+   (c) 404 sess=False {"detail":"Not found."}
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+site/videos/qa-none/view/
+   (a) 404 sess=False {"detail":"Not found."}
+   (b) 415 sess=False {"detail":"Unsupported media type \"application/x-www-form-urlencoded\" in request."}
+   (c) 404 sess=False {"detail":"Not found."}
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+consultations/public/book/
+   (a) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (b) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (c) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+consultations/public/manage/bad-token/pay/
+   (a) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (b) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (c) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+consultations/public/manage/bad-token/reschedule/
+   (a) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (b) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (c) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+consultations/public/manage/bad-token/review/
+   (a) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (b) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (c) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+gateways/pay/bad-token/checkout/
+   (a) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (b) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (c) 404 sess=False {"detail":"This feature is not enabled for this academy."}
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+ANY sessionid set: False
+== rerun with code_reset, self_registration, consultations, payment_links ON in qa
+identity/password/code/
+   (a) 400 sess=False {"channel":["This field is required."],"identifier":["This field is required."]}
+   (b) 400 sess=False {"channel":["This field is required."],"identifier":["This field is required."]}
+   (c) 403 sess=False CSRF Failed (CSRF Failed: CSRF token missing."})
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+identity/password/code/verify/
+   (a) 400 sess=False {"channel":["This field is required."],"identifier":["This field is required."]}
+   (b) 400 sess=False {"channel":["This field is required."],"identifier":["This field is required."]}
+   (c) 403 sess=False CSRF Failed (CSRF Failed: CSRF token missing."})
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+identity/password/code/reset/
+   (a) 400 sess=False {"channel":["This field is required."],"identifier":["This field is required."],"account_i
+   (b) 400 sess=False {"channel":["This field is required."],"identifier":["This field is required."],"account_i
+   (c) 403 sess=False CSRF Failed (CSRF Failed: CSRF token missing."})
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+--
+registration/
+   (a) 400 sess=False {"kind":["This field is required."],"phone":["This field is required."],"country":["This f
+   (b) 400 sess=False {"kind":["This field is required."],"phone":["This field is required."],"country":["This f
+   (c) 403 sess=False CSRF Failed (CSRF Failed: CSRF token missing."})
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+--
+consultations/public/book/
+   (a) 400 sess=False {"product":["This field is required."],"teacher":["This field is required."],"provider":["
+   (b) 400 sess=False {"product":["This field is required."],"teacher":["This field is required."],"provider":["
+   (c) 400 sess=False {"product":["This field is required."],"teacher":["This field is required."],"provider":["
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+consultations/public/manage/bad-token/pay/
+   (a) 404 sess=False {"detail":"Consultation request not found."}
+   (b) 404 sess=False {"detail":"Consultation request not found."}
+   (c) 404 sess=False {"detail":"Consultation request not found."}
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+consultations/public/manage/bad-token/reschedule/
+   (a) 400 sess=False {"starts_at":["This field is required."]}
+   (b) 400 sess=False {"starts_at":["This field is required."]}
+   (c) 400 sess=False {"starts_at":["This field is required."]}
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+consultations/public/manage/bad-token/review/
+   (a) 400 sess=False {"rating":["This field is required."]}
+   (b) 400 sess=False {"rating":["This field is required."]}
+   (c) 400 sess=False {"rating":["This field is required."]}
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+gateways/pay/bad-token/checkout/
+   (a) 404 sess=False {"detail":"Payment link not found."}
+   (b) 404 sess=False {"detail":"Payment link not found."}
+   (c) 404 sess=False {"detail":"Payment link not found."}
+   (d) 403 sess=False {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}

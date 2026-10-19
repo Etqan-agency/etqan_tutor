@@ -1,0 +1,4 @@
+## TC-104/086 pending custom domain of SUSPENDED qa-tmp-1
+Host qa-academy.test /api/v1/identity/csrf/ -> 404 <!DOCTYPE html> <html lang="en"> <head>   <meta http-equiv="content-type" content="text/html; charset=utf-8">   <title>P
+Host qa-academy.test / -> 404 <!DOCTYPE html><html lang="ar" dir="rtl"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,
+## TC-104 active subdomain of suspended academy -> 403

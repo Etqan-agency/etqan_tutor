@@ -1,0 +1,24 @@
+## TC-020
+f02-a@qa.etqan.test -> |202| 69ms
+qa-teacher@qa.etqan.test -> |202| 68ms
+qa-admin@qa.etqan.test -> |202| 70ms
+qa-staff-codes@qa.etqan.test -> |202| 70ms
+f02-e@qa.etqan.test -> |202| 68ms
+f02-b@qa.etqan.test -> |202| 70ms
+nobody-r@qa.etqan.test -> |202| 70ms
+mails:
+2Fb3sSyyaVAX8XOd8D3AfV f02-a@qa.etqan.test | [Etqan QA Academy] رمز إعادة تعيين كلمة المرور
+code from mail: 167744
+db: email|f02-a@qa.etqan.test|64|t|0|t
+verify: {"accounts":[{"id":8,"full_name":"F02 Student a"}]} 200 
+verify wrong: {"code":["Invalid or expired code."]} 400  tries=1
+reset weak: {"new_password":["This password is too common."]} 400 
+code at qaother: {"detail":"This feature is not enabled for this academy."} 404 
+reset:
+HTTP/1.1 204 No Content
+used_at set: t
+reuse: {"code":["Invalid or expired code."]} 400 
+old session: 403 old pw: 400 new pw: 200
+alert:
+3is8rD9EraBgPHNjBPz7jy f02-a@qa.etqan.test | [Etqan QA Academy] تنبيه أمني: تم إجراء تغيير على حسابك
+f02-a@qa.etqan.test 200

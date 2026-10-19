@@ -1,0 +1,27 @@
+## 2026-10-17T20:52:45Z backend: docker build --target dev --build-arg UID=501 --build-arg GID=20 -t etqan-qa001-backend:gid20 backend
+#10 ERROR: process "/bin/sh -c groupadd -g ${GID} app && useradd -u ${UID} -g app -m app     && chown -R app:app /app" did not complete successfully: exit code: 4
+------
+ > [dev 2/3] RUN groupadd -g 20 app && useradd -u 501 -g app -m app     && chown -R app:app /app:
+0.566 groupadd: GID '20' already exists
+------
+Dockerfile:23
+--------------------
+  22 |     ARG GID=1000
+  23 | >>> RUN groupadd -g ${GID} app && useradd -u ${UID} -g app -m app \
+  24 | >>>     && chown -R app:app /app
+  25 |     COPY --chown=app:app . .
+--------------------
+ERROR: failed to solve: process "/bin/sh -c groupadd -g ${GID} app && useradd -u ${UID} -g app -m app     && chown -R app:app /app" did not complete successfully: exit code: 4
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/8voblsjl9wzqdi2kknc3135n1
+exit=1
+## node:22-alpine: the dashboard/marketing dev-stage user step with GID=20
+dialout:x:20:root
+addgroup: gid '20' in use
+exit=1
+## python:3.13-slim group 20
+Unable to find image 'python:3.13-slim' locally
+3.13-slim: Pulling from library/python
+Digest: sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f
+Status: Downloaded newer image for python:3.13-slim
+dialout:x:20:

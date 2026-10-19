@@ -1,0 +1,22 @@
+== S7 probe: own teacher host-link on ended / completed sessions
+[200] GET sessions/282/host-link/ :: {"url":"https://example.test/V4","host":false}
+[200] GET sessions/281/host-link/ :: {"url":"https://example.test/V3","host":false}
+== TC-019
+[200] POST sessions/bulk/ :: {"done":[295,296],"skipped":[{"id":245,"code":"scheduling.not_started"},{"id":247,"code":"payroll.payslip_issued"},{"id":255,"code":"scheduling.session_cancelled"},{"id":999999,"code":"not_found"}]}
+activity delta=2
+[400] POST sessions/bulk/ :: {"reason":["Give a reason."]}
+[400] POST sessions/bulk/ :: {"reason":["Give a reason."]}
+[400] POST sessions/bulk/ :: {"action":["\"late\" is not a valid choice."]}
+[400] POST sessions/bulk/ :: {"ids":["This list may not be empty."]}
+[400] POST sessions/bulk/ :: {"ids":["Ensure this field has no more than 200 elements."]}
+[403] POST sessions/bulk/ :: {"detail":"You do not have permission to perform this action."}
+{"done":[297,298],"skipped":[]} 200
+{"done":[],"skipped":[{"id":297,"code":"scheduling.not_allowed_in_status"},{"id":298,"code":"scheduling.not_allowed_in_status"}]} 200
+[200] POST sessions/bulk/ :: {"done":[295,296],"skipped":[]}
+245|scheduled|not_set|not_set|not_set|regular|f|||||f|f|t
+247|completed|present|not_set|not_set|extra|f||1|||f|t|t
+255|cancelled|not_set|not_set|not_set|extra|f|||k||f|f|t
+295|cancelled|present|not_set|not_set|extra|f||1|bulk c||f|f|t
+296|cancelled|present|not_set|not_set|extra|f||1|bulk c||f|f|t
+297|cancelled|not_set|not_set|not_set|extra|f|||race||f|f|t
+298|cancelled|not_set|not_set|not_set|extra|f|||race||f|f|t

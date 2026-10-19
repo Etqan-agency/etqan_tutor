@@ -1,0 +1,13 @@
+2026-10-17T21:14:46Z
+## A: cross-site form POST, no token, Origin evil.example
+HTTP/1.1 403 Forbidden
+{"detail":"CSRF Failed: Origin checking failed - http://evil.example does not match any trusted origins."}
+## B: JSON, no token, same origin
+HTTP/1.1 403 Forbidden
+{"detail":"CSRF Failed: CSRF cookie not set."}
+## C: GET identity/csrf/ then JSON with X-CSRFToken, same origin (the dashboard flow)
+HTTP/1.1 200 OK
+Set-Cookie: sessionid=<redacted>; expires=Sat, 31 Oct 2026 21:14:46 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax
+## D: qa csrftoken replayed on qaother with Origin qa
+HTTP/1.1 403 Forbidden
+{"detail":"CSRF Failed: Origin checking failed - http://qa.etqan.localhost does not match any trusted origins."}

@@ -1,0 +1,47 @@
+## ETQAN-QA-021 retest 2026-10-19T00:29:15Z (REAL, academy qa)
+login adm 200
+### setup: reactivate Ed(21)/Mo(22), restore roles 8,9,10 as admin, set fixture passwords via shell
+admin activate staff 21 -> [200] {"id":21,"full_name":"F03 Ed","email":"f03-ed@qa.etqan.test","is_active":true,"roles":[{"id":8,"name_ar":"F03 محرر","name_en":"F03 Role editor"}],"invited":false,"created_at":"2026-10-19T00:05:20.033018Z"}
+admin activate staff 22 -> [200] {"id":22,"full_name":"F03 Mo","email":"f03-mo@qa.etqan.test","is_active":true,"roles":[{"id":9,"name_ar":"F03 مال","name_en":"F03 Money"}],"invited":false,"created_at":"2026-10-19T00:05:20.073971Z"}
+admin restore role 8 -> [200] {"id":8,"name_ar":"F03 محرر","name_en":"F03 Role editor","permissions":["role.create","role.update","role.view","role.view_any","staff.create","staff.update","staff.view","staff.view_any","student.view_any"],"is_active":
+admin restore role 9 -> [200] {"id":9,"name_ar":"F03 مال","name_en":"F03 Money","permissions":["invoice.view_any","payment.view_any","payslip.view_any"],"is_active":true,"members":1,"created_at":"2026-10-19T00:05:19.888780Z"}
+admin restore role 10 -> [200] {"id":10,"name_ar":"F03 ب2","name_en":"F03 Ed ok","permissions":["student.view_any"],"is_active":true,"members":0,"created_at":"2026-10-19T00:05:24.139782Z"}
+f03-ed@qa.etqan.test pw set
+f03-mo@qa.etqan.test pw set
+Mo detail -> [200] {"id":22,"full_name":"F03 Mo","email":"f03-mo@qa.etqan.test","is_active":true,"roles":[{"id":9,"name_ar":"F03 مال","name_en":"F03 Money"}],"invited":false,"created_at":"2026-10-19T00:05:20.073971Z"}
+Role 8 (Ed) -> [200] {"id":8,"name_ar":"F03 محرر","name_en":"F03 Role editor","permissions":["role.create","role.update","role.view","role.view_any","staff.create","staff.update","staff.view","staff.view_any","student.view_any"],"is_active":
+Role 10 -> [200] {"id":10,"name_ar":"F03 ب2","name_en":"F03 Ed ok","permissions":["student.view_any"],"is_active":true,"members":0,"created_at":"2026-10-19T00:05:24.139782Z"}
+login ed 200
+login mo 200
+Ed perms: ["role.create","role.update","role.view","role.view_any","staff.create","staff.update","staff.view","staff.view_any","student.view_any"]
+### original repro (bug steps 1-5)
+1 Mo invoices -> [200] {"count":6,"next":null,"previous":null,"results":[{"id":6,"number":"INV-000006","status":"void","is_overdue":false,"student":{"id":5,"full_name":"QA student"},"payer":{"id":5,"full_name":"QA student"},"subscription_id":n
+2 Ed retire Money(9) -> [403] {"is_active":["You can only retire a role whose permissions you hold yourself."]}
+  DB: 9|t|F03 Money|["invoice.view_any", "payment.view_any", "payslip.view_any"]
+3 Mo invoices -> [200] {"count":6,"next":null,"previous":null,"results":[{"id":6,"number":"INV-000006","status":"void","is_overdue":false,"student":{"id":5,"full_name":"QA student"},"payer":{"id":5,"full_name":"QA student"},"subscription_id":n
+  Mo perms: ["invoice.view_any","payment.view_any","payslip.view_any"]
+4 Ed restore (already active, no flip) -> [200] {"id":9,"name_ar":"F03 مال","name_en":"F03 Money","permissions":["invoice.view_any","payment.view_any","payslip.view_any"],"is_active":true,"members":1,"created_at":"2026-10-19T00:05:19.888780Z"}
+5 Ed rename (by design allowed) -> [200] {"id":9,"name_ar":"F03 أعاد","name_en":"F03 Renamed by Ed","permissions":["invoice.view_any","payment.view_any","payslip.view_any"],"is_active":true,"members":1,"created_at":"2026-10-19T00:05:19.888780Z"}
+  DB: 9|t|F03 Renamed by Ed|["invoice.view_any", "payment.view_any", "payslip.view_any"]
+### related spec cases
+6 Ed retire + same perms -> [403] {"is_active":["You can only retire a role whose permissions you hold yourself."]}
+7 Ed retire + strip perms -> [403] {"permissions":["You can only remove permissions you hold yourself."]}
+8 Ed retire string false -> [403] {"is_active":["You can only retire a role whose permissions you hold yourself."]}
+9 Ed retire 0 -> [403] {"is_active":["You can only retire a role whose permissions you hold yourself."]}
+10 Ed retire Supervisor(1) -> [403] {"is_active":["You can only retire a role whose permissions you hold yourself."]}
+  DB: 1|t|Supervisor|["attendance.update", "attendance.view", "att
+11 Ed retire role 10 (codes Ed holds) -> [200] {"id":10,"name_ar":"F03 ب2","name_en":"F03 Ed ok","permissions":["student.view_any"],"is_active":false,"members":0,"created_at":"2026-10-19T00:05:24.139782Z"}
+12 Ed restore role 10 -> [200] {"id":10,"name_ar":"F03 ب2","name_en":"F03 Ed ok","permissions":["student.view_any"],"is_active":true,"members":0,"created_at":"2026-10-19T00:05:24.139782Z"}
+  DB: 10|t|F03 Ed ok|["student.view_any"]
+13 Ed retire own role 8 (holds all codes) -> [200] {"id":8,"name_ar":"F03 محرر","name_en":"F03 Role editor","permissions":["role.create","role.update","role.view","role.view_any","staff.create","staff.update","staff.view","staff.view_any","student.view_any"],"is_active":
+13b admin restore 8 -> [200] {"id":8,"name_ar":"F03 محرر","name_en":"F03 Role editor","permissions":["role.create","role.update","role.view","role.view_any","staff.create","staff.update","staff.view","staff.view_any","student.view_any"],"is_active":
+14 admin retire 9 -> [200] {"id":9,"name_ar":"F03 أعاد","name_en":"F03 Renamed by Ed","permissions":["invoice.view_any","payment.view_any","payslip.view_any"],"is_active":false,"members":1,"created_at":"2026-10-19T00:05:19.888780Z"}
+15 Ed restore 9 (regression of old guard) -> [403] {"is_active":["You can only restore a role whose permissions you hold yourself."]}
+16 admin restore 9 -> [200] {"id":9,"name_ar":"F03 أعاد","name_en":"F03 Renamed by Ed","permissions":["invoice.view_any","payment.view_any","payslip.view_any"],"is_active":true,"members":1,"created_at":"2026-10-19T00:05:19.888780Z"}
+  DB: 9|t|F03 Renamed by Ed|["invoice.view_any", "payment.view_any", "payslip.view_any"]
+17 Mo invoices after admin restore -> [200] {"count":6,"next":null,"previous":null,"results":[{"id":6,"number":"INV-000006","status":"void","is_overdue":false,"student":{"id":5,"full_name":"QA student"},"payer":{"id":5,"full_name":"QA student"},"subscription_id":n
+18 admin rename back -> [200] {"id":9,"name_ar":"F03 مال","name_en":"F03 Money","permissions":["invoice.view_any","payment.view_any","payslip.view_any"],"is_active":true,"members":1,"created_at":"2026-10-19T00:05:19.888780Z"}
+### tenant isolation: Ed cookie on qaother
+19 Ed cookie qaother retire -> [403] {"detail":"Authentication credentials were not provided."}
+19b Ed cookie qaother list -> [403] {"detail":"Authentication credentials were not provided."}
+  qaother roles: 1|t 

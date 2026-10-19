@@ -1,0 +1,16 @@
+{
+  "names": [
+    "name",
+    "subdomain",
+    "timezone",
+    "currency",
+    "plan_label",
+    "plan_notes",
+    "admin_email",
+    "admin_full_name"
+  ],
+  "help": [
+    "The academy's first admin; gets a set-password email."
+  ],
+  "timezoneTag": "INPUT:text"
+}

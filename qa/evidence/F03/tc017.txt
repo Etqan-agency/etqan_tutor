@@ -1,0 +1,50 @@
+== TC-017
+horizon {"generation_horizon_days":0} -> [400]  | Asia/Riyadh|USD|en|21|3|10|t|f|90
+horizon {"generation_horizon_days":61} -> [400]  | Asia/Riyadh|USD|en|21|3|10|t|f|90
+horizon {"generation_horizon_days":-1} -> [400]  | Asia/Riyadh|USD|en|21|3|10|t|f|90
+horizon {"generation_horizon_days":"abc"} -> [400]  | Asia/Riyadh|USD|en|21|3|10|t|f|90
+horizon {"generation_horizon_days":14.5} -> [400]  | Asia/Riyadh|USD|en|21|3|10|t|f|90
+horizon {"generation_horizon_days":"14"} -> [200]  | Asia/Riyadh|USD|en|14|3|10|t|f|90
+horizon {"generation_horizon_days":1} -> [200]  | Asia/Riyadh|USD|en|1|3|10|t|f|90
+horizon {"generation_horizon_days":60} -> [200]  | Asia/Riyadh|USD|en|60|3|10|t|f|90
+grace {"renewal_grace_days":-1} -> [400]  | Asia/Riyadh|USD|en|60|3|10|t|f|90
+grace {"renewal_grace_days":61} -> [400]  | Asia/Riyadh|USD|en|60|3|10|t|f|90
+grace {"renewal_grace_days":0} -> [200]  | Asia/Riyadh|USD|en|60|0|10|t|f|90
+grace {"renewal_grace_days":60} -> [200]  | Asia/Riyadh|USD|en|60|60|10|t|f|90
+due {"invoice_due_days":91} -> [400]  | Asia/Riyadh|USD|en|60|60|10|t|f|90
+due {"invoice_due_days":0} -> [200]  | Asia/Riyadh|USD|en|60|60|0|t|f|90
+due {"invoice_due_days":90} -> [200]  | Asia/Riyadh|USD|en|60|60|90|t|f|90
+postpone {"postpone_limit_minutes":10081} -> [400]  | Asia/Riyadh|USD|en|60|60|90|t|f|90
+postpone {"postpone_limit_minutes":10080} -> [200]  | Asia/Riyadh|USD|en|60|60|90|t|f|10080
+postpone {"postpone_limit_minutes":0} -> [200]  | Asia/Riyadh|USD|en|60|60|90|t|f|0
+postpone {"postpone_limit_minutes":120} -> [200]  | Asia/Riyadh|USD|en|60|60|90|t|f|120
+absent {"absent_consumes_session":"yes"} -> [200]  | Asia/Riyadh|USD|en|60|60|90|t|f|120
+absent {"absent_consumes_session":1} -> [200]  | Asia/Riyadh|USD|en|60|60|90|t|f|120
+absent {"absent_consumes_session":"false"} -> [200]  | Asia/Riyadh|USD|en|60|60|90|f|f|120
+absent {"absent_consumes_session":null} -> [400]  | Asia/Riyadh|USD|en|60|60|90|f|f|120
+absent {"absent_consumes_session":[]} -> [400]  | Asia/Riyadh|USD|en|60|60|90|f|f|120
+absent {"absent_consumes_session":"maybe"} -> [400]  | Asia/Riyadh|USD|en|60|60|90|f|f|120
+absent {"absent_consumes_session":"on"} -> [200]  | Asia/Riyadh|USD|en|60|60|90|t|f|120
+absent {"absent_consumes_session":true} -> [200]  | Asia/Riyadh|USD|en|60|60|90|t|f|120
+tz {"timezone":"Mars/Phobos"} -> [400]  | Asia/Riyadh|USD|en|60|60|90|t|f|120
+tz {"timezone":""} -> [400]  | Asia/Riyadh|USD|en|60|60|90|t|f|120
+tz {"timezone":"cairo"} -> [400]  | Asia/Riyadh|USD|en|60|60|90|t|f|120
+tz {"timezone":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"} -> [400]  | Asia/Riyadh|USD|en|60|60|90|t|f|120
+tz {"timezone":"UTC"} -> [200]  | UTC|USD|en|60|60|90|t|f|120
+tz {"timezone":"Etc/GMT+14"} -> [400]  | UTC|USD|en|60|60|90|t|f|120
+tz {"timezone":"Africa/Cairo"} -> [200]  | Africa/Cairo|USD|en|60|60|90|t|f|120
+lang {"default_language":"es"} -> [400]  | Africa/Cairo|USD|en|60|60|90|t|f|120
+lang {"default_language":"fr"} -> [400]  | Africa/Cairo|USD|en|60|60|90|t|f|120
+lang {"default_language":"AR"} -> [400]  | Africa/Cairo|USD|en|60|60|90|t|f|120
+lang {"default_language":"en"} -> [200]  | Africa/Cairo|USD|en|60|60|90|t|f|120
+lang {"default_language":"ar"} -> [200]  | Africa/Cairo|USD|ar|60|60|90|t|f|120
+unknown {"foo":1,"updated_at":"2000-01-01T00:00:00Z","supervision_enabled":true} -> [200]  | Africa/Cairo|USD|ar|60|60|90|t|f|120
+empty {} -> [200]  | Africa/Cairo|USD|ar|60|60|90|t|f|120
+non-JSON -> {"detail":"JSON parse error - Expecting value: line 1 column 1 (char 0)"} [400]
+form-encoded -> bled":true,"updated_at":"2026-10-19T00:13:23.889545Z"} [200]
+qa: postponement=off
+postpone_off {"postpone_limit_minutes":60} -> [400]  | Africa/Cairo|USD|ar|60|5|90|t|f|120
+GET has postpone key while off: False
+qa: postponement=on
+== restore baseline
+restore {"timezone":"Africa/Cairo","default_currency":"EGP","default_language":"ar","generation_horizon_days":14,"renewal_grace_days":7,"invoice_due_days":7,"absent_consumes_session":true,"excused_consumes_session":false,"auto_invoice_on_subscription":true,"postpone_limit_minutes":120} -> [200]  | Africa/Cairo|EGP|ar|14|7|7|t|f|120

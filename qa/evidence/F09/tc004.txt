@@ -1,0 +1,19 @@
+== TC-004 2026-10-19T03:36:55.341140
+patch price 200 {"id": 3, "price_minor": 120000}
+inv after price edit 13|150000|unpaid
+renew 201 {"id": 7, "status": "active", "schedule_status": "active", "student": {"id": 5, "full_name": "QA student", "timezone": "Africa/Cairo"}, "teacher": {"id": 7, "full_name": "QA teacher"}, "course": {"id": 2, "name_ar": "تجويد", "name_en": "Tajweed QA"}, "package": {"id": 2, "name_ar": "شهري", "name_en": "Monthly QA"}, "starts_on": "2026-11-19", "term_ends_on": "2026-12-18", "ends_on": "2026-12-18", "
+inv after renew 13|3|150000|unpaid
+14|7|120000|unpaid
+delete invoiced 409 {"detail": "This subscription has invoices. Void them first.", "code": "billing.subscription_invoiced"}
+cancel SUB2 404 "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">\n  <title>Page not found at /api/v1/subscriptions/None/cancel/</title>\n  <meta name=\"robots\" content=\"NONE,NOARCHIVE\">\n  <style>\n    html * { padding:0; margin:0; }\n    body * { padding:10px "
+SUB2 inv ERROR:  column "none" does not exist
+LINE 1: ...rency,status from billing_invoice where subscription_id=None
+                                                                   ^
+HINT:  Perhaps you meant to reference the column "billing_invoice.notes".
+== TC-004 contd 2026-10-19T03:37:06.877127
+cancel SUB2 200 {"id": 8, "status": "cancelled"}
+SUB2 inv after cancel 15|99950|EGP|unpaid
+summary 200 {"revenue_this_month": [{"currency": "EGP", "amount_minor": 50000}, {"currency": "USD", "amount_minor": 2500}], "overdue": []}
+void inv 13 200 {"status": "void"}
+delete SUB1 after void 409 {"detail": "This subscription was renewed. Cancel the renewal first.", "code": "scheduling.already_renewed"}
+SUB1 row 3|active inv 13|3|void

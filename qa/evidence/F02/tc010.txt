@@ -1,0 +1,32 @@
+## TC-010
+200
+200
+a: {"current_password":["Incorrect password."]} 400  71ms
+b: {"new_password":["Ensure this field has at least 8 characters."]} 400  69ms
+hash unchanged after a,b: yes
+mails after refusals:        0
+c:  200  111ms
+  c changed hash: YES
+  login with 12345678 works
+d:  200  150ms
+e:  200  150ms
+f:  200  149ms
+g 200k:  200 115ms
+  hash prefix now: argon2$argon2id$v=19
+  login with prev pw after g: 400
+## TC-010 (h) + S1 on link reset
+a2 session before (h): 403
+h valid change:  200
+a1 (changer) me: 200   a2 me: 403
+old (200k A) login: 400
+alert mails since last refusal-free point:
+4krtilyyUGj2ZDgwRWObH1 f02-a@qa.etqan.test | [Etqan QA Academy] تنبيه أمني: تم إجراء تغيير على حسابك
+anonymous change: {"detail":"Authentication credentials were not provided."} 403 
+S1 on link reset with 12345678: f02-d@qa.etqan.test 200
+  login f02-d 12345678: 200
+Settings AUTH_PASSWORD_VALIDATORS: ['UserAttributeSimilarityValidator', 'MinimumLengthValidator', 'CommonPasswordValidator', 'NumericPasswordValidator']
+validate_password callers:
+etqan/identity/codereset.py:18:from django.contrib.auth.password_validation import validate_password
+etqan/identity/codereset.py:250:        validate_password(password, user)
+etqan/identity/services.py:10:from django.contrib.auth.password_validation import validate_password
+etqan/identity/services.py:745:        validate_password(password, user)

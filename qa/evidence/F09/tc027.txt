@@ -1,0 +1,17 @@
+== TC-027 2026-10-19T03:44:59.762409
+paypal save 200 {"enabled": true, "mode": "test", "client_id": "cid_f09", "has_secret": true, "webhook_id": "WH-F09", "currency": "USD", "locale": "en-US", "notes": "", "webhook_url": "http://qa.etqan.localhost/api/v1/gateways/webhooks/paypal/", "events": ["CHECKOUT.ORDER.APPROVED", "PAYMENT.CAPTURE.COMPLETED", "PA
+USD can_pay_online ['stripe', 'paypal']
+OK  TC027 USD offers stripe+paypal
+EGP can_pay_online ['stripe']
+OK  TC027 EGP offers stripe only
+OK  TC027 paypal EGP 400 :: {"provider": ["This payment method cannot take this amount."]}
+paypal start 201 {"id": "c0f63ce1-337e-4e05-a6f2-44f7441dfe6b", "redirect_url": "http://qa.etqan.localhost/app/pay/simulate/c0f63ce1-337e-4e05-a6f2-44f7441dfe6b", "amount_minor": 5000, "fee_minor": 250, "currency": "USD"}
+sim 200 {"status": "completed"}
+pp payment paypal|5000|250|USD|CAP-SIM-663A4D3952A84AC4A
+OK  TC027 paypal payment CAP-SIM, invoice paid
+fail (200, {'status': 'failed'}) expire (200, {'status': 'failed'}) failed
+KWD can_pay_online ['stripe']
+KWD start 201 {"amount_minor": 12345, "fee_minor": 625}
+OK  TC027 KWD total multiple of 10 :: 12970
+S6 KWD fee off can_pay_online []
+paypal disabled 200

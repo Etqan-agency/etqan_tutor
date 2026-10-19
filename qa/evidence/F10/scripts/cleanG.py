@@ -1,0 +1,10 @@
+from qa import *
+st = st_load(); a = S(); a.login(*PW["admin"])
+log("==== TC-029 cleanup")
+log("T13 rate 6000", a.patch(f"/payroll/rates/{q('select id from payroll_teacherrate where teacher_id=14 and course_id is null')}/", {"hourly_rate_minor": 6000})[0])
+for aid in q("select id from payroll_payadjustment where teacher_id in (14,15) and payslip_id is null").split(): log("del adj", aid, a.delete(f"/payroll/adjustments/{aid}/")[0])
+log("del fixed T14", a.delete(f"/payroll/fixed-salaries/{st['fixed_T14']}/")[0]); log("rate T14 6000", a.patch(f"/payroll/rates/{st['rate_T14']}/", {"hourly_rate_minor": 6000})[0])
+c, g = a.post("/payroll/payslips/generate/", {"year": 2026, "month": 4}); log("generate April now", c, short(g))
+log("T14 April", q("select id,gross_minor,net_minor,status from payroll_payslip where teacher_id=15"))
+log("no partial rows left", q("select count(*) from payroll_payadjustment where teacher_id in (14,15)"), q("select count(*) from payroll_fixedsalary where teacher_id=15"))
+save("tc029.txt")

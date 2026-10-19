@@ -1,0 +1,5 @@
+qa-tmp-1 features before: {} qaother: {}
+after: qa-tmp-1 status/features: active|{}
+admin_log rows by user 2: 2
+2026-10-17 20:05:08.137121+00|2|QA Tmp One|Copied features from Etqan QA Other.
+2026-10-17 20:05:10.752239+00|2|QA Tmp One|Copied features from Etqan QA Other.

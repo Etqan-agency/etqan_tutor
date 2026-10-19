@@ -1,0 +1,15 @@
+{
+  "status": 200,
+  "json": [
+    {
+      "country": "AE",
+      "price_minor": 4000,
+      "currency": "AED"
+    },
+    {
+      "country": "SA",
+      "price_minor": 5000,
+      "currency": "SAR"
+    }
+  ]
+}

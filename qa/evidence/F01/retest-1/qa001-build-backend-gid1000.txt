@@ -1,0 +1,51 @@
+$ 2026-10-17T21:52:03Z docker build --progress=plain --target dev --build-arg UID=1000 --build-arg GID=1000  -t etqan-qa001-r1/backend:gid1000 backend  (host id: uid=501(khaledsakr) gid=20(staff) groups=20(staff),12(everyone),61(localaccounts),79(_appserverusr),80(admin),81(_appserveradm),98(_lpadmin),702(com.apple.sharepoint.group.2),33(_appstore),100(_lpoperator),204(_developer),250(_analyticsusers),395(com.apple.access_ftp),398(com.apple.access_screensharing),399(com.apple.access_ssh),400(com.apple.access_remote_ae),701(com.apple.sharepoint.group.1))
+
+#5 [base 1/4] FROM docker.io/library/python:3.13-slim@sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f
+#5 resolve docker.io/library/python:3.13-slim@sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f 0.2s done
+#5 DONE 0.2s
+
+#4 [internal] load build context
+#4 transferring context: 597.42kB 0.3s done
+#4 DONE 0.3s
+
+#6 [base 2/4] WORKDIR /app
+#6 CACHED
+
+#7 [base 3/4] RUN apt-get update && apt-get install -y --no-install-recommends     build-essential     libpq-dev     curl     && rm -rf /var/lib/apt/lists/*
+#7 CACHED
+
+#8 [base 4/4] COPY requirements/ requirements/
+#8 CACHED
+
+#9 [dev 1/3] RUN pip install --no-cache-dir -r requirements/local.txt
+#9 CACHED
+
+#10 [dev 2/3] RUN set -eu;     getent group "1000" >/dev/null || groupadd -g "1000" app;     useradd -u "1000" -g "1000" -m app;     chown -R "1000:1000" /app
+#10 CACHED
+
+#11 [dev 3/3] COPY --chown=1000:1000 . .
+#11 DONE 0.5s
+
+#12 exporting to image
+#12 exporting layers
+#12 exporting layers 0.7s done
+#12 exporting manifest sha256:0bf1696cf18d40bfd7acf32c2f456df61ae73af97a5a2f4d3d95776285ae620e done
+#12 exporting config sha256:5a5ac15af6ae6cba00b997da51d2916acc34dcf39fbffba3cdf732d4c26740fd done
+#12 exporting attestation manifest sha256:c7957eae1f42632a4c5ff1941cc78db6a13061e6860371a003735260ed198c3b 0.0s done
+#12 exporting manifest list sha256:ae13a0d12525d0454126b00cc83c1c107cef68d8444bf74ba328ff0d2ba9d3fd done
+#12 naming to docker.io/etqan-qa001-r1/backend:gid1000 done
+#12 unpacking to docker.io/etqan-qa001-r1/backend:gid1000
+#12 unpacking to docker.io/etqan-qa001-r1/backend:gid1000 0.3s done
+#12 DONE 1.1s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/4tnqhby6a1etombmwjfhvxeqk
+build exit=0
+## id:
+uid=1000(app) gid=1000(app) groups=1000(app)
+## stat /app:
+1000:1000 app:app /app
+app:x:1000:
+app can write /app
+## python manage check as app:
+django 6.0.9
+app

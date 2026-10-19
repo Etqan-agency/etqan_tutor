@@ -1,0 +1,19 @@
+demo|active|UTC|USD|f|{"faqs": true, "export": true, "levels": true, "themes": true, "parents": true, "spanish": true, "articles": true, "balances": true, "expenses": true, "families": true, "homework": true, "invoices": true, "whatsapp": true, "zoom_api": true, "contracts": true, "donations": true, "ai_reports": true, "broadcasts": true, "code_reset": true, "two_factor": true, "phone_login": true, "quick_login": true, "site_status": true, "supervision": true, "activity_log": true, "ai_assistant": true, "certificates": true, "file_uploads": true, "honour_board": true, "page_builder": true, "postponement": true, "study_groups": true, "system_codes": true, "consultations": true, "internal_chat": true, "payment_links": true, "payroll_rules": true, "session_times": true, "site_tracking": true, "system_status": true, "url_redirects": true, "video_library": true, "advertisements": true, "exchange_rates": true, "extra_sessions": true, "google_sign_in": true, "quran_chapters": true, "trial_sessions": true, "country_pricing": true, "disposal_status": true, "installable_app": true, "manual_sessions": true, "online_payments": true, "quick_translate": true, "salary_expenses": true, "session_archive": true, "session_reports": true, "session_reviews": true, "teacher_balance": true, "payment_receipts": true, "recorded_courses": true, "weekly_schedules": true, "report_deductions": true, "self_registration": true, "testimonial_media": true, "auto_notifications": true, "bulk_teacher_rates": true, "push_notifications": true, "salary_projections": true, "teacher_attendance": true, "educational_content": true, "group_subscriptions": true, "simplified_sessions": true, "family_subscriptions": true, "fixed_teacher_salary": true, "student_teacher_rate": true, "subscription_archive": true, "teacher_availability": true, "compensation_sessions": true, "incentives_deductions": true, "registration_waitlist": true, "verified_certificates": true, "notification_templates": true, "payslip_acknowledgement": true, "notification_preferences": true, "multi_course_subscriptions": true}
+other|active|UTC|USD|f|{}
+qaother|active|UTC|USD|f|{"internal_chat": false}
+qa|active|Africa/Cairo|EGP|f|{"families": true, "invoices": true, "internal_chat": false, "online_payments": true}
+qa-tmp-1|suspended|Asia/Riyadh|USD|f|{"families": true, "invoices": true, "internal_chat": false, "online_payments": true}
+|active
+demo|active
+other|active
+qaother|active
+qa|active
+qa-tmp-1|suspended
+qa-tmp-tz|suspended
+qa-tmp-race-a|suspended
+qa-tmp-race-b|suspended
+journey-1792270407267|active
+journey-1792270459368|active
+journey-1792270543395|active
+qa-tmp-r1ok|suspended
+khaled|active

@@ -1,0 +1,19 @@
+cleanup suspended 4 [8, 10, 6, 7]
+1||active|UTC|USD|{}
+2|demo|active|UTC|USD|{"faqs": true, "export": true, "levels": true, "themes": true, "parents": true, "spanish": true, "articles": true, "balances": true, "expe
+3|other|active|UTC|USD|{}
+4|qaother|active|UTC|USD|{"internal_chat": false}
+5|qa|active|Africa/Cairo|EGP|{"families": true, "invoices": true, "internal_chat": false, "online_payments": true}
+6|qa-tmp-1|suspended|Asia/Riyadh|USD|{"families": true, "invoices": true, "internal_chat": false, "online_payments": true}
+7|qa-tmp-tz|suspended|Mars/Phobos|usd|{}
+8|qa-tmp-race-a|suspended|UTC|USD|{}
+10|qa-tmp-race-b|suspended|UTC|USD|{}
+12|journey-1792270407267|active|UTC|USD|{}
+13|journey-1792270459368|active|UTC|USD|{}
+14|journey-1792270543395|active|UTC|USD|{}
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbb
+localtest.me|6|disabled|f
+www.qa-academy.test|6|disabled|f
+qa-academy.test|6|disabled|f
+fixture invoices: 0
+QA-ISO tags: 0

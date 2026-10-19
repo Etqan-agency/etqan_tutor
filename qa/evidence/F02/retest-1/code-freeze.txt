@@ -1,0 +1,7 @@
+df8ac3a4a951a11b2d7a3c06d4745864 etqan/identity/authentication.py
+58084c8b1ce02feaf6d73e1cccf3aa7f config/settings/base.py
+bcc2d12a03d292785767d5498bbf8a1f etqan/identity/services.py
+8ee3c8bbb403f1891c4774334e2dee2f etqan/identity/api/serializers.py
+31ae7fee4aab8c2c496ae488bc71018b etqan/identity/tests/test_impersonation.py
+f39630034d5aedac937d6a8c0c186d2a etqan/identity/tests/test_features.py
+1200e12e4a1aa0ffbb317ce8c1dd82aa etqan/identity/tests/test_password_management.py

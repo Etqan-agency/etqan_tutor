@@ -1,0 +1,29 @@
+Invoices
+INV-000153
+For SCN Student A2, due Oct 26, 2026
+Balance: EGP 0.00
+Void
+INV-000152
+For SCN Student A2, due Oct 19, 2026
+Balance: EGP 0.00
+Void
+INV-000151
+For SCN Student A2, due Oct 19, 2026
+Balance: EGP 200.00
+Unpaid
+INV-000150
+For SCN Student A1, due Oct 26, 2026
+Balance: EGP 0.00
+Void
+INV-000148
+For SCN Student A3, due Oct 26, 2026
+Balance: EGP 0.00
+Void
+INV-000147
+For SCN Student A2, due Oct 26, 2026
+Balance: EGP 0.00
+Paid
+INV-000146
+For SCN Student A1, due Oct 26, 2026
+Balance: EGP 0.00
+Paid

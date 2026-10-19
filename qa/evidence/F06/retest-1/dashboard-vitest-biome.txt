@@ -1,0 +1,9 @@
+   ✓ AcademySettingsForm > loads and saves timezone, currency and language  617ms
+   ✓ AcademySettingsForm > saves the horizon and grace days and checks their range  375ms
+
+ Test Files  2 passed (2)
+      Tests  14 passed (14)
+   Start at  16:30:43
+   Duration  5.03s (transform 611ms, setup 1.26s, collect 1.68s, tests 2.66s, environment 1.48s, prepare 167ms)
+
+Checked 10 files in 123ms. No fixes applied.

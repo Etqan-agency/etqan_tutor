@@ -1,0 +1,21 @@
+2026-10-17T21:16:13Z
+## new dev-stage user line from dashboard/Dockerfile (identical in marketing/Dockerfile), run in node:22-alpine
+set -eu;      deluser node 2>/dev/null || true;      group="$(awk -F: -v gid="${GID}" '$3 == gid { print $1; exit }' /etc/group)";      if [ -z "$group" ]; then addgroup -g "${GID}" app; group=app; fi;      adduser -u "${UID}" -G "$group" -D app;      chown -R "${UID}:${GID}" /app
+-- UID=501 GID=20
+uid=501(app) gid=20(dialout) groups=20(dialout),20(dialout)
+/app 501:20
+/app/x 501:20
+/app/y 501:20
+exit=0
+-- UID=1000 GID=1000
+uid=1000(app) gid=1000(app) groups=1000(app),1000(app)
+/app 1000:1000
+/app/x 1000:1000
+/app/y 1000:1000
+exit=0
+-- UID=1001 GID=1001
+uid=1001(app) gid=1001(app) groups=1001(app),1001(app)
+/app 1001:1001
+/app/x 1001:1001
+/app/y 1001:1001
+exit=0

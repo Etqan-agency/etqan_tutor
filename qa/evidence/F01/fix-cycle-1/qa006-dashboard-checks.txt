@@ -1,0 +1,22 @@
+$ biome check (touched files)
+Checked 4 files in 45ms. No fixes applied.
+biome exit=0
+$ tsc --noEmit
+tsc exit=0
+$ vitest run (touched + dependants)
+   ✓ LoginForm > two-factor step > returns to step one with a translated message on identity.mfa_expired  499ms
+ ✓ src/features/identity/components/RemoveEmailDialog.test.tsx (3 tests) 675ms
+   ✓ RemoveEmailDialog > removes on confirm  393ms
+ ✓ src/features/quicklogin/queries.test.tsx (1 test) 53ms
+ ✓ src/features/quicklogin/api.test.ts (1 test) 5ms
+ ✓ src/features/quicklogin/ImpersonationBanner.test.tsx (2 tests) 178ms
+ ✓ src/features/identity/components/ProfileEditForm.test.tsx (9 tests) 12547ms
+   ✓ ProfileEditForm > saves edits  943ms
+   ✓ ProfileEditForm > has no axe violations  10928ms
+
+ Test Files  22 passed (22)
+      Tests  201 passed (201)
+   Start at  21:14:14
+   Duration  18.38s (transform 3.93s, setup 21.80s, collect 22.12s, tests 41.31s, environment 25.30s, prepare 2.82s)
+
+vitest exit=0

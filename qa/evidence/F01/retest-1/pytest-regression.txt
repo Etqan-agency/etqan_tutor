@@ -1,0 +1,12 @@
+$ 2026-10-17T21:59:36Z dc.sh exec -T django pytest etqan/tenants/tests/test_admin_permissions.py etqan/identity/tests/test_login_csrf.py etqan/tenants/tests/test_services.py etqan/tenants/tests/test_commands.py etqan/tenants/tests/test_admin.py -q -p no:cacheprovider
+............................................................             [100%]
+=============================== warnings summary ===============================
+etqan/tenants/tests/test_admin_permissions.py: 8 warnings
+etqan/identity/tests/test_login_csrf.py: 8 warnings
+etqan/tenants/tests/test_admin.py: 10 warnings
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+60 passed, 26 warnings in 140.05s (0:02:20)
+exit=0 at 2026-10-17T22:02:00Z

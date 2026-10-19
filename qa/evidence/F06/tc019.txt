@@ -1,0 +1,35 @@
+[200] PUT schedule/availability/ :: {"teacher":{"id":7,"full_name":"QA teacher"},"windows":[{"weekday":0,"start_time":"09:00","end_time":"12:00"}]}
+[400] PUT schedule/availability/ :: {"windows.0":["End the window after it starts."]}
+[400] PUT schedule/availability/ :: {"windows":["Choose at most 50 windows."]}
+[404] PUT schedule/availability/217/ :: {"detail":"Not found."}
+[404] GET schedule/availability/217/ :: {"detail":"Not found."}
+[200] PUT schedule/availability/217/ :: {"teacher":{"id":217,"full_name":"QA6 Teacher B"},"windows":[{"weekday":1,"start_time":"07:00","end_time":"08:00"}]}
+7|0|09:00:00|12:00:00
+217|1|07:00:00|08:00:00
+[200] PUT schedule/availability/7/ :: {"teacher":{"id":7,"full_name":"QA teacher"},"windows":[{"weekday":0,"start_time":"09:00","end_time":"12:00"},{"weekday":2,"start_time":"09:00","end_time":"10:00"}]}
+[200] PUT schedule/availability/7/ :: {"teacher":{"id":7,"full_name":"QA teacher"},"windows":[{"weekday":0,"start_time":"09:00","end_time":"12:00"}]}
+1
+[201] POST subscriptions/ :: {"id":39,"status":"active","schedule_status":"active","student":{"id":214,"full_name":"QA6 Student 3","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":4,"name_ar":
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;d=json.loads(sys.argv[1]);print(eval(sys.argv[2]))
+                                                    ~~~~^^^^^^^^^^^^^
+  File "<string>", line 1
+    k:v for k
+     ^
+SyntaxError: invalid syntax
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;d=json.loads(sys.argv[1]);print(eval(sys.argv[2]))
+                                                    ~~~~^^^^^^^^^^^^^
+  File "<string>", line 1
+    v in d.items() if 'outside' in k
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: expected 'else' after 'if' expression
+   outside keys:     outside keys: 
+[200] GET subscriptions/39/slots/ :: [{"id":47,"weekday":0,"start_time":"20:00","minutes":45,"meeting_url":"","is_active":true,"has_sessions":true,"outside_availability":true}]
+[400] POST subscriptions/ :: {"teacher":["This teacher does not teach the course."]}
+qa: teacher_availability=off
+[200] GET subscriptions/39/slots/ :: [{"id":47,"weekday":0,"start_time":"20:00","minutes":45,"meeting_url":"","is_active":true,"has_sessions":true}]
+[404] PUT schedule/availability/ :: {"detail":"This feature is not enabled for this academy."}
+qa: teacher_availability=on

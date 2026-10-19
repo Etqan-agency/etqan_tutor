@@ -1,0 +1,44 @@
+## TC-013
+w1:{"code":["Invalid code."]} 400  w2:{"code":["Invalid code."]} 400  w3:{"code":["Invalid code."]} 400  w4:{"code":["Invalid code."]} 400  w5:{"detail":"Too many wrong codes. Sign in again.","code":"identity.mfa_locked"} 403  
+(a) right after 5 wrong: {"detail":"Your sign-in has expired. Sign in again.","code":"identity.mfa_expired"} 403  me=403
+(b)+1:403 (b)+2:400 (b)+3:400 (b)+4:400 (b)+5:400 
+(b)w1:400 (b)w2:429 (b)w3:429 (b)w4:429 (b)w5:429 
+{"mfa_required":true} 200 
+(b) right code after 10 wrong in the hour:
+HTTP/1.1 429 Too Many Requests
+Retry-After: 3589
+{"detail":"Request was throttled. Expected available in 3589 seconds."}
+
+keys: academy_qa::1:failures:mfa_pending:<hash> academy_qa::1:failures:mfa_user:<hash> 
+pending keys {'id': 'epfpOVUEY8iKKn2iQHPCpA', 'user_id': 7, 'pw': 'fd78239d05ac162e', 'expires': 1792364272.6968582, 'via': 'password', 'timezone': 'Africa/Cairo', 'limit_key': 'qa-teacher@qa.etqan.test', 'google_sub': ''}
+edited 1792363872.6968582 now 1792363974.6144443
+(c) expired pending + right code: {"detail":"Your sign-in has expired. Sign in again.","code":"identity.mfa_expired"} 403  me=403
+(d) after pw change between steps: {"detail":"Your sign-in has expired. Sign in again.","code":"identity.mfa_expired"} 403  me=403
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import json,sys;print(json.load(sys.stdin)["Text"])
+                          ~~~~~~~~~^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py", line 298, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+(e) deactivated between steps: {"detail":"Your sign-in has expired. Sign in again.","code":"identity.mfa_expired"} 403  me=403
+200
+(f) identifier locked while pending: {"detail":"Your sign-in has expired. Sign in again.","code":"identity.mfa_expired"} 403  me=403
+restore teacher pw: 200
+(e)/(f) rerun — first run's logins failed because the restore mail was read too early (password was the temp one), so those first (e)/(f) lines are void.
+{"mfa_required":true} 200 200
+(e) deactivated between steps: {"detail":"This account is not active."} 403  me=403
+200
+{"mfa_required":true} 200 (f) identifier locked while pending: {"detail":"Request was throttled. Expected available in 3574 seconds."} 429  me=403
+sanity: pending + right code works: 200 200

@@ -1,0 +1,4 @@
+All checks passed!
+2 files already formatted
+Contracts: 54 kept, 0 broken.
+70 passed, 8 warnings in 2.13s

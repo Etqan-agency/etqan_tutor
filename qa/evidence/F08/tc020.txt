@@ -1,0 +1,33 @@
+[200] GET sessions/299/activity/ :: {"results":[{"id":94,"action":"times","actor":{"id":7,"name":"QA teacher"},"actor_kind":"user","created_at":"2026-10-19T16:45:33.921535Z","changes":[{"field":"teacher_in_at","before":null,"after":"2026-10-14T18:31:00Z"}],"reverts":null,"reverted_by":[],"can_revert":true},{"id":93,"action":"restore","actor":{"id":1,"name":"QA Admin"},"actor_kind":"user","created_at":"2026-10-19T16:45:33.861549Z","changes":[{"field":"status","before":"cancelled","after":"completed"},{"field":"cancel_reason","before":"l1","after":""}],"reverts":null,"reverted_by":[],"can_revert":true},{"id":92,"action":"cancel","actor":{"id":1,"name":"QA Admin"},"actor_kind":"user","created_at":"2026-10-19T16:45:33.799734Z","changes":[{"field":"status","before":"completed","after":"cancelled"},{"field":"cancel_reason","before":"","after":"l1"}],"reverts":null,"reverted_by":[],"can_revert":false},{"id":91,"action":"attendanc
+91|299|1|attendance|{"status": ["scheduled", "completed"], "student_attendance": ["not_set", "present"]}|
+92|299|1|cancel|{"status": ["completed", "cancelled"], "cancel_reason": ["", "l1"]}|
+93|299|1|restore|{"status": ["cancelled", "completed"], "cancel_reason": ["l1", ""]}|
+94|299|7|times|{"teacher_in_at": [null, "2026-10-14T18:31:00Z"]}|
+entries 91 92 93 94
+-- revert newest (times 94)
+[200] POST sessions/299/activity/94/revert/ :: {"session":{"id":299,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-14","starts_at":"2026-10-14T18:30:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":
+
+-- revert restore (93) -> back to cancelled
+[200] POST sessions/299/activity/93/revert/ :: {"session":{"id":299,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-14","starts_at":"2026-10-14T18:30:00Z","minutes":30,"status":"cancelled","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":
+cancelled|l1
+-- stale: revert attendance entry (91) whose status changed since
+[409] POST sessions/299/activity/91/revert/ :: {"detail":"This changed after that entry. Reload to see what it is now.","code":"scheduling.changed_since"}
+-- revert a revert (96)
+[200] POST sessions/299/activity/96/revert/ :: {"session":{"id":299,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-14","starts_at":"2026-10-14T18:30:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":
+91|299|1|attendance|{"status": ["scheduled", "completed"], "student_attendance": ["not_set", "present"]}|
+92|299|1|cancel|{"status": ["completed", "cancelled"], "cancel_reason": ["", "l1"]}|
+93|299|1|restore|{"status": ["cancelled", "completed"], "cancel_reason": ["l1", ""]}|
+94|299|7|times|{"teacher_in_at": [null, "2026-10-14T18:31:00Z"]}|
+95|299|1|times|{"teacher_in_at": ["2026-10-14T18:31:00Z", null]}|94
+96|299|1|cancel|{"status": ["completed", "cancelled"], "cancel_reason": ["", "l1"]}|93
+97|299|1|restore|{"status": ["cancelled", "completed"], "cancel_reason": ["l1", ""]}|96
+-- locked P6 entry 10
+[409] POST sessions/247/activity/10/revert/ :: {"detail":"This session is on an issued payslip.","code":"payroll.payslip_issued"}
+-- compensated original C1 entry 29
+[409] POST sessions/243/activity/29/revert/ :: {"detail":"This session was made up or compensated, so it can't change.","code":"scheduling.has_compensation"}
+GET tea=404  GET nocode=403  GET codes=403  GET stu=404  GET sup=200  
+teacher revert=404
+qa: activity_log=off
+[404] GET sessions/299/activity/ :: {"detail":"This feature is not enabled for this academy."}
+[404] POST sessions/299/activity/92/revert/ :: {"detail":"This feature is not enabled for this academy."}
+qa: activity_log=on

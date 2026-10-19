@@ -1,0 +1,20 @@
+== TC-028 (added by Agent 2, P1): mixed-source race on one invoice never overpays 2026-10-19T03:52:24.499661
+round 0 codes [201, 400, 409, 200] paid|n 10000|1 status paid checkout false|balance_below_amount
+OK  TC028 round 0: sum completed == 10000, exactly one payment, paid
+OK  TC028 round 0: losing code stays unused
+round 1 codes [201, 400, 409, 200] paid|n 10000|1 status paid checkout false|balance_below_amount
+OK  TC028 round 1: sum completed == 10000, exactly one payment, paid
+OK  TC028 round 1: losing code stays unused
+round 2 codes [201, 400, 409, 200] paid|n 10000|1 status paid checkout false|balance_below_amount
+OK  TC028 round 2: sum completed == 10000, exactly one payment, paid
+OK  TC028 round 2: losing code stays unused
+round 3 codes [201, 400, 409, 200] paid|n 10000|1 status paid checkout false|balance_below_amount
+OK  TC028 round 3: sum completed == 10000, exactly one payment, paid
+OK  TC028 round 3: losing code stays unused
+round 4 codes [201, 400, 409, 200] paid|n 10000|1 status paid checkout false|balance_below_amount
+OK  TC028 round 4: sum completed == 10000, exactly one payment, paid
+OK  TC028 round 4: losing code stays unused
+ledger USD|0|0
+EGP|72000|72000
+overpay any 
+5xx in log 0

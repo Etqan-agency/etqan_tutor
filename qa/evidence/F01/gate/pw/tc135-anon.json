@@ -1,0 +1,4 @@
+{
+  "status": 302,
+  "location": "/admin/login/?next=/admin/tenants/academy/"
+}

@@ -1,0 +1,16 @@
+expect 2026-10-19 2026-10-19 15:00:00+00:00
+expect 2026-10-26 2026-10-26 15:00:00+00:00
+expect 2026-11-02 2026-11-02 16:00:00+00:00
+expect 2026-11-09 2026-11-09 16:00:00+00:00
+expect 2026-11-16 2026-11-16 16:00:00+00:00
+[201] POST subscriptions/ :: {"id":23,"status":"active","schedule_status":"active","student":{"id":214,"full_name":"QA6 Student 3","timezone":"Africa/Cairo"},"teacher":{"id":217,"full_name":"QA6 Teacher B"},"course":{"id":3,"name
+[200] GET subscriptions/23/sessions/ :: {"count":3,"next":null,"previous":null,"results":[{"id":89,"subscription_id":23,"slot_id":22,"occurs_on":"2026-10-19","starts_at":"2026-10-19T15:00:00Z","minutes":45,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host"
+[('2026-10-19', '2026-10-19T15:00:00Z'), ('2026-10-26', '2026-10-26T15:00:00Z'), ('2026-11-02', '2026-11-02T16:00:00Z')]
+[200] POST schedule/generate/ :: {"created":3,"skipped_existing":3,"skipped_paused":0,"skipped_out_of_term":1,"skipped_stopped":0,"conflicts":[]}
+[200] POST schedule/generate/ :: {"created":0,"skipped_existing":6,"skipped_paused":0,"skipped_out_of_term":1,"skipped_stopped":0,"conflicts":[]}
+2026-10-19|2026-10-19 15:00:00|2026-10-19 18:00:00|45|t|t|19|121|scheduled
+2026-10-26|2026-10-26 15:00:00|2026-10-26 18:00:00|45|t|t|19|121|scheduled
+2026-11-02|2026-11-02 16:00:00|2026-11-02 18:00:00|45|t|t|19|121|scheduled
+2026-11-09|2026-11-09 16:00:00|2026-11-09 18:00:00|45|t|t|19|121|scheduled
+2026-11-16|2026-11-16 16:00:00|2026-11-16 18:00:00|45|t|t|19|121|scheduled
+2026-11-23|2026-11-23 16:00:00|2026-11-23 18:00:00|45|t|t|19|121|scheduled

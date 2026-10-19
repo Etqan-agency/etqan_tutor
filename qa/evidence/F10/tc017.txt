@@ -1,0 +1,22 @@
+==== TC-017 2026-10-19T04:08:19.982992 today 2026-10-19
+OK  mark-paid draft 409 :: 409 {"detail": "Not allowed while the payslip is draft.", "code": "payroll.not_allowed_in_status"}
+OK  issue on issued 409 :: 409 {"detail": "Not allowed while the payslip is issued.", "code": "payroll.not_allowed_in_status"}
+OK  issue on paid 409 :: 409 {"detail": "Not allowed while the payslip is paid.", "code": "payroll.not_allowed_in_status"}
+OK  mark-paid on paid 409 :: 409 {"detail": "Not allowed while the payslip is paid.", "code": "payroll.not_allowed_in_status"}
+OK  paid_on tomorrow 400 on paid_on :: 400 {"paid_on": ["A payslip can't be paid in the future."]}
+OK  paid_on malformed 400 :: 400 {"paid_on": ["Date has wrong format. Use one of these formats instead: YYYY-MM-DD."]}
+T5 Aug unchanged issued||
+T1 Aug draft {"id": 16, "gross_minor": 20000, "net_minor": 20000}
+issue T1 Aug 200 20000
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  pay-to-balance off 403/404 :: 404 {"detail": "This feature is not enabled for this academy."}
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+quick-login as T1 200 {"id": 7, "email": "qa-teacher@qa.etqan.test", "full_name": "QA teacher", "phone": "", "preferred_language": "ar", "effective_language": "ar", "timezo
+me under quick login 200 {"id": 7, "email": "qa-teacher@qa.etqan.test", "full_name": "QA teacher", "phone": "", "preferred_language": "ar", "effe
+S3 impersonated pay-to-balance 403 {"detail": "You do not have permission to perform this action."}
+S3 impersonated mark-paid 403 {"detail": "You do not have permission to perform this action."}
+S3 impersonated issue 403 {"detail": "You do not have permission to perform this action."}
+S3 impersonated generate 403 {"detail": "You do not have permission to perform this action."}
+S3 impersonated acknowledge 403 {"detail": "Not while signed in as someone else.", "code": "identity.impersonating"}
+OK  pay-to-balance 200 paid_to_balance :: 200 {"status": "paid", "paid_to_balance": true, "net_minor": 20000}
+OK  pay-to-balance on paid 409 :: 409 {"detail": "Not allowed while the payslip is paid.", "code": "payroll.not_allowed_in_status"}

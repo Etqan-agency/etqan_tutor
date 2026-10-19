@@ -1,0 +1,8 @@
+{
+  "closedAtMs": 3016,
+  "resubmitStatus": 200,
+  "errors": [
+    "This subdomain is already taken."
+  ],
+  "url": "http://etqan.localhost/admin/tenants/academy/add/"
+}

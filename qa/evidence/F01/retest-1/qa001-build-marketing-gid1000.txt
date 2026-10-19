@@ -1,0 +1,53 @@
+$ 2026-10-17T21:53:44Z docker build --progress=plain --target dev --build-arg UID=1000 --build-arg GID=1000 --secret id=tokens_token,env=GH_TOKEN -t etqan-qa001-r1/marketing:gid1000 marketing  (host id: uid=501(khaledsakr) gid=20(staff) groups=20(staff),12(everyone),61(localaccounts),79(_appserverusr),80(admin),81(_appserveradm),98(_lpadmin),702(com.apple.sharepoint.group.2),33(_appstore),100(_lpoperator),204(_developer),250(_analyticsusers),395(com.apple.access_ftp),398(com.apple.access_screensharing),399(com.apple.access_ssh),400(com.apple.access_remote_ae),701(com.apple.sharepoint.group.1))
+#9 36.61 + @fontsource/ibm-plex-sans-arabic 5.3.0
+#9 36.61 + @fontsource/inter 5.3.0
+#9 36.61 + astro 6.4.8
+#9 36.61 + tailwindcss 4.3.3
+#9 36.61 
+#9 36.61 devDependencies:
+#9 36.61 + @astrojs/check 0.9.10
+#9 36.61 + @biomejs/biome 2.5.14
+#9 36.61 + @tailwindcss/vite 4.3.3
+#9 36.61 + @types/node 22.20.4
+#9 36.61 + @vitest/coverage-v8 3.2.7
+#9 36.61 + typescript 6.0.3
+#9 36.61 + vitest 3.2.7
+#9 36.61 
+#9 36.62 ╭ Warning ─────────────────────────────────────────────────────────────────────╮
+#9 36.62 │                                                                              │
+#9 36.62 │   Ignored build scripts: esbuild@0.27.7, esbuild@0.28.2, sharp@0.34.5.       │
+#9 36.62 │   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+#9 36.62 │   to run scripts.                                                            │
+#9 36.62 │                                                                              │
+#9 36.62 ╰──────────────────────────────────────────────────────────────────────────────╯
+#9 36.68 Done in 36.4s using pnpm v10.28.0
+#9 DONE 37.2s
+
+#10 [dev 6/6] RUN set -eu;     deluser node 2>/dev/null || true;     group="$(awk -F: -v gid="1000" '$3 == gid { print $1; exit }' /etc/group)";     if [ -z "$group" ]; then addgroup -g "1000" app; group=app; fi;     adduser -u "1000" -G "$group" -D app;     chown -R "1000:1000" /app
+#10 DONE 21.8s
+
+#11 exporting to image
+#11 exporting layers
+#11 exporting layers 15.0s done
+#11 exporting manifest sha256:d9049e8fd8a01df5f3e470cb0ad54a916a258d921c8ffa297fcab287c6e27798 done
+#11 exporting config sha256:60faa6784e25aa25599d8c89dce8b68a015f9f46e1017081a193b3d16c868128 done
+#11 exporting attestation manifest sha256:99d711a1fc70617761048df740c5486bc599df1ced3d2df611ba72a25cfe6508 done
+#11 exporting manifest list sha256:702eff8616919e60854416dc08166270f93a202d5375ddc7c64b66dafcbd2985 done
+#11 naming to docker.io/etqan-qa001-r1/marketing:gid1000 done
+#11 unpacking to docker.io/etqan-qa001-r1/marketing:gid1000
+#11 unpacking to docker.io/etqan-qa001-r1/marketing:gid1000 8.7s done
+#11 DONE 23.9s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/9hb1twujgj4rvfrfaipmvleos
+build exit=0
+## id:
+uid=1000(app) gid=1000(app) groups=1000(app)
+## stat /app:
+1000:1000 app:app /app
+1000:1000 app:app /app/node_modules
+app:x:1000:app
+app can write /app
+## pnpm as app:
+app
+10.28.0
+12

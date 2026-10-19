@@ -1,0 +1,33 @@
+## ETQAN-QA-018 retest 2026-10-18T23:53:56Z (REAL, academy qa). First attempt of this script had a bash-3.2 quoting bug (JSON parse 400s, no request reached the view); this is the rerun.
+### (1) change password, original repro as f02-a
+login f02-a: 200
+new=12345678(len 8) -> {"new_password":["This password is too common."]} 400
+new=password(len 8) -> {"new_password":["This password is too common."]} 400
+new=f02-a@qa.etqan.test(len 19) -> {"new_password":["The password is too similar to the email."]} 400
+new=Zq9#Zq9#Zq9#Zq9#Zq9#(len 129) -> {"new_password":["Ensure this field has no more than 128 characters."]} 400
+new=200000 chars -> {"new_password":["Ensure this field has no more than 128 characters."]} 400
+wrong current + weak -> {"current_password":["Incorrect password."]} 400
+DB hash unchanged after refusals: yes
+login with 12345678: 400
+strong change ->  200
+login with new: 200; old pw: 400
+restore ->  200
+login orig: 200
+same-as-current (proposal; still accepted) ->  200
+security-alert mails to f02-a: 3
+### (2) reset by link, original repro as f02-d
+reset request: 200
+uid=MTE token=dgo51y-d...
+confirm new=12345678(len 8) -> {"new_password":["This password is too common."]} 400
+confirm new=password(len 8) -> {"new_password":["This password is too common."]} 400
+confirm new=f02-d@qa.etqan.test(len 19) -> {"new_password":["The password is too similar to the email."]} 400
+confirm new=Zq9#Zq9#Zq9#Zq9#Zq9#(len 129) -> {"new_password":["Ensure this field has no more than 128 characters."]} 400
+bad token + weak (token error first) -> {"token":["Invalid or expired reset link."]} 400
+DB hash unchanged after refusals: yes
+confirm strong ->  200
+login new (2FA account: expect 2FA challenge 200, not 400): {"mfa_required":true} 200
+token reuse -> {"token":["Invalid or expired reset link."]} 400
+### cleanup: restore f02-d password via a fresh reset link
+reset request: 200
+confirm orig:  200
+login f02-d orig: {"mfa_required":true} 200

@@ -1,0 +1,47 @@
+== TC-021
+['academy_now', 'features_on', 'jobs', 'runs', 'server_now', 'subdomain', 'timezone', 'version'] jobs 2 ['reconcile_subscriptions', 'notifications'] runs 0 features_on 22
+me.features len: 22
+run 1: {"id":1,"job":"reconcile_subscriptions","status":"queued","result":{},"error":"","requested_by":{"id":1,"full_name":"QA Admin"},"requested_at":"2026-10-19T00:15:17.401399Z","started_at":null,"finished_at":null} [202] 
+run 2: {"id":2,"job":"reconcile_subscriptions","status":"queued","result":{},"error":"","requested_by":{"id":1,"full_name":"QA Admin"},"requested_at":"2026-10-19T00:15:17.475249Z","started_at":null,"finished_at":null} [202] 
+bad {"job":"notifications"}: {"job":["\"notifications\" is not a valid choice."]} [400] 
+bad {}: {"job":["This field is required."]} [400] 
+bad {"job":"rm -rf"}: {"job":["\"rm -rf\" is not a valid choice."]} [400] 
+2|reconcile_subscriptions|ok|1|t|{"paused": 0, "created": 0, "expired": 0, "resumed": 0}|
+1|reconcile_subscriptions|ok|1|t|{"paused": 0, "created": 0, "expired": 0, "resumed": 0}|
+-- stale run
+new run [202]
+UPDATE 1
+post after stale: {"id":4,"job":"reconcile_subscriptions","status":"queued","result":{},"error":"","requested_by":{"id":1,"full_name":"QA Admin"},"requested_at":"2026-10-19T00:15:17.899572Z","started_at":null,"finished_at":null} [202] 
+4|ok|
+3|ok|
+2|ok|
+perm: nocode 403 tch 403 stu 403 anon 403
+qa: system_status=off
+off: adm 404 nocode 403
+qa: system_status=on
+== TC-022 spanish
+stu es on: {'preferred_language': 'es', 'effective_language': 'es'}
+qa: spanish=off
+stu me while off: {'preferred_language': 'es', 'effective_language': 'en'}
+DB: es
+resend es while off: {"id":5,"email":"qa-student@qa.etqan.test","full_name":"QA student","phone":"","preferred_language":"es","effective_lang
+
+par set es while off: {"preferred_language":["Choose Arabic or English."]} [400] 
+academy default es: {"default_language":["\"es\" is not a valid choice."]} [400] 
+qa: spanish=on
+academy default es with spanish on: {"default_language":["\"es\" is not a valid choice."]} [400] 
+[200]
+== TC-021 deterministic (celery_worker stopped so runs stay queued)
+ Container etqan_tutor-celery_worker-1  Stopped
+run A: {"id":5,"job":"reconcile_subscriptions","status":"queued","result":{},"error":"","requested_by":{"id":1,"full_name":"QA Admin"},"requested_at":"2026-10-19T00:15:53.730902Z","started_at":null,"finished
+
+run B (open run exists): {"detail":"A run of this job is already in progress.","code":"systemstatus.run_open"} [409] 
+UPDATE 1
+run C after stale: {"id":7,"job":"reconcile_subscriptions","status":"queued","result":{},"error":"","requested_by":{"id":1,"full_name":"QA Admin"},"requested_at":"2026-10-19T00:15:53.896615Z","started_at":null,"finished
+
+7|queued|
+5|failed|Timed out.
+4|ok|
+ Container etqan_tutor-celery_worker-1  Started
+7|ok|t|{"paused": 0, "created": 0, "expired": 0, "resumed": 0}
+5|failed|t|{}

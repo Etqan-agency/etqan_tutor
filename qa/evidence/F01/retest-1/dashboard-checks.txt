@@ -1,0 +1,10 @@
+$ 2026-10-17T21:57:56Z dashboard: biome check (touched), tsc --noEmit, vitest run src/features/identity src/features/quicklogin
+Checked 4 files in 59ms. No fixes applied.
+biome exit=
+tsc exit=
+ Test Files  22 passed (22)
+      Tests  201 passed (201)
+vitest exit=
+(exit codes above were blank: zsh has no PIPESTATUS; re-run unpiped:)
+biome exit=0
+tsc exit=0

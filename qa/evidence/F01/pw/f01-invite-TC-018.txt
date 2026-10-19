@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-invite.spec.ts:83:1 › TC-018 the invite link is single-use and a wrong token is refused (500ms)
+
+  1 passed (1.9s)

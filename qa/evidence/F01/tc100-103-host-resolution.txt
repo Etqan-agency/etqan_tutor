@@ -1,0 +1,23 @@
+## TC-100 unknown subdomain
+nope-qa.etqan.localhost      /api/v1/identity/csrf/         404  | Page not found at /api/v1/identity/csrf/
+nope-qa.etqan.localhost      /                              404  | Site not found
+nope-qa.etqan.localhost      /app/                          200  | 
+## TC-101 bare base domain
+etqan.localhost              /admin/                        302 http://localhost/admin/login/?next=/admin/ | 
+etqan.localhost              /health/live/                  200  | {"status": "ok"}
+etqan.localhost              /api/v1/identity/csrf/         404  | Page not found at /api/v1/identity/csrf/
+etqan.localhost              /api/v1/academy/features/      404  | Page not found at /api/v1/academy/features/
+etqan.localhost              /app/                          404  | Page not found at /app/
+etqan.localhost              /                              404  | Page not found at /
+etqan.localhost              /accounts/login/               404  | Page not found at /accounts/login/
+etqan.localhost              /media/x                       404  | Page not found at /media/x
+## TC-102 admin on academy hosts
+qa.etqan.localhost           /admin/                        404  | الصفحة غير موجودة · Etqan QA Academy
+localhost                    /admin/                        404  | Site not found
+127.0.0.1                    /admin/                        404  | Site not found
+qa.etqan.localhost           /admin/login/                  404  | الصفحة غير موجودة · Etqan QA Academy
+## TC-103 X-Forwarded-Host
+me with XFH qaother: {"id":1,"email":"qa-admin@qa.etqan.test","full_name":"QA Admin","phone":"","pref
+branding with XFH qaother: {"name":{"ar":"Etqan QA Academy","en":"Etqan QA Academy"},"tagline":{"
+anon qa host XFH demo, csrf: 404 (unknown host + XFH demo)
+USE_X_FORWARDED_HOST False SESSION_COOKIE_DOMAIN None CSRF_COOKIE_DOMAIN None CSRF_TRUSTED_ORIGINS [] SESSION_COOKIE_NAME sessionid

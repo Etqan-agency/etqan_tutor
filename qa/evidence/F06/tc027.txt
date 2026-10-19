@@ -1,0 +1,29 @@
+[201] POST people/teachers/ :: {"id":12,"role":"teacher","two_factor":false,"user":{"full_name":"QA6OTHER Teacher","email":"qa6-other-teacher@qa.etqan.test","phone":"","preferred_language":"a
+[201] POST people/students/ :: {"id":13,"role":"student","two_factor":false,"user":{"full_name":"QA6OTHER Student","email":"qa6-other-stu@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"UTC","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_timezo
+[200] PATCH catalogue/courses/2/ :: {"id":2,"name_ar":"س","name_en":"QA6OTHER Course","description_ar":"","description_en":"","language":"ar","is_active":true,"created_at":"2026-10-19T04:42:02.110548Z","updated_at":"2026-10-19T04:51:40.377949Z","teacher_ids":[12]}
+[201] POST subscriptions/ :: {"id":1,"status":"active","schedule_status":"active","student":{"id":13,"full_name":"QA6OTHER Student","timezone":"UTC"},"teacher":{"id":12,"full_name":"QA6OTHER Teacher"},"course":{"id":2,"name_ar":"س","name_en":"QA6OTHER Course"},"package":{"id":1,"name_ar":"س","name_en":"QA6OTHER Pkg"},"starts_on
+1|777|USD
+before qa subs/sess=57/175 other=1/4/2026-10-19 04:51:40.418946+00
+qa GET id 1 -> 200 student=QA student
+[201] POST subscriptions/ :: {"id":59,"status":"active","schedule_status":"active","student":{"id":13,"full_name":"F02 Student new","timezone":"Afric
+[400] POST subscriptions/ :: {"teacher":["Choose an active teacher."]}
+[404] POST schedule/generate/ :: {"detail":"No Subscription matches the given query."}
+-- qaother admin against qa-only ids (qa max sub id > qaother max)
+[404] GET subscriptions/34/ :: {"detail":"No Subscription matches the given query."}
+[404] PATCH subscriptions/34/ :: {"detail":"No Subscription matches the given query."}
+[404] POST subscriptions/34/renew/ :: {"detail":"No Subscription matches the given query."}
+[404] POST subscriptions/34/cancel/ :: {"detail":"No Subscription matches the given query."}
+[404] POST subscriptions/34/pauses/ :: {"detail":"No Subscription matches the given query."}
+[404] GET subscriptions/34/slots/ :: {"detail":"No Subscription matches the given query."}
+[404] POST subscriptions/34/archive/ :: {"detail":"This feature is not enabled for this academy."}
+[404] DELETE subscriptions/34/ :: {"detail":"No Subscription matches the given query."}
+[404] GET bundles/4/ :: {"detail":"No SubscriptionBundle matches the given query."}
+[404] GET trials/1/ :: {"detail":"This feature is not enabled for this academy."}
+[404] GET groups/2/ :: {"detail":"This feature is not enabled for this academy."}
+[404] POST schedule/generate/ :: {"detail":"No Subscription matches the given query."}
+[400] POST subscriptions/ :: {"course":["Choose an active course."]}
+qaother today has QA6 names (not OTHER): 0
+qa today has QA6OTHER: 0
+qaother list: ['QA6OTHER Student']
+{'paused': 0, 'resumed': 0, 'expired': 0, 'created': 0}
+after qa subs/sess=58/178 other=1/4/2026-10-19 04:51:40.418946+00

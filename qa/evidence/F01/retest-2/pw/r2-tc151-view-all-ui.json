@@ -1,0 +1,37 @@
+{
+  "etqan_billing/etqaninvoice": {
+    "status": 200,
+    "actions": [],
+    "checkboxes": 0
+  },
+  "account/emailaddress": {
+    "status": 200,
+    "actions": [],
+    "checkboxes": 0
+  },
+  "django_celery_beat/periodictask": {
+    "status": 200,
+    "actions": [],
+    "checkboxes": 0
+  },
+  "integrations/platformaccount": {
+    "status": 200,
+    "actions": [],
+    "checkboxes": 0
+  },
+  "identity/teacherprofile": {
+    "status": 200,
+    "actions": [],
+    "checkboxes": 0
+  },
+  "tenants/academy": {
+    "status": 200,
+    "actions": [],
+    "checkboxes": 0
+  },
+  "tenants/domain": {
+    "status": 200,
+    "actions": [],
+    "checkboxes": 0
+  }
+}

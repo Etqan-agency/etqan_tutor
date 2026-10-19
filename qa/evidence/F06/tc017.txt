@@ -1,0 +1,18 @@
+[201] POST subscriptions/ :: {"id":34,"status":"active","schedule_status":"active","student":{"id":213,"full_name":"QA6 Student 2","timezone":"Africa/Cairo"},"teacher":{"id":218,"full_name":"QA6 Teacher C"},"course":{"id":3,"name
+15
+[200] POST people/teachers/218/deactivate/ :: {"id":218,"role":"teacher","two_factor":false,"user":{"full_name":"QA6 Teacher C","email":"qa6-teacher-c@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":false,"account_state":"inactive","pending_email":"","last_login_ip":null,"last_login_device":"","last_log
+[200] POST people/students/213/deactivate/ :: {"id":213,"role":"student","two_factor":false,"user":{"full_name":"QA6 Student 2","email":"qa6-student-2@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":false,"account_state":"inactive","pending_email":"","last_login_ip":null,"last_login_device":"","last_log
+deactivated at 2026-10-19 04:46:18.397963+00
+213|QA6 Student 2|f
+218|QA6 Teacher C|f
+2026-10-26
+2026-10-25
+DELETE 2
+{'paused': 0, 'resumed': 0, 'expired': 0, 'created': 2}
+[200] POST schedule/generate/ :: {"created":0,"skipped_existing":15,"skipped_paused":0,"skipped_out_of_term":0,"skipped_stopped":0,"conflicts":[]}
+sessions created after deactivation: 2 2026-10-26,2026-10-25
+today board contains S17 rows: 1  teacher C on board: True
+[400] POST subscriptions/ :: {"student":["Choose an active student."]}
+[400] POST subscriptions/ :: {"teacher":["Choose an active teacher."]}
+[400] POST subscriptions/34/renew/ :: {"student":["Choose an active student."]}
+   renew with inactive people -> 400

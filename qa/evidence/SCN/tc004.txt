@@ -1,0 +1,81 @@
+== TC-004
+[201] POST people/students/ :: {"id":227,"role":"student","two_factor":false,"user":{"full_name":"SCN Student A3","email":"scn-a3@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"accou
+[200] PATCH people/families/11/ :: {"id":11,"name":"SCN Family A","is_active":true,"payer":{"id":224,"full_name":"SCN Parent A","role":"parent"},"payer_needs_choosing":false,"students":[{"id":222,"full_name":"SCN Student A1"},{"id":223,"full_name":"SCN Student A2"},{"id":227,"full_name":"SCN Student A3"}],"notes":"","created_at":"2026-10-19T17:03:35.048812Z"}
+SET
+11
+[201] SA3 sub; conflicts: [(371, '2026-10-19', ['session', 'other']), (371, '2026-10-19', ['session', 'other']), (371, '2026-10-19', ['session', 'other']), (371, '2026-10-19', ['session', 'other']), (371, '2026-10-19', ['session', 'other']), (371, '2026-10-19', ['session', 'other']), (371, '2026-10-19', ['session', 'other']), (372, '2026-10-26', ['session', 'other']), (372, '2026-10-26', ['session', 'other']), (372, '2026-10-26', ['session', 'other']), (372, '2026-10-26', ['session', 'other']), (373, '2026-11-02', ['session', 'other']), (373, '2026-11-02', ['session', 'other']), (373, '2026-11-02', ['session', 'other']), (373, '2026-11-02', ['session', 'other']), (373, '2026-11-02', ['session', 'other']), (374, '2026-11-09', ['session', 'other']), (374, '2026-11-09', ['session', 'other']), (374, '2026-11-09', ['session', 'other']), (374, '2026-11-09', ['session', 'other']), (374, '2026-11-09', ['session', 'other'])]
+conflict entry sample: {'session': {'id': 371, 'subscription_id': 87, 'slot_id': 100, 'occurs_on': '2026-10-19', 'starts_at': '2026-10-19T15:00:00Z', 'minutes': 60, 'status': 'scheduled', 'student_attendance': 'not_set', 'teacher_attendance': 'not_set', 'has_started': True, 'meeting_url': '', 'meeting_host': False, 'generated': True, 'student': {'id': 227, 'full_name': 'SCN Student A3', 'timezone': 'Africa/Cairo'}, 'teacher': {'id': 7, 'full_name': 'QA teacher'}, 'course': {'id': 6, 'name_ar': 'scn', 'name_en': 'SCN Quran'}, 'notes': '', 'cancel_reason': '', 'has_report': False, 'payroll_locked': False, 'kind': 'regular', 'compensates_id': None, 'compensation_id': None, 'trial_id': None, 'pays_teacher': True, 'com
+[200] POST schedule/generate/ :: {"created":2,"skipped_existing":4,"skipped_paused":0,"skipped_out_of_term":1,"skipped_stopped":0,"skipped_inactive":0,"conflicts":[{"session":{"id":375,"subscription_id":87,"slot_id":100,"occurs_on":"2026-11-16","starts_at":"2026-11-16T16:00:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":true,"student":{"id":227,"full_name":"SCN Student A3","timezone":"Africa/Cairo"},"teach
+-- deactivate Teacher Gone
+[200] POST people/teachers/221/deactivate/ :: {"id":221,"role":"teacher","two_factor":false,"user":{"full_name":"SCN Teacher Gone","email":"scn-teacher-gone@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":false,"account_state":"inactive","pending_email":"","last_login_ip":null,"last_login_device":"","la
+[400] POST subscriptions/ :: {"teacher":["Choose an active teacher."]}
+SET
+1
+SUB1 unchanged: yes
+-- overlap SQL (T1, non-cancelled)
+SET
+70|355|16|85|2026-10-26 15:00:00+00
+70|372|16|87|2026-10-26 15:00:00+00
+71|356|16|85|2026-11-02 16:00:00+00
+71|373|16|87|2026-11-02 16:00:00+00
+72|358|16|85|2026-10-22 15:00:00+00
+73|359|16|85|2026-10-29 15:00:00+00
+74|354|17|85|2026-10-19 15:00:00+00
+74|371|17|87|2026-10-19 15:00:00+00
+76|356|17|85|2026-11-02 16:00:00+00
+76|373|17|87|2026-11-02 16:00:00+00
+78|359|17|85|2026-10-29 15:00:00+00
+79|354|18|85|2026-10-19 15:00:00+00
+79|371|18|87|2026-10-19 15:00:00+00
+80|355|18|85|2026-10-26 15:00:00+00
+80|372|18|87|2026-10-26 15:00:00+00
+81|356|18|85|2026-11-02 16:00:00+00
+81|373|18|87|2026-11-02 16:00:00+00
+82|358|18|85|2026-10-22 15:00:00+00
+83|359|18|85|2026-10-29 15:00:00+00
+84|354|19|85|2026-10-19 15:00:00+00
+84|371|19|87|2026-10-19 15:00:00+00
+85|355|19|85|2026-10-26 15:00:00+00
+85|372|19|87|2026-10-26 15:00:00+00
+86|356|19|85|2026-11-02 16:00:00+00
+86|373|19|87|2026-11-02 16:00:00+00
+87|358|19|85|2026-10-22 15:00:00+00
+88|359|19|85|2026-10-29 15:00:00+00
+114|354|16|85|2026-10-19 15:00:00+00
+114|371|16|87|2026-10-19 15:00:00+00
+115|367|17|85|2026-11-16 16:00:00+00
+115|375|17|87|2026-11-16 16:00:00+00
+116|369|17|85|2026-11-12 16:00:00+00
+117|368|20|85|2026-11-23 16:00:00+00
+117|376|20|87|2026-11-23 16:00:00+00
+119|370|20|85|2026-11-19 16:00:00+00
+150|358|35|85|2026-10-22 15:00:00+00
+151|359|35|85|2026-10-29 15:00:00+00
+276|354||85|2026-10-19 15:42:00+00
+276|371||87|2026-10-19 15:42:00+00
+282|354||85|2026-10-19 15:12:00+00
+282|371||87|2026-10-19 15:12:00+00
+322|357|16|85|2026-11-09 16:00:00+00
+322|374|16|87|2026-11-09 16:00:00+00
+323|357|17|85|2026-11-09 16:00:00+00
+323|374|17|87|2026-11-09 16:00:00+00
+324|357|18|85|2026-11-09 16:00:00+00
+324|374|18|87|2026-11-09 16:00:00+00
+325|374|19|87|2026-11-09 16:00:00+00
+325|357|19|85|2026-11-09 16:00:00+00
+338|360|16|85|2026-11-05 16:00:00+00
+339|360|17|85|2026-11-05 16:00:00+00
+340|360|18|85|2026-11-05 16:00:00+00
+341|360|19|85|2026-11-05 16:00:00+00
+354|371|85|87|2026-10-19 15:00:00+00
+355|372|85|87|2026-10-26 15:00:00+00
+356|373|85|87|2026-11-02 16:00:00+00
+357|374|85|87|2026-11-09 16:00:00+00
+367|375|85|87|2026-11-16 16:00:00+00
+368|376|85|87|2026-11-23 16:00:00+00
+-- cancel SA3 sub
+[200] POST subscriptions/87/cancel/ :: {"id":87,"status":"cancelled","schedule_status":"active","student":{"id":227,"full_name":"SCN Student A3","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":6,"name_ar":"scn","name_en":"SCN Quran"},"package":{"id":17,"name_ar":"س","name_en":"SCN Pkg 2x4w"},"starts_on":"2026-10-19","term_ends_on":"2026-11-18","ends_on":"2026-11-18","grace_ends_on":"2026-11-25","in
+SET
+148|unpaid|150000|
+SET
+scheduled|1

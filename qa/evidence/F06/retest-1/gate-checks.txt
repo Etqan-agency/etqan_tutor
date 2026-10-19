@@ -1,0 +1,23 @@
+== invoices per new subscription (one each, package price, subscription currency)
+table=billing_invoice
+ERROR:  column i.total_minor does not exist
+LINE 1: select i.subscription_id, count(*), string_agg(i.total_minor...
+                                                       ^
+== qaother isolation: no qa rows leaked
+0
+1
+== invoices per new subscription 73-78 (sub|count|amount currency status|package price|sub currency)
+73|1|99999 EGP unpaid|99999|EGP
+74|1|99999 EGP unpaid|99999|EGP
+75|1|99999 EGP unpaid|99999|EGP
+76|1|99999 EGP unpaid|99999|EGP
+77|1|150000 EGP unpaid|150000|EGP
+78|1|150000 EGP unpaid|150000|EGP
+== qaother: 0 subscriptions, its 1 session is a pre-existing standalone (no subscription) from 2026-09-05 -> nothing from qa leaked
+== G1 isolation on the touched endpoints (qaother admin, qa ids)
+login oth 200 {"id":1,"email":"qaother-admin@qa.etqan.test","full_name":"QA Other Admin","phone":"","preferred_language":"ar","effecti
+[404] POST subscriptions/34/renew/ :: {"detail":"No Subscription matches the given query."}
+[404] POST schedule/generate/ :: {"detail":"No Subscription matches the given query."}
+[200] GET schedule/today/ :: {"date":"2026-10-19","rows":[]}
+== qa cookie on qaother host
+[403] GET subscriptions/ :: {"detail":"Authentication credentials were not provided."}

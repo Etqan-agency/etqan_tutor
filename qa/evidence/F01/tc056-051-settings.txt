@@ -1,0 +1,10 @@
+## TC-056
+{"timezone":["Unknown timezone."]} HTTP 400 
+{"timezone":"Africa/Cairo","default_currency":"EGP","default_language":"ar","generation_horizon_days":14,"renewal_grace_
+
+db: Africa/Cairo|EGP
+{"default_currency":["Use a three-letter currency code, like EGP."]} HTTP 400 
+## TC-051 settings API (qa)
+{"timezone":"Africa/Cairo","default_currency":"EGP","default_language":"ar","gen
+## S1 recovery path: qa-tmp-tz admin fixes timezone via settings
+(not executed: qa-tmp-tz is left broken as evidence per spec; will be suspended)

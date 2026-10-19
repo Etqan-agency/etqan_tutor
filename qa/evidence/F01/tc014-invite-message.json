@@ -1,0 +1,33 @@
+{
+ "ID": "1SHEQ5qiY01Vdf4jdF0RU7",
+ "MessageID": "179226657749.79.3379333041107208670@0082306cafbd",
+ "From": {
+  "Name": "Etqan QA Academy",
+  "Address": "noreply@etqan.academy"
+ },
+ "To": [
+  {
+   "Name": "",
+   "Address": "qa-admin@qa.etqan.test"
+  }
+ ],
+ "Cc": [],
+ "Bcc": [],
+ "ReplyTo": [],
+ "ReturnPath": "noreply@etqan.academy",
+ "Subject": "[Etqan QA Academy] عيّن كلمة المرور",
+ "ListUnsubscribe": {
+  "Header": "",
+  "Links": [],
+  "Errors": "",
+  "HeaderPost": ""
+ },
+ "Date": "2026-10-17T19:49:37Z",
+ "Tags": [],
+ "Username": "",
+ "Text": "Etqan QA Academy · Etqan QA Academy\r\n\r\nمرحبًا QA Admin،\r\n\r\nأُنشئ لك حساب. عيّن كلمة المرور للبدء:\r\n\r\nhttp://qa.etqan.localhost/app/reset-password?uid=MQ&token=REDACTED-QA\r\n\r\nإن لم تكن تتوقع هذه الرسالة فيمكنك تجاهلها.\r\n\r\n--\r\nEtqan QA Academy · Etqan QA Academy\r\n\r\nhttp://qa.etqan.localhost/\r\n",
+ "HTML": "<!doctype html>\r\n<html><body style=\"margin:0;background:#f6f6f4;font-family:Arial,Helvetica,sans-serif;color:#111\">\r\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tr><td align=\"center\" style=\"padding:24px\">\r\n<table role=\"presentation\" width=\"560\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#fff;border-radius:12px;overflow:hidden\">\r\n<tr><td style=\"background:#0E7C66;color:#FFFFFF;padding:20px 24px\">\r\n\r\n<strong style=\"font-size:18px\">Etqan QA Academy</strong> <span dir=\"rtl\" style=\"font-size:16px\">· Etqan QA Academy</span>\r\n</td></tr>\r\n<tr><td dir=\"rtl\" lang=\"ar\" style=\"padding:24px;font-size:15px;line-height:1.6;white-space:pre-line;text-align:start\">مرحبًا QA Admin،\r\n\r\nأُنشئ لك حساب. عيّن كلمة المرور للبدء:\r\n\r\n<a href=\"http://qa.etqan.localhost/app/reset-password?uid=MQ&amp;token=REDACTED-QA\" rel=\"nofollow\">http://qa.etqan.localhost/app/reset-password?uid=MQ&amp;token=REDACTED-QA</a>\r\n\r\nإن لم تكن تتوقع هذه الرسالة فيمكنك تجاهلها.</td></tr>\r\n<tr><td style=\"padding:16px 24px;border-top:1px solid #eee;font-size:13px;color:#555\">\r\nEtqan QA Academy · <span dir=\"rtl\">Etqan QA Academy</span><br>\r\n<a href=\"http://qa.etqan.localhost/\" style=\"color:#0E7C66\">http://qa.etqan.localhost/</a>\r\n</td></tr></table></td></tr></table></body></html>\r\n",
+ "Size": 3316,
+ "Inline": [],
+ "Attachments": []
+}

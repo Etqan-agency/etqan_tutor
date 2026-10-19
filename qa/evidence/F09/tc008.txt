@@ -1,0 +1,12 @@
+== TC-008 2026-10-19T03:37:39.243723
+refund Pb 200 {"id": 23, "number": "INV-000023", "status": "partial", "is_overdue": false, "student": {"id": 5, "full_name": "QA student"}, "payer": {"id": 35, "full_name": "QA Parent Three"}, "subscription_id": null, "description": "TC008 F", "amount_minor": 30000, "paid_minor": 10000, "balance_minor": 20000, "c
+F partial 11|completed|f|
+12|refunded|t|1
+OK  TC008 F partial after refund
+OK  TC008 second refund 409 already_refunded :: {"detail": "This payment is already refunded.", "code": "billing.already_refunded"}
+OK  TC008 repay 201 paid :: {"status": "paid", "paid_minor": 30000, "balance_minor": 0}
+delete Pa 204
+OK  TC008 delete 204 and partial
+OK  TC008 delete again 404 :: 404
+OK  TC008 refunded list has Pb :: 200
+summary {"revenue_this_month": [{"currency": "EGP", "amount_minor": 106001}, {"currency": "USD", "amount_minor": 2500}], "overdue": []}

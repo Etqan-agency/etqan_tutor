@@ -1,0 +1,6 @@
+$ ruff check etqan/tenants/admin.py etqan/etqan_billing/admin.py etqan/integrations/admin.py etqan/identity/admin.py etqan/platform/admin.py etqan/tenants/tests/test_admin_permissions.py etqan/tenants/tests/test_admin_stale_change.py etqan/etqan_billing/tests/test_admin_permissions.py etqan/integrations/tests/test_admin.py
+All checks passed!
+exit 0
+$ ruff format --check etqan/tenants/admin.py etqan/etqan_billing/admin.py etqan/integrations/admin.py etqan/identity/admin.py etqan/platform/admin.py etqan/tenants/tests/test_admin_permissions.py etqan/tenants/tests/test_admin_stale_change.py etqan/etqan_billing/tests/test_admin_permissions.py etqan/integrations/tests/test_admin.py
+9 files already formatted
+exit 0

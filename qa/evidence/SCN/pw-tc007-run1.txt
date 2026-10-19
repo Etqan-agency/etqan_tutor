@@ -1,0 +1,30 @@
+        14 × locator resolved to 2 elements
+           - unexpected value "2"
+
+
+      40 | 	await expect(page.getByRole("tab", { name: /today/i })).toHaveAttribute("aria-selected", "true");
+      41 | 	const rows = page.getByRole("row").filter({ hasText: "SCN Student A1" }).filter({ hasText: /10:00/ });
+    > 42 | 	await expect(rows).toHaveCount(1);
+         | 	                   ^
+      43 | 	const picker = rows.getByLabel("Student attendance for SCN Student A1");
+      44 | 	await expect(picker).toBeEnabled();
+      45 | 	const marked = page.waitForResponse(
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/scn-tc007-teacher-attendance.spec.ts:42:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-scn-tc007-teacher-atten-86759-and-the-package-is-consumed-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-scn-tc007-teacher-atten-86759-and-the-package-is-consumed-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-scn-tc007-teacher-atten-86759-and-the-package-is-consumed-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-scn-tc007-teacher-atten-86759-and-the-package-is-consumed-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/qa/scn-tc007-teacher-attendance.spec.ts:29:1 › SCN-TC-007 teacher marks U1 present in Teaching > Sessions; session completes and the package is consumed 
+error: Recipe `e2e` failed with exit code 1

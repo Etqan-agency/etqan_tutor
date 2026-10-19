@@ -1,0 +1,41 @@
+{
+  "step1": {
+    "login": 200,
+    "sentHeader": true,
+    "sentMatchesPreLoginCookie": false,
+    "rotated": true
+  },
+  "noReload": true,
+  "tagCreate": {
+    "status": 201,
+    "headerMatchesCookie": true,
+    "body": "{\"id\":45,\"emoji\":\"🧪\",\"name_ar\":\"وسم QA159\",\"name_en\":\"QA159 tag\",\"kind\":\"student\",\"position\":22,\"is_active\":true,\"peopl"
+  },
+  "step2": {
+    "logout": 200,
+    "login": 200,
+    "sentHeader": true,
+    "write": {
+      "status": 200,
+      "body": "{\"id\":4,\"email\":\"qa-supervisor@qa.etqan.test\",\"full_name\":\"QA Supervisor\",\"phone\":\"\",\"preferred_language\":\"ar\",\"effectiv",
+      "tokenLen": 32
+    }
+  },
+  "step3": {
+    "tabBLogin": 200,
+    "tabALogin": 200,
+    "tabAWrite": {
+      "status": 200,
+      "body": "{\"id\":4,\"email\":\"qa-supervisor@qa.etqan.test\",\"full_name\":\"QA Supervisor\",\"phone\":\"\",\"preferred_language\":\"ar\",\"effectiv",
+      "tokenLen": 32
+    }
+  },
+  "csrfFailedSeen": [],
+  "consoleErrors": [
+    "console: Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "console: Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "console: Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "console: Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "console: Failed to load resource: the server responded with a status of 403 (Forbidden)"
+  ]
+}

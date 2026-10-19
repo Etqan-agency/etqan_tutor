@@ -1,0 +1,40 @@
+# 2026-10-17T21:26:45Z ETQAN-QA-003 retest-1 (Agent 2), REAL
+## DB before
+academies|12
+qa-tmp-r1* rows|0
+qa-tmp-r1* domains|0
+qa_tmp_r1* schemas|0
+invites to qa-tmp-r1|0
+login ops@ -> 302
+## Admin Add form (filed step 1 and variants)
+Add form tz='Mars/Phobos' currency='usd' -> HTTP 200
+   field error: Unknown timezone.
+   error anchor: id_timezone_error
+Add form tz='africa/cairo' currency='EGP' -> HTTP 200
+   field error: Unknown timezone.
+   error anchor: id_timezone_error
+Add form tz='Africa/Cairo' currency='US' -> HTTP 200
+   field error: Use a three-letter currency code, like EGP.
+   error anchor: id_currency_error
+Add form tz='Africa/Cairo' currency='E1P' -> HTTP 200
+   field error: Use a three-letter currency code, like EGP.
+   error anchor: id_currency_error
+Add form tz='' currency='EGP' -> HTTP 200
+   field error: This field is required.
+   error anchor: id_timezone_error
+Add form tz='Africa/Cairo' currency='' -> HTTP 200
+   field error: This field is required.
+   error anchor: id_currency_error
+## create_academy command
+CommandError: Unknown timezone.
+
+exit=1
+CommandError: Use a three-letter currency code, like EGP.
+
+exit=1
+## DB after (expect no qa-tmp-r1* row, domain, schema or user)
+academies|12
+qa-tmp-r1* rows|0
+qa-tmp-r1* domains|0
+qa_tmp_r1* schemas|0
+invites to qa-tmp-r1|0

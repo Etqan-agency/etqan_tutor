@@ -1,0 +1,50 @@
+== TC-010
+[201] POST sessions/extra/ :: {"session":{"id":387,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-21","starts_at":"2026-10-21T06:00:00Z","minutes":30,"status":"schedule
+qa-parent child (user 5) session: 336
+-- pa session ids n=      22
+pa API==DB(students 222,223,227): False
+  pa GET 383 [200] ('completed', 'present', 'SCN Student A1')
+  pa GET 384 [200] ('completed', 'absent', 'SCN Student A1')
+  pa GET 361 [200] ('scheduled', 'not_set', 'SCN Student A2')
+  pa GET 387 [404] 
+  pa GET 336 [404] 
+  pa subs [200] ['SCN Student A1', 'SCN Student A2']
+  pa students [403] {"detail":"You do not have permission to perform this action."}
+  pa families [403] {"detail":"You do not have permission to perform this action."}
+-- pb session ids n=       1
+pb API==DB(students 225): True
+  pb GET 383 [404] 
+  pb GET 384 [404] 
+  pb GET 361 [404] 
+  pb GET 387 [200] ('scheduled', 'not_set', 'SCN Student B1')
+  pb GET 336 [404] 
+  pb subs [200] []
+  pb students [403] {"detail":"You do not have permission to perform this action."}
+  pb families [403] {"detail":"You do not have permission to perform this action."}
+-- par session ids n=     126
+par API==DB(students 5): False
+  par GET 383 [404] 
+  par GET 384 [404] 
+  par GET 361 [404] 
+  par GET 387 [404] 
+  par GET 336 [200] ('scheduled', 'not_set', 'QA student')
+  par subs [200] ['QA student', 'QA student', 'QA student', 'QA student', 'QA student', 'QA student', 'QA student', 'QA student', 'QA student', 'QA student', 'QA student']
+  par students [403] {"detail":"You do not have permission to perform this action."}
+  par families [403] {"detail":"You do not have permission to perform this action."}
+-- sa1 session ids n=      16
+sa1 API==DB(students 222): True
+  sa1 GET 383 [200] ('completed', 'present', 'SCN Student A1')
+  sa1 GET 384 [200] ('completed', 'absent', 'SCN Student A1')
+  sa1 GET 361 [404] 
+  sa1 GET 387 [404] 
+  sa1 GET 336 [404] 
+  sa1 subs [200] ['SCN Student A1']
+  sa1 students [403] {"detail":"You do not have permission to perform this action."}
+  sa1 families [403] {"detail":"You do not have permission to perform this action."}
+-- PA payload keys for U1 (internal fields?)
+{'meeting_host': False, 'meeting_url': ''}
+admin keys extra vs parent: ['actual_minutes', 'archived_at', 'can_postpone', 'cancel_reason', 'compensable', 'compensated', 'compensates_id', 'compensation_id', 'course', 'created_by', 'disposal_reason', 'ends_at', 'generated', 'has_report', 'has_started', 'id', 'kind', 'meeting_host', 'meeting_url', 'minutes', 'notes', 'occurs_on', 'opened_by_supervisor_at', 'original_starts_at', 'payroll_locked', 'pays_teacher', 'postponed_at', 'postponed_by', 'slot_id', 'starts_at', 'status', 'student', 'student_attendance', 'student_in_at', 'student_out_at', 'subscription_id', 'supervisor', 'supervisor_attendance', 'teacher', 'teacher_attendance', 'teacher_in_at', 'teacher_out_at', 'trial_id']
+pa API==DB(guardianship children): True api-db [] db-api []
+par API==DB(guardianship children): False api-db [258] db-api []
+SET
+371|scheduled||227

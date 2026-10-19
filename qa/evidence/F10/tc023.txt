@@ -1,0 +1,35 @@
+==== TC-023 matrix 2026-10-19T04:11:20.569275
+| endpoint | anon | student | parent | staffno | staffc | s_payread | s_pay | sup | T1 | s_updnoview | admin |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| GET /payroll/rates/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| POST /payroll/rates/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| PATCH /payroll/rates/1/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| DELETE /payroll/rates/999999/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| POST /payroll/rates/bulk/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| GET /payroll/settings/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| PATCH /payroll/settings/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| GET /payroll/adjustments/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| POST /payroll/adjustments/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| PATCH /payroll/adjustments/1/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| GET /payroll/payslips/ | 403 | 403 | 403 | 403 | 403 | 200 | - | 403 | 200 | 403 | - |
+| GET /payroll/payslips/1/ | 403 | 403 | 403 | 403 | 403 | 200 | - | 403 | 200 | 403 | - |
+| POST /payroll/payslips/generate/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| POST /payroll/payslips/1/issue/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 409 | - |
+| POST /payroll/payslips/35/mark-paid/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 400 | - |
+| POST /payroll/payslips/1/pay-to-balance/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 409 | - |
+| GET /payroll/payslips/projection/ | 403 | 403 | 403 | 403 | 403 | 200 | - | 403 | 403 | 403 | - |
+| GET /payroll/payslips/?format=csv | 403 | 403 | 403 | 403 | 403 | 200 | - | 403 | 403 | 403 | - |
+| GET /payroll/balances/?teacher=7 | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 200 | 403 | - |
+| GET /payroll/withdrawals/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 200 | 403 | - |
+| POST /payroll/withdrawals/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 409 | 403 | - |
+| POST /payroll/withdrawals/1/approve/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| POST /payroll/withdrawals/1/reject/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| POST /payroll/withdrawals/1/pay/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| POST /payroll/withdrawals/1/cancel/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 409 | 403 | - |
+| GET /payroll/fixed-salaries/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| POST /payroll/fixed-salaries/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| GET /payroll/student-rates/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+| POST /payroll/student-rates/ | 403 | 403 | 403 | 403 | 403 | 403 | - | 403 | 403 | 403 | - |
+OK  no DB change from any denied/limited role request :: []
+s_pay GETs ['/payroll/rates/:200', '/payroll/settings/:200', '/payroll/adjustments/:200', '/payroll/payslips/:200', '/payroll/payslips/1/:200', '/payroll/payslips/projection/:200', '/payroll/payslips/?format=csv:200', '/payroll/balances/?teacher=7:200', '/payroll/withdrawals/:200', '/payroll/fixed-salaries/:200', '/payroll/student-rates/:200']
+admin GETs ['/payroll/rates/:200', '/payroll/settings/:200', '/payroll/adjustments/:200', '/payroll/payslips/:200', '/payroll/payslips/1/:200', '/payroll/payslips/projection/:200', '/payroll/payslips/?format=csv:200', '/payroll/balances/?teacher=7:200', '/payroll/withdrawals/:200', '/payroll/fixed-salaries/:200', '/payroll/student-rates/:200']

@@ -1,0 +1,331 @@
+diff --git a/Dockerfile b/Dockerfile
+index f841b23a..fdd1a7ce 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -18,11 +18,15 @@ RUN pip install --no-cache-dir -r requirements/local.txt
+ # Run as the host developer's UID/GID so files the container writes into the
+ # bind-mounted ./backend (.coverage, .pytest_cache, .ruff_cache, migrations)
+ # are owned by the developer, never root. Defaults match a typical Linux login.
++# The host's GID may already be a group in the image (macOS `staff` is 20,
++# Debian's `dialout`): the app user then joins that group (ETQAN-QA-001).
+ ARG UID=1000
+ ARG GID=1000
+-RUN groupadd -g ${GID} app && useradd -u ${UID} -g app -m app \
+-    && chown -R app:app /app
+-COPY --chown=app:app . .
++RUN set -eu; \
++    getent group "${GID}" >/dev/null || groupadd -g "${GID}" app; \
++    useradd -u "${UID}" -g "${GID}" -m app; \
++    chown -R "${UID}:${GID}" /app
++COPY --chown=${UID}:${GID} . .
+ USER app
+ CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+ 
+diff --git a/etqan/identity/api/views.py b/etqan/identity/api/views.py
+index 69f9289e..e320d30e 100644
+--- a/etqan/identity/api/views.py
++++ b/etqan/identity/api/views.py
+@@ -58,6 +58,7 @@ from etqan.platform import secrets
+ from etqan.platform.exceptions import UnavailableError
+ from etqan.platform.pagination import StandardPagination
+ from etqan.platform.permissions import IMPERSONATING
++from etqan.platform.permissions import CsrfChecked
+ from etqan.platform.permissions import FeatureOn
+ from etqan.platform.permissions import HasCode
+ from etqan.platform.permissions import NotImpersonating
+@@ -170,7 +171,7 @@ def _registrant_refusal(user) -> Response | None:
+ 
+ 
+ class LoginView(APIView):
+-    permission_classes = [AllowAny]
++    permission_classes = [AllowAny, CsrfChecked]
+ 
+     @extend_schema(
+         request=LoginSerializer,
+@@ -253,7 +254,7 @@ def _after_second_factor(request, user, pending: dict) -> None:
+ 
+ 
+ class LoginTwoFactorView(APIView):
+-    permission_classes = [AllowAny]
++    permission_classes = [AllowAny, CsrfChecked]
+ 
+     @extend_schema(
+         request=LoginTwoFactorSerializer,
+@@ -777,7 +778,7 @@ class StopImpersonationView(APIView):
+ 
+ 
+ class QuickLoginExchangeView(APIView):
+-    permission_classes = [AllowAny]
++    permission_classes = [AllowAny, CsrfChecked]
+ 
+     @extend_schema(
+         request=QuickLoginExchangeSerializer,
+diff --git a/etqan/platform/permissions.py b/etqan/platform/permissions.py
+index 8848d755..ddaaf19b 100644
+--- a/etqan/platform/permissions.py
++++ b/etqan/platform/permissions.py
+@@ -1,4 +1,5 @@
+ from django.conf import settings
++from rest_framework.authentication import SessionAuthentication
+ from rest_framework.exceptions import NotFound
+ from rest_framework.exceptions import PermissionDenied
+ from rest_framework.permissions import SAFE_METHODS
+@@ -209,3 +210,15 @@ class NotImpersonating(BasePermission):
+         if impersonator_id(request) is not None:
+             raise PermissionDenied(IMPERSONATING)
+         return True
++
++
++class CsrfChecked(BasePermission):
++    """ADR-0003 for a request that is not signed in yet. DRF checks CSRF only
++    for a signed-in session, so a view that signs someone in asks for the
++    check itself; otherwise another site could sign the visitor's browser into
++    an account of its choosing (login CSRF, ETQAN-QA-006). 403 ``CSRF Failed:
++    ...``; safe methods pass."""
++
++    def has_permission(self, request, view):
++        SessionAuthentication().enforce_csrf(request)
++        return True
+diff --git a/etqan/tenants/admin.py b/etqan/tenants/admin.py
+index a1f162b1..02744f86 100644
+--- a/etqan/tenants/admin.py
++++ b/etqan/tenants/admin.py
+@@ -9,6 +9,7 @@ from django_tenants.utils import get_public_schema_name
+ 
+ from etqan.etqan_billing import services as etqan_billing
+ from etqan.platform import features
++from etqan.platform import validators
+ from etqan.platform.exceptions import ValidationError as EtqanValidationError
+ from etqan.platform.params import as_int
+ from etqan.tenants import services
+@@ -39,6 +40,22 @@ class AcademyCreationForm(forms.ModelForm):
+         except EtqanValidationError as exc:
+             raise forms.ValidationError(exc.message) from exc
+ 
++    # ETQAN-QA-003: create_academy checks these too; here they become form
++    # errors instead of a failed save.
++    def clean_timezone(self):
++        try:
++            return validators.clean_timezone(self.cleaned_data.get("timezone") or "")
++        except EtqanValidationError as exc:
++            raise forms.ValidationError(exc.message) from exc
++
++    def clean_currency(self):
++        try:
++            return validators.clean_currency(
++                self.cleaned_data.get("currency") or "", "currency"
++            )
++        except EtqanValidationError as exc:
++            raise forms.ValidationError(exc.message) from exc
++
+ 
+ # Plan 13 §5.5: the Academy change page's Features section.
+ ACADEMY_FIELDS = [
+@@ -192,6 +209,9 @@ class AcademyAdmin(admin.ModelAdmin):
+     ]
+     list_filter = ["status"]
+     search_fields = ["name", "subdomain"]
++    # Every action changes academies, so each needs the change permission
++    # (`permissions=["change"]`): a view-only staff member is offered none,
++    # and Django refuses a forged one.
+     actions = ["suspend_academies", "reactivate_academies", "copy_features"]
+     action_form = AcademyActionForm
+     inlines = [DomainInline]
+@@ -258,14 +278,16 @@ class AcademyAdmin(admin.ModelAdmin):
+         obj.pk = created.pk
+         obj.schema_name = created.schema_name
+ 
+-    @admin.action(description="Suspend selected academies")
++    @admin.action(description="Suspend selected academies", permissions=["change"])
+     def suspend_academies(self, request, queryset):
+         count = services.set_status(
+             list(queryset.values_list("pk", flat=True)), "suspended"
+         )
+         self.message_user(request, f"Suspended {count} academies.", messages.SUCCESS)
+ 
+-    @admin.action(description="Copy features from another academy")
++    @admin.action(
++        description="Copy features from another academy", permissions=["change"]
++    )
+     def copy_features(self, request, queryset):
+         """Plan 13 §5.5: the chosen academy's switches, onto each selected
+         one; each change goes into the admin's history."""
+@@ -291,7 +313,7 @@ class AcademyAdmin(admin.ModelAdmin):
+             messages.SUCCESS,
+         )
+ 
+-    @admin.action(description="Reactivate selected academies")
++    @admin.action(description="Reactivate selected academies", permissions=["change"])
+     def reactivate_academies(self, request, queryset):
+         count = services.set_status(
+             list(queryset.values_list("pk", flat=True)), "active"
+@@ -399,7 +421,7 @@ class DomainAdmin(admin.ModelAdmin):
+         )
+         obj.pk = created.pk
+ 
+-    @admin.action(description="Check DNS and activate")
++    @admin.action(description="Check DNS and activate", permissions=["change"])
+     def check_dns(self, request, queryset):
+         # Pending rows are activated for the first time; disabled rows are
+         # re-enabled. Active rows have nothing to check.
+@@ -427,7 +449,7 @@ class DomainAdmin(admin.ModelAdmin):
+                     messages.WARNING,
+                 )
+ 
+-    @admin.action(description="Make primary")
++    @admin.action(description="Make primary", permissions=["change"])
+     def make_primary_action(self, request, queryset):
+         for domain in queryset:
+             try:
+@@ -437,7 +459,7 @@ class DomainAdmin(admin.ModelAdmin):
+                     request, f"{domain.domain}: {exc.message}", messages.ERROR
+                 )
+ 
+-    @admin.action(description="Disable")
++    @admin.action(description="Disable", permissions=["change"])
+     def disable_action(self, request, queryset):
+         for domain in queryset:
+             try:
+diff --git a/etqan/tenants/services.py b/etqan/tenants/services.py
+index bc3cabe0..9c024e0d 100644
+--- a/etqan/tenants/services.py
++++ b/etqan/tenants/services.py
+@@ -15,6 +15,8 @@ from etqan.access import services as access_services
+ from etqan.identity import services as identity_services
+ from etqan.platform import features
+ from etqan.platform.exceptions import ValidationError
++from etqan.platform.validators import clean_currency
++from etqan.platform.validators import clean_timezone
+ from etqan.site import services as site_services
+ from etqan.tenants.models import Academy
+ from etqan.tenants.models import Domain
+@@ -93,6 +95,10 @@ def create_academy(  # noqa: PLR0913 -- keyword-only; signature fixed by the Tas
+ ) -> Academy:
+     """Create an academy: schema (migrated), primary domain, and its first admin."""
+     value = validate_subdomain(subdomain)
++    # The same checks the academy's own settings apply (ETQAN-QA-003): an
++    # unknown timezone would break every page and job of the new academy.
++    timezone = clean_timezone(timezone)
++    currency = clean_currency(currency, field="currency")
+     academy = Academy(
+         schema_name=schema_name_for(value),
+         name=name,
+diff --git a/etqan/tenants/tests/test_admin.py b/etqan/tenants/tests/test_admin.py
+index c0e32b17..3771827a 100644
+--- a/etqan/tenants/tests/test_admin.py
++++ b/etqan/tenants/tests/test_admin.py
+@@ -108,3 +108,37 @@ def test_changelist_offers_no_delete_action(staff_client):
+     ]
+     assert "suspend_academies" in choices
+     assert "delete_selected" not in choices
++
++
++@pytest.mark.django_db
++@pytest.mark.parametrize(
++    ("timezone", "currency", "message"),
++    [
++        ("Mars/Phobos", "USD", b"Unknown timezone."),
++        ("UTC", "US", b"Use a three-letter currency code, like EGP."),
++        ("UTC", "U$D", b"Use a three-letter currency code, like EGP."),
++    ],
++)
++def test_admin_rejects_a_bad_timezone_or_currency(
++    staff_client, timezone, currency, message
++):
++    """ETQAN-QA-003: a form error, and no academy."""
++    resp = staff_client.post(
++        "/admin/tenants/academy/add/",
++        {
++            "name": "QA Tmp TZ",
++            "subdomain": "tz-bad",
++            "timezone": timezone,
++            "currency": currency,
++            "plan_label": "",
++            "plan_notes": "",
++            "admin_email": "tz@tz.test",
++            "admin_full_name": "",
++        },
++        HTTP_HOST=PUBLIC_HOST,
++    )
++    assert resp.status_code == 200
++    assert message in resp.content
++    connection.set_schema_to_public()
++    assert not Academy.objects.filter(subdomain="tz-bad").exists()
++    assert not schema_exists("academy_tz_bad")
+diff --git a/etqan/tenants/tests/test_commands.py b/etqan/tenants/tests/test_commands.py
+index aee7846f..85313a90 100644
+--- a/etqan/tenants/tests/test_commands.py
++++ b/etqan/tenants/tests/test_commands.py
+@@ -44,3 +44,25 @@ def test_bootstrap_platform_creates_public_domains_idempotently(settings):
+         Domain.objects.filter(tenant=public, is_primary=True).get().domain
+         == settings.TENANT_BASE_DOMAIN
+     )
++
++
++@pytest.mark.django_db
++def test_create_academy_command_refuses_an_unknown_timezone():
++    """ETQAN-QA-003: the command's bad timezone is a clean error, nothing made."""
++    from django.core.management.base import CommandError  # noqa: PLC0415
++
++    connection.set_schema_to_public()
++    with pytest.raises(CommandError, match=r"Unknown timezone\."):
++        call_command(
++            "create_academy",
++            "--name",
++            "Zeta",
++            "--subdomain",
++            "zeta-tz",
++            "--admin-email",
++            "z@z.test",
++            "--timezone",
++            "Mars/Phobos",
++        )
++    connection.set_schema_to_public()
++    assert not Academy.objects.filter(subdomain="zeta-tz").exists()
+diff --git a/etqan/tenants/tests/test_services.py b/etqan/tenants/tests/test_services.py
+index cc9b5dce..0168f80a 100644
+--- a/etqan/tenants/tests/test_services.py
++++ b/etqan/tenants/tests/test_services.py
+@@ -212,3 +212,42 @@ def test_create_academy_seeds_the_preset_tags(in_public, monkeypatch):
+     with tenant_context(academy):
+         assert Tag.objects.filter(kind="student", is_active=True).count() == 21
+         assert Tag.objects.filter(kind="teacher", is_active=True).count() == 22
++
++
++# ETQAN-QA-003: a new academy's timezone and currency pass the same checks
++# as its own settings; a bad one creates nothing.
++@pytest.mark.django_db
++@pytest.mark.parametrize(
++    ("field", "values"),
++    [
++        ("timezone", {"timezone": "Mars/Phobos"}),
++        ("timezone", {"timezone": "africa/cairo"}),
++        ("currency", {"currency": "US"}),
++        ("currency", {"currency": "dollars"}),
++    ],
++)
++def test_bad_timezone_or_currency_is_rejected_and_nothing_is_created(
++    in_public, field, values
++):
++    before = Academy.objects.count()
++    with pytest.raises(ValidationError) as exc:
++        services.create_academy(
++            name="Zone", subdomain="zone-bad", admin_email="z@zone.test", **values
++        )
++    assert exc.value.field == field
++    assert Academy.objects.count() == before
++    assert not schema_exists("academy_zone_bad")
++    assert not Domain.objects.filter(domain__startswith="zone-bad.").exists()
++
++
++@pytest.mark.django_db
++def test_create_academy_stores_the_currency_upper_case(in_public):
++    from etqan.academy.models import AcademySettings  # noqa: PLC0415
++
++    academy = services.create_academy(
++        name="Lower", subdomain="lower-cur", admin_email="l@lower.test", currency="usd"
++    )
++    academy.refresh_from_db()
++    assert academy.currency == "USD"
++    with tenant_context(academy):
++        assert AcademySettings.objects.get().default_currency == "USD"

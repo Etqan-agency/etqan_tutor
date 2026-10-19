@@ -1,0 +1,68 @@
+== TC-017 2026-10-19T03:39:34.469917
+start EGP 49505 USD 2500
+parent W1 default 201 {"status": null, "paid_minor": null, "balance_minor": null}
+BAD TC017 W1 paid by wallet, spent 30000 :: bal 49505->19505
+W1 payment 22|wallet|30000|0|completed
+BAD TC017 W2 partial 10000 :: {"status": null, "paid_minor": null, "balance_minor": null}
+W2 amt 9999999999 409 {"detail": "The balance does not cover this.", "code": "wallet.insufficient_balance"}
+OK  TC017 W2 amt 9999999999 4xx
+W2 amt 0 400 {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+OK  TC017 W2 amt 0 4xx
+W2 amt 1.5 400 {"amount_minor": ["A valid integer is required."]}
+OK  TC017 W2 amt 1.5 4xx
+W2 amt 9223372036854775807 409 {"detail": "The balance does not cover this.", "code": "wallet.insufficient_balance"}
+OK  TC017 W2 amt 9223372036854775807 4xx
+W2 amt 99999999999999999999 400 {"amount_minor": ["Ensure this value is less than or equal to 9223372036854775807."]}
+OK  TC017 W2 amt 99999999999999999999 4xx
+W3 USD 201 {"status": null, "paid_minor": null, "balance_minor": null}
+BAD TC017 W3 spends 2500 USD partial
+OK  TC017 W3 no USD funds 409 :: {"detail": "The balance does not cover this.", "code": "wallet.insufficient_balance"}
+OK  TC017 void 409 :: {"detail": "This invoice is void.", "code": "billing.invoice_void"}
+OK  TC017 paid 409 :: {"detail": "Nothing is due on this invoice.", "code": "wallet.nothing_due"}
+OK  TC017 other family (parent) 404 :: {"detail": "Invoice with identifier '29' not found."}
+OK  TC017 other family (student) 404 :: {"detail": "Invoice with identifier '29' not found."}
+P3 sees INV_P3 200
+P3 wallet pay 404 {"detail": "Invoice with identifier '30' not found."}
+OK  TC017 sibling payer wallet pay 404
+race prep bal 10000
+race diff invoices [(201, '{"status": null, "paid_minor": null, "balance_minor": null}'), (409, '{"detail": "The balance does not cover this.", "code": "wallet.insufficient_balance"}')]
+BAD TC017 race two invoices: balance never negative, spent<=10000 :: bal 0
+race same invoice [(201, '{"status": null, "paid_minor": null, "balance_minor": null}'), (409, '{"detail": "Nothing is due on this invoice.", "code": "wallet.nothing_due"}')]
+OK  TC017 race same invoice paid <= amount :: 1
+admin pays W2 201 {"status": null, "paid_minor": null, "balance_minor": null}
+OK  TC017 admin wallet pay
+entries 1|topup|50000|50000|17|
+2|topup|2500|2500|18|
+3|topup|100000000|100050000|19|
+4|topup|5|100050005|20|
+5|adjustment|-1000|100049005||
+6|adjustment|500|100049505||
+7|adjustment|-100|100049405||
+8|adjustment|100|100049505||
+9|reversal|-100000000|49505|19|
+10|spend|-30000|19505|22|24
+11|spend|-10000|9505|23|25
+12|spend|-2500|0|24|26
+13|topup|10000|19505|25|
+14|adjustment|-9505|10000||
+15|spend|-10000|0|26|31
+16|topup|20000|20000|27|
+17|spend|-10000|10000|28|33
+18|spend|-5000|5000|29|25
+spend payments 10|22|wallet|30000
+11|23|wallet|10000
+12|24|wallet|2500
+15|26|wallet|10000
+17|28|wallet|10000
+18|29|wallet|5000
+inv 1|EGP|5000|5000
+2|USD|0|0
+== TC-017 DB verification of statuses (pay endpoint returns the wallet entry, not the invoice)
+24|W1|30000|EGP|paid
+25|W2|80000|EGP|partial
+26|W3|4000|USD|partial
+31|race1|10000|EGP|paid
+32|race2|10000|EGP|unpaid
+33|race3|10000|EGP|paid
+OK  TC017 W1 paid W2 partial(15000) W3 partial(2500)
+OK  TC017 race1/race2 exactly one paid

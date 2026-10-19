@@ -1,0 +1,14 @@
+E       AssertionError: assert 'active' == 'suspended'
+E         
+E         - suspended
+E         + active
+E       assert False is True
+E        +  where False = <Academy: Renamed on the stale page>.etqan_defaults_suspended
+E       AssertionError: {'etqan_defaults_suspended': ["Etqan's defaults may be suspended only once an Etqan invoice is unpaid 30 days after issue."]}
+E       assert 200 == 302
+E        +  where 200 = <TemplateResponse status_code=200, "text/html; charset=utf-8">.status_code
+PASSED etqan/tenants/tests/test_admin_stale_change.py::test_a_fresh_page_still_reactivates_and_lifts_the_suspension
+FAILED etqan/tenants/tests/test_admin_stale_change.py::test_a_stale_page_writes_only_what_its_user_changed
+FAILED etqan/tenants/tests/test_admin_stale_change.py::test_what_the_user_did_change_on_a_stale_page_is_saved
+FAILED etqan/tenants/tests/test_admin_stale_change.py::test_an_untouched_stale_suspend_box_is_not_checked_again
+3 failed, 1 passed, 4 warnings in 1.47s

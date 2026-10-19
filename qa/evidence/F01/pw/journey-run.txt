@@ -1,0 +1,14 @@
+
+Running 1 test using 1 worker
+
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+  ✓  1 [chromium] › e2e/journey.spec.ts:41:1 › an academy's first month, from Etqan to a parent's notification (1.0m)
+
+  1 passed (1.0m)

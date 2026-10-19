@@ -1,0 +1,50 @@
+== partial staff setup
+[201]
+[201]
+link: http://qa.etqan.localhost/app/reset-password?uid=MjM&token=d...
+[200]
+login part 200
+== TC-008 matrix (admin nocode codes sup tch stu par anon)
+GET /academy/settings/: adm=200 nocode=200 codes=200 sup=200 tch=200 stu=200 par=200 anon=403
+PATCH /academy/settings/: adm=200 nocode=403 codes=403 sup=403 tch=403 stu=403 par=403 anon=403
+GET /academy/features/: adm=200 nocode=403 codes=403 sup=403 tch=403 stu=403 par=403 anon=403
+GET /access/roles/: adm=200 nocode=403 codes=403 sup=403 tch=403 stu=403 par=403 anon=403
+POST /access/roles/: nocode=403 codes=403 sup=403 tch=403 stu=403 par=403 anon=403 adm=201
+GET /access/staff/: adm=200 nocode=403 codes=403 sup=403 tch=403 stu=403 par=403 anon=403
+GET /people/admins/: adm=200 nocode=403 codes=403 sup=403 tch=403 stu=403 par=403 anon=403
+anon body: {"detail":"Authentication credentials were not provided."}
+settings updated_at before=2026-10-17 20:13:23.739584+00 after=2026-10-19 00:07:46.450667+00 (admin PATCH same value)
+-- grant codes staff academy_settings.update via role 3
+200
+codes PATCH settings -> 200 features -> 403
+200
+== TC-009 business matrix (adm nocode part sup tch stu par anon)
+GET /people/students/: adm=200 nocode=403 part=200 sup=200 tch=403 stu=403 par=403 anon=403
+GET /people/teachers/: adm=200 nocode=403 part=403 sup=200 tch=403 stu=403 par=403 anon=403
+GET /people/admins/: adm=200 nocode=403 part=403 sup=403 tch=403 stu=403 par=403 anon=403
+GET /sessions/: adm=200 nocode=403 part=200 sup=200 tch=200 stu=200 par=200 anon=403
+GET /subscriptions/: adm=200 nocode=403 part=403 sup=200 tch=200 stu=200 par=200 anon=403
+GET /billing/invoices/: adm=200 nocode=403 part=200 sup=403 tch=403 stu=200 par=200 anon=403
+GET /billing/payments/: adm=200 nocode=403 part=403 sup=403 tch=403 stu=403 par=403 anon=403
+GET /payroll/payslips/: adm=200 nocode=403 part=200 sup=403 tch=200 stu=403 par=403 anon=403
+GET /payroll/rates/: adm=200 nocode=403 part=403 sup=403 tch=403 stu=403 par=403 anon=403
+part POST students -> 403 POST invoices -> 403 void -> 403 gen payslips -> 403 issue -> 403
+stu POST invoices -> 403 stu PATCH session 1 -> 403 stu POST sessions -> 403
+== TC-010 row scope
+adm invoices: 2 [2, 1] | sessions: 8 [5, 3, 7, 1, 6, 4, 8, 2] | subs: 2 [2, 1]
+part invoices: 2 [2, 1] | sessions: 8 [5, 3, 7, 1, 6, 4, 8, 2] | subs: ? 
+stu invoices: 1 [1] | sessions: 4 [3, 1, 4, 2] | subs: 1 [1]
+tch invoices: ?  | sessions: 4 [3, 1, 4, 2] | subs: 1 [1]
+par invoices: 0 [] | sessions: 0 [] | subs: 0 []
+sup invoices: ?  | sessions: 8 [5, 3, 7, 1, 6, 4, 8, 2] | subs: 2 [2, 1]
+stu GET other invoice 2 -> 404 own 1 -> 200; stu GET other session 5 -> 404 own 1 -> 200; tch GET session 5 (other teacher) -> 404
+-- link parent 6 to student 5
+[201]
+par invoices: 1 [1] ; par GET inv 1 -> 200 inv2 -> 404
+unlink -> 204
+par invoices after unlink: 0 [] inv1 -> 404
+relink -> 201
+1|1
+2|1
+2|4
+1|4

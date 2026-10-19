@@ -1,0 +1,6 @@
+
+statuses: ['draft', 'issued', 'paid', 'void']
+ETQ-QA-TMP-0002 draft 250 -> oldest_unpaid_days: None may_suspend: False
+ETQ-QA-TMP-0003 paid 250 -> oldest_unpaid_days: None may_suspend: False
+ETQ-QA-TMP-0004 issued 0 -> oldest_unpaid_days: None may_suspend: False
+cleanup remaining: 0

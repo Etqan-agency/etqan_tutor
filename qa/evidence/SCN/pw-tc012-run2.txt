@@ -1,0 +1,30 @@
+Running 1 test using 1 worker
+  ✘  1 [chromium] › e2e/qa/scn-tc012-parent-portal.spec.ts:32:1 › SCN-TC-012 parent sees the children's sessions and attendance, the invoice with the wallet payment; FAM-B is not found (8.0s)
+  ✘  2 [chromium] › e2e/qa/scn-tc012-parent-portal.spec.ts:32:1 › SCN-TC-012 parent sees the children's sessions and attendance, the invoice with the wallet payment; FAM-B is not found (retry #1) (8.3s)
+  1) [chromium] › e2e/qa/scn-tc012-parent-portal.spec.ts:32:1 › SCN-TC-012 parent sees the children's sessions and attendance, the invoice with the wallet payment; FAM-B is not found 
+    Error: expect(locator).toContainText(expected) failed
+    Locator: getByRole('listitem').filter({ hasText: 'Oct 19, 2026 10:00 SCN Student A1' })
+    Expected substring: "Present"
+    Timeout: 5000ms
+    Error: element(s) not found
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByRole('listitem').filter({ hasText: 'Oct 19, 2026 10:00 SCN Student A1' })
+      41 | 	await expect(page.getByRole("heading", { name: "My sessions" })).toBeVisible();
+      42 | 	const item = (text: string) => page.getByRole("listitem").filter({ hasText: text });
+    > 43 | 	await expect(item("Oct 19, 2026 10:00 SCN Student A1")).toContainText("Present");
+         | 	                                                        ^
+      44 | 	await expect(item("Oct 19, 2026 11:00 SCN Student A1")).toContainText("Absent");
+      45 | 	await expect(item("Oct 19, 2026 12:00 SCN Student A1")).toContainText("Excused");
+      46 | 	// Local Cairo wall clock on both sides of the 2026-10-30 DST change.
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/scn-tc012-parent-portal.spec.ts:43:58
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-scn-tc012-parent-portal-0bc4b--payment-FAM-B-is-not-found-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Error Context: test-results/qa-scn-tc012-parent-portal-0bc4b--payment-FAM-B-is-not-found-chromium/error-context.md
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+    Error: expect(locator).toContainText(expected) failed
+    Locator: getByRole('listitem').filter({ hasText: 'Oct 19, 2026 10:00 SCN Student A1' })
+    Expected substring: "Present"
+    Timeout: 5000ms
+    Error: element(s) not found

@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:89:1 › TC-076 suspending Etqan's defaults with no unpaid invoice is refused (910ms)
+
+  1 passed (1.5s)

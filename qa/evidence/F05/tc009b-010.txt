@@ -1,0 +1,13 @@
+== TC-009 step 5 redo
+[200] email now f05-dup@qa.etqan.test
+2 ['[Etqan QA Other] عيّن كلمة المرور', '[Etqan QA Academy] عيّن كلمة المرور']
+== TC-010 confirm
+[200] POST identity/verify-email/ :: 
+email=f05-pend@qa.etqan.test pending=
+f05-pend@qa.etqan.test|t|t
+f05-pend@qa.etqan.test
+login so 400 {"non_field_errors":["Invalid credentials."]}
+login s1 200 {"id":114,"email":"f05-pend@qa.etqan.test","full_name":"QA5 Sami","phone":"+201005550101","preferred_language":"ar","eff
+2 ['[Etqan QA Academy] تنبيه أمني: تم إجراء تغيير على حسابك', '[Etqan QA Academy] عيّن كلمة المرور']
+[400] POST identity/verify-email/ :: {"non_field_errors":["Invalid or expired verification key."]}
+[201] POST people/parents/ :: {"id":129,"role":"parent","two

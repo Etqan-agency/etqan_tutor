@@ -1,0 +1,14 @@
+# 2026-10-18T21:38:13Z Agent 2 mutation check: copy of /app in /tmp/qa_r2 with the cycle-2 fix removed (3 admin files at HEAD, tenants/admin.py minus the 3 QA-014 hunks, platform/admin.py deleted); tests unchanged
+FAILED etqan/tenants/tests/test_admin_permissions.py::test_view_only_staff_is_offered_no_action_on_any_registered_admin
+FAILED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_periodic_task_action_changes_nothing
+FAILED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_make_verified_changes_nothing
+FAILED etqan/tenants/tests/test_admin_stale_change.py::test_a_stale_page_writes_only_what_its_user_changed
+FAILED etqan/tenants/tests/test_admin_stale_change.py::test_what_the_user_did_change_on_a_stale_page_is_saved
+FAILED etqan/tenants/tests/test_admin_stale_change.py::test_an_untouched_stale_suspend_box_is_not_checked_again
+FAILED etqan/etqan_billing/tests/test_admin_permissions.py::test_view_only_staff_is_offered_no_invoice_action
+FAILED etqan/etqan_billing/tests/test_admin_permissions.py::test_a_forged_issue_changes_nothing_and_emails_nobody
+FAILED etqan/etqan_billing/tests/test_admin_permissions.py::test_a_forged_email_again_emails_nobody
+FAILED etqan/etqan_billing/tests/test_admin_permissions.py::test_a_forged_mark_paid_changes_nothing
+FAILED etqan/etqan_billing/tests/test_admin_permissions.py::test_a_forged_void_changes_nothing
+FAILED etqan/integrations/tests/test_admin.py::test_view_only_staff_cannot_run_the_test_action
+12 failed, 23 passed, 33 warnings in 2.68s

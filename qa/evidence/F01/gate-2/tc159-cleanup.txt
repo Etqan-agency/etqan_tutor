@@ -1,0 +1,5 @@
+# TC-159 cleanup 2026-10-18T21:42:59Z
+anonymous GET qa /api/v1/identity/me/ -> 403 {detail: Authentication credentials were not provided.} (source of the 5 console 403s on login pages)
+
+tags [(45, 'QA159 tag')]
+deleted (1, {'identity.Tag': 1})

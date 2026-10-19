@@ -1,0 +1,13 @@
+from qa import *
+a=S(); a.login(*PW["admin"])
+log("== TC-014 restore of qa's own invoice 1 touched through id collision (QA data, not a defect)", datetime.datetime.now().isoformat())
+log(q("select id,amount_minor,method,status,created_at from billing_payment where invoice_id=1 order by id"))
+c,j=a.patch("/billing/invoices/1/",{"description":"F03 قرآن — F03 باقة"}); log("desc restore",c)
+new_cash=q("select id from billing_payment where invoice_id=1 and method='cash' and amount_minor=1")
+if new_cash: log("delete 1-minor cash", new_cash, a.delete(f"/billing/payments/{new_cash}/")[0])
+w=q("select id from billing_payment where invoice_id=1 and method='wallet' and status='completed'")
+if w: c,j=a.post(f"/wallet/payments/{w}/move/",{}); log("move wallet pay back", w, c)
+log("SQL restore payment 1 refund (QA data edit)", q("update billing_payment set status='completed', refunded_at=null, refunded_by_id=null where id=1 returning id,status"))
+log("recompute invoice 1 status via no-op edit", a.patch("/billing/invoices/1/",{"description":"F03 قرآن — F03 باقة"})[0], q("select status,(select sum(amount_minor) from billing_payment where invoice_id=1 and status='completed') from billing_invoice where id=1"))
+log(q("select id,amount_minor,method,status from billing_payment where invoice_id=1 order by id"))
+save("tc014.txt")

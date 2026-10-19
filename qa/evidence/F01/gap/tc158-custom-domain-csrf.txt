@@ -1,0 +1,14 @@
+== host qa-academy.test
+csrf GET 200 same-origin login: 200 | me: 200
+csrf GET 200 Origin subdomain: 403
+csrf GET 200 Origin evil.example: 403
+subdomain token replayed on qa-academy.test (header only, own cookie): 403
+subdomain token + cookie forced onto qa-academy.test: 200
+no token: csrf GET 200 403
+== host www.qa-academy.test
+csrf GET 200 same-origin login: 200 | me: 200
+csrf GET 200 Origin subdomain: 403
+csrf GET 200 Origin evil.example: 403
+subdomain token replayed on www.qa-academy.test (header only, own cookie): 403
+subdomain token + cookie forced onto www.qa-academy.test: 200
+no token: csrf GET 200 403

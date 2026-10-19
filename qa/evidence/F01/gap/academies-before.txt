@@ -1,0 +1,34 @@
+1|public||active|UTC|USD|f|{}|b29a4d4b84eae1022cd573371cbe39b9
+2|academy_demo|demo|active|UTC|USD|f|{"faqs": true, "export": true, "levels": true, "themes": true, "parents": true, "spanish": true, "articles": true, "balances": true, "expenses": true, "families": true, "homework": true, "invoices": true, "whatsapp": true, "zoom_api": true, "contracts": true, "donations": true, "ai_reports": true, "broadcasts": true, "code_reset": true, "two_factor": true, "phone_login": true, "quick_login": true, "site_status": true, "supervision": true, "activity_log": true, "ai_assistant": true, "certificates": true, "file_uploads": true, "honour_board": true, "page_builder": true, "postponement": true, "study_groups": true, "system_codes": true, "consultations": true, "internal_chat": true, "payment_links": true, "payroll_rules": true, "session_times": true, "site_tracking": true, "system_status": true, "url_redirects": true, "video_library": true, "advertisements": true, "exchange_rates": true, "extra_sessions": true, "google_sign_in": true, "quran_chapters": true, "trial_sessions": true, "country_pricing": true, "disposal_status": true, "installable_app": true, "manual_sessions": true, "online_payments": true, "quick_translate": true, "salary_expenses": true, "session_archive": true, "session_reports": true, "session_reviews": true, "teacher_balance": true, "payment_receipts": true, "recorded_courses": true, "weekly_schedules": true, "report_deductions": true, "self_registration": true, "testimonial_media": true, "auto_notifications": true, "bulk_teacher_rates": true, "push_notifications": true, "salary_projections": true, "teacher_attendance": true, "educational_content": true, "group_subscriptions": true, "simplified_sessions": true, "family_subscriptions": true, "fixed_teacher_salary": true, "student_teacher_rate": true, "subscription_archive": true, "teacher_availability": true, "compensation_sessions": true, "incentives_deductions": true, "registration_waitlist": true, "verified_certificates": true, "notification_templates": true, "payslip_acknowledgement": true, "notification_preferences": true, "multi_course_subscriptions": true}|03ad843b47c0fd471400a89ce4a013e9
+3|academy_other|other|active|UTC|USD|f|{}|b42d0b24b09b32c8e4f0559de34d8647
+4|academy_qaother|qaother|active|UTC|USD|f|{"internal_chat": false}|e2fe67cdcf433b51e58caa5d1efe959a
+5|academy_qa|qa|active|Africa/Cairo|EGP|f|{"families": true, "invoices": true, "internal_chat": false, "online_payments": true}|e627618489c574750326c1d7c9ba0750
+6|academy_qa_tmp_1|qa-tmp-1|suspended|Asia/Riyadh|USD|f|{"families": true, "invoices": true, "internal_chat": false, "online_payments": true}|d28628be25a7d06630814a40568aa1cb
+7|academy_qa_tmp_tz|qa-tmp-tz|suspended|Mars/Phobos|usd|f|{}|b29ad05e67a750b895492ba6dd7c7d8f
+8|academy_qa_tmp_race_a|qa-tmp-race-a|suspended|UTC|USD|f|{}|fb9de5e5cc2eda1840326123c1dfc522
+10|academy_qa_tmp_race_b|qa-tmp-race-b|suspended|UTC|USD|f|{}|9e84f143b270195e84a5f72da308f40a
+12|academy_journey_1792270407267|journey-1792270407267|active|UTC|USD|f|{}|3532b0a328289e7a9f40fc0db2e7d2e1
+13|academy_journey_1792270459368|journey-1792270459368|active|UTC|USD|f|{}|b02d055438589a8afbab55a293fee39a
+14|academy_journey_1792270543395|journey-1792270543395|active|UTC|USD|f|{}|4195269b093e11f6cd538e2631f483a0
+15|academy_qa_tmp_r1ok|qa-tmp-r1ok|suspended|Africa/Cairo|EGP|f|{}|740cf36b88101a7a39ce54f4dacf0cda
+16|academy_khaled|khaled|active|Africa/Cairo|EGP|f|{"faqs": true, "export": true, "levels": true, "themes": true, "parents": true, "spanish": true, "articles": true, "balances": true, "expenses": true, "families": true, "homework": true, "invoices": true, "whatsapp": true, "zoom_api": true, "contracts": true, "donations": true, "ai_reports": true, "broadcasts": true, "code_reset": true, "two_factor": true, "phone_login": true, "quick_login": true, "site_status": true, "supervision": true, "activity_log": true, "ai_assistant": true, "certificates": true, "file_uploads": true, "honour_board": true, "page_builder": true, "postponement": true, "study_groups": true, "system_codes": true, "consultations": true, "internal_chat": true, "payment_links": true, "payroll_rules": true, "session_times": true, "site_tracking": true, "system_status": true, "url_redirects": true, "video_library": true, "advertisements": true, "exchange_rates": true, "extra_sessions": true, "google_sign_in": true, "quran_chapters": true, "trial_sessions": true, "country_pricing": true, "disposal_status": true, "installable_app": true, "manual_sessions": true, "online_payments": true, "quick_translate": true, "salary_expenses": true, "session_archive": true, "session_reports": true, "session_reviews": true, "teacher_balance": true, "payment_receipts": true, "recorded_courses": true, "weekly_schedules": true, "report_deductions": true, "self_registration": true, "testimonial_media": true, "auto_notifications": true, "bulk_teacher_rates": true, "push_notifications": true, "salary_projections": true, "teacher_attendance": true, "educational_content": true, "group_subscriptions": true, "simplified_sessions": true, "family_subscriptions": true, "fixed_teacher_salary": true, "student_teacher_rate": true, "subscription_archive": true, "teacher_availability": true, "compensation_sessions": true, "incentives_deductions": true, "registration_waitlist": true, "verified_certificates": true, "notification_templates": true, "payslip_acknowledgement": true, "notification_preferences": true, "multi_course_subscriptions": true}|416802cea399618cb22740a4991af074
+1|etqan.localhost|1|t|active
+2|localhost|1|f|active
+3|127.0.0.1|1|f|active
+4|demo.etqan.localhost|2|t|active
+5|other.etqan.localhost|3|t|active
+6|qaother.etqan.localhost|4|t|active
+7|qa.etqan.localhost|5|t|active
+8|qa-tmp-1.etqan.localhost|6|t|active
+9|qa-tmp-tz.etqan.localhost|7|t|active
+10|qa-tmp-race-a.etqan.localhost|8|t|active
+11|qa-tmp-race-b.etqan.localhost|10|t|active
+12|qa-academy.test|6|f|disabled
+13|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd.co|6|f|disabled
+14|localtest.me|6|f|disabled
+15|www.qa-academy.test|6|f|disabled
+16|journey-1792270407267.etqan.localhost|12|t|active
+17|journey-1792270459368.etqan.localhost|13|t|active
+18|journey-1792270543395.etqan.localhost|14|t|active
+19|qa-tmp-r1ok.etqan.localhost|15|t|active
+20|khaled.etqan.localhost|16|t|active

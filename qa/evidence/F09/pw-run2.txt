@@ -1,0 +1,8 @@
+
+Running 3 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f09-billing.spec.ts:43:1 › TC-001 owner creates a manual invoice, opens it and prints it (3.7s)
+  ✓  2 [chromium] › e2e/qa/f09-billing.spec.ts:71:1 › TC-021 parent applies a discount code from the family invoice page (5.9s)
+  ✓  3 [chromium] › e2e/qa/f09-billing.spec.ts:109:1 › TC-022 parent pays an invoice online through the simulator (5.9s)
+
+  3 passed (16.1s)

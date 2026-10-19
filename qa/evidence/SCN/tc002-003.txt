@@ -1,0 +1,42 @@
+== TC-002
+[201] POST subscriptions/ :: {"id":85,"status":"active","schedule_status":"active","student":{"id":222,"full_name":"SCN Student A1","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":6,"name_ar":"scn","name_en":"SCN Quran"},"package":{"id":17,"name_ar":"س","name_en":"SCN Pkg 2x4w"},"starts_on":"2026-10-19","term_ends_on":"2026-11-18","ends_on":"2026-11-18","grace_ends_on":"2026-11-25","in_grace":false,"sessions_total":8,"sessions_used":0,"carried_over_sessions":0,"sessions_remaining":8,"extra_sessions":0,"progress":0.0,"price_minor":150000,"currency":"EGP","renewed_from":null,"renewal":null,"supervisor":null,"archived_at":null,"can_archive":false,"payment_status":"unpaid","payment_overdue":false,"duration_value":1,"duration_unit":"month","session_minutes":60,"freeze_days_allowed":0,"paused_days":0,"freeze_days_left":0,"notes":"","renewal_starts_on":"2026-11-19","slots":[{"id":96,"weekday":0,"start_time":"18:00","minutes":60,"meeting_url":"","is_active":true,"has_sessions":true,"outside_availability":false},{"id":97,"weekday":3,"start_time":"18:00","minutes":60,"meeting_url":"","is_active":true,"has_sessions":true,"outside_availability":false}],"pauses":[],"archived_by":null,"schedule_changed_at":null,"schedule_changed_by":null,"substitutions":[],"conflicts":[{"session":{"id":354,"subscription_id":85,"slot_id":96,"occurs_on":"2026-10-19","starts_at":"2026-10-19T15:00:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has
+[201] POST subscriptions/ :: {"id":86,"status":"active","schedule_status":"active","student":{"id":223,"full_name":"SCN Student A2","timezone":"Africa/Cairo"},"teacher":{"id":219,"full_name":"SCN Teacher Two"},"course":{"id":6,"name_ar":"scn","name_en":"SCN Quran"},"package":{"id":17,"name_ar":"س","name_en":"SCN Pkg 2x4w"},"starts_on":"2026-10-19","term_ends_on":"2026-11-18","ends_on":"2026-11-18","grace_ends_on":"2026-11-25","in_grace":false,"sessions_total":8,"sessions_used":0,"carried_over_sessions":0,"sessions_remaining":8,"extra_sessions":0,"progress":0.0,"price_minor":150000,"currency":"EGP","renewed_from":null,"ren
+{'status': 'active', 'sessions_total': 8, 'sessions_used': 0, 'sessions_remaining': 8, 'starts_on': '2026-10-19', 'ends_on': '2026-11-18', 'price_minor': 150000, 'currency': 'EGP'}
+SUB1 sessions API: [('2026-10-19', '2026-10-19T15:00:00Z', 'regular', 'scheduled', 60), ('2026-10-22', '2026-10-22T15:00:00Z', 'regular', 'scheduled', 60), ('2026-10-26', '2026-10-26T15:00:00Z', 'regular', 'scheduled', 60), ('2026-10-29', '2026-10-29T15:00:00Z', 'regular', 'scheduled', 60), ('2026-11-02', '2026-11-02T16:00:00Z', 'regular', 'scheduled', 60), ('2026-11-05', '2026-11-05T16:00:00Z', 'regular', 'scheduled', 60), ('2026-11-09', '2026-11-09T16:00:00Z', 'regular', 'scheduled', 60)]
+SET
+354|2026-10-19|2026-10-19 15:00:00|2026-10-19 18:00:00|regular|scheduled|60
+358|2026-10-22|2026-10-22 15:00:00|2026-10-22 18:00:00|regular|scheduled|60
+355|2026-10-26|2026-10-26 15:00:00|2026-10-26 18:00:00|regular|scheduled|60
+359|2026-10-29|2026-10-29 15:00:00|2026-10-29 18:00:00|regular|scheduled|60
+356|2026-11-02|2026-11-02 16:00:00|2026-11-02 18:00:00|regular|scheduled|60
+360|2026-11-05|2026-11-05 16:00:00|2026-11-05 18:00:00|regular|scheduled|60
+357|2026-11-09|2026-11-09 16:00:00|2026-11-09 18:00:00|regular|scheduled|60
+SET
+361|2026-10-20|2026-10-20 14:00:00|2026-10-20 17:00:00
+364|2026-10-23|2026-10-23 14:00:00|2026-10-23 17:00:00
+362|2026-10-27|2026-10-27 14:00:00|2026-10-27 17:00:00
+365|2026-10-30|2026-10-30 15:00:00|2026-10-30 17:00:00
+363|2026-11-03|2026-11-03 15:00:00|2026-11-03 17:00:00
+366|2026-11-06|2026-11-06 15:00:00|2026-11-06 17:00:00
+SET
+0
+-- generate to 11-30
+[200] POST schedule/generate/ :: {"created":4,"skipped_existing":7,"skipped_paused":0,"skipped_out_of_term":2,"skipped_stopped":0,"skipped_inactive":0,"conflicts":[{"session":{"id":369,"subscription_id":85,"slot_id":97,"occurs_on":"2026-11-12","starts_at":"2026-11-12T16:00:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":true,"student":{"id":222,"full_name":"SCN Student A1","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":6,"name_ar":"scn","name_en":"SCN Quran"},"notes"
+SET
+85|11
+86|6
+(0, 8)
+T1 today: {"detail":"You do not have permission to perform this action."}
+== TC-003
+[200] GET billing/invoices/?student=222 :: {"count":1,"next":null,"previous":null,"results":[{"id":146,"number":"INV-000146","status":"unpaid","is_overdue":false,"student":{"id":222,"full_name":"SCN Student A1"},"payer":{"id":224,"full_name":"SCN Parent A"},"subscription_id":85,"description":"scn — س","amount_minor":150000,"paid_minor":0,"balance_minor":150000,"currency":"EGP","issued_on":"2026-10-19","due_on":"2026-10-26","voided_at":null,"created_at":"2026-10-19T17:05:27.122267Z","notes":"","created_by":{"id":1,"full_name":"QA Admin"}}]}
+SET
+146|INV-000146|124|224|150000|EGP|unpaid|2026-10-19|2026-10-26|85
+147|INV-000147|125|224|150000|EGP|unpaid|2026-10-19|2026-10-26|86
+[200] POST schedule/generate/ :: {"created":0,"skipped_existing":11,"skipped_paused":0,"skipped_out_of_term":2,"skipped_stopped":0,"skipped_inactive":0,"conflicts":[]}
+[200] POST schedule/generate/ :: {"created":0,"skipped_existing":11,"skipped_paused":0,"skipped_out_of_term":2,"skipped_stopped":0,"skipped_inactive":0,"conflicts":[]}
+SET
+11
+SET
+2
+SET
+147

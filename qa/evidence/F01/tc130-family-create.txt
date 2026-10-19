@@ -1,0 +1,2 @@
+{"id":1,"name":"QA Family F01","is_active":true,"payer":{"id":5,"full_name":"QA student","role":"student"},"payer_needs_choosing":false,"students":[{"id":5,"full_name":"QA student"}],"notes":"","created_at":"2026-10-17T20:13:44.133651Z"}
+HTTP 201

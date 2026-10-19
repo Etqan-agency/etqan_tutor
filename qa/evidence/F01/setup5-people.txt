@@ -1,0 +1,28 @@
+## SETUP-5 staff + people
+{"id":2,"full_name":"QA Staff NoCode","email":"qa-staff-nocode@qa.etqan.test","is_active":true,"roles":[{"id":2,"name_ar":"بلا صلاحيات","name_en":"QA No Codes"}],"invited":true,"created_at":"2026-10-17T20:07:10.110318Z"}
+HTTP 201
+{"id":3,"full_name":"QA Staff Codes","email":"qa-staff-codes@qa.etqan.test","is_active":true,"roles":[{"id":3,"name_ar":"عرض الطلاب","name_en":"QA Student View"}],"invited":true,"created_at":"2026-10-17T20:07:10.201341Z"}
+HTTP 201
+{"id":4,"full_name":"QA Supervisor","email":"qa-supervisor@qa.etqan.test","is_active":true,"roles":[{"id":1,"name_ar":"مشرف","name_en":"Supervisor"}],"invited":true,"created_at":"2026-10-17T20:07:10.313233Z"}
+HTTP 201
+(eval):1: bad substitution
+{"user":["This field is required."]}
+HTTP 400
+{"user":["This field is required."]}
+HTTP 400
+{"user":["This field is required."]}
+HTTP 400
+{"profile":{"gender":["This field is required."]}}
+HTTP 400
+{"id":5,"role":"student","two_factor":false,"user":{"full_name":"QA student","email":"qa-student@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_timezone":""},"profile":{"date_of_birth":null,"gender":"","country":"","status":"active","notes":"","xp":0,"nationality":"","age_group":null,"tags":[],"account_type":"individual","family":null}}
+HTTP 201
+{"id":6,"role":"parent","two_factor":false,"user":{"full_name":"QA parent","email":"qa-parent@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last_login_timezone":""},"profile":{"has_whatsapp":false,"notes":"","children":[]}}
+HTTP 201
+efault_meeting_url":"","pay_currency":"EGP","payout_method":"","payout_details":"","course_ids":[],"tags":[]}}
+HTTP 201
+qa-staff-nocode accept: HTTP 200 login: 200
+qa-staff-codes accept: HTTP 200 login: 200
+qa-supervisor accept: HTTP 200 login: 200
+qa-teacher accept: HTTP 200 login: 200
+qa-student accept: HTTP 200 login: 200
+qa-parent accept: HTTP 200 login: 200

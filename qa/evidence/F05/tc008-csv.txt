@@ -1,0 +1,17 @@
+country=EG -> 64
+[201] POST people/students/ :: {"id":124,"role":"student","t
+[201] POST people/students/ :: {"id":125,"role":"student","t
+[201] POST people/students/ :: {"id":126,"role":"student","t
+[201] POST people/students/ :: {"id":127,"role":"student","t
+Content-Disposition: attachment; filename="students.csv"
+Content-Type: text/csv; charset=utf-8
+X-Content-Type-Options: nosniff
+00000000: efbb bf                                  ...
+﻿ID,Name,Email,Phone,Language,Account,Active,Status,Gender,Country,Date of birth,Age group,Nationality,XP,Tags,Account type,Family
+rows=80  count=80
+125,'+cmd,,+201005559999,ar,no_login,yes,active,,,,,,0,,individual,
+126,'-5 days,,+201005559999,ar,no_login,yes,active,,,,,,0,,individual,
+124,"'=HYPERLINK(""http://x"")",,+201005559999,ar,no_login,yes,active,,,,,,0,,individual,
+127,'@SUM(1),,+201005559999,ar,no_login,yes,active,,,,,,0,,individual,
+4
+filtered rows=10 SQL=10

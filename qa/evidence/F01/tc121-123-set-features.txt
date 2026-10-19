@@ -1,0 +1,42 @@
+## TC-121
+CommandError: Unknown feature: chat.
+exit=1
+db: {}
+me.features: ['families', 'parents', 'session_reports', 'invoices', 'auto_notifications', 'teacher_attendance', 'export']
+qa: families=on
+exit=0
+db: {"families": true}
+demo md5 unchanged: yes qaother: {} (before {})
+## TC-122
+CommandError: Name at least one feature with --on or --off.
+exit=1
+CommandError: A feature can't be switched both on and off.
+exit=1
+CommandError: Unknown feature: nosuch.
+exit=1
+CommandError: No academy has the subdomain 'nope'.
+exit=1
+db after refusals: {"families": true}
+## TC-123
+qa: online_payments=on, invoices=off
+exit=0
+api online_payments: [(False, ['invoices'])]
+me has online_payments: 0
+## TC-123 cont.
+gateways/checkouts/ (online_payments held off): {"detail":"This feature is not enabled for this academy."} HTTP 404 
+gateways/settings/: {"detail":"This feature is not enabled for this academy."} HTTP 404 
+admin change page help: Held off: needs Invoices and receipts.
+qa: invoices=on
+exit=0
+## TC-121 (corrected code internal_chat)
+qa: internal_chat=on, families=off
+exit=0
+db: {"families": false, "invoices": true, "internal_chat": true, "online_payments": true}
+me.features: ['parents', 'session_reports', 'invoices', 'auto_notifications', 'teacher_attendance', 'export', 'internal_chat', 'online_payments']
+## TC-124 families off: admin vs teacher
+admin GET people/families/: {"detail":"This feature is not enabled for this academy."} HTTP 404 
+teacher GET people/families/: {"detail":"You do not have permission to perform this action."} HTTP 403 
+staff-codes GET people/families/: {"detail":"You do not have permission to perform this action."} HTTP 403 
+qa: families=on, internal_chat=off
+exit=0
+db restored: {"families": true, "invoices": true, "internal_chat": false, "online_payments": true}

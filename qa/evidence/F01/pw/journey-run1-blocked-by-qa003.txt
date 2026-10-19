@@ -1,0 +1,256 @@
+
+Running 1 test using 1 worker
+
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+ERROR 2026-10-17 20:54:18,093 etqan.platform.tenancy notifications.scan failed for academy academy_qa_tmp_tz
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/zoneinfo/_common.py", line 12, in load_tzdata
+    path = resources.files(package_name).joinpath(resource_name)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/importlib/resources/_common.py", line 46, in wrapper
+    return func(anchor)
+  File "/usr/local/lib/python3.13/importlib/resources/_common.py", line 56, in files
+    return from_package(resolve(anchor))
+                        ~~~~~~~^^^^^^^^
+  File "/usr/local/lib/python3.13/functools.py", line 934, in wrapper
+    return dispatch(args[0].__class__)(*args, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/importlib/resources/_common.py", line 82, in _
+    return importlib.import_module(cand)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1404, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1369, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1333, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'tzdata.zoneinfo.Mars'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/etqan/platform/tenancy.py", line 41, in for_each_academy
+    job()
+    ~~~^^
+  File "/app/etqan/notifications/services/scan.py", line 263, in scan_now
+    return scan(now=now)
+  File "/app/etqan/notifications/services/scan.py", line 176, in scan
+    today = now.astimezone(ZoneInfo(academy.timezone)).date()
+                           ~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/zoneinfo/_common.py", line 29, in load_tzdata
+    raise ZoneInfoNotFoundError(f"No time zone found with key {key}")
+zoneinfo._common.ZoneInfoNotFoundError: 'No time zone found with key Mars/Phobos'
+CommandError: The scan failed in at least one academy.
+
+  ✘  1 [chromium] › e2e/journey.spec.ts:41:1 › an academy's first month, from Etqan to a parent's notification (51.6s)
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+ERROR 2026-10-17 20:55:15,401 etqan.platform.tenancy notifications.scan failed for academy academy_qa_tmp_tz
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/zoneinfo/_common.py", line 12, in load_tzdata
+    path = resources.files(package_name).joinpath(resource_name)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/importlib/resources/_common.py", line 46, in wrapper
+    return func(anchor)
+  File "/usr/local/lib/python3.13/importlib/resources/_common.py", line 56, in files
+    return from_package(resolve(anchor))
+                        ~~~~~~~^^^^^^^^
+  File "/usr/local/lib/python3.13/functools.py", line 934, in wrapper
+    return dispatch(args[0].__class__)(*args, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/importlib/resources/_common.py", line 82, in _
+    return importlib.import_module(cand)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1404, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1369, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1333, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'tzdata.zoneinfo.Mars'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/etqan/platform/tenancy.py", line 41, in for_each_academy
+    job()
+    ~~~^^
+  File "/app/etqan/notifications/services/scan.py", line 263, in scan_now
+    return scan(now=now)
+  File "/app/etqan/notifications/services/scan.py", line 176, in scan
+    today = now.astimezone(ZoneInfo(academy.timezone)).date()
+                           ~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/zoneinfo/_common.py", line 29, in load_tzdata
+    raise ZoneInfoNotFoundError(f"No time zone found with key {key}")
+zoneinfo._common.ZoneInfoNotFoundError: 'No time zone found with key Mars/Phobos'
+CommandError: The scan failed in at least one academy.
+
+  ✘  2 [chromium] › e2e/journey.spec.ts:41:1 › an academy's first month, from Etqan to a parent's notification (retry #1) (56.8s)
+
+
+  1) [chromium] › e2e/journey.spec.ts:41:1 › an academy's first month, from Etqan to a parent's notification 
+
+    Error: Command failed: /private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/manage-wrap.sh 'scan_notifications'
+    System check identified some issues:
+
+    WARNINGS:
+    ?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+    ERROR 2026-10-17 20:54:18,093 etqan.platform.tenancy notifications.scan failed for academy academy_qa_tmp_tz
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.13/zoneinfo/_common.py", line 12, in load_tzdata
+        path = resources.files(package_name).joinpath(resource_name)
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+      File "/usr/local/lib/python3.13/importlib/resources/_common.py", line 46, in wrapper
+        return func(anchor)
+      File "/usr/local/lib/python3.13/importlib/resources/_common.py", line 56, in files
+        return from_package(resolve(anchor))
+                            ~~~~~~~^^^^^^^^
+      File "/usr/local/lib/python3.13/functools.py", line 934, in wrapper
+        return dispatch(args[0].__class__)(*args, **kw)
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+      File "/usr/local/lib/python3.13/importlib/resources/_common.py", line 82, in _
+        return importlib.import_module(cand)
+               ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+      File "/usr/local/lib/python3.13/importlib/__init__.py", line 88, in import_module
+        return _bootstrap._gcd_import(name[level:], package, level)
+               ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "<frozen importlib._bootstrap>", line 1404, in _gcd_import
+      File "<frozen importlib._bootstrap>", line 1369, in _find_and_load
+      File "<frozen importlib._bootstrap>", line 1333, in _find_and_load_unlocked
+    ModuleNotFoundError: No module named 'tzdata.zoneinfo.Mars'
+
+    During handling of the above exception, another exception occurred:
+
+    Traceback (most recent call last):
+      File "/app/etqan/platform/tenancy.py", line 41, in for_each_academy
+        job()
+        ~~~^^
+      File "/app/etqan/notifications/services/scan.py", line 263, in scan_now
+        return scan(now=now)
+      File "/app/etqan/notifications/services/scan.py", line 176, in scan
+        today = now.astimezone(ZoneInfo(academy.timezone)).date()
+                               ~~~~~~~~^^^^^^^^^^^^^^^^^^
+      File "/usr/local/lib/python3.13/zoneinfo/_common.py", line 29, in load_tzdata
+        raise ZoneInfoNotFoundError(f"No time zone found with key {key}")
+    zoneinfo._common.ZoneInfoNotFoundError: 'No time zone found with key Mars/Phobos'
+    CommandError: The scan failed in at least one academy.
+
+
+
+       at manage.ts:33
+
+      31 | 	if (REMOTE) {
+      32 | 		const [command, ...words] = REMOTE;
+    > 33 | 		return execFileSync(command, [...words, ...args.map(shellQuote)], {
+         | 		       ^
+      34 | 			encoding: "utf8",
+      35 | 			timeout: TIMEOUT_MS,
+      36 | 		});
+        at manage (/Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/manage.ts:33:10)
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/journey.spec.ts:250:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/journey-an-academy-s-first-559e2--to-a-parent-s-notification-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/journey-an-academy-s-first-559e2--to-a-parent-s-notification-chromium/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/journey-an-academy-s-first-559e2--to-a-parent-s-notification-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: Command failed: /private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/manage-wrap.sh 'scan_notifications'
+    System check identified some issues:
+
+    WARNINGS:
+    ?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+    ERROR 2026-10-17 20:55:15,401 etqan.platform.tenancy notifications.scan failed for academy academy_qa_tmp_tz
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.13/zoneinfo/_common.py", line 12, in load_tzdata
+        path = resources.files(package_name).joinpath(resource_name)
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+      File "/usr/local/lib/python3.13/importlib/resources/_common.py", line 46, in wrapper
+        return func(anchor)
+      File "/usr/local/lib/python3.13/importlib/resources/_common.py", line 56, in files
+        return from_package(resolve(anchor))
+                            ~~~~~~~^^^^^^^^
+      File "/usr/local/lib/python3.13/functools.py", line 934, in wrapper
+        return dispatch(args[0].__class__)(*args, **kw)
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+      File "/usr/local/lib/python3.13/importlib/resources/_common.py", line 82, in _
+        return importlib.import_module(cand)
+               ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+      File "/usr/local/lib/python3.13/importlib/__init__.py", line 88, in import_module
+        return _bootstrap._gcd_import(name[level:], package, level)
+               ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "<frozen importlib._bootstrap>", line 1404, in _gcd_import
+      File "<frozen importlib._bootstrap>", line 1369, in _find_and_load
+      File "<frozen importlib._bootstrap>", line 1333, in _find_and_load_unlocked
+    ModuleNotFoundError: No module named 'tzdata.zoneinfo.Mars'
+
+    During handling of the above exception, another exception occurred:
+
+    Traceback (most recent call last):
+      File "/app/etqan/platform/tenancy.py", line 41, in for_each_academy
+        job()
+        ~~~^^
+      File "/app/etqan/notifications/services/scan.py", line 263, in scan_now
+        return scan(now=now)
+      File "/app/etqan/notifications/services/scan.py", line 176, in scan
+        today = now.astimezone(ZoneInfo(academy.timezone)).date()
+                               ~~~~~~~~^^^^^^^^^^^^^^^^^^
+      File "/usr/local/lib/python3.13/zoneinfo/_common.py", line 29, in load_tzdata
+        raise ZoneInfoNotFoundError(f"No time zone found with key {key}")
+    zoneinfo._common.ZoneInfoNotFoundError: 'No time zone found with key Mars/Phobos'
+    CommandError: The scan failed in at least one academy.
+
+
+
+       at manage.ts:33
+
+      31 | 	if (REMOTE) {
+      32 | 		const [command, ...words] = REMOTE;
+    > 33 | 		return execFileSync(command, [...words, ...args.map(shellQuote)], {
+         | 		       ^
+      34 | 			encoding: "utf8",
+      35 | 			timeout: TIMEOUT_MS,
+      36 | 		});
+        at manage (/Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/manage.ts:33:10)
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/journey.spec.ts:250:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/journey-an-academy-s-first-559e2--to-a-parent-s-notification-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/journey-an-academy-s-first-559e2--to-a-parent-s-notification-chromium-retry1/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/journey-an-academy-s-first-559e2--to-a-parent-s-notification-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/journey-an-academy-s-first-559e2--to-a-parent-s-notification-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/journey-an-academy-s-first-559e2--to-a-parent-s-notification-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/journey.spec.ts:41:1 › an academy's first month, from Etqan to a parent's notification 
+error: Recipe `e2e` failed with exit code 1

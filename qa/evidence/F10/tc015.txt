@@ -1,0 +1,22 @@
+==== TC-015 2026-10-19T04:06:20.746193
+issue Aug T11 200 EGP 6000
+fixed T11 (from Oct) 201
+adj T11 201
+pay_currency USD 200 {"id": 45, "role": "teacher", "two_factor": false, "user": {"full_name": "F10 Teacher Eleven", "email": "qa-teacher11@qa.etqan.test", "phone": "", "preferred_language": "ar", "timezone": "Africa/Cairo
+profile USD
+gen {"created": 0, "replaced": 7, "removed": 0, "missing_rate": [{"id": 45, "full_name": "F10 Teacher Eleven"}], "other_currency": [{"id": 45, "full_name": "F10 Teacher Eleven"}], "unpaid_sessions": [{"id": 7, "full_name": "QA teacher"}], "stale_fixed_salary": []}
+OK  missing_rate lists T11
+OK  other_currency lists T11
+OK  stale_fixed_salary lists T11 (Oct) :: [{"id": 45, "full_name": "F10 Teacher Eleven"}]
+S10 rate re-save 200 {"id": 8, "teacher": {"id": 45, "full_name": "F10 Teacher Eleven"}, "course": null, "hourly_rate_minor": 6000, "currency": "USD", "counts": true, "created_at": "2026-10-19T01:01:54.627356Z", "updated_at": "2026-10-19T01:06:21.600984Z"}
+S10 Sept draft now {"currency": "USD", "gross_minor": 0, "net_minor": 0, "missing_rate": true}
+OK  issue T11 Sept USD :: 200 {"currency": "USD", "net_minor": 6000}
+OK  Aug still EGP
+OK  bulk mixed currencies 400 payroll.mixed_currencies :: 400 {"teachers": ["These teachers are paid in different currencies."], "code": "payroll.mixed_currencies"}
+OK  new adj stored USD :: 201 USD
+DB currencies rate|USD
+adj|EGP
+adj|USD
+fixed|EGP
+slip 8|EGP
+slip 9|USD

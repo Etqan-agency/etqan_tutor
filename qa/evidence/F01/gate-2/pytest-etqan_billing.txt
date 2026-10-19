@@ -1,0 +1,13 @@
+# pytest etqan/etqan_billing started 2026-10-18T21:50:10Z
+........................................................................ [ 52%]
+.................................................................        [100%]
+=============================== warnings summary ===============================
+etqan/etqan_billing/tests/test_admin.py: 21 warnings
+etqan/etqan_billing/tests/test_admin_permissions.py: 6 warnings
+etqan/etqan_billing/tests/test_api.py: 6 warnings
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+137 passed, 33 warnings in 4.98s
+# exit=0 ended 2026-10-18T21:50:19Z

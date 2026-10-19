@@ -1,0 +1,4 @@
+# F03 Agent 3 (Debugger & Fix Engineer) log
+- 2026-10-19 03:26:22 Fix cycle 1, attempt 1: ETQAN-QA-021. Checked the expected behaviour: docs/features/roles-permissions.md rules 1 and 3 (the removal guards) plus the restore guard in update_role. Retiring is a mass removal, so the bug is confirmed.
+- 2026-10-19 03:26:22 Root cause: update_role guarded only the restore direction of is_active. Fix: guard any is_active flip for staff (backend/etqan/access/services.py). Rename is left unguarded by design, and spec rule 2 now says so.
+- 2026-10-19 03:26:22 Regression: 4 service tests + 1 API test. Before fix: 2 failed (qa021-before.txt). After: etqan/access 2054 passed, 1 unrelated failure (site/admin routes, owner WIP); ruff clean; lint-imports 54/0 (qa021-after.txt). Tag REAL (pytest). Status FIXED-UNVERIFIED; Agent 2 to retest live. No commits.

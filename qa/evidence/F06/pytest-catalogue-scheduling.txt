@@ -1,0 +1,8 @@
+etqan/scheduling/tests/test_staff_scope.py: 4 warnings
+etqan/scheduling/tests/test_times_postponement_board.py: 1 warning
+etqan/scheduling/tests/test_trials_pays_teacher.py: 6 warnings
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+1451 passed, 383 warnings in 104.15s (0:01:44)

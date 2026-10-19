@@ -1,0 +1,14 @@
+{"export": true, "themes": true, "parents": true, "spanish": true, "balances": true, "expenses": true, "families": true, "invoices": true, "contracts": true, "code_reset": true, "two_factor": true, "phone_login": true, "quick_login": true, "supervision": true, "postponement": true, "study_groups": true, "system_codes": true, "internal_chat": false, "payment_links": true, "payroll_rules": true, "system_status": true, "exchange_rates": true, "extra_sessions": true, "google_sign_in": false, "disposal_status": true, "manual_sessions": true, "online_payments": true, "quick_translate": true, "salary_expenses": true, "session_reports": true, "teacher_balance": true, "payment_receipts": true, "report_deductions": true, "bulk_teacher_rates": true, "salary_projections": true, "teacher_attendance": true, "group_subscriptions": true, "fixed_teacher_salary": true, "student_teacher_rate": true, "incentives_deductions": true, "payslip_acknowledgement": true}
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+qa: country_pricing=on, trial_sessions=on, teacher_availability=on, study_groups=on, multi_course_subscriptions=on, families=on, family_subscriptions=on, group_subscriptions=on, weekly_schedules=on, subscription_archive=on, invoices=on, supervision=on
+login adm 200 {"id":1,"email":"qa-admin@qa.etqan.test","full_name":"QA Admin","phone":"","preferred_language":"ar","effective_language
+login codes 200 {"id":3,"email":"qa-staff-codes@qa.etqan.test","full_name":"QA Staff Codes","phone":"","preferred_language":"ar","effect
+login nocode 200 {"id":2,"email":"qa-staff-nocode@qa.etqan.test","full_name":"QA Staff NoCode","phone":"","preferred_language":"ar","effe
+login sup 200 {"id":4,"email":"qa-supervisor@qa.etqan.test","full_name":"QA Supervisor","phone":"","preferred_language":"ar","effectiv
+login tea 200 {"id":7,"email":"qa-teacher@qa.etqan.test","full_name":"QA teacher","phone":"","preferred_language":"ar","effective_lang
+login stu 200 {"id":5,"email":"qa-student@qa.etqan.test","full_name":"QA student","phone":"","preferred_language":"ar","effective_lang
+login par 200 {"id":6,"email":"qa-parent@qa.etqan.test","full_name":"QA parent","phone":"","preferred_language":"ar","effective_langua
+login oth 200 {"id":1,"email":"qaother-admin@qa.etqan.test","full_name":"QA Other Admin","phone":"","preferred_language":"ar","effecti

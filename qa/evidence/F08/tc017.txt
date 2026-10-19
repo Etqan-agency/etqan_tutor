@@ -1,0 +1,38 @@
+J1 J7 J2 J3 J4 J6 J8 = 285,286,287,288,289,290,291
+285|scheduled|2026-10-19 17:03:00+00|||
+286|scheduled|2026-10-19 17:03:00+00|||
+287|scheduled|2026-10-19 20:43:00+00|||
+288|scheduled|2026-10-19 16:58:00+00|https://example.test/room||
+289|cancelled|2026-10-19 17:08:00+00|||
+290|scheduled|2026-10-19 16:38:00+00|||
+291|scheduled|2026-10-19 17:05:00+00|||
+other blank due qa sessions before: 5,74,79,84,89,114,129,136,158,159,160,166,184,190,275
+-- zoom_api OFF (default) run
+provisioned 0
+qa: zoom_api=on
+-- zoom_api ON run 1
+156 objects imported automatically (use -v 2 for details).
+
+provisioned 14
+285|scheduled|2026-10-19 17:03:00+00|https://meet.jit.si/Etqan8ae7ea58b947499da13ccdfc86ed021d|jitsi|
+286|scheduled|2026-10-19 17:03:00+00|https://meet.jit.si/Etqan8ae7ea58b947499da13ccdfc86ed021d|jitsi|
+287|scheduled|2026-10-19 20:43:00+00|https://meet.jit.si/Etqan8c5b3f6e9ec94dccb48ec438602bc6c0|jitsi|
+288|scheduled|2026-10-19 16:58:00+00|https://example.test/room||
+289|cancelled|2026-10-19 17:08:00+00|||
+290|scheduled|2026-10-19 16:38:00+00|https://meet.jit.si/Etqanb89a76a02ace44bd83f1e7eecd87f53b|jitsi|
+291|scheduled|2026-10-19 17:05:00+00|https://meet.jit.si/Etqanfdbad1bfb1f24396af5a2c5737e65665|jitsi|
+-- run 2
+provisioned 0
+285|scheduled|2026-10-19 17:03:00+00|https://meet.jit.si/Etqan8ae7ea58b947499da13ccdfc86ed021d|jitsi|
+286|scheduled|2026-10-19 17:03:00+00|https://meet.jit.si/Etqan8ae7ea58b947499da13ccdfc86ed021d|jitsi|
+287|scheduled|2026-10-19 20:43:00+00|https://meet.jit.si/Etqan8c5b3f6e9ec94dccb48ec438602bc6c0|jitsi|
+288|scheduled|2026-10-19 16:58:00+00|https://example.test/room||
+289|cancelled|2026-10-19 17:08:00+00|||
+290|scheduled|2026-10-19 16:38:00+00|https://meet.jit.si/Etqanb89a76a02ace44bd83f1e7eecd87f53b|jitsi|
+291|scheduled|2026-10-19 17:05:00+00|https://meet.jit.si/Etqanfdbad1bfb1f24396af5a2c5737e65665|jitsi|
+qa: zoom_api=off
+-- zoom_api OFF again (J9=292 blank)
+provisioned 0
+292|
+5|5
+

@@ -1,0 +1,14 @@
+## TC-022
+(e) victim requests: 202
+    attacker requests: 202
+    rows for target: 1|4 (old id 3)
+    victim uses first code 212233: {"code":["Invalid or expired code."]} 400    second code 566826: {"accounts":[{"id":10,"full_name":"F02 Student c"}]} 200 
+(a) 3rd request: 202
+    mails so far (3rd):        1
+    4th request: 202
+    mails after 4th:        1
+(b)w1 400  (b)w2 400  (b)w3 400  (b)w4 400  (b)w5 400  
+    right after 5 wrong: {"code":["Invalid or expired code."]} 400  tries=5
+400 400 400 400 400 400 400 400 400 400 400 400 400 400 400 400 400 400 400 400 429 (c) 21 wrong codes across targets
+202 202 202 202 202 202 202 202 202 202 429 (d) 11 requests one IP
+(f) expired: {"code":["Invalid or expired code."]} 400 

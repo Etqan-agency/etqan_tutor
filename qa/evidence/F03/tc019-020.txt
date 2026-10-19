@@ -1,0 +1,54 @@
+== TC-019
+PUT en/nav.students {"value":"Learners"} -> {"language":"en","key":"nav.students","value":"Learners"} [201] 
+PUT en/nav.students {"value":"Pupils"} -> {"language":"en","key":"nav.students","value":"Pupils"} [200] 
+en|nav.students|Pupils|1
+anon GET: Cache-Control: max-age=60  {"en":{"nav.students":"Pupils"}} 
+qaother anon GET: {}
+qa: quick_translate=off
+off: anon GET {} PUT adm 404 nocode 403 rows=1
+qa: quick_translate=on
+on again: {"en":{"nav.students":"Pupils"}}
+PUT es/nav.students {"value":"Alumnos"} -> {"language":"es","key":"nav.students","value":"Alumnos"} [201] 
+DELETE -> 204 again -> 204 GET {"es":{"nav.students":"Alumnos"}}
+throttle:  116 200   14 429 
+== TC-020 input safety
+PUT en/nav.students {"value": "<b>x</b>"} -> {"value":["Only plain text and {{name}} placeholders are allowed."]} [400] 
+PUT en/nav.students {"value": "a>b"} -> {"value":["Only plain text and {{name}} placeholders are allowed."]} [400] 
+PUT en/nav.students {"value": "$t(nav.students)"} -> {"value":["Only plain text and {{name}} placeholders are allowed."]} [400] 
+PUT en/nav.students {"value": "{{- name}}"} -> {"value":["Only plain text and {{name}} placeholders are allowed."]} [400] 
+PUT en/nav.students {"value": "{{a b}}"} -> {"value":["Only plain text and {{name}} placeholders are allowed."]} [400] 
+PUT en/nav.students {"value": "{{name}}"} -> {"language":"en","key":"nav.students","value":"{{name}}"} [201] 
+PUT en/nav.students {"value": "Hello {{ name }}"} -> {"language":"en","key":"nav.students","value":"Hello {{ name }}"} [200] 
+PUT en/nav.students {"value": "{{name"} -> {"language":"en","key":"nav.students","value":"{{name"} [200] 
+PUT en/nav.students {"value": "name}}"} -> {"language":"en","key":"nav.students","value":"name}}"} [200] 
+PUT en/nav.students {"value": "   "} -> {"value":["This field may not be blank."]} [400] 
+PUT en/nav.students {"value": "\u0645\u0631\u062d\u0628\u0627 \ud83d\ude00"} -> {"language":"en","key":"nav.students","value":"مرحبا 😀"} [200] 
+PUT en/nav.students {"value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"} -> {"value":["Ensure this field has no more than 500 characters."]} [400] 
+PUT en/nav.students {"value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"} -> {"language":"en","key":"nav.students","value":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+nav.students|500
+PUT en/__proto__.x {"value":"v"} -> {"key":["Not a valid text key."]} [400] 
+PUT en/a.constructor {"value":"v"} -> {"key":["Not a valid text key."]} [400] 
+PUT en/a.prototype.b {"value":"v"} -> {"key":["Not a valid text key."]} [400] 
+PUT en/nokey {"value":"v"} -> {"key":["Not a valid text key."]} [400] 
+PUT en/a..b {"value":"v"} -> {"key":["Not a valid text key."]} [400] 
+PUT en/a.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb {"value":"v"} -> {"key":["Not a valid text key."]} [400] 
+PUT en/a.b-c {"value":"v"} -> {"key":["Not a valid text key."]} [400] 
+PUT en/1a.b {"value":"v"} -> {"key":["Not a valid text key."]} [400] 
+PUT en/x.y_z {"value":"v"} -> {"language":"en","key":"x.y_z","value":"v"} [201] 
+PUT fr/nav.students {"value":"v"} -> {"language":["Not a supported language."]} [400] 
+perm: nocode 403 tch 403 anon 403
+-- 2000 cap
+                                                             ^
+rows=2
+PUT en/f03.newkey {"value":"v"} -> {"language":"en","key":"f03.newkey","value":"v"} [201] 
+PUT en/nav.students {"value":"updated at cap"} -> {"language":"en","key":"nav.students","value":"updated at cap"} [200] 
+DELETE 3
+cleanup rows=0
+-- 2000 cap (retry, correct columns)
+PUT en/nav.students {"value":"existing"} -> {"language":"en","key":"nav.students","value":"existing"} [201] 
+INSERT 0 1999
+rows=2000
+PUT en/f03.newkey {"value":"v"} -> {"detail":"An academy keeps at most 2000 overrides.","code":"translations.limit"} [400] 
+PUT en/nav.students {"value":"updated at cap"} -> {"language":"en","key":"nav.students","value":"updated at cap"} [200] 
+DELETE 2000
+cleanup rows=0

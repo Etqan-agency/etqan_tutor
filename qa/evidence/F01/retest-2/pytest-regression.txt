@@ -1,0 +1,15 @@
+$ 2026-10-18T21:08:10Z pytest etqan/tenants/tests/test_admin_permissions.py etqan/tenants/tests/test_admin_stale_change.py etqan/etqan_billing/tests/test_admin_permissions.py etqan/integrations/tests/test_admin.py etqan/tenants/tests/test_admin_features.py etqan/tenants/tests/test_admin_suspend.py etqan/identity/tests/test_admin.py -q -p no:cacheprovider
+.............................................................            [100%]
+=============================== warnings summary ===============================
+etqan/tenants/tests/test_admin_permissions.py: 10 warnings
+etqan/tenants/tests/test_admin_stale_change.py: 4 warnings
+etqan/etqan_billing/tests/test_admin_permissions.py: 6 warnings
+etqan/integrations/tests/test_admin.py: 13 warnings
+etqan/tenants/tests/test_admin_features.py: 7 warnings
+etqan/tenants/tests/test_admin_suspend.py: 4 warnings
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+61 passed, 44 warnings in 3.81s
+exit=0 elapsed=8s 2026-10-18T21:08:18Z

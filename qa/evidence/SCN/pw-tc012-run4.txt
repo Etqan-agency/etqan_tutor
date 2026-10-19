@@ -1,0 +1,3 @@
+Running 1 test using 1 worker
+  ✓  1 [chromium] › e2e/qa/scn-tc012-parent-portal.spec.ts:32:1 › SCN-TC-012 parent sees the children's sessions and attendance, the invoice with the wallet payment; FAM-B is not found (13.2s)
+  1 passed (13.9s)

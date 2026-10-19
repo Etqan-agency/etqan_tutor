@@ -1,0 +1,19 @@
+[201] POST subscriptions/ :: {"id":27,"status":"active","schedule_status":"active","student":{"id":214,"full_name":"QA6 Student 3","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":4,"name_ar":"عربي","name_en":"QA6 Arabic"},"package":{"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m"},"starts_on"
+[200] POST schedule/generate/ :: {"created":2,"skipped_existing":1,"skipped_paused":0,"skipped_out_of_term":0,"skipped_stopped":0,"conflicts":[]}
+A=27 session 10-19 id=121
+[200] POST sessions/121/attendance/ :: {"id":121,"subscription_id":27,"slot_id":29,"occurs_on":"2026-10-19","starts_at":"2026-10-19T03:00:00Z","minutes":45,"status":"completed","student_attendance":"present","teacher_attendance":"present","has_started":true,"meeting_url":"","meeting_host":false,"generated":true,"student":{"id":214,"full_name":"QA6 Student 3","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course
+124|2026-10-05|scheduled|not_set
+125|2026-10-12|scheduled|not_set
+121|2026-10-19|completed|present
+122|2026-10-26|scheduled|not_set
+123|2026-11-02|scheduled|not_set
+[201] POST subscriptions/27/renew/ :: {"id":28,"status":"active","schedule_status":"active","student":{"id":214,"full_name":"QA6 Student 3","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":4,"name_ar":"عربي","name_en":"QA6 Arabic"},"package":{"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m"},"starts_on"
+[200] POST schedule/generate/ :: {"created":0,"skipped_existing":3,"skipped_paused":0,"skipped_out_of_term":0,"skipped_stopped":0,"conflicts":[]}
+27|2026-10-05|06:00|scheduled|not_set
+27|2026-10-12|06:00|scheduled|not_set
+27|2026-10-19|06:00|completed|present
+28|2026-10-19|06:00|scheduled|not_set
+28|2026-10-26|06:00|scheduled|not_set
+28|2026-11-02|06:00|scheduled|not_set
+DUPLICATES for student 214:
+2026-10-19|06:00|121|1|2|27/completed/present 28/scheduled/not_set

@@ -1,0 +1,49 @@
+sessions 17 before: 2026-10-19,2026-10-22,2026-10-26,2026-10-29,2026-11-02
+   sub 17: status=active ends_on=2026-11-18 term=2026-11-18
+[201] POST subscriptions/17/pauses/ :: {"id":17,"status":"active","schedule_status":"active","student":{"id":212,"full_name":"QA6 Student 1","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m"},"starts_on":
+sessions 17 after: 2026-10-19,2026-10-29,2026-11-02
+   sub 17: status=active ends_on=2026-11-25 term=2026-11-18
+[409] POST subscriptions/17/pauses/ :: {"detail":"This pause overlaps another one.","code":"scheduling.pause_overlaps"}
+[409] POST subscriptions/17/pauses/ :: {"detail":"That is more than the freeze days allowed.","code":"scheduling.freeze_days_exceeded"}
+[400] POST subscriptions/17/pauses/ :: {"from_date":["Start the pause between the start and end dates."]}
+[400] POST subscriptions/17/pauses/ :: {"to_date":["End the pause on or after its start."]}
+renewal R1 of 17 now: 2026-11-19|2027-01-18|active
+-- pause covering today on 16
+   sub 16: status=active ends_on=2026-11-18 term=2026-11-18
+[201] POST subscriptions/16/pauses/ :: {"id":16,"status":"paused","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m"},"starts_on"
+   sub 16: status=paused ends_on=2026-11-21 term=2026-11-18
+{'paused': 0, 'resumed': 0, 'expired': 0, 'created': 0}
+   sub 16: status=paused ends_on=2026-11-21 term=2026-11-18
+[201] POST subscriptions/16/pauses/ :: {"id":16,"status":"paused","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m"},"starts_on"
+[404] DELETE pauses/16/ :: {"detail":"No SubscriptionPause matches the given query."}
+[404] POST pauses/16/end/ :: {"detail":"No SubscriptionPause matches the given query."}
+   sub 16: status=paused ends_on=2026-11-22 term=2026-11-18
+1|17|2026-10-20|2026-10-26
+2|16|2026-10-19|2026-10-21
+3|16|2026-10-28|2026-10-28
+[404] DELETE pauses/16/ :: {"detail":"No SubscriptionPause matches the given query."}
+sessions 16 after: 2026-10-22,2026-10-26,2026-10-29,2026-11-02
+1|17|2026-10-20|2026-10-26
+2|16|2026-10-19|2026-10-21
+3|16|2026-10-28|2026-10-28
+[409] DELETE pauses/2/ :: {"detail":"Only a pause that has not started can be deleted.","code":"scheduling.pause_started"}
+[200] POST pauses/2/end/ :: {"id":16,"status":"active","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m"},"starts_on"
+   sub 16: status=active ends_on=2026-11-19 grace=2026-11-26
+3|16|2026-10-28|2026-10-28
+[204] DELETE pauses/3/ :: 
+   sub 16: status=active ends_on=2026-11-18 grace=2026-11-25
+-- overlap old 17 (ends 11-25 after pause) vs renewal R1=20 (starts 11-19)
+[200] POST schedule/generate/ :: {"created":2,"skipped_existing":0,"skipped_paused":0,"skipped_out_of_term":4,"skipped_stopped":0,"conflicts":[]}
+[200] POST schedule/generate/ :: {"created":4,"skipped_existing":0,"skipped_paused":0,"skipped_out_of_term":2,"skipped_stopped":0,"conflicts":[]}
+17|2026-11-12|18:00
+17|2026-11-16|18:00
+20|2026-11-19|18:00
+20|2026-11-23|18:00
+20|2026-11-26|18:00
+20|2026-11-30|18:00
+2026-03-15|2026-03-15 07:00:00+00|1|14|3
+2026-10-22|2026-10-22 15:00:00+00|123|1|2
+2026-10-19|2026-10-19 15:00:00+00|123|1|2
+2026-10-26|2026-10-26 15:00:00+00|123|1|2
+2026-11-02|2026-11-02 16:00:00+00|123|1|2
+2026-10-29|2026-10-29 15:00:00+00|123|1|2

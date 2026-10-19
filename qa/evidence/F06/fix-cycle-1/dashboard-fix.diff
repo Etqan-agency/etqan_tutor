@@ -1,0 +1,96 @@
+diff --git a/src/features/academy/AcademySettingsForm.test.tsx b/src/features/academy/AcademySettingsForm.test.tsx
+index da59fb3..514820c 100644
+--- a/src/features/academy/AcademySettingsForm.test.tsx
++++ b/src/features/academy/AcademySettingsForm.test.tsx
+@@ -76,6 +76,27 @@ describe("AcademySettingsForm", () => {
+ 		expect(await screen.findByText("Saved.")).toBeInTheDocument();
+ 	});
+ 
++	it("warns that existing lessons keep their time when the time zone changes", async () => {
++		// ETQAN-QA-041.
++		const user = userEvent.setup();
++		renderForm();
++		expect(await screen.findByDisplayValue("Africa/Cairo")).toBeInTheDocument();
++		expect(
++			screen.queryByText(/keep their current time/),
++		).not.toBeInTheDocument();
++		await user.selectOptions(screen.getByLabelText("Time zone"), "Asia/Riyadh");
++		expect(screen.getByRole("status")).toHaveTextContent(
++			/keep their current time/,
++		);
++		await user.selectOptions(
++			screen.getByLabelText("Time zone"),
++			"Africa/Cairo",
++		);
++		expect(
++			screen.queryByText(/keep their current time/),
++		).not.toBeInTheDocument();
++	});
++
+ 	it("saves the horizon and grace days and checks their range", async () => {
+ 		vi.mocked(academyApi.update).mockImplementation(async (body) => ({
+ 			timezone: "Africa/Cairo",
+diff --git a/src/features/academy/AcademySettingsForm.tsx b/src/features/academy/AcademySettingsForm.tsx
+index e624136..bb21d9d 100644
+--- a/src/features/academy/AcademySettingsForm.tsx
++++ b/src/features/academy/AcademySettingsForm.tsx
+@@ -49,6 +49,7 @@ export function AcademySettingsForm() {
+ 		control,
+ 		handleSubmit,
+ 		setError,
++		watch,
+ 		formState: { errors, isSubmitting },
+ 	} = useForm<Values>({
+ 		resolver: zodResolver(schema),
+@@ -123,6 +124,15 @@ export function AcademySettingsForm() {
+ 					))}
+ 				</Select>
+ 			</Field>
++			{/* ETQAN-QA-041: sessions already generated keep their instant. */}
++			{data && watch("timezone") !== data.timezone ? (
++				<p
++					role="status"
++					className="rounded-md bg-warning px-3 py-2 text-sm text-warning-foreground"
++				>
++					{t("academySettings.timezoneChangeWarning")}
++				</p>
++			) : null}
+ 			<Field
+ 				id="default_currency"
+ 				label={t("academySettings.currency")}
+diff --git a/src/locales/ar/academySettings.json b/src/locales/ar/academySettings.json
+index 379b8ab..7ad8dfc 100644
+--- a/src/locales/ar/academySettings.json
++++ b/src/locales/ar/academySettings.json
+@@ -1,6 +1,7 @@
+ {
+ 	"subtitle": "القيم الافتراضية للأشخاص والباقات الجديدة.",
+ 	"timezone": "المنطقة الزمنية",
++	"timezoneChangeWarning": "تحتفظ الحصص الموجودة بالفعل في الجدول بوقتها الحالي، ولا تستخدم المنطقة الزمنية الجديدة إلا الحصص التي تُنشأ بعد الحفظ. راجع الحصص القادمة بعد التغيير.",
+ 	"currency": "العملة الافتراضية",
+ 	"language": "اللغة الافتراضية",
+ 	"hint": "يحصل الأشخاص الجدد على هذه اللغة والمنطقة الزمنية ما لم تختر غيرهما، ويُدفع للمعلمين الجدد بهذه العملة.",
+diff --git a/src/locales/en/academySettings.json b/src/locales/en/academySettings.json
+index b29dcf8..22ebe07 100644
+--- a/src/locales/en/academySettings.json
++++ b/src/locales/en/academySettings.json
+@@ -1,6 +1,7 @@
+ {
+ 	"subtitle": "Defaults for new people and packages.",
+ 	"timezone": "Time zone",
++	"timezoneChangeWarning": "Lessons already on the schedule keep their current time; only lessons created after you save use the new time zone. Check upcoming lessons after the change.",
+ 	"currency": "Default currency",
+ 	"language": "Default language",
+ 	"hint": "New people get this language and time zone unless you choose others; new teachers are paid in this currency.",
+diff --git a/src/locales/es/academySettings.json b/src/locales/es/academySettings.json
+index 6a4a056..d2e289c 100644
+--- a/src/locales/es/academySettings.json
++++ b/src/locales/es/academySettings.json
+@@ -1,6 +1,7 @@
+ {
+ 	"subtitle": "Valores predeterminados para nuevas personas y paquetes.",
+ 	"timezone": "Zona horaria",
++	"timezoneChangeWarning": "Las clases que ya están en el horario conservan su hora actual; solo las clases creadas después de guardar usan la nueva zona horaria. Revisa las próximas clases tras el cambio.",
+ 	"currency": "Moneda predeterminada",
+ 	"language": "Idioma predeterminado",
+ 	"hint": "Las personas nuevas reciben este idioma y esta zona horaria salvo que elijas otros; a los profesores nuevos se les paga en esta moneda.",

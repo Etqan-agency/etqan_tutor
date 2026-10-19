@@ -1,0 +1,12 @@
+## TC-106/107/108/109 copied session cookies
+role               on-qa  qaother  public   db-qaother db-public     
+qa-admin           200    403      404      0      0      qa-db=1
+qa-staff-nocode    200    403      404      0      0      qa-db=1
+qa-staff-codes     200    403      404      0      0      qa-db=1
+qa-supervisor      200    403      404      0      0      qa-db=1
+qa-teacher         200    403      404      0      0      qa-db=1
+qa-student         200    403      404      0      0      qa-db=1
+qa-parent          200    403      404      0      0      qa-db=1
+Etqan staff (ops) sessionid -> qa me: {"detail":"Authentication credentials were not provided."} 403 ; in academy_qa.django_session: 0 public: 1
+qaother admin cookie -> qa me: 403
+user id 1 in both: qa=qa-admin@qa.etqan.test qaother=qaother-admin@qa.etqan.test

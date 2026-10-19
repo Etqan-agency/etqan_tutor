@@ -1,0 +1,40 @@
+        connection.set_schema_to_public()
+        viewer = User.objects.create_user(email="ops-view@etqan.test", password="x")
+        viewer.is_staff = True
+        viewer.save(update_fields=["is_staff"])
+        viewer.user_permissions.set(
+            Permission.objects.filter(codename="view_platformaccount")
+        )
+        client.force_login(viewer)
+        fake = FakeEmail()
+        monkeypatch.setitem(providers.PROVIDERS, "email", fake)
+        account = PlatformAccount.objects.get(service="email")
+        page = client.get(LIST, HTTP_HOST=PUBLIC_HOST)
+        assert page.status_code == 200
+>       assert page.context.get("action_form") is None
+E       assert <ActionForm bound=False, valid=False, fields=(action;select_across)> is None
+E        +  where <ActionForm bound=False, valid=False, fields=(action;select_across)> = get('action_form')
+E        +    where get = [[{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: '57VImqMZE1CASx3RpD66qi8UxEjt6SIFT7m... 'all', '1': 1, 'csrf_token': <SimpleLazyObject: '57VImqMZE1CASx3RpD66qi8UxEjt6SIFT7mh4ABG3UrvEUlg5S3fGu8mxP86O2mD'>}]].get
+E        +      where [[{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: '57VImqMZE1CASx3RpD66qi8UxEjt6SIFT7m... 'all', '1': 1, 'csrf_token': <SimpleLazyObject: '57VImqMZE1CASx3RpD66qi8UxEjt6SIFT7mh4ABG3UrvEUlg5S3fGu8mxP86O2mD'>}]] = <TemplateResponse status_code=200, "text/html; charset=utf-8">.context
+
+etqan/integrations/tests/test_admin.py:201: AssertionError
+=============================== warnings summary ===============================
+etqan/tenants/tests/test_admin_permissions.py: 10 warnings
+etqan/etqan_billing/tests/test_admin_permissions.py: 6 warnings
+etqan/integrations/tests/test_admin.py: 1 warning
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED etqan/tenants/tests/test_admin_permissions.py::test_view_only_staff_is_offered_no_action_on_any_registered_admin
+FAILED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_periodic_task_action_changes_nothing
+FAILED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_make_verified_changes_nothing
+FAILED etqan/etqan_billing/tests/test_admin_permissions.py::test_view_only_staff_is_offered_no_invoice_action
+FAILED etqan/etqan_billing/tests/test_admin_permissions.py::test_a_forged_issue_changes_nothing_and_emails_nobody
+FAILED etqan/etqan_billing/tests/test_admin_permissions.py::test_a_forged_email_again_emails_nobody
+FAILED etqan/etqan_billing/tests/test_admin_permissions.py::test_a_forged_mark_paid_changes_nothing
+FAILED etqan/etqan_billing/tests/test_admin_permissions.py::test_a_forged_void_changes_nothing
+FAILED etqan/integrations/tests/test_admin.py::test_view_only_staff_cannot_run_the_test_action
+9 failed, 10 passed, 17 warnings in 2.13s
+

@@ -1,0 +1,48 @@
+== TC-023 2026-10-19T03:43:02.986395
+C1 x2 (200, {'received': True}) (200, {'received': True})
+OK  TC023 duplicate delivery one payment
+C1 payment 50000|2500|stripe
+C1 second event id (200, {'received': True})
+OK  TC023 still one payment after 2nd event id
+C2 mismatch (200, {'received': True})
+C3 currency (200, {'received': True})
+C4 livemode (200, {'received': True})
+C5 unknown (200, {'received': True})
+tampered 400 {"detail": "Bad signature."}
+OK  TC023 tampered 400
+old ts 400 {"detail": "Bad signature."}
+OK  TC023 old ts 400
+wrong secret 400 {"detail": "Bad signature."}
+OK  TC023 wrong secret 400
+no header 400 {"detail": "Bad signature."}
+OK  TC023 no header 400
+OK  TC023 bad signatures add no webhook row
+C1..C5 DB 56|completed|t||pi_f09_1
+57|completed|f|amount_mismatch|pi_f09_2
+58|completed|f|currency_mismatch|pi_f09_3
+59|completed|f|mode_mismatch|pi_f09_4
+60|pending|||
+OK  TC023 C2 not applied, no payment, invoice unpaid
+OK  TC023 C3 not applied, no payment, invoice unpaid
+OK  TC023 C4 not applied, no payment, invoice unpaid
+resolve C2 200 {"id": "712acf46-7304-4e2c-8e25-8c7634d28ac4", "status": "completed", "applied": false, "amount_minor": 50000, "fee_minor": 2500, "currency": "EGP", "provider": "stripe", "purpose": "invoice", "refere
+OK  TC023 resolve 200
+OK  TC023 resolve again 409 nothing_to_resolve :: {"detail": "Nothing here needs resolving.", "code": "gateways.nothing_to_resolve"}
+OK  TC023 resolve C1 409 :: {"detail": "Nothing here needs resolving.", "code": "gateways.nothing_to_resolve"}
+C7 reused payment_intent (200, {'received': True})
+C7 DB completed|f|already_recorded
+OK  TC023 C7 already_recorded, no second payment
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+feature off delivery (200, {'received': True})
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  TC023 feature off: webhook still records payment
+attention open 200 [(62, 'already_recorded'), (59, 'mode_mismatch'), (58, 'currency_mismatch')]
+webhookevent evt_f09_1|checkout.session.completed|t
+evt_f09_1b|checkout.session.async_payment_succeeded|t
+evt_f09_2|checkout.session.completed|t
+evt_f09_3|checkout.session.completed|t
+evt_f09_4|checkout.session.completed|t
+evt_f09_5|checkout.session.completed|f
+evt_f09_7|checkout.session.completed|t
+evt_f09_8|checkout.session.completed|t
+5xx in log 0

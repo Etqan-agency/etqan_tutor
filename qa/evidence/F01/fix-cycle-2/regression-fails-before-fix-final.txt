@@ -1,0 +1,74 @@
+# Fix cycle 2 changes taken out of tenants/etqan_billing/integrations/identity admin.py and platform/admin.py removed (cycle-1 QA-002 kept); final test files
+E       AssertionError: assert 'active' == 'suspended'
+E         
+E         - suspended
+E         + active
+E       assert False is True
+E        +  where False = <Academy: Renamed on the stale page>.etqan_defaults_suspended
+E       AssertionError: {'etqan_defaults_suspended': ["Etqan's defaults may be suspended only once an Etqan invoice is unpaid 30 days after issue."]}
+E       assert 200 == 302
+E        +  where 200 = <TemplateResponse status_code=200, "text/html; charset=utf-8">.status_code
+E       AssertionError: assert {'EmailAddres...counts'], ...} == {}
+E         
+E         Left contains 5 more items:
+E         {'EmailAddress': ['make_verified'],
+E          'EtqanInvoice': ['email_again',
+E                           'issue_invoices',
+E                           'mark_paid',
+E                           'void_invoices'],...
+E         
+E         ...Full output truncated (4 lines hidden), use '-vv' to show
+E       AssertionError: assert [(<PeriodicTa...every day>]>)] == []
+E         
+E         Left contains one more item: (<PeriodicTaskAdmin: model=PeriodicTask site=AdminSite(name='admin')>, <WSGIRequest: POST '/admin/django_celery_beat/periodictask/'>, <PeriodicTaskQuerySet [<PeriodicTask: qa-013 probe: every day>]>)
+E         Use -v to get more diff
+E       assert True is False
+E        +  where True = <EmailAddress: unverified@etqan.test>.verified
+E       AssertionError: assert ['email_again...oid_invoices'] == []
+E         
+E         Left contains 4 more items, first extra item: 'email_again'
+E         Use -v to get more diff
+E       AssertionError: assert 'issued' == 'draft'
+E         
+E         - draft
+E         + issued
+E       assert [<django.core...ffff762cf820>] == []
+E         
+E         Left contains one more item: <django.core.mail.message.EmailMultiAlternatives object at 0xffff762cf820>
+E         Use -v to get more diff
+E       AssertionError: assert ('paid', date...(2026, 10, 1)) == ('issued', None)
+E         
+E         At index 0 diff: 'paid' != 'issued'
+E         Use -v to get more diff
+E       AssertionError: assert ('void', date...timezone.utc)) == ('issued', None)
+E         
+E         At index 0 diff: 'void' != 'issued'
+E         Use -v to get more diff
+E       assert <ActionForm bound=False, valid=False, fields=(action;select_across)> is None
+E        +  where <ActionForm bound=False, valid=False, fields=(action;select_across)> = get('action_form')
+E        +    where get = [[{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'oIIXHvVnvoItPa2YJlUB5k3CaUiB807kxE3... 'all', '1': 1, 'csrf_token': <SimpleLazyObject: 'oIIXHvVnvoItPa2YJlUB5k3CaUiB807kxE3D14a1xXmqZ7iAnFCIL
+E        +      where [[{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'oIIXHvVnvoItPa2YJlUB5k3CaUiB807kxE3... 'all', '1': 1, 'csrf_token': <SimpleLazyObject: 'oIIXHvVnvoItPa2YJlUB5k3CaUiB807kxE3D14a1xXmqZ7iAnFCILCc8V
+PASSED etqan/tenants/tests/test_admin_stale_change.py::test_a_fresh_page_still_reactivates_and_lifts_the_suspension
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_view_only_staff_is_offered_no_academy_action
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_view_only_staff_is_offered_no_domain_action
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_status_action_changes_nothing[suspend_academies]
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_status_action_changes_nothing[reactivate_academies]
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_copy_features_changes_nothing
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_domain_action_changes_nothing
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_staff_with_change_permission_is_offered_every_action
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_staff_with_change_permission_can_suspend
+PASSED etqan/tenants/tests/test_admin_permissions.py::test_staff_with_change_permission_keeps_the_third_party_actions
+PASSED etqan/etqan_billing/tests/test_admin_permissions.py::test_staff_with_change_permission_is_offered_and_runs_every_action
+FAILED etqan/tenants/tests/test_admin_stale_change.py::test_a_stale_page_writes_only_what_its_user_changed
+FAILED etqan/tenants/tests/test_admin_stale_change.py::test_what_the_user_did_change_on_a_stale_page_is_saved
+FAILED etqan/tenants/tests/test_admin_stale_change.py::test_an_untouched_stale_suspend_box_is_not_checked_again
+FAILED etqan/tenants/tests/test_admin_permissions.py::test_view_only_staff_is_offered_no_action_on_any_registered_admin
+FAILED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_periodic_task_action_changes_nothing
+FAILED etqan/tenants/tests/test_admin_permissions.py::test_a_forged_make_verified_changes_nothing
+FAILED etqan/etqan_billing/tests/test_admin_permissions.py::test_view_only_staff_is_offered_no_invoice_action
+FAILED etqan/etqan_billing/tests/test_admin_permissions.py::test_a_forged_issue_changes_nothing_and_emails_nobody
+FAILED etqan/etqan_billing/tests/test_admin_permissions.py::test_a_forged_email_again_emails_nobody
+FAILED etqan/etqan_billing/tests/test_admin_permissions.py::test_a_forged_mark_paid_changes_nothing
+FAILED etqan/etqan_billing/tests/test_admin_permissions.py::test_a_forged_void_changes_nothing
+FAILED etqan/integrations/tests/test_admin.py::test_view_only_staff_cannot_run_the_test_action
+12 failed, 11 passed, 21 warnings in 3.31s

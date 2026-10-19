@@ -1,0 +1,40 @@
+== TC-026 2026-10-19T03:44:52.911388
+options 200 {"currencies": ["EGP", "USD", "ZZZ"], "providers": ["stripe"]}
+start 201 {"id": "deeafee7-386b-415b-a5c5-e2cfa5caee95", "redirect_url": "http://qa.etqan.localhost/app/pay/simulate/deeafee7-386b-415b-a5c5-e2cfa5caee95", "amount_minor": 10000, "fee_minor": 500, "currency": "EGP"}
+OK  TC026 checkout 10000 fee 500
+restart 201 {"id": "deeafee7-386b-415b-a5c5-e2cfa5caee95"}
+reuse? True
+sim 200 {"status": "completed"}
+topup row 1|10000|EGP|paid
+payment 54|10000|500|stripe|t|
+entry topup|10000
+OK  TC026 balance +10000 only (fee not credited) :: 35000->45000
+OK  TC026 payment 10000+500 wallet_topup stripe
+dup webhook (200, {'received': True}) (200, {'received': True})
+OK  TC026 duplicate delivery no change
+amt 0 400 {"amount_minor": ["Ensure this value is greater than or equal to 1."]}
+OK  TC026 refuse amt 0 4xx
+amt max+1 400 {"amount_minor": ["Ensure this value is less than or equal to 100000000."]}
+OK  TC026 refuse amt max+1 4xx
+amt 1.5 400 {"amount_minor": ["A valid integer is required."]}
+OK  TC026 refuse amt 1.5 4xx
+JPY 400 {"currency": ["Choose one of the offered currencies."]}
+OK  TC026 refuse JPY 4xx
+S2 404 {"detail": "Student with identifier '32' not found."}
+OK  TC026 refuse S2 4xx
+paypal 400 {"provider": ["This payment method is not available."]}
+OK  TC026 refuse paypal 4xx
+unknown provider 400 {"provider": ["\"nope\" is not a valid choice."]}
+OK  TC026 refuse unknown provider 4xx
+parent2 for S1 404 {"detail": "Student with identifier '5' not found."}
+OK  TC026 refuse parent2 for S1 4xx
+pending k2 201
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+sim with balances off 200 {"status": "completed"}
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  TC026 balances off: money still credited :: 45000->52000
+OK  TC026 revenue +10500+7350 :: 566006->583856
+reverse online topup 201 {"id": 25, "kind": "reversal", "currency": "EGP", "amount_minor": -10000, "balance_after_minor": 42000, "note": "", "invoice_id": null, "payment_id": 
+OK  TC026 reversal removes amount+fee 10500 from revenue :: 583856->573356
+ledger inv USD|0|0
+EGP|42000|42000

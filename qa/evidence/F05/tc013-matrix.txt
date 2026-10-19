@@ -1,0 +1,20 @@
+sup perms: ['attendance.update', 'attendance.view', 'attendance.view_any', 'family.view', 'family.view_any', 'parent.view', 'parent.view_any', 'session.supervise', 'session.update', 'session.view', 'session.view_any', 'session_report.update', 'session_report.view', 'session_report.view_any', 'student.view', 'student.view_any', 'subscription.view', 'subscription.view_any', 'teacher.view', 'teacher.view_any']
+codes perms: ['student.view', 'student.view_any']
+jar       Ls   Ds   Cs   Us  Act Bulk   Lt   Lp   La Ltag Ctag   Lf  Csv   Me
+adm      200  200  201  200  200  200  200  200  200  200  201  200  200  200
+nocode   403  403  403  403  403  403  403  403  403  403  403  403  403  200
+codes    200  200  403  403  403  403  403  403  403  403  403  403  200  200
+sup      200  200  403  403  403  403  200  200  403  403  403  200  200  200
+tch      403  403  403  403  403  403  403  403  403  403  403  403  403  200
+stu      403  403  403  403  403  403  403  403  403  403  403  403  403  200
+par      403  403  403  403  403  403  403  403  403  403  403  403  403  200
+anon     403  403  403  403  403  403  403  403  403  403  403  403  403  403
+counts users/tags/families before 131/45/4 after 132/46/4 (adm creates 1 user + 1 tag)
+--- 403 bodies with person data (should be empty):
+done
+--- 404 vs 403 for nonexistent id (non-office):
+tch nonexist=403 exist=403
+stu nonexist=403 exist=403
+nocode nonexist=403 exist=403
+--- 5xx sweep:
+0

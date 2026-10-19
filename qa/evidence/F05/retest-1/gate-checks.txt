@@ -1,0 +1,23 @@
+gate checks start 2026-10-19T04:36:51Z
+login adm 20
+login oadm 200 {
+== G1 tenant isolation on the touched path: an address taken in qa is free in qaother, and a race in qaother leaves qa untouched
+   1 201    3 400  qaother rows=1 qa rows=1 qa users count/max before=174/211 after=174/211
+== G2 signed-in (usable password) branch: 2 parallel PATCH of 74 and 75 to one new address, then confirm every mailed key
+74:200 75:200 
+emailaddress rows for f05-rt-pend2@qa.etqan.test: 74:false:false,75:false:false
+mails to f05-rt-pend2@qa.etqan.test: 2
+[200] POST identity/verify-email/ :: 
+[400] POST identity/verify-email/ :: {"non_field_errors":["Invalid or expired verification key."]}
+users with f05-rt-pend2@qa.etqan.test: 75:f05-bulko@qa.etqan.test:pending=f05-rt-pend2@qa.etqan.test,74:f05-rt-pend2@qa.etqan.test:pending=
+django 500/IntegrityError lines: 0
+postgres unique violations: 3
+== cleanup 2026-10-19T04:37:11Z: deactivate race-made students (Agent 3: 170,175; retest RT1*; qaother G1*)
+qa ids: 170,175,180,185,190,195,201,203,202,204,205,206,200,207
+[200] POST people/students/bulk/ :: {"updated":14}
+qaother ids: 8
+[200] POST people/students/bulk/ :: {"updated":1}
+still active: qa=14 qaother=1
+[200] POST people/students/bulk/ :: {"updated":14}
+[200] POST people/students/bulk/ :: {"updated":1}
+still active (deactivate action): qa=0 qaother=0

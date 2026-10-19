@@ -1,0 +1,5 @@
+# 2026-10-18T02:53:33Z gate re-check of open bugs (REAL)
+QA-012 ops-view GET academy/5/change/: 500
+QA-012 ops GET academy/5/change/: 200
+QA-002 ops-view changelist action options: 0
+QA-002 ops changelist action options: 1

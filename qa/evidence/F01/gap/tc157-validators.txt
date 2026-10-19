@@ -1,0 +1,13 @@
+TZ 'Etc/GMT-3' accepted Etc/GMT-3
+TZ 'America/Argentina/Buenos_Aires' accepted America/Argentina/Buenos_Aires
+TZ 'US/Eastern' accepted US/Eastern
+TZ 'UTC' accepted UTC
+TZ 'GMT' accepted GMT
+TZ 'Africa/Cairo' accepted Africa/Cairo
+TZ 'utc' refused Unknown timezone.
+CUR 'XXX' accepted XXX
+CUR 'ZZZ' accepted ZZZ
+CUR 'EGP' accepted EGP
+CUR 'usd' accepted USD
+CUR 'EG1' refused Use a three-letter currency code, like EGP.
+CUR 'EGPP' refused Use a three-letter currency code, like EGP.

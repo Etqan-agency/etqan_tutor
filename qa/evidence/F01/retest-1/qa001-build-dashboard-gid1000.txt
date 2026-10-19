@@ -1,0 +1,53 @@
+$ 2026-10-17T21:52:08Z docker build --progress=plain --target dev --build-arg UID=1000 --build-arg GID=1000 --secret id=tokens_token,env=GH_TOKEN -t etqan-qa001-r1/dashboard:gid1000 dashboard  (host id: uid=501(khaledsakr) gid=20(staff) groups=20(staff),12(everyone),61(localaccounts),79(_appserverusr),80(admin),81(_appserveradm),98(_lpadmin),702(com.apple.sharepoint.group.2),33(_appstore),100(_lpoperator),204(_developer),250(_analyticsusers),395(com.apple.access_ftp),398(com.apple.access_screensharing),399(com.apple.access_ssh),400(com.apple.access_remote_ae),701(com.apple.sharepoint.group.1))
+#9 31.88 + @testing-library/user-event 14.6.1
+#9 31.88 + @types/jest-axe 3.5.9
+#9 31.88 + @types/react 19.2.14
+#9 31.88 + @types/react-dom 19.2.3
+#9 31.88 + @vitejs/plugin-react-swc 4.3.0
+#9 31.88 + @vitest/coverage-v8 3.2.7
+#9 31.88 + jest-axe 10.0.0
+#9 31.88 + jsdom 29.1.1
+#9 31.88 + typescript 6.0.2
+#9 31.88 + vite 8.0.8
+#9 31.88 + vitest 3.2.6
+#9 31.88 
+#9 31.89 ╭ Warning ─────────────────────────────────────────────────────────────────────╮
+#9 31.89 │                                                                              │
+#9 31.89 │   Ignored build scripts: @parcel/watcher@2.6.0, @swc/core@1.15.24,           │
+#9 31.89 │   esbuild@0.27.7.                                                            │
+#9 31.89 │   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+#9 31.89 │   to run scripts.                                                            │
+#9 31.89 │                                                                              │
+#9 31.89 ╰──────────────────────────────────────────────────────────────────────────────╯
+#9 31.93 Done in 31.7s using pnpm v10.28.0
+#9 DONE 32.3s
+
+#10 [dev 6/6] RUN set -eu;     deluser node 2>/dev/null || true;     group="$(awk -F: -v gid="1000" '$3 == gid { print $1; exit }' /etc/group)";     if [ -z "$group" ]; then addgroup -g "1000" app; group=app; fi;     adduser -u "1000" -G "$group" -D app;     chown -R "1000:1000" /app
+#10 DONE 23.9s
+
+#11 exporting to image
+#11 exporting layers
+#11 exporting layers 14.9s done
+#11 exporting manifest sha256:d305512a043e7a7574b1b292148b92b9b92b16f9c69430a176cf9048a1a2f644
+#11 exporting manifest sha256:d305512a043e7a7574b1b292148b92b9b92b16f9c69430a176cf9048a1a2f644 done
+#11 exporting config sha256:a0979ab768815ba24fbb7b0cc899a4d6a651838ef17b3c4462b992534a13e540 done
+#11 exporting attestation manifest sha256:0de0f163855bcae62a9db94f096b0c2faf3b395cbdb291538618e943c52db183 done
+#11 exporting manifest list sha256:b881d5d05b0e8bd6d4a07483954cc3d7f8dcd11dcc040227dee42b3c907f8199 done
+#11 naming to docker.io/etqan-qa001-r1/dashboard:gid1000 done
+#11 unpacking to docker.io/etqan-qa001-r1/dashboard:gid1000
+#11 unpacking to docker.io/etqan-qa001-r1/dashboard:gid1000 10.4s done
+#11 DONE 25.4s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/43vz4m0z3b66wugq7fm7h2qxu
+build exit=0
+## id:
+uid=1000(app) gid=1000(app) groups=1000(app)
+## stat /app:
+1000:1000 app:app /app
+1000:1000 app:app /app/node_modules
+app:x:1000:app
+app can write /app
+## pnpm as app:
+app
+10.28.0
+33

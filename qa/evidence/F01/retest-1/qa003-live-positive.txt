@@ -1,0 +1,31 @@
+# 2026-10-17T21:56:02Z ETQAN-QA-003 retest-1 positive path (Agent 2), REAL: Add form, tz Africa/Cairo, currency 'egp'
+POST add -> 302 http://etqan.localhost/admin/tenants/academy/ (15.687991s)
+class="success">The academy “
+ id |  subdomain  | status |   timezone   | currency 
+----+-------------+--------+--------------+----------
+ 15 | qa-tmp-r1ok | active | Africa/Cairo | EGP
+(1 row)
+
+   timezone   | default_currency | default_language 
+--------------+------------------+------------------
+ Africa/Cairo | EGP              | ar
+(1 row)
+
+              email              |   timezone   | is_active | has_usable 
+---------------------------------+--------------+-----------+------------
+ qa-tmp-r1ok-admin@qa.etqan.test | Africa/Cairo | t         | f
+(1 row)
+
+           domain            | status | is_primary 
+-----------------------------+--------+------------
+ qa-tmp-r1ok.etqan.localhost | active | t
+(1 row)
+
+## Mailpit invite
+messages: 1
+qa-tmp-r1ok-admin@qa.etqan.test | [QA Tmp R1 OK] عيّن كلمة المرور
+## cleanup: ops@ Suspend action on qa-tmp-r1ok (id 15)
+POST -> 302
+qa-tmp-r1ok|suspended
+GET http://qa-tmp-r1ok.etqan.localhost/api/v1/identity/me/ -> 403
+{"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}

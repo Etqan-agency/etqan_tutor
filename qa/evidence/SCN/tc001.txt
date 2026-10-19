@@ -1,0 +1,107 @@
+== TC-001
+[201] POST people/students/ :: {"id":222,"role":"student","two_factor":false,"user":{"full_name":"SCN Student A1","email":"scn-a1@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login
+[201] POST people/students/ :: {"id":223,"role":"student","two_factor":false,"user":{"full_name":"SCN Student A2","email":"scn-a2@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login
+[201] POST people/parents/ :: {"id":224,"role":"parent","two_factor":false,"user":{"full_name":"SCN Parent A","email":"scn-parent-a@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_lo
+[201] POST people/students/ :: {"id":225,"role":"student","two_factor":false,"user":{"full_name":"SCN Student B1","email":"scn-b1@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login
+[201] POST people/parents/ :: {"id":226,"role":"parent","two_factor":false,"user":{"full_name":"SCN Parent B","email":"scn-parent-b@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_lo
+[201] POST people/students/222/guardians/ :: [{"id":224,"full_name":"SCN Parent A","email":"scn-parent-a@qa.etqan.test","phone":""}]
+[201] POST people/students/223/guardians/ :: [{"id":224,"full_name":"SCN Parent A","email":"scn-parent-a@qa.etqan.test","phone":""}]
+[201] POST people/students/225/guardians/ :: [{"id":226,"full_name":"SCN Parent B","email":"scn-parent-b@qa.etqan.test","phone":""}]
+[201] POST people/families/ :: {"id":11,"name":"SCN Family A","is_active":true,"payer":{"id":224,"full_name":"SCN Parent A","role":"parent"},"payer_needs_choosing":false,"students":[{"id":222,"full_name":"SCN Student A1"},{"id":223,"full_name":"SCN Student A2"}],"notes":"","created_at":"2026-10-19T17:03:35.048812Z"}
+[201] POST people/families/ :: {"id":12,"name":"SCN Family B","is_active":true,"payer":{"id":226,"full_name":"SCN Parent B","role":"parent"},"payer_needs_choosing":false,"students":[{"id":225,"full_name":"SCN Student B1"}],"notes":"","created_at":"2026-10-19T17:03:35.165822Z"}
+[200] GET people/families/11/ :: {"id":11,"name":"SCN Family A","is_active":true,"payer":{"id":224,"full_name":"SCN Parent A","role":"parent"},"payer_needs_choosing":false,"students":[{"id":222,"full_name":"SCN Student A1"},{"id":223,"full_name":"SCN Student A2"}],"notes":"","created_at":"2026-10-19T17:03:35.048812Z"}
+[200] GET billing/payers/?student=222 :: {"default":224,"choices":[{"id":224,"full_name":"SCN Parent A","relation":"family"},{"id":222,"full_name":"SCN Student A1","relation":"student"}]}
+-- SA1 into FAM-B (must be 400)
+[400] PATCH people/families/12/ :: {"student_ids":["SCN Student A1 is already in another family."]}
+[400] POST people/families/ :: {"payer_id":["This field is required."]}
+SET
+ERROR:  relation "people_family" does not exist
+LINE 1: ...rch_path=academy_qa; select id,name,payer_id from people_fam...
+                                                             ^
+SET
+224|scn-parent-a@qa.etqan.test|parent|t
+225|scn-b1@qa.etqan.test|student|t
+222|scn-a1@qa.etqan.test|student|t
+226|scn-parent-b@qa.etqan.test|parent|t
+223|scn-a2@qa.etqan.test|student|t
+SET
+3
+SET
+ERROR:  syntax error at or near "primary"
+LINE 1: ...t search_path=academy_qa; select user_id,verified,primary fr...
+                                                             ^
+scn-parent-a: 1 ['[Etqan QA Academy] عيّن كلمة المرور']
+scn-a1: 1 ['[Etqan QA Academy] عيّن كلمة المرور']
+scn-a2: 1 ['[Etqan QA Academy] عيّن كلمة المرور']
+scn-b1: 1 ['[Etqan QA Academy] عيّن كلمة المرور']
+scn-parent-b: 1 ['[Etqan QA Academy] عيّن كلمة المرور']
+== TC-001 DB (rerun with real table names)
+SET
+11|SCN Family A||t|2026-10-19 17:03:35.048812+00|2026-10-19 17:03:35.048818+00|224
+12|SCN Family B||t|2026-10-19 17:03:35.165822+00|2026-10-19 17:03:35.165829+00|226
+ERROR:  syntax error at or near "\"
+LINE 1: set search_path=academy_qa; \d identity_studentprofile
+                                    ^
+SET
+222|11
+223|11
+225|12
+SET
+SET
+222|f|t
+223|f|t
+224|f|t
+225|f|t
+226|f|t
+guardianship rows 21,22,23 (profile ids 12->124,125 ; 13->126) = PA->SA1,SA2 ; PB->SB1
+scn-parent-a link: http://qa.etqan.localhost/app/reset-password?uid=MjI0&token=REDACTED-QA
+accept 400 {"token":["Invalid or expired reset link."]}
+login pa 400 {"non_field_errors":["Email address is not verified."]}
+scn-parent-b link: http://qa.etqan.localhost/app/reset-password?uid=MjI2&token=REDACTED-QA
+accept 400 {"token":["Invalid or expired reset link."]}
+login pb 400 {"non_field_errors":["Email address is not verified."]}
+scn-a1 link: http://qa.etqan.localhost/app/reset-password?uid=MjIy&token=REDACTED-QA
+accept 400 {"token":["Invalid or expired reset link."]}
+login sa1 400 {"non_field_errors":["Email address is not verified."]}
+scn-a2 link: http://qa.etqan.localhost/app/reset-password?uid=MjIz&token=REDACTED-QA
+accept 400 {"token":["Invalid or expired reset link."]}
+login sa2 400 {"non_field_errors":["Email address is not verified."]}
+scn-b1 link: http://qa.etqan.localhost/app/reset-password?uid=MjI1&token=REDACTED-QA
+accept 400 {"token":["Invalid or expired reset link."]}
+login sb1 400 {"non_field_errors":["Email address is not verified."]}
+scn-teacher2 link: http://qa.etqan.localhost/app/reset-password?uid=MjE5&token=REDACTED-QA
+accept 400 {"token":["Invalid or expired reset link."]}
+login t2 400 {"non_field_errors":["Email address is not verified."]}
+scn-teacher3 link: http://qa.etqan.localhost/app/reset-password?uid=MjIw&token=REDACTED-QA
+accept 400 {"token":["Invalid or expired reset link."]}
+login t3 400 {"non_field_errors":["Email address is not verified."]}
+reset scn-parent-a 200
+reset scn-parent-b 200
+reset scn-a1 200
+reset scn-a2 200
+reset scn-b1 200
+reset scn-teacher2 200
+reset scn-teacher3 200
+accept 400 {"token":["Invalid or expired reset link."]}
+login pa 400 {"non_field_errors":["Email address is not verified."]}
+accept 400 {"token":["Invalid or expired reset link."]}
+login pb 400 {"non_field_errors":["Email address is not verified."]}
+accept 400 {"token":["Invalid or expired reset link."]}
+login sa1 400 {"non_field_errors":["Email address is not verified."]}
+accept 400 {"token":["Invalid or expired reset link."]}
+login sa2 400 {"non_field_errors":["Email address is not verified."]}
+accept 400 {"token":["Invalid or expired reset link."]}
+login sb1 400 {"non_field_errors":["Email address is not verified."]}
+accept 400 {"token":["Invalid or expired reset link."]}
+login t2 400 {"non_field_errors":["Email address is not verified."]}
+accept 400 {"token":["Invalid or expired reset link."]}
+login t3 400 {"non_field_errors":["Email address is not verified."]}
+SET
+UPDATE 7
+login pa 200 {"id":224,"email":"scn-parent-a@qa.etqan.test","full_name":"SCN Par
+login pb 200 {"id":226,"email":"scn-parent-b@qa.etqan.test","full_name":"SCN Par
+login sa1 200 {"id":222,"email":"scn-a1@qa.etqan.test","full_name":"SCN Student 
+login sa2 200 {"id":223,"email":"scn-a2@qa.etqan.test","full_name":"SCN Student 
+login sb1 200 {"id":225,"email":"scn-b1@qa.etqan.test","full_name":"SCN Student 
+login t2 200 {"id":219,"email":"scn-teacher2@qa.etqan.test","full_name":"SCN Tea
+login t3 200 {"id":220,"email":"scn-teacher3@qa.etqan.test","full_name":"SCN Pay

@@ -1,0 +1,8 @@
+
+Running 3 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f06-catalogue-scheduling.spec.ts:52:1 › TC-006 country prices: UI shows major units, API stores minor units (4.4s)
+  ✓  2 [chromium] › e2e/qa/f06-catalogue-scheduling.spec.ts:89:1 › TC-014 renew, cancel the renewal, renew again, archive an ended one (8.5s)
+  ✓  3 [chromium] › e2e/qa/f06-catalogue-scheduling.spec.ts:145:1 › TC-023 study group created in the UI, one-group rule (4.4s)
+
+  3 passed (17.9s)

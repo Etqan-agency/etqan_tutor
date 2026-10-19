@@ -1,0 +1,3 @@
+## view-only staff: domain actions (qa-academy.test id 12, disabled)
+check_dns -> <li class="warning">Qa-academy.test: resolves to nothing, expected sites.etqan.localhost.</li> 
+disable_action -> 

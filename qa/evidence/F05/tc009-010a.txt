@@ -1,0 +1,57 @@
+== TC-009
+[201] POST people/students/ :: {"id":128
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;d=json.loads(sys.argv[1]);print(eval(sys.argv[2]))
+                      ~~~~~~~~~~^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+[400] POST people/parents/ :: {"user":{"email":["This email is already in use."]}}
+[400] POST people/parents/ :: {"user":{"email":["This email is already in use."]}}
+[400] POST people/parents/ :: {"user":{"email":["This email is already in use."]}}
+[400] PATCH people/students/116/ :: {"user":{"email":["This email is already in use."]}}
+[404] PATCH people/students// :: <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /api/v1/people/students//</title>
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <style>
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+ 
+ERROR:  syntax error at end of input
+LINE 1: select email from academy_qa.identity_user where id=
+                                                            ^
+"email":"f05-stu1@qa.etqan.test","phone":"+201005550101","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"active","pending_email":"f05-pend@qa.etqan.test"
+[400] POST people/parents/ :: {"user":{"email":["This email is already in use."]}}
+[201] POST people/teachers/ :: {"id":6,"role":"teacher","two
+[400] POST people/teachers/ :: {"user":{"email":["This email is already in use."]}}
+users 127 -> 127  mails 139 -> 141 (expected +2: pending confirm/alert for s1, qaother invite)
+    "identity_user_email_ci_unique" UNIQUE, btree (lower(email::text))
+    "identity_user_email_key" UNIQUE CONSTRAINT, btree (email)
+    TABLE "academy_qa.chat_participant" CONSTRAINT "chat_participant_user_id_3f5ce7b2_fk_identity_user_id" FOREIGN KEY (user_id) REFERENCES academy_qa.identity_user(id) DEFERRABLE INITIALLY DEFERRED
+    TABLE "academy_qa.consultations_review" CONSTRAINT "consultations_review_decided_by_id_a06d5cec_fk_identity_user_id" FOREIGN KEY (decided_by_id) REFERENCES academy_qa.identity_user(id) DEFERRABLE INITIALLY DEFERRED
+    TABLE "academy_qa.learning_levelupgraderequest" CONSTRAINT "learning_levelupgrad_decided_by_id_4fd21e84_fk_identity_" FOREIGN KEY (decided_by_id) REFERENCES academy_qa.identity_user(id) DEFERRABLE INITIALLY DEFERRED
+    TABLE "academy_qa.notifications_notification" CONSTRAINT "notifications_notifi_recipient_id_d055f3f0_fk_identity_" FOREIGN KEY (recipient_id) REFERENCES academy_qa.identity_user(id) DEFERRABLE INITIALLY DEFERRED
+    TABLE "academy_qa.payroll_withdrawalrequest" CONSTRAINT "payroll_withdrawalre_decided_by_id_58854dc6_fk_identity_" FOREIGN KEY (decided_by_id) REFERENCES academy_qa.identity_user(id) DEFERRABLE INITIALLY DEFERRED
+    TABLE "academy_qa.recorded_review" CONSTRAINT "recorded_review_decided_by_id_8e89ec79_fk_identity_user_id" FOREIGN KEY (decided_by_id) REFERENCES academy_qa.identity_user(id) DEFERRABLE INITIALLY DEFERRED
+    TABLE "academy_qa.registration_registration" CONSTRAINT "registration_registr_decided_by_id_aae69ce5_fk_identity_" FOREIGN KEY (decided_by_id) REFERENCES academy_qa.identity_user(id) DEFERRABLE INITIALLY DEFERRED
+    TABLE "academy_qa.socialaccount_socialaccount" CONSTRAINT "socialaccount_social_user_id_8146e70c_fk_identity_" FOREIGN KEY (user_id) REFERENCES academy_qa.identity_user(id) DEFERRABLE INITIALLY DEFERRED
+1|1
+== TC-010 (S1 now has pending f05-pend@; use that as the 'new' address)
+email=f05-stu1@qa.etqan.test pending=f05-pend@qa.etqan.test
+f05-stu1@qa.etqan.test|t|t
+f05-pend@qa.etqan.test|f|f
+login so 200 {"id":114,"email":"f05-stu1@qa.etqan.test","full_name":"QA5 Sami","phone":"+201005550101","preferred_language":"ar","eff
+login sn 400 {"non_field_errors":["Email address is not verified."]}
+1 ['[Etqan QA Academy] [Etqan] تأكيد عنوان البريد الإلكتروني']
+1 ['[Etqan QA Academy] عيّن كلمة المرور']
+['http://qa.etqan.localhost/app/verify-email?key=REDACTED-QA', 'http://qa.etqan.localhost/']

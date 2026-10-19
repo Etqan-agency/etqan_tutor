@@ -1,0 +1,28 @@
+[200] PATCH academy/settings/ :: {"timezone":"Africa/Cairo","default_currency":"EGP","default_language":"ar","generation_horizon_days":21,"renewal_grace_days":7,"absent_consumes_session":false,"excused_consumes_session":false,"auto_invoice_on_subscription":true,"invoice_due_days":7,"postpone_limit_minutes":120,"supervision_enabled":true,"updated_at":"2026-10-19T17:03:13.514113Z"}
+[200] PATCH payroll/settings/ :: {"student_absent_pay_bp":5000,"student_excused_pay_bp":2500,"at_disposal_pays":false,"group_pay":"per_student","report_deduction_bp":0,"updated_at":"2026-10-19T17:03:13.560038Z","updated_by":{"id":1,"full_name":"QA Admin"}}
+[200] PATCH billing/settings/ :: {"local_payment_enabled":true}
+[400] POST people/teachers/ :: {"profile":{"gender":["This field is required."]}}
+[400] POST people/teachers/ :: {"profile":{"gender":["This field is required."]}}
+[400] POST people/teachers/ :: {"profile":{"gender":["This field is required."]}}
+[400] POST catalogue/courses/ :: {"detail":"JSON parse error - Expecting value: line 1 column 57 (char 56)"}
+[201] POST catalogue/packages/ :: {"id":17,"name_ar":"س","name_en":"SCN Pkg 2x4w","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":60,"duration_value":1,"duration_unit":"month","freeze_days_allowed":0,"price_minor":150000,"currency":"EGP","is_active":true,"created_at":"2026-10-19T17:03:14.097491Z","updated_at":"2026-10-19T17:03:14.097499Z","sessions_total":8}
+[400] POST payroll/rates/ :: {"course":["This teacher already has this rate. Edit it instead."]}
+T2=
+T3=
+TG=
+T1=7
+C1=
+PKG=17
+[201] POST people/teachers/ :: {"id":219,"role":"teacher","two_factor":false,"user":{"full_name":"SCN Teacher Two","email":"scn-teacher2@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last_logi
+[201] POST people/teachers/ :: {"id":220,"role":"teacher","two_factor":false,"user":{"full_name":"SCN Payroll Teacher","email":"scn-teacher3@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last_
+[201] POST people/teachers/ :: {"id":221,"role":"teacher","two_factor":false,"user":{"full_name":"SCN Teacher Gone","email":"scn-teacher-gone@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last
+[201] POST catalogue/courses/ :: {"id":6,"name_ar":"scn","name_en":"SCN Quran","description_ar":"","description_en":"","language":"ar","is_active":true,"created_at":"2026-10-19T17:03:22.402521Z","updated_at":"2026-10-19T17:03:22.402528Z","teacher_ids":[7,219,220,221]}
+[201] POST payroll/rates/ :: {"id":23,"teacher":{"id":219,"full_name":"SCN Teacher Two"},"course":null,"hourly_rate_minor":6000,"currency":"EGP","counts":true,"created_at":"2026-10-19T17:03:22.489680Z","updated_at":"2026-10-19T17:03:22.489689Z"}
+[201] POST payroll/rates/ :: {"id":24,"teacher":{"id":220,"full_name":"SCN Payroll Teacher"},"course":null,"hourly_rate_minor":6000,"currency":"EGP","counts":true,"created_at":"2026-10-19T17:03:22.533364Z","updated_at":"2026-10-19T17:03:22.533373Z"}
+[200] GET payroll/rates/?teacher=7 :: [{"id":1,"teacher":{"id":7,"full_name":"QA teacher"},"course":null,"hourly_rate_minor":6000,"currency":"EGP","counts":true,"created_at":"2026-10-19T01:01:54.164108Z","updated_at":"2026-10-19T01:06:27.866581Z"}]
+T1=7
+PKG=17
+T2=219
+T3=220
+TG=221
+C1=6

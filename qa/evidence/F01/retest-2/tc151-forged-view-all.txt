@@ -1,0 +1,64 @@
+== 2026-10-18T21:03:48Z login ops-view-all@
+302 http://etqan.localhost/admin/
+== state before
+10|ETQ-2025-01-0002|issued|||f|f|736d032462ac0fda3621fdee67e18d1a
+11|ETQ-2025-02-0002|draft|||f|f|e00ced2595deca4a1f64e3b10cfb6bd6
+email|2|f
+task|11|f|0||0b489b84a3684d3058dcecfc53dd88cd
+pa|5|f||95fbc6b0fb2d9382ed44d7948d8b9255
+mailpit total 0; admin_log max 48
+== actions offered (option values in action select) to ops-view-all@
+etqan_billing/etqaninvoice: [] checkboxes=0
+account/emailaddress: [] checkboxes=0
+django_celery_beat/periodictask: [] checkboxes=0
+integrations/platformaccount: [] checkboxes=0
+identity/teacherprofile: [] checkboxes=0
+tenants/academy: [] checkboxes=0
+tenants/domain: [] checkboxes=0
+-- forged mark_paid on etqan_billing/etqaninvoice id=10
+HTTP 200 
+   messages: 
+-- forged void_invoices on etqan_billing/etqaninvoice id=10
+HTTP 200 
+   messages: 
+-- forged email_again on etqan_billing/etqaninvoice id=10
+HTTP 200 
+   messages: 
+-- forged issue_invoices on etqan_billing/etqaninvoice id=11
+HTTP 200 
+   messages: 
+-- forged make_verified on account/emailaddress id=2
+HTTP 200 
+   messages: 
+-- forged enable_tasks on django_celery_beat/periodictask id=11
+HTTP 200 
+   messages: 
+-- forged disable_tasks on django_celery_beat/periodictask id=11
+HTTP 200 
+   messages: 
+-- forged toggle_tasks on django_celery_beat/periodictask id=11
+HTTP 200 
+   messages: 
+-- forged run_tasks on django_celery_beat/periodictask id=11
+HTTP 200 
+   messages: 
+-- forged test_accounts on integrations/platformaccount id=5
+HTTP 200 
+   messages: 
+-- forged send_password_set_email on identity/teacherprofile id=1
+HTTP 200 
+   messages: 
+-- forged suspend_academies on tenants/academy id=5
+HTTP 200 
+   messages: 
+-- forged reactivate_academies on tenants/academy id=6
+HTTP 200 
+   messages: 
+== state after
+10|ETQ-2025-01-0002|issued|||f|f|736d032462ac0fda3621fdee67e18d1a
+11|ETQ-2025-02-0002|draft|||f|f|e00ced2595deca4a1f64e3b10cfb6bd6
+email|2|f
+task|11|f|0||0b489b84a3684d3058dcecfc53dd88cd
+pa|5|f||95fbc6b0fb2d9382ed44d7948d8b9255
+mailpit total 0 (before 0)
+admin_log new rows:

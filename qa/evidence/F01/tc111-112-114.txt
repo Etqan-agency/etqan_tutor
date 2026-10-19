@@ -1,0 +1,22 @@
+## TC-111
+{"id":44,"emoji":"","name_ar":"QA-ISO-1792267693","name_en":"QA-ISO-1792267693","kind":"student","position":22,"is_active":true,"people":0}
+HTTP 201
+qaother list contains: 0
+qaother detail 44: {"detail":"Method \"GET\" not allowed."} HTTP 405 
+db qa: 1 qaother: 0 qaother id 44 name: 
+cleanup delete in qa: HTTP 405 remaining: 1
+## TC-112 qa admin on Etqan console
+Please enter the correct email and password for a staff account.
+HTTP 200
+## TC-114 qa csrf used on qaother login
+ts","widget.subscriptions_stats"],"is_super_admin":true,"features":["families","parents","session_reports","invoices","auto_notifications","teacher_attendance","export"],"impersonator":null}
+HTTP 200
+
+same, with qaother Referer/Origin but qa's token cookie+header:
+{"non_field_errors":["Invalid credentials."]}
+HTTP 400
+## TC-114 follow-up: login POST without any CSRF token
+json, no cookie/header: 200
+form-encoded, Origin evil.example, no token: 200 {"id":1,"email":"qaother-admin@qa.etqan.test","full_name":"QA Other Admin","phone":"","preferred_lan
+authenticated write without token (qa admin POST tag): 403 {"detail":"CSRF Failed: CSRF token missing."}
+cleanup deleted (1, {'identity.Tag': 1})

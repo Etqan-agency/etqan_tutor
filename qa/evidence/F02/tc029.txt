@@ -1,0 +1,16 @@
+## TC-029
+sessionid after csrf/: 0
+second login on same jar rotates key:  old row: 1
+planted key authenticated?: 403
+expire_date ahead: 14.00 days
+expired session: 403
+AGE 1209600 SAVE_EVERY False EXPIRE_AT_CLOSE False SECURE False SAMESITE Lax
+production.py:
+30:SESSION_COOKIE_SECURE = True
+31:CSRF_COOKIE_SECURE = True
+40:SESSION_COOKIE_SAMESITE = "Lax"
+cookie attrs through Caddy: see tc001-002-api.txt (sessionid HttpOnly; Max-Age=1209600; SameSite=Lax; no Secure on dev; csrftoken no HttpOnly)
+TC-029 re-check of same-jar re-login:
+login1: 200
+login2: _attendance","export","online_payments","two_factor","phone_login","quick_login","code_reset"],"impersonator":null} 200 
+K1=tz6apcxm K2=tz6apcxm rotated: no

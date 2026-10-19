@@ -1,0 +1,856 @@
+diff --git a/etqan/etqan_billing/admin.py b/etqan/etqan_billing/admin.py
+index 561a73a4..2ac51d44 100644
+--- a/etqan/etqan_billing/admin.py
++++ b/etqan/etqan_billing/admin.py
+@@ -242,6 +242,8 @@ class EtqanInvoiceAdmin(admin.ModelAdmin):
+     ]
+     list_filter = ["status", "period", "academy"]
+     search_fields = ["number"]
++    # Every action changes an invoice or emails it, so each needs the change
++    # permission: a view-only staff member is offered none (ETQAN-QA-013).
+     actions = ["issue_invoices", "email_again", "mark_paid", "void_invoices"]
+     action_form = InvoiceActionForm
+     inlines = [LineInline]
+@@ -304,7 +306,10 @@ class EtqanInvoiceAdmin(admin.ModelAdmin):
+                     request, f"· {invoice.number}: {done}", messages.SUCCESS
+                 )
+ 
+-    @admin.action(description="Issue the selected drafts now (and email them)")
++    @admin.action(
++        description="Issue the selected drafts now (and email them)",
++        permissions=["change"],
++    )
+     def issue_invoices(self, request, queryset):
+         def issue_and_send(invoice):
+             issued = services.issue(invoice)
+@@ -314,7 +319,9 @@ class EtqanInvoiceAdmin(admin.ModelAdmin):
+             request, queryset, issue_and_send, "issued; the PDF goes to its admins."
+         )
+ 
+-    @admin.action(description="Email the selected invoices again")
++    @admin.action(
++        description="Email the selected invoices again", permissions=["change"]
++    )
+     def email_again(self, request, queryset):
+         def send(invoice):
+             if invoice.status != Status.ISSUED:
+@@ -323,7 +330,10 @@ class EtqanInvoiceAdmin(admin.ModelAdmin):
+ 
+         self._each(request, queryset, send, "emailed again to its admins.")
+ 
+-    @admin.action(description="Mark the selected invoices paid (date, method above)")
++    @admin.action(
++        description="Mark the selected invoices paid (date, method above)",
++        permissions=["change"],
++    )
+     def mark_paid(self, request, queryset):
+         form = InvoiceActionForm(request.POST)
+         form.is_valid()
+@@ -340,7 +350,10 @@ class EtqanInvoiceAdmin(admin.ModelAdmin):
+             "marked paid.",
+         )
+ 
+-    @admin.action(description="Void the selected invoices (reason above)")
++    @admin.action(
++        description="Void the selected invoices (reason above)",
++        permissions=["change"],
++    )
+     def void_invoices(self, request, queryset):
+         form = InvoiceActionForm(request.POST)
+         form.is_valid()
+diff --git a/etqan/identity/admin.py b/etqan/identity/admin.py
+index 1b6d8629..9c63ef21 100644
+--- a/etqan/identity/admin.py
++++ b/etqan/identity/admin.py
+@@ -32,7 +32,8 @@ class TeacherProfileAdmin(admin.ModelAdmin):
+     raw_id_fields = ("user",)
+     actions = ["send_password_set_email"]
+ 
+-    @admin.action(description="Send password-set email")
++    # It emails the teacher, so it needs the change permission (ETQAN-QA-013).
++    @admin.action(description="Send password-set email", permissions=["change"])
+     def send_password_set_email(self, request, queryset):
+         sent = skipped = 0
+         for profile in queryset.select_related("user"):
+diff --git a/etqan/integrations/admin.py b/etqan/integrations/admin.py
+index e94c6b57..826b5d6b 100644
+--- a/etqan/integrations/admin.py
++++ b/etqan/integrations/admin.py
+@@ -153,7 +153,9 @@ class PlatformAccountAdmin(admin.ModelAdmin):
+         path = WEBHOOK_PATHS.get(obj.service)
+         return f"{settings.FRONTEND_URL.rstrip('/')}{path}" if path else "—"
+ 
+-    @admin.action(description="Test the selected accounts")
++    # A test sends a message from Etqan's account and stores the result, so it
++    # needs the change permission (ETQAN-QA-013).
++    @admin.action(description="Test the selected accounts", permissions=["change"])
+     def test_accounts(self, request, queryset):
+         for account in queryset:
+             # Messages start with the service's display name ("Email: …"):
+diff --git a/etqan/integrations/tests/test_admin.py b/etqan/integrations/tests/test_admin.py
+index dbd9b99a..579ae209 100644
+--- a/etqan/integrations/tests/test_admin.py
++++ b/etqan/integrations/tests/test_admin.py
+@@ -178,3 +178,31 @@ def test_a_bad_ai_key_is_shown_on_the_secret_field(staff_client):
+     )
+     assert resp.status_code == 200
+     assert "sk-ant-" in resp.content.decode()
++
++
++def test_view_only_staff_cannot_run_the_test_action(client, monkeypatch):
++    """ETQAN-QA-013: a test sends a real message from Etqan's account and
++    writes the result, so it needs the change permission."""
++    from django.contrib.auth.models import Permission  # noqa: PLC0415
++
++    connection.set_schema_to_public()
++    viewer = User.objects.create_user(email="ops-view@etqan.test", password="x")
++    viewer.is_staff = True
++    viewer.save(update_fields=["is_staff"])
++    viewer.user_permissions.set(
++        Permission.objects.filter(codename="view_platformaccount")
++    )
++    client.force_login(viewer)
++    fake = FakeEmail()
++    monkeypatch.setitem(providers.PROVIDERS, "email", fake)
++    account = PlatformAccount.objects.get(service="email")
++    page = client.get(LIST, HTTP_HOST=PUBLIC_HOST)
++    assert page.status_code == 200
++    assert page.context.get("action_form") is None
++    client.post(
++        LIST,
++        {"action": "test_accounts", "_selected_action": [account.pk], "index": 0},
++        HTTP_HOST=PUBLIC_HOST,
++    )
++    assert fake.probed == []
++    assert PlatformAccount.objects.get(service="email").last_test_at is None
+diff --git a/etqan/tenants/admin.py b/etqan/tenants/admin.py
+index a1f162b1..cf40a941 100644
+--- a/etqan/tenants/admin.py
++++ b/etqan/tenants/admin.py
+@@ -9,6 +9,7 @@ from django_tenants.utils import get_public_schema_name
+ 
+ from etqan.etqan_billing import services as etqan_billing
+ from etqan.platform import features
++from etqan.platform import validators
+ from etqan.platform.exceptions import ValidationError as EtqanValidationError
+ from etqan.platform.params import as_int
+ from etqan.tenants import services
+@@ -39,6 +40,22 @@ class AcademyCreationForm(forms.ModelForm):
+         except EtqanValidationError as exc:
+             raise forms.ValidationError(exc.message) from exc
+ 
++    # ETQAN-QA-003: create_academy checks these too; here they become form
++    # errors instead of a failed save.
++    def clean_timezone(self):
++        try:
++            return validators.clean_timezone(self.cleaned_data.get("timezone") or "")
++        except EtqanValidationError as exc:
++            raise forms.ValidationError(exc.message) from exc
++
++    def clean_currency(self):
++        try:
++            return validators.clean_currency(
++                self.cleaned_data.get("currency") or "", "currency"
++            )
++        except EtqanValidationError as exc:
++            raise forms.ValidationError(exc.message) from exc
++
+ 
+ # Plan 13 §5.5: the Academy change page's Features section.
+ ACADEMY_FIELDS = [
+@@ -83,7 +100,13 @@ def feature_field(code: str) -> str:
+ class _AcademyChangeForm(forms.ModelForm):
+     """The academy's own fields and one checkbox per feature. Only the
+     switches Etqan changes are stored; the others keep following their
+-    defaults."""
++    defaults.
++
++    ETQAN-QA-014: every field carries the value the page showed (a hidden
++    initial), so "changed" means changed on this page, not "differs from the
++    row now". A field its user left alone keeps the row's current value, so
++    a page opened before the academy was suspended, had its defaults
++    suspended or a feature switched off elsewhere undoes none of that."""
+ 
+     class Meta:
+         model = Academy
+@@ -99,6 +122,12 @@ class _AcademyChangeForm(forms.ModelForm):
+ 
+     def __init__(self, *args, **kwargs):
+         super().__init__(*args, **kwargs)
++        for name, field in self.fields.items():
++            # A post without the shown value (a page from before this
++            # change) is compared with the row, as before.
++            field.show_hidden_initial = (
++                not self.is_bound or self.add_initial_prefix(name) in self.data
++            )
+         days = etqan_billing.oldest_unpaid_days(self.instance)
+         unpaid = (
+             "No unpaid Etqan invoice."
+@@ -121,6 +150,8 @@ class _AcademyChangeForm(forms.ModelForm):
+     def clean_etqan_defaults_suspended(self) -> bool:
+         """Plan D16: switching on needs an invoice 30 days unpaid; lifting a
+         suspension is always allowed."""
++        if "etqan_defaults_suspended" not in self.changed_data:
++            return self.instance.etqan_defaults_suspended
+         value = self.cleaned_data["etqan_defaults_suspended"]
+         if (
+             value
+@@ -133,6 +164,14 @@ class _AcademyChangeForm(forms.ModelForm):
+             )
+         return value
+ 
++    def clean(self):
++        cleaned = super().clean()
++        # The academy's own fields; the feature boxes are merged in save().
++        for name in _AcademyChangeForm.Meta.fields:
++            if name in cleaned and name not in self.changed_data:
++                cleaned[name] = getattr(self.instance, name)
++        return cleaned
++
+     def save(self, commit=True):  # noqa: FBT002 -- Django's signature
+         changed = {
+             feature.code: self.cleaned_data[feature_field(feature.code)]
+@@ -192,6 +231,9 @@ class AcademyAdmin(admin.ModelAdmin):
+     ]
+     list_filter = ["status"]
+     search_fields = ["name", "subdomain"]
++    # Every action changes academies, so each needs the change permission
++    # (`permissions=["change"]`): a view-only staff member is offered none,
++    # and Django refuses a forged one.
+     actions = ["suspend_academies", "reactivate_academies", "copy_features"]
+     action_form = AcademyActionForm
+     inlines = [DomainInline]
+@@ -258,14 +300,16 @@ class AcademyAdmin(admin.ModelAdmin):
+         obj.pk = created.pk
+         obj.schema_name = created.schema_name
+ 
+-    @admin.action(description="Suspend selected academies")
++    @admin.action(description="Suspend selected academies", permissions=["change"])
+     def suspend_academies(self, request, queryset):
+         count = services.set_status(
+             list(queryset.values_list("pk", flat=True)), "suspended"
+         )
+         self.message_user(request, f"Suspended {count} academies.", messages.SUCCESS)
+ 
+-    @admin.action(description="Copy features from another academy")
++    @admin.action(
++        description="Copy features from another academy", permissions=["change"]
++    )
+     def copy_features(self, request, queryset):
+         """Plan 13 §5.5: the chosen academy's switches, onto each selected
+         one; each change goes into the admin's history."""
+@@ -291,7 +335,7 @@ class AcademyAdmin(admin.ModelAdmin):
+             messages.SUCCESS,
+         )
+ 
+-    @admin.action(description="Reactivate selected academies")
++    @admin.action(description="Reactivate selected academies", permissions=["change"])
+     def reactivate_academies(self, request, queryset):
+         count = services.set_status(
+             list(queryset.values_list("pk", flat=True)), "active"
+@@ -399,7 +443,7 @@ class DomainAdmin(admin.ModelAdmin):
+         )
+         obj.pk = created.pk
+ 
+-    @admin.action(description="Check DNS and activate")
++    @admin.action(description="Check DNS and activate", permissions=["change"])
+     def check_dns(self, request, queryset):
+         # Pending rows are activated for the first time; disabled rows are
+         # re-enabled. Active rows have nothing to check.
+@@ -427,7 +471,7 @@ class DomainAdmin(admin.ModelAdmin):
+                     messages.WARNING,
+                 )
+ 
+-    @admin.action(description="Make primary")
++    @admin.action(description="Make primary", permissions=["change"])
+     def make_primary_action(self, request, queryset):
+         for domain in queryset:
+             try:
+@@ -437,7 +481,7 @@ class DomainAdmin(admin.ModelAdmin):
+                     request, f"{domain.domain}: {exc.message}", messages.ERROR
+                 )
+ 
+-    @admin.action(description="Disable")
++    @admin.action(description="Disable", permissions=["change"])
+     def disable_action(self, request, queryset):
+         for domain in queryset:
+             try:
+=== NEW etqan/platform/admin.py
+"""The third-party admins on the Etqan console, with their actions behind the
+change permission (ETQAN-QA-013).
+
+Django offers an action to anyone who may view the list unless the action
+names its permissions. Etqan's own admins say `permissions=["change"]` on
+every action that changes data or sends something; django-celery-beat's
+task actions (enable, disable, toggle, run) and allauth's "make verified"
+don't, so a view-only staff member could run them. They are registered
+again here with the same rule. Admin autodiscovery imports this module after
+theirs (`etqan.platform` follows both apps in INSTALLED_APPS)."""
+
+from allauth.account.admin import EmailAddressAdmin
+from allauth.account.models import EmailAddress
+from django.contrib import admin
+from django_celery_beat.admin import PeriodicTaskAdmin
+from django_celery_beat.models import PeriodicTask
+
+
+class ChangeToRunActions:
+    """Only a staff member who may change the model is offered its actions
+    (delete keeps its own delete permission). Django validates the posted
+    action against `get_actions`, so a forged one is refused too."""
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        if self.has_change_permission(request):
+            return actions
+        return {name: a for name, a in actions.items() if name == "delete_selected"}
+
+
+class EtqanPeriodicTaskAdmin(ChangeToRunActions, PeriodicTaskAdmin):
+    pass
+
+
+class EtqanEmailAddressAdmin(ChangeToRunActions, EmailAddressAdmin):
+    pass
+
+
+for model, model_admin in (
+    (PeriodicTask, EtqanPeriodicTaskAdmin),
+    (EmailAddress, EtqanEmailAddressAdmin),
+):
+    admin.site.unregister(model)
+    admin.site.register(model, model_admin)
+=== NEW etqan/etqan_billing/tests/test_admin_permissions.py
+"""ETQAN-QA-013: the invoice actions change invoices (and, through
+`may_suspend`, whether Etqan's defaults may be suspended), so a staff
+member who may only view invoices is offered none of them, and a forged
+action POST changes nothing and emails nobody. A staff member with the
+change permission (not a superuser) still runs them."""
+
+import pytest
+from django.contrib.auth.models import Permission
+from django.core import mail
+from django.db import connection
+from django_tenants.utils import tenant_context
+
+from etqan.etqan_billing import services
+from etqan.identity.models import User
+
+pytestmark = pytest.mark.django_db
+PUBLIC_HOST = "etqan.localhost"
+LIST = "/admin/etqan_billing/etqaninvoice/"
+INVOICE_ACTIONS = ["email_again", "issue_invoices", "mark_paid", "void_invoices"]
+
+
+def _staff(client, email: str, *codenames: str):
+    connection.set_schema_to_public()
+    user = User.objects.create_user(email=email, password="pw-12345678")
+    user.is_staff = True
+    user.save(update_fields=["is_staff"])
+    user.user_permissions.set(
+        Permission.objects.filter(
+            content_type__app_label="etqan_billing", codename__in=codenames
+        )
+    )
+    client.force_login(user)
+    return client
+
+
+@pytest.fixture
+def view_only_client(client):
+    return _staff(client, "ops-view@etqan.test", "view_etqaninvoice")
+
+
+@pytest.fixture
+def change_client(client):
+    return _staff(
+        client, "ops-change@etqan.test", "view_etqaninvoice", "change_etqaninvoice"
+    )
+
+
+@pytest.fixture
+def an_admin(tenants):
+    with tenant_context(tenants.main):
+        User.objects.create_user(
+            email="head@noor.test", password="pw-12345678", role="admin"
+        )
+
+
+def _offered(resp) -> list[str]:
+    form = resp.context.get("action_form")
+    if form is None:
+        return []
+    return sorted(value for value, _ in form.fields["action"].choices if value)
+
+
+def _post(client, action: str, pk: int, **extra):
+    return client.post(
+        LIST,
+        {"action": action, "_selected_action": [pk], "index": 0, **extra},
+        HTTP_HOST=PUBLIC_HOST,
+    )
+
+
+def test_view_only_staff_is_offered_no_invoice_action(view_only_client):
+    resp = view_only_client.get(LIST, HTTP_HOST=PUBLIC_HOST)
+    assert resp.status_code == 200
+    assert _offered(resp) == []
+
+
+def test_a_forged_issue_changes_nothing_and_emails_nobody(
+    draft, an_admin, view_only_client, django_capture_on_commit_callbacks
+):
+    with django_capture_on_commit_callbacks(execute=True):
+        _post(view_only_client, "issue_invoices", draft.pk)
+    draft.refresh_from_db()
+    assert draft.status == "draft"
+    assert mail.outbox == []
+
+
+def test_a_forged_email_again_emails_nobody(
+    draft, an_admin, view_only_client, django_capture_on_commit_callbacks
+):
+    services.issue(draft)
+    with django_capture_on_commit_callbacks(execute=True):
+        _post(view_only_client, "email_again", draft.pk)
+    assert mail.outbox == []
+
+
+def test_a_forged_mark_paid_changes_nothing(draft, view_only_client):
+    services.issue(draft)
+    _post(view_only_client, "mark_paid", draft.pk, paid_on="2026-10-01", method="cash")
+    draft.refresh_from_db()
+    assert (draft.status, draft.paid_on) == ("issued", None)
+
+
+def test_a_forged_void_changes_nothing(draft, view_only_client):
+    services.issue(draft)
+    _post(view_only_client, "void_invoices", draft.pk, reason="Forged")
+    draft.refresh_from_db()
+    assert (draft.status, draft.voided_at) == ("issued", None)
+
+
+def test_staff_with_change_permission_is_offered_and_runs_every_action(
+    draft, change_client
+):
+    resp = change_client.get(LIST, HTTP_HOST=PUBLIC_HOST)
+    assert _offered(resp) == INVOICE_ACTIONS
+    services.issue(draft)
+    _post(change_client, "mark_paid", draft.pk, paid_on="2026-10-01", method="cash")
+    draft.refresh_from_db()
+    assert draft.status == "paid"
+=== NEW etqan/tenants/tests/test_admin_permissions.py
+"""ETQAN-QA-002: the academy and domain admin actions change data, so a
+staff member who may only view academies is offered none of them, and a
+forged action POST changes nothing. A staff member with the change
+permission (not a superuser) still runs them. ETQAN-QA-013 extends the
+rule to every admin on the Etqan console."""
+
+import pytest
+from allauth.account.models import EmailAddress
+from django.apps import apps
+from django.contrib import admin
+from django.contrib.auth.models import Permission
+from django.db import connection
+from django.test import RequestFactory
+from django_celery_beat.admin import PeriodicTaskAdmin
+from django_celery_beat.models import IntervalSchedule
+from django_celery_beat.models import PeriodicTask
+
+from etqan.identity.models import User
+from etqan.tenants import services
+from etqan.tenants.models import Academy
+from etqan.tenants.models import Domain
+
+pytestmark = pytest.mark.django_db
+PUBLIC_HOST = "etqan.localhost"
+ACADEMY_ACTIONS = ("suspend_academies", "reactivate_academies", "copy_features")
+DOMAIN_ACTIONS = ("check_dns", "make_primary_action", "disable_action")
+
+
+def _staff(client, email: str, *codenames: str):
+    connection.set_schema_to_public()
+    user = User.objects.create_user(email=email, password="pw-12345678")
+    user.is_staff = True
+    user.save(update_fields=["is_staff"])
+    user.user_permissions.set(
+        Permission.objects.filter(
+            content_type__app_label="tenants", codename__in=codenames
+        )
+    )
+    client.force_login(user)
+    return client
+
+
+@pytest.fixture
+def view_only_client(client):
+    return _staff(client, "ops-view@etqan.test", "view_academy", "view_domain")
+
+
+@pytest.fixture
+def change_client(client):
+    return _staff(
+        client,
+        "ops-change@etqan.test",
+        "view_academy",
+        "change_academy",
+        "view_domain",
+        "change_domain",
+    )
+
+
+def _offered(resp) -> list[str]:
+    form = resp.context.get("action_form")
+    if form is None:
+        return []
+    return [value for value, _ in form.fields["action"].choices if value]
+
+
+def test_view_only_staff_is_offered_no_academy_action(view_only_client):
+    resp = view_only_client.get("/admin/tenants/academy/", HTTP_HOST=PUBLIC_HOST)
+    assert resp.status_code == 200
+    assert _offered(resp) == []
+
+
+def test_view_only_staff_is_offered_no_domain_action(view_only_client):
+    resp = view_only_client.get("/admin/tenants/domain/", HTTP_HOST=PUBLIC_HOST)
+    assert resp.status_code == 200
+    assert _offered(resp) == []
+
+
+@pytest.mark.parametrize("action", ["suspend_academies", "reactivate_academies"])
+def test_a_forged_status_action_changes_nothing(
+    view_only_client, tenants, restore_tenant_objects, action
+):
+    status = "active" if action == "suspend_academies" else "suspended"
+    connection.set_schema_to_public()
+    Academy.objects.filter(pk=tenants.other.pk).update(status=status)
+    view_only_client.post(
+        "/admin/tenants/academy/",
+        {"action": action, "_selected_action": [tenants.other.pk], "index": 0},
+        HTTP_HOST=PUBLIC_HOST,
+    )
+    connection.set_schema_to_public()
+    assert Academy.objects.get(pk=tenants.other.pk).status == status
+
+
+def test_a_forged_copy_features_changes_nothing(
+    view_only_client, tenants, restore_tenant_objects
+):
+    connection.set_schema_to_public()
+    Academy.objects.filter(pk=tenants.main.pk).update(features={"parents": False})
+    Academy.objects.filter(pk=tenants.other.pk).update(features={"parents": True})
+    view_only_client.post(
+        "/admin/tenants/academy/",
+        {
+            "action": "copy_features",
+            "copy_from": tenants.main.pk,
+            "_selected_action": [tenants.other.pk],
+            "index": 0,
+        },
+        HTTP_HOST=PUBLIC_HOST,
+    )
+    connection.set_schema_to_public()
+    assert Academy.objects.get(pk=tenants.other.pk).features == {"parents": True}
+
+
+def test_a_forged_domain_action_changes_nothing(view_only_client, tenants, monkeypatch):
+    connection.set_schema_to_public()
+    pending = services.add_custom_domain(tenants.other, "view-only.example")
+    monkeypatch.setattr(services, "check_domain_dns", lambda _d: (True, ["1.2.3.4"]))
+    for action in DOMAIN_ACTIONS:
+        view_only_client.post(
+            "/admin/tenants/domain/",
+            {"action": action, "_selected_action": [pending.pk], "index": 0},
+            HTTP_HOST=PUBLIC_HOST,
+        )
+    connection.set_schema_to_public()
+    pending.refresh_from_db()
+    assert pending.status == Domain.Status.PENDING
+    assert pending.is_primary is False
+
+
+def test_staff_with_change_permission_is_offered_every_action(change_client):
+    academies = change_client.get("/admin/tenants/academy/", HTTP_HOST=PUBLIC_HOST)
+    domains = change_client.get("/admin/tenants/domain/", HTTP_HOST=PUBLIC_HOST)
+    assert sorted(_offered(academies)) == sorted(ACADEMY_ACTIONS)
+    assert sorted(_offered(domains)) == sorted(DOMAIN_ACTIONS)
+
+
+def test_staff_with_change_permission_can_suspend(
+    change_client, tenants, restore_tenant_objects
+):
+    resp = change_client.post(
+        "/admin/tenants/academy/",
+        {"action": "suspend_academies", "_selected_action": [tenants.other.pk]},
+        HTTP_HOST=PUBLIC_HOST,
+    )
+    assert resp.status_code == 302
+    connection.set_schema_to_public()
+    assert Academy.objects.get(pk=tenants.other.pk).status == "suspended"
+
+
+# ETQAN-QA-013: the same rule for every admin on the Etqan console, the
+# third-party ones included (django-celery-beat, allauth).
+
+
+def _viewer_of_everything(email: str) -> User:
+    connection.set_schema_to_public()
+    user = User.objects.create_user(email=email, password="pw-12345678")
+    user.is_staff = True
+    user.save(update_fields=["is_staff"])
+    user.user_permissions.set(Permission.objects.filter(codename__startswith="view_"))
+    return User.objects.get(pk=user.pk)  # a fresh permission cache
+
+
+def test_view_only_staff_is_offered_no_action_on_any_registered_admin():
+    user = _viewer_of_everything("ops-view-all@etqan.test")
+    request = RequestFactory().get("/admin/", HTTP_HOST=PUBLIC_HOST)
+    request.user = user
+    registered = [m for m in apps.get_models() if admin.site.is_registered(m)]
+    assert PeriodicTask in registered
+    offered = {
+        model.__qualname__: sorted(actions)
+        for model in registered
+        if (actions := admin.site.get_model_admin(model).get_actions(request))
+    }
+    assert offered == {}
+
+
+@pytest.fixture
+def view_all_client(client):
+    client.force_login(_viewer_of_everything("ops-view-all@etqan.test"))
+    return client
+
+
+def test_a_forged_periodic_task_action_changes_nothing(view_all_client, monkeypatch):
+    connection.set_schema_to_public()
+    every = IntervalSchedule.objects.create(every=1, period=IntervalSchedule.DAYS)
+    task = PeriodicTask.objects.create(
+        name="qa-013 probe", task="etqan.qa013.probe", interval=every, enabled=False
+    )
+    sent = []
+    monkeypatch.setattr(PeriodicTaskAdmin, "run_tasks", lambda *args: sent.append(args))
+    for action in ("enable_tasks", "toggle_tasks", "run_tasks"):
+        view_all_client.post(
+            "/admin/django_celery_beat/periodictask/",
+            {"action": action, "_selected_action": [task.pk], "index": 0},
+            HTTP_HOST=PUBLIC_HOST,
+        )
+    task.refresh_from_db()
+    assert task.enabled is False
+    assert sent == []
+
+
+def test_a_forged_make_verified_changes_nothing(view_all_client):
+    connection.set_schema_to_public()
+    person = User.objects.create_user(email="unverified@etqan.test", password="x")
+    address = EmailAddress.objects.create(
+        user=person, email=person.email, verified=False, primary=True
+    )
+    view_all_client.post(
+        "/admin/account/emailaddress/",
+        {"action": "make_verified", "_selected_action": [address.pk], "index": 0},
+        HTTP_HOST=PUBLIC_HOST,
+    )
+    address.refresh_from_db()
+    assert address.verified is False
+
+
+def test_staff_with_change_permission_keeps_the_third_party_actions():
+    connection.set_schema_to_public()
+    user = User.objects.create_user(email="ops-beat@etqan.test", password="x")
+    user.is_staff = True
+    user.save(update_fields=["is_staff"])
+    user.user_permissions.set(
+        Permission.objects.filter(
+            codename__in=[
+                "view_periodictask",
+                "change_periodictask",
+                "view_emailaddress",
+                "change_emailaddress",
+            ]
+        )
+    )
+    request = RequestFactory().get("/admin/", HTTP_HOST=PUBLIC_HOST)
+    request.user = User.objects.get(pk=user.pk)
+    beat = admin.site.get_model_admin(PeriodicTask).get_actions(request)
+    emails = admin.site.get_model_admin(EmailAddress).get_actions(request)
+    assert sorted(beat) == [
+        "disable_tasks",
+        "enable_tasks",
+        "run_tasks",
+        "toggle_tasks",
+    ]
+    assert sorted(emails) == ["make_verified"]
+=== NEW etqan/tenants/tests/test_admin_stale_change.py
+"""ETQAN-QA-014: an academy change page saved after the academy changed
+elsewhere (suspended, its defaults suspended, a feature switched off by
+`set_features`) writes only what its user changed on the page; the newer
+values of everything else stay."""
+
+from html.parser import HTMLParser
+
+import pytest
+from django.contrib.admin.models import LogEntry
+from django.core.management import call_command
+from django.db import connection
+
+from etqan.identity.models import User
+from etqan.tenants.models import Academy
+
+pytestmark = pytest.mark.django_db
+PUBLIC_HOST = "etqan.localhost"
+
+
+class _Form(HTMLParser):
+    """What a browser posts for the page's academy form: named inputs, a
+    checked box as "on", a select's chosen option, a textarea's text."""
+
+    def __init__(self):
+        super().__init__()
+        self.data: dict[str, str] = {}
+        self._inside = False
+        self._select: str | None = None
+        self._textarea: str | None = None
+
+    def handle_starttag(self, tag, attrs):
+        attr = dict(attrs)
+        if tag == "form":
+            self._inside = attr.get("id") == "academy_form"
+        if not self._inside:
+            return
+        if tag == "option":
+            if self._select and "selected" in attr:
+                self.data[self._select] = attr.get("value") or ""
+        elif tag == "input" and "name" in attr:
+            self._input(attr)
+        elif tag == "select" and "name" in attr:
+            self._select = attr["name"]
+        elif tag == "textarea" and "name" in attr:
+            self._textarea = attr["name"]
+            self.data[attr["name"]] = ""
+
+    def _input(self, attr):
+        kind = attr.get("type", "text")
+        if kind == "submit" or (kind == "checkbox" and "checked" not in attr):
+            return
+        default = "on" if kind == "checkbox" else ""
+        self.data[attr["name"]] = attr.get("value") or default
+
+    def handle_endtag(self, tag):
+        if tag == "form":
+            self._inside = False
+        elif tag == "select":
+            self._select = None
+        elif tag == "textarea":
+            self._textarea = None
+
+    def handle_data(self, data):
+        if self._textarea:
+            self.data[self._textarea] += data.removeprefix("\n")
+
+
+def page_data(resp) -> dict:
+    parser = _Form()
+    parser.feed(resp.content.decode())
+    return parser.data
+
+
+@pytest.fixture
+def staff_client(client):
+    connection.set_schema_to_public()
+    staff = User.objects.create_superuser(
+        email="ops14@etqan.test", password="pw-12345678"
+    )
+    client.force_login(staff)
+    return client
+
+
+@pytest.fixture
+def academy(tenants, restore_tenant_objects):
+    connection.set_schema_to_public()
+    Academy.objects.filter(pk=tenants.other.pk).update(
+        status="active",
+        etqan_defaults_suspended=False,
+        features={"families": True},
+        plan_notes="",
+    )
+    return tenants.other
+
+
+def url(academy) -> str:
+    return f"/admin/tenants/academy/{academy.pk}/change/"
+
+
+def changed_elsewhere(academy) -> None:
+    """Tab B: suspended, its defaults suspended, families switched off."""
+    Academy.objects.filter(pk=academy.pk).update(
+        status="suspended", etqan_defaults_suspended=True
+    )
+    call_command("set_features", academy.subdomain, "--off", "families")
+
+
+def test_a_stale_page_writes_only_what_its_user_changed(staff_client, academy):
+    stale = page_data(staff_client.get(url(academy), HTTP_HOST=PUBLIC_HOST))
+    assert stale["status"] == "active"
+    assert "feature_families" in stale
+    changed_elsewhere(academy)
+
+    stale["plan_notes"] = "Called the owner."
+    resp = staff_client.post(url(academy), stale, HTTP_HOST=PUBLIC_HOST)
+
+    assert resp.status_code == 302, resp.context["adminform"].form.errors
+    row = Academy.objects.get(pk=academy.pk)
+    assert row.plan_notes == "Called the owner."
+    assert row.status == "suspended"
+    assert row.etqan_defaults_suspended is True
+    assert row.features["families"] is False
+    entry = LogEntry.objects.filter(object_id=str(academy.pk)).latest("pk")
+    assert entry.get_change_message() == "Changed Plan notes."
+
+
+def test_what_the_user_did_change_on_a_stale_page_is_saved(staff_client, academy):
+    stale = page_data(staff_client.get(url(academy), HTTP_HOST=PUBLIC_HOST))
+    changed_elsewhere(academy)
+
+    stale["status"] = "suspended"  # the same as now: nothing to undo
+    stale["name"] = "Renamed on the stale page"
+    del stale["feature_families"]  # switched off here too
+    stale["feature_supervision"] = "on"
+    resp = staff_client.post(url(academy), stale, HTTP_HOST=PUBLIC_HOST)
+
+    assert resp.status_code == 302, resp.context["adminform"].form.errors
+    row = Academy.objects.get(pk=academy.pk)
+    assert row.name == "Renamed on the stale page"
+    assert row.status == "suspended"
+    assert row.etqan_defaults_suspended is True
+    assert row.features == {"families": False, "supervision": True}
+
+
+def test_a_fresh_page_still_reactivates_and_lifts_the_suspension(staff_client, academy):
+    changed_elsewhere(academy)
+    fresh = page_data(staff_client.get(url(academy), HTTP_HOST=PUBLIC_HOST))
+    fresh["status"] = "active"
+    del fresh["etqan_defaults_suspended"]
+    fresh["feature_families"] = "on"
+    resp = staff_client.post(url(academy), fresh, HTTP_HOST=PUBLIC_HOST)
+
+    assert resp.status_code == 302, resp.context["adminform"].form.errors
+    row = Academy.objects.get(pk=academy.pk)
+    assert (row.status, row.etqan_defaults_suspended) == ("active", False)
+    assert row.features["families"] is True
+
+
+def test_an_untouched_stale_suspend_box_is_not_checked_again(staff_client, academy):
+    """The page showed the defaults suspended; they were lifted since. Saving
+    the page untouched neither re-suspends nor refuses (no unpaid invoice)."""
+    Academy.objects.filter(pk=academy.pk).update(etqan_defaults_suspended=True)
+    stale = page_data(staff_client.get(url(academy), HTTP_HOST=PUBLIC_HOST))
+    assert stale["etqan_defaults_suspended"] == "on"
+    Academy.objects.filter(pk=academy.pk).update(etqan_defaults_suspended=False)
+
+    resp = staff_client.post(url(academy), stale, HTTP_HOST=PUBLIC_HOST)
+
+    assert resp.status_code == 302, resp.context["adminform"].form.errors
+    assert Academy.objects.get(pk=academy.pk).etqan_defaults_suspended is False

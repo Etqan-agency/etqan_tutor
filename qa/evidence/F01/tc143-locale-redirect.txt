@@ -1,0 +1,3 @@
+AL='' / -> 302 http://qa.etqan.localhost/ar/
+AL='en-US,en;q=0.9' / -> 302 http://qa.etqan.localhost/en/
+AL='ar' / -> 302 http://qa.etqan.localhost/ar/

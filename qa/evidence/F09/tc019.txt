@@ -1,0 +1,61 @@
+== TC-019 2026-10-19T03:40:13.030460
+batch {"kind": "discount", "quantity": 3, "valid_days": 30, "discount_kind": "percent", "discount_value": 15} 201 {"id": 1, "kind": "discount", "course": null, "package": null, "teacher": null, "sessions_total": null, "discount": {"kind": "percent", "value": 15, "currency": ""}, "valid_days": 30, "expires_on": "2026-11-17", "quantity": 3, "note": "", "created_by": {"id": 1, "full_name": "QA Admin"}, "created_at
+batch {"kind": "discount", "quantity": 2, "valid_days": 1, "discount_kind": "fixed", "discount_value": 20000, "currency": "EGP"} 201 {"id": 2, "kind": "discount", "course": null, "package": null, "teacher": null, "sessions_total": null, "discount": {"kind": "fixed", "value": 20000, "currency": "EGP"}, "valid_days": 1, "expires_on": "2026-10-19", "quantity": 2, "note": "", "created_by": {"id": 1, "full_name": "QA Admin"}, "created
+batch {"kind": "activation", "quantity": 3, "valid_days": 30, "course": 2, "package": 2, "teacher": 7} 201 {"id": 3, "kind": "activation", "course": {"id": 2, "name_en": "Tajweed QA", "name_ar": "تجويد"}, "package": {"id": 2, "name_en": "Monthly QA", "name_ar": "شهري"}, "teacher": {"id": 7, "full_name": "QA teacher"}, "sessions_total": 8, "discount": null, "valid_days": 30, "expires_on": "2026-11-17", "q
+batch {"kind": "renewal", "quantity": 2, "valid_days": 30, "course": 2, "package": 2} 201 {"id": 4, "kind": "renewal", "course": {"id": 2, "name_en": "Tajweed QA", "name_ar": "تجويد"}, "package": {"id": 2, "name_en": "Monthly QA", "name_ar": "شهري"}, "teacher": null, "sessions_total": 8, "discount": null, "valid_days": 30, "expires_on": "2026-11-17", "quantity": 2, "note": "", "created_b
+batch {"kind": "discount", "quantity": 2, "valid_days": 30, "discount_kind": "percent", "discount_value": 1} 201 {"id": 5, "kind": "discount", "course": null, "package": null, "teacher": null, "sessions_total": null, "discount": {"kind": "percent", "value": 1, "currency": ""}, "valid_days": 30, "expires_on": "2026-11-17", "quantity": 2, "note": "", "created_by": {"id": 1, "full_name": "QA Admin"}, "created_at"
+bad {"kind": "discount", "quantity": 0, "valid_days": 30, "discount_kind": "percent", "discount_value": 15} 400 {"quantity": ["Make 1 to 500 codes at a time."]}
+OK  TC019 refusal 400
+bad {"kind": "discount", "quantity": 501, "valid_days": 30, "discount_kind": "percent", "discount_value": 15} 400 {"quantity": ["Make 1 to 500 codes at a time."]}
+OK  TC019 refusal 400
+bad {"kind": "discount", "quantity": 1, "valid_days": 0, "discount_kind": "percent", "discount_value": 15} 400 {"valid_days": ["Make the codes valid for 1 to 3650 days."]}
+OK  TC019 refusal 400
+bad {"kind": "discount", "quantity": 1, "valid_days": 3651, "discount_kind": "percent", "discount_value": 15} 400 {"valid_days": ["Make the codes valid for 1 to 3650 days."]}
+OK  TC019 refusal 400
+bad {"kind": "discount", "quantity": 1, "valid_days": 30, "discount_kind": "percent", "discount_value": 0} 400 {"discount_value": ["Enter a percentage from 1 to 100."]}
+OK  TC019 refusal 400
+bad {"kind": "discount", "quantity": 1, "valid_days": 30, "discount_kind": "percent", "discount_value": 101} 400 {"discount_value": ["Enter a percentage from 1 to 100."]}
+OK  TC019 refusal 400
+bad {"kind": "discount", "quantity": 1, "valid_days": 30, "discount_kind": "percent", "discount_value": 12.5} 400 {"discount_value": ["A valid integer is required."]}
+OK  TC019 refusal 400
+bad {"kind": "discount", "quantity": 1, "valid_days": 30, "discount_kind": "fixed", "discount_value": 100} 400 {"currency": ["Use a three-letter currency code, like EGP."]}
+OK  TC019 refusal 400
+bad {"kind": "discount", "quantity": 1, "valid_days": 30, "discount_kind": "fixed", "discount_value": 100000001, "currency": "EGP"} 400 {"discount_value": ["Enter an amount from 1 to 100000000 minor units."]}
+OK  TC019 refusal 400
+bad {"kind": "discount", "quantity": 1, "valid_days": 30, "discount_kind": "percent", "discount_value": 10, "currency": "EGP"} 400 {"currency": ["A percentage takes no currency."]}
+OK  TC019 refusal 400
+bad {"kind": "activation", "quantity": 1, "valid_days": 30, "course": 2, "package": 2} 400 {"teacher": ["Choose a teacher."]}
+OK  TC019 refusal 400
+bad {"kind": "renewal", "quantity": 1, "valid_days": 30, "course": 2, "package": 2, "teacher": 7} 201 {"id": 6, "kind": "renewal", "course": {"id": 2, "name_en": "Tajweed QA", "name_ar": "تجويد"}, "package": {"id": 2, "name_en": "Monthly QA", "name_ar": "شهري"},
+BAD TC019 refusal 400
+bad {"kind": "activation", "quantity": 1, "valid_days": 30, "course": 1, "package": 2, "teacher": 16} 201 {"id": 7, "kind": "activation", "course": {"id": 1, "name_en": "F03 Quran", "name_ar": "F03 قرآن"}, "package": {"id": 2, "name_en": "Monthly QA", "name_ar": "شه
+BAD TC019 refusal 400
+bad {"kind": "nope", "quantity": 1, "valid_days": 30} 400 {"kind": ["\"nope\" is not a valid choice."]}
+OK  TC019 refusal 400
+DB batches 1|discount|3|2026-11-17|percent|15|
+2|discount|2|2026-10-19|fixed|20000|EGP
+3|activation|3|2026-11-17||0|
+4|renewal|2|2026-11-17||0|
+5|discount|2|2026-11-17|percent|1|
+6|renewal|1|2026-11-17||0|
+7|activation|1|2026-11-17||0|
+expiry check 1|t
+2|t
+3|t
+4|t
+5|t
+6|t
+7|t
+codes 14|14|14
+list unused discount 200 7
+sample {"id": 12, "code": "SYS-8TGV0-FXGM5", "kind": "discount", "state": "unused", "batch": {"id": 5, "note": ""}, "course": null, "package": null, "teacher": null, "sessions_total": null, "discount": {"kind": "percent", "value": 1, "currency": ""}, "expires_on": "2026-11-17", "redeemed_at": null, "redeem
+csv 200 ﻿Code,Type,Course,Package,Teacher,Discount type,Discount value,Discount currency,Expires on,Status,Redeemed at,Student,Batch note,Void reason | SYS-V8AK4-HX1ZE,activation,F03 Quran,Monthly QA,F02 Teach
+by code 200 1
+OK  TC019 void unused :: {"id": 3, "code": "SYS-XB0YF-46DWY", "kind": "discount", "state": "void", "batch": {"id": 1, "note": ""}, "course": null, "package": null, "teacher": 
+OK  TC019 void again 409 :: {"detail": "Only an unused code can be voided.", "code": "vouchers.not_unused"}
+throttle codes [400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 429, 429]
+OK  TC019 21st attempt 429 :: 20
+unknown vs void 400 {"code": "vouchers.invalid"} 400 {"code": "vouchers.invalid"}
+OK  TC019 unknown and void answer identically
+TC019 activation teacher not on course 400 {"teacher": ["This teacher does not teach the course."]}
+OK  TC019 teacher not on course 400

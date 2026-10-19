@@ -1,0 +1,8 @@
+$ 2026-10-18T21:43:18Z playwright test e2e/qa/f01-gap.spec.ts --grep TC-169 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-gap.spec.ts:110:1 › TC-169 Add-academy POST abandoned by the browser mid-provision (34.4s)
+
+  1 passed (35.1s)
+exit=0 2026-10-18T21:43:54Z

@@ -1,0 +1,77 @@
+﻿Date,Customer,Customer type,Invoice,Method,Transaction number,Amount (minor units),Fee (minor units),Currency,Status
+2026-10-19,SCN Student A1,student,INV-000146,cash,,29899,0,EGP,completed
+2026-10-19,SCN Student A2,student,INV-000147,cash,,150000,0,EGP,completed
+2026-10-19,SCN Student A1,student,INV-000146,cash,,1,0,EGP,completed
+2026-10-19,SCN Student A1,student,INV-000146,wallet,,40000,0,EGP,completed
+2026-10-19,SCN Student A1,student,,cash,,40000,0,EGP,completed
+2026-10-19,SCN Student A1,student,INV-000146,cash,,100,0,EGP,completed
+2026-10-19,SCN Student A1,student,INV-000146,cash,,50000,0,EGP,completed
+2026-10-19,SCN Student A1,student,INV-000146,wallet,,30000,0,EGP,completed
+2026-10-19,SCN Student A1,student,,cash,,30000,0,EGP,completed
+2026-10-19,QA student,student,INV-000095,stripe,pi_sim_80a131aa8bad47768161094937232b3a,30000,1500,EGP,completed
+2026-10-19,QA student,student,INV-000094,code,,2000,0,EGP,completed
+2026-10-19,QA student,student,INV-000092,cash,,10000,0,EGP,completed
+2026-10-19,QA student,student,INV-000091,cash,,10000,0,EGP,completed
+2026-10-19,QA student,student,INV-000090,cash,,10000,0,EGP,completed
+2026-10-19,QA student,student,INV-000089,cash,,10000,0,EGP,completed
+2026-10-19,QA student,student,INV-000088,cash,,10000,0,EGP,completed
+2026-10-19,QA student,student,,cash,,30000,0,EGP,completed
+2026-10-19,QA student,student,INV-000087,stripe,pi_sim_bc7f8e4c1af245d5b6ffa75f138bd52e,30000,1500,EGP,completed
+2026-10-19,QA student,student,INV-000086,code,,2000,0,EGP,completed
+2026-10-19,QA student,student,INV-000084,stripe,pi_sim_4f4280ff06164bdbb7cf31e40899947a,30000,1500,EGP,completed
+2026-10-19,QA student,student,INV-000083,code,,2000,0,EGP,completed
+2026-10-19,QA student,student,INV-000082,code,,2000,0,EGP,completed
+2026-10-19,QA student,student,INV-000073,cash,,12345,0,KWD,completed
+2026-10-19,QA student,student,INV-000008,cash,,5050,0,USD,completed
+2026-10-19,QA student,student,INV-000001,wallet,,42000,0,EGP,credited
+2026-10-19,QA student,student,INV-000070,paypal,CAP-SIM-663A4D3952A84AC4A,5000,250,USD,completed
+2026-10-19,QA student,student,,stripe,pi_sim_aed9a34ff7754eeea735a5e116da81c2,7000,350,EGP,completed
+2026-10-19,QA student,student,,stripe,pi_sim_706317f722c449a398a1e9bfc1b24f0a,10000,500,EGP,refunded
+2026-10-19,QA student,student,,stripe,pi_sim_3e526c7c50a94cefb03693a4200f6606,25000,1250,EGP,completed
+2026-10-19,QA student,student,INV-000048,stripe,pi_sim_16d774b7cb0a48b38cd2aa864e630877,50000,2500,EGP,completed
+2026-10-19,QA student,student,INV-000068,stripe,pi_sim_f61eae0df79d4a56a8afd18c0e41c96e,5000,250,EGP,completed
+2026-10-19,QA student,student,INV-000066,stripe,pi_sim_0ad33e3c692a4a89b260ac1edd0c2156,50000,2500,EGP,completed
+2026-10-19,QA student,student,INV-000065,stripe,pi_sim_616394968c90489b93bdfbba2b228957,50000,2500,EGP,completed
+2026-10-19,QA student,student,INV-000063,cash,,20000,0,EGP,completed
+2026-10-19,QA student,student,INV-000060,stripe,pi_f09_8,50000,2500,EGP,completed
+2026-10-19,QA student,student,INV-000056,stripe,pi_f09_1,50000,2500,EGP,completed
+2026-10-19,QA student,student,INV-000048,stripe,pi_sim_c5d344ffc3f54882855702e4a7d31fa0,50000,2500,EGP,refunded
+2026-10-19,QA student,student,INV-000047,code,,150000,0,EGP,completed
+2026-10-19,QA student,student,INV-000046,code,,150000,0,EGP,completed
+2026-10-19,QA student,student,INV-000045,code,,150000,0,EGP,completed
+2026-10-19,QA student,student,INV-000043,code,,3000,0,EGP,completed
+2026-10-19,QA student,student,INV-000042,code,,20000,0,EGP,completed
+2026-10-19,QA student,student,INV-000038,code,,5000,0,EGP,completed
+2026-10-19,QA student,student,INV-000037,code,,1,0,EGP,completed
+2026-10-19,QA student,student,INV-000036,code,,1508,0,EGP,completed
+2026-10-19,QA student,student,INV-000038,cash,,45000,0,EGP,completed
+2026-10-19,QA student,student,INV-000035,wallet,,10000,0,EGP,credited
+2026-10-19,QA student,student,INV-000035,cash,,10000,0,EGP,credited
+2026-10-19,QA student,student,,cash,,20000,0,EGP,completed
+2026-10-19,QA student,student,INV-000034,cash,,10000,0,EGP,completed
+2026-10-19,QA student,student,INV-000025,wallet,,5000,0,EGP,completed
+2026-10-19,QA student,student,INV-000033,wallet,,10000,0,EGP,completed
+2026-10-19,QA student,student,,cash,,20000,0,EGP,completed
+2026-10-19,QA student,student,INV-000031,wallet,,10000,0,EGP,completed
+2026-10-19,QA student,student,,cash,,10000,0,EGP,completed
+2026-10-19,QA student,student,INV-000026,wallet,,2500,0,USD,completed
+2026-10-19,QA student,student,INV-000025,wallet,,10000,0,EGP,completed
+2026-10-19,QA student,student,INV-000024,wallet,,30000,0,EGP,completed
+2026-10-19,QA student,student,INV-000028,cash,,1000,0,EGP,completed
+2026-10-19,QA student,student,,cash,,5,0,EGP,completed
+2026-10-19,QA student,student,,cash,,100000000,0,EGP,refunded
+2026-10-19,QA student,student,,zelle,,2500,0,USD,completed
+2026-10-19,QA student,student,,cash,,50000,0,EGP,completed
+2026-10-19,Walk In 2,unregistered,,western_union,,8000,0,USD,completed
+2026-10-19,QA student,student,,cash,TN-F09-1,16000,0,EGP,refunded
+2026-10-19,QA student,student,INV-000023,instapay,,20000,0,EGP,refunded
+2026-10-19,QA student,student,INV-000022,cash,,5000,0,EGP,refunded
+2026-10-19,QA student,student,INV-000021,cash,,5000,0,EGP,completed
+2026-10-19,QA student,student,INV-000020,cash,,1000,0,EGP,completed
+2026-10-19,QA student,student,INV-000017,cash,,6000,0,EGP,completed
+2026-10-19,QA student,student,INV-000017,cash,,4000,0,EGP,completed
+2026-10-19,QA student,student,INV-000016,instapay,,1,0,EGP,completed
+2026-10-19,QA student,student,INV-000016,cash,,20000,0,EGP,completed
+2026-10-19,QA student,student,INV-000003,cash,,2500,0,USD,completed
+2026-10-19,QA student,student,INV-000001,cash,,50000,0,EGP,completed
+2026-09-19,QA student,student,INV-000016,bank_transfer,,29999,0,EGP,completed

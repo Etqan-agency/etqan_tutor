@@ -1,0 +1,8 @@
+registration imports only the platform and identity's services KEPT (12 ignored imports)
+translations imports only the platform KEPT
+ai reaches other apps only through their services KEPT (78 ignored imports)
+other apps reach ai only through its services KEPT
+devices reaches other apps only through their services KEPT (27 ignored imports)
+no app imports devices KEPT
+
+Contracts: 54 kept, 0 broken.

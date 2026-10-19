@@ -1,0 +1,329 @@
+$ 2026-10-18T21:45:21Z playwright test e2e/qa/f01-login-csrf.spec.ts e2e/tenant-login.spec.ts e2e/b9-sign-in.spec.ts --workers=1 --retries=0
+
+Running 9 tests using 1 worker
+
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+  ✓  1 [chromium] › e2e/b9-sign-in.spec.ts:143:2 › B9b sign-in › a student by phone › a student signs in by phone (7.2s)
+  ✓  2 [chromium] › e2e/b9-sign-in.spec.ts:177:2 › B9b sign-in › a student by phone › an admin signs in as a student and returns (3.0s)
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+  ✓  3 [chromium] › e2e/b9-sign-in.spec.ts:57:2 › B9b sign-in › a teacher turns on two-factor and signs in with a code (23.9s)
+  ✓  4 [chromium] › e2e/b9-sign-in.spec.ts:197:2 › B9b sign-in › an emailed sign-in link works once (8.4s)
+  ✓  5 [chromium] › e2e/qa/f01-login-csrf.spec.ts:10:1 › QA-006 a fresh browser signs in through the dashboard (1.4s)
+  ✓  6 [chromium] › e2e/qa/f01-login-csrf.spec.ts:38:1 › QA-006 a form on another page cannot sign the browser in (237ms)
+  ✓  7 [chromium] › e2e/tenant-login.spec.ts:12:2 › academies › an academy admin signs in on their own academy (1.4s)
+  ✓  8 [chromium] › e2e/tenant-login.spec.ts:17:2 › academies › an admin of one academy cannot sign in on another (1.4s)
+  ✓  9 [chromium] › e2e/tenant-login.spec.ts:23:2 › academies › each academy keeps its own session (2.4s)
+
+  9 passed (56.4s)
+exit=0 2026-10-18T21:46:17Z
+
+$ 2026-10-18T21:46:17Z playwright test e2e/qa/f01-retest2.spec.ts --workers=1 --retries=0
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-retest2.spec.ts:26:1 › R2-TC-151 view-only staff are offered no action on any console list (1.0s)
+  ✘  2 [chromium] › e2e/qa/f01-retest2.spec.ts:58:1 › R2-TC-152 a stale change page in a second tab undoes nothing (1.9s)
+
+
+  1) [chromium] › e2e/qa/f01-retest2.spec.ts:58:1 › R2-TC-152 a stale change page in a second tab undoes nothing 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+        "families": true,
+    -   "status": "active",
+    +   "status": "suspended",
+      }
+
+       99 | 	await context.close();
+      100 |
+    > 101 | 	expect(shownA).toEqual({ status: "active", families: true });
+          | 	               ^
+      102 | 	expect(suspendMsg).toContain("Suspended 1 academies.");
+      103 | 	expect(tabAMsg).toMatch(/was changed successfully/);
+      104 | 	expect(after).toEqual({ status: "suspended", families: false, planNotes: "QA-R2-UI-stale-edit" });
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-retest2.spec.ts:101:17
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/g2-pwout/qa-f01-retest2-R2-TC-152-a-0e828-a-second-tab-undoes-nothing-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/g2-pwout/qa-f01-retest2-R2-TC-152-a-0e828-a-second-tab-undoes-nothing-chromium/test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/g2-pwout/qa-f01-retest2-R2-TC-152-a-0e828-a-second-tab-undoes-nothing-chromium/error-context.md
+
+  1 failed
+    [chromium] › e2e/qa/f01-retest2.spec.ts:58:1 › R2-TC-152 a stale change page in a second tab undoes nothing 
+  1 passed (3.4s)
+exit=1 2026-10-18T21:46:21Z
+
+$ 2026-10-18T21:46:21Z playwright test e2e/qa/f01-console.spec.ts --grep TC-064 suspend --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:63:1 › TC-064 suspend qa-tmp-1 with the admin action (755ms)
+
+  1 passed (1.2s)
+exit=0 2026-10-18T21:46:23Z
+
+$ 2026-10-18T21:46:23Z playwright test e2e/qa/f01-console.spec.ts --grep TC-071  --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:74:1 › TC-071 the suspended academy's dashboard login (5.0s)
+
+  1 passed (5.5s)
+exit=0 2026-10-18T21:46:29Z
+
+$ 2026-10-18T21:46:29Z playwright test e2e/qa/f01-console.spec.ts --grep TC-072  --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:98:1 › TC-072 reactivate qa-tmp-1 (677ms)
+
+  1 passed (1.2s)
+exit=0 2026-10-18T21:46:30Z
+
+$ 2026-10-18T21:46:30Z playwright test e2e/qa/f01-console.spec.ts --grep TC-074 suspend --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:108:1 › TC-074 suspend through the change form's status field (777ms)
+
+  1 passed (1.2s)
+exit=0 2026-10-18T21:46:32Z
+
+$ 2026-10-18T21:46:32Z playwright test e2e/qa/f01-console.spec.ts --grep TC-074b --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:120:1 › TC-074b reactivate through the change form (753ms)
+
+  1 passed (1.2s)
+exit=0 2026-10-18T21:46:33Z
+
+$ 2026-10-18T21:46:33Z playwright test e2e/qa/f01-console.spec.ts --grep TC-073/075 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:129:1 › TC-073/075/127/137 public rows hidden, no deletes, forged actions (1.4s)
+
+  1 passed (1.9s)
+exit=0 2026-10-18T21:46:36Z
+
+$ 2026-10-18T21:46:36Z playwright test e2e/qa/f01-console.spec.ts --grep TC-133 a view-only --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:167:1 › TC-133 a view-only Etqan staff member can't change anything (1.3s)
+
+  1 passed (1.8s)
+exit=0 2026-10-18T21:46:38Z
+
+$ 2026-10-18T21:46:38Z playwright test e2e/qa/f01-console.spec.ts --grep TC-134 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:198:1 › TC-134 is_staff with no permissions sees nothing (618ms)
+
+  1 passed (1.1s)
+exit=0 2026-10-18T21:46:39Z
+
+$ 2026-10-18T21:46:39Z playwright test e2e/qa/f01-console.spec.ts --grep TC-135 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:209:1 › TC-135 anonymous admin URLs redirect to the login (35ms)
+
+  1 passed (400ms)
+exit=0 2026-10-18T21:46:40Z
+
+$ 2026-10-18T21:46:40Z playwright test e2e/qa/f01-console.spec.ts --grep TC-064 suspend --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:63:1 › TC-064 suspend qa-tmp-1 with the admin action (734ms)
+
+  1 passed (1.2s)
+exit=0 2026-10-18T21:46:42Z
+
+$ 2026-10-18T21:46:42Z playwright test e2e/qa/f01-features-admin.spec.ts --grep TC-125 feature --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:24:1 › TC-125 feature fieldsets on qaother; tick only Chat (895ms)
+
+  1 passed (1.4s)
+exit=0 2026-10-18T21:46:43Z
+
+$ 2026-10-18T21:46:43Z playwright test e2e/qa/f01-features-admin.spec.ts --grep TC-125b --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:50:1 › TC-125b untick Chat on qaother (687ms)
+
+  1 passed (1.2s)
+exit=0 2026-10-18T21:46:45Z
+
+$ 2026-10-18T21:46:45Z playwright test e2e/qa/f01-features-admin.spec.ts --grep TC-126 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:59:1 › TC-126 copy features from qa to qa-tmp-1 (1.0s)
+
+  1 passed (1.5s)
+exit=0 2026-10-18T21:46:47Z
+
+$ 2026-10-18T21:46:47Z playwright test e2e/qa/f01-features-admin.spec.ts --grep TC-076 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:89:1 › TC-076 suspending Etqan's defaults with no unpaid invoice is refused (703ms)
+
+  1 passed (1.2s)
+exit=0 2026-10-18T21:46:48Z
+
+$ 2026-10-18T21:46:48Z playwright test e2e/qa/f01-features-admin.spec.ts --grep TC-080 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:110:1 › TC-080 lifting the defaults suspension is always allowed (703ms)
+
+  1 passed (1.2s)
+exit=0 2026-10-18T21:46:50Z
+
+$ 2026-10-18T21:46:50Z playwright test e2e/qa/f01-features-admin.spec.ts --grep TC-055 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:116:1 › TC-055 edit timezone on the change page (940ms)
+
+  1 passed (1.4s)
+exit=0 2026-10-18T21:46:52Z
+
+$ 2026-10-18T21:46:52Z playwright test e2e/qa/f01-features-admin.spec.ts --grep TC-025 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:125:1 › TC-025 a forged subdomain on the change form is ignored (686ms)
+
+  1 passed (1.2s)
+exit=0 2026-10-18T21:46:53Z
+
+$ 2026-10-18T21:46:53Z playwright test e2e/qa/f01-dashboard.spec.ts --grep TC-051 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:22:1 › TC-051 Settings shows Cairo and EGP (3.1s)
+
+  1 passed (3.6s)
+exit=0 2026-10-18T21:46:57Z
+
+$ 2026-10-18T21:46:57Z playwright test e2e/qa/f01-dashboard.spec.ts --grep TC-128 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:34:1 › TC-128 Settings → Features is read-only and matches the API (22.5s)
+
+  1 passed (23.0s)
+exit=0 2026-10-18T21:47:20Z
+
+$ 2026-10-18T21:47:20Z playwright test e2e/qa/f01-dashboard.spec.ts --grep TC-129 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:61:1 › TC-129/130 families off on qa: nav and direct URL; data kept (10.3s)
+
+  1 passed (10.8s)
+exit=0 2026-10-18T21:47:32Z
+
+$ 2026-10-18T21:47:32Z playwright test e2e/qa/f01-dashboard.spec.ts --grep TC-143 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:83:1 › TC-143 the new academy's public site renders with defaults (139ms)
+
+
+  1) [chromium] › e2e/qa/f01-dashboard.spec.ts:83:1 › TC-143 the new academy's public site renders with defaults 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 502
+
+      89 | 	await page.screenshot({ path: `${EVIDENCE}/tc143-public-site.png`, fullPage: true });
+      90 | 	save("tc143-public-site.json", { status: res?.status(), url: page.url(), dir, body: body.slice(0, 800) });
+    > 91 | 	expect(res?.status()).toBe(200);
+         | 	                      ^
+      92 | 	expect(dir).toBe("rtl");
+      93 | 	expect(body).toContain("تعلّم مع أفضل المعلمين");
+      94 | 	expect(body).toContain(QA.name);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f01-dashboard.spec.ts:91:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../../private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/g2-pwout/qa-f01-dashboard-TC-143-th-da172--site-renders-with-defaults-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../../private/tmp/claude-501/-Users-khaledsakr-Documents-Etqan-tutor/55afddca-abb7-4698-b08b-38df7f0acb0e/scratchpad/g2-pwout/qa-f01-dashboard-TC-143-th-da172--site-renders-with-defaults-chromium/error-context.md
+
+  1 failed
+    [chromium] › e2e/qa/f01-dashboard.spec.ts:83:1 › TC-143 the new academy's public site renders with defaults 
+exit=1 2026-10-18T21:47:33Z
+
+$ 2026-10-18T21:47:33Z playwright test e2e/qa/f01-dashboard.spec.ts --grep TC-100 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:97:1 › TC-100 the SPA on an unknown academy host (6.0s)
+
+  1 passed (6.5s)
+exit=0 2026-10-18T21:47:39Z
+
+$ 2026-10-18T21:47:39Z playwright test e2e/qa/f01-dashboard.spec.ts --grep TC-141 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:118:2 › TC-141 Arabic set-password page › RTL, keyboard order, announced error (3.1s)
+
+  1 passed (3.6s)
+exit=0 2026-10-18T21:47:43Z
+
+# done 2026-10-18T21:47:43Z
+# --- reruns after investigation ---
+$ 2026-10-18T21:49:26Z [rerun after marketing container recovery, marketing-recovery.txt] playwright test e2e/qa/f01-dashboard.spec.ts --grep TC-143 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:83:1 › TC-143 the new academy's public site renders with defaults (909ms)
+
+  1 passed (1.6s)
+exit=0 2026-10-18T21:49:28Z
+
+$ 2026-10-18T21:49:41Z [R2-TC-152 rerun with precondition qa-tmp-1 active; r2-tc152-rerun.txt] playwright test e2e/qa/f01-retest2.spec.ts --grep R2-TC-152 --workers=1 --retries=0
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-retest2.spec.ts:58:1 › R2-TC-152 a stale change page in a second tab undoes nothing (2.2s)
+
+  1 passed (2.8s)
+exit=0 2026-10-18T21:49:44Z
+

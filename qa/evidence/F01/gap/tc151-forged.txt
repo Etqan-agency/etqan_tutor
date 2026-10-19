@@ -1,0 +1,49 @@
+mailpit total before: 89
+-- before
+5|ETQ-2025-01-0001|issued||||t 6|ETQ-2025-02-0001|draft||||f 
+1|f
+-- changelists offered to ops-view-all (now rows exist):
+etqan_billing/etqaninvoice: "" "issue_invoices" "email_again" "mark_paid" "void_invoices" "" "bank_transfer" "cash" "card" "other" 
+account/emailaddress: "" "make_verified" 
+django_celery_beat/periodictask: "" "enable_tasks" "disable_tasks" "toggle_tasks" "run_tasks" 
+integrations/platformaccount: "" "test_accounts" 
+-- forged mark_paid on A(5):
+302 http://etqan.localhost/admin/etqan_billing/etqaninvoice/
+"success">· ETQ-2025-01-0001: marked paid.
+"selected">
+"selected">
+"selected">
+5|ETQ-2025-01-0001|paid|2026-10-01|cash||t 6|ETQ-2025-02-0001|draft||||f 
+1|f
+-- reset A to issued (ORM)
+UPDATE 1
+-- forged void on A(5):
+302 http://etqan.localhost/admin/etqan_billing/etqaninvoice/
+"success">· ETQ-2025-01-0001: voided.
+"selected">
+"selected">
+"selected">
+5|ETQ-2025-01-0001|void|||t|t|f 6|ETQ-2025-02-0001|draft|||f|f|f 
+1|f
+-- forged issue_invoices on B(6):
+302 http://etqan.localhost/admin/etqan_billing/etqaninvoice/
+"success">· ETQ-2025-02-0001: issued; the PDF goes to its admins.
+"selected">
+"selected">
+"selected">
+5|ETQ-2025-01-0001|void|||t|t|f 6|ETQ-2025-02-0001|issued|||f|t|f 
+1|f
+-- forged make_verified on EmailAddress 1:
+302 http://etqan.localhost/admin/account/emailaddress/
+"success">Marked ops-view-all@qa.etqan.test as verified.
+"selected">
+"selected">
+5|ETQ-2025-01-0001|void|||t|t|f 6|ETQ-2025-02-0001|issued|||f|t|f 
+1|t
+5|ETQ-2025-01-0001|void|||t|t|f 6|ETQ-2025-02-0001|issued|||f|t|t 
+1|t
+mailpit total after: 90
+2026-10-18T04:49:51.66Z ['qa-admin@qa.etqan.test'] [Etqan] Invoice ETQ-2025-02-0001 for February 2025
+2026-10-18T04:28:09.617Z ['e2e-link-1792297683790@demo.test'] [Demo Academy] Your sign-in link
+2026-10-18T04:28:06.731Z ['e2e-link-1792297683790@demo.test'] [Demo Academy] Set your password
+admin_log rows for these:

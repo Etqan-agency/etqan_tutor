@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-dashboard.spec.ts:34:1 › TC-128 Settings → Features is read-only and matches the API (23.3s)
+
+  1 passed (24.1s)

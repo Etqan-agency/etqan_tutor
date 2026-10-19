@@ -1,0 +1,19 @@
+2026-10-17T21:16:27Z
+$ docker build --target dev --secret id=tokens_token,env=GH_TOKEN --build-arg UID=501 --build-arg GID=20 -t etqan-qa001/dashboard:gid20 dashboard
+#11 exporting layers
+#11 exporting layers 13.0s done
+#11 exporting manifest sha256:cf8d8142c2815a40a0bf435bae2831d12edadb65987e8384b7b5549e05523cfa done
+#11 exporting config sha256:d956b8e784f2c677df817d1a02cc23e8d3ae69604bf75a4ac2d9cc38574fb179 done
+#11 exporting attestation manifest sha256:576599fea2bb1f25a7ae1606de861bdb969e7c5611975d062faa05f365f92a38 done
+#11 exporting manifest list sha256:8ac62a825edd9c1c338a9aec2708f96cfa20f5acc4e7213a42a355f027c2087b done
+#11 naming to docker.io/etqan-qa001/dashboard:gid20 done
+#11 unpacking to docker.io/etqan-qa001/dashboard:gid20
+#11 unpacking to docker.io/etqan-qa001/dashboard:gid20 10.1s done
+#11 DONE 23.2s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/lrqoux9g5bob2a6f2wtpgutmb
+build exit=0
+uid=501(app) gid=20(dialout) groups=20(dialout)
+/app 501:20
+/app/node_modules 501:20
+/app/package.json 501:20

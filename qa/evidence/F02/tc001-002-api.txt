@@ -1,0 +1,21 @@
+## TC-001 API
+HTTP/1.1 200 OK
+Set-Cookie: csrftoken=REDACTED-QA; expires=Sun, 17 Oct 2027 22:44:52 GMT; Max-Age=31449600; Path=/; SameSite=Lax
+Set-Cookie: sessionid=REDACTED-QA; expires=Sun, 01 Nov 2026 22:44:52 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax
+{'role': 'admin', 'is_super_admin': True, 'impersonator': None, 'features': ['families', 'parents', 'session_reports', 'invoices', 'auto_notifications', 'teacher_attendance', 'export', 'online_payments', 'two_factor', 'phone_login', 'quick_login', 'code_reset']} perms 881
+session row: 1|2026-11-01 22:44:52.359661+00
+2026-10-18 22:44:52.353461+00|192.168.65.1|desktop|Africa/Cairo|Africa/Cairo
+me: 200
+logout:  200 
+row after: 0
+replay old cookie: {"detail":"Authentication credentials were not provided."} 403
+Africa/Cairo
+
+## TC-002 CSRF
+a) no token: {"detail":"CSRF Failed: CSRF cookie not set."} 403
+0
+b) evil origin: {"detail":"CSRF Failed: Origin checking failed - http://evil.example does not match any trusted origins."} 403
+0
+last_login unchanged: yes sessions 58 -> 58
+c) token no origin: 200
+200

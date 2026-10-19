@@ -1,0 +1,22 @@
+## TC-065 suspended API (anonymous)
+GET /api/v1/identity/csrf/                       403 {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+POST /api/v1/identity/login/                     403 {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+GET /api/v1/site/branding/                       403 {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+GET /accounts/                                   403 {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+GET /media/x                                     403 {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+GET /api/v1/identity/me/                         403 {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+sessions after: 1 last_login: 2026-10-17 19:54:47.078622+00
+## TC-066 health
+GET /health/live/                                200 {"status": "ok"}
+GET /health/ready/                               200 {"status": "ok", "checks": {"database": "ok"}}
+GET /health/                                     404 <!DOCTYPE html> <html lang="en"> <head>   <meta http-equiv="content-type" content="text/html; charset=utf-8">   <title>Page not found at /health/</title>   <met
+GET /healthx/                                    503 <!DOCTYPE html><html lang="ar" dir="rtl"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" co
+GET /health/../api/v1/identity/csrf/             403 {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"}
+## TC-067 existing session (cookie jar from before suspension)
+me: {"detail": "This academy is suspended. Please contact Etqan.", "code": "tenant.suspended"} HTTP 403 
+## TC-068 public site
+GET /                                            503 <!DOCTYPE html><html lang="ar" dir="rtl"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" co
+## TC-069 other academies
+qa me: HTTP 200
+qaother csrf: 200
+demo login page: 200

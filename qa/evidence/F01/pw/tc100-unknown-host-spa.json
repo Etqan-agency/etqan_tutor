@@ -1,0 +1,13 @@
+{
+  "before": "nope-qa.etqan.localhost\nالعربية\nWelcome back\n\nSign in to continue your studies.\n\nEmail\n*\nPassword\n*\nSign in\n\nNew here? Ask your academy for an account\n\nForgot your password?",
+  "after": "nope-qa.etqan.localhost\nالعربية\nWelcome back\n\nSign in to continue your studies.\n\nEmail\n*\nPassword\n*\nSign in\n\nNew here? Ask your academy for an account\n\nForgot your password?",
+  "alerts": [],
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+}

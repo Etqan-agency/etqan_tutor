@@ -1,0 +1,3 @@
+
+for_each_academy keys: ['academy_demo', 'academy_other', 'academy_qa', 'academy_qa_tmp_race_a', 'academy_qa_tmp_race_b', 'academy_qa_tmp_tz', 'academy_qaother']
+qa_tmp_1 present: False | academy_qa present: True

@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-console.spec.ts:128:1 › TC-073/075/127/137 public rows hidden, no deletes, forged actions (2.1s)
+
+  1 passed (2.8s)

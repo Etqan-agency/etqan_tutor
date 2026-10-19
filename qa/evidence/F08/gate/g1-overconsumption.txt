@@ -1,0 +1,22 @@
+== Gate check G1 (Agent 2): over-consumption past the package total on Sub C 84 (8 sessions)
+admin session 200
+start used/remaining/extra/progress = (1, 7, 0, 0.125)
+[201] POST sessions/regular/ :: {"session":{"id":310,"subscription_id":84,"slot_id":null,"occurs_on":"2026-10-02","starts_at":"2026-10-02T06:00:00Z","minutes":30,"status":"scheduled"
+[201] POST sessions/regular/ :: {"session":{"id":311,"subscription_id":84,"slot_id":null,"occurs_on":"2026-10-03","starts_at":"2026-10-03T06:00:00Z","minutes":30,"status":"scheduled"
+[201] POST sessions/regular/ :: {"session":{"id":312,"subscription_id":84,"slot_id":null,"occurs_on":"2026-10-04","starts_at":"2026-10-04T06:00:00Z","minutes":30,"status":"scheduled"
+[201] POST sessions/regular/ :: {"session":{"id":313,"subscription_id":84,"slot_id":null,"occurs_on":"2026-10-05","starts_at":"2026-10-05T06:00:00Z","minutes":30,"status":"scheduled"
+[201] POST sessions/regular/ :: {"session":{"id":314,"subscription_id":84,"slot_id":null,"occurs_on":"2026-10-06","starts_at":"2026-10-06T06:00:00Z","minutes":30,"status":"scheduled"
+[201] POST sessions/regular/ :: {"session":{"id":315,"subscription_id":84,"slot_id":null,"occurs_on":"2026-10-07","starts_at":"2026-10-07T06:00:00Z","minutes":30,"status":"scheduled"
+[201] POST sessions/regular/ :: {"session":{"id":316,"subscription_id":84,"slot_id":null,"occurs_on":"2026-10-08","starts_at":"2026-10-08T06:00:00Z","minutes":30,"status":"scheduled"
+[201] POST sessions/regular/ :: {"session":{"id":317,"subscription_id":84,"slot_id":null,"occurs_on":"2026-10-09","starts_at":"2026-10-09T06:00:00Z","minutes":30,"status":"scheduled"
+created 310,311,312,313,314,315,316,317
+310:200 311:200 312:200 313:200 314:200 315:200 316:200 317:200 
+after 8 more present: used/remaining/extra/progress = (9, -1, 1, 1.0)
+DB consuming count: 9
+teacher view 200
+foreign student view 404
+qaother view 404
+-- cleanup: undo + delete
+310:200/204 311:200/204 312:200/204 313:200/204 314:200/204 315:200/204 316:200/204 317:200/204 
+end used/remaining/extra/progress = (1, 7, 0, 0.125)
+left rows: 0

@@ -1,0 +1,22 @@
+round 1 create
+2 400 {"user":{"email":["This email is already in use."]}}
+1 400 {"user":{"email":["This email is already in use."]}}
+4 400 {"user":{"email":["This email is already in use."]}}
+3 400 {"user":{"email":["This email is already in use."]}}
+5 201 {"id":170,"role":"student","two_factor":false,"user":{"full_name":"QA5 RaceF1 5","email":"
+round 2 create
+4 400 {"user":{"email":["This email is already in use."]}}
+3 400 {"user":{"email":["This email is already in use."]}}
+5 400 {"user":{"email":["This email is already in use."]}}
+2 400 {"user":{"email":["This email is already in use."]}}
+1 201 {"id":175,"role":"student","two_factor":false,"user":{"full_name":"QA5 RaceF2 1","email":"
+round 1 edit
+170 400 {"user":{"email":["This email is already in use."]}}
+175 200 {"id":175,"role":"student","two_factor":false,"user":{"full_name":"QA5 RaceF2 1","email":"
+round 2 edit
+175 400 {"user":{"email":["This email is already in use."]}}
+170 200 {"id":170,"role":"student","two_factor":false,"user":{"full_name":"QA5 RaceF1 5","email":"
+round 3 edit
+170 400 {"user":{"email":["This email is already in use."]}}
+175 200 {"id":175,"role":"student","two_factor":false,"user":{"full_name":"QA5 RaceF2 1","email":"
+IntegrityError lines in django log, last 3 min: 0

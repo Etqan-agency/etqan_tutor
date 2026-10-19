@@ -1,0 +1,30 @@
+login adm 200 {"id":1,"email":"qa-admin@qa.etqan.test","full_name":"QA Admin","phone":"","preferred_language":"ar","effective_language
+login codes 200 {"id":3,"email":"qa-staff-codes@qa.etqan.test","full_name":"QA Staff Codes","phone":"","preferred_language":"ar","effect
+login nocode 200 {"id":2,"email":"qa-staff-nocode@qa.etqan.test","full_name":"QA Staff NoCode","phone":"","preferred_language":"ar","effe
+login sup 200 {"id":4,"email":"qa-supervisor@qa.etqan.test","full_name":"QA Supervisor","phone":"","preferred_language":"ar","effectiv
+login tea 200 {"id":7,"email":"qa-teacher@qa.etqan.test","full_name":"QA teacher","phone":"","preferred_language":"ar","effective_lang
+login tea2 200 {"id":36,"email":"qa-teacher2@qa.etqan.test","full_name":"F10 Teacher Two","phone":"","preferred_language":"ar","effecti
+login stu 200 {"id":5,"email":"qa-student@qa.etqan.test","full_name":"QA student","phone":"","preferred_language":"ar","effective_lang
+login par 200 {"id":6,"email":"qa-parent@qa.etqan.test","full_name":"QA parent","phone":"","preferred_language":"ar","effective_langua
+login oth 200 {"id":1,"email":"qaother-admin@qa.etqan.test","full_name":"QA Other Admin","phone":"","preferred_language":"ar","effecti
+{"export": true, "themes": true, "parents": true, "spanish": true, "balances": true, "expenses": true, "families": true, "invoices": true, "contracts": true, "code_reset": true, "two_factor": true, "phone_login": true, "quick_login": true, "supervision": true, "postponement": true, "study_groups": true, "system_codes": true, "internal_chat": false, "payment_links": true, "payroll_rules": true, "system_status": true, "exchange_rates": true, "extra_sessions": true, "google_sign_in": false, "trial_sessions": true, "country_pricing": true, "disposal_status": true, "manual_sessions": true, "online_payments": true, "quick_translate": true, "salary_expenses": true, "session_reports": true, "teacher_balance": true, "payment_receipts": true, "weekly_schedules": true, "report_deductions": true, "bulk_teacher_rates": true, "salary_projections": true, "teacher_attendance": true, "group_subscriptions": true, "family_subscriptions": true, "fixed_teacher_salary": true, "student_teacher_rate": true, "subscription_archive": true, "teacher_availability": true, "incentives_deductions": true, "payslip_acknowledgement": true, "multi_course_subscriptions": true}
+ERROR:  column "ends_on" does not exist
+LINE 1: ...dent_id,teacher_id,course_id,package_id,starts_on,ends_on fr...
+                                                             ^
+1|F03 Pack|2|30|150000|EGP|t
+2|Monthly QA|2|30|150000|EGP|t
+3|QA6 Pkg 2x1m|2|45|150000|EGP|t
+4|QA6 Pkg 3x10d|3|45|99999|EGP|t
+10|QA6 Inactive|1|30|100|EGP|f
+1|F03 Quran
+2|Tajweed QA
+3|QA6 Quran
+4|QA6 Arabic
+at_disposal|1
+completed|60
+cancelled|1
+scheduled|130
+ERROR:  column "period_start" does not exist
+LINE 1: select id,teacher_id,period_start,status from academy_qa.pay...
+                             ^
+[200] GET sessions/?page_size=1 :: {"count":192,"next":"http://qa.etqan.localhost/api/v1/sessions/?page=2&page_size=1","previous":null,"results":[{"id":68,"subscription_id":null,"slot_id":null,"occurs_on":"2026-02-16","starts_at":"2026-02-16T07:00:00Z","minutes":60,"status":"completed","student_attendance":"present","teacher_attendance":"present","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full_name":"QA student","timezone":"Africa/Cairo"},"teacher":{"id":47,"full_name":"F10 Teacher Thirteen"},"course":{"id":1,"name_ar":"F03 قرآن","name_en":"F03 Quran"},"notes":"","cancel_reason

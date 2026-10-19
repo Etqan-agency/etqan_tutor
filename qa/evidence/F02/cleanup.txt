@@ -1,0 +1,7 @@
+## Cleanup 2026-10-19 02:18:25
+deleted leftover impersonation sessions: 3
+role 4: ["parent.view", "parent.view_any", "quick_login.create", "student.view", "student.view_any", "teacher.view", "teacher.view_any"]
+features: qaother {'code_reset': False, 'two_factor': True, 'quick_login': True, 'internal_chat': False} qa {'parents': True, 'families': True, 'invoices': True, 'code_reset': True, 'two_factor': True, 'phone_login': True, 'quick_login': True, 'internal_chat': False, 'google_sign_in': False, 'online_payments': True} 
+fixture users: 8:f02-a@qa.etqan.test:true 9:f02-b@qa.etqan.test:true 10:f02-c@qa.etqan.test:true 11:f02-d@qa.etqan.test:true 12:f02-e@qa.etqan.test:true 13:f02-new@qa.etqan.test:true 14:f02-new2@qa.etqan.test:true 15:f02-parent@qa.etqan.test:true 16:f02-teacher@qa.etqan.test:true 17:f02-staff-ql@qa.etqan.test:true 18:f02-staff-qlnv@qa.etqan.test:true  
+mfa rows: 11:totp 11:recovery_codes 
+seeded logins: staff-nocode=200 staff-codes=200 supervisor=200 teacher=200 student=200 parent=200  admin=200 qaother=200

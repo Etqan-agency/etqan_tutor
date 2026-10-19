@@ -1,0 +1,55 @@
+== TC-005
+[409] DELETE catalogue/packages/3/ :: {"detail":"This package is used by subscriptions or system codes. Deactivate it instead.","code":"catalogue.in_use"}
+[409] DELETE catalogue/courses/3/ :: {"detail":"This course is used by subscriptions or system codes. Deactivate it instead.","code":"catalogue.in_use"}
+[201] POST catalogue/packages/3/duplicate/ :: {"id":16,"name_ar":"ب (نسخة)","name_en":"QA6 Pkg 2x1m (copy)","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":45,"duration_value":1,"duration_unit":"month","freeze_days
+   copy name=QA6 Pkg 2x1m (copy) active=False
+[201] POST catalogue/courses/3/duplicate/ :: {"id":5,"name_ar":"قرآن (نسخة)","name_en":"QA6 Quran (copy)","description_ar":"","description_en":"","language":"ar","is_active":false,"created_at":"2026-10-19T04:52:23.932539Z","updated_at":"2026-10-
+   copy name=QA6 Quran (copy) active=False teachers=[7, 217, 218]
+3|SA|5000|SAR
+16|SA|5000|SAR
+[200] PATCH catalogue/packages/3/ :: {"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":45,"duration_value":1,"duration_unit":"month","freeze_days_allowed":7,"pr
+[400] POST subscriptions/ :: {"package":["Choose an active package."]}
+[200] PATCH catalogue/packages/3/ :: {"id":3,"name_ar":"ب","name_en":"QA6 Pkg 2x1m","description_ar":"","description_en":"","sessions_per_week":2,"session_minutes":45,"duration_value":1,"duration_unit":"month","freeze_days_allowed":7,"pr
+[200] PATCH catalogue/courses/4/ :: {"id":4,"name_ar":"عربي","name_en":"QA6 Arabic","description_ar":"","description_en":"","language":"ar","is_active":false,"created_at":"2026-10-19T04:40:24.958522Z","updated_at":"2026-10-19T04:52:24.2
+[400] POST subscriptions/ :: {"course":["Choose an active course."]}
+[200] PATCH catalogue/courses/4/ :: {"id":4,"name_ar":"عربي","name_en":"QA6 Arabic","description_ar":"","description_en":"","language":"ar","is_active":true,"created_at":"2026-10-19T04:40:24.958522Z","updated_at":"2026-10-19T04:52:24.45
+[200] GET subscriptions/16/ :: {"id":16,"status":"active","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":7,"full_name":"QA teacher"},"course":{"id":3,"name_ar"
+   existing sub keeps: (5000, 'SAR', 8)
+[204] DELETE catalogue/packages/16/ :: 
+[204] DELETE catalogue/courses/5/ :: 
+== TC-007
+before 1:SA5000SAR
+[400] PUT catalogue/packages/3/country-prices/ :: {"rows.1.country":["This country is already in the list."]}
+     -> 1:SA5000SAR
+[400] PUT catalogue/packages/3/country-prices/ :: {"rows.0.price_minor":["Enter a price of 0 or more."]}
+     -> 1:SA5000SAR
+[400] PUT catalogue/packages/3/country-prices/ :: {"rows.0.price_minor":["Enter a price of 0 or more."]}
+     -> 1:SA5000SAR
+[400] PUT catalogue/packages/3/country-prices/ :: {"rows.0.price_minor":["Enter a price of 0 or more."]}
+     -> 1:SA5000SAR
+[400] PUT catalogue/packages/3/country-prices/ :: {"rows.0.price_minor":["This price is too large."]}
+     -> 1:SA5000SAR
+[400] PUT catalogue/packages/3/country-prices/ :: {"rows.0.country":["Use a two-letter country code, like EG."]}
+     -> 1:SA5000SAR
+[400] PUT catalogue/packages/3/country-prices/ :: {"rows.0.country":["Use a two-letter country code, like EG."]}
+     -> 1:SA5000SAR
+[400] PUT catalogue/packages/3/country-prices/ :: {"rows.0.country":["Choose a country."]}
+     -> 1:SA5000SAR
+[400] PUT catalogue/packages/3/country-prices/ :: {"rows.0.currency":["Use a three-letter currency code, like EGP."]}
+     -> 1:SA5000SAR
+[400] PUT catalogue/packages/3/country-prices/ :: {"rows":["Send the list of country prices."]}
+     -> 1:SA5000SAR
+[400] PUT catalogue/packages/3/country-prices/ :: {"rows":["Send the list of country prices."]}
+     -> 1:SA5000SAR
+[400] PUT catalogue/packages/3/country-prices/ :: {"rows.1.price_minor":["Enter a price of 0 or more."]}
+     -> 1:SA5000SAR
+[200] PUT catalogue/packages/3/country-prices/ :: [{"country":"AE","price_minor":1,"currency":"SAR"}]
+     -> 1:AE1SAR
+[400] PUT catalogue/packages/3/country-prices/ :: {"rows":["Use at most 250 countries."]}
+     251 -> 1
+[200] 250 -> 250
+== TC-006 API: replace + lowercase
+[200] PUT catalogue/packages/3/country-prices/ :: [{"country":"AE","price_minor":4000,"currency":"AED"},{"country":"SA","price_minor":5000,"currency":"SAR"}]
+[200] PUT catalogue/packages/3/country-prices/ :: [{"country":"SA","price_minor":5000,"currency":"SAR"},{"country":"US","price_minor":3000,"currency":"USD"}]
+     -> 2:SA5000SAR,US3000USD
+[200] PUT catalogue/packages/3/country-prices/ :: [{"country":"SA","price_minor":5000,"currency":"SAR"}]

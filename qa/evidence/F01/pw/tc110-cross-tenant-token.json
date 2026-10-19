@@ -1,0 +1,8 @@
+{
+  "status": 400,
+  "body": {
+    "token": [
+      "Invalid or expired reset link."
+    ]
+  }
+}

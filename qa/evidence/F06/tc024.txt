@@ -1,0 +1,32 @@
+a=30 future=2
+[200] POST schedules/stop/ :: {"subscriptions":[30]}
+   future after stop=0 status=stopped
+{'paused': 0, 'resumed': 0, 'expired': 0, 'created': 0}
+   future after job=0
+[200] POST schedule/generate/ :: {"created":0,"skipped_existing":0,"skipped_paused":0,"skipped_out_of_term":0,"skipped_stopped":1,"conflicts":[]}
+[200] POST schedules/delete/ :: {"subscriptions":[30]}
+   status=deleted
+[200] POST schedules/restore/ :: {"subscriptions":[30]}
+   status=active future=2
+[200] POST schedules/activate/ :: {"subscriptions":[30]}
+   status=active future=2
+-- bulk teacher change: b=27 (course C2, teacher C not on it)
+[409] POST schedules/teacher/ :: {"detail":"Not allowed while the subscription is expired.","code":"scheduling.not_allowed_in_status","member_id":27}
+   a teacher=217
+[201] POST subscriptions/ :: {"id":53,"status":"active","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":217,"full_name":"QA6 Teacher B"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":4,"name_ar":"ب2","name_en":"QA6 Pkg 3x10d"},"sta
+[200] POST sessions/181/attendance/ :: {"id":181,"subscription_id":53,"slot_id":56,"occurs_on":"2026-10-19","starts_at":"2026-10-19T03:30:00Z","minutes":45,"status":"completed","student_attendance":"present","teacher_attendance":"present","has_started":true,"meeting_url":"","meeting_host":false,"generated":true,"student":{"id":216,"full_
+[200] POST schedules/teacher/ :: {"subscriptions":[30,53],"conflicts":[],"outside_availability":[]}
+30|2026-10-20|scheduled|218
+30|2026-10-27|scheduled|218
+53|2026-10-19|completed|217
+53|2026-10-26|scheduled|218
+53|2026-11-02|scheduled|218
+-- substitution on a (teacher now 218)
+[201] POST schedules/substitutions/ :: {"substitutions":[{"id":1,"subscription_id":30,"teacher":{"id":7,"full_name":"QA teacher"},"from_date":"2026-10-26","to_date":"2026-11-02"}],"conflicts":[],"outside_availability":[188]}
+[400] POST schedules/substitutions/ :: {"from_date":["This overlaps another substitution of this schedule."],"member_id":30}
+[400] POST schedules/substitutions/ :: {"to_date":["A substitution lasts at most 366 days."]}
+2026-10-20|218|f
+2026-10-27|7|t
+[204] DELETE schedules/substitutions/1/ :: 
+2026-10-20|218|f
+2026-10-27|218|f

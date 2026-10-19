@@ -1,0 +1,28 @@
+== TC-021 bundle actions
+[200] POST bundles/2/pause/ :: {"id":2,"kind":"multi_course","student":{"id":212,"full_name":"QA6 Student 1"},"family":null,"study_group":null,"notes":"","state":"live","created_by":{"id":1,"full_name":"QA Admin"},"created_at":"2026-10-19T04:48:51.870772Z","members":[{"id":41,"status":"active","schedule_status":"active","student"
+1
+[200] POST bundles/2/renew/ :: {"id":2,"kind":"multi_course","student":{"id":212,"full_name":"QA6 Student 1"},"family":null,"study_group":null,"notes":"","state":"live","created_by":{"id":1,"full_name":"QA Admin"},"created_at":"2026-10-19T04:48:51.870772Z","members":[{"id":41,"status":"active","schedule_status":"active","student"
+48|41|2|150000|EGP
+49|42|2|0|EGP
+== TC-022 extra: same student + same course twice
+[400] POST bundles/family/ :: {"rows.1.course":["This course is already in the bundle for this student."]}
+== TC-023
+[201] POST groups/ :: {"id":2,"name":"QA6 Group API","notes":"","is_active":true,"members":[{"id":213,"full_name":"QA6 Student 2","is_active":true},{"id":216,"full_name":"QA6 Student SA","is_active":true}],"can_delete":true,"created_at":"2026-10-19T04:49:31.760029Z"}
+[400] POST groups/ :: {"student_ids":["Already in another study group: QA6 Student 2."]}
+[400] POST bundles/group/ :: {"rows.0.price_minor":["These students pay in different currencies: leave the price empty."]}
+[201] POST bundles/group/ :: {"id":6,"kind":"group","student":null,"family":null,"study_group":{"id":2,"name":"QA6 Group API"},"notes":"","state":"live","created_by":{"id":1,"full_name":"QA Admin"},"created_at":"2026-10-19T04:49:32.006723Z","members":[{"id":50,"status":"active","schedule_status":"active","student":{"id":213,"fu
+conflicts in create: 0
+50|6|QA6 Student 2|150000|EGP|active
+51|6|QA6 Student SA|5000|SAR|active
+[201] POST bundles/6/members/ :: {"id":6,"kind":"group","student":null,"family":null,"study_group":{"id":2,"name":"QA6 Group API"},"notes":"","state":"live","created_by":{"id":1,"full_name":"QA Admin"},"created_at":"2026-10-19T04:49:32.006723Z","members":[{"id":50,"status":"active","schedule_status":"active","student":{"id":213,"fu
+50|QA6 Student 2|150000|EGP|active|1
+51|QA6 Student SA|5000|SAR|active|1
+52|QA6 Student 3|150000|EGP|active|1
+[200] DELETE bundles/6/members/214/ :: {"id":6,"kind":"group","student":null,"family":null,"study_group":{"id":2,"name":"QA6 Group API"},"notes":"","state":"live","created_by":{"id":1,"full_name":"QA Admin"},"created_at":"2026-10-19T04:49:32.006723Z","members":[{"id":50,"status":"active","schedule_status":"active","student":{"id":213,"fu
+50|QA6 Student 2|active
+51|QA6 Student SA|active
+52|QA6 Student 3|cancelled
+[409] DELETE groups/2/ :: {"detail":"This study group has subscription bundles. Dissolve them first.","code":"scheduling.group_in_use"}
+2|2
+[409] POST bundles/2/pause/ :: {"detail":"That is more than the freeze days allowed.","code":"scheduling.freeze_days_exceeded","member_id":41}
+41|2026-11-01|2026-11-02

@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f06-retest1.spec.ts:20:1 › QA-041 settings form warns that existing lessons keep their time (4.0s)
+
+  1 passed (4.9s)

@@ -1,0 +1,30 @@
+T1=275 T2=276 starts 2026-10-19T15:42:00Z
+== TC-015
+[200] POST sessions/275/times/ :: {"id":275,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T16:52:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":false,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"f
+[409] POST sessions/275/times/ :: {"detail":"Times open when the session starts.","code":"scheduling.not_started"}
+[403] POST sessions/276/times/ :: {"detail":"Permission denied for action: record the student's times."}
+[200] POST sessions/276/times/ :: {"id":276,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T15:42:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"fu
+2026-10-19 15:43:00+00|2026-10-19 16:38:00+00|55
+[400] POST sessions/276/times/ :: {"teacher_out_at":["Leaving can't be before coming in."]}
+[400] POST sessions/276/times/ :: {"teacher_out_at":["That is more than 600 minutes."]}
+[200] POST sessions/276/times/ :: {"id":276,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-19","starts_at":"2026-10-19T15:42:00Z","minutes":60,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"fu
+[400] POST sessions/276/times/ :: {"actual_minutes":["Ensure this value is less than or equal to 600."]}
+2026-10-19 15:43:00+00|2026-10-19 16:38:00+00|45|60|completed
+projection before times=[(63000, 330000)] after times+mark=[(69000, 330000)] (expect +6000 from minutes=60, not 45)
+== TC-024 teacher_attendance switch
+remA0 (2, 6)
+[200] POST sessions/278/attendance/ :: {"id":278,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-16","starts_at":"2026-10-16T17:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"present","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+scheduled|present
+[200] POST sessions/278/attendance/ :: {"id":278,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-16","starts_at":"2026-10-16T17:00:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"present","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+remA (3, 5)
+[200] POST sessions/278/attendance/ :: {"id":278,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-16","starts_at":"2026-10-16T17:00:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"absent","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full_
+remA after teacher absent (2, 6)
+qa: teacher_attendance=off
+[403] POST sessions/277/attendance/ :: {"detail":"Teacher attendance is not enabled for this academy."}
+[403] POST sessions/277/attendance/ :: {"detail":"Teacher attendance is not enabled for this academy."}
+[403] POST sessions/277/times/ :: {"detail":"Teacher attendance is not enabled for this academy."}
+[200] PUT sessions/278/report/ :: {"session":278,"behaviour":3,"participation":3,"notes":"","written_by":{"id":7,"full_name":"QA teacher"},"created_at":"2026-10-19T16:42:20.692010Z","updated_at":"2026-10-19T16:42:20.692016Z"}
+[200] POST sessions/277/attendance/ :: {"id":277,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-17","starts_at":"2026-10-17T17:00:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"present","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"fu
+qa: teacher_attendance=on
+277|completed|present|present|not_set|extra|f||1|||f|f|t
+278|completed|present|absent|not_set|regular|f||7|||f|f|t

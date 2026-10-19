@@ -1,0 +1,35 @@
+[200] POST people/teachers/218/activate/ :: {"id":218,"role":"teacher","two_factor":false,"user":{"full_name":"QA6 Teacher C","email":"qa6-teach
+[200] POST people/students/213/activate/ :: {"id":213,"role":"student","two_factor":false,"user":{"full_name":"QA6 Student 2","email":"qa6-student-2@qa.etqan.test","phone":"","preferred_language":"ar","timezone":"Africa/Cairo","is_active":true,"account_state":"invited","pending_email":"","last_login_ip":null,"last_login_device":"","last_login
+-- same teacher 7, Mon/Thu 18:00, subs 16-19
+[200] POST schedule/generate/ :: {"created":0,"skipped_existing":3,"skipped_paused":0,"skipped_out_of_term":0,"skipped_stopped":0,"co
+n_conflicts= 0
+[200] POST schedule/generate/ :: {"created":0,"skipped_existing":30,"skipped_paused":2,"skipped_out_of_term":17,"skipped_stopped":0,"conflicts":[]}
+n_conflicts= 0
+-- create response for a new clashing sub (teacher 7, Thu 18:00, student 4)
+[201] POST subscriptions/ :: {"id":35,"status":"active","schedule_status":"active","student":{"id":215,"full_name":"QA6 Student 4
+keys: []
+{}
+-- S5: same student 212 (teacher 7 Thu 18:00) gets teacher B at Thu 18:00
+[201] POST subscriptions/ :: {"id":36,"status":"active","schedule_status":"active","student":{"id":212,"full_name":"QA6 Student 1","timezone":"Africa/Cairo"},"teacher":{"id":217,"full_name":"QA6 Teacher B"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":4,"name_ar":"ب2","name_en":"QA6 Pkg 3x10d"},"star
+{}
+[200] POST schedule/generate/ :: {"created":0,"skipped_existing":1,"skipped_paused":0,"skipped_out_of_term":0,"skipped_stopped":0,"conflicts":[]}
+n_conflicts= 0
+-- teacher B back-to-back (X1 Tue 08:00 45m) vs 08:45 and overlap 08:35
+[201] POST subscriptions/ :: {"id":37,"status":"active","schedule_status":"active","student":{"id":214,"full_name":"QA6 Student 3","timezone":"Africa/Cairo"},"teacher":{"id":217,"full_name":"QA6 Teacher B"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":4,"name_ar":"ب2","name_en":"QA6 Pkg 3x10d"},"star
+{}
+[201] POST subscriptions/ :: {"id":38,"status":"active","schedule_status":"active","student":{"id":216,"full_name":"QA6 Student SA","timezone":"Africa/Cairo"},"teacher":{"id":217,"full_name":"QA6 Teacher B"},"course":{"id":3,"name_ar":"قرآن","name_en":"QA6 Quran"},"package":{"id":4,"name_ar":"ب2","name_en":"QA6 Pkg 3x10d"},"sta
+{}
+71:def conflicts(created: list[Session]) -> list[tuple[Session, Session]]:
+72-    """Each created session that overlaps another non-cancelled session of the
+73-    same teacher (P4-9: reported, never blocked). Each pair is listed once.
+74-    Slice B2a: also used for one session added by hand. Slice B2f F-4: rows of
+29|2026-10-20|08:00|45
+38|2026-10-20|08:35|45
+37|2026-10-20|08:45|45
+37
+38
+DELETE 2
+[200] POST schedule/generate/ :: {"created":1,"skipped_existing":0,"skipped_paused":0,"skipped_out_of_term":0,"skipped_stopped":0,"co
+K3 back-to-back conflicts: [('2026-10-20T05:45:00Z', '2026-10-20T06:00:00Z')]
+[200] POST schedule/generate/ :: {"created":1,"skipped_existing":0,"skipped_paused":0,"skipped_out_of_term":0,"skipped_stopped":0,"conflicts":[{"session":{"id":159,"subscription_id":38,"slot_id":46,"occurs_on":"2026-10-20","starts_at":"2026-10-20T05:35:00Z","minutes":45,"status":"scheduled","student_attendance":"not_set","teacher_a
+K4 10-min overlap conflicts: [(38, '2026-10-20T05:35:00Z', 29, '2026-10-20T05:00:00Z'), (38, '2026-10-20T05:35:00Z', 37, '2026-10-20T05:45:00Z'), (38, '2026-10-20T05:35:00Z', 30, '2026-10-20T06:00:00Z')]

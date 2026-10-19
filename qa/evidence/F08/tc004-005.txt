@@ -1,0 +1,42 @@
+== TC-004
+[200] POST sessions/247/attendance/ :: {"id":247,"subscription_id":null,"slot_id":null,"occurs_on":"2026-07-15","starts_at":"2026-07-15T07:00:00Z","minutes":60,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"fu
+[200] POST payroll/payslips/generate/ :: {"created":1,"replaced":0,"removed":0,"missing_rate":[],"other_currency":[],"unpaid_sessions":[],"stale_fixed_salary":[]}
+PS=42
+42|draft|6000|6000
+[200] POST payroll/payslips/42/issue/ :: {"id":42,"number":"PAY-000039","status":"issued","teacher":{"id":7,"full_name":"QA teacher"},"year":2026,"month":7,"currency":"EGP","sessions":1,"minutes":60,"counts":{"regular":0,"compensation":0,"extra":1,"trial":0,"at_disposal":0,"student_absent":0,"student_excused":0,"group_members":0},"gross_mi
+[409] POST sessions/247/attendance/ :: {"detail":"This session is on an issued payslip.","code":"payroll.payslip_issued"}
+[409] POST sessions/247/attendance/ :: {"detail":"This session is on an issued payslip.","code":"payroll.payslip_issued"}
+[409] POST sessions/247/cancel/ :: {"detail":"This session is on an issued payslip.","code":"payroll.payslip_issued"}
+[409] POST sessions/247/restore/ :: {"detail":"This session is on an issued payslip.","code":"payroll.payslip_issued"}
+[409] POST sessions/247/postpone/ :: {"detail":"This session is on an issued payslip.","code":"payroll.payslip_issued"}
+[409] POST sessions/247/times/ :: {"detail":"This session is on an issued payslip.","code":"payroll.payslip_issued"}
+[409] POST sessions/247/disposal/ :: {"detail":"This session is on an issued payslip.","code":"payroll.payslip_issued"}
+[409] POST sessions/247/pays-teacher/ :: {"detail":"This session is on an issued payslip.","code":"payroll.payslip_issued"}
+[200] POST sessions/bulk/ :: {"done":[],"skipped":[{"id":247,"code":"payroll.payslip_issued"}]}
+[200] POST sessions/bulk/ :: {"done":[],"skipped":[{"id":247,"code":"payroll.payslip_issued"}]}
+[409] DELETE sessions/247/ :: {"detail":"This session is on an issued payslip.","code":"payroll.payslip_issued"}
+[200] PUT sessions/247/report/ :: {"session":247,"behaviour":3,"participation":3,"notes":"","written_by":{"id":1,"full_name":"QA Admin"},"created_at":"2026-10-19T16:37:25.618330Z","updated_at":"2026-10-19T16:37:25.618339Z"}
+247|completed|present|not_set|not_set|extra|f||1|||f|t|t
+activity rows before=1 after=1; net before=6000 after=6000
+1|t
+5
+== TC-005
+[400] POST sessions/240/cancel/ :: {"reason":["This field may not be blank."]}
+[200] POST sessions/240/cancel/ :: {"id":240,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-07","starts_at":"2026-10-07T05:00:00Z","minutes":30,"status":"cancelled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+cancelled|teacher ill|1|t
+[409] POST sessions/240/cancel/ :: {"detail":"Not allowed while the session is cancelled.","code":"scheduling.not_allowed_in_status"}
+[409] POST sessions/240/attendance/ :: {"detail":"This session was cancelled.","code":"scheduling.session_cancelled"}
+[200] POST sessions/240/restore/ :: {"id":240,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-07","starts_at":"2026-10-07T05:00:00Z","minutes":30,"status":"scheduled","student_attendance":"not_set","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+scheduled|||
+[409] POST sessions/240/restore/ :: {"detail":"Not allowed while the session is scheduled.","code":"scheduling.not_allowed_in_status"}
+[200] POST sessions/240/attendance/ :: {"id":240,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-07","starts_at":"2026-10-07T05:00:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+[200] POST sessions/240/cancel/ :: {"id":240,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-07","starts_at":"2026-10-07T05:00:00Z","minutes":30,"status":"cancelled","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+[200] POST sessions/240/restore/ :: {"id":240,"subscription_id":83,"slot_id":null,"occurs_on":"2026-10-07","starts_at":"2026-10-07T05:00:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+[409] POST sessions/245/attendance/ :: {"detail":"Attendance opens when the session starts.","code":"scheduling.not_started"}
+240|completed|present|not_set|not_set|regular|f||1|||f|f|t
+245|scheduled|not_set|not_set|not_set|regular|f|||||f|f|t
+11|240|1|cancel|{"status": ["scheduled", "cancelled"], "cancel_reason": ["", "teacher ill"]}|
+12|240|1|restore|{"status": ["cancelled", "scheduled"], "cancel_reason": ["teacher ill", ""]}|
+13|240|1|attendance|{"status": ["scheduled", "completed"], "student_attendance": ["not_set", "present"]}|
+14|240|1|cancel|{"status": ["completed", "cancelled"], "cancel_reason": ["", "after mark"]}|
+15|240|1|restore|{"status": ["cancelled", "completed"], "cancel_reason": ["after mark", ""]}|

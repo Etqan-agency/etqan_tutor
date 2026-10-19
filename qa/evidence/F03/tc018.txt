@@ -1,0 +1,31 @@
+login adm2 200
+== TC-018 S5 concurrent disjoint PATCHes, 20 rounds
+round 1 expected 21,2 got 14,2
+round 2 expected 22,3 got 14,3
+round 3 expected 23,4 got 14,4
+round 4 expected 24,5 got 24,7
+round 5 expected 25,6 got 25,7
+round 6 expected 26,7 got 14,7
+round 7 expected 27,8 got 14,8
+round 8 expected 28,9 got 14,9
+round 9 expected 29,10 got 29,7
+round 10 expected 30,1 got 14,1
+round 11 expected 31,2 got 31,7
+round 12 expected 32,3 got 32,7
+round 13 expected 33,4 got 33,7
+round 14 expected 34,5 got 34,7
+round 15 expected 35,6 got 35,7
+round 16 expected 36,7 got 14,7
+round 17 expected 37,8 got 37,7
+round 18 expected 38,9 got 38,7
+round 19 expected 39,10 got 14,10
+round 20 expected 40,1 got 14,1
+lost updates: 20/20
+== self-heal on qa-tmp-1 (suspended throwaway) via shell
+1
+BEGIN
+DELETE 1
+COMMIT
+healed Asia/Riyadh USD
+3|Asia/Riyadh|USD
+Asia/Riyadh|USD

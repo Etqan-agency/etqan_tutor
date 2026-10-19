@@ -1,0 +1,29 @@
+== TC-016 2026-10-19T03:38:46.392754
+OK  TC016 -1000 201 :: {"id": 5, "kind": "adjustment", "currency": "EGP", "amount_minor": -1000, "balance_after_minor": 100049005, "note": "fix", "invoice_id": null, "payment_id": null, "session_id": null, "created_at": "20
+OK  TC016 +500 201 :: {"id": 6, "kind": "adjustment", "currency": "EGP", "amount_minor": 500, "balance_after_minor": 100049505, "note": "gift", "invoice_id": null, "payment_id": null, "session_id": null, "created_at": "202
+BAD TC016 overdraw 409 insufficient :: {"amount_minor": ["Ensure this value is greater than or equal to -100000000."]}
+OK  TC016 {'amount_minor': 0, 'currency': 'EGP', 'reason': 'z'} 400 :: {"amount_minor": ["Enter an amount other than zero."]}
+OK  TC016 {'amount_minor': 5, 'currency': 'EGP', 'reason': ''} 400 :: {"reason": ["This field may not be blank."]}
+OK  TC016 {'amount_minor': 5, 'currency': 'EGP', 'reason': '   '} 400 :: {"reason": ["This field may not be blank."]}
+OK  TC016 {'amount_minor': 5, 'currency': 'EGP', 'reason': 'xxxxxxxxxx 400 :: {"reason": ["Ensure this field has no more than 500 characters."]}
+OK  TC016 {'amount_minor': 100000001, 'currency': 'EGP', 'reason': 'x' 400 :: {"amount_minor": ["Ensure this value is less than or equal to 100000000."]}
+OK  TC016 {'amount_minor': -100000001, 'currency': 'EGP', 'reason': 'x 400 :: {"amount_minor": ["Ensure this value is greater than or equal to -100000000."]}
+OK  TC016 negative no wallet 409 :: {"detail": "The balance does not cover this.", "code": "wallet.insufficient_balance"}
+OK  TC016 no JPY wallet created
+OK  TC016 no billing_payment added
+adj entries 5|adjustment|-1000|
+6|adjustment|500|
+update-only positive 403 {"detail": "This adjustment needs wallet.create."}
+OK  TC016 positive with wallet.update only 403
+update-only negative 201 {"id": 7, "kind": "adjustment", "currency": "EGP", "amount_minor": -100, "balance_after_minor": 100049405, "note": "x", "invoice_id": null, "payment_i
+create-only negative 403 {"detail": "This adjustment needs wallet.update."}
+OK  TC016 negative with wallet.create only 403
+create-only positive 201 {"id": 8, "kind": "adjustment", "currency": "EGP", "amount_minor": 100, "balance_after_minor": 100049505, "note": "x", "invoice_id": null, "payment_id
+inv 1|EGP|100049505|100049505
+2|USD|2500|2500
+== TC-018 step 3a (reverse MAX top-up first) 2026-10-19T03:39:34.218474
+reverse PT=19 201 {"id": 9, "kind": "reversal", "currency": "EGP", "amount_minor": -100000000, "balance_after_minor": 49505, "note": "", "invoice_id": null, "payment_id": 19, "session_id": null, "created_at": "2026-10-19T00:39:34.238872Z", "reversed": false, "created_by": {"id": 1, "full_name": "QA Admin"}}
+OK  TC018 reverse top-up ok
+reverse again (balance now < amount) -> S8 probe 409 {"detail": "The balance does not cover this.", "code": "wallet.insufficient_balance"}
+== TC-016 overdraw retry 2026-10-19T03:39:34.343823
+OK  TC016 overdraw 409 insufficient, balance unchanged :: {"detail": "The balance does not cover this.", "code": "wallet.insufficient_balance"} bal 49505

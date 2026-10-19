@@ -1,0 +1,3 @@
+1 failed, 2049 passed, 1958 warnings in 42.48s
+FAILED etqan/access/tests/test_routes.py::test_every_route_declares_its_code_or_is_named_exempt
+E         Left contains 6 more items, first extra item: ('api/v1/site/admin/hero-slides/$', 'GET')

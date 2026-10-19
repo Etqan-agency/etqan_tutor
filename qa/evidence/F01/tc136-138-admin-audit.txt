@@ -1,0 +1,27 @@
+## TC-136 admin login without CSRF token
+POST /admin/login/ no token -> 403
+Set-Cookie on staff login (from TC-010): ['csrftoken=REDACTED-QA; expires=Sat, 16 Oct 2027 19:50:12 GMT; Max-Age=31449600; Path=/; SameSite=Lax', 'sessionid=REDACTED-QA; expires=Sat, 31 Oct 2026 19:50:12 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax']
+## TC-138 admin history (public.django_admin_log)
+2026-10-17 19:49:37|ops@qa.etqan.test|1|academy|Etqan QA Academy|[{"added": {}}]
+2026-10-17 19:55:26|ops@qa.etqan.test|1|academy|QA Tmp TZ|[{"added": {}}]
+2026-10-17 19:55:43|ops@qa.etqan.test|1|academy|QA Tmp Race A|[{"added": {}}]
+2026-10-17 20:01:01|ops@qa.etqan.test|1|domain|qa-academy.test|[{"added": {}}]
+2026-10-17 20:01:04|ops@qa.etqan.test|1|domain|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc.dddddddd|[{"added": {}}]
+2026-10-17 20:01:05|ops@qa.etqan.test|1|domain|localtest.me|[{"added": {}}]
+2026-10-17 20:05:08|ops-view@qa.etqan.test|2|academy|QA Tmp One|Copied features from Etqan QA Other.
+2026-10-17 20:05:11|ops-view@qa.etqan.test|2|academy|QA Tmp One|Copied features from Etqan QA Other.
+2026-10-17 20:05:46|ops@qa.etqan.test|2|academy|QA Tmp One|[{"changed": {"fields": ["Status"]}}]
+2026-10-17 20:05:48|ops@qa.etqan.test|2|academy|QA Tmp One|[]
+2026-10-17 20:05:49|ops@qa.etqan.test|2|academy|QA Tmp One|[{"changed": {"fields": ["Status"]}}]
+2026-10-17 20:05:55|ops@qa.etqan.test|2|academy|QA Tmp One|[]
+2026-10-17 20:06:10|ops@qa.etqan.test|2|academy|QA Tmp One|[{"changed": {"fields": ["Status"]}}]
+2026-10-17 20:06:11|ops@qa.etqan.test|2|academy|QA Tmp One|[]
+2026-10-17 20:06:30|ops@qa.etqan.test|2|academy|QA Tmp One|[{"changed": {"fields": ["Status"]}}]
+2026-10-17 20:11:26|ops@qa.etqan.test|2|academy|Etqan QA Other|[{"changed": {"fields": ["Internal chat (\u0646\u0638\u0627\u0645 \u06
+2026-10-17 20:11:30|ops@qa.etqan.test|2|academy|Etqan QA Other|[{"changed": {"fields": ["Internal chat (\u0646\u0638\u0627\u0645 \u06
+2026-10-17 20:11:34|ops@qa.etqan.test|2|academy|QA Tmp One|Copied features from Etqan QA Academy.
+2026-10-17 20:12:07|ops@qa.etqan.test|2|academy|QA Tmp One|[{"changed": {"fields": ["Suspend Etqan's defaults"]}}]
+2026-10-17 20:12:52|ops@qa.etqan.test|2|academy|QA Tmp One|[{"changed": {"fields": ["Suspend Etqan's defaults"]}}]
+2026-10-17 20:13:01|ops@qa.etqan.test|2|academy|QA Tmp One|[{"changed": {"fields": ["Timezone"]}}]
+2026-10-17 20:13:05|ops@qa.etqan.test|2|academy|Etqan QA Academy|[]
+status actions logged? suspend/reactivate entries: 6 (only change-form status edits appear; action-driven suspends by ops@ and ops-view@ are absent)

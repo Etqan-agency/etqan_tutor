@@ -1,0 +1,18 @@
+{
+  "fieldsets": [
+    "Features: People",
+    "Features: Teaching",
+    "Features: Money",
+    "Features: Communication",
+    "Features: Content",
+    "Features: Platform",
+    "DOMAINS"
+  ],
+  "readonly": [
+    "qa",
+    "academy_qa",
+    "Oct. 17, 2026, 7:49 p.m."
+  ],
+  "subdomainInput": 0,
+  "url": "http://etqan.localhost/admin/tenants/academy/5/change/"
+}

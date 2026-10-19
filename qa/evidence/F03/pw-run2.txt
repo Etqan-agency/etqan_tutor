@@ -1,0 +1,45 @@
+      68 | 	const roles = await api(page, "/access/roles/");
+    > 69 | 	const created = (roles.json as { id: number; name_en: string; permissions: string[] }[]).find(
+         | 	                                                                                         ^
+      70 | 		(r) => r.name_en === role,
+      71 | 	);
+      72 | 	expect(created?.permissions).toEqual(["student.view", "student.view_any"]);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f03-roles-settings.spec.ts:69:91
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f03-roles-settings-TC-0-d1f11--and-a-retire-bites-at-once-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f03-roles-settings-TC-0-d1f11--and-a-retire-bites-at-once-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TypeError: roles.json.find is not a function
+
+      67 |
+      68 | 	const roles = await api(page, "/access/roles/");
+    > 69 | 	const created = (roles.json as { id: number; name_en: string; permissions: string[] }[]).find(
+         | 	                                                                                         ^
+      70 | 		(r) => r.name_en === role,
+      71 | 	);
+      72 | 	expect(created?.permissions).toEqual(["student.view", "student.view_any"]);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f03-roles-settings.spec.ts:69:91
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f03-roles-settings-TC-0-d1f11--and-a-retire-bites-at-once-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f03-roles-settings-TC-0-d1f11--and-a-retire-bites-at-once-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f03-roles-settings-TC-0-d1f11--and-a-retire-bites-at-once-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f03-roles-settings-TC-0-d1f11--and-a-retire-bites-at-once-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/qa/f03-roles-settings.spec.ts:45:1 › TC-023 owner builds a role and hires staff; the staff app is narrowed and a retire bites at once 
+  1 passed (22.4s)
+error: Recipe `e2e` failed with exit code 1

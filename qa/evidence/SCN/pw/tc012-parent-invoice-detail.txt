@@ -1,0 +1,36 @@
+Invoice
+Print
+INV-000146
+Paid
+Student
+SCN Student A1
+Billed to
+SCN Parent A
+Issued
+Oct 19, 2026
+Due
+Oct 26, 2026
+Amount
+EGP 1,500.00
+Paid
+EGP 1,500.00
+Balance
+EGP 0.00
+
+scn — س
+
+Payments
+EGP 300.00 · Balance
+Oct 19, 2026
+EGP 500.00 · Cash
+Oct 19, 2026
+EGP 1.00 · Cash
+Oct 19, 2026
+EGP 400.00 · Balance
+Oct 19, 2026
+EGP 0.01 · Cash
+Oct 19, 2026
+EGP 298.99 · Cash
+Oct 19, 2026
+---API---
+{"id":146,"number":"INV-000146","status":"paid","is_overdue":false,"student":{"id":222,"full_name":"SCN Student A1"},"payer":{"id":224,"full_name":"SCN Parent A"},"subscription_id":85,"description":"scn — س","amount_minor":150000,"paid_minor":150000,"balance_minor":0,"currency":"EGP","issued_on":"2026-10-19","due_on":"2026-10-26","voided_at":null,"created_at":"2026-10-19T17:05:27.122267Z","can_pay_online":[],"local_methods":[],"payments":[{"id":76,"customer":{"type":"student","name":"SCN Student A1","student_id":222,"email":"","phone":""},"invoice":{"id":146,"number":"INV-000146"},"transaction_number":"","reference":"","method":"wallet","amount_minor":30000,"fee_minor":0,"currency":"EGP","status":"completed","paid_on":"2026-10-19","refunded_at":null,"created_at":"2026-10-19T17:10:40.132366Z","wallet_topup":false,"editable":false,"deletable":false,"refundable":false,"movable":true},{"id":77,"customer":{"type":"student","name":"SCN Student A1","student_id":222,"email":"","phone":""},"invoice":{"id":146,"number":"INV-000146"},"transaction_number":"","reference":"","method":"cash","amount_minor":50000,"fee_minor":0,"currency":"EGP","status":"completed","paid_on":"2026-10-19","refunded_at":null,"created_at":"2026-10-19T17:14:14.764056Z","wallet_topup":false,"editable":false,"deletable":true,"refundable":true,"movable":true},{"id":78,"customer":{"type":"student","name":"SCN Student A1","student_id":222,"email":"","phone":""},"invoice":{"id":146,"number":"INV-000146"},"transaction_number":"","reference":"","method":"cash","amount_minor":100,"fee_minor":0,"currency":"EGP","status":"completed","paid_on":"2026-10-19","refunded_at":null,"created_at":"2026-10-19T17:14:15.034808Z","wallet_topup":false,"editable":false,"deletable":true,"refundable":true,"movable":true},{"id":80,"customer":{"type":"student","name":"SCN Student A1","student_id":222,"email":"","phone":""},"invoice":{"id":146,"number":"INV-000146"},"transaction_number":"","reference":"","method":"wallet","amount_minor":40000,"fee_minor":0,"currency":"EGP","status":"completed","paid_on":"2026-10-19","refunded_at":null,"created_at":"2026-10-19T17:14:15.178228Z","wallet_topup":false,"editable":false,"deletable":false,"refundable":false,"movable":true},{"id":81,"customer":{"type":"student","name":"SCN Student A1","student_id":222,"email":"","phone":""},"invoice":{"id":146,"number":"INV-000146"},"transaction_number":"","reference":"","method":"cash","amount_minor":1,"fee_minor":0,"currency":"EGP","status":"completed","paid_on":"2026-10-19","refunded_at":null,"created_at":"2026-10-19T17:14:15.456165Z","wallet_topup":false,"editable":false,"deletable":true,"refundable":true,"movable":true},{"id":83,"customer":{"type":"student","name":"SCN Student A1","student_id":222,"email":"","phone":""},"invoice":{"id":146,"number":"INV-000146"},"transaction_number":"","reference":"","method":"cash","amount_minor":29899,"fee_minor":0,"currency":"EGP","status":"completed","paid_on":"2026-10-19","refunded_at":null,"created_at":"2026-10-19T17:14:30.798289Z","wallet_topup":false,"editable":false,"deletable":true,"refundable":true,"movable":true}]}

@@ -1,0 +1,27 @@
+==== TC-027 2026-10-19T04:11:44.343231
+projection 200 {"year": 2026, "month": 10, "rows": [{"teacher": {"id": 16, "full_name": "F02 Teacher"}, "currency": "EGP", "paid_so_far_minor": 0, "projected_minor": 0, "scheduled_sessions": 4, "scheduled_minutes": 120, "missing_rate": true}, {"teacher": {"id": 42, "full_name": "F10 Teacher Eight"}, "currency": "EGP", "paid_so_far_minor": 500000, "projected_minor": 500000, "scheduled_sessions": 0, "scheduled_minutes": 0, "missing_rate": false}, {"teacher": {"id": 45, "full_name": "F10 Teacher Eleven"}, "currency": "USD", "paid_so_far_minor": 100, "projected_minor": 100, "scheduled_sessions": 0, "scheduled_minutes": 0, "missing_rate": false}, {"teacher": {"id": 39, "full_name": "F10 Teacher Five"}, "currency": "EGP", "paid_so_far_minor": 6700, "projected_minor": 6700, "scheduled_sessions": 0, "scheduled_minutes": 0, "missing_rate": false}, {"teacher": {"id": 43, "full_name": "F10 Teacher Nine"}, "currency": "EGP", "paid_so_far_minor": 300000, "projected_minor": 300000, "scheduled_sessions": 0, "scheduled_minutes": 0, "missing_rate": false}, {"teacher": {"id": 41, "full_name": "F10 Teacher Seven"}, "currency": "EGP", "paid_so_far_minor": 6000, "projected_minor": 6000, "scheduled_sessions": 0, "scheduled_minutes": 0, "missing_rate": false}, {"teacher": {"id": 37, "full_name": "F10 Teacher Three"}, "currency": "EGP", "paid_so_far_minor": 6000, "projected_minor": 6000, "scheduled_sessions": 0, "scheduled_minutes": 0, "missing_rate": false}, {"teacher": {"id": 7, "full_name": "QA teacher"}, "curr
+T1 projection row {"teacher": {"id": 7, "full_name": "QA teacher"}, "currency": "EGP", "paid_so_far_minor": 12000, "projected_minor": 33000, "scheduled_sessions": 5, "scheduled_minutes": 210, "missing_rate": false}
+T1 Oct draft net 12000 gross 6000
+projection csv 200 ﻿Teacher,Currency,Scheduled sessions,Scheduled minutes,Paid so far (minor units),Projected (minor units),Missing rate
+F02 Teacher,EGP,4,120,0,0,yes
+F10 Teacher Eight,EGP,0,0,500000,500000,no
+F10 Teacher Eleven,USD,0,0,100,100,no
+F10 Teacher Five,EGP,0,0,6700,6700,no
+F10 Teacher Nine,EGP,0,0,300000,300000,no
+F10 Teacher Seven,EGP,0,0,6000,6000,no
+F10 Teacher Three,EGP,0,0,6000,6000,no
+QA te
+payread projection 200
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+exch off estimate {"estimate": null}
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  projection switch off 403/404 :: 404
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  projection no DB writes :: generate above changes updated_at; checked separately
+OK  projection call writes nothing
+51|2026-10-10|60|scheduled
+3|2026-10-22|30|scheduled
+1|2026-10-26|30|scheduled
+52|2026-10-28|60|scheduled
+4|2026-10-29|30|scheduled

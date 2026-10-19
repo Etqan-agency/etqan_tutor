@@ -1,0 +1,9 @@
+==== TC-008 2026-10-19T04:03:00.688882
+OK  attendance on locked session 409 payroll.payslip_issued :: 409 {"detail": "This session is on an issued payslip.", "code": "payroll.payslip_issued"}
+late marked 200 completed
+BAD unpaid_sessions lists T1 late session :: [{"id": 7, "full_name": "QA teacher"}]
+OK  T1 Sept payslip unchanged 13500 paid
+bonus 201 {"id": 1, "teacher": {"id": 7, "full_name": "QA teacher"}, "kind": "bonus", "amount_minor": 6000, "percent_bp": null, "currency": "EGP", "effective_on": "2026-10-05", "reason": "late Sept session", "p
+OK  Oct has no late Sept session line :: [('session', 50, 6000), ('adjustment', None, 6000)]
+OK  Oct has adjustment line 6000
+DB late f lines 0

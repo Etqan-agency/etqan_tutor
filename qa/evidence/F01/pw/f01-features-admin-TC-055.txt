@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › e2e/qa/f01-features-admin.spec.ts:116:1 › TC-055 edit timezone on the change page (839ms)
+
+  1 passed (1.4s)

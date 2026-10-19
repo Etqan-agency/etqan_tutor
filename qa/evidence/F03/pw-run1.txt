@@ -1,0 +1,45 @@
+      116 | 	await expect.poll(async () => (await api(page, "/academy/settings/")).json?.renewal_grace_days).toBe(5);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f03-roles-settings.spec.ts:113:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f03-roles-settings-TC-0-5221b-nslate-off-shows-FeatureOff-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f03-roles-settings-TC-0-5221b-nslate-off-shows-FeatureOff-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.fill: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Renewal grace (days)')
+
+
+      111 | 	await page.goto(`${QA}/app/settings/academy`);
+      112 | 	const grace = page.getByLabel("Renewal grace (days)");
+    > 113 | 	await grace.fill("5");
+          | 	            ^
+      114 | 	await page.getByLabel("Default currency").selectOption("EUR");
+      115 | 	await page.getByRole("button", { name: "Save", exact: true }).first().click();
+      116 | 	await expect.poll(async () => (await api(page, "/academy/settings/")).json?.renewal_grace_days).toBe(5);
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f03-roles-settings.spec.ts:113:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f03-roles-settings-TC-0-5221b-nslate-off-shows-FeatureOff-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-f03-roles-settings-TC-0-5221b-nslate-off-shows-FeatureOff-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f03-roles-settings-TC-0-5221b-nslate-off-shows-FeatureOff-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-f03-roles-settings-TC-0-5221b-nslate-off-shows-FeatureOff-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › e2e/qa/f03-roles-settings.spec.ts:45:1 › TC-023 owner builds a role and hires staff; the staff app is narrowed and a retire bites at once 
+    [chromium] › e2e/qa/f03-roles-settings.spec.ts:107:1 › TC-024 settings save and survive reload; features are read-only; quick translate off shows FeatureOff 
+error: Recipe `e2e` failed with exit code 1

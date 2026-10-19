@@ -1,0 +1,30 @@
+    Locator: getByText('Subscription cancelled.')
+    Expected: visible
+    Error: strict mode violation: getByText('Subscription cancelled.') resolved to 2 elements:
+        1) <div class="text-muted-foreground">Subscription cancelled.</div> aka getByText('Subscription cancelled.', { exact: true })
+        2) <span role="status" aria-live="assertive">Notifications Subscription cancelled.</span> aka getByText('Notifications Subscription')
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText('Subscription cancelled.')
+      119 | 	await page.getByRole("button", { name: "Cancel subscription" }).click();
+      120 | 	await page.getByRole("alertdialog").getByRole("button", { name: "Cancel subscription" }).click();
+    > 121 | 	await expect(page.getByText("Subscription cancelled.")).toBeVisible();
+          | 	                                                        ^
+      122 | 	// renew the original again in the UI: allowed now
+      123 | 	await page.goto(`${QA}/app/scheduling/subscriptions/${id}`);
+      124 | 	await page.getByRole("button", { name: "Renew", exact: true }).click();
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/f06-catalogue-scheduling.spec.ts:121:58
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-f06-catalogue-schedulin-79803--again-archive-an-ended-one-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Error Context: test-results/qa-f06-catalogue-schedulin-79803--again-archive-an-ended-one-chromium-retry1/error-context.md
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-f06-catalogue-schedulin-79803--again-archive-an-ended-one-chromium-retry1/trace.zip
+    Usage:
+        pnpm exec playwright show-trace test-results/qa-f06-catalogue-schedulin-79803--again-archive-an-ended-one-chromium-retry1/trace.zip
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+  1 failed
+    [chromium] › e2e/qa/f06-catalogue-scheduling.spec.ts:89:1 › TC-014 renew, cancel the renewal, renew again, archive an ended one 
+  1 did not run
+  1 passed (20.9s)
+error: Recipe `e2e` failed with exit code 1

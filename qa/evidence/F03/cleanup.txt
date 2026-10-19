@@ -1,0 +1,29 @@
+login adm 200
+{
+  "saved": {
+    "timezone": "Africa/Cairo",
+    "default_currency": "EUR",
+    "default_language": "ar",
+    "generation_horizon_days": 14,
+    "renewal_grace_days": 5,
+    "absent_consumes_session": true,
+    "excused_consumes_session": false,
+    "auto_invoice_on_subscription": true,
+    "invoice_due_days": 7,
+    "postpone_limit_minutes": 120,
+    "supervision_enabled": true,
+    "updated_at
+== cleanup
+deact staff 20 200 deact staff 22 200 deact staff 25 200 deact staff 21 200 deact staff 26 200 deact staff 23 200 deact staff 24 200 deact staff 29 200 deact staff 27 200 deact staff 28 200 deact staff 30 200 
+retire role 13 200 retire role 14 200 retire role 15 200 retire role 16 200 retire role 17 200 retire role 7 200 retire role 8 200 retire role 10 200 retire role 9 200 retire role 6 200 retire role 11 200 retire role 12 200 
+void inv 4 200 void inv 5 200 void inv 6 200 
+unlink guardian (baseline had none): 204
+qaother staff 2 deact: 200
+settings: Africa/Cairo|EGP|ar|14|7|7|t|f|t|120
+qaother settings: UTC|USD
+roles: 1:Supervisor:true:20 2:QA No Codes:true:0 3:QA Student View:true:2 4:F02 QL Full:true:7 5:F02 QL NoView:true:1 6:F03 Front desk:false:4 7:F03 Trim:false:2 8:F03 Role editor:false:9 9:F03 Money:false:3 10:F03 Ed ok:false:1 11:F03 Partial:false:4 12:F03 Matrix:false:0 13:F03 Iso:false:1 14:F03 QL Teacher:false:2 15:F03 Everything:false:881 16:F03 UI Desk 1792369176028:false:2 17:F03 UI Desk 1792369180807:false:2 18:F03 UI Desk 1792369207690:false:2
+translations rows: 0 open jobruns: 0
+features qa: {"themes": true, "parents": true, "spanish": true, "families": true, "invoices": true, "code_reset": true, "two_factor": true, "phone_login": true, "quick_login": true, "supervision": true, "postponement": true, "internal_chat": false, "payroll_rules": true, "system_status": true, "google_sign_in": false, "online_payments": true, "quick_translate": true, "session_reports": true, "teacher_balance": true, "payment_receipts": true, "student_teacher_rate": true}
+login chk1 200
+login chk2 200
+login chk3 200

@@ -1,0 +1,28 @@
+== TC-009 2026-10-19T03:49:21.904917
+KWD pay 201 {"status": "paid", "paid_minor": 12345}
+injection invoice 201
+summary {"revenue_this_month": [{"currency": "EGP", "amount_minor": 573356}, {"currency": "KWD", "amount_minor": 12345}, {"currency": "USD", "amount_minor": 23300}], "overdue": []}
+SQL revenue EGP|573356
+KWD|12345
+USD|23300
+OK  TC009 revenue per currency == SQL :: api {'EGP': 573356, 'KWD': 12345, 'USD': 23300} sql {'EGP': 573356, 'KWD': 12345, 'USD': 23300}
+OK  TC009 revenue is a list per currency
+paid_minor consistency (should be empty) 
+invoice count 79 79
+open balance API {'EGP': 1181942, 'JPY': 1500, 'KWD': 12345, 'USD': 14450, 'ZZZ': 10000} SQL EGP|1181942
+JPY|1500
+KWD|12345
+USD|14450
+ZZZ|10000
+OK  TC009 open balance per currency API == SQL
+inv csv 200 ﻿Number,Student,Payer,Description,Amount (minor units),Paid (minor units),Balance (minor units),Currency,Issued on,Due on,Status,Overdue
+   INV-000079,QA student,QA Parent Three,"'=HYPERLINK(""http://x"",""y"")",100,0,100,EGP,2026-10-19,2026-10-26,unpaid,no
+   INV-000078,QA student,QA Parent Three,JPY,1500,0,1500,JPY,2026-10-19,2026-10-26,unpaid,no
+   INV-000074,QA student,QA Parent Three,KWD nofee,12345,0,12345,KWD,2026-10-19,2026-10-26,unpaid,no
+   INV-000073,QA student,QA Parent Three,KWD,12345,12345,0,KWD,2026-10-19,2026-10-26,paid,no
+OK  TC009 CSV injection defused
+pay csv 200 ﻿Date,Customer,Customer type,Invoice,Method,Transaction number,Amount (minor units),Fee (minor units),Currency,Status rows 54
+   2026-10-19,QA student,student,INV-000073,cash,,12345,0,KWD,completed
+payments USD 200 6 {'USD'}
+OK  TC009 currency filter only USD
+S7: refunded payments excluded from revenue regardless of refund date; revenue bucket = paid_on (code: summary.py)

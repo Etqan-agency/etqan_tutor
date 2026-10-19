@@ -1,0 +1,22 @@
+== port 80
+trailing dot + qa cookie: HTTP/1.1 404 Not Found | 7c1 <!DOCTYPE html> <html lang="en"> <head>   <meta http-equiv="content-type" content="text/html; charset=utf-8">   <title>Page not found at /api/v1/
+trailing dot + qaother cookie: HTTP/1.1 404 Not Found | 7c1 <!DOCTYPE html> <html lang="en"> <head>   <meta http-equiv="content-type" content="text/html; charset=utf-8">   <title>Page not found at /api/v1/
+Host qa:443 + qaother cookie: HTTP/1.1 403 Forbidden | {"detail":"Authentication credentials were not provided."}
+Host qa:443 + qa cookie: HTTP/1.1 200 OK | {"id":1,"email":"qa-admin@qa.etqan.test","full_name":"QA Admin","phone":"","preferred_language":"ar","effective_language":"ar","timezone":"Africa/Cair
+two Host (qa, qaother) + qaother cookie: HTTP/1.1 400 Bad Request | 400 Bad Request
+two Host (qa, qaother) + qa cookie: HTTP/1.1 400 Bad Request | 400 Bad Request
+absolute-form qa URL, Host qaother, qaother cookie: HTTP/1.1 403 Forbidden | {"detail":"Authentication credentials were not provided."}
+absolute-form qa URL, Host qaother, qa cookie: HTTP/1.1 200 OK | {"id":1,"email":"qa-admin@qa.etqan.test","full_name":"QA Admin","phone":"","preferred_language":"ar","effective_language":"ar","timezone":"Africa/Cair
+Host qa + qaother cookie: HTTP/1.1 403 Forbidden | {"detail":"Authentication credentials were not provided."}
+Host qaother + qaother cookie (control): HTTP/1.1 200 OK | {"id":1,"email":"qaother-admin@qa.etqan.test","full_name":"QA Other Admin","phone":"","preferred_language":"ar","effective_language":"ar","timezone":"
+== port 8000
+trailing dot + qa cookie: HTTP/1.1 404 Not Found | <!DOCTYPE html> <html lang="en"> <head>   <meta http-equiv="content-type" content="text/html; charset=utf-8">   <title>Page not found at /api/v1/ident
+trailing dot + qaother cookie: HTTP/1.1 404 Not Found | <!DOCTYPE html> <html lang="en"> <head>   <meta http-equiv="content-type" content="text/html; charset=utf-8">   <title>Page not found at /api/v1/ident
+Host qa:443 + qaother cookie: HTTP/1.1 403 Forbidden | {"detail":"Authentication credentials were not provided."}
+Host qa:443 + qa cookie: HTTP/1.1 200 OK | {"id":1,"email":"qa-admin@qa.etqan.test","full_name":"QA Admin","phone":"","preferred_language":"ar","effective_language":"ar","timezone":"Africa/Cair
+two Host (qa, qaother) + qaother cookie: HTTP/1.1 404 Not Found | 
+two Host (qa, qaother) + qa cookie: HTTP/1.1 404 Not Found | 
+absolute-form qa URL, Host qaother, qaother cookie: HTTP/1.1 404 Not Found | <!DOCTYPE html> <html lang="en"> <head>   <meta http-equiv="content-type" content="text/html; charset=utf-8">   <title>Page not found at http://qa.etq
+absolute-form qa URL, Host qaother, qa cookie: HTTP/1.1 404 Not Found | <!DOCTYPE html> <html lang="en"> <head>   <meta http-equiv="content-type" content="text/html; charset=utf-8">   <title>Page not found at http://qa.etq
+Host qa + qaother cookie: HTTP/1.1 403 Forbidden | {"detail":"Authentication credentials were not provided."}
+Host qaother + qaother cookie (control): HTTP/1.1 200 OK | {"id":1,"email":"qaother-admin@qa.etqan.test","full_name":"QA Other Admin","phone":"","preferred_language":"ar","effective_language":"ar","timezone":"

@@ -1,0 +1,14 @@
+156 objects imported automatically (use -v 2 for details).
+
+== ops-view-all@qa.etqan.test perms: 32
+  account.emailaddress: ['make_verified']  has_change=False
+  django_celery_beat.periodictask: ['disable_tasks', 'enable_tasks', 'run_tasks', 'toggle_tasks']  has_change=False
+  etqan_billing.etqaninvoice: ['email_again', 'issue_invoices', 'mark_paid', 'void_invoices']  has_change=False
+  identity.teacherprofile: ['send_password_set_email']  has_change=False
+  integrations.platformaccount: ['test_accounts']  has_change=False
+== ops-view@qa.etqan.test perms: 2
+  account.emailaddress: ['make_verified']  has_change=False
+  django_celery_beat.periodictask: ['disable_tasks', 'enable_tasks', 'run_tasks', 'toggle_tasks']  has_change=False
+  etqan_billing.etqaninvoice: ['email_again', 'issue_invoices', 'mark_paid', 'void_invoices']  has_change=False
+  identity.teacherprofile: ['send_password_set_email']  has_change=False
+  integrations.platformaccount: ['test_accounts']  has_change=False

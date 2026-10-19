@@ -1,0 +1,53 @@
+$ 2026-10-17T21:51:54Z docker build --progress=plain --target dev --build-arg UID=501 --build-arg GID=20 --secret id=tokens_token,env=GH_TOKEN -t etqan-qa001-r1/dashboard:gid20 dashboard  (host id: uid=501(khaledsakr) gid=20(staff) groups=20(staff),12(everyone),61(localaccounts),79(_appserverusr),80(admin),81(_appserveradm),98(_lpadmin),702(com.apple.sharepoint.group.2),33(_appstore),100(_lpoperator),204(_developer),250(_analyticsusers),395(com.apple.access_ftp),398(com.apple.access_screensharing),399(com.apple.access_ssh),400(com.apple.access_remote_ae),701(com.apple.sharepoint.group.1))
+#3 transferring context: 118B 0.0s done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 DONE 0.0s
+
+#5 [dev 1/6] FROM docker.io/library/node:22-alpine@sha256:0a7108bf6c7bf5de370ffb1a3ed6be93d405b43ff159f681a8d18c0e2bc2e402
+#5 resolve docker.io/library/node:22-alpine@sha256:0a7108bf6c7bf5de370ffb1a3ed6be93d405b43ff159f681a8d18c0e2bc2e402
+#5 resolve docker.io/library/node:22-alpine@sha256:0a7108bf6c7bf5de370ffb1a3ed6be93d405b43ff159f681a8d18c0e2bc2e402 1.1s done
+#5 DONE 1.1s
+
+#4 [internal] load build context
+#4 transferring context: 143B done
+#4 DONE 0.0s
+
+#6 [dev 4/6] COPY package.json pnpm-lock.yaml ./
+#6 CACHED
+
+#7 CACHED
+
+#8 [dev 2/6] RUN npm install -g pnpm@10.28.0     && apk add --no-cache git
+#8 CACHED
+
+#9 [dev 3/6] WORKDIR /app
+#9 CACHED
+
+#10 [dev 6/6] RUN set -eu;     deluser node 2>/dev/null || true;     group="$(awk -F: -v gid="20" '$3 == gid { print $1; exit }' /etc/group)";     if [ -z "$group" ]; then addgroup -g "20" app; group=app; fi;     adduser -u "501" -G "$group" -D app;     chown -R "501:20" /app
+#10 CACHED
+
+#11 exporting to image
+#11 exporting layers done
+#11 exporting manifest sha256:cf8d8142c2815a40a0bf435bae2831d12edadb65987e8384b7b5549e05523cfa done
+#11 exporting config sha256:d956b8e784f2c677df817d1a02cc23e8d3ae69604bf75a4ac2d9cc38574fb179 done
+#11 exporting attestation manifest sha256:2c8b750f22dd7f983d3b91c08d17cd602e5ce88e3e9f0d35b5b49808e4d23734 done
+#11 exporting manifest list sha256:5a1a7a5ba53f721d964fe5a243f6bdc81b530fb1f737080b57a0e642c06e8a8c done
+#11 naming to docker.io/etqan-qa001-r1/dashboard:gid20 done
+#11 unpacking to docker.io/etqan-qa001-r1/dashboard:gid20 done
+#11 DONE 0.1s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/rn5j9f2s2jtub5vi4ka85qh0x
+build exit=0
+## id:
+uid=501(app) gid=20(dialout) groups=20(dialout)
+## stat /app:
+501:20 app:dialout /app
+501:20 app:dialout /app/node_modules
+dialout:x:20:root,app
+app can write /app
+## pnpm as app:
+app
+10.28.0
+33

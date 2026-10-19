@@ -1,0 +1,67 @@
+== TC-006
+missing email: {"email":["This field is required."]} [400] 
+dup email teacher: {"email":["This email is already in use."]} [400] 
+dup email case: {"email":["This email is already in use."]} [400] 
+role 999999: {"role_ids":["Choose roles from the list."]} [400] 
+qaother max role id=1 names: 1:Supervisor
+role_ids:"1": {"role_ids":["Expected a list of items but got type \"str\"."]} [400] 
+f03-z rows: 0
+search hana: [(20, 'f03-hana@qa.etqan.test')]
+all staff emails contain admin? 9 False
+sessions for hana before: 200 (total)
+deactivate hana -> 200
+hana old session me -> 403
+login hana2 400
+f
+roles kept: 1
+reactivate -> 200
+login hana 200
+== TC-007
+20 money/settings codes: []
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;j=json.load(sys.stdin);j=j.get('results',j);print([r.get('id') for r in j])
+                                             ^^^^^
+AttributeError: 'list' object has no attribute 'get'
+supervisors: 
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;j=json.load(sys.stdin);j=j.get('results',j);print([r.get('id') for r in j])
+                                             ^^^^^
+AttributeError: 'list' object has no attribute 'get'
+retire Supervisor -> 200 list:   sup /supervision/ -> 403
+S4: session 1 supervisor_id still: 4 ; sub 1: 4
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;j=json.load(sys.stdin);j=j.get('results',j);print([r.get('id') for r in j])
+                                             ^^^^^
+AttributeError: 'list' object has no attribute 'get'
+restore -> 200 list:  sup /supervision/ -> 200
+S4 probe: assign retired supervisor? retire then PATCH sub 2 supervisor_id=4:
+  {"supervisor_id":["Choose an active staff member who can supervise."]} [400] 
+  sub 1 detail (retired sup kept?): [(2, None), (1, {'id': 4, 'full_name': 'QA Supervisor'})]
+nocode sup list -> 403
+qa: supervision=off
+supervision off: adm -> 404 nocode -> 403 sup /supervision/ -> 404
+qa: supervision=on
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;j=json.load(sys.stdin);j=j.get('results',j);print([r.get('id') for r in j])
+                                             ^^^^^
+AttributeError: 'list' object has no attribute 'get'
+deactivate supervisor user via staff PATCH 4 -> 200 list: 
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;j=json.load(sys.stdin);j=j.get('results',j);print([r.get('id') for r in j])
+                                             ^^^^^
+AttributeError: 'list' object has no attribute 'get'
+reactivate -> 200 list: 
+login sup 200
+== TC-007 lists (rerun)
+supervisors: [(4, 'QA Supervisor')]
+retired: []
+restored: [(4, 'QA Supervisor')]
+user deactivated: []
+reactivated: [(4, 'QA Supervisor')]
+QA Student View member (staff-codes id 3) never listed; admin id 1 never listed (see list above)
+login sup 200

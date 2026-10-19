@@ -1,0 +1,131 @@
+
+Running 2 tests using 1 worker
+
+  ✘  1 [chromium] › e2e/qa/scn-tc007-teacher-attendance.spec.ts:29:1 › SCN-TC-007 teacher marks U1 present in Teaching > Sessions; session completes and the package is consumed (304ms)
+  ✘  2 [chromium] › e2e/qa/scn-tc007-teacher-attendance.spec.ts:29:1 › SCN-TC-007 teacher marks U1 present in Teaching > Sessions; session completes and the package is consumed (retry #1) (132ms)
+  ✘  3 [chromium] › e2e/qa/scn-tc012-parent-portal.spec.ts:32:1 › SCN-TC-012 parent sees the children's sessions and attendance, the invoice with the wallet payment; FAM-B is not found (10.5s)
+  ✘  4 [chromium] › e2e/qa/scn-tc012-parent-portal.spec.ts:32:1 › SCN-TC-012 parent sees the children's sessions and attendance, the invoice with the wallet payment; FAM-B is not found (retry #1) (10.9s)
+
+
+  1) [chromium] › e2e/qa/scn-tc007-teacher-attendance.spec.ts:29:1 › SCN-TC-007 teacher marks U1 present in Teaching > Sessions; session completes and the package is consumed 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 0
+    Received:   NaN
+
+      30 | 	page,
+      31 | }) => {
+    > 32 | 	expect(U1).toBeGreaterThan(0);
+         | 	           ^
+      33 | 	const errors: string[] = [];
+      34 | 	page.on("response", (r) => r.status() >= 500 && errors.push(`${r.status()} ${r.url()}`));
+      35 | 	await login(page, "qa-teacher@qa.etqan.test", "QA-People-2026!");
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/scn-tc007-teacher-attendance.spec.ts:32:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-scn-tc007-teacher-atten-86759-and-the-package-is-consumed-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-scn-tc007-teacher-atten-86759-and-the-package-is-consumed-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 0
+    Received:   NaN
+
+      30 | 	page,
+      31 | }) => {
+    > 32 | 	expect(U1).toBeGreaterThan(0);
+         | 	           ^
+      33 | 	const errors: string[] = [];
+      34 | 	page.on("response", (r) => r.status() >= 500 && errors.push(`${r.status()} ${r.url()}`));
+      35 | 	await login(page, "qa-teacher@qa.etqan.test", "QA-People-2026!");
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/scn-tc007-teacher-attendance.spec.ts:32:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-scn-tc007-teacher-atten-86759-and-the-package-is-consumed-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-scn-tc007-teacher-atten-86759-and-the-package-is-consumed-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-scn-tc007-teacher-atten-86759-and-the-package-is-consumed-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-scn-tc007-teacher-atten-86759-and-the-package-is-consumed-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › e2e/qa/scn-tc012-parent-portal.spec.ts:32:1 › SCN-TC-012 parent sees the children's sessions and attendance, the invoice with the wallet payment; FAM-B is not found 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('INV-000146').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText('INV-000146').first()
+
+
+      70 | 	// Invoice detail: 1,500.00 total, 300.00 paid from the wallet, balance from the API
+      71 | 	await page.goto(`${QA}/app/learning/invoices/${INV1}`);
+    > 72 | 	await expect(page.getByText("INV-000146").first()).toBeVisible();
+         | 	                                                   ^
+      73 | 	const detail = await api(page, `billing/invoices/${INV1}/`);
+      74 | 	expect(detail.status).toBe(200);
+      75 | 	const detText = await page.locator("main").innerText();
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/scn-tc012-parent-portal.spec.ts:72:53
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-scn-tc012-parent-portal-0bc4b--payment-FAM-B-is-not-found-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-scn-tc012-parent-portal-0bc4b--payment-FAM-B-is-not-found-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('INV-000146').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText('INV-000146').first()
+
+
+      70 | 	// Invoice detail: 1,500.00 total, 300.00 paid from the wallet, balance from the API
+      71 | 	await page.goto(`${QA}/app/learning/invoices/${INV1}`);
+    > 72 | 	await expect(page.getByText("INV-000146").first()).toBeVisible();
+         | 	                                                   ^
+      73 | 	const detail = await api(page, `billing/invoices/${INV1}/`);
+      74 | 	expect(detail.status).toBe(200);
+      75 | 	const detText = await page.locator("main").innerText();
+        at /Users/khaledsakr/Documents/Etqan tutor/etqan_tutor/dashboard/e2e/qa/scn-tc012-parent-portal.spec.ts:72:53
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/qa-scn-tc012-parent-portal-0bc4b--payment-FAM-B-is-not-found-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/qa-scn-tc012-parent-portal-0bc4b--payment-FAM-B-is-not-found-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/qa-scn-tc012-parent-portal-0bc4b--payment-FAM-B-is-not-found-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/qa-scn-tc012-parent-portal-0bc4b--payment-FAM-B-is-not-found-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › e2e/qa/scn-tc007-teacher-attendance.spec.ts:29:1 › SCN-TC-007 teacher marks U1 present in Teaching > Sessions; session completes and the package is consumed 
+    [chromium] › e2e/qa/scn-tc012-parent-portal.spec.ts:32:1 › SCN-TC-012 parent sees the children's sessions and attendance, the invoice with the wallet payment; FAM-B is not found 
+error: Recipe `e2e` failed with exit code 1

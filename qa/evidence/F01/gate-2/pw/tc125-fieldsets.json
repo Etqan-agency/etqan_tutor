@@ -1,0 +1,51 @@
+{
+  "fieldsets": [
+    {
+      "title": "",
+      "description": "",
+      "boxes": 0
+    },
+    {
+      "title": "Features: People",
+      "description": "Only Etqan switches these; the academy's admin sees them read-only. Switching a feature off hides it and keeps its data.",
+      "boxes": 7
+    },
+    {
+      "title": "Features: Teaching",
+      "description": "",
+      "boxes": 29
+    },
+    {
+      "title": "Features: Money",
+      "description": "",
+      "boxes": 21
+    },
+    {
+      "title": "Features: Communication",
+      "description": "",
+      "boxes": 7
+    },
+    {
+      "title": "Features: Content",
+      "description": "",
+      "boxes": 10
+    },
+    {
+      "title": "Features: Platform",
+      "description": "",
+      "boxes": 14
+    },
+    {
+      "title": "Domains",
+      "description": "",
+      "boxes": 0
+    }
+  ],
+  "chatLabel": "Internal chat (نظام المحادثات الداخلية)",
+  "unbuilt": "Free sessions for subscribers (نظام الحصص المجانية للمشتركين)\nTakes effect when built.",
+  "result": {
+    "messages": "The academy “Etqan QA Other” was changed successfully.",
+    "errors": "",
+    "errornote": ""
+  }
+}

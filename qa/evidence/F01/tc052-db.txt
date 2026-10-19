@@ -1,0 +1,2 @@
+academysettings: Mars/Phobos|usd|ar
+users: 1|qa-tmp-tz-admin@qa.etqan.test|QA Tmp TZ Admin|admin|t|ar|Mars/Phobos|!tmYhe3|f 

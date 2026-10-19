@@ -1,0 +1,21 @@
+2026-10-17T21:19:37Z
+## view-only: forged suspend_academies on qa-tmp-1 (pk 6) -> no action runs, no message
+login 302
+changelist offers actions: 
+POST final 200
+## view-only: forged reactivate_academies on qa-tmp-1 (pk 6, suspended) -> stays suspended
+login 302
+changelist offers actions: 
+POST final 200
+## view-only domain changelist + forged check_dns on a non-existent pk
+login 302
+changelist offers actions: 
+POST final 200
+## superuser ops@: actions still offered; suspend on non-existent pk 999999 (no real academy touched)
+login 302
+changelist offers actions: <option value="" <option value="suspend_academies" <option value="reactivate_academies" <option value="copy_features" <option value="" 
+<li class="success">Suspended 0 academies.</li>
+POST final 200
+## DB
+5|qa|active
+6|qa-tmp-1|suspended

@@ -1,0 +1,16 @@
+$ 2026-10-18T21:08:34Z pytest etqan/platform -q -p no:cacheprovider
+........................................................................ [ 31%]
+........................................................................ [ 63%]
+........................................................................ [ 95%]
+..........                                                               [100%]
+=============================== warnings summary ===============================
+etqan/platform/tests/test_export_feature.py: 10 warnings
+etqan/platform/tests/test_feature_on.py: 1 warning
+etqan/platform/tests/test_health.py: 2 warnings
+etqan/platform/tests/test_middleware.py: 2 warnings
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+226 passed, 15 warnings in 2.51s
+exit=0 elapsed=6s 2026-10-18T21:08:40Z

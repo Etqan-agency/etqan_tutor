@@ -1,0 +1,12 @@
+==== TC-014 2026-10-19T04:06:14.193853
+OK  report bp 200 :: {"student_absent_pay_bp": 5000, "student_excused_pay_bp": 2500, "at_disposal_pays": true, "group_pay": "per_class", "report_deduction_bp": 1000, "updated_at": "2026-10-19T01:06:14.208993Z", "updated_by": {"id": 1, "full_name": "QA Admin"}}
+report 405 {"detail": "Method \"POST\" not allowed."}
+BAD 2 report lines -600, ded 1200, net 16800, sent 1 missing 2 :: [-600, -600, -600] {"deductions_minor": 1800, "net_minor": 16200, "reports_sent": 0, "reports_missing": 3, "report_deductions_minor": 1800}
+OK  10001 400 :: 400
+group report lines [('report', 58, -300)] expected round(3000*1000*3/(10000*3))=300
+OK  group report deduction once = 300
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+OK  off: PATCH bp 400 :: 400 {"report_deduction_bp": ["Report deductions are switched off."]}
+OK  off: build ignores bp :: {"deductions_minor": 0, "net_minor": 18000}
+?: (staticfiles.W004) The directory '/app/etqan/static' in the STATICFILES_DIRS setting does not exist.
+BAD issue rebuilds same 16800 :: 200 16200

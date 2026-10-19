@@ -1,0 +1,38 @@
+== TC-002
+[200] PATCH academy/settings/ :: {"timezone":"Africa/Cairo","default_currency":"EGP","default_language":"ar","generation_horizon_days":14,"renewal_grace_days":7,"absent_consumes_session":false,"excused_consumes_session":false,"auto_i
+rem0 (0, 8) sqlcons=0
+[200] POST sessions/236/attendance/ :: {"id":236,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-12","starts_at":"2026-10-12T01:00:00Z","minutes":30,"status":"completed","student_attendance":"absent","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full_
+after P2 absent: (0, 8) sql=0
+[200] POST sessions/237/attendance/ :: {"id":237,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-13","starts_at":"2026-10-13T02:00:00Z","minutes":30,"status":"completed","student_attendance":"excused","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+after P3 excused: (0, 8) sql=0
+[200] POST sessions/238/attendance/ :: {"id":238,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-14","starts_at":"2026-10-14T03:00:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"absent","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full_
+after P4 present+teacher absent: (0, 8) sql=0
+[200] POST sessions/239/attendance/ :: {"id":239,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-15","starts_at":"2026-10-15T04:00:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+after P5 present: (1, 7) sql=1
+[200] PATCH academy/settings/ :: {"timezone":"Africa/Cairo","default_currency":"EGP","default_language":"ar","generation_horizon_days":14,"renewal_grace_days":7,"absent_consumes_session":true,"excused_consumes_session":false,"auto_invoice_on_subscription":true,"invoice_due_days":7,"postpone_limit_minutes":120,"supervision_enabled":
+absent_consumes=true: (2, 6) sql=2
+[200] PATCH academy/settings/ :: {"timezone":"Africa/Cairo","default_currency":"EGP","default_language":"ar","generation_horizon_days":14,"renewal_grace_days":7,"absent_consumes_session":true,"excused_consumes_session":true,"auto_invoice_on_subscription":true,"invoice_due_days":7,"postpone_limit_minutes":120,"supervision_enabled":t
+excused_consumes=true: (3, 5) sql=3
+[400] POST sessions/239/attendance/ :: {"student_attendance":["\"late\" is not a valid choice."]}
+236|completed|absent|not_set|not_set|regular|f||1|||f|f|t
+237|completed|excused|not_set|not_set|regular|f||1|||f|f|t
+238|completed|present|absent|not_set|regular|f||1|||f|f|t
+239|completed|present|not_set|not_set|regular|f||1|||f|f|t
+[200] PATCH academy/settings/ :: {"timezone":"Africa/Cairo","default_currency":"EGP","default_language":"ar","generation_horizon_days":14,"renewal_grace_days":7,"absent_consumes_session":true,"excused_consumes_session":false,"auto_invoice_on_subscription":true,"invoice_due_days":7,"postpone_limit_minutes":120,"supervision_enabled":
+restored original settings (absent=true excused=false): (2, 6)
+== TC-003
+proj0 [(37500, 286500, 58)] rem (2, 6)
+[200] POST sessions/248/attendance/ :: {"id":248,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T07:00:00Z","minutes":60,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+X1 present: proj [(43500, 286500, 57)] rem (2, 6)
+[200] POST sessions/249/attendance/ :: {"id":249,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T09:00:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+X2 present: proj [(43500, 286500, 57)] rem (2, 6)
+[200] POST sessions/249/pays-teacher/ :: {"id":249,"subscription_id":82,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T09:00:00Z","minutes":30,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"full
+X2 pays on: proj [(46500, 289500, 57)]
+[200] POST sessions/250/attendance/ :: {"id":250,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T11:00:00Z","minutes":45,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"fu
+X4 (45min pays=false) present: proj [(46500, 289500, 57)]
+[200] POST sessions/250/pays-teacher/ :: {"id":250,"subscription_id":null,"slot_id":null,"occurs_on":"2026-10-18","starts_at":"2026-10-18T11:00:00Z","minutes":45,"status":"completed","student_attendance":"present","teacher_attendance":"not_set","has_started":true,"meeting_url":"","meeting_host":false,"generated":false,"student":{"id":5,"fu
+X4 pays on: proj [(51000, 294000, 57)]
+248|completed|present|not_set|not_set|extra|f||1|||f|f|t
+249|completed|present|not_set|not_set|extra|f||1|||f|f|t
+250|completed|present|not_set|not_set|extra|f||1|||f|f|t
+0

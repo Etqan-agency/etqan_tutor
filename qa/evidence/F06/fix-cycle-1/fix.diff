@@ -1,0 +1,227 @@
+diff --git a/etqan/scheduling/api/payloads.py b/etqan/scheduling/api/payloads.py
+index f664349f..55f451cf 100644
+--- a/etqan/scheduling/api/payloads.py
++++ b/etqan/scheduling/api/payloads.py
+@@ -396,6 +396,8 @@ def generation_result(
+         "skipped_out_of_term": result.skipped_out_of_term,
+         # Slice B2g (plan D5).
+         "skipped_stopped": result.skipped_stopped,
++        # ETQAN-QA-040: dates of a deactivated student or teacher.
++        "skipped_inactive": result.skipped_inactive,
+         "conflicts": [
+             {
+                 "session": session_row(session, viewer=viewer, supervision=supervision),
+diff --git a/etqan/scheduling/api/views.py b/etqan/scheduling/api/views.py
+index 01ea41b5..73b3a215 100644
+--- a/etqan/scheduling/api/views.py
++++ b/etqan/scheduling/api/views.py
+@@ -21,6 +21,7 @@ from etqan.platform.permissions import codes_of
+ from etqan.platform.permissions import is_office
+ from etqan.platform.permissions import role_of
+ from etqan.scheduling import services
++from etqan.scheduling.api import bundle_payloads
+ from etqan.scheduling.api import payloads
+ from etqan.scheduling.api.archived import archived_mode
+ from etqan.scheduling.api.serializers import GenerateInput
+@@ -131,13 +132,19 @@ def subscription_filters(params) -> dict:
+     }
+ 
+ 
+-def detail(pk, request, *, code=status.HTTP_200_OK) -> Response:
++def detail(pk, request, *, code=status.HTTP_200_OK, conflicts=None) -> Response:
+     sub = services.subscriptions_queryset().get(pk=pk)
+     payload = payloads.subscription_detail(
+         sub,
+         is_admin=_is_office(request),
+         supervision=payloads.shows_supervision(request.user),
+     )
++    if conflicts is not None:
++        # ETQAN-QA-042 (P4-9): create and renew report the new sessions'
++        # double-bookings, as generate and bundle create do; never blocked.
++        payload["conflicts"] = bundle_payloads.conflict_rows(
++            conflicts, viewer=request.user
++        )
+     return Response(payload, status=code)
+ 
+ 
+@@ -222,7 +229,12 @@ class SubscriptionListView(CSVExportMixin, generics.GenericAPIView):
+         with transaction.atomic():
+             sub = services.create_subscription(**data, trial=trial)
+             billing_services.invoice_subscription(sub.pk, by=request.user)
+-        return detail(sub.pk, request, code=status.HTTP_201_CREATED)
++        return detail(
++            sub.pk,
++            request,
++            code=status.HTTP_201_CREATED,
++            conflicts=services.subscription_conflicts(sub),
++        )
+ 
+ 
+ class SubscriptionDetailView(APIView):
+@@ -273,7 +285,12 @@ class RenewView(APIView):
+                 sub, by=request.user, **_ids(body.validated_data)
+             )
+             billing_services.invoice_subscription(new.pk, by=request.user)
+-        return detail(new.pk, request, code=status.HTTP_201_CREATED)
++        return detail(
++            new.pk,
++            request,
++            code=status.HTTP_201_CREATED,
++            conflicts=services.subscription_conflicts(new),
++        )
+ 
+ 
+ class CancelView(APIView):
+diff --git a/etqan/scheduling/services/__init__.py b/etqan/scheduling/services/__init__.py
+index 2899fa0b..6a9537f0 100644
+--- a/etqan/scheduling/services/__init__.py
++++ b/etqan/scheduling/services/__init__.py
+@@ -55,6 +55,7 @@ from etqan.scheduling.services.bundles import is_current
+ from etqan.scheduling.services.generation import GenerationResult
+ from etqan.scheduling.services.generation import generate
+ from etqan.scheduling.services.generation import generate_horizon
++from etqan.scheduling.services.generation import subscription_conflicts
+ from etqan.scheduling.services.groups import MAX_CANDIDATES
+ from etqan.scheduling.services.groups import StudyGroupMembers
+ from etqan.scheduling.services.groups import create_group
+@@ -368,6 +369,7 @@ __all__ = [
+     "slots_outside",
+     "stop_schedules",
+     "study_group_members",
++    "subscription_conflicts",
+     "subscriptions_expired",
+     "subscriptions_queryset",
+     "subscriptions_running_low",
+diff --git a/etqan/scheduling/services/board.py b/etqan/scheduling/services/board.py
+index 19c7d1c3..2e1efc5b 100644
+--- a/etqan/scheduling/services/board.py
++++ b/etqan/scheduling/services/board.py
+@@ -8,13 +8,16 @@ from zoneinfo import ZoneInfo
+ 
+ from django.db.models import Exists
+ from django.db.models import OuterRef
++from django.db.models import Prefetch
+ from django.db.models import Q
++from django.db.models import prefetch_related_objects
+ 
+ from etqan.platform import features
+ from etqan.scheduling import dates
+ from etqan.scheduling.models import ScheduleSlot
+ from etqan.scheduling.models import Session
+ from etqan.scheduling.models import Subscription
++from etqan.scheduling.models import TeacherSubstitution
+ from etqan.scheduling.services import rules
+ 
+ STATES = {
+@@ -102,6 +105,14 @@ def today_board(day: date | None = None) -> list[TodayRow]:
+     derived = rules.derive(
+         [s.subscription for s in slots] + [s.subscription for s in moved_in]
+     )
++    # ETQAN-QA-040: a missing row's teacher may be a substitute's (G-5).
++    prefetch_related_objects(
++        [s.subscription for s in slots],
++        Prefetch(
++            "substitutions",
++            queryset=TeacherSubstitution.objects.select_related("teacher__user"),
++        ),
++    )
+     # Slice B2g §4: a row names its session's teacher, and whom it stands in for.
+     sessions = {
+         s.slot_id: s
+@@ -130,6 +141,8 @@ def today_board(day: date | None = None) -> list[TodayRow]:
+                 day < sub.starts_on
+                 or day > rules.generation_last_day(sub, values.grace_ends_on)
+                 or rules.covering_pause(sub, day) is not None
++                # ETQAN-QA-040: generation leaves a deactivated person out.
++                or rules.person_inactive(sub, day)
+             )
+         ):
+             continue
+diff --git a/etqan/scheduling/services/generation.py b/etqan/scheduling/services/generation.py
+index 9a8cf0e5..87f7bbfb 100644
+--- a/etqan/scheduling/services/generation.py
++++ b/etqan/scheduling/services/generation.py
+@@ -30,6 +30,9 @@ class GenerationResult:
+     # Slice B2g (plan D5): live schedules the run left out because they are
+     # stopped or deleted — a count of schedules, not of dates.
+     skipped_stopped: int = 0
++    # ETQAN-QA-040: dates left out because the student or the date's teacher
++    # (the substitute's, inside a substitution) is deactivated.
++    skipped_inactive: int = 0
+ 
+ 
+ def ends_at(session: Session):
+@@ -151,7 +154,11 @@ def generate(
+     slots = list(
+         ScheduleSlot.objects.filter(
+             is_active=True, subscription_id__in=_lock_live(subscription)
+-        ).select_related("subscription__teacher", "subscription__renewal")
++        ).select_related(
++            "subscription__teacher__user",
++            "subscription__student__user",
++            "subscription__renewal",
++        )
+     )
+     # Slice B2g G-5: the substitutions with their teachers, once per run.
+     prefetch_related_objects(
+@@ -159,7 +166,7 @@ def generate(
+         "pauses",
+         Prefetch(
+             "substitutions",
+-            queryset=TeacherSubstitution.objects.select_related("teacher"),
++            queryset=TeacherSubstitution.objects.select_related("teacher__user"),
+         ),
+     )
+     existing = set(
+@@ -187,6 +194,8 @@ def generate(
+                 result.skipped_paused += 1
+             elif (slot.pk, day) in existing:
+                 result.skipped_existing += 1
++            elif rules.person_inactive(sub, day):
++                result.skipped_inactive += 1
+             else:
+                 new.append(_new_session(slot, day, academy.timezone))
+     # The unique (slot, date) constraint makes a concurrent run harmless.
+@@ -206,6 +215,18 @@ def generate(
+     return result
+ 
+ 
++def subscription_conflicts(subscription: Subscription) -> list[tuple[Session, Session]]:
++    """ETQAN-QA-042: the double-bookings of ``subscription``'s sessions, for
++    the create and renew answers (P4-9: reported, never blocked)."""
++    return conflicts(
++        list(
++            rules.sessions_queryset()
++            .filter(subscription=subscription)
++            .exclude(status=Session.Status.CANCELLED)
++        )
++    )
++
++
+ def generate_horizon(subscription: Subscription | None = None) -> GenerationResult:
+     """Today through today + the academy's horizon (spec §4.1)."""
+     today = rules.today()
+diff --git a/etqan/scheduling/services/rules.py b/etqan/scheduling/services/rules.py
+index 29802d09..0e66b036 100644
+--- a/etqan/scheduling/services/rules.py
++++ b/etqan/scheduling/services/rules.py
+@@ -258,6 +258,19 @@ def covering_substitution(
+     return None
+ 
+ 
++def person_inactive(subscription: Subscription, day: date) -> bool:
++    """ETQAN-QA-040: the student, or the teacher of ``day`` (the
++    substitute's inside a substitution, G-5), is deactivated. Create, renew
++    and a hand-added session already refuse them; generation and the Today
++    board's missing rows leave them out too. Reads the (prefetched)
++    substitutions and the people's users."""
++    if not subscription.student.user.is_active:
++        return True
++    cover = covering_substitution(subscription, day)
++    teacher = cover.teacher if cover is not None else subscription.teacher
++    return not teacher.user.is_active
++
++
+ def covering_pause(subscription: Subscription, day: date) -> SubscriptionPause | None:
+     """The pause that includes ``day``. Reads the (prefetched) pauses."""
+     for pause in subscription.pauses.all():

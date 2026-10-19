@@ -1,0 +1,66 @@
+== TC-014 2026-10-19T03:47:43.892755
+qo student 201 {"id": 3, "role": "student", "two_factor": false, "user": {"full_name": "QO Student", "email": "qo-student@qa.etqan.test
+OI 201 {"id": 1, "number": "INV-000001", "currency": "USD"}
+qo topup 201
+qo gw 200
+qo checkout (admin start) 201 {"id": "e4ab0f59-b33f-4cea-8266-586b9750871b", "redirect_url": "http://qaother.etqan.localhost/app/pay/simulate/e4ab0f59
+qo link 201
+counts ('51', '2', '29:pending', '26')
+same ids in qa? 1|INV-000001|EGP
+2|INV-000002|EGP
+-- qa admin -> qaother ids (note: an id that also exists in qa resolves to qa's own row)
+GET /billing/invoices/1/ 200 {"number": "INV-000001", "currency": "EGP", "description": "F03 قرآن — F03 باقة", "status": "partial"}
+PATCH /billing/invoices/1/ 200 {"number": "INV-000001", "currency": "EGP", "description": "hijack", "status": "partial"}
+POST /billing/invoices/1/payments/ 201 {"number": "INV-000001", "currency": "EGP", "description": "hijack", "status": "partial"}
+POST /billing/invoices/1/void/ 409 {"number": null, "currency": null, "description": null, "status": null}
+GET /billing/payments/1/ 200 {"number": null, "currency": "EGP", "description": null, "status": "completed"}
+POST /billing/payments/1/refund/ 200 {"number": "INV-000001", "currency": "EGP", "description": "hijack", "status": "partial"}
+GET /wallet/students/3/ 404 {"number": null, "currency": null, "description": null, "status": null}
+POST /wallet/invoices/1/pay/ 201 {"number": null, "currency": "EGP", "description": null, "status": null}
+POST /vouchers/codes/1/void/ 409 {"number": null, "currency": null, "description": null, "status": null}
+GET /gateways/checkouts/e4ab0f59-b33f-4cea-8266-586b9750871b/ 404 {"number": null, "currency": null, "description": null, "status": null}
+POST /gateways/simulate/e4ab0f59-b33f-4cea-8266-586b9750871b/ 404 {"number": null, "currency": null, "description": null, "status": null}
+GET /gateways/links/1/ 200 {"number": null, "currency": "EGP", "description": "", "status": "paid"}
+qaother OI unchanged OI|partial
+OK  TC014 qaother OI untouched by qa admin
+OK  TC014 qaother checkout not completed by qa simulate
+-- qaother admin -> qa ids
+GET /billing/invoices/7/ 404 {"number": null, "description": null, "status": null}
+GET /billing/payments/45/ 404 {"number": null, "description": null, "status": null}
+GET /gateways/checkouts/4e3997d4-c570-4602-aaa8-b759ce18307a/ 404 {"number": null, "description": null, "status": null}
+GET /wallet/students/5/ 404 {"number": null, "description": null, "status": null}
+POST /gateways/simulate/d75bda65-c0b4-4a4e-a985-9abd6eec8ccd/ 404 {"number": null, "description": null, "status": null}
+OK  TC014 qa checkout UUID 404 on qaother
+OK  TC014 qa checkout uuid unknown to qaother simulate
+qa code on qaother office 400 {"code": "vouchers.invalid"}
+OK  TC014 qa code invalid on qaother
+qaother code on qa office 400 {"code": "vouchers.invalid"}
+OK  TC014 qaother code invalid on qa
+qa pending checkout 65807775-c60b-47eb-b564-453b081767be pending
+qa event w/ qa secret -> qaother (400, {'detail': 'Bad signature.'}) | qa event w/ qaother secret -> qaother (200, {'received': True}) | w/ qaother secret -> qa (400, {'detail': 'Bad signature.'})
+OK  TC014 cross webhook never completes qa checkout
+qaother webhookevent rows evt_f09_x2|
+session cookie domain [('csrftoken', 'qa.etqan.localhost'), ('sessionid', 'qa.etqan.localhost')]
+qa session on qaother 403
+OK  TC014 qa session refused on qaother
+qa summary {"revenue_this_month": [{"currency": "EGP", "amount_minor": 523357}, {"currency": "USD", "amount_minor": 18250}], "overdue": []}
+qaother summary {"revenue_this_month": [{"currency": "USD", "amount_minor": 4000}], "overdue": []}
+counts after ('53', '2', '29:pending', '26')
+BAD TC014 qa payments unchanged by cross calls
+OK  TC014 qaother payments unchanged
+OK  TC014 qa webhookevent unchanged
+== TC-014 restore of qa's own invoice 1 touched through id collision (QA data, not a defect) 2026-10-19T03:48:14.802657
+1|50000|cash|refunded|2026-10-19 00:12:50.751214+00
+57|1|cash|completed|2026-10-19 00:47:44.963634+00
+58|42000|wallet|completed|2026-10-19 00:47:45.226322+00
+desc restore 200
+delete 1-minor cash 57 204
+move wallet pay back 58 201
+SQL restore payment 1 refund (QA data edit) 1|completed
+UPDATE 1
+recompute invoice 1 status via no-op edit 200 unpaid|50000
+1|50000|cash|completed
+58|42000|wallet|credited
+recompute via API: add 1 201 partial
+delete 204 partial
+consistency all invoices (should be empty): 

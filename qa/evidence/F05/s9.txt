@@ -1,0 +1,5 @@
+deact 200
+[400] POST people/families/ :: {"payer_id":["Choose one of the family's students or their parents."]}
+[400] POST people/families/ :: {"payer_id":["This field is required."]}
+[201] POST people/families/ :: {"id":8,"name":"QA5 Mixed Fam","is_active":true,"payer":{"id":109,"full_name":"QA5 Bulk 56","role":"student"},"payer_needs_choosing":false,"students":[{"id":108,"full_name":"QA5 Bulk 55"},{"id":109,"full_name":"QA5 Bulk 56"}],"notes":"","created_at":"2026-10-19T04:27:01.749292Z"}
+reactivated 200

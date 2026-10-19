@@ -1,0 +1,15 @@
+celery_worker-1  | [2026-10-17 20:11:00,714: INFO/ForkPoolWorker-8] Task notifications.scan[e982d2fd-3e76-4b79-bc09-ab346b9465d0] succeeded in 0.683007125997392s: {'academy_demo': 'ok', 'academy_other': 'ok', 'academy_qa': 'ok', 'academy_qa_tmp_1': 'ok', 'academy_qa_tmp_race_a': 'ok', 'academy_qa_tmp_race_b': 'ok', 'academy_qa_tmp_tz': 'failed', 'academy_qaother': 'ok'}
+celery_worker-1  | [2026-10-17 20:12:00,024: INFO/MainProcess] Task devices.push[b0772ab5-7baa-46f2-b63b-23322558cc05] received
+celery_worker-1  | [2026-10-17 20:12:00,043: INFO/MainProcess] Task notifications.scan[34cfcf14-fcde-47dd-a8ec-56407dcd5761] received
+celery_worker-1  | [2026-10-17 20:12:00,065: INFO/MainProcess] Task devices.push_academy[664dc2c9-535b-4de5-bb13-8f300a399192] received
+celery_worker-1  | [2026-10-17 20:12:00,067: INFO/MainProcess] Task devices.push_academy[013302a1-12e0-4c50-9dd1-41de9ab1263a] received
+celery_worker-1  | [2026-10-17 20:12:00,073: INFO/MainProcess] Task devices.push_academy[aecfb29d-cacb-4165-8c5f-9b0e3442d0dc] received
+celery_worker-1  | [2026-10-17 20:12:00,080: INFO/MainProcess] Task devices.push_academy[e603db98-0956-430e-8570-1a57b2af1d59] received
+celery_worker-1  | [2026-10-17 20:12:00,086: INFO/MainProcess] Task devices.push_academy[e8054e41-4988-4f07-972c-8c3af6759702] received
+celery_worker-1  | [2026-10-17 20:12:00,093: INFO/MainProcess] Task devices.push_academy[0b3b1c2c-247f-473e-8b13-0e528daeab5b] received
+celery_worker-1  | [2026-10-17 20:12:00,098: INFO/MainProcess] Task devices.push_academy[62146bf3-2c90-4be2-98ba-ec2f3abb7c0a] received
+celery_worker-1  | [2026-10-17 20:12:00,115: INFO/MainProcess] Task devices.push_academy[9582337b-1cfe-4118-b459-8c84af41c4a0] received
+celery_worker-1  | [2026-10-17 20:12:00,677: ERROR/ForkPoolWorker-1] notifications.scan failed for academy academy_qa_tmp_tz
+celery_worker-1  |     raise ZoneInfoNotFoundError(f"No time zone found with key {key}")
+celery_worker-1  | zoneinfo._common.ZoneInfoNotFoundError: 'No time zone found with key Mars/Phobos'
+celery_worker-1  | [2026-10-17 20:12:00,762: INFO/ForkPoolWorker-1] Task notifications.scan[34cfcf14-fcde-47dd-a8ec-56407dcd5761] succeeded in 0.7145803749954212s: {'academy_demo': 'ok', 'academy_other': 'ok', 'academy_qa': 'ok', 'academy_qa_tmp_1': 'ok', 'academy_qa_tmp_race_a': 'ok', 'academy_qa_tmp_race_b': 'ok', 'academy_qa_tmp_tz': 'failed', 'academy_qaother': 'ok'}

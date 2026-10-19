@@ -1,0 +1,33 @@
+{
+  "id": 79,
+  "r1": 80,
+  "r2": 81,
+  "second": {
+    "status": 409,
+    "json": {
+      "detail": "This subscription was already renewed.",
+      "code": "scheduling.already_renewed"
+    }
+  },
+  "live": {
+    "status": 409,
+    "json": {
+      "detail": "Not allowed while the subscription is active.",
+      "code": "scheduling.not_allowed_in_status"
+    }
+  },
+  "renewArchived": {
+    "status": 409,
+    "json": {
+      "detail": "This is archived. Restore it first.",
+      "code": "scheduling.archived"
+    }
+  },
+  "errors": [
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)"
+  ]
+}

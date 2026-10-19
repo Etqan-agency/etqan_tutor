@@ -1,0 +1,5 @@
+Running 3 tests using 1 worker
+  ✓  1 [chromium] › e2e/qa/f05-people.spec.ts:53:1 › TC-028 add a student, page through the list, bulk status, deactivate and activate (7.5s)
+  ✓  2 [chromium] › e2e/qa/f05-people.spec.ts:116:1 › TC-029 family with a paying parent: payer options, save, needs-choosing flag, retire (4.8s)
+  ✓  3 [chromium] › e2e/qa/f05-people.spec.ts:167:1 › TC-030 contract uploaded by the admin, downloaded by the teacher; student is refused (8.5s)
+  3 passed (21.5s)
