@@ -34,7 +34,8 @@ jobs:
       - run: pip install -r requirements/local.txt
       - run: ruff check . && ruff format --check .
       - run: lint-imports
-      - run: pytest --create-db --cov=etqan -q
+      # -n auto: one worker (and test database) per core; see backend conftest.py.
+      - run: pytest --create-db -n auto --cov=etqan -q
 
   dashboard:
     runs-on: ubuntu-latest
