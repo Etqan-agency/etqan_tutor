@@ -174,7 +174,7 @@ jobs:
         run: |
           docker run --rm -v "$PWD:/mnt" -w /mnt koalaman/shellcheck:v0.11.0 \
             infra/scripts/*.sh infra/scripts/tests/*.sh infra/scripts/tests/fakebin/* \
-            infra/staging-sim/entrypoint.sh scripts/deploy-staging.sh scripts/staging-sim.sh \
+            infra/staging-sim/entrypoint.sh scripts/deploy.sh scripts/staging-sim.sh \
             scripts/staging-sim-needed.sh scripts/orchestration/*.sh scripts/orchestration/tests/*.sh
       - name: ship.sh, smoke.sh and compose tests
         run: |
@@ -449,13 +449,25 @@ jobs:
       - if: always()
         run: bash scripts/staging-sim.sh down
 
-  # Spec §3.2: every green master is deployed to staging, once a server
-  # exists; without the STAGING_SSH_HOST secret the job skips its steps and
-  # succeeds. Manual runs (rollback) use the same workflow.
+  # Spec §3.2: every green master is deployed, to staging and then to
+  # production, once each server exists; an environment without its SSH_HOST
+  # secret skips its steps and succeeds. Production waits for staging, so a
+  # deploy that breaks staging never reaches it. Manual runs (rollback) use the
+  # same workflow.
   deploy-staging:
     needs: [images, staging-sim]
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    uses: ./.github/workflows/deploy-staging.yml
+    uses: ./.github/workflows/deploy.yml
     with:
+      environment: staging
+      sha: ${{ github.sha }}
+    secrets: inherit
+
+  deploy-production:
+    needs: [deploy-staging]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: production
       sha: ${{ github.sha }}
     secrets: inherit

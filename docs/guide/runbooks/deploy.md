@@ -24,18 +24,20 @@ deployed stack. Setting up a staging server for the first time is covered step b
    (and `:master`).
 3. `staging-sim` deploys those images to a simulated server (Docker-in-Docker) when
    `scripts/staging-sim-needed.sh` says infra changed. Run it locally with `just staging-sim`.
-4. `deploy-staging` calls `.github/workflows/deploy-staging.yml`. It checks that the SHA is a
-   40-character hex ancestor of `origin/master`, then runs `scripts/deploy-staging.sh <sha>`:
+4. `deploy-staging`, then `deploy-production`, call `.github/workflows/deploy.yml` with their
+   GitHub environment. It checks that the SHA is a 40-character hex ancestor of `origin/master`,
+   then runs `scripts/deploy.sh <sha>`:
    - rsync `infra/` → `/opt/etqan/` (never `.env.production` or `.active-color`);
    - log the server in to GHCR;
    - `ssh … bash /opt/etqan/scripts/ship.sh <sha>`;
    - optionally `manage.sh seed_staging` (manual runs with *seed* checked);
-   - `infra/scripts/smoke.sh $STAGING_BASE_URL`: `/health/ready/` on the academy host,
+   - `infra/scripts/smoke.sh $ACADEMY_URL`: `/health/ready/` on the academy host,
      `/admin/login/` and the official site's `/en/` on the base host, `/app/` serves the SPA
      shell, `/` returns 200.
 
-   Without the `STAGING_SSH_HOST` secret the job skips every step and still succeeds.
-   Deploys run one at a time (`concurrency: staging`).
+   An environment without its `SSH_HOST` secret skips every step and still succeeds.
+   Production runs only after staging succeeded, and deploys run one at a time per
+   environment (`concurrency: deploy-<environment>`). Seeding is refused on production.
 
 ## What `ship.sh <sha>` does (blue/green)
 
@@ -59,14 +61,26 @@ be backward-compatible: add first, remove in a later release. Migrations are nev
 ## Production
 
 Production is `tutor.etqanpp.com` (academies at `<sub>.tutor.etqanpp.com`) on
-`deploy@178.104.138.79`. It has no deploy workflow: the owner deploys a `master` SHA whose CI
-reached `images`, by hand:
+`deploy@178.104.138.79`. Every green `master` deploys there automatically (step 4), after
+staging. The GitHub `production` environment allows only `master` and holds:
+
+| Secret | Value |
+|---|---|
+| `SSH_USER` | `deploy` |
+| `SSH_KEY` | a key made for CI only; its public half is in `~deploy/.ssh/authorized_keys` |
+| `KNOWN_HOSTS` | `178.104.138.79 <the server's ed25519 host key>`, taken from the server itself |
+| `GHCR_READ_TOKEN` | a classic token with `read:packages` only |
+| `ACADEMY_URL` | an academy that exists, for the smoke check: `https://<sub>.tutor.etqanpp.com` |
+| `SSH_HOST` | `178.104.138.79`. **Added last**: it switches the deploy on |
+
+`ship.sh` dumps the database to `/opt/etqan/backups/pre-<sha>-<time>.dump` before migrating
+(the newest 14 are kept, on the server only). To restore one, stop the app and load it:
 
 ```sh
-rsync -az --exclude .env.production --exclude .active-color --exclude .git infra/ deploy@178.104.138.79:/opt/etqan/
-ssh deploy@178.104.138.79 'echo "$GHCR_READ_TOKEN" | docker login ghcr.io -u <user> --password-stdin'   # once
-ssh deploy@178.104.138.79 bash /opt/etqan/scripts/ship.sh <sha>
-bash infra/scripts/smoke.sh https://<academy>.tutor.etqanpp.com
+cd /opt/etqan && C="docker compose -f docker-compose.production.yml --env-file .env.production"
+$C stop django-blue django-green celery-worker-blue celery-worker-green celery-beat-blue celery-beat-green
+$C exec -T postgres sh -c 'pg_restore -U "$POSTGRES_USER" -d "$POSTGRES_DB" --clean --if-exists' < backups/<file>.dump
+bash scripts/ship.sh <the sha that dump was taken before>
 ```
 
 DNS is at Hostinger, so `.env.production` sets `TLS_MODE=http` (no wildcard certificate; each
@@ -76,7 +90,7 @@ come from `.env.production`.
 
 ## Rollback
 
-Actions → *Deploy staging* → *Run workflow*, with `sha` set to an earlier `master` commit
+Actions → *Deploy* → *Run workflow*, with the environment and `sha` set to an earlier `master` commit
 whose images are still in GHCR. Only commits whose CI reached `images` have images, and
 the server keeps only 24 hours of pulled images. This is the same blue/green switch, run in
 the other direction. The schema stays as it is (see above). Start a rollback only when no
@@ -114,8 +128,9 @@ Flower has no public route in production. Reach it through an SSH tunnel.
   contract files). Provider accounts (Zoom, Stripe, email, WhatsApp, AI) are **not** env
   vars. Etqan's defaults are entered in the platform admin (`/admin/` on the base domain), and
   each academy enters its own under Settings → Integrations.
-- CI secrets: `SUBMODULE_TOKEN`, `TOKENS_REPO_TOKEN`. The GitHub `staging` environment holds
-  `STAGING_SSH_*`, `STAGING_KNOWN_HOSTS`, `GHCR_READ_TOKEN` and `STAGING_BASE_URL`.
+- CI secrets: `SUBMODULE_TOKEN`, `TOKENS_REPO_TOKEN`. The GitHub `staging` and `production`
+  environments each hold `SSH_HOST`, `SSH_USER`, `SSH_KEY`, `KNOWN_HOSTS`, `GHCR_READ_TOKEN` and
+  `ACADEMY_URL` (see Production).
 
 ## Custom domains
 

@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
-# Deploy one image tag to a staging server and check it from outside
-# (spec §3.2). The deploy-staging CI job and scripts/staging-sim.sh both run
+# Deploy one image tag to a server (staging or production) and check it from
+# outside (spec §3.2). The deploy workflow and scripts/staging-sim.sh both run
 # exactly this:
 #   1. copy infra/ to /opt/etqan/ (never .env.production or .active-color);
 #   2. log the server in to the registry, when a token is given;
 #   3. run ship.sh <sha> there (blue/green);
 #   4. seed the demo academy, when SEED=1;
-#   5. run infra/scripts/smoke.sh here, against STAGING_BASE_URL.
+#   5. run infra/scripts/smoke.sh here, against DEPLOY_ACADEMY_URL.
 #
-#   scripts/deploy-staging.sh <40-character meta commit SHA>
+#   scripts/deploy.sh <40-character meta commit SHA>
 #
 # Environment:
-#   STAGING_SSH_HOST, STAGING_SSH_USER   the server and its deploy user
-#   STAGING_SSH_PORT                     optional, default 22
-#   STAGING_SSH_KEY_FILE                 a file holding the private key
-#   STAGING_KNOWN_HOSTS_FILE             a file holding the server's host key(s)
-#   STAGING_BASE_URL                     an academy's URL (https://demo.staging.example.com)
+#   DEPLOY_SSH_HOST, DEPLOY_SSH_USER     the server and its deploy user
+#   DEPLOY_SSH_PORT                      optional, default 22
+#   DEPLOY_SSH_KEY_FILE                  a file holding the private key
+#   DEPLOY_KNOWN_HOSTS_FILE              a file holding the server's host key(s)
+#   DEPLOY_ACADEMY_URL                   an academy's URL (https://demo.staging.example.com)
 #   REGISTRY_TOKEN                       optional: a read-only registry token, sent
 #                                        on stdin, never on a command line
 #   REGISTRY, REGISTRY_USER              the registry (default ghcr.io) and its user
@@ -27,20 +27,20 @@
 set -euo pipefail
 set +x
 
-SHA="${1:?Usage: deploy-staging.sh <commit-sha>}"
+SHA="${1:?Usage: deploy.sh <commit-sha>}"
 if ! [[ "$SHA" =~ ^[0-9a-f]{40}$ ]]; then
     echo "ERROR: expected a full 40-character commit SHA, got '${SHA}'." >&2
     exit 2
 fi
-: "${STAGING_SSH_HOST:?}" "${STAGING_SSH_USER:?}" "${STAGING_SSH_KEY_FILE:?}"
-: "${STAGING_KNOWN_HOSTS_FILE:?}" "${STAGING_BASE_URL:?}"
+: "${DEPLOY_SSH_HOST:?}" "${DEPLOY_SSH_USER:?}" "${DEPLOY_SSH_KEY_FILE:?}"
+: "${DEPLOY_KNOWN_HOSTS_FILE:?}" "${DEPLOY_ACADEMY_URL:?}"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-SSH=(ssh -i "$STAGING_SSH_KEY_FILE" -p "${STAGING_SSH_PORT:-22}"
+SSH=(ssh -i "$DEPLOY_SSH_KEY_FILE" -p "${DEPLOY_SSH_PORT:-22}"
     -o IdentitiesOnly=yes -o BatchMode=yes -o ConnectTimeout=20
     -o ServerAliveInterval=15 -o ServerAliveCountMax=4
-    -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$STAGING_KNOWN_HOSTS_FILE")
-TARGET="${STAGING_SSH_USER}@${STAGING_SSH_HOST}"
+    -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$DEPLOY_KNOWN_HOSTS_FILE")
+TARGET="${DEPLOY_SSH_USER}@${DEPLOY_SSH_HOST}"
 remote() {
     "${SSH[@]}" "$TARGET" "$@"
 }
@@ -72,7 +72,7 @@ else
     echo "Not asked to seed."
 fi
 
-echo "── 5/5 Smoke check ${STAGING_BASE_URL}"
+echo "── 5/5 Smoke check ${DEPLOY_ACADEMY_URL}"
 CA="$(mktemp)"
 trap 'rm -f "$CA"' EXIT
 remote bash /opt/etqan/scripts/edge-ca.sh > "$CA"
@@ -80,4 +80,4 @@ if [ -s "$CA" ]; then
     echo "The edge uses its internal CA; trusting its root for the check."
     export SMOKE_CACERT="$CA"
 fi
-bash "${ROOT}/infra/scripts/smoke.sh" "$STAGING_BASE_URL"
+bash "${ROOT}/infra/scripts/smoke.sh" "$DEPLOY_ACADEMY_URL"

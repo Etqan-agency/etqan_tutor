@@ -126,16 +126,16 @@ Deploy note (integrations slice 3):
 - Staging uploads are linked at the S3 store's in-network address (`http://s3:9000/...`), so
   browsers cannot load them until staging uses real S3 or a public custom domain (STAGING.md §7).
 - MinIO's images are no longer pullable; the overlay uses RustFS 1.0.0 (service `s3`).
-- `deploy-staging` declares `environment: staging`; if the org's plan has no environments for
+- `deploy.yml` declares the job's `environment` (staging or production); if the org's plan has no environments for
   private repos, drop that line and use repository secrets (STAGING.md §3); the master-only
   branch policy on manual dispatch is lost with it.
 - GitHub keeps only the newest pending deploy per concurrency group: start a rollback when no
   deploy is waiting.
-- The production deploy workflow, monitoring alerts, backups and restore drills are not built.
+- Monitoring alerts, off-site backups and restore drills are not built (each deploy dumps the database on the server only, `ship.sh`).
 - Plan 9's open review follow-ups (all minor, deferred; none blocking): `ship_test.sh` doesn't pin
   overlay-line edge cases (last-line-wins, CRLF, quotes) though `ship.sh` handles them; `manage.sh`
   takes no stdin (`-i`); `ship.sh`'s banner names `ghcr.io` even under `ETQAN_REGISTRY`;
-  `deploy-staging.sh`'s rsync `-e` escapes with `printf %q` (backslashes, which rsync's `-e` parser
+  `deploy.sh`'s rsync `-e` escapes with `printf %q` (backslashes, which rsync's `-e` parser
   ignores), so a key or known-hosts path with spaces breaks it; `staging-sim-needed.sh` fails closed
   on a brand new submodule (the CI step runs the simulation whenever the script fails or prints
   anything but true/false); the simulation rebuilds the images rather than pulling the ones `images`
@@ -215,7 +215,7 @@ Deploy note (integrations slice 3):
 
 ## Standing warnings
 
-- No staging server or domain yet: `deploy-staging` skips until the `staging` secrets exist (infra/STAGING.md). No production deploy workflow. Wildcard TLS (`*.domain`) uses Cloudflare DNS-01 (`TLS_MODE=cloudflare`, the default).
+- No staging server yet: `deploy-staging` skips until the `staging` environment's secrets exist (infra/STAGING.md). Production (`tutor.etqanpp.com`, `TLS_MODE=http`, DNS at Hostinger) deploys every green `master` after staging (`deploy-production`, docs/guide/runbooks/deploy.md). Wildcard TLS (`*.domain`) uses Cloudflare DNS-01 (`TLS_MODE=cloudflare`, the default).
 - Deploy order (infra `scripts/ship.sh`): `migrate` + `bootstrap_platform` run from the new image before the new colour starts. Production refuses to boot without `DJANGO_S3_BUCKET` (+ AWS keys, public-read bucket policy; see `infra/.env.production.example`).
 - A new NOT NULL column needs `db_default=` (Django's DB-side default), so the old colour keeps
   serving reads with the old model while `ship.sh` migrates and the new colour starts (Plan 10 M4).
