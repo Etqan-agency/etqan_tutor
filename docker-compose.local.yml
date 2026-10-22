@@ -1,7 +1,7 @@
 # Local stack behind Caddy (caddy/Caddyfile.local). Every academy is
 # http://<subdomain>.etqan.localhost: the marketing site at /, the dashboard at
-# /app/, the API at /api/ — all same-origin. http://etqan.localhost/admin/ is
-# the Etqan staff console.
+# /app/, the API at /api/ — all same-origin. http://etqan.localhost/ is the
+# official Etqan Tutor site, and http://etqan.localhost/admin/ the staff console.
 x-uidgid: &uidgid
   UID: ${HOST_UID:-1000}
   GID: ${HOST_GID:-1000}
@@ -27,7 +27,7 @@ services:
       - "${ETQAN_HTTP_PORT:-80}:80"
     volumes:
       - ./caddy/Caddyfile.local:/etc/caddy/Caddyfile:ro
-    depends_on: [django, dashboard, marketing]
+    depends_on: [django, dashboard, marketing, website]
 
   django:
     build: { context: ./backend, target: dev, args: *uidgid }
@@ -121,10 +121,17 @@ services:
       - ./marketing:/app
       - marketing_node_modules:/app/node_modules
 
+  website:
+    build: { context: ./website, target: dev, args: *uidgid }
+    volumes:
+      - ./website:/app
+      - website_node_modules:/app/node_modules
+
 volumes:
   postgres_data:
   dashboard_node_modules:
   marketing_node_modules:
+  website_node_modules:
 
 secrets:
   tokens_token:

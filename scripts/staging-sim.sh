@@ -41,7 +41,7 @@ ACADEMY_URL="https://demo.${BASE_DOMAIN}"
 NET=etqan-sim
 SERVER=etqan-sim-server
 REGISTRY_CONTAINER=etqan-sim-registry
-IMAGES=(backend dashboard marketing)
+IMAGES=(backend dashboard marketing website)
 
 # SIM_DIR is removed with rm -rf and chmodded: refuse anything that does not
 # look like a simulation work directory.
@@ -116,12 +116,12 @@ build() {
         env -u GH_TOKEN -u GITHUB_TOKEN gh auth token > "$token_file"
     fi
     docker build -q -t "$(image backend):${SHA_A}" "${ROOT}/backend" >/dev/null
-    for name in dashboard marketing; do
+    for name in dashboard marketing website; do
         docker build -q --secret "id=tokens_token,src=${token_file}" \
             -t "$(image "$name"):${SHA_A}" "${ROOT}/${name}" >/dev/null
     done
     if [ "$cleanup" = 1 ]; then rm -f "$token_file"; fi
-    echo "Built the three images as ${SHA_A}."
+    echo "Built the four images as ${SHA_A}."
 }
 
 # The server's .env.production, from .env.staging.example: fresh secrets,

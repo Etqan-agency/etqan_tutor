@@ -14,3 +14,7 @@
 	path = marketing
 	url = https://github.com/Etqan-agency/etqan_tutor_marketing.git
 	branch = main
+[submodule "website"]
+	path = website
+	url = https://github.com/Etqan-agency/etqan_tutor_official_site.git
+	branch = main
