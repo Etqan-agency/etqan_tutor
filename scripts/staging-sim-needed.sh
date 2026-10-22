@@ -2,7 +2,7 @@
 # Does a pull request need the staging simulation (spec §5)? Prints true or
 # false. True when the meta diff since <base> touches the infra pointer, the
 # workflows, the Caddyfiles or the deploy and simulation scripts, or when a
-# backend, dashboard or marketing pointer moves what shapes its image (the
+# backend, dashboard, marketing or website pointer moves what shapes its image (the
 # Dockerfile, .dockerignore, nginx.conf or requirements/) or what the
 # simulation itself exercises: dashboard's e2e/ and playwright.config.ts, or
 # backend's seed_dev.py, seed_staging.py, config/settings/production.py and
@@ -17,7 +17,7 @@ if grep -qE '^(infra$|\.github/workflows/|caddy/|scripts/(deploy-staging|staging
     echo true
     exit 0
 fi
-for repo in backend dashboard marketing; do
+for repo in backend dashboard marketing website; do
     grep -qx "$repo" <<< "$changed" || continue
     old="$(git rev-parse "${BASE}:${repo}")"
     git -C "$repo" cat-file -e "${old}^{commit}" 2>/dev/null ||

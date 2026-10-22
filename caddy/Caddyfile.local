@@ -2,7 +2,8 @@
 #   /api /accounts /health /media /__debug__ → Django
 #   /app                                     → dashboard (Vite dev server)
 #   everything else                          → marketing site (Astro)
-# http://etqan.localhost is the Etqan staff admin; any other hostname mapped to
+# http://etqan.localhost is the official Etqan Tutor site, with Django's staff
+# admin at /admin/ (and /static, /health, /api, /__debug__); any other hostname mapped to
 # 127.0.0.1 in /etc/hosts is routed like an academy host (custom-domain testing).
 #
 # Caddy is the ONLY proxy hop in front of Django (REST_FRAMEWORK NUM_PROXIES=1).
@@ -31,7 +32,9 @@
 http://etqan.localhost {
 	@internal path /internal/*
 	respond @internal 404
-	reverse_proxy django:8000
+	@django path /admin /admin/* /static/* /health/* /api/* /__debug__/*
+	reverse_proxy @django django:8000
+	reverse_proxy website:4322
 }
 
 http://flower.etqan.localhost {

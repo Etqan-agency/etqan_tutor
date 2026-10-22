@@ -10,7 +10,7 @@ deployed stack. Setting up a staging server for the first time is covered step b
 |---|---|---|---|
 | Compose | `docker-compose.local.yml` | `infra/docker-compose.production.yml` + `infra/docker-compose.staging.yml` overlay | `infra/docker-compose.production.yml` |
 | Django | `runserver` | gunicorn, blue/green | gunicorn (3 workers), blue/green |
-| TLS | none (http) | `TLS_MODE=internal` (Caddy's own CA) | `TLS_MODE=cloudflare`: wildcard via DNS-01, on-demand certificates for custom domains |
+| TLS | none (http) | `TLS_MODE=internal` (Caddy's own CA) | `TLS_MODE=cloudflare`: wildcard via DNS-01; or `TLS_MODE=http` (DNS not on Cloudflare): HTTP-01 for the base domain, on-demand per academy subdomain. On-demand certificates for custom domains in both |
 | Storage | local disk | RustFS S3 from the overlay | S3 (`DJANGO_S3_*`) |
 | Email | Mailpit | Mailpit (server's 127.0.0.1:8025) | SMTP/SES (`DJANGO_EMAIL_*`) |
 | Env file | `backend/.env` (from `.env.example`) | `/opt/etqan/.env.production` with `ETQAN_OVERLAY=staging` (from `infra/.env.staging.example`) | `/opt/etqan/.env.production` (from `infra/.env.production.example`) |
@@ -20,7 +20,7 @@ deployed stack. Setting up a staging server for the first time is covered step b
 
 1. A push to `master` runs `.github/workflows/ci.yml`, with all test jobs as in
    [Testing](../testing.md#ci).
-2. `images` builds and pushes `ghcr.io/etqan-agency/{backend,dashboard,marketing}:<sha>`
+2. `images` builds and pushes `ghcr.io/etqan-agency/{backend,dashboard,marketing,website}:<sha>`
    (and `:master`).
 3. `staging-sim` deploys those images to a simulated server (Docker-in-Docker) when
    `scripts/staging-sim-needed.sh` says infra changed. Run it locally with `just staging-sim`.
@@ -31,7 +31,8 @@ deployed stack. Setting up a staging server for the first time is covered step b
    - `ssh … bash /opt/etqan/scripts/ship.sh <sha>`;
    - optionally `manage.sh seed_staging` (manual runs with *seed* checked);
    - `infra/scripts/smoke.sh $STAGING_BASE_URL`: `/health/ready/` on the academy host,
-     `/admin/login/` on the base host, `/app/` serves the SPA shell, `/` returns 200.
+     `/admin/login/` and the official site's `/en/` on the base host, `/app/` serves the SPA
+     shell, `/` returns 200.
 
    Without the `STAGING_SSH_HOST` secret the job skips every step and still succeeds.
    Deploys run one at a time (`concurrency: staging`).
@@ -47,13 +48,31 @@ deployed stack. Setting up a staging server for the first time is covered step b
 5. Starts the new colour (`django-<c>`, `celery-worker-<c>`, `celery-beat-<c>`), then checks
    `/health/ready/` up to 10 times. On failure it removes the new colour.
 6. Writes `.active-color`, stops the old colour with a 30-second drain, restarts
-   `dashboard` and `marketing`, and prunes images older than 24 hours.
+   `dashboard`, `marketing` and `website`, and prunes images older than 24 hours.
 
 Caddy sends traffic to whichever colour is healthy (`lb_policy first` with active health
 checks), so the switch has no 502 window.
 
 **Migrations run before the new code serves, while the old code is still live.** Each one must
 be backward-compatible: add first, remove in a later release. Migrations are never reversed.
+
+## Production
+
+Production is `tutor.etqanpp.com` (academies at `<sub>.tutor.etqanpp.com`) on
+`deploy@178.104.138.79`. It has no deploy workflow: the owner deploys a `master` SHA whose CI
+reached `images`, by hand:
+
+```sh
+rsync -az --exclude .env.production --exclude .active-color --exclude .git infra/ deploy@178.104.138.79:/opt/etqan/
+ssh deploy@178.104.138.79 'echo "$GHCR_READ_TOKEN" | docker login ghcr.io -u <user> --password-stdin'   # once
+ssh deploy@178.104.138.79 bash /opt/etqan/scripts/ship.sh <sha>
+bash infra/scripts/smoke.sh https://<academy>.tutor.etqanpp.com
+```
+
+DNS is at Hostinger, so `.env.production` sets `TLS_MODE=http` (no wildcard certificate; each
+academy subdomain gets its own on first visit, Let's Encrypt allows 50 a week per registered
+domain). Records: A `tutor` and A `*.tutor` → the server's IP. No overlay: real S3 and SMTP
+come from `.env.production`.
 
 ## Rollback
 

@@ -4,7 +4,8 @@ Multi-academy tutoring operations SaaS (Etqan Agency). Fork of Kaleem.
 
 ## Layout
 Meta repo with submodules: `backend/` (Django + DRF, package `etqan`), `dashboard/`
-(React + TanStack), `infra/`, `tokens/` (`@etqan/tokens`). Trunk: `master` here, `main`
+(React + TanStack), `marketing/` (each academy's site), `website/` (the official Etqan
+Tutor site, static Astro), `infra/`, `tokens/` (`@etqan/tokens`). Trunk: `master` here, `main`
 in submodules. Work on a `feat/*` branch in each touched repo, PR, merge; then bump the
 submodule pointers here.
 
@@ -23,7 +24,8 @@ submodule pointers here.
   | everything else | marketing site (Astro, `marketing/`) |
   | `/internal/*` | 404 — never reachable from outside Caddy |
 
-  The bare base domain serves only Django (admin for Etqan staff).
+  The bare base domain serves the official Etqan Tutor site (`website/`); only `/admin/*`,
+  `/static/*`, `/health/*` and `/api/*` (Etqan's webhooks) go to Django there.
 - Migrate with `migrate_schemas`, never assume a single schema.
 - Background jobs must loop over academies explicitly (`tenant_context`).
 - Build any user-facing URL with `etqan.platform.frontend.frontend_url()`.
