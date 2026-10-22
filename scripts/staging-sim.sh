@@ -102,7 +102,7 @@ up() {
         sleep 1
     done
     docker exec "$SERVER" docker info >/dev/null
-    # known_hosts from the server's own key, as STAGING_KNOWN_HOSTS would be.
+    # known_hosts from the server's own key, as the KNOWN_HOSTS secret would be.
     echo "[127.0.0.1]:${SIM_SSH_PORT} $(docker exec "$SERVER" cat /etc/ssh/ssh_host_ed25519_key.pub | cut -d' ' -f1-2)" \
         > "${SIM_DIR}/known_hosts"
     echo "Simulated server up: ssh on 127.0.0.1:${SIM_SSH_PORT}, https on 127.0.0.1:${SIM_HTTPS_PORT}."
@@ -146,14 +146,14 @@ write_env() {
 }
 
 deploy() { # deploy <sha> <seed 0|1>
-    STAGING_SSH_HOST=127.0.0.1 STAGING_SSH_USER=deploy STAGING_SSH_PORT="$SIM_SSH_PORT" \
-        STAGING_SSH_KEY_FILE="${SIM_DIR}/id_ed25519" \
-        STAGING_KNOWN_HOSTS_FILE="${SIM_DIR}/known_hosts" \
-        STAGING_BASE_URL="$ACADEMY_URL" \
+    DEPLOY_SSH_HOST=127.0.0.1 DEPLOY_SSH_USER=deploy DEPLOY_SSH_PORT="$SIM_SSH_PORT" \
+        DEPLOY_SSH_KEY_FILE="${SIM_DIR}/id_ed25519" \
+        DEPLOY_KNOWN_HOSTS_FILE="${SIM_DIR}/known_hosts" \
+        DEPLOY_ACADEMY_URL="$ACADEMY_URL" \
         REGISTRY=registry:5000 REGISTRY_USER=sim \
         REGISTRY_TOKEN="$(cat "${SIM_DIR}/registry-password")" \
         SEED="$2" SMOKE_CONNECT_TO="::127.0.0.1:${SIM_HTTPS_PORT}" \
-        bash "${ROOT}/scripts/deploy-staging.sh" "$1"
+        bash "${ROOT}/scripts/deploy.sh" "$1"
 }
 
 push() { # push <sha>: A's images, under the tag <sha>
