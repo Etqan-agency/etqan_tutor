@@ -1,0 +1,627 @@
+[vite:react-swc] We recommend switching to `@vitejs/plugin-react` for improved performance as no swc plugins are used. More information at https://vite.dev/rolldown
+
+ RUN  v3.2.6 /app
+
+ ✓ src/features/people/AdminsList.test.tsx (4 tests) 941ms
+   ✓ AdminsList > invites a new admin  428ms
+ ✓ src/features/access/StaffList.test.tsx (8 tests) 1366ms
+   ✓ StaffList > lists each member's email, roles and status  385ms
+   ✓ StaffList > searches and filters by role and status, from the first page  317ms
+   ✓ StaffList > closes the dialog before a deactivated member leaves the Active list  324ms
+ ❯ src/features/people/StudentsList.test.tsx (23 tests | 1 failed) 6366ms
+   ✓ StudentsList > lists students with their account state  432ms
+   ✓ StudentsList > isolates each student's name and family 175ms
+   ✓ StudentsList > filters by status tab and searches 285ms
+   ✓ StudentsList > applies a bulk status change to the selected rows  462ms
+   ✓ StudentsList > shows an empty state 79ms
+   ✓ StudentsList > says nothing matches when a search or filter empties the list 179ms
+   ✓ StudentsList > keeps the search box wide enough for its hint 98ms
+   ✓ StudentsList > selects every row on the page and clears them again 180ms
+   ✓ StudentsList > asks before deactivating the selection 235ms
+   ✓ StudentsList > shows each row's tags and filters by tag, nationality and age  333ms
+   ✓ StudentsList > adds and removes a tag on the selected rows  582ms
+   × StudentsList > shows the server's reason when a bulk action is refused 1170ms
+     → Unable to find an element with the text: A retired tag can't be added.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mstyle[39m=[32m""[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33maria-label[39m=[32m"Students"[39m
+      [33mclass[39m=[32m"flex flex-col gap-4 outline-none"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Status"[39m
+        [33mclass[39m=[32m"flex flex-wrap gap-2 border-b border-border pb-2"[39m
+        [33mrole[39m=[32m"tablist"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"true"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mAll[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mActive[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mTrial[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mIn progress[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mPaused[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mInactive[0m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<section[39m
+        [33maria-label[39m=[32m"1 selected"[39m
+        [33mclass[39m=[32m"flex flex-wrap items-end gap-2 rounded-lg border border-border bg-secondary p-3"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"me-auto text-sm font-medium"[39m
+        [36m>[39m
+          [0m1 selected[0m
+        [36m</span>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary relative h-10 px-3 after:absolute after:-inset-y-0.5 after:inset-x-0 after:content-['']"[39m
+        [36m>[39m
+          [0mSend sign-in links[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary relative h-10 px-3 after:absolute after:-inset-y-0.5 after:inset-x-0 after:content-['']"[39m
+        [36m>[39m
+          [0mActivate[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-expanded[39m=[32m"false"[39m
+          [33maria-haspopup[39m=[32m"dialog"[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary relative h-10 px-3 after:absolute after:-inset-y-0.5 after:inset-x-0 after:content-['']"[39m
+          [33mdata-state[39m=[32m"closed"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mDeactivate[0m
+        [36m</button>[39m
+        [36m<select[39m
+          [33maria-label[39m=[32m"New status"[39m
+          [33mclass[39m=[32m"flex h-11 cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 text-start w-auto"[39m
+        [36m>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"active"[39m
+          [36m>[39m
+            [0mActive[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"trial"[39m
+          [36m>[39m
+            [0mTrial[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"in_progress"[39m
+          [36m>[39m
+            [0mIn progress[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"paused"[39m
+          [36m>[39m
+            [0mPaused[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"inactive"[39m
+          [36m>[39m
+            [0mInactive[0m
+          [36m</option>[39m
+        [36m</select>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-cent...
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mstyle[39m=[32m""[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33maria-label[39m=[32m"Students"[39m
+      [33mclass[39m=[32m"flex flex-col gap-4 outline-none"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Status"[39m
+        [33mclass[39m=[32m"flex flex-wrap gap-2 border-b border-border pb-2"[39m
+        [33mrole[39m=[32m"tablist"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"true"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mAll[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mActive[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mTrial[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mIn progress[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mPaused[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mInactive[0m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<section[39m
+        [33maria-label[39m=[32m"1 selected"[39m
+        [33mclass[39m=[32m"flex flex-wrap items-end gap-2 rounded-lg border border-border bg-secondary p-3"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"me-auto text-sm font-medium"[39m
+        [36m>[39m
+          [0m1 selected[0m
+        [36m</span>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary relative h-10 px-3 after:absolute after:-inset-y-0.5 after:inset-x-0 after:content-['']"[39m
+        [36m>[39m
+          [0mSend sign-in links[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary relative h-10 px-3 after:absolute after:-inset-y-0.5 after:inset-x-0 after:content-['']"[39m
+        [36m>[39m
+          [0mActivate[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-expanded[39m=[32m"false"[39m
+          [33maria-haspopup[39m=[32m"dialog"[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary relative h-10 px-3 after:absolute after:-inset-y-0.5 after:inset-x-0 after:content-['']"[39m
+          [33mdata-state[39m=[32m"closed"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mDeactivate[0m
+        [36m</button>[39m
+        [36m<select[39m
+          [33maria-label[39m=[32m"New status"[39m
+          [33mclass[39m=[32m"flex h-11 cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 text-start w-auto"[39m
+        [36m>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"active"[39m
+          [36m>[39m
+            [0mActive[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"trial"[39m
+          [36m>[39m
+            [0mTrial[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"in_progress"[39m
+          [36m>[39m
+            [0mIn progress[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"paused"[39m
+          [36m>[39m
+            [0mPaused[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"inactive"[39m
+          [36m>[39m
+            [0mInactive[0m
+          [36m</option>[39m
+        [36m</select>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-cent...
+   ✓ StudentsList > shows each row's account type with a family chip, and filters by both 283ms
+   ✓ StudentsList > creates a family from the selection and reports who was skipped  374ms
+   ✓ StudentsList > creates a family by submitting with Enter and still moves focus off body  338ms
+   ✓ StudentsList > keeps the dialog open with the reason when no one can be linked 240ms
+   ✓ StudentsList > adds the selection to an active family and removes it from one  332ms
+   ✓ StudentsList > hides New student and the selection from staff who may only view 65ms
+   ✓ StudentsList > offers sign-in links, but not the update actions, to staff who may only quick-login 83ms
+   ✓ StudentsList > hides the Tag filter, but keeps the tags column, without tag.view_any 87ms
+   ✓ StudentsList > keeps nothing of families while family accounts are off 133ms
+   ✓ StudentsList > hides the Family filter and the bulk Add-to-family picker without family.view_any 111ms
+   ✓ StudentsList > hides the bulk Create-family button without family.create even with student.update 107ms
+ ✓ src/features/employment/ContractDialog.test.tsx (10 tests) 1854ms
+   ✓ ContractDialog > needs a teacher  436ms
+   ✓ ContractDialog > starts each edit afresh: no stale file, refetched values  336ms
+ ✓ src/features/scheduling/StudyGroupsList.test.tsx (5 tests) 915ms
+   ✓ StudyGroupsList > lists each group with its students and status  303ms
+ ✓ src/features/people/TeacherForm.test.tsx (11 tests) 1999ms
+   ✓ TeacherForm > requires gender and payout details when a payout method is chosen  552ms
+   ✓ TeacherForm > creates a teacher with courses, pay currency from the academy  415ms
+   ✓ TeacherForm > tags a teacher with teacher tags  389ms
+ ✓ src/features/people/FamiliesList.test.tsx (5 tests) 825ms
+   ✓ FamiliesList > lists each family's students, payer and status  328ms
+ ✓ src/features/people/TeachersList.test.tsx (5 tests) 660ms
+   ✓ TeachersList > shows course names and filters by course  425ms
+ ✓ src/features/people/StudentForm.test.tsx (18 tests) 3845ms
+   ✓ StudentForm > creates a student without email and opens the new record  602ms
+   ✓ StudentForm > shows a nested server error under the email field  388ms
+   ✓ StudentForm > edits an existing student and shows account and guardians  327ms
+   ✓ StudentForm > saves tags, XP and nationality, keeping a retired tag the student has  449ms
+   ✓ StudentForm > keeps an unchecked retired tag visible and re-checkable before save (M6)  348ms
+   ✓ StudentForm > hides retired tags the student doesn't have and checks XP  368ms
+ ✓ src/features/people/AccountActions.test.tsx (14 tests) 869ms
+ ✓ src/features/employment/ContractsList.test.tsx (8 tests) 765ms
+ ✓ src/routes/verify-email.test.tsx (8 tests) 489ms
+ ✓ src/features/people/ParentsList.test.tsx (4 tests) 749ms
+   ✓ ParentsList > lists parents with WhatsApp and their children  419ms
+ ✓ src/ui/input.test.tsx (5 tests) 727ms
+   ✓ Input > is labelable and accepts typed text  535ms
+ ✓ src/features/people/FamilyPage.test.tsx (3 tests) 386ms
+   ✓ FamilyPage > shows the family with links to its students  314ms
+stderr | src/lib/field-error.test.ts > useFieldError > translates a known server sentence
+An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/lib/field-error.test.ts (4 tests) 26ms
+ ✓ src/lib/form-errors.test.ts (6 tests) 8ms
+stderr | src/components/NameList.test.tsx > NameList > isolates each name and uses the reader's comma
+An update to NameList inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | src/components/NameList.test.tsx > NameList > uses a Latin comma in English and a dash for none
+An update to NameList inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/components/NameList.test.tsx (2 tests) 32ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/features/people/StudentsList.test.tsx > StudentsList > shows the server's reason when a bulk action is refused
+TestingLibraryElementError: Unable to find an element with the text: A retired tag can't be added.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mstyle[39m=[32m""[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33maria-label[39m=[32m"Students"[39m
+      [33mclass[39m=[32m"flex flex-col gap-4 outline-none"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Status"[39m
+        [33mclass[39m=[32m"flex flex-wrap gap-2 border-b border-border pb-2"[39m
+        [33mrole[39m=[32m"tablist"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"true"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mAll[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mActive[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mTrial[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mIn progress[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mPaused[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mInactive[0m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<section[39m
+        [33maria-label[39m=[32m"1 selected"[39m
+        [33mclass[39m=[32m"flex flex-wrap items-end gap-2 rounded-lg border border-border bg-secondary p-3"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"me-auto text-sm font-medium"[39m
+        [36m>[39m
+          [0m1 selected[0m
+        [36m</span>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary relative h-10 px-3 after:absolute after:-inset-y-0.5 after:inset-x-0 after:content-['']"[39m
+        [36m>[39m
+          [0mSend sign-in links[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary relative h-10 px-3 after:absolute after:-inset-y-0.5 after:inset-x-0 after:content-['']"[39m
+        [36m>[39m
+          [0mActivate[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-expanded[39m=[32m"false"[39m
+          [33maria-haspopup[39m=[32m"dialog"[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary relative h-10 px-3 after:absolute after:-inset-y-0.5 after:inset-x-0 after:content-['']"[39m
+          [33mdata-state[39m=[32m"closed"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mDeactivate[0m
+        [36m</button>[39m
+        [36m<select[39m
+          [33maria-label[39m=[32m"New status"[39m
+          [33mclass[39m=[32m"flex h-11 cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 text-start w-auto"[39m
+        [36m>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"active"[39m
+          [36m>[39m
+            [0mActive[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"trial"[39m
+          [36m>[39m
+            [0mTrial[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"in_progress"[39m
+          [36m>[39m
+            [0mIn progress[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"paused"[39m
+          [36m>[39m
+            [0mPaused[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"inactive"[39m
+          [36m>[39m
+            [0mInactive[0m
+          [36m</option>[39m
+        [36m</select>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-cent...
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mstyle[39m=[32m""[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<section[39m
+      [33maria-label[39m=[32m"Students"[39m
+      [33mclass[39m=[32m"flex flex-col gap-4 outline-none"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Status"[39m
+        [33mclass[39m=[32m"flex flex-wrap gap-2 border-b border-border pb-2"[39m
+        [33mrole[39m=[32m"tablist"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"true"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mAll[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mActive[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mTrial[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mIn progress[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mPaused[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mInactive[0m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<section[39m
+        [33maria-label[39m=[32m"1 selected"[39m
+        [33mclass[39m=[32m"flex flex-wrap items-end gap-2 rounded-lg border border-border bg-secondary p-3"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"me-auto text-sm font-medium"[39m
+        [36m>[39m
+          [0m1 selected[0m
+        [36m</span>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary relative h-10 px-3 after:absolute after:-inset-y-0.5 after:inset-x-0 after:content-['']"[39m
+        [36m>[39m
+          [0mSend sign-in links[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary relative h-10 px-3 after:absolute after:-inset-y-0.5 after:inset-x-0 after:content-['']"[39m
+        [36m>[39m
+          [0mActivate[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-expanded[39m=[32m"false"[39m
+          [33maria-haspopup[39m=[32m"dialog"[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary relative h-10 px-3 after:absolute after:-inset-y-0.5 after:inset-x-0 after:content-['']"[39m
+          [33mdata-state[39m=[32m"closed"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mDeactivate[0m
+        [36m</button>[39m
+        [36m<select[39m
+          [33maria-label[39m=[32m"New status"[39m
+          [33mclass[39m=[32m"flex h-11 cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 text-start w-auto"[39m
+        [36m>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"active"[39m
+          [36m>[39m
+            [0mActive[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"trial"[39m
+          [36m>[39m
+            [0mTrial[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"in_progress"[39m
+          [36m>[39m
+            [0mIn progress[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"paused"[39m
+          [36m>[39m
+            [0mPaused[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"inactive"[39m
+          [36m>[39m
+            [0mInactive[0m
+          [36m</option>[39m
+        [36m</select>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"inline-flex items-center justify-cent...
+ ❯ waitForWrapper node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ findByText node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ src/features/people/StudentsList.test.tsx:317:17
+    315|   await user.click(screen.getByRole("button", { name: "Add tag" }));
+    316|   expect(
+    317|    await screen.findByText("A retired tag can't be added."),
+       |                 ^
+    318|   ).toBeInTheDocument();
+    319|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 17 passed (18)
+      Tests  1 failed | 142 passed (143)
+   Start at  19:45:05
+   Duration  27.45s (transform 1.71s, setup 7.56s, collect 9.14s, tests 22.82s, environment 10.93s, prepare 1.42s)
+
+

@@ -1,0 +1,12 @@
+   ✓ AppSidebar > marks only the store active on a store page, not My recorded courses too (ETQAN-QA-462)  349ms
+   ✓ AppSidebar > calls onNavigate when a link is clicked  317ms
+   ✓ AppSidebar > labels the nav and has no axe violations  824ms
+ ✓ src/features/shell/AppShell.test.tsx (26 tests) 2645ms
+   ✓ AppShell > shows the language menu while Spanish is on  392ms
+   ✓ AppShell > opens the mobile drawer from the hamburger and closes on Escape  316ms
+
+ Test Files  9 passed (9)
+      Tests  99 passed (99)
+   Start at  16:03:44
+   Duration  8.97s (transform 3.24s, setup 9.48s, collect 13.06s, tests 8.63s, environment 17.66s, prepare 3.17s)
+

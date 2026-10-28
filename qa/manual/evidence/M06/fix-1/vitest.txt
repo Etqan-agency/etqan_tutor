@@ -1,0 +1,245 @@
+[vite:react-swc] We recommend switching to `@vitejs/plugin-react` for improved performance as no swc plugins are used. More information at https://vite.dev/rolldown
+
+ RUN  v3.2.6 /app
+
+ ✓ src/features/scheduling/SubscriptionForm.test.tsx (12 tests) 4611ms
+   ✓ SubscriptionForm > creates a subscription with its slots and opens it  1178ms
+   ✓ SubscriptionForm > puts server errors on their fields  508ms
+   ✓ SubscriptionForm > prices a student of a priced country in that country's currency  524ms
+   ✓ SubscriptionForm > keeps Create disabled while the price is on its way, and after it fails  597ms
+   ✓ SubscriptionForm > stays submittable with the last good price when a refresh fails  344ms
+   ✓ SubscriptionForm > shows a changed price in words and reads the price again  399ms
+ ✓ src/features/scheduling/BundleForm.currency.test.tsx (8 tests) 9320ms
+   ✓ BundleForm with country prices (B3d D-5) > prices a multi-course bundle for its student's country  1280ms
+   ✓ BundleForm with country prices (B3d D-5) > prices each family row for its student's country and sends the currency  1312ms
+   ✓ BundleForm with country prices (B3d D-5) > leaves a group's price to each member while their currencies differ  523ms
+   ✓ BundleForm with country prices (B3d D-5) > prefills no price for a group, and sends none while it stays empty  423ms
+   ✓ BundleForm with country prices (B3d D-5) > sends a typed group price in the members' one currency  446ms
+   ✓ BundleForm with country prices (B3d D-5) > clears a typed group price when the members' currency changes  496ms
+   ✓ BundleForm with country prices (B3d D-5) > keeps no stale currency when a row's price cannot be read  3475ms
+   ✓ BundleForm with country prices (B3d D-5) > reads the prices again when the server says the currency moved  1362ms
+stderr | src/features/scheduling/SupervisorFields.test.tsx > the subscription form's Supervisor (Plan 12b) > has no Supervisor while supervision is off
+Warning: A notFoundError was encountered on the route with ID "__root__", but a notFoundComponent option was not configured, nor was a router level defaultNotFoundComponent configured. Consider configuring at least one of these to avoid TanStack Router's overly generic defaultNotFoundComponent (<p>Not Found</p>)
+
+ ✓ src/features/scheduling/SupervisorFields.test.tsx (14 tests) 3334ms
+   ✓ the subscription form's Supervisor (Plan 12b) > offers who may supervise and sends the choice  1034ms
+   ✓ the subscription form's Supervisor (Plan 12b) > sends no supervisor as null, and lands a refusal on the field  442ms
+   ✓ the subscription form's Supervisor (Plan 12b) > has no Supervisor while supervision is off  427ms
+   ✓ the edit dialog's Supervisor > sends only the supervisor when only it changed  334ms
+ ✓ src/features/scheduling/SessionsList.test.tsx (21 tests) 3435ms
+   ✓ SessionsList > shows today's sessions in the academy's time and the student's  575ms
+   ✓ SessionsList > filters, searches and exports what it shows  558ms
+ ✓ src/features/scheduling/TimesPanel.test.tsx (7 tests) 1157ms
+   ✓ TimesPanel > office: stamps now next to a time and saves only that time  404ms
+ ✓ src/features/scheduling/TrialForm.test.tsx (5 tests) 2068ms
+   ✓ TrialForm > records a request with TutorHamster's fields  1345ms
+ ✓ src/features/shell/AppSidebar.test.tsx (7 tests) 3040ms
+   ✓ AppSidebar > marks the current route active and others not  686ms
+   ✓ AppSidebar > keeps Subscriptions active on a bundle's page (ETQAN-QA-211)  390ms
+   ✓ AppSidebar > calls onNavigate when a link is clicked  329ms
+   ✓ AppSidebar > labels the nav and has no axe violations  894ms
+   ✓ AppSidebar > labels each group of links  315ms
+ ✓ src/features/scheduling/TodayBoard.test.tsx (6 tests) 648ms
+   ✓ TodayBoard > lists today's slots with the student's time and state  358ms
+ ✓ src/features/scheduling/SchedulesList.test.tsx (9 tests) 2181ms
+   ✓ SchedulesList > shows each row's timetable, progress, status and substitutes  438ms
+   ✓ SchedulesList > asks the server for each tab and filter  303ms
+   ✓ SchedulesList > acts only on chosen rows that are still shown  403ms
+   ✓ SchedulesList > selects a row, selects the whole page, and clears the choice on a tab change  312ms
+ ✓ src/features/scheduling/FamilySubscriptions.test.tsx (4 tests) 359ms
+ ✓ src/features/scheduling/BundleForm.test.tsx (10 tests) 8022ms
+   ✓ BundleForm > creates a multi-course bundle and opens it  1353ms
+   ✓ BundleForm > takes a family's students on its rows  954ms
+   ✓ BundleForm > subscribes a study group with one row  357ms
+   ✓ BundleForm > puts the server's errors on the row and the owner  805ms
+   ✓ BundleForm > puts a row's own refusal inside that row  1093ms
+   ✓ BundleForm > puts a supervisor refusal on the supervisor  1036ms
+   ✓ BundleForm > shows a row's own refusal beside its field errors  746ms
+   ✓ BundleForm > shows a refused rule above the button  798ms
+   ✓ BundleForm > lists the clashes it reports and links the bundle  765ms
+ ✓ src/features/scheduling/BundleRowFields.test.tsx (5 tests) 899ms
+   ✓ BundleRowFields > offers the course's teachers and fills the price and minutes from the package  490ms
+stderr | src/features/scheduling/RevertDialog.test.tsx > RevertDialog > speaks Arabic
+An update to Toaster inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/features/scheduling/RevertDialog.test.tsx (15 tests) 1240ms
+ ✓ src/features/scheduling/StudyGroupDialog.test.tsx (5 tests) 1197ms
+   ✓ StudyGroupDialog > creates a group of the students the server offers  656ms
+ ✓ src/features/scheduling/SessionPage.test.tsx (22 tests) 2056ms
+   ✓ SessionPage > shows the details in the academy's time and the student's  375ms
+   ✓ SessionPage > cancels with a reason  310ms
+ ✓ src/features/scheduling/PostponeDialog.test.tsx (5 tests) 1542ms
+   ✓ PostponeDialog > sends the day and time as typed, with the student's time shown  493ms
+   ✓ PostponeDialog > shows the office the teacher's conflicts, then Done  315ms
+   ✓ PostponeDialog > warns the office when the new time is outside the teacher's availability  451ms
+ ✓ src/features/scheduling/AddSessionDialog.test.tsx (6 tests) 3293ms
+   ✓ AddSessionDialog > offers paused subscriptions and searches by student name  497ms
+   ✓ AddSessionDialog > adds a regular session on a subscription  601ms
+   ✓ AddSessionDialog > asks for the student, course, teacher and minutes of an extra session  462ms
+   ✓ AddSessionDialog > shows the teacher's other sessions at that time  683ms
+   ✓ AddSessionDialog > clears the teacher when the course changes  501ms
+   ✓ AddSessionDialog > warns when the session is outside the teacher's availability  547ms
+ ✓ src/features/scheduling/StudyGroupsList.test.tsx (5 tests) 1123ms
+   ✓ StudyGroupsList > lists each group with its students and status  427ms
+ ✓ src/features/scheduling/ScheduleActions.test.tsx (7 tests) 953ms
+ ✓ src/features/scheduling/ScheduleCalendar.test.tsx (6 tests) 677ms
+ ✓ src/features/scheduling/ScheduleDialogs.test.tsx (9 tests) 2243ms
+   ✓ ScheduleTeacherDialog > sends the new teacher for the chosen schedules  392ms
+   ✓ SubstituteDialog > names the refusing subscription inside the dialog  364ms
+ ✓ src/features/scheduling/TrialFromInquiry.test.tsx (5 tests) 1025ms
+   ✓ TrialFromInquiry > creates a request from the inquiry, then marks it and opens the trial  723ms
+ ✓ src/features/scheduling/GenerateDialog.test.tsx (3 tests) 744ms
+   ✓ GenerateDialog > runs a range and lists the double-bookings  371ms
+ ✓ src/features/scheduling/AttendanceControls.test.tsx (11 tests) 477ms
+ ✓ src/features/scheduling/SessionActivity.test.tsx (14 tests) 974ms
+ ✓ src/features/scheduling/BundlePage.test.tsx (7 tests) 907ms
+   ✓ BundlePage > shows the owner, the state and the totals per currency  300ms
+ ✓ src/features/scheduling/ArchiveActions.test.tsx (10 tests) 805ms
+   ✓ ArchiveSubscriptionButton > archives after a confirm and says so  342ms
+ ✓ src/features/scheduling/SessionClasses.test.tsx (15 tests) 931ms
+   ✓ SessionClasses > adds the make-up with the original's id  306ms
+ ✓ src/features/scheduling/AddScheduleDialog.test.tsx (2 tests) 429ms
+   ✓ AddScheduleDialog (plan D15) > searches the server's candidates and opens the chosen subscription  370ms
+ ✓ src/features/scheduling/SubscriptionActions.test.tsx (21 tests) 2447ms
+   ✓ SubscriptionActions > renews with pre-filled values and opens the renewal  462ms
+   ✓ SubscriptionActions > edits teacher, start, price and notes, sending only the changed fields  406ms
+ ✓ src/features/scheduling/TeacherSessions.test.tsx (15 tests) 953ms
+   ✓ TeacherSessions > shows today's sessions on the teacher's own clock  327ms
+ ✓ src/features/scheduling/MySupervision.test.tsx (9 tests) 802ms
+ ✓ src/features/scheduling/ScheduleStatusCard.test.tsx (6 tests) 510ms
+ ✓ src/features/scheduling/SlotsPanel.test.tsx (7 tests) 1184ms
+   ✓ SlotsPanel > lists slots with the student's time and edits one  517ms
+ ✓ src/features/scheduling/FamilySessions.test.tsx (8 tests) 524ms
+ ✓ src/features/scheduling/SimpleSessions.test.tsx (6 tests) 736ms
+   ✓ SimpleSessions > lists the academy's today compactly, one row per session  321ms
+ ✓ src/features/scheduling/BundleActions.test.tsx (12 tests) 2203ms
+   ✓ BundleActions > renews from a chosen day, or each member's own  434ms
+   ✓ BundleActions > reopens Add, Renew and Pause empty after a success  609ms
+ ✓ src/features/scheduling/ScheduleTrialDialog.test.tsx (6 tests) 1667ms
+   ✓ ScheduleTrialDialog > opens on the requested day and time, and has Cancel (ETQAN-QA-212)  329ms
+   ✓ ScheduleTrialDialog > does not suggest with an invalid or non-positive length  398ms
+ ✓ src/features/scheduling/ReportForm.test.tsx (3 tests) 553ms
+   ✓ ReportForm > needs both scales, then saves them with the notes  390ms
+ ✓ src/features/scheduling/ReportDialog.test.tsx (3 tests) 541ms
+   ✓ ReportDialog > writes a new report and closes  407ms
+ ✓ src/features/scheduling/SubscriptionsList.test.tsx (11 tests) 1414ms
+   ✓ SubscriptionsList > shows progress, extras, status and the grace end  351ms
+   ✓ SubscriptionsList > is the archive: only archived rows, its filters, Restore and Delete permanently (B2d)  323ms
+ ✓ src/features/scheduling/NewSubscription.test.tsx (10 tests) 1760ms
+   ✓ NewSubscription > offers the bundle types the academy has on  345ms
+   ✓ NewSubscription > follows a new linked type while it stays open  372ms
+ ✓ src/features/scheduling/TrialPage.test.tsx (9 tests) 1218ms
+   ✓ TrialPage > shows the request, its current session and the earlier ones  335ms
+   ✓ TrialPage > deletes after a confirm  335ms
+ ✓ src/features/scheduling/MissingReports.test.tsx (4 tests) 426ms
+ ✓ src/features/scheduling/TrialsList.test.tsx (5 tests) 1214ms
+   ✓ TrialsList > lists each request with its status, teacher and session  482ms
+   ✓ TrialsList > filters by status, request status, source and the student's name  344ms
+ ✓ src/features/scheduling/AvailabilityEditor.test.tsx (6 tests) 1178ms
+   ✓ AvailabilityEditor > shows the week and saves an added window  577ms
+ ✓ src/features/scheduling/FamilyHome.test.tsx (7 tests) 362ms
+ ✓ src/features/scheduling/GroupChip.test.tsx (1 test) 112ms
+ ✓ src/features/scheduling/PausesPanel.test.tsx (6 tests) 907ms
+   ✓ PausesPanel > shows freeze days left, ends the current pause and deletes a future one  376ms
+   ✓ PausesPanel > adds a pause, checking the dates first  321ms
+ ✓ src/components/TagChips.test.tsx (3 tests) 123ms
+ ✓ src/features/scheduling/BundleLink.test.tsx (3 tests) 169ms
+stderr | src/components/NameList.test.tsx > NameList > isolates each name and uses the reader's comma
+An update to NameList inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | src/components/NameList.test.tsx > NameList > uses a Latin comma in English and a dash for none
+An update to NameList inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/components/NameList.test.tsx (2 tests) 26ms
+ ✓ src/features/catalogue/CatalogueList.test.tsx (4 tests) 394ms
+ ✓ src/components/ExportButton.test.tsx (2 tests) 124ms
+ ✓ src/features/scheduling/SessionsPanel.test.tsx (3 tests) 410ms
+   ✓ SessionsPanel > lists upcoming sessions in the academy's clock, then past ones  334ms
+ ✓ src/features/scheduling/SubstituteChip.test.tsx (1 test) 131ms
+ ✓ src/features/scheduling/TermFields.test.tsx (5 tests) 1010ms
+   ✓ TermFields price (B3d R2) > prefills the student's country price and labels its currency  340ms
+   ✓ TermFields price (B3d R2) > resets the price when the resolved currency changes, and keeps typing otherwise  349ms
+ ✓ src/features/scheduling/SubscriptionDetail.test.tsx (6 tests) 483ms
+ ✓ src/features/scheduling/activityFormat.test.ts (12 tests) 30ms
+ ❯ src/features/scheduling/bits.test.tsx (9 tests | 1 failed) 332ms
+   ✓ JoinLink > shows the link for a scheduled session 173ms
+   ✓ JoinLink > hides the link from a student at the administration's disposal 18ms
+   ✓ JoinLink > hides the link from a parent at the administration's disposal 12ms
+   ✓ JoinLink > keeps the link for a teacher at the administration's disposal 20ms
+   ✓ JoinLink > gives the session's teacher Start as host on a Zoom meeting 47ms
+   ✓ JoinLink > gives everyone else, and any Jitsi room, the join link 29ms
+   ✓ PersonName and ZonedDateTime > isolates the parenthesised Latin part of a name 3ms
+   ✓ PersonName and ZonedDateTime > leaves a plain name alone 2ms
+   × PersonName and ZonedDateTime > isolates the day from the time 25ms
+     → expected [ 'Oct 27, 2026', '21:00' ] to deeply equal [ 'Oct 27, 2026', '20:00' ]
+ ✓ src/features/scheduling/trials.schemas.test.ts (2 tests) 21ms
+ ✓ src/features/scheduling/SessionKindChip.test.tsx (2 tests) 35ms
+ ✓ src/features/scheduling/api.test.ts (10 tests) 10ms
+ ✓ src/features/scheduling/bundleApi.test.ts (3 tests) 5ms
+ ✓ src/features/scheduling/refusal.test.ts (6 tests) 8ms
+ ✓ src/features/scheduling/scheduleApi.test.ts (5 tests) 6ms
+ ✓ src/features/scheduling/postponing.test.ts (2 tests) 3ms
+ ✓ src/features/scheduling/scheduleRefusal.test.ts (3 tests) 6ms
+ ✓ src/features/shell/nav.test.ts (27 tests) 20ms
+ ✓ src/features/scheduling/SubscriptionTypeChoice.test.ts (3 tests) 3ms
+ ✓ src/features/scheduling/hostLink.test.ts (2 tests) 3ms
+ ✓ src/features/scheduling/countCopy.test.ts (2 tests) 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/features/scheduling/bits.test.tsx > PersonName and ZonedDateTime > isolates the day from the time
+AssertionError: expected [ 'Oct 27, 2026', '21:00' ] to deeply equal [ 'Oct 27, 2026', '20:00' ]
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    "Oct 27, 2026",[22m
+[32m-   "20:00",[39m
+[31m+   "21:00",[39m
+[2m  ][22m
+
+ ❯ src/features/scheduling/bits.test.tsx:155:17
+    153|    (b) => b.textContent,
+    154|   );
+    155|   expect(parts).toEqual(["Oct 27, 2026", "20:00"]);
+       |                 ^
+    156|  });
+    157| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 71 passed (72)
+      Tests  1 failed | 526 passed (527)
+   Start at  19:44:02
+   Duration  110.83s (transform 7.34s, setup 30.01s, collect 50.00s, tests 83.76s, environment 41.90s, prepare 5.00s)
+
+

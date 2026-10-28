@@ -1,0 +1,166 @@
+diff --git a/etqan/identity/api/people_filters.py b/etqan/identity/api/people_filters.py
+index f8a3235f..64662ff3 100644
+--- a/etqan/identity/api/people_filters.py
++++ b/etqan/identity/api/people_filters.py
+@@ -8,6 +8,8 @@ from etqan.identity.models import TeacherProfile
+ from etqan.identity.services import ACCOUNT_TYPES
+ from etqan.platform import features
+ from etqan.platform.params import as_int
++from etqan.platform.search import folded_q
++from etqan.platform.search import with_folded
+ 
+ _BOOL = {"true": True, "false": False}
+ _TAGGED = {"student": StudentProfile, "teacher": TeacherProfile}
+@@ -60,7 +62,8 @@ def filter_families(queryset, params):
+     """``?search=`` on the name, ``?active=true|false``; anything else is
+     ignored."""
+     if search := params.get("search", "").strip():
+-        queryset = queryset.filter(name__icontains=search)
++        # ETQAN-QA-151: "عائلة ابراهيم" finds "عائلة إبراهيم".
++        queryset = with_folded(queryset, "name").filter(folded_q("name", search))
+     if (active := params.get("active")) in _BOOL:
+         queryset = queryset.filter(is_active=_BOOL[active])
+     return queryset
+@@ -68,8 +71,10 @@ def filter_families(queryset, params):
+ 
+ def filter_people(queryset, role: str, params):
+     if q := params.get("q", "").strip():
+-        queryset = queryset.filter(
+-            Q(full_name__icontains=q) | Q(email__icontains=q) | Q(phone__icontains=q)
++        # ETQAN-QA-151: the name matches whatever spelling of hamza, taa
++        # marbuta or alef maqsura was typed ("ابراهيم" finds "إبراهيم").
++        queryset = with_folded(queryset, "full_name").filter(
++            folded_q("full_name", q) | Q(email__icontains=q) | Q(phone__icontains=q)
+         )
+     if (active := params.get("is_active")) in _BOOL:
+         queryset = queryset.filter(is_active=_BOOL[active])
+diff --git a/etqan/identity/tests/test_families_api.py b/etqan/identity/tests/test_families_api.py
+index da529d7b..96eb2d32 100644
+--- a/etqan/identity/tests/test_families_api.py
++++ b/etqan/identity/tests/test_families_api.py
+@@ -97,6 +97,13 @@ class TestAdmin:
+         body = admin.get(f"{F}?page_size=1&page=2").json()
+         assert [row["name"] for row in body["results"]] == ["Omar family"]
+ 
++    def test_search_folds_arabic_spelling_variants(self, admin):
++        """ETQAN-QA-151: "عائلة ابراهيم" finds "عائلة إبراهيم"."""
++        family("عائلة إبراهيم", student("A"))
++        family("Zaid house", student("B"))
++        body = admin.get(f"{F}?search=عائله ابراهيم").json()
++        assert [row["name"] for row in body["results"]] == ["عائلة إبراهيم"]
++
+     def test_patch_answers_a_fresh_read_and_can_retire(self, admin):
+         yusuf, aisha = student("Yusuf"), student("Aisha")
+         mine = family("Mine", yusuf, aisha, payer=aisha)
+diff --git a/etqan/identity/tests/test_people_api.py b/etqan/identity/tests/test_people_api.py
+index abf50171..f977417c 100644
+--- a/etqan/identity/tests/test_people_api.py
++++ b/etqan/identity/tests/test_people_api.py
+@@ -192,6 +192,29 @@ def test_search_filters_and_pagination(admin):
+     assert (page["count"], len(page["results"])) == (2, 1)
+ 
+ 
++@pytest.mark.parametrize(
++    "typed",
++    ["ابراهيم", "إبراهيم", "ابرَاهيم", "Ibrahim", "ibrahim"],
++)
++def test_search_folds_arabic_spelling_variants(admin, typed):
++    """ETQAN-QA-151: a name found whatever hamza/marks the admin typed."""
++    services.create_person(
++        "student", full_name="إبراهيم حسن (Ibrahim Hassan)", profile={}
++    )
++    services.create_person("student", full_name="أسامة علي", profile={})
++    services.create_person("student", full_name="مصطفى", profile={})
++    url = f"{B}students/?q={typed}"
++    assert names(admin, url) == ["إبراهيم حسن (Ibrahim Hassan)"]
++
++
++def test_search_folds_taa_marbuta_and_alef_maqsura(admin):
++    """ETQAN-QA-151: "اسامه" finds "أسامة", "مصطفي" finds "مصطفى"."""
++    services.create_person("student", full_name="أسامة علي", profile={})
++    services.create_person("student", full_name="مصطفى", profile={})
++    assert names(admin, f"{B}students/?q=اسامه") == ["أسامة علي"]
++    assert names(admin, f"{B}students/?q=مصطفي") == ["مصطفى"]
++
++
+ def test_teacher_course_filter(admin):
+     a = services.create_person("teacher", full_name="A", profile={"gender": "male"})
+     services.create_person("teacher", full_name="B", profile={"gender": "female"})
+"""Arabic-aware text search (ETQAN-QA-151).
+
+People type Arabic names without hamza or with the other spelling of a
+letter ("ابراهيم" for "إبراهيم", "اسامه" for "أسامة"). A plain
+``icontains`` misses those, so a search folds both sides the same way:
+alef forms to bare alef, taa marbuta to haa, alef maqsura to yaa, and drops
+tatweel and short-vowel marks. No stored column or migration: the folding
+runs in the query (``TRANSLATE`` + ``REGEXP_REPLACE``), like ``icontains``
+already scans the column.
+"""
+
+import re
+
+from django.db.models import Func
+from django.db.models import Q
+from django.db.models import TextField
+from django.db.models import Value
+
+_FROM = "أإآٱةى"
+_TO = "ااااهي"
+# Tatweel, the harakat (fathatan … sukun) and the superscript alef.
+_MARKS = "ـً-ْٰ"
+_MARKS_RE = re.compile(f"[{_MARKS}]")
+_TABLE = str.maketrans(_FROM, _TO)
+
+
+def fold(text: str) -> str:
+    """The search form of ``text``: Arabic letter variants folded, marks
+    dropped. Latin text is unchanged (case is left to ``icontains``)."""
+    return _MARKS_RE.sub("", text).translate(_TABLE)
+
+
+def folded(field: str) -> Func:
+    """The database twin of :func:`fold` for a text column."""
+    stripped = Func(
+        field,
+        Value(f"[{_MARKS}]"),
+        Value(""),
+        Value("g"),
+        function="REGEXP_REPLACE",
+        output_field=TextField(),
+    )
+    return Func(
+        stripped,
+        Value(_FROM),
+        Value(_TO),
+        function="TRANSLATE",
+        output_field=TextField(),
+    )
+
+
+def with_folded(queryset, *fields: str):
+    """``queryset`` with each field's folded form aliased (not selected), so
+    :func:`folded_q` can match it."""
+    return queryset.alias(**{_alias(field): folded(field) for field in fields})
+
+
+def folded_q(field: str, text: str) -> Q:
+    """``field`` contains ``text``, both folded (needs :func:`with_folded`
+    on the queryset first)."""
+    return Q(**{f"{_alias(field)}__icontains": fold(text)})
+
+
+def _alias(field: str) -> str:
+    return f"_folded_{field.replace('__', '_')}"
+from etqan.platform.search import fold
+
+
+def test_fold_unifies_arabic_letter_variants():
+    """ETQAN-QA-151: the spellings people type fold to one form."""
+    assert fold("إبراهيم") == fold("ابراهيم") == fold("أبراهيم") == "ابراهيم"
+    assert fold("آمنة") == "امنه"
+    assert fold("مصطفى") == "مصطفي"
+    assert fold("محمّد") == fold("مـحـمد") == "محمد"
+
+
+def test_fold_leaves_latin_text_alone():
+    assert fold("Ibrahim Hassan +20") == "Ibrahim Hassan +20"

@@ -1,0 +1,40 @@
+
+ ❯ src/features/payroll/schemas.test.ts:37:32
+     35|   expect(schema.safeParse(base).success).toBe(true);
+     36|   const yen = schema.safeParse({ ...base, teacher: "22" });
+     37|   expect(yen.error?.issues[0]).toMatchObject({
+       |                                ^
+     38|    path: ["amount"],
+     39|    message: "billing.errors.amountInvalid",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  src/features/payroll/schemas.test.ts > withdrawalProblem > refuses more than available, a bad amount and an unknown currency
+AssertionError: expected { field: 'amount', …(1) } to deeply equal { field: 'amount', …(1) }
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "field": "amount",[22m
+[32m-   "message": "billing.errors.amountInvalid",[39m
+[31m+   "message": "billing.errors.decimals0",[39m
+[2m  }[22m
+
+ ❯ src/features/payroll/schemas.test.ts:130:53
+    128|    message: "payroll.withdrawals.overAvailable",
+    129|   });
+    130|   expect(withdrawalProblem(balances, "JPY", "1.5")).toEqual({
+       |                                                     ^
+    131|    field: "amount",
+    132|    message: "billing.errors.amountInvalid",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  4 failed | 13 passed (17)
+      Tests  5 failed | 182 passed (187)
+   Start at  20:58:54
+   Duration  30.46s (transform 11.20s, setup 25.19s, collect 112.29s, tests 72.79s, environment 27.45s, prepare 2.92s)
+
+

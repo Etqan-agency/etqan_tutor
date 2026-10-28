@@ -1,0 +1,11 @@
+M09 fix-1 (Agent 3), 2026-10-27T20:57:50Z
+- tsc --noEmit: exit 0 (tsc.txt).
+- Vitest (payroll + lib money/field-error/form-errors/i18n): 196 passed, 4 failed (vitest.txt).
+  The 4 failures are NOT from M09 changes: AdjustmentsList "adds one in the chosen teacher's currency",
+  RatesPage "checks the amount before sending it", schemas.test adjustmentFormSchema / withdrawalProblem.
+  They assert amount-validation messages changed by M08's ETQAN-QA-300 fix in
+  dashboard/src/features/billing/schemas.ts + locales/*/billing.json (modified 23:53 local, during this run).
+  The same tests passed in vitest-first.txt before that change landed.
+- Backend: payroll pytest 439 passed; test_pay_to_balance 20 passed; ruff check/format clean; lint-imports 54 kept (backend.txt).
+- QA-360 bidi measurement (Chromium, qa360-bidi-measure.mjs): pos currencyX 1203 < digitX 1216;
+  Intl neg currencyX 1263 > digitX 1188 (flipped); LRI-isolated neg currencyX 1197 < minusX 1211 < digitX 1216 (same side as positive).

@@ -1,0 +1,13 @@
+# M01 Agent 1 log
+- 2026-10-28T13:31:39Z start: read README, environment, bug register (known admin bugs QA-002..016)
+- 2026-10-28T13:36:54Z created qa-tmp-m01a (id 19), invite followed, F-001..005 written
+- 2026-10-28T13:43:01Z academies actions, domains done; F-006..010. Next billing
+- 2026-10-28T13:51:07Z billing prices/pricing/invoices done; F-011..015, F-017..020 (F-016 assigned later to usage events). Next usage, connect fees, integrations, beat, users, roles
+- 2026-10-28T13:53:41Z usage, integrations, beat, users done; F-016, F-021..024 (F-024 plain-text password). Next: view-only + noperm roles
+- 2026-10-28T13:57:15Z roles view-only/noperm, connect fees, search done; F-025..028 + Covered written. 28 findings. Agent 1 done.
+- 2026-10-28T14:59:38Z confirmation sweep start (agent 1, post-fix cycle 1)
+- 2026-10-28T15:02:56Z suspend/reactivate m01b confirm OK; AR suspended login OK (mobile overflow -> F-029); created qa-tmp-m01c id 25
+- 2026-10-28T15:03:53Z invite for m01c (AR email, set-password AR, sign-in OK)
+- 2026-10-28T15:06:13Z domains add/check DNS/make primary(refused)/disable on www.qa-tmp-m01c.example.test (id 32): only known QA-010
+- 2026-10-28T15:07:58Z billing: draft ETQ-2026-10-0002 (m01c) created + voided with reason; void message stray '·' -> F-030; invoice manual line qty 0 -> F-031
+- 2026-10-28T15:10:11Z sweep done: view-only/noperm re-checked (QA-012 still 500, known); new F-029..F-032 written. Agent 1 sweep done.

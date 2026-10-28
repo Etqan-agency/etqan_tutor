@@ -1,0 +1,12 @@
+[vite:react-swc] We recommend switching to `@vitejs/plugin-react` for improved performance as no swc plugins are used. More information at https://vite.dev/rolldown
+
+ RUN  v3.2.6 /app
+
+ ✓ src/features/scheduling/TeacherSessions.test.tsx (16 tests) 1035ms
+   ✓ TeacherSessions > shows today's sessions on the teacher's own clock  336ms
+
+ Test Files  1 passed (1)
+      Tests  16 passed (16)
+   Start at  20:54:54
+   Duration  7.81s (transform 2.92s, setup 1.08s, collect 4.07s, tests 1.04s, environment 1.19s, prepare 122ms)
+

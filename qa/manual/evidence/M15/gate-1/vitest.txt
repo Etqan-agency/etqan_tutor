@@ -1,0 +1,25 @@
+              [36m<span[39m
+                [33maria-hidden[39m=[32m"true"[39m
+                [33mclass[39m=[32m"text-destructive"[39m
+              [36m>[39m
+      ...
+ ❯ src/features/consultations/BookingWizard.test.tsx:126:51
+    124|   await user.click(screen.getByRole("button", { name: "Pay with PayPal…
+    125|   await waitFor(() =>
+    126|    expect(vi.mocked(bookingApi.book).mock.calls[0][0]).toMatchObject({
+       |                                                   ^
+    127|     starts_at: null,
+    128|     provider: "paypal",
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 32 passed (33)
+      Tests  2 failed | 229 passed (231)
+   Start at  01:58:40
+   Duration  27.84s (transform 9.57s, setup 33.39s, collect 67.90s, tests 86.56s, environment 41.52s, prepare 5.60s)
+
+

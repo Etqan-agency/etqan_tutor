@@ -1,0 +1,198 @@
+[vite:react-swc] We recommend switching to `@vitejs/plugin-react` for improved performance as no swc plugins are used. More information at https://vite.dev/rolldown
+
+ RUN  v3.2.6 /app
+
+ ✓ src/features/consultations/ProductDialog.test.tsx (10 tests) 5580ms
+   ✓ ProductDialog > creates across the three tabs, defaulting the currency  2709ms
+   ✓ ProductDialog > refuses a bad price or share before sending  623ms
+   ✓ ProductDialog > puts a server error under its field and jumps to its tab  519ms
+   ✓ ProductDialog > lists the product's teachers who opted out so they can be removed  311ms
+   ✓ ProductDialog > needs at least one teacher before sending  368ms
+   ✓ ProductDialog > asks for a description in words before sending (ETQAN-QA-570)  493ms
+ ✓ src/features/recorded/PlaylistForm.test.tsx (14 tests) 6046ms
+   ✓ PlaylistForm > checks required fields and the discount before sending  1239ms
+   ✓ PlaylistForm > sends a new course as multipart with minor units  1035ms
+   ✓ PlaylistForm > converts JPY 1500 to 1500 minor units  436ms
+   ✓ PlaylistForm > converts KWD 1.250 to 1250 minor units  718ms
+   ✓ PlaylistForm > rejects the price abc inline and sends nothing  400ms
+   ✓ PlaylistForm > rejects the price -5 inline and sends nothing  492ms
+   ✓ PlaylistForm > rejects the price 1,5 inline and sends nothing  338ms
+   ✓ PlaylistForm > rejects the price 1.234 inline and sends nothing  325ms
+   ✓ PlaylistForm > rejects a bad discount and a discount above the price  390ms
+stderr | src/features/curriculum/LevelDialog.test.tsx > LevelDialog > builds a tree with a chapter-linked topic and submits it
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/features/curriculum/LevelDialog.test.tsx > LevelDialog > shows a nested server error under its field and a 409 at the top
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/features/curriculum/LevelDialog.test.tsx > LevelDialog > asks for a course in words and shows a form-level 400
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/features/curriculum/LevelDialog.test.tsx > LevelDialog > hides the chapter picker while quran_chapters is off
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/features/curriculum/LevelDialog.test.tsx > LevelDialog > puts the Arabic name first and marks both names required (ETQAN-QA-560)
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ ✓ src/features/content/ContentAdmin.test.tsx (11 tests) 1573ms
+   ✓ ContentAdmin > needs a course before it lists anything  486ms
+stderr | src/features/curriculum/LevelDialog.test.tsx > LevelDialog > checks a topic's verses in words before saving (ETQAN-QA-561)
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/features/curriculum/LevelDialog.test.tsx > LevelDialog > says where to load the chapters when there are none (ETQAN-QA-562)
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ ✓ src/features/curriculum/LevelDialog.test.tsx (7 tests) 2448ms
+   ✓ LevelDialog > builds a tree with a chapter-linked topic and submits it  1328ms
+   ✓ LevelDialog > checks a topic's verses in words before saving (ETQAN-QA-561)  448ms
+ ✓ src/features/catalogue/CourseForm.test.tsx (11 tests) 1340ms
+   ✓ CourseForm > requires both names and links teachers  632ms
+ ✓ src/features/catalogue/PackageForm.test.tsx (5 tests) 893ms
+   ✓ PackageForm > shows sessions_total live and saves minor units  562ms
+ ✓ src/features/recorded/VideosTab.test.tsx (7 tests) 539ms
+ ✓ src/features/curriculum/LevelsList.test.tsx (5 tests) 574ms
+stderr | src/features/curriculum/ChaptersTable.test.tsx > ChaptersTable > shows the chapters and edits a chapter's names
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/features/curriculum/ChaptersTable.test.tsx > ChaptersTable > titles the edit dialog with the Arabic name in Arabic (ETQAN-QA-563)
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/features/curriculum/ChaptersTable.test.tsx > ChaptersTable > titles the edit dialog with the Arabic name in Arabic (ETQAN-QA-563)
+An update to Toaster inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to ChaptersTable inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to EditNames inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/features/curriculum/ChaptersTable.test.tsx (5 tests) 623ms
+ ✓ src/features/consultations/ProductsAdmin.test.tsx (6 tests) 622ms
+ ✓ src/features/recorded/PlaylistsAdmin.test.tsx (4 tests) 472ms
+ ✓ src/features/catalogue/CatalogueList.test.tsx (7 tests) 796ms
+   ✓ CatalogueList > filters by active state and duplicates  333ms
+ ❯ src/features/curriculum/errors.test.ts (8 tests | 1 failed) 14ms
+   ✓ curriculumErrorText > translates learning codes from the curriculum area 3ms
+   ✓ curriculumErrorText > falls back to the shared text 1ms
+   ✓ formErrors > keeps errors of rendered inputs and lifts the rest to the form 1ms
+   ✓ formErrors > shows a form-level 400 message 0ms
+   ✓ formErrors > translates a learning code 0ms
+   ✓ formErrors > says something when the body is empty 0ms
+   × formErrors in Arabic (ETQAN-QA-561) > shows known fixed server sentences in the reader's language 7ms
+     → expected 'استخدم أحرفًا إنجليزية صغيرة وأرقامًا…' not to match /[a-z]{4}/
+   ✓ formErrors in Arabic (ETQAN-QA-561) > keeps an unknown server sentence as sent 0ms
+ ✓ src/locales/catalogue-bidi.test.ts (2 tests) 3ms
+ ✓ src/features/curriculum/chapterLabel.test.ts (2 tests) 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/features/curriculum/errors.test.ts > formErrors in Arabic (ETQAN-QA-561) > shows known fixed server sentences in the reader's language
+AssertionError: expected 'استخدم أحرفًا إنجليزية صغيرة وأرقامًا…' not to match /[a-z]{4}/
+
+[32m- Expected:[39m 
+/[a-z]{4}/
+
+[31m+ Received:[39m 
+"استخدم أحرفًا إنجليزية صغيرة وأرقامًا وشرطات فقط، مثل ⁦tajweed-1⁩."
+
+ ❯ src/features/curriculum/errors.test.ts:74:31
+     72|   expect(out.fields.file).toBe(ar("errors.server.fileTypeNotAllowed"));
+     73|   expect(out.fields.slug).toBe(ar("recorded.form.slugInvalid"));
+     74|   expect(out.fields.slug).not.toMatch(/[a-z]{4}/);
+       |                               ^
+     75|  });
+     76|  it("keeps an unknown server sentence as sent", () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 14 passed (15)
+      Tests  1 failed | 103 passed (104)
+   Start at  01:57:23
+   Duration  27.52s (transform 4.25s, setup 5.98s, collect 15.48s, tests 21.53s, environment 8.02s, prepare 945ms)
+
+
+exit 1
