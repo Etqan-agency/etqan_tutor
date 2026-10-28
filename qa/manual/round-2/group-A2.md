@@ -1,0 +1,52 @@
+# Round 2, group A2: Text, translations, wording, CSV exports, part 2 (48 bugs)
+
+Every bug below must end VERIFIED. Full details are in `qa/bug-register.md`.
+
+- [x] ETQAN-QA-625 (P3, M10): Chat group dialog: saving with no participants shows the raw English server text "A group has 1 to 200 participants." in the Arabic UI
+- [x] ETQAN-QA-659 (P3, M11): Level upgrade requests: the office sidebar item "طلبات الترقية" has no pending count, so a request is noticed only by opening the page
+- [x] ETQAN-QA-681 (P3, M11): Issue certificate dialog: Student and Course selects are blank boxes with no "اختر…" text (the ETQAN-QA-653 fix covered only the homework dialog)
+- [x] ETQAN-QA-684 (P3, M11): Arabic UI: a title that starts with Latin text (file name "M11-photo.png") is pushed to the far left of its card, away from its checkbox and meta line (side effect of the ETQAN-QA-651/672 `dir="auto"` fix)
+- [x] ETQAN-QA-751 (P3, M16): Public site has no sign-up link: header, hero and footer offer only "تسجيل الدخول"; self-registration is reachable only through the sign-in page
+- [x] ETQAN-QA-752 (P3, M16): "اشترِ الدورة" on a recorded course sends a visitor to a bare sign-in page with no word about the course and no way back to the site
+- [x] ETQAN-QA-759 (P3, M16): Registration step 4: the consent "أوافق على شروط الأكاديمية…" points to terms the visitor can't read, and nothing summarises what will be sent
+- [x] ETQAN-QA-778 (P3, M16): After a trial request is sent, the form silently returns to "تواصل معنا" while the trial success line stays; a second send from the page goes in as a plain contact
+- [x] ETQAN-QA-808 (P3, M01): Academy history says "Changed Family accounts … and Contracts …" / "Changed Status." without saying which way
+- [x] ETQAN-QA-814 (P3, M01): Billing "By academy" filters list the platform row "Etqan"; academies appear in no order in every console picker
+- [x] ETQAN-QA-819 (P3, M01): Etqan invoice email: sender "etqan" in lower case, plain text only, English only for an Arabic academy
+- [x] ETQAN-QA-820 (P3, M01): Mark paid with a date typed 28/10/2026 says "No action selected." and clears the inputs
+- [x] ETQAN-QA-825 (P3, M01): Connect fee currency accepts any text up to 3 characters ("zz" saved as "ZZ")
+- [x] ETQAN-QA-064 (P4, M02): Sign-in copy is student-only ("Sign in to continue your studies.") for every role, and the 2FA code step keeps the sign-up / forgot-password links
+- [x] ETQAN-QA-101 (P4, M03): Admin Home repeats every sidebar item as ~69 tiles in an order unrelated to the sidebar groups; only "Account" has a description
+- [x] ETQAN-QA-119 (P4, M03): Detail pages have only a generic title ("Student", "Invoice", "Teacher") and no breadcrumb/back link; every browser tab reads the same
+- [x] ETQAN-QA-177 (P4, M04): Read-only student page: double gap between "أولياء الأمور" and "تفضيلات الإشعارات" (empty wallet wrapper keeps its margin)
+- [x] ETQAN-QA-215 (P4, M06): Price label shows empty parentheses "السعر ()" / "Price ()" until a package is picked
+- [x] ETQAN-QA-256 (P4, M07): Today board calls a scheduled session "مولَّدة" (generated) while the Sessions list calls it "مجدولة"
+- [x] ETQAN-QA-258 (P4, M07): Session activity log: "Before"/"After" columns sit at a different position in every entry
+- [x] ETQAN-QA-261 (P4, M07): Session kind wording differs: list tabs "Core / أساسية" vs session page and Add dialog "Regular / عادية"; "المقرر" vs "الدورة"
+- [x] ETQAN-QA-263 (P4, M07): Student "حصصي" starts every row with the student's own name; a postponed lesson has no "postponed" mark
+- [x] ETQAN-QA-267 (P4, M07): Homework page: subtitle grammar "الأعمال التي تُكلَّف بها الطالب" and an empty "تمت الإجابة" cell
+- [x] ETQAN-QA-274 (P4, M07): "إضافة حصة" (إضافية): "الدقائق" is required but has no asterisk and no hint, while for "عادية" it is optional
+- [x] ETQAN-QA-275 (P4, M07): Cancelled session page still shows the "الرابط" / "Link" label with nothing under it
+- [x] ETQAN-QA-375 (P4, M09): Teacher "رصيدي" (AR): in a request card with a long note, the amount is not lined up with the date and note
+- [x] ETQAN-QA-411 (P4, M14): Reports to write: every row repeats the teacher's own name, and there is no count
+- [x] ETQAN-QA-423 (P4, M14): Status "تحت تصرف الإدارة" / "At the administration's disposal" is shown to the teacher with no explanation
+- [x] ETQAN-QA-424 (P4, M14): Payslip number in the display font reads "PAY-oooo39": old-style zeros look like the letter o
+- [x] ETQAN-QA-469 (P4, M15): Paid invoice shows the raw provider id "pi_sim_0a82e186b84a4b3981c30089652e36ef" to the family as the payment's main detail
+- [x] ETQAN-QA-470 (P4, M15): Homework answer file picker is the bare native control (English "Choose File / No file chosen" in Chromium) with no allowed types or size hint
+- [x] ETQAN-QA-503 (P4, M12): Features page tells the academy an off feature "تعمل عند بنائها" (works once it is built)
+- [x] ETQAN-QA-602 (P4, M10): Every own chat message carries a large solid red "حذف" (Delete) button, always visible
+- [x] ETQAN-QA-605 (P4, M10): "قرأها 0" (read by 0) under every own message in a one-to-one chat
+- [x] ETQAN-QA-607 (P4, M10): Chat group dialog: the group image picker is the bare native "Choose File / No file chosen" control
+- [x] ETQAN-QA-610 (P4, M10): Notification template editor: "إلغاء" sits alone on its own row, opposite "حفظ"/"معاينة"
+- [x] ETQAN-QA-615 (P4, M10): Broadcasts: "فشل 0" is a red badge even when nothing failed
+- [x] ETQAN-QA-655 (P4, M11): Materials shelf: a link material gets a tiny underlined "فتح" text while a file gets a bordered "تنزيل" button
+- [x] ETQAN-QA-667 (P4, M11): Student/parent "شهاداتي": the certificate card has no visible "عرض / طباعة" action; only clicking the whole card opens it
+- [x] ETQAN-QA-675 (P4, M11): Monthly report "اكتب بالذكاء الاصطناعي" is offered when no AI account is set up; the user learns it only after writing instructions and pressing إنشاء. The facts panel is titled "سجلات هذا الشهر" for the chosen (past) month
+- [x] ETQAN-QA-676 (P4, M11): Monthly report print page repeats the student and month (header "التقرير الشهري / سبتمبر 2026 / QA student", then a fields row with both again); the header's month is centred while the name is start-aligned
+- [x] ETQAN-QA-679 (P4, M11): Teacher "تقييماتي": an average of 4.5 is drawn as five full stars
+- [x] ETQAN-QA-762 (P4, M16): Teacher avatar initial on consultation pages is "ا" (from the article of "الشيخ")
+- [x] ETQAN-QA-769 (P4, M16): Home "من نحن" section repeats its title (eyebrow "من نحن" and heading "من نحن"; EN "ABOUT US" / "About us")
+- [x] ETQAN-QA-776 (P4, M16): Closed-site (maintenance) page shows the academy name twice: "Etqan QA Academy · Etqan QA Academy"
+- [x] ETQAN-QA-777 (P4, M16): Article page: a category name that ends in Latin letters or digits mixes with the date ("فئة بوابة 1 · M16 أكتوبر 2026")
+- [x] ETQAN-QA-780 (P4, M16): Visitor consultation booking: slot days are bare "2026/10/29" with no weekday
+- [x] ETQAN-QA-815 (P4, M01): "etqan" in lower case across the billing console: "Add etqan invoice", "Select etqan invoice to change", "2 etqan invoices", "The etqan invoice line …"

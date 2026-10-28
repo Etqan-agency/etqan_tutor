@@ -1,0 +1,19 @@
+# D agent 3 (fixer, cycle 1)
+- 2026-10-28 21:44 start; read README, group-D, register entries
+- 21:44 058+114: requireAuth next= + connection-problem screen
+- 21:48 174 guard, 554/557/558/559 PackageForm, 564, 566 done
+- 21:50 575 slot warning, 162 week order done; next 259/266
+- 21:53 259/266 done (SessionContext.tsx + homework session filter)
+- 21:58 304, 453 done (outstanding endpoint + AmountDue); next 452/767
+- 22:02 backend 452/767 receipts (email + family endpoint + public link paid fields) done, pytest billing 390 passed
+- 22:04 452/767 dashboard done; next 763
+- 22:05 763 PublicFrame header done; next payroll 352/359/361/362/374/410
+- 22:09 361,374,362,410 done; next 359, 352
+- 22:15 359, 352 done; next 466, 502, 601, 657, 709, 803, 817, 826
+- 22:17 466, 601 done
+- 22:21 657 done; next 709
+- 22:23 709 done; next 502
+- 22:24 502 done; next 803/817/826 (console)
+- 22:29 803, 817, 826 done; running tsc/biome/lint-imports
+- 22:46 register (32 entries FIXED-UNVERIFIED), decisions.md, group-D ticked. Checks: tsc clean except other group's FamilySessions.test; vitest 2094/2096 (2 failures in others' files: design-preview FilePicker/phoneCards, SupervisorFields); pytest touched apps green; ruff + lint-imports 54 kept
+- 2026-10-28 23:31 cycle 2: ETQAN-QA-362 fixed: WithdrawalsPage amount column items-start (Money no longer stretched to the LTR edge); new regression test; WithdrawalsPage.test.tsx 15/15; tsc only error is in another group's FamilySessions.test.tsx. Register FIXED-UNVERIFIED, ticked.

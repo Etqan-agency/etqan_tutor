@@ -1,0 +1,4 @@
+# Group B, Agent 3 (fixer), cycle 1
+- 2026-10-28T19:02:25Z Fixed all 18 (050 052 065 120 216 217 218 355 623 683 712 121 272 320 414 421 574 626). Shared fixes: components/PersonName (216/218/683/120), bidiName direction-aware for "(…)" names (120), i18n singleFullStop post-processor (320), AlertDialog layer z-[60] (414).
+- Checks: vitest on touched tests 343/343 pass; tsc clean for my files (3 errors remain in FamilySessions*.tsx / unsaved-changes.test.tsx, other groups' work in progress); biome clean; backend site tests 52 pass, ruff + lint-imports clean. Migration academy_site.0008_inquiry_handled_at applied with migrate_schemas (every schema, additive column).
+- Note for other groups: SessionPage.test "no Link fact on a cancelled session (QA-275)" failed once mid-edit (another group's SessionPage change); passed on the final run. routes/design-preview.test fails on FilePicker/phoneCards (group C's new ui exports).

@@ -1,0 +1,96 @@
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+=== Starting migration
+Operations to perform:
+  Apply all migrations: academy, academy_site, access, account, admin, ai, auth, billing, catalogue, chat, consultations, contenttypes, devices, django_celery_beat, employment, etqan_billing, finance, gateways, identity, integrations, integrations_accounts, learning, library, mfa, notifications, payroll, recorded, registration, scheduling, sessions, sites, socialaccount, systemstatus, tenants, translations, vouchers, wallet
+Running migrations:
+  No migrations to apply.
+MIGRATE EXIT=0
