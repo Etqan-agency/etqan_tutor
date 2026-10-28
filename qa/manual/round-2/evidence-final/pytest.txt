@@ -1,0 +1,423 @@
+........................................................................ [  0%]
+..............................................................F......... [  1%]
+........................................................................ [  2%]
+........................................................................ [  2%]
+........................................................................ [  3%]
+........................................................................ [  4%]
+........................................................................ [  4%]
+........................................................................ [  5%]
+........................................................................ [  6%]
+........................................................................ [  7%]
+........................................................................ [  7%]
+........................................................................ [  8%]
+........................................................................ [  9%]
+........................................................................ [  9%]
+........................................................................ [ 10%]
+........................................................................ [ 11%]
+........................................................................ [ 11%]
+........................................................................ [ 12%]
+........................................................................ [ 13%]
+........................................................................ [ 14%]
+........................................................................ [ 14%]
+........................................................................ [ 15%]
+........................................................................ [ 16%]
+........................................................................ [ 16%]
+........................................................................ [ 17%]
+........................................................................ [ 18%]
+........................................................................ [ 18%]
+........................................................................ [ 19%]
+........................................................................ [ 20%]
+........................................................................ [ 21%]
+........................................................................ [ 21%]
+..........................................s............................. [ 22%]
+........................................................................ [ 23%]
+........................................................................ [ 23%]
+........................................................................ [ 24%]
+........................................................................ [ 25%]
+........................................................................ [ 25%]
+........................................................................ [ 26%]
+........................................................................ [ 27%]
+........................................................................ [ 28%]
+........................................................................ [ 28%]
+........................................................................ [ 29%]
+........................................................................ [ 30%]
+........................................................................ [ 30%]
+........................................................................ [ 31%]
+........................................................................ [ 32%]
+........................................................................ [ 32%]
+........................................................................ [ 33%]
+........................................................................ [ 34%]
+........................................................................ [ 35%]
+........................................................................ [ 35%]
+........................................................................ [ 36%]
+........................................................................ [ 37%]
+........................................................................ [ 37%]
+........................................................................ [ 38%]
+........................................................................ [ 39%]
+........................................................................ [ 39%]
+........................................................................ [ 40%]
+........................................................................ [ 41%]
+........................................................................ [ 42%]
+........................................................................ [ 42%]
+........................................................................ [ 43%]
+........................................................................ [ 44%]
+........................................................................ [ 44%]
+........................................................................ [ 45%]
+........................................................................ [ 46%]
+........................................................................ [ 46%]
+........................................................................ [ 47%]
+........................................................................ [ 48%]
+........................................................................ [ 49%]
+........................................................................ [ 49%]
+........................................................................ [ 50%]
+........................................................................ [ 51%]
+........................................................................ [ 51%]
+........................................................................ [ 52%]
+........................................................................ [ 53%]
+........................................................................ [ 53%]
+........................................................................ [ 54%]
+........................................................................ [ 55%]
+........................................................................ [ 56%]
+........................................................................ [ 56%]
+........................................................................ [ 57%]
+........................................................................ [ 58%]
+........................................................................ [ 58%]
+........................................................................ [ 59%]
+........................................................................ [ 60%]
+........................................................................ [ 61%]
+........................................................................ [ 61%]
+........................................................................ [ 62%]
+........................................................................ [ 63%]
+........................................................................ [ 63%]
+........................................................................ [ 64%]
+........................................................................ [ 65%]
+........................................................................ [ 65%]
+........................................................................ [ 66%]
+........................................................................ [ 67%]
+........................................................................ [ 68%]
+........................................................................ [ 68%]
+........................................................................ [ 69%]
+........................................................................ [ 70%]
+........................................................................ [ 70%]
+........................................................................ [ 71%]
+........................................................................ [ 72%]
+........................................................................ [ 72%]
+........................................................................ [ 73%]
+........................................................................ [ 74%]
+........................................................................ [ 75%]
+........................................................................ [ 75%]
+........................................................................ [ 76%]
+........................................................................ [ 77%]
+........................................................................ [ 77%]
+........................................................................ [ 78%]
+........................................................................ [ 79%]
+........................................................................ [ 79%]
+........................................................................ [ 80%]
+........................................................................ [ 81%]
+........................................................................ [ 82%]
+........................................................................ [ 82%]
+........................................................................ [ 83%]
+........................................................................ [ 84%]
+........................................................................ [ 84%]
+........................................................................ [ 85%]
+........................................................................ [ 86%]
+........................................................................ [ 86%]
+........................................................................ [ 87%]
+........................................................................ [ 88%]
+........................................................................ [ 89%]
+........................................................................ [ 89%]
+........................................................................ [ 90%]
+........................................................................ [ 91%]
+........................................................................ [ 91%]
+........................................................................ [ 92%]
+........................................................................ [ 93%]
+........................................................................ [ 93%]
+........................................................................ [ 94%]
+........................................................................ [ 95%]
+........................................................................ [ 96%]
+........................................................................ [ 96%]
+........................................................................ [ 97%]
+........................................................................ [ 98%]
+........................................................................ [ 98%]
+........................................................................ [ 99%]
+............................................                             [100%]
+=================================== FAILURES ===================================
+____________ test_every_route_declares_its_code_or_is_named_exempt _____________
+
+    def test_every_route_declares_its_code_or_is_named_exempt():
+        served = set()
+        exempt_served = set()
+        for route, method, callback in _handlers():
+            if _qualname(callback.cls) in SELF_SERVICE:
+                exempt_served.add(_qualname(callback.cls))
+                continue
+            served.add((route, method))
+        tabled = {}
+        for method, path, code in ROUTES:
+            route, declared = _declared(method, path)
+            assert declared == code, (method, path)
+            tabled[(route, method)] = code
+        for method, path in ADMIN_ONLY:
+            route, declared = _declared(method, path)
+            assert declared is None, (method, path)
+            tabled.setdefault((route, method), None)
+>       assert sorted(served - set(tabled)) == []
+E       AssertionError: assert [('api/v1/bil...en/', 'POST')] == []
+E         
+E         Left contains 4 more items, first extra item: ('api/v1/billing/invoices/outstanding/', 'GET')
+E         Use -v to get more diff
+
+etqan/access/tests/test_routes.py:1919: AssertionError
+=============================== warnings summary ===============================
+etqan/site/models.py:142
+  /app/etqan/site/models.py:142: PytestCollectionWarning: cannot collect test class 'Testimonial' because it has a __init__ constructor (from: etqan/site/tests/test_admin_media.py)
+    class Testimonial(models.Model):
+
+etqan/site/models.py:142
+  /app/etqan/site/models.py:142: PytestCollectionWarning: cannot collect test class 'Testimonial' because it has a __init__ constructor (from: etqan/site/tests/test_media_models.py)
+    class Testimonial(models.Model):
+
+etqan/site/models.py:142
+  /app/etqan/site/models.py:142: PytestCollectionWarning: cannot collect test class 'Testimonial' because it has a __init__ constructor (from: etqan/site/tests/test_public_api.py)
+    class Testimonial(models.Model):
+
+etqan/site/models.py:142
+  /app/etqan/site/models.py:142: PytestCollectionWarning: cannot collect test class 'Testimonial' because it has a __init__ constructor (from: etqan/site/tests/test_public_media.py)
+    class Testimonial(models.Model):
+
+etqan/site/models.py:142
+  /app/etqan/site/models.py:142: PytestCollectionWarning: cannot collect test class 'Testimonial' because it has a __init__ constructor (from: etqan/site/tests/test_public_page_builder.py)
+    class Testimonial(models.Model):
+
+etqan/site/models.py:142
+  /app/etqan/site/models.py:142: PytestCollectionWarning: cannot collect test class 'Testimonial' because it has a __init__ constructor (from: etqan/site/tests/test_public_settings.py)
+    class Testimonial(models.Model):
+
+etqan/site/models.py:142
+  /app/etqan/site/models.py:142: PytestCollectionWarning: cannot collect test class 'Testimonial' because it has a __init__ constructor (from: etqan/site/tests/test_seed_b8b.py)
+    class Testimonial(models.Model):
+
+etqan/academy/tests/test_api.py: 30 warnings
+etqan/academy/tests/test_features_api.py: 5 warnings
+etqan/access/tests/test_access_api.py: 30 warnings
+etqan/access/tests/test_me.py: 8 warnings
+etqan/access/tests/test_routes.py: 1945 warnings
+etqan/ai/tests/reports/test_api.py: 31 warnings
+etqan/ai/tests/reports/test_draft_task.py: 12 warnings
+etqan/ai/tests/test_api.py: 19 warnings
+etqan/billing/tests/test_api.py: 23 warnings
+etqan/billing/tests/test_code_payments.py: 2 warnings
+etqan/billing/tests/test_family_payer.py: 1 warning
+etqan/billing/tests/test_features.py: 1 warning
+etqan/billing/tests/test_local_methods_api.py: 17 warnings
+etqan/billing/tests/test_online.py: 1 warning
+etqan/billing/tests/test_receipts.py: 1 warning
+etqan/billing/tests/test_records.py: 23 warnings
+etqan/billing/tests/test_refunds.py: 2 warnings
+etqan/billing/tests/test_staff_scope.py: 2 warnings
+etqan/billing/tests/test_subscription_api.py: 8 warnings
+etqan/billing/tests/test_terms.py: 4 warnings
+etqan/billing/tests/test_wallet_payments.py: 1 warning
+etqan/catalogue/tests/test_api.py: 13 warnings
+etqan/catalogue/tests/test_country_prices_api.py: 10 warnings
+etqan/chat/tests/test_access.py: 4 warnings
+etqan/chat/tests/test_attachments.py: 18 warnings
+etqan/chat/tests/test_conversations.py: 7 warnings
+etqan/chat/tests/test_group_image.py: 20 warnings
+etqan/chat/tests/test_groups.py: 33 warnings
+etqan/chat/tests/test_messages.py: 14 warnings
+etqan/chat/tests/test_moderation.py: 32 warnings
+etqan/consultations/tests/test_api_manage.py: 17 warnings
+etqan/consultations/tests/test_api_margins.py: 8 warnings
+etqan/consultations/tests/test_api_my.py: 5 warnings
+etqan/consultations/tests/test_api_products.py: 8 warnings
+etqan/consultations/tests/test_api_public.py: 14 warnings
+etqan/consultations/tests/test_api_requests.py: 21 warnings
+etqan/consultations/tests/test_api_requests_csv.py: 11 warnings
+etqan/consultations/tests/test_api_reviews.py: 3 warnings
+etqan/consultations/tests/test_office_self_booked.py: 1 warning
+etqan/devices/tests/test_icons.py: 15 warnings
+etqan/devices/tests/test_manifest.py: 8 warnings
+etqan/devices/tests/test_push_api.py: 19 warnings
+etqan/employment/tests/test_api.py: 15 warnings
+etqan/etqan_billing/tests/test_admin.py: 21 warnings
+etqan/etqan_billing/tests/test_admin_console_qa.py: 7 warnings
+etqan/etqan_billing/tests/test_admin_layout_qa.py: 2 warnings
+etqan/etqan_billing/tests/test_admin_permissions.py: 6 warnings
+etqan/etqan_billing/tests/test_admin_round2_qa.py: 6 warnings
+etqan/etqan_billing/tests/test_api.py: 7 warnings
+etqan/finance/tests/test_api.py: 22 warnings
+etqan/finance/tests/test_rates_api.py: 19 warnings
+etqan/gateways/tests/test_capture.py: 23 warnings
+etqan/gateways/tests/test_checkouts.py: 22 warnings
+etqan/gateways/tests/test_checkouts_csv.py: 5 warnings
+etqan/gateways/tests/test_connect_webhooks.py: 14 warnings
+etqan/gateways/tests/test_impersonation.py: 10 warnings
+etqan/gateways/tests/test_links.py: 13 warnings
+etqan/gateways/tests/test_list.py: 4 warnings
+etqan/gateways/tests/test_pay_links.py: 25 warnings
+etqan/gateways/tests/test_paypal_orders.py: 19 warnings
+etqan/gateways/tests/test_paypal_settings.py: 13 warnings
+etqan/gateways/tests/test_paypal_webhooks.py: 64 warnings
+etqan/gateways/tests/test_public_checkouts.py: 7 warnings
+etqan/gateways/tests/test_settings.py: 9 warnings
+etqan/gateways/tests/test_simulate.py: 9 warnings
+etqan/gateways/tests/test_webhooks.py: 26 warnings
+etqan/identity/tests/test_accounts_closed.py: 8 warnings
+etqan/identity/tests/test_api_auth.py: 19 warnings
+etqan/identity/tests/test_api_docs.py: 9 warnings
+etqan/identity/tests/test_api_resend_verification.py: 5 warnings
+etqan/identity/tests/test_api_versioning.py: 4 warnings
+etqan/identity/tests/test_async_email.py: 1 warning
+etqan/identity/tests/test_code_reset.py: 36 warnings
+etqan/identity/tests/test_console_users.py: 5 warnings
+etqan/identity/tests/test_email_branding.py: 3 warnings
+etqan/identity/tests/test_email_management.py: 7 warnings
+etqan/identity/tests/test_families_api.py: 13 warnings
+etqan/identity/tests/test_family_bulk.py: 22 warnings
+etqan/identity/tests/test_family_people.py: 9 warnings
+etqan/identity/tests/test_features.py: 9 warnings
+etqan/identity/tests/test_google.py: 62 warnings
+etqan/identity/tests/test_impersonation.py: 34 warnings
+etqan/identity/tests/test_login_2fa.py: 24 warnings
+etqan/identity/tests/test_login_csrf.py: 8 warnings
+etqan/identity/tests/test_password_management.py: 27 warnings
+etqan/identity/tests/test_people_actions_api.py: 19 warnings
+etqan/identity/tests/test_people_api.py: 42 warnings
+etqan/identity/tests/test_people_depth_lists.py: 11 warnings
+etqan/identity/tests/test_people_services.py: 8 warnings
+etqan/identity/tests/test_phone_login.py: 18 warnings
+etqan/identity/tests/test_profile_access.py: 7 warnings
+etqan/identity/tests/test_profile_depth.py: 8 warnings
+etqan/identity/tests/test_quick_login_links.py: 30 warnings
+etqan/identity/tests/test_retired.py: 11 warnings
+etqan/identity/tests/test_roles.py: 1 warning
+etqan/identity/tests/test_security_log.py: 4 warnings
+etqan/identity/tests/test_signin.py: 29 warnings
+etqan/identity/tests/test_signin_registrants.py: 8 warnings
+etqan/identity/tests/test_spanish.py: 6 warnings
+etqan/identity/tests/test_staff_scope.py: 2 warnings
+etqan/identity/tests/test_tags_api.py: 33 warnings
+etqan/identity/tests/test_twofactor_api.py: 47 warnings
+etqan/integrations/tests/test_admin.py: 15 warnings
+etqan/integrations/tests/test_ai_provider.py: 2 warnings
+etqan/integrations/tests/test_api.py: 12 warnings
+etqan/integrations/tests/test_connect.py: 8 warnings
+etqan/integrations/tests/test_email.py: 1 warning
+etqan/integrations/tests/test_video.py: 12 warnings
+etqan/integrations/tests/test_zoom.py: 1 warning
+etqan/learning/tests/test_api_certificates.py: 21 warnings
+etqan/learning/tests/test_api_content.py: 10 warnings
+etqan/learning/tests/test_api_homework.py: 21 warnings
+etqan/learning/tests/test_api_honour.py: 12 warnings
+etqan/learning/tests/test_api_levels.py: 7 warnings
+etqan/learning/tests/test_api_progress.py: 11 warnings
+etqan/learning/tests/test_api_reviews.py: 20 warnings
+etqan/learning/tests/test_subject_certificates.py: 3 warnings
+etqan/library/tests/test_api.py: 9 warnings
+etqan/notifications/tests/test_api.py: 28 warnings
+etqan/notifications/tests/test_api_b5a.py: 20 warnings
+etqan/notifications/tests/test_api_b5b.py: 19 warnings
+etqan/notifications/tests/test_features.py: 1 warning
+etqan/notifications/tests/test_whatsapp_choice.py: 7 warnings
+etqan/notifications/tests/test_whatsapp_delivery.py: 1 warning
+etqan/payroll/tests/test_api.py: 17 warnings
+etqan/payroll/tests/test_api_b4b.py: 23 warnings
+etqan/payroll/tests/test_api_pay_rules.py: 20 warnings
+etqan/payroll/tests/test_api_payslip_balance.py: 12 warnings
+etqan/payroll/tests/test_api_projections.py: 14 warnings
+etqan/payroll/tests/test_api_withdrawals.py: 19 warnings
+etqan/payroll/tests/test_counts.py: 5 warnings
+etqan/payroll/tests/test_staff_scope.py: 1 warning
+etqan/platform/tests/test_console_order.py: 1 warning
+etqan/platform/tests/test_export_feature.py: 10 warnings
+etqan/platform/tests/test_feature_on.py: 1 warning
+etqan/platform/tests/test_health.py: 2 warnings
+etqan/platform/tests/test_middleware.py: 2 warnings
+etqan/recorded/tests/test_api_enrolments.py: 6 warnings
+etqan/recorded/tests/test_api_feedback.py: 6 warnings
+etqan/recorded/tests/test_api_feedback_office.py: 6 warnings
+etqan/recorded/tests/test_api_file.py: 9 warnings
+etqan/recorded/tests/test_api_my.py: 9 warnings
+etqan/recorded/tests/test_api_office.py: 11 warnings
+etqan/recorded/tests/test_api_public.py: 6 warnings
+etqan/recorded/tests/test_api_store.py: 8 warnings
+etqan/recorded/tests/test_certificates.py: 9 warnings
+etqan/recorded/tests/test_codes.py: 1 warning
+etqan/recorded/tests/test_store_ratings.py: 3 warnings
+etqan/registration/tests/test_api.py: 60 warnings
+etqan/registration/tests/test_google_prefill.py: 9 warnings
+etqan/registration/tests/test_signin_flow.py: 5 warnings
+etqan/registration/tests/test_signin_hook.py: 3 warnings
+etqan/registration/tests/test_spanish.py: 3 warnings
+etqan/scheduling/tests/test_activity_subscription_wide.py: 1 warning
+etqan/scheduling/tests/test_activity_tracking.py: 3 warnings
+etqan/scheduling/tests/test_api_activity.py: 14 warnings
+etqan/scheduling/tests/test_api_archive_lists.py: 13 warnings
+etqan/scheduling/tests/test_api_archive_routes.py: 10 warnings
+etqan/scheduling/tests/test_api_availability.py: 12 warnings
+etqan/scheduling/tests/test_api_bundle_labels.py: 7 warnings
+etqan/scheduling/tests/test_api_bundles.py: 28 warnings
+etqan/scheduling/tests/test_api_groups.py: 12 warnings
+etqan/scheduling/tests/test_api_schedule.py: 40 warnings
+etqan/scheduling/tests/test_api_schedules.py: 25 warnings
+etqan/scheduling/tests/test_api_session_classes.py: 14 warnings
+etqan/scheduling/tests/test_api_session_writes.py: 30 warnings
+etqan/scheduling/tests/test_api_sessions.py: 25 warnings
+etqan/scheduling/tests/test_api_subscriptions.py: 29 warnings
+etqan/scheduling/tests/test_api_supervision.py: 14 warnings
+etqan/scheduling/tests/test_api_times_postponement.py: 28 warnings
+etqan/scheduling/tests/test_api_trials.py: 19 warnings
+etqan/scheduling/tests/test_api_trials_links.py: 7 warnings
+etqan/scheduling/tests/test_bundles_country_pricing.py: 2 warnings
+etqan/scheduling/tests/test_bundles_members.py: 1 warning
+etqan/scheduling/tests/test_country_pricing.py: 5 warnings
+etqan/scheduling/tests/test_features.py: 1 warning
+etqan/scheduling/tests/test_generation_guards.py: 4 warnings
+etqan/scheduling/tests/test_host_link.py: 7 warnings
+etqan/scheduling/tests/test_schedules_generation.py: 1 warning
+etqan/scheduling/tests/test_schedules_payloads.py: 5 warnings
+etqan/scheduling/tests/test_staff_scope.py: 4 warnings
+etqan/scheduling/tests/test_times_postponement_board.py: 1 warning
+etqan/scheduling/tests/test_trials_pays_teacher.py: 6 warnings
+etqan/site/tests/test_admin_api.py: 36 warnings
+etqan/site/tests/test_admin_articles.py: 54 warnings
+etqan/site/tests/test_admin_b8b.py: 64 warnings
+etqan/site/tests/test_admin_media.py: 70 warnings
+etqan/site/tests/test_admin_page_builder.py: 44 warnings
+etqan/site/tests/test_admin_settings.py: 11 warnings
+etqan/site/tests/test_hero_slides.py: 25 warnings
+etqan/site/tests/test_inquiries.py: 29 warnings
+etqan/site/tests/test_public_api.py: 9 warnings
+etqan/site/tests/test_public_articles.py: 40 warnings
+etqan/site/tests/test_public_b8b.py: 9 warnings
+etqan/site/tests/test_public_media.py: 32 warnings
+etqan/site/tests/test_public_page_builder.py: 14 warnings
+etqan/site/tests/test_public_settings.py: 8 warnings
+etqan/systemstatus/tests/test_api.py: 7 warnings
+etqan/tenants/tests/test_admin.py: 11 warnings
+etqan/tenants/tests/test_admin_console_qa.py: 7 warnings
+etqan/tenants/tests/test_admin_features.py: 7 warnings
+etqan/tenants/tests/test_admin_permissions.py: 11 warnings
+etqan/tenants/tests/test_admin_round2_qa.py: 1 warning
+etqan/tenants/tests/test_admin_stale_change.py: 4 warnings
+etqan/tenants/tests/test_admin_suspend.py: 4 warnings
+etqan/tenants/tests/test_domain_admin.py: 7 warnings
+etqan/tenants/tests/test_domains.py: 10 warnings
+etqan/tenants/tests/test_isolation.py: 6 warnings
+etqan/tenants/tests/test_middleware.py: 3 warnings
+etqan/translations/tests/test_api.py: 26 warnings
+etqan/vouchers/tests/test_api.py: 37 warnings
+etqan/vouchers/tests/test_generation.py: 1 warning
+etqan/vouchers/tests/test_registry.py: 6 warnings
+etqan/wallet/tests/test_api.py: 19 warnings
+etqan/wallet/tests/test_compensation.py: 1 warning
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED etqan/access/tests/test_routes.py::test_every_route_declares_its_code_or_is_named_exempt
+1 failed, 10266 passed, 1 skipped, 4914 warnings in 2413.67s (0:40:13)
+
+PYTEST EXIT=1

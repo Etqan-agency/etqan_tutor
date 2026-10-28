@@ -1,0 +1,18 @@
+# A2 Agent 3 (fixer) cycle 1 log
+- 2026-10-28 21:41 start: 48 bugs, read register entries.
+- 21:46 backend fixed 808 814 815 819 820 825 (tests test_admin_round2_qa.py in etqan_billing + tenants, green)
+- 21:49 625 607 470 684 fixed (shared ui/file-picker.tsx FilePicker; tests GroupsPage/MyHomework/LibraryList green)
+- 21:52 681 667 659 fixed (tests green)
+- 21:55 064 256 261 263 274 275 fixed (tests green)
+- 21:59 258 411 423 267 215 fixed (tests green; SessionActivity has 3 failures from another group's bidi isolate change, not A2)
+- 22:01 177 119 fixed (components/BackLink + PageHeader back slot; student/teacher/parent/invoice pages named)
+- 22:02 101 fixed (home shortcuts grouped)
+- 22:04 375 424 469 fixed
+- 22:05 503 602 605 fixed
+- 22:07 610 615 fixed
+- 22:08 655 679 fixed
+- 22:11 675 676 fixed
+- 22:14 762 (backend name_initial) 780 fixed
+- 22:29 751 752 759 769 776 777 778 fixed (backend registration_open; marketing test/round2-a2.test.ts 7/7; dashboard login + register)
+- 22:29 checks: dashboard touched tests 61 files / 680 tests green; tsc only 2 errors in other groups' files (FamilySessions.test.tsx:202 onTestFinished, lib/unsaved-changes.test.tsx:22); backend scoped pytest 1473 passed, ruff clean, lint-imports 54 kept, makemigrations --check clean; marketing articles.test.ts fails on http-vs-https canonical in this container (env, not A2)
+- 22:29 register: 48 entries updated FIXED-UNVERIFIED (round 2); group-A2.md all ticked; 12 decisions appended to round-2/decisions.md
