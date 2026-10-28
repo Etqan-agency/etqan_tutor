@@ -1,0 +1,2 @@
+1193 files already formatted
+RUFF-FORMAT EXIT=0

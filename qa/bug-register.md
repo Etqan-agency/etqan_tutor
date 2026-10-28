@@ -1485,8 +1485,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** The whole app turns Arabic/RTL at once; the toast reads "Saved." in English inside the Arabic UI. The "Preferred language" select showed العربية while the UI was English, so any save applies it.
 - **Evidence:** `qa/manual/screens/M02/M02-F-003-save-profile-flips-ui-to-arabic.png`, `qa/manual/screens/M02/triage/t009-profile-save-flips-lang.png`
 - **Notes:** Applying the language on save is intended (B9d L-5, `ProfileEditForm.tsx:53`), but it fires on every save, not only when the field changed; the toast uses `t` from the old language.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause:** `ProfileEditForm.onSubmit` applied the stored/effective language on every save, and toasted with the render's `t` (old language).
+- **Fix (files):** Only switch when `preferred_language` differs from the form's initial value; toast via `i18n.t` (`dashboard/src/features/identity/components/ProfileEditForm.tsx`).
+- **Regression test:** `ProfileEditForm.test.tsx` "keeps the current language when the preference was not changed".
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: ProfileEditForm.test.tsx "keeps the current language when the preference was not changed" passes; diff reviewed)
 
 ---
 
@@ -1517,8 +1519,10 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** The button blocks a second submit: one change, one toast, one email.
 - **Actual:** Two 200 POST /api/v1/identity/me/password/, two toasts, two "تنبيه أمني" emails 17 ms apart (Mailpit 18:54:34.106/.123; Agent 1 got the same at 18:27:38.805/.831). A Playwright dblclick and a second click 60 ms later were both blocked; two clicks in the same task (before React re-renders `isSubmitting`) go through, which a fast human double-click can hit (Agent 1 did).
 - **Evidence:** `qa/manual/screens/M02/M02-F-005-double-submit-two-password-toasts.png`, `qa/manual/screens/M02/triage/t010c-double-submit-sync.png`, `qa/manual/screens/M02/triage/t010b-double-submit-password.png` (slower double click: one toast)
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause:** Two submits in one task both pass before React re-renders `isSubmitting`.
+- **Fix (files):** `useRef` in-flight guard in `onSubmit` (`dashboard/src/features/identity/components/ChangePasswordCard.tsx`).
+- **Regression test:** `ChangePasswordCard.test.tsx` "ignores a second submit while the first is in flight".
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: ChangePasswordCard.test.tsx in-flight guard test passes; diff reviewed (ref guard reset in finally))
 
 ---
 
@@ -1533,9 +1537,11 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** "This email is already confirmed" (or the same success).
 - **Actual:** Red "رابط التأكيد غير صالح أو منتهي الصلاحية."; the card has an empty title area. Network: 400 POST /api/v1/identity/verify-email/.
 - **Evidence:** `qa/manual/screens/M02/M02-F-006-used-verify-link-says-invalid.png`, `qa/manual/screens/M02/triage/t014a-verify-first.png`, `qa/manual/screens/M02/triage/t014b-verify-second-invalid.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** allauth's `from_key` skips confirmations of already-verified addresses, so a second click fell into the 400 branch; the card had no heading.
+  - **Fix (files):** `identity/services.py:email_key_already_verified`, `identity/api/views.py:VerifyEmailView` answers 200 `{already_verified: true}`; dashboard `identity/api.ts`/`queries.ts`, `routes/verify-email.tsx` (heading + "already confirmed"), locales auth.alreadyVerified ar/en/es. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `identity/tests/test_api_auth.py::TestVerifyEmail::test_a_used_key_of_a_verified_address_is_the_same_success`; Vitest `routes/verify-email.test.tsx` "says an address confirmed earlier is already confirmed".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-053-after.png)
 ---
 
 ## ETQAN-QA-054: Removing an email address gives no confirmation toast
@@ -1565,9 +1571,11 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** Normal form shown; after submit "الرابط غير صالح أو منتهي الصلاحية. يرجى طلب رابط جديد." with only "العودة إلى تسجيل الدخول". 400 POST /api/v1/identity/password/reset/confirm/. The reset email also doesn't say how long the link lasts (the code email says 10 minutes).
 - **Evidence:** `qa/manual/screens/M02/M02-F-008a-used-reset-link-shows-form.png`, `qa/manual/screens/M02/M02-F-008b-used-reset-link-error-after-submit.png`, `qa/manual/screens/M02/triage/t019b-used-reset-link-shows-form.png`, `qa/manual/screens/M02/triage/t019c-used-reset-link-error.png`
 - **Notes:** A "Request a new link" button is a small change; checking the token before showing the form needs an API call.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** the page could only learn the token was dead by submitting; the invalid state had no way to a new link; the email gave no lifetime.
+  - **Fix (files):** backend `identity/services.py:reset_link_valid`, additive `POST identity/password/reset/check/` (`api/views.py:PasswordResetCheckView`, `api/urls.py`, serializer); reset emails ar/en/es say "works once, for 3 days"; dashboard `identityApi.checkPasswordReset`, `useResetLinkCheck`, `routes/reset-password.tsx` (dead link shown at once + "Request a new link"), locales auth.requestNewLink. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `identity/tests/test_password_management.py::test_check_says_a_used_link_is_dead_before_any_typing`; Vitest `routes/reset-password.test.tsx` "says a used link is dead before any typing".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-055-after.png; POST reset/check/ bogus -> {valid:false}, page offers a new link before typing)
 ---
 
 ## ETQAN-QA-056: Forgot password: the subtitle always says "we'll send you a reset link", and the method cards stay on screen through the code step and after success
@@ -1615,7 +1623,8 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** Lands on Home `/app/`; the login URL carries no return address and `onSuccess` always navigates to `/`.
 - **Evidence:** `qa/manual/screens/M02/M02-F-011-deeplink-lost-after-login.png`, `qa/manual/screens/M02/triage/t006-deeplink-after-login.png`
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: `requireAuth` redirected to `/login` with no return address and `LoginPage.onSuccess` always went to `/`. Fix: `features/identity/require-auth.ts` passes `?next=<location.href>` (in-app paths only, `safeNext`); `routes/login.tsx` validates `next` and lands there; `_authed`/`_print` pass `location`. Regression test: `require-auth.test.ts` "sends a signed-out visitor to login with the page asked for"; `login.test.tsx` "keeps an in-app return address…", "lands on the page asked for after signing in".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/D/ETQAN-QA-362-after.png (signed-out /app/payroll/withdrawals -> /login?next=%2Fpayroll%2Fwithdrawals -> after sign-in lands on /payroll/withdrawals); require-auth.test.ts, login.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -1631,9 +1640,11 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** "Your session has ended, please sign in again" and a way to the login page (ideally back here after).
 - **Actual:** "لم يتم تزويد بيانات الدخول." (DRF "Authentication credentials were not provided.") under the form; header, menu and name stay signed in. 403 PATCH /api/v1/identity/me/.
 - **Evidence:** `qa/manual/screens/M02/M02-F-012-session-lost-raw-auth-error.png`, `qa/manual/screens/M02/triage/t016-session-lost-save.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** no global handling of an ended session: DRF's NotAuthenticated came back as a plain message and nothing changed on the page.
+  - **Fix (files):** backend `platform/drf.py:exception_handler` adds `code: not_authenticated`; dashboard `lib/api.ts` response interceptor fires `SESSION_ENDED`, new `identity/components/SessionEndedBanner.tsx` in `shell/AppShell.tsx` (message + Sign in with `next`), locales errors.not_authenticated/sessionEndedSignIn ar/en/es (also translates the inline error via its code). (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `platform/tests/test_drf.py::test_a_missing_session_is_answered_with_its_code`; Vitest `identity/components/SessionEndedBanner.test.tsx`.
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); unauthenticated PATCH me/ -> code not_authenticated)
 ---
 
 ## ETQAN-QA-060: Latin text in the Arabic UI is laid out RTL: a name "Aisha R." shows as ".Aisha R" (field and header), emails/phones right-aligned in inputs
@@ -1709,8 +1720,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** Subtitle "Sign in to continue your studies." / "سجّل الدخول لمتابعة دراستك." for admins/teachers/staff; the PageHeader and the "New here?" + "Forgot your password?" links sit outside `LoginForm`, so they stay under the 2FA code form.
 - **Evidence:** `qa/manual/screens/M02/M02-F-020-2fa-step-student-copy-and-signup-links.png`, `qa/manual/screens/M02/triage/t001-login-empty-ar.png`
 - **Notes:** 2FA step confirmed from Agent 1's screenshot plus code (login.tsx:36-79); not re-run to avoid another 2FA enrol/disable on the throwaway.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The subtitle was student-worded and the links sat outside LoginForm, unaware of the 2FA step.
+- **Fix (files):** dashboard/src/features/identity/components/LoginForm.tsx (onStepChange), routes/login.tsx (links hidden on the code step), locales auth.signInSubtitle (neutral)
+- **Regression test:** login.test.tsx: keeps the code step free of the password links (ETQAN-QA-064)
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-064-after.png; neutral subtitle 'سجّل الدخول إلى حسابك.'; code-step links via login.test.tsx)
 
 ---
 
@@ -1726,8 +1739,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** The value is wrapped in one `<span dir="ltr">`, so the three parts are laid out left-to-right inside the RTL line; an Arabic reader meets "Africa/Cairo" first, then "حاسوب", then the IP. EN is correct ("Last sign-in: Desktop · 192.168.65.1 · Africa/Cairo").
 - **Evidence:** `qa/manual/screens/M02/sweep/M02-F-021-last-signin-no-time-ar.png`, `qa/manual/screens/M02/triage/t032-last-signin-ar.png`, `qa/manual/screens/M02/triage/t033-last-signin-en.png`
 - **Notes:** The other half of M02-F-021 (no date/time of the last sign-in) is **not a bug**: B9b S-8 defines the line as "device · IP · zone" and `user_payload` has no `last_login` field. Adding the time needs an API field, so it is logged as a PROPOSAL (P3) in `qa/coverage-gaps.md`, not as part of this fix. Suggested fix: drop the outer `dir="ltr"` and isolate only the Latin parts (IP, zone) with `<bdi>`/`dir="ltr"` per part.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause:** One `<span dir="ltr">` around all three parts laid them out LTR inside the RTL line.
+- **Fix (files):** Parts follow the page direction, each one in its own `<bdi>` (`dashboard/src/features/quicklogin/LastSignIn.tsx`).
+- **Regression test:** `quicklogin/SecurityLogPage.test.tsx` LastSignIn "joins device, IP and zone" (no LTR wrapper, one bdi per part).
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: qa/manual/screens/round-2/B/ETQAN-QA-065-after.png; DOM: "آخر دخول: <bdi>حاسوب</bdi> · <bdi>192.168.65.1</bdi> · <bdi>Africa/Cairo</bdi>")
 
 ---
 
@@ -1743,9 +1758,11 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** AR "جديد على إتقان؟ اطلب من أكاديميتك إنشاء حساب لك"; EN "New here? Ask your academy for an account"; ES "¿Eres nuevo? Pide una cuenta a tu academia". Only Arabic names the platform.
 - **Evidence:** `qa/manual/screens/M02/sweep/M02-F-022-new-to-etqan-ar.png`, `qa/manual/screens/M02/triage/t030-qaother-new-to-etqan-ar.png`, `qa/manual/screens/M02/triage/t031-qaother-new-here-en.png`
 - **Notes:** Not a dup of ETQAN-QA-064 (that one is the student-only subtitle and the 2FA-step links). Fix is the Arabic string only (the key name `newToEtqan` can stay).
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** the Arabic string `auth.newToEtqan` named the platform.
+  - **Fix (files):** `locales/ar/auth.json` → "جديد هنا؟ اطلب من أكاديميتك إنشاء حساب لك". (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `locales/copy.test.ts` "never names the platform on an academy's sign-in page".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-066-after.png)
 ---
 
 ## --- M06 manual bugs ---
@@ -1764,9 +1781,11 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** (2) two rows "إبراهيم حسن / حفظ القرآن الكريم / Ahmad / 0 من 8 حصة / نشط / غير مدفوع" that differ only by the end date; no start column. (3) Mona appears twice on Wednesday and Saturday 17:00, Ibrahim twice on Thursday 17:00. (4) two identical "نشط" cards differing only in "ينتهي في". Status "active" for a not-started renewal is the data model (status has no "upcoming"; the old one expires when the job reaches the renewal start, subscriptions.md §5), so the defect is the display: nothing tells the office or the family which period is current.
 - **Not part of this bug:** the renewal invoice due date (issued at renewal + `invoice_due_days`, billing.md) is by design.
 - **Evidence:** `qa/manual/screens/M06/M06-F-008-renewal-two-active-rows.png`, `qa/manual/screens/M06/M06-F-021-student-two-identical-active-subs.png`, `qa/manual/screens/M06/triage/t004-list-ibrahim-renewal-two-active.png`, `qa/manual/screens/M06/triage/t005-calendar-mona-twice.png`, `qa/manual/screens/M06/triage/t006-student-two-active-cards.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** a not-started renewal is `active` in the model and the UI showed only the status; the calendar listed its slots too.
+  - **Fix (files):** dashboard `scheduling/bits.tsx` SubscriptionStatusChip(startsOn) → "Upcoming · starts <date>" in SubscriptionsList, SubscriptionDetail, FamilySubscriptions; backend `scheduling/services/schedule_reads.py:schedule_calendar` leaves out subscriptions starting after today. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `scheduling/tests/test_api_schedules.py::test_a_renewal_not_started_yet_is_not_a_second_calendar_entry`; Vitest `scheduling/SubscriptionDetail.test.tsx` "marks a renewal that has not started as upcoming".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-200-after.png)
 ---
 
 ## ETQAN-QA-201: Early renewal: the renew dialog gives no warning and the old period still shows "الحصص المتبقية 8" though only 2 of its lessons remain
@@ -1781,9 +1800,11 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** No warning. Sub 94: "نشط", ينتهي 26/11, "الحصص المتبقية 8", "0 من 8 حصة", upcoming only 28/10 and 31/10. The 6 other paid lessons silently move out (deleted from the old term per subscriptions.md §5; `carried_over` counts only the overrun). The office can't see where they went.
 - **Evidence:** `qa/manual/screens/M06/M06-F-009-early-renewal-old-period-remaining-8.png`, `qa/manual/screens/M06/M06-F-009b-early-renewal-new-period.png`, `qa/manual/screens/M06/triage/t003-sub94-detail-ar.png`
 - **Notes:** The deletion itself is documented behaviour; whether unused lessons should carry over is an owner decision. This bug is the missing warning and the misleading count.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** the renew dialog never compared the start with the current end; the summary only had the package-based remaining count.
+  - **Fix (files):** `scheduling/RenewDialog.tsx` early-start warning; backend `scheduling/api/payloads.py:subscription_detail` additive `sessions_scheduled`; `SubscriptionDetail.tsx` "N still scheduled in this period" after an early renewal. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `scheduling/tests/test_api_subscriptions.py::test_admin_creates_with_slots_and_gets_every_derived_value` (sessions_scheduled); Vitest `scheduling/SubscriptionDetail.test.tsx` "says how many lessons an early-renewed period still has".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47))
 ---
 
 ## ETQAN-QA-202: New subscription "Student" dropdown stops at the first 100 students with no hint; Arabic-named students are unreachable without the search box
@@ -1797,8 +1818,10 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** Every active student reachable, or a visible "showing the first 100, type to search" hint.
 - **Actual:** 101 options (100 + "—"), last "QA5 UI 947767"; no Arabic-named student (منى السيد, حمزة القاضي…), no hint. Only the separate search box finds them.
 - **Evidence:** `qa/manual/screens/M06/M06-F-001-student-list-cut-at-100.png`, `qa/manual/screens/M06/triage/t001-new-sub-form-ar.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** Each dialog asked `usePeople("students", {page_size: 100})` once, with no server search (or, in the subscription form, a search but no hint), so students past the first page, most Arabic names, could not be chosen.
+- **Fix (files):** one shared searchable picker `dashboard/src/features/people/StudentPicker.tsx` (`useStudentPicker` + `StudentPicker`: server `q` search, "showing the first N of M, type a name" hint, the picked/edited student kept as an option), exported from `features/people/index.ts`; locales `people.picker` (ar/en/es); used in `dashboard/src/features/scheduling/SubscriptionForm.tsx`.
+- **Regression test:** `dashboard/src/features/people/StudentPicker.test.tsx`; `dashboard/src/features/scheduling/SubscriptionForm.test.tsx` still green.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-202-after.png; browser: hint 'يظهر أول 100 من 133', search 'منى' -> 'منى السيد', picked student kept after searching 'QA'; StudentPicker + SubscriptionForm tests pass)
 
 ---
 
@@ -2033,8 +2056,10 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** "السعر" alone (or the academy currency) before a package is chosen.
 - **Actual:** "السعر ()"; after a package, "السعر (EGP)".
 - **Evidence:** `qa/manual/screens/M06/M06-F-006-price-label-empty-parens.png`, `qa/manual/screens/M06/triage/t001-new-sub-form-ar.png`, `qa/manual/screens/M06/triage/t010-family-picker.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The label always interpolated the currency, empty before a price was known.
+- **Fix (files):** dashboard/src/features/scheduling/TermFields.tsx, BundleRowFields.tsx, locales scheduling.form.priceBare
+- **Regression test:** TermFields.test.tsx: labels the price without empty brackets
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: TermFields.test.tsx)
 
 ## ETQAN-QA-216: Expanded weekly calendar: mixed Arabic/Latin names wrap with the bracket and hyphen on the wrong side ("Adam Al-) آدم النجار" / "(Najjar")
 - **Feature:** M06 Weekly schedules, expanded calendar (`ScheduleCalendar.tsx` event cards: student line and "course · teacher" line). **Severity:** P3. **Type:** RTL. **Easy P3:** yes. **Priority:** medium
@@ -2048,8 +2073,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** "Mona Al-) منى السيد" / "(Sayed", "Adam Al-) آدم النجار" / "(Najjar", teacher lines "أحمد الحداد (-Ahmad Al" / "(Haddad". The narrow calendar cards make every such name wrap.
 - **Evidence:** `qa/manual/screens/M06/triage/t020-calendar-name-bidi-wrap.png` (crop, 2x), `qa/manual/screens/M06/fix/smoke-cal-ar.png`
 - **Notes:** Same class as ETQAN-QA-209 (fixed with `bits.PersonName` on the list, summary, session and trial pages). The calendar cards were not listed in 209 and don't use it. Fix: `PersonName` for the student and teacher names in `ScheduleCalendar`.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause:** Calendar cards rendered bare `full_name` strings.
+- **Fix (files):** Shared `PersonName` moved to `dashboard/src/components/PersonName.tsx` (re-exported from `scheduling/bits`); `ScheduleCalendar.tsx` uses it for the student and the teacher in "course · teacher".
+- **Regression test:** `components/PersonName.test.tsx` (shared element).
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: qa/manual/screens/round-2/B/ETQAN-QA-216-after.png (expanded calendar AR: "منى السيد (Mona Al-" / "Sayed)"))
 
 ## ETQAN-QA-217: Deleting a pause or a stopped weekly slot happens on one click, with no confirmation and no message
 - **Feature:** M06 Subscription detail (`PausesPanel` "حذف"/"Delete" on a pause row, `SlotsPanel` "حذف"/"Delete" on a stopped slot). **Severity:** P3. **Type:** UI-layout. **Easy P3:** yes. **Priority:** medium
@@ -2064,8 +2091,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** The pause disappears at once: no dialog (0 `[role=dialog]`), no toast; "لا توجد إيقافات." and "متبقٍ 7 من 7 أيام تجميد". The stopped slot row also disappears at once (Agent 1). Deleting is permanent, unlike stop/restart.
 - **Evidence:** `qa/manual/screens/M06/triage/t023d-pause-before-delete.png`, `qa/manual/screens/M06/triage/t023e-pause-deleted-no-confirm.png`, `qa/manual/screens/M06/M06-F-024a-pause-before-delete.png`, `qa/manual/screens/M06/M06-F-024b-pause-deleted-no-confirm.png`, `qa/manual/screens/M06/M06-F-024c-stopped-slot-deleted-no-confirm.png`
 - **Notes:** Same pattern as ETQAN-QA-205 (fixed for Stop and End early only). The code shows it: `PausesPanel.tsx:221` and `SlotsPanel.tsx:289` call `remove.mutate(id, { onError: fail })` straight from the button. Fix: wrap both in the shared `Confirm` (as 205 did) and add success toasts. Related ETQAN-QA-160/165 (M04, same class elsewhere).
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause:** `PausesPanel`/`SlotsPanel` Delete called `remove.mutate` directly from the button.
+- **Fix (files):** Both wrapped in the shared `Confirm` with a body and a success toast; new keys `scheduling.slots.deleteBody/deleteDone`, `scheduling.pauses.deleteTitle/deleteBody/deleteDone` in ar/en/es (`dashboard/src/features/scheduling/PausesPanel.tsx`, `SlotsPanel.tsx`).
+- **Regression test:** `PausesPanel.test.tsx` "…deletes a future one" and `SlotsPanel.test.tsx` "stops, restarts and deletes" now assert dialog first, then toast.
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: PausesPanel.test.tsx and SlotsPanel.test.tsx assert Confirm then toast; diff reviewed (shared Confirm, toast on success))
 
 ## ETQAN-QA-218: Weekly schedules list and admin Sessions list (AR): "Arabic (Latin)" names wrap with the bracket and hyphen on the wrong side ("Hamza Al-) حمزة القاضي" / "(Qadi")
 - **Feature:** M06 `/app/scheduling/schedules` (`SchedulesList.tsx`: student/bundle column and the slot line "… · teacher") and `/app/scheduling/sessions` (`SessionsList.tsx`: student and teacher columns). **Severity:** P3. **Type:** RTL. **Easy P3:** yes. **Priority:** medium
@@ -2079,8 +2108,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** (1) Student column "Hamza Al-) حمزة القاضي" / "(Qadi", "Fatima Al-) فاطمة الزهراء" / "(Zahra"; family row slot lines end "(Yousef" / "(Al-Mansouri" and "(Maryam" / "(Al-Khatib". (2) Student "Hamza Al-) حمزة القاضي" / "(Qadi"; teacher "Ahmad Al-) الشيخ أحمد الحداد" / "(Haddad", "Maryam Al-) الأستاذة مريم الخطيب" / "(Khatib".
 - **Evidence:** `qa/manual/screens/M06/triage/t021-weekly-schedules-names.png`, `qa/manual/screens/M06/triage/t022-sessions-list-names.png`, `qa/manual/screens/M06/M06-F-025-weekly-schedules-name-parens-broken.png`, `qa/manual/screens/M06/M06-F-025b-admin-sessions-list-name-parens-broken.png`
 - **Notes:** Same class as ETQAN-QA-209 (list/summary/session/trial), ETQAN-QA-111 (teacher table) and ETQAN-QA-216 (calendar). `bits.PersonName` is used only in SubscriptionsList, SubscriptionDetail, SessionPage, TrialPage and TeacherSessionTable; SchedulesList and SessionsList still render the bare string. Fix: `PersonName` there (Agent 3 may do it together with 216).
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause:** `SchedulesList`/`SessionsList` rendered bare names.
+- **Fix (files):** `PersonName` for the student link and teacher cells; `bidiName` for names inside t() lines (slot line teacher/student, substitution teacher, supervisor cell) (`dashboard/src/features/scheduling/SchedulesList.tsx`, `SessionsList.tsx`).
+- **Regression test:** `SchedulesList.test.tsx` asserts the isolated teacher/substitute in the lines; `components/PersonName.test.tsx`.
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: qa/manual/screens/round-2/B/ETQAN-QA-218-after.png (schedules list AR, wrapped names and teacher lines in order); sessions list DOM uses <bdi>)
 
 ---
 
@@ -2111,7 +2142,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** 69 links in `main`, page 3,931 px tall; order mixes groups (Today, Sessions, Missing reports, Subscriptions, Invoices, Payslips, Rates, Adjustments, Students …, Trials, Study groups …). "Rates"/"Adjustments" lack their Payroll context. Only the last tile "Account" has a description, leaving it alone on its own row.
 - **Evidence:** `qa/manual/screens/M03/M03-F-002-home-tiles-no-order-en.png`, `qa/manual/screens/M03/triage/t009-admin-home-tiles-en.png`
 - **Root cause / Fix / Regression tests:** _Agent 3 (design proposal; not an easy fix)_
-- **Verification status:** OPEN
+- **Root cause (round 2):** Home rendered every nav item as a big BentoTile in nav-array order with one description.
+- **Fix (files):** dashboard/src/routes/_authed/index.tsx (groupNavItems sections, compact links, no descriptions)
+- **Regression test:** routes/_authed/index.test.tsx: files the shortcuts under the sidebar's group headings
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-101-after.png)
 
 ## ETQAN-QA-102: Notification texts mix Latin names, amounts and ISO dates into Arabic without isolation ("لـSCN Student B1" shows as "SCN Student B1J", date "26-10-2026.", raw "1,500.00 EGP"), title and body aligned differently
 - **Feature:** M03 Notifications (bell + `/app/notifications`). **Severity:** P3. **Type:** RTL. **Easy P3:** yes. **Priority:** medium
@@ -2128,9 +2162,11 @@ Next ID: **ETQAN-QA-067**
 - **Regression test:** pytest `notifications/tests/test_text.py::test_arabic_text_isolates_every_value_and_english_is_unchanged` (+ Arabic expectations in test_text/test_scan/test_chat_notice updated; notifications+devices+chat 729 passed); Vitest `notifications/bits.test.tsx` "gives the title and body one direction from their text". Evidence: `qa/manual/evidence/M03/fix-1/`.
 - **Retest (Agent 2 gate, 2026-10-27):** new rows created through the real renderer (`scan._row`, invoice INV-000149, ids 564 AR / 565 EN, email skipped). Fixed part: the Arabic body now keeps its order ("(50.00 EGP)" stays in its brackets, "2026-10-26." with the full stop at the end), and title + body now align on one side in the EN UI. **Still failing:** the template's lone "لـ" sits right before the isolated Latin name, so it still renders glued to it and reads "SCN Student B1J" (the first symptom in this bug's title). Same remedy as ETQAN-QA-100: change the Arabic notification templates so the lam is not alone before a filled value (e.g. "للطالب {student}" / "لـ {student}" with a word). `qa/manual/screens/M03/fix/ETQAN-QA-102-before-after.png`, `qa/manual/screens/M03/fix/g22-zoom-new-row-ar.png`, `qa/manual/screens/M03/fix/g22-notifications-new-ar.png`. The follow-up proposal (format amounts/dates in each recipient's language, N8-4) is **PROPOSAL-accepted** (in `qa/coverage-gaps.md`; not a defect of the reported symptoms).
 - **M10 dup (Agent 2, 2026-10-28):** M10-F-012: absence notice and email still read "في ⁨2026-10-28 03:30 (Africa/Cairo)⁩" — ISO date plus the English IANA id in Arabic text (bell, `/notifications`, email; also postpone/make-up). Part of this bug's open locale-date proposal, not re-filed. Evidence `qa/manual/screens/M10/triage/t012-parent-notifications.png`, `qa/manual/screens/M10/triage/t014-absence-email.png`.
-- **Verification status:** OPEN (reopened by gate; easy P3, queue for next fix cycle)
-
-## ETQAN-QA-103: The bell list is taller than the window (≈1,104 px on 900 px): "See all" is off-screen and a normal click on it fails
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** (round 2 remainder) the Arabic templates put a lone "لـ" before the isolated name, and Arabic texts used ISO dates, IANA ids and raw currency codes.
+  - **Fix (files):** `notifications/text.py`: "للطالب {student}" in the six templates, Arabic `when()`/`day()` write dd/mm/yyyy and common zones by city, `money_in` uses the Arabic currency sign; English unchanged. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `notifications/tests/test_text.py::test_arabic_text_isolates_every_value_and_english_is_unchanged` (no `لـ{` in any template, city name, dd/mm/yyyy, ج.م.) + updated test_scan expectations.
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-102-after.png)## ETQAN-QA-103: The bell list is taller than the window (≈1,104 px on 900 px): "See all" is off-screen and a normal click on it fails
 - **Feature:** M03 Top bar / notifications panel. **Severity:** P3. **Type:** UI-layout. **Easy P3:** yes. **Priority:** medium
 - **Environment:** as ETQAN-QA-100, EN and AR. **Tag:** REAL
 - **Found by:** Agent 1 (M03-F-004); reproduced by Agent 2 on 2026-10-27.
@@ -2185,9 +2221,11 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** (1) heading "الطالب", a spinner that never ends, and a "الرصيد" card with "تعذّر تحميل الرصيد."; 404s for people/students, chat/access, notifications/preferences, wallet/students. (2) spinner while `GET billing/invoices/999999/` is retried (4× per Agent 1; 2 already within the first second), then "This invoice couldn't be found." without a back link.
 - **Evidence:** `qa/manual/screens/M03/M03-F-009-missing-student-spinner-ar.png`, `qa/manual/screens/M03/M03-F-009b-missing-invoice-spinner-en.png`, `qa/manual/screens/M03/triage/t005-missing-student-ar.png`, `qa/manual/screens/M03/triage/t007-missing-invoice-early-en.png`
 - **Root cause / Fix / Regression tests:** _Agent 3_ (query retry on 4xx; student detail has no error state)
-- **Verification status:** OPEN
-
-## ETQAN-QA-107: Top bar cuts the user's name to ~100 px even with plenty of room ("QA Staff NoC…", "QA Other Ad…", "الأستاذة مريم الـ…")
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** the not-found student page still mounted the wallet, notification and chat cards, each failing its own 404 (retries were already fixed by ETQAN-QA-677; the invoice back link exists).
+  - **Fix (files):** `routes/_authed/people.students.$personId.tsx`: the side cards render only once the person loaded. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `routes/_authed/people.students.$personId.test.tsx` "shows no card for a student that doesn't exist".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-106-after.png)## ETQAN-QA-107: Top bar cuts the user's name to ~100 px even with plenty of room ("QA Staff NoC…", "QA Other Ad…", "الأستاذة مريم الـ…")
 - **Feature:** M03 Top bar / user menu. **Severity:** P3. **Type:** UI-layout. **Easy P3:** yes. **Priority:** low
 - **Environment:** as ETQAN-QA-100, 1440x900. **Tag:** REAL
 - **Found by:** Agent 1 (M03-F-010); reproduced by Agent 2 on 2026-10-27. (The "ellipsis at the wrong end" part is no longer seen after ETQAN-QA-060's `dir="auto"`.)
@@ -2302,7 +2340,8 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** redirect to `/app/login`; header shows "qa.etqan.localhost" (branding also failed) and the "EN" toggle; the session is in fact still valid, and the requested page is lost (see ETQAN-QA-058).
 - **Evidence:** `qa/manual/screens/M03/M03-F-018-502-shows-login-with-hostname-ar.png`, `qa/manual/screens/M03/triage/t020-502-shows-login-ar.png`
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: `requireAuth` treated any failure of `identity/me/` (a 502 too) as signed out. Fix: `require-auth.ts`: only a 4xx redirects; a 5xx/no answer is retried twice, then `ConnectionProblemError`, shown by the new `identity/components/ConnectionProblem.tsx` ("Connection problem… retrying", auto-retry 5 s, Try again now) as `errorComponent` of `_authed` and `_print`; `auth.connection*` keys ar/en/es. Regression test: `require-auth.test.ts` "treats a 5xx as a connection problem…", "gets through when the server answers on a retry".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: require-auth.test.ts (5xx retried then ConnectionProblemError, 4xx redirects); dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ## ETQAN-QA-115: The parent's menu and pages speak as if the parent were the student ("My learning", "My progress", "My homework", "My certificates"; AR "تعلّمي", "تقدّمي", "واجباتي", "شهاداتي")
 - **Feature:** M03 Parent navigation (copy). **Severity:** P3. **Type:** copy. **Easy P3:** yes. **Priority:** low
@@ -2318,9 +2357,11 @@ Next ID: **ETQAN-QA-067**
 - **Regression test:** `shell/nav.test.ts` `roleLabelKey` (incl. every first-person learning item has a parent wording); `index.test.tsx` "words a parent's learning tiles about their children". Evidence: `qa/manual/evidence/M03/fix-1/`.
 - **Retest (Agent 2 gate, 2026-10-27):** parent.sharif AR/EN: "تعلّم أبنائي", "تقدّم أبنائي", "My children's progress" etc. in sidebar, tiles and page title; student keeps "تقدّمي". `qa/manual/screens/M03/fix/ETQAN-QA-115-before-after.png`, `qa/manual/screens/M03/fix/g15-parent-home-en.png`, `qa/manual/screens/M03/fix/g17-parent-progress-ar.png` Gate re-ran: Vitest 31 files / 324 tests pass, tsc 0, pytest etqan/notifications 401 pass (`qa/manual/evidence/M03/gate/`); diff reviewed (root-cause fixes, no test hacks).
 - **Reopened (Agent 2 final gate, 2026-10-27, from M03-F-025):** the AR sidebar item and Home tile `reviews.nav.rate` still read "قيّم حصصك" (rate YOUR sessions) for a parent; it was in the original finding's list but is missing from `PARENT_LABELS` in `features/shell/nav.ts` (EN "Rate lessons" is neutral, so the EN-based regression test did not catch it). Remedy: map `reviews.nav.rate` → `nav.parent.rate` (AR "قيّم حصص أبنائي", EN may stay "Rate lessons") and extend the test to the AR wording. Evidence: `qa/manual/screens/M03/M03-F-025-parent-rate-your-sessions-ar.png`, `qa/manual/screens/M03/triage/t022-parent-rate-wording-ar.png`. Still easy P3, next fix cycle.
-- **Verification status:** REOPENED
-
-## ETQAN-QA-116: Home tiles ignore the nav's academy-setting filter (qaother shows a "Local payment methods" tile the sidebar hides), and the money card says "Expenses and donations" while donations are off
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** (reopened) `reviews.nav.rate` was missing from `PARENT_LABELS`.
+  - **Fix (files):** `shell/nav.ts` maps it to `nav.parent.rate` (ar "قيّم حصص أبنائي", en/es children wording). (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `shell/nav.test.ts` "words the rate item about the parent's children in Arabic".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-115-after.png)## ETQAN-QA-116: Home tiles ignore the nav's academy-setting filter (qaother shows a "Local payment methods" tile the sidebar hides), and the money card says "Expenses and donations" while donations are off
 - **Feature:** M03 Home (office) / nav consistency. **Severity:** P3. **Type:** functional. **Easy P3:** yes. **Priority:** low
 - **Environment:** academy `qaother` (most switches off), AR. **Tag:** REAL
 - **Found by:** Agent 1 (M03-F-020); reproduced by Agent 2 on 2026-10-27.
@@ -2359,8 +2400,10 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** a card per session on narrow screens (time, student, attendance, "I'm in"), or a sticky first column with a visible scroll hint.
 - **Actual:** an 8-column table 706 px wide in a 341 px box; only When/Student/Course/Status visible, date in four lines; the teacher's daily actions are off-screen with no hint.
 - **Evidence:** `qa/manual/screens/M03/M03-F-022-mobile-teacher-actions-offscreen-en.png`, `qa/manual/screens/M03/M03-F-022b-mobile-teacher-actions-after-sideways-scroll-en.png`, `qa/manual/screens/M03/triage/t017-mobile-teacher-table-en.png`
-- **Root cause / Fix / Regression tests:** _Agent 3 (layout change; proposal)_
-- **Verification status:** OPEN
+- **Root cause (round 2):** A plain `<table>` inside a sideways scroller with no phone layout, so on 375 px the row actions and status sit off-screen behind a hidden scroll.
+- **Fix (files):** one shared phone-card recipe `phoneCards` in `dashboard/src/ui/styles.ts` (below `sm` each row is a card and each cell shows its `data-label` and value; unchanged from `sm` up), applied with a `data-label` on every cell: `dashboard/src/features/scheduling/TeacherSessionTable.tsx`.
+- **Regression test:** `dashboard/src/ui/phone-cards.test.ts`.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-118-after.png (375 teacher home: one card per session, attendance + 'دخلت' visible, table 341/341); TodayBoard/TeacherSessions tests pass)
 
 ## ETQAN-QA-119: Detail pages have only a generic title ("Student", "Invoice", "Teacher") and no breadcrumb/back link; every browser tab reads the same
 - **Feature:** M03 Detail pages / titles. **Severity:** P4. **Type:** UI-layout. **Easy P3:** no. **Priority:** low
@@ -2372,7 +2415,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** H1 "Student", tab "Student · Etqan QA Academy"; no breadcrumb element (`nav[aria-label*=readcrumb]` absent), no back link.
 - **Evidence:** `qa/manual/screens/M03/M03-F-023-detail-generic-title-no-breadcrumb-en.png`, `qa/manual/screens/M03/triage/t008-student-detail-title-en.png`
 - **Root cause / Fix / Regression tests:** _Agent 3 (proposal)_
-- **Verification status:** OPEN
+- **Root cause (round 2):** Detail routes used a fixed title and PageHeader had no back slot.
+- **Fix (files):** dashboard/src/components/BackLink.tsx (new), ui/page-header.tsx (`back`), routes people.students/teachers/parents.$personId.tsx, billing.invoices.$invoiceId.tsx, locales billing.invoice.titleNumber
+- **Regression test:** routes/_authed/people.students.$personId.test.tsx: titles with the name, links back to Students
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-119-after.png)
 
 ## ETQAN-QA-120: English UI: an "Arabic (English)" name is shown with the bracket part first ("Assalamu alaikum, (Maryam Al-Khatib) الأستاذة مريم الخطيب"); regression of the QA-111/112 name isolation
 - **Feature:** M03 Home greeting, account-menu button, family "Next session" line (EN, LTR). **Severity:** P3. **Type:** RTL. **Easy P3:** yes. **Priority:** medium
@@ -2384,8 +2430,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** "(Maryam Al-Khatib) الأستاذة مريم الخطيب"; parent: "(Mahmoud Al-Sharif) محمود الشريف" and "(Omar Al-Sharif) عمر الشريف · Quran Memorization · (Ahmad Al-Haddad) الشيخ أحمد الحداد"; on a phone the line wraps as "(Ahmad Al- الشيخ أحمد الحداد" / "Haddad)". Arabic UI is correct. DOM text: `⁨الأستاذة مريم الخطيب ⁨(Maryam Al-Khatib)⁩⁩`.
 - **Evidence:** `qa/manual/screens/M03/M03-F-024-en-greeting-name-order-flipped.png`, `qa/manual/screens/M03/M03-F-024b-parent-en-greeting-nextsession-flipped.png`, `qa/manual/screens/M03/M03-F-024c-mobile-parent-nextsession-scrambled-en.png`, `qa/manual/screens/M03/triage/t021-maryam-home-en-name-order.png` (before cycle 1: `qa/manual/screens/M03/step-036-maryam-home-en.png`)
 - **Root cause (Agent 2 analysis):** `dashboard/src/lib/bidi.ts` `bidiName()` wraps the whole name in FSI…PDI. FSI takes its direction from the first strong character, which is Arabic, so the whole name becomes an RTL isolate even in the LTR English sentence; inside it the LTR "(…)" isolate is laid out to the left of the Arabic. Fix direction: isolate the outer name with the UI's direction (LRI in LTR UI / RLI in RTL UI, or `<bdi dir>` per language) instead of FSI, or only isolate the bracketed part; add an EN test.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause:** `bidiName` wrapped the whole name in FSI (first strong = Arabic, so an RTL isolate in English); the account menu used `dir="auto"` (same effect).
+- **Fix (files):** `bidiName` now isolates a name with a "(…)" part in the UI's direction (LRI/RLI from i18next language), plain names keep FSI (`dashboard/src/lib/bidi.ts`); UserMenu renders the shared `PersonName` without `dir=auto` for bracketed names (`dashboard/src/features/shell/UserMenu.tsx`). Covers greeting, account menu and family "Next session" line (FamilyHome/FamilySessions use `bidiName`).
+- **Regression test:** `lib/bidi.test.ts` "isolates the whole name in the UI's direction", `routes/_authed/index.test.tsx` greeting (LRI), `shell/UserMenu.test.tsx` "keeps an Arabic (Latin) name in stored order in English".
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: qa/manual/screens/round-2/B/ETQAN-QA-120-after.png (EN 375, parent.sharif: "Assalamu alaikum, محمود الشريف (Mahmoud Al-Sharif)", LRI outer isolate))
 
 ## ETQAN-QA-121: Phone, family invoices list: the status badge ("Void", "Partly paid", "Paid") floats mid-card under the balance, aligned to nothing
 - **Feature:** M03 mobile layout, `/app/learning/invoices` (`features/billing/FamilyInvoices.tsx`). **Severity:** P4. **Type:** mobile. **Easy P3:** no (P4). **Priority:** low
@@ -2397,8 +2445,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** under "Balance: …" the badge sits ~95 px in, right-aligned to the balance line's width.
 - **Evidence:** `qa/manual/screens/M03/M03-F-026-mobile-invoice-badge-floating-en.png`, `qa/manual/screens/M03/triage/t023-mobile-parent-invoices-badge-en.png`
 - **Root cause (Agent 2 analysis):** the right-hand block is `flex flex-col items-end`; when `flex-wrap` moves it onto its own line at phone width, the block shrinks to the balance text and the badge is end-aligned inside it. Cosmetic.
-- **Root cause / Fix / Regression tests:** _Agent 3 (optional, P4)_
-- **Verification status:** OPEN
+- **Root cause:** The amounts block was `items-end`; wrapped onto its own line on a phone it end-aligned the badge inside the balance's width.
+- **Fix (files):** `items-start sm:items-end` (`dashboard/src/features/billing/FamilyInvoices.tsx`).
+- **Regression test:** `FamilyInvoices.test.tsx` "starts the amounts block at the card's start on a phone".
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: qa/manual/screens/round-2/B/ETQAN-QA-121-after.png (parent EN 375, All tab: badge at card start))
 
 ## --- M04 manual bugs ---
 
@@ -2467,10 +2517,11 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** Localised, searchable names (e.g. "القاهرة (GMT+2)", "الرياض"), with common zones first.
 - **Actual:** A plain `<select>` with 419 options starting `UTC|Africa/Abidjan|Africa/Accra|Africa/Addis_Ababa`; finding Riyadh means scrolling hundreds of English ids. Choosing Country = Saudi Arabia leaves Africa/Cairo with no hint.
 - **Evidence:** `qa/manual/screens/M04/M04-F-006-timezone-raw-iana-list.png`, `qa/manual/screens/M04/triage/t005-new-student-xp.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-155: Student notification preferences (admin view): "التغييرات على جدولك." speaks to the admin, and "القاربة على الانتهاء" is not correct Arabic
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** every time-zone select listed raw `Intl.supportedValuesOf` ids.
+  - **Fix (files):** new shared `components/TimezoneOptions.tsx` + `lib/timezones.ts` (COMMON_ZONES, zoneOffset, zoneName with old-id renames) used by UserFieldsSection, ProfileEditForm, AcademySettingsForm, RegisterForm, consultations RequestDialog; new `locales/{ar,en,es}/timezones.json` city names. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `people/UserFieldsSection.test.tsx` "lists common time zones first by city"; AcademySettingsForm tests updated.
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-154-after.png)## ETQAN-QA-155: Student notification preferences (admin view): "التغييرات على جدولك." speaks to the admin, and "القاربة على الانتهاء" is not correct Arabic
 - **Feature:** M04 Student detail, notification preferences card (`locales/ar/notifications.json:113-114`). **Severity:** P3. **Type:** copy. **Easy P3:** yes. **Priority:** low
 - **Environment:** local docker stack (backend adff9c9 + uncommitted QA fixes, dashboard 5ed775d + branch `qa/manual-2026-10`), academy `qa`, Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M04 (M04-F-008); reproduced by Agent 2 on 2026-10-27.
@@ -2537,10 +2588,11 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** Badge stays "بلا تسجيل دخول"; only the button changes to "تفعيل". In the list the account column is identical to an active email-less student.
 - **Evidence:** `qa/manual/screens/M04/M04-F-012a-deactivated-list-shows-no-login.png`, `qa/manual/screens/M04/M04-F-012b-deactivated-detail-shows-no-login.png`, `qa/manual/screens/M04/triage/t012-249-deactivated-no-confirm.png`
 - **Notes:** people.md lists the states but not that `no_login` hides `inactive`. Student 249 was reactivated after the repro.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-160: "تعطيل" (deactivate) acts on one click with no confirmation, on the person page and in bulk
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** `identity/services.py:account_state` returned `no_login` before checking `is_active`.
+  - **Fix (files):** inactive is checked first. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `identity/tests/test_people_services.py::TestCreatePerson::test_a_deactivated_student_without_email_reads_inactive`.
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-159-after.png)## ETQAN-QA-160: "تعطيل" (deactivate) acts on one click with no confirmation, on the person page and in bulk
 - **Feature:** M04 People `AccountActions.tsx:151-157`, `StudentsList.tsx:253` (bulk). **Severity:** P3. **Type:** UI-layout. **Easy P3:** yes. **Priority:** medium
 - **Environment:** local docker stack (backend adff9c9 + uncommitted QA fixes, dashboard 5ed775d + branch `qa/manual-2026-10`), academy `qa`, Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M04 (M04-F-013); reproduced by Agent 2 on 2026-10-27.
@@ -2566,10 +2618,11 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** `ID,Name,Email,Phone,Language,Account,Active,Status,Gender,Country,…` and values `invited`, `paused`, `female`, `EG`, `adult`, `individual`. (Good: UTF-8 BOM, filters respected, formula cells escaped.)
 - **Evidence:** `qa/manual/screens/M04/M04-F-014-csv-export-english.png`, `qa/manual/screens/M04/M04-F-014-csv-export-english.csv`
 - **Notes:** Re-fetched by Agent 2 from the AR session with `Accept-Language: ar`: same English output.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-162: Teacher availability week starts on Monday in the Arabic UI (Egypt academy)
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** CSV headers were fixed English labels and values raw codes, whatever the reader's language.
+  - **Fix (files):** shared `platform/csv_labels.py` + `platform/csv.py` (CSVRenderer translates headers/codes/yes-no by `?lang=` or the request language); dashboard `lib/api.ts:csvUrl` sends `lang` for ar/es. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `identity/tests/test_people_api.py::test_csv_speaks_the_readers_language`; Vitest `lib/api.test.ts` "asks for the CSV in the interface's language".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); live Arabic CSV fetched: Arabic headers/words)## ETQAN-QA-162: Teacher availability week starts on Monday in the Arabic UI (Egypt academy)
 - **Feature:** M04 Teachers, `features/scheduling/AvailabilityEditor.tsx`. **Severity:** P4. **Type:** UI-layout. **Easy P3:** no. **Priority:** low
 - **Environment:** local docker stack (backend adff9c9 + uncommitted QA fixes, dashboard 5ed775d + branch `qa/manual-2026-10`), academy `qa`, Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M04 (M04-F-017); reproduced by Agent 2 on 2026-10-27.
@@ -2580,7 +2633,8 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** الاثنين … الأحد (Monday first, Sunday last). No week-start setting is documented.
 - **Evidence:** `qa/manual/screens/M04/M04-F-017-availability-week-starts-monday.png`, `qa/manual/screens/M04/triage/t017-availability-week.png`
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: `AvailabilityEditor`/`SlotFields` iterate `WEEKDAYS` Monday-first in every language. Fix: `scheduling/schemas.ts` `weekdaysInOrder(language)` (Arabic Saturday→Friday, values unchanged), used by both pickers. Regression test: `scheduling/weekday-order.test.ts`.
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/D/ETQAN-QA-162-after.png (teacher AR availability starts Saturday); weekday-order.test.ts; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ## ETQAN-QA-163: Contracts list (AR): the file name and the date are scrambled ("2026/10/ui-526170.pdf · 19", "عقد خالد.27 · 2026/10/pdf")
 - **Feature:** M04 Contracts list card subtitle. **Severity:** P3. **Type:** RTL. **Easy P3:** yes. **Priority:** medium
@@ -2606,10 +2660,11 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** الدافع pre-selected with the current payer.
 - **Actual:** The select shows "—": `value=""` while option 252 exists (eval `/:—,248:…,249:…,252:M04 عبد الرحمن القحطاني (وليّ أمر)`). Saving untouched keeps the old payer (Agent 1), so the dialog misstates the saved data and invites a wrong re-pick.
 - **Evidence:** `qa/manual/screens/M04/M04-F-020-family-edit-payer-blank.png`, `qa/manual/screens/M04/triage/t020-family-edit-payer-blank.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-165: "إيقاف" (retire) a family acts on one click with no confirmation
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** the payer select rendered before its options loaded, so the DOM showed "—" while the form value was the payer.
+  - **Fix (files):** `people/FamilyDialog.tsx` re-applies the saved payer once the options are there. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `people/FamilyDialog.test.tsx` "shows the saved payer once the payer list has loaded".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-164-after.png)## ETQAN-QA-165: "إيقاف" (retire) a family acts on one click with no confirmation
 - **Feature:** M04 Families, `FamiliesList.tsx:FamilyActiveToggle`. **Severity:** P3. **Type:** UI-layout. **Easy P3:** yes. **Priority:** medium
 - **Environment:** local docker stack (backend adff9c9 + uncommitted QA fixes, dashboard 5ed775d + branch `qa/manual-2026-10`), academy `qa`, Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M04 (M04-F-021); reproduced by Agent 2 on 2026-10-27.
@@ -2633,10 +2688,11 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** The chip marks the family as retired (the family filter already labels such families "(موقوفة)"), since it no longer pays for them.
 - **Actual:** Rows 248 and 249 show "عائلي" + "M04 عائلة عبد الرحمن" exactly like an active family.
 - **Evidence:** `qa/manual/screens/M04/M04-F-022-retired-family-badge-not-marked.png`, `qa/manual/screens/M04/triage/t023-bulk-bar-preselected.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-167: Students bulk bar comes with a family ("QA Fam") and a tag already chosen, so "إضافة إلى عائلة" can act on a value the user never picked; no select-all
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** the student payload's family had no active flag, so the chip could not tell.
+  - **Fix (files):** backend `identity/api/payloads.py` family adds `is_active` (additive); dashboard `people/familyLabel.ts` "(Retired)" mark in StudentsList chips and StudentForm. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `identity/tests/test_family_people.py` (payload); Vitest `people/StudentsList.test.tsx` "marks the family chip of a retired family".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-166-after.png)## ETQAN-QA-167: Students bulk bar comes with a family ("QA Fam") and a tag already chosen, so "إضافة إلى عائلة" can act on a value the user never picked; no select-all
 - **Feature:** M04 Students list bulk bar (`StudentsList.tsx:112-114`: `familyId = bulkFamily ?? activeFamilies[0]?.id`, same for tag). **Severity:** P3. **Type:** functional. **Easy P3:** yes. **Priority:** medium
 - **Environment:** local docker stack (backend adff9c9 + uncommitted QA fixes, dashboard 5ed775d + branch `qa/manual-2026-10`), academy `qa`, Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M04 (M04-F-023); reproduced by Agent 2 on 2026-10-27.
@@ -2701,8 +2757,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** Only name, email, type, status, dates, code and preferences. Type reads "متعلّم بالغ" (masculine) for a female registrant. No link to student 254.
 - **Evidence:** `qa/manual/screens/M04/M04-F-027-registration-review-missing-phone-dob.png`, `qa/manual/screens/M04/triage/t027-registration-review.png`
 - **Notes:** The fields exist on the student (CSV row 254 has phone, female, EG, 1995-06-01); the panel may need them in the registration payload (possible API addition, proposal).
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The detail serializer sent only the registration and the registrant's name/email; the panel never linked the student it creates; the kind label had no feminine form.
+- **Fix (files):** backend `backend/etqan/registration/api/serializers.py`: additive `registrant_details` {phone, date_of_birth, gender, country} via `identity.get_student_profile`; `dashboard/src/features/registration/admin/RegistrationDetail.tsx` + `schemas.ts` show them (phone as a tel: link, country via Intl), "Open <name>" links to `/people/students/<id>` once approved (needs `student.view_any`), kind uses i18n context `adult_female` (ar "متعلّمة بالغة"); locales `registration.admin.detail.*` (ar/en/es).
+- **Regression test:** `backend/etqan/registration/tests/test_api.py::test_the_detail_carries_what_the_registrant_entered`; `dashboard/src/features/registration/admin/RegistrationsPage.test.tsx` ("shows what the registrant entered … ETQAN-QA-171").
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-171-after.png (phone, DOB, gender أنثى, country مصر, 'متعلّمة بالغة', link 'فتح ملف …'); registration test_api passes; serializer change additive. Note: the list row summary above still says 'متعلّم بالغ')
 
 ## ETQAN-QA-172: Email-confirmation page says "يمكنك الآن تسجيل الدخول" although the registration still waits for approval; sign-in then refuses
 - **Feature:** M04 Self-registration, `routes/verify-email.tsx:31` (`auth.verified`, same text for every case). **Severity:** P3. **Type:** copy. **Easy P3:** yes. **Priority:** medium
@@ -2729,8 +2787,10 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** Filters behind a "تصفية" button (or one chip row) so the list shows on the first screen; rows as cards on a phone.
 - **Actual:** First screen = tabs + 9 selects of uneven widths; the first row starts at the bottom. Table scrollWidth 705 vs box 341: names wrap one word per line, emails break at the hyphen ("m04-" / "adam@qa.etqan.test"), the phone column is cut, with no sign the table scrolls.
 - **Evidence:** `qa/manual/screens/M04/M04-F-030a-mobile-filters-fill-screen.png`, `qa/manual/screens/M04/M04-F-030b-mobile-table-squeezed.png`, `qa/manual/screens/M04/triage/t030a-mobile-filters.png`, `qa/manual/screens/M04/triage/t030b-mobile-table.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** A plain `<table>` inside a sideways scroller with no phone layout, so on 375 px the row actions and status sit off-screen behind a hidden scroll. The nine filters sat in the toolbar at every width.
+- **Fix (files):** one shared phone-card recipe `phoneCards` in `dashboard/src/ui/styles.ts` (below `sm` each row is a card and each cell shows its `data-label` and value; unchanged from `sm` up), applied with a `data-label` on every cell: `dashboard/src/features/people/PeopleList.tsx` (students, parents, teachers); filters folded behind a "Filters" button on phones by the shared `dashboard/src/components/PhoneFilters.tsx` (locales `common.phoneFilters`).
+- **Regression test:** `dashboard/src/ui/phone-cards.test.ts`; `dashboard/src/components/PhoneFilters.test.tsx`.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-173-after.png (375: cards, filters behind 'التصفية', table 341/341); StudentsList + PhoneFilters tests pass)
 
 ## ETQAN-QA-174: Leaving a half-filled person form loses everything with no warning
 - **Feature:** M04 People forms (no unsaved-changes guard anywhere in the dashboard: no `useBlocker`/`beforeunload`). **Severity:** P3. **Type:** functional. **Easy P3:** no. **Priority:** low
@@ -2744,7 +2804,8 @@ Next ID: **ETQAN-QA-067**
 - **Evidence:** `qa/manual/screens/M04/M04-F-031-unsaved-form-lost-no-warning.png`, `qa/manual/screens/M04/triage/t031-unsaved-form-lost.png`
 - **Notes:** App-wide pattern; fix likely a shared form guard (proposal).
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: No unsaved-changes guard existed anywhere (no `useBlocker`/`beforeunload`). Fix: New shared `lib/unsaved-changes.ts` `useUnsavedChangesGuard(dirty)` (router blocker + beforeunload, `common.unsavedChanges`); used by `StudentForm`, `TeacherForm`, `ParentForm` (save navigates with `ignoreBlocker`). Regression test: `lib/unsaved-changes.test.tsx` (asks and stays when refused; leaves when confirmed; never asks when clean); people form suites green.
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: lib/unsaved-changes.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ## ETQAN-QA-175: Person form: the "leave the email empty…" hint sits under the time-zone field, two rows away from the email field (also shown to read-only viewers)
 - **Feature:** M04/People student form (also teacher form). **Severity:** P3. **Type:** UI-layout. **Easy P3:** yes. **Priority:** low
@@ -2755,10 +2816,11 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** email input at top-left (y 174–218); the hint is a full-width row at y 394 under "المنطقة الزمنية", reading as a time-zone note. Read-only viewers (supervisor, staff with codes) see it too.
 - **Evidence:** `qa/manual/screens/M04/M04-F-032-email-hint-under-timezone.png`, `qa/manual/screens/M04/triage/t032-email-hint-under-tz.png`, read-only: `qa/manual/screens/M04/triage/t034-readonly-student-double-gap.png`
 - **Root cause (Agent 2 pointer):** `dashboard/src/features/people/UserFieldsSection.tsx` renders `emailHint` as the last child of the grid (`sm:col-span-2` after the time-zone Field) instead of as the email Field's description; no read-only check.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-176: Families list: on retired families the "تعديل" / "استعادة" buttons wrap onto two lines (rows twice as tall)
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** `UserFieldsSection` printed the hint as the grid's last row, for every viewer.
+  - **Fix (files):** shared `ui/field.tsx` gains `hint` (under the control, aria-describedby); the email Field carries it; StudentForm passes it only when editable. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `people/UserFieldsSection.test.tsx` "puts the email hint under the email field".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-175-after.png)## ETQAN-QA-176: Families list: on retired families the "تعديل" / "استعادة" buttons wrap onto two lines (rows twice as tall)
 - **Feature:** M04/People families list. **Severity:** P3. **Type:** UI-layout. **Easy P3:** yes. **Priority:** low
 - **Environment:** qa academy, admin AR, 1440x900. **Tag:** REAL
 - **Found by:** Agent 1 (M04-F-033); reproduced by Agent 2 on 2026-10-27.
@@ -2767,10 +2829,11 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** "استعادة" drops under "تعديل"; retired rows measure 109 px vs 65 px for active rows.
 - **Evidence:** `qa/manual/screens/M04/M04-F-033-retired-family-actions-wrap.png`, `qa/manual/screens/M04/triage/t033-retired-family-actions-wrap.png`
 - **Root cause (Agent 2 pointer):** `features/people/FamiliesList.tsx` action cell: the plain restore `Button` and the Confirm-wrapped retire trigger size differently; the cell is not `whitespace-nowrap`/flex-nowrap.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-177: Read-only student page: double gap between "أولياء الأمور" and "تفضيلات الإشعارات" (empty wallet wrapper keeps its margin)
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** the actions cell was `flex-wrap`.
+  - **Fix (files):** `people/FamiliesList.tsx` actions `flex-nowrap whitespace-nowrap`. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `people/FamiliesList.test.tsx` "keeps a retired family's Edit and Restore on one line".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-176-after.png)## ETQAN-QA-177: Read-only student page: double gap between "أولياء الأمور" and "تفضيلات الإشعارات" (empty wallet wrapper keeps its margin)
 - **Feature:** M04/People student detail. **Severity:** P4. **Type:** UI-layout. **Easy P3:** yes (trivial). **Priority:** low
 - **Environment:** qa academy, supervisor AR (also staff-codes), 1440x900. **Tag:** REAL
 - **Found by:** Agent 1 (M04-F-034); reproduced by Agent 2 on 2026-10-27.
@@ -2779,8 +2842,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** ~72 px gap (guardians card ends ≈1167, prefs card starts ≈1240); DOM has an empty `div.mt-6` (height 0).
 - **Evidence:** `qa/manual/screens/M04/M04-F-034-readonly-student-double-gap.png`, `qa/manual/screens/M04/triage/t034-readonly-student-double-gap.png`
 - **Root cause (Agent 2 pointer):** `routes/_authed/people.students.$personId.tsx` wraps `StudentWalletCard` in `<div className="mt-6">`; the card returns null without wallet permission but the wrapper stays.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The wallet wrapper `div.mt-6` stayed when the card rendered null.
+- **Fix (files):** dashboard/src/routes/_authed/people.students.$personId.tsx (`empty:hidden`)
+- **Regression test:** people.students.$personId.test.tsx: leaves no gap when the balance card hides itself
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: people.students.$personId.test.tsx + empty:hidden diff)
 
 ## ETQAN-QA-178: Parents list (EN): the "Invite pending" account pill wraps onto two lines
 - **Feature:** M04/People parents list. **Severity:** P4. **Type:** UI-layout. **Easy P3:** yes (trivial). **Priority:** low
@@ -2791,8 +2856,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** "Invite / pending" wraps inside the pill; those rows are 67 px vs 50 px (M04 عبد الرحمن القحطاني, QA5 Parent Two, QA5 Reuse old).
 - **Evidence:** `qa/manual/screens/M04/M04-F-035-parents-invite-pending-wraps.png`, `qa/manual/screens/M04/triage/t035-parents-invite-pending-wraps.png`
 - **Root cause (Agent 2 pointer):** account badge (`people.json` `invited`) has no `whitespace-nowrap`; the Account column is the narrowest.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** `StatusChip` allowed its label to wrap; the Account column is the narrowest.
+- **Fix (files):** `dashboard/src/ui/status-chip.tsx`: `whitespace-nowrap` (every pill stays on one line).
+- **Regression test:** `dashboard/src/ui/status-chip.test.tsx`.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-178-after.png (EN parents: 'Invite pending' one line, 25 px pill); status-chip test passes)
 
 ## --- M14 manual bugs ---
 
@@ -2856,10 +2923,11 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** "2026-07-15 — تجويد — QA student" (AR) while the paid date shows 2026/10/27; EN shows "2026-09-03 — F03 قرآن — QA student".
 - **Evidence:** `qa/manual/screens/M14/M14-F-004-payslip-iso-dates.png`, `qa/manual/screens/M14/M14-F-027-payslip-arabic-course-in-english.png`, `qa/manual/screens/M14/triage/t008-payslip-ar.png`, `qa/manual/screens/M14/triage/t010-payslip-en.png`, `qa/manual/screens/M14/triage/t009-print.png`
 - **Root cause (Agent 2 pointer):** `describe_session` stores `f"{occurs_on.isoformat()} — {course} — {student}"` in the academy language at generation; the UI prints the stored string. Fix needs structured fields (date, course id) on the line or rendering from the session (API change → proposal).
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-404: Withdrawal amount rejects Arabic-Indic digits: "٥" gives "أدخل مبلغًا أكبر من صفر"
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** lines print `describe_session`'s text frozen at build (ISO date, generation language).
+  - **Fix (files):** `scheduling/services/paylock.py:session_facts`, `payroll/api/payloads.py:payslip_detail` adds `session` per session line (additive); `payroll/PayslipBody.tsx` renders date in the reader's format and course in the UI language, description as fallback. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `payroll/tests/test_api.py` (line.session); Vitest `payroll/PayslipBody.test.tsx` "words a session line in the reader's language and date format".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-403-after.png)## ETQAN-QA-404: Withdrawal amount rejects Arabic-Indic digits: "٥" gives "أدخل مبلغًا أكبر من صفر"
 - **Feature:** M14 Teacher My balance (`WithdrawalDialog` amount parsing). **Severity:** P3. **Type:** functional. **Easy P3:** yes. **Priority:** medium
 - **Environment:** local docker stack (backend adff9c9 + uncommitted QA fixes, dashboard 5ed775d + branch `qa/manual-2026-10`), academy `qa` (Africa/Cairo, EGP), Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M14 (M14-F-005); reproduced by Agent 2 on 2026-10-27.
@@ -2952,10 +3020,11 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** The row shows "دخلت 23:05 · خرجت 23:06" (or similar) so the teacher can see what was recorded.
 - **Actual:** Toast "تم التسجيل." (info icon); the button flips, then disappears; nothing on the row shows a time. (Stamping 8 h late is allowed by design: B2b B-1/B-2, times are a record only, not read by pay; not part of this bug.)
 - **Evidence:** `qa/manual/screens/M14/M14-F-010-im-in-hours-late.png`, `qa/manual/screens/M14/s034-row.png`, `qa/manual/screens/M14/triage/t036-maryam-home.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-410: My balance shows a total with no explanation of how it is made
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** `TimesPanel.TeacherTimes` returned nothing once stamped and never showed the times.
+  - **Fix (files):** it shows "In HH:MM · Out HH:MM" (viewer's zone) on the row (`sessionTimes.times.inAt/outAt` ar/en/es). (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `scheduling/TeacherSessions.test.tsx` "shows the recorded times on the row, and the opening rule once".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47))## ETQAN-QA-410: My balance shows a total with no explanation of how it is made
 - **Feature:** M14 Teacher My balance (`MyBalance`). **Severity:** P4. **Type:** copy. **Easy P3:** yes. **Priority:** low
 - **Environment:** local docker stack (backend adff9c9 + uncommitted QA fixes, dashboard 5ed775d + branch `qa/manual-2026-10`), academy `qa` (Africa/Cairo, EGP), Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M14 (M14-F-012); reproduced by Agent 2 on 2026-10-27.
@@ -2966,7 +3035,8 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** Card "EGP / الرصيد: 159.00 ج.م. / المتاح: 159.00 ج.م." and the request list; nothing ties it to payslips (raw "EGP" header above "ج.م." amounts).
 - **Evidence:** `qa/manual/screens/M14/M14-F-012-balance-no-explanation.png`, `qa/manual/screens/M14/triage/t013-balance.png`
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: `MyBalance` showed the totals only; `Balances` headed each card with the raw code. Fix: `MyBalance.tsx` line "Balance = payslips paid to your balance minus withdrawals paid…" with a My payslips link; `Balances.tsx` heads cards with the currency's name (`Intl.DisplayNames`). Regression test: `MyBalance.test.tsx` "explains how the balance is made".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: MyBalance.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ## ETQAN-QA-411: Reports to write: every row repeats the teacher's own name, and there is no count
 - **Feature:** M14 Teacher Reports to write. **Severity:** P4. **Type:** UI-layout. **Easy P3:** yes. **Priority:** low
@@ -2978,8 +3048,10 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** Rows show student, date, course; a total ("24 تقريرًا").
 - **Actual:** "QA teacher · قرآن F03 · 10:00 2026/08/12" on every row; long list, no count.
 - **Evidence:** `qa/manual/screens/M14/M14-F-013-reports-own-name-repeated.png`, `qa/manual/screens/M14/triage/t007-reports.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The teacher view reused the admin row with the teacher name and showed no total.
+- **Fix (files):** dashboard/src/features/scheduling/MissingReports.tsx (rowOwn, count), locales scheduling.missing.rowOwn/count_*
+- **Regression test:** MissingReports.test.tsx: teacher row without own name; says how many reports are left
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-411-after.png)
 
 ## ETQAN-QA-412: My sessions history: past sessions with no attendance still show a green "مجدولة", identical to future ones; nothing flags them
 - **Feature:** M14 Teacher My sessions → السجل. **Severity:** P3. **Type:** UI-layout. **Easy P3:** no. **Priority:** medium
@@ -2991,10 +3063,11 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** Past sessions without attendance stand out ("بحاجة لتسجيل الحضور") or can be filtered.
 - **Actual:** Sessions from 26/10 (and earlier) show green "مجدولة" + "لم يُحدَّد" like future sessions; 5 pages, no filter; "كتابة التقرير" appears only after marking.
 - **Evidence:** `qa/manual/screens/M14/M14-F-014-history-past-still-scheduled.png`, `qa/manual/screens/M14/triage/t005-history.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-413: Homework session picker lists bare dates, many identical ("19/10/2026" ×14)
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** status chip only knew `scheduled`.
+  - **Fix (files):** shared `scheduling/bits.tsx` `awaitsAttendance` + `SessionStateChip` (warning "Attendance not recorded" once a scheduled session is over), used in `TeacherSessionTable.tsx`. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `scheduling/TeacherSessions.test.tsx` "flags a past session nobody marked".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-412-after.png)## ETQAN-QA-413: Homework session picker lists bare dates, many identical ("19/10/2026" ×14)
 - **Feature:** M14 Teacher Homework create / detail dialogs. **Severity:** P3. **Type:** UI-layout. **Easy P3:** yes. **Priority:** medium
 - **Environment:** local docker stack (backend adff9c9 + uncommitted QA fixes, dashboard 5ed775d + branch `qa/manual-2026-10`), academy `qa` (Africa/Cairo, EGP), Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M14 (M14-F-015); reproduced by Agent 2 on 2026-10-27.
@@ -3021,8 +3094,10 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** The confirmation stands out (overlay over the first dialog).
 - **Actual:** A second card with the same background in the middle of the first; fields above/below stay bright; the title repeats.
 - **Evidence:** `qa/manual/screens/M14/M14-F-016-homework-delete-confirm-overlap.png`, `qa/manual/screens/M14/triage/t028-hw-delete-confirm.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause:** The alert dialog shared the form dialog's layer (z-50), so the confirmation could blend with the dialog under it.
+- **Fix (files):** Alert dialog overlay and positioner one layer up (`z-[60]`), so its scrim always dims the first dialog (`dashboard/src/ui/dialog.tsx`).
+- **Regression test:** `ui/dialog.test.tsx` "layers an alert dialog above any dialog".
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: qa/manual/screens/round-2/B/ETQAN-QA-414-after.png (teacher AR: confirm over homework dialog, first dialog dimmed; overlays z 50/60))
 
 ## ETQAN-QA-415: Answered homework is not flagged for the teacher: same grey "غير مكتمل" as unanswered
 - **Feature:** M14 Teacher Homework list. **Severity:** P3. **Type:** functional. **Easy P3:** yes. **Priority:** medium
@@ -3132,8 +3207,10 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** A positive/neutral style: confirming pay isn't destructive.
 - **Actual:** Red "Confirm receipt" on each card (and red confirm in the dialog per Agent 1), the colour of delete/cancel.
 - **Evidence:** `qa/manual/screens/M14/M14-F-023-confirm-receipt-red.png`, `qa/manual/screens/M14/triage/t012-confirm-receipt-red.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause:** `ConfirmReceipt` used `Confirm`'s destructive defaults.
+- **Fix (files):** `triggerVariant`/`confirmVariant` = primary (`dashboard/src/features/payroll/ConfirmReceipt.tsx`).
+- **Regression test:** `PayslipPage.test.tsx` "lets the teacher confirm receipt…" asserts bg-primary on trigger and confirm.
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: PayslipPage.test.tsx asserts bg-primary on trigger and confirm; no unconfirmed payslip in live data for a screenshot; diff reviewed)
 
 ## ETQAN-QA-422: Payslip list doesn't show which payslips were confirmed
 - **Feature:** M14 Teacher My payslips list. **Severity:** P3. **Type:** UI-layout. **Easy P3:** yes. **Priority:** low
@@ -3161,8 +3238,10 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** A short hint for the teacher (e.g. tooltip: "الحصة لا تُحتسب ولا تُدفع؛ راجع الإدارة").
 - **Actual:** Red badge, no explanation; Postpone hidden. ("دخلت" on an at-disposal session is by design, B2b B-2, not part of this bug.)
 - **Evidence:** `qa/manual/screens/M14/M14-F-026-admin-disposal-status-ar.png`, `qa/manual/screens/M14/M14-F-026-admin-disposal-status-en.png`, `qa/manual/screens/M14/triage/t004-disposal-row.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The teacher's table showed the status chip only.
+- **Fix (files):** dashboard/src/features/scheduling/TeacherSessionTable.tsx (hint), locales scheduling.sessions.atDisposalHint
+- **Regression test:** TeacherSessions.test.tsx: explains a session at the administration's disposal
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-423-after.png; TeacherSessions.test.tsx)
 
 ## ETQAN-QA-424: Payslip number in the display font reads "PAY-oooo39": old-style zeros look like the letter o
 - **Feature:** M14 Payslip detail card title (display serif font). **Severity:** P4. **Type:** UI-layout. **Easy P3:** yes. **Priority:** low
@@ -3174,8 +3253,10 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** Lining figures for reference numbers (`font-variant-numeric: lining-nums`).
 - **Actual:** "PAY-000001" renders with old-style figures: 0 like o, 1 like ı; the list shows it in the normal font.
 - **Evidence:** `qa/manual/screens/M14/M14-F-028-payslip-number-oldstyle-zeros.png`, `qa/manual/screens/M14/triage/t010-payslip-en.png`, `qa/manual/screens/M14/triage/t008-payslip-ar.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** Fraunces defaults to old-style figures.
+- **Fix (files):** dashboard/src/index.css (`.font-display { font-variant-numeric: lining-nums }`)
+- **Regression test:** src/qa-round2-a2.test.ts (display font)
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-424-after.png)
 
 ## ETQAN-QA-425: Phone: availability row puts "إلى" after the start field and the end field on the next line without a label
 - **Feature:** M14 Teacher availability (`AvailabilityEditor`), 375x812. **Severity:** P3. **Type:** mobile. **Easy P3:** yes. **Priority:** low
@@ -3237,8 +3318,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** Only "فت" of the button shows at the left edge; "QA Student Three" takes 3 lines; reachable only by scrolling the table sideways. Same layout problem as ETQAN-QA-118 (Home table), different component.
 - **Evidence:** `qa/manual/screens/M14/M14-F-032-mobile-levels-button-cut.png`, `qa/manual/screens/M14/triage/t033-m-levels.png`
 - **Root cause (Agent 2 pointer):** Layout change (card view on narrow screens) → proposal, as ETQAN-QA-118.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** A plain `<table>` inside a sideways scroller with no phone layout, so on 375 px the row actions and status sit off-screen behind a hidden scroll.
+- **Fix (files):** one shared phone-card recipe `phoneCards` in `dashboard/src/ui/styles.ts` (below `sm` each row is a card and each cell shows its `data-label` and value; unchanged from `sm` up), applied with a `data-label` on every cell: `dashboard/src/features/curriculum/StudentLevelsList.tsx`.
+- **Regression test:** `dashboard/src/ui/phone-cards.test.ts`.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-428-after.png (375 teacher levels: cards, 'فتح التقدّم' fully visible, names one line))
 
 ## ETQAN-QA-429: Teacher "هذا الأسبوع": the two "opens at…" hints repeat under every future row, so only 3 sessions fit on a desktop screen
 - **Feature:** M14 Teacher My sessions, week tab (`AttendanceControls.tsx` `opensAtStart` + `TimesPanel.tsx` `sessionTimes.notOpen`). **Severity:** P3. **Type:** UI-layout. **Easy P3:** yes. **Priority:** medium
@@ -3250,10 +3333,11 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** the rule said once (e.g. one line above the table, or as the disabled button's tooltip) so the week list stays scannable.
 - **Actual:** every future row carries "يُفتح تسجيل الحضور عند موعد البدء." under the attendance selects and "يُفتح تسجيل الدخول قبل بدء الحصة بـ15 دقيقة." under the dimmed "دخلت"; rows are ~185 px, only 3 of 7 sessions fit on the first screen.
 - **Evidence:** `qa/manual/screens/M14/M14-F-033-week-hints-repeated.png`, `qa/manual/screens/M14/triage/t040-week-hints.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-430: Phone: teacher Homework table hides "الحالة", "تاريخ التكليف" and the only action "فتح" off-screen to the side
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** each row's AttendanceControls and TeacherTimes printed their own hint.
+  - **Fix (files):** `quiet` prop on both (hint moves to the disabled button's title), one line above the table in `TeacherSessionTable.tsx` (`scheduling.mine.opensHint`). (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `scheduling/TeacherSessions.test.tsx` "shows the recorded times on the row, and the opening rule once".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-429-after.png)## ETQAN-QA-430: Phone: teacher Homework table hides "الحالة", "تاريخ التكليف" and the only action "فتح" off-screen to the side
 - **Feature:** M14 Teacher Homework list (`HomeworkList`), 375x812. **Severity:** P3. **Type:** mobile. **Easy P3:** no. **Priority:** medium
 - **Environment:** local docker stack (backend 68e95e1c + uncommitted QA fixes, dashboard 626d0e7 on branch `qa/manual-2026-10`), academy `qa` (Africa/Cairo, EGP), Chromium via `qa/manual/tools/step.mjs`. **Tag:** REAL
 - **Found by:** Agent 1, M14 confirmation sweep (M14-F-034), after the ETQAN-QA-426 fix; reproduced by Agent 2 on 2026-10-28.
@@ -3264,8 +3348,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** page no longer widens (scrollWidth 375 — ETQAN-QA-426 holds), but the table is 578 px in a 341 px scroller; only Student/Course/Title/Type/"تمت الإجابة" show, status, date and "فتح" are off the left edge with no scroll hint; the title wraps over 4 lines. Same layout class as ETQAN-QA-118 (Home) and ETQAN-QA-428 (levels), different page.
 - **Evidence:** `qa/manual/screens/M14/M14-F-034-mobile-homework-open-offscreen.png`, `qa/manual/screens/M14/triage/t042-m-homework-open-offscreen.png`
 - **Root cause (Agent 2 pointer):** Layout change (card view on narrow screens) → proposal, as ETQAN-QA-118/428.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** A plain `<table>` inside a sideways scroller with no phone layout, so on 375 px the row actions and status sit off-screen behind a hidden scroll.
+- **Fix (files):** one shared phone-card recipe `phoneCards` in `dashboard/src/ui/styles.ts` (below `sm` each row is a card and each cell shows its `data-label` and value; unchanged from `sm` up), applied with a `data-label` on every cell: `dashboard/src/features/homework/HomeworkList.tsx`.
+- **Regression test:** `dashboard/src/ui/phone-cards.test.ts`.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-430-after.png (375 qa-teacher homework: status, date and 'فتح' in each card, 341/341))
 
 ## --- M09 manual bugs ---
 
@@ -3299,9 +3385,11 @@ Next ID: **ETQAN-QA-067**
 - **Root cause:** `PayslipPage.tsx` printed `payslip.notes` as a bare `<p>` outside the facts list, and the page had no link to its list (the route header is a plain `PageHeader`).
 - **Fix (Agent 3, cycle 1, 2026-10-27, branch qa/manual-2026-10, uncommitted):** notes are a labelled entry in the facts `<dl>` ("ملاحظات الدفع" / "Payment notes", full width, keeps line breaks); a `BackLink` nav above the actions (and above the not-found alert) goes to `/payroll/payslips` for the office or `/teaching/payslips` for the teacher. New keys `payroll.payslip.{notes,back,links}` in en/ar/es.
 - **Regression test:** `PayslipPage.test.tsx` "labels the payment notes and links back to the payslips" (office and teacher hrefs). Evidence: `qa/manual/evidence/M09/fix-1/` (vitest.txt, tsc.txt, backend.txt).
-- **Verification status:** OPEN (reopened 2026-10-28, Agent 2 gate-1: half fixed). Back link 'العودة إلى كشوف الرواتب' works (office /app/payroll/payslips, teacher /app/teaching/payslips, also on 375px) and the label 'ملاحظات الدفع' is there. But the value `<dd dir="auto">` spans the whole row (`lg:col-span-4`), so a Latin note ('scn') renders at the far LEFT edge, ~1,000px from its right-aligned label, which looks as detached as before. Other Latin values ('SCN Payroll Teacher') stay under their labels. Fix: keep the block in the page direction and isolate only the text (e.g. `<dd><span dir="auto">…</span></dd>` or `text-start` + `unicode-bidi:plaintext` on an inline span). Evidence: `qa/manual/screens/M09/fix/ETQAN-QA-351-after.png`.
-
-## ETQAN-QA-352: Rates page is one 8,400-px column of teacher cards with no search or filter; per-student rates are only at the very bottom
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** (reopened) the notes `<dd dir="auto">` made a Latin note a full-width LTR block.
+  - **Fix (files):** `payroll/PayslipPage.tsx`: the `<dd>` keeps the page direction, the text is a `<bdi>`. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `payroll/PayslipPage.test.tsx` "labels the payment notes…" (no dir on dd, BDI child).
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-351-after.png)## ETQAN-QA-352: Rates page is one 8,400-px column of teacher cards with no search or filter; per-student rates are only at the very bottom
 - **Feature:** M09 Payroll rates (`RatesPage.tsx`). **Severity:** P3. **Type:** UI-layout. **Easy P3:** no. **Priority:** medium
 - **Environment:** local docker stack (backend 68e95e1c + uncommitted QA fixes, dashboard 626d0e7 on branch `qa/manual-2026-10`), academy `qa` (Africa/Cairo, EGP), Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M09 (M09-F-004); reproduced by Agent 2 on 2026-10-27.
@@ -3314,7 +3402,8 @@ Next ID: **ETQAN-QA-067**
 - **Evidence:** `qa/manual/screens/M09/M09-F-004-rates-page-no-search.png`, `qa/manual/screens/M09/triage/T-F004-rates-top.png`
 - **Root cause (Agent 2 pointer):** Layout/feature change → likely a proposal.
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: `RatesPage` rendered every teacher card with no way to narrow it; per-student rates came last. Fix: `RatesPage.tsx`: name search over the roster ("No teacher matches"), a "Go to per-student rates" jump to `#student-rates`; `payroll.rates.search/toStudentRates/noMatch`. Regression test: `RatesPage.test.tsx` "finds a teacher by name (ETQAN-QA-352)".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: RatesPage.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ## ETQAN-QA-353: Rates page (AR): "لـ" glues to the Latin teacher name in buttons and dialog titles ("QA6 Teacher BJ إزالة الراتب الثابت"); full names inside row buttons
 - **Feature:** M09 Payroll rates (`FixedSalary.tsx`, `StudentRates.tsx`, `RateDialog`/fixed-salary dialog titles). **Severity:** P3. **Type:** RTL. **Easy P3:** yes. **Priority:** low
@@ -3345,10 +3434,11 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** An Arabic month picker like the payslips page (month + year selects).
 - **Actual:** Inputs `text`, `month`; the month field shows "--------- ----"; Agent 1 saw "October 2026" in English when editing. `type=month` falls back to a free-text box on Firefox and desktop Safari.
 - **Evidence:** `qa/manual/screens/M09/M09-F-007-month-field-dashes.png`, `qa/manual/screens/M09/triage/T-F007-month-field.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-355: "إصدار" is offered on a draft that can't be issued (missing rate, month not over, negative net); the refusal comes only after confirming an "irreversible" action
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** `FixedSalary.tsx` used `<input type=month>`.
+  - **Fix (files):** a month + year select pair (`MonthYearPicker`, month names via `payroll/bits.monthName`). (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `payroll/FixedSalary.test.tsx` "sets one from a chosen month" (selects, localized names).
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-354-after.png)## ETQAN-QA-355: "إصدار" is offered on a draft that can't be issued (missing rate, month not over, negative net); the refusal comes only after confirming an "irreversible" action
 - **Feature:** M09 Payslip detail (`PayslipPage.tsx` issue action; `payslips.issue` 409s). **Severity:** P3. **Type:** functional. **Easy P3:** no. **Priority:** medium
 - **Environment:** local docker stack (backend 68e95e1c + uncommitted QA fixes, dashboard 626d0e7 on branch `qa/manual-2026-10`), academy `qa` (Africa/Cairo, EGP), Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M09 (M09-F-008); reproduced by Agent 2 on 2026-10-27.
@@ -3361,8 +3451,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** 409 POST /api/v1/payroll/payslips/46/issue/ → toast "لم ينتهِ هذا الشهر بعد…". PAY-000042 shows an active red "إصدار" and no warning that a negative net can't be issued (payroll.md: issue refuses `month_not_over`, `missing_rate`, `negative_net`).
 - **Evidence:** `qa/manual/screens/M09/M09-F-008a-issue-offered-though-blocked.png`, `qa/manual/screens/M09/M09-F-008b-issue-refused-month-not-over.png`, `qa/manual/screens/M09/triage/T-F008a-issue-confirm.png`, `qa/manual/screens/M09/triage/T-F008b-issue-409.png`, `qa/manual/screens/M09/triage/T-F014-negative-net.png`
 - **Root cause (Agent 2 pointer):** The payload already has `missing_rate`, `net_minor`, year/month: derive `canIssue` client-side.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause:** The Issue action was always live on a draft; the client ignored `missing_rate`, `net_minor` and year/month it already had.
+- **Fix (files):** `issueBlocker()` derives `month_not_over` (academy zone) / `missing_rate` / `negative_net`; Issue is disabled with the translated reason (`errors.payroll.*`) shown beside it (`dashboard/src/features/payroll/PayslipPage.tsx`).
+- **Regression test:** `PayslipPage.test.tsx` "disables Issue with the reason for a month not over or a negative net" and missing-rate test asserts disabled.
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: qa/manual/screens/round-2/B/ETQAN-QA-355-after.png; payslips 45/46: Issue disabled with "لم ينتهِ هذا الشهر بعد…"; missing-rate/negative-net covered by PayslipPage.test.tsx)
 
 ## ETQAN-QA-356: Generate summary (AR): plural agreement for one teacher ("لم يعودوا يتقاضون بها", "كشف راتبهم") and "لـ" glued to the Latin name
 - **Feature:** M09 Payslips list generate summary (`payroll.json` ar `list.*` keys). **Severity:** P3. **Type:** copy. **Easy P3:** yes. **Priority:** low
@@ -3391,10 +3483,11 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** Only "اكتملت حصص لـ QA teacher بعد إصدار كشف راتبهم. أضف تسوية في شهر لاحق لدفع أجرها. إضافة تسويات"; the link opens an empty adjustment form. The API returns only `person(user)` per teacher (`payroll/api/payloads.py:159`).
 - **Evidence:** `qa/manual/screens/M09/M09-F-010-unpaid-sessions-warning-vague.png`, `qa/manual/screens/M09/triage/T-F009-F010-generate-sep.png`
 - **Root cause (Agent 2 pointer):** Needs the session ids in the generate result → API change → proposal.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-358: Raw English server messages in Arabic payroll pay dialogs: mark paid, pay to balance, pay withdrawal
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** generate returned only the teacher per late case.
+  - **Fix (files):** `payroll/services/payslips.py` `_unpaid_rows` returns the rows, `GenerateResult.unpaid_details`; `payroll/api/payloads.py` additive `sessions` per entry; `PayslipsList.tsx` lists date · student · minutes. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `payroll/tests/test_api.py` (generate result with sessions); Vitest `payroll/PayslipsList.test.tsx` "lists the sessions completed after an issued payslip".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-357-after.png)## ETQAN-QA-358: Raw English server messages in Arabic payroll pay dialogs: mark paid, pay to balance, pay withdrawal
 - **Feature:** M09 `MarkPaidDialog.tsx`, `WithdrawalActions.tsx` pay; server `payroll/services/payslips.py:332-335`, `withdrawals.py:146-149`. **Severity:** P3. **Type:** translation. **Easy P3:** yes. **Priority:** medium
 - **Environment:** local docker stack (backend 68e95e1c + uncommitted QA fixes, dashboard 626d0e7 on branch `qa/manual-2026-10`), academy `qa` (Africa/Cairo, EGP), Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M09 (M09-F-011); reproduced by Agent 2 on 2026-10-27.
@@ -3423,7 +3516,8 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** Shown as a normal pending bonus; only the generate summary says adjustments were excluded (payroll.md: "A row left in an old currency does not count").
 - **Evidence:** `qa/manual/screens/M09/M09-F-012-adjustment-old-currency-not-flagged.png`, `qa/manual/screens/M09/triage/T-F012-adjustments.png`
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: Adjustment rows carried no sign of a stale currency. Fix: Backend `payroll/api/payloads.py` additive `old_currency` (unused and not the teacher's pay currency); `AdjustmentsList.tsx` "Old currency: not counted" chip. Regression test: pytest `payroll/tests/test_rates_adjustments.py::test_an_unused_adjustment_in_an_old_currency_is_flagged`; `AdjustmentsList.test.tsx` "flags an unused one left in an old currency".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: pytest payroll test_rates_adjustments; AdjustmentsList.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ## ETQAN-QA-360: Arabic: negative amounts put the currency on the other side ("ج.م. ‎-4,000.00" under "3,000.00 ج.م.")
 - **Feature:** M09 money formatting of negative values (`PayslipBody.tsx`, `ProjectionsPage.tsx`; `@/lib/money` format). **Severity:** P3. **Type:** RTL. **Easy P3:** yes. **Priority:** low
@@ -3453,7 +3547,8 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** QA6 Teacher B −1,000.00 so far/projected; EGP totals 8,585.46 / 13,387.57 include it (5,000+67+3,000+60+60+123.46+1,275−1,000 = 8,585.46), so the total is 1,000 lower than the positive nets.
 - **Evidence:** `qa/manual/screens/M09/M09-F-015-projection-negative-net-in-total.png`, `qa/manual/screens/M09/en-projections.png`, `qa/manual/screens/M09/triage/T-F015-projection-total.png`
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: `projections._totals` summed every row's net, negatives included. Fix: `payroll/services/projections.py` totals count `max(net, 0)`; `ProjectionsPage.tsx` badge "Below zero: nothing to pay, not in the totals". Regression test: pytest `test_projections.py::test_a_negative_net_counts_as_nothing_to_pay_in_the_total`; `ProjectionsPage.test.tsx` "flags a teacher whose net is below zero".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: pytest payroll test_projections (max(net,0) in totals); ProjectionsPage.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ## ETQAN-QA-362: Withdrawals list (AR): the rejection reason is pushed to the far side of the Amount cell, away from the amount and note
 - **Feature:** M09 Withdrawals list (`WithdrawalsPage.tsx` amount cell). **Severity:** P4. **Type:** UI-layout. **Easy P3:** no. **Priority:** low
@@ -3466,7 +3561,9 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** Note sits under the amount at the right; "السبب: M09 الرصيد محجوز لشهر قادم" / "السبب: race" sit at the left edge of the cell, next to the teacher column.
 - **Evidence:** `qa/manual/screens/M09/M09-F-016-reject-reason-misaligned.png`, `qa/manual/screens/M09/triage/T-F016-F020-F021-withdrawals.png`
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: Each line had `dir="auto"` stretched across the cell, so its alignment followed its first letter. Fix: `payroll/WithdrawalsPage.tsx`: note and reason lines `self-start`; the reason line inherits the page direction with the reason isolated. Regression test: `WithdrawalsPage.test.tsx` reason assertion (isolated) and suite green; visual check by Agent 2.
+- **Round 2 fix (Agent 3, group D, cycle 2, 2026-10-28):** Root cause: the cell's `flex flex-col` stretched every line to full width, and the amount (`<Money>`, `dir="ltr"`) then aligned to its own LTR start, the far left of an RTL cell. Fix (files): `dashboard/src/features/payroll/WithdrawalsPage.tsx`: the column is `items-start`, so amount, note and reason all shrink to content and share the cell's start edge. Regression test: `WithdrawalsPage.test.tsx` "lines the amount, note and reason up at the cell's start edge (ETQAN-QA-362)" (15/15 green).
+- **Verification status:** VERIFIED (round 2, Agent 2, cycle 2, 2026-10-28; evidence: qa/manual/screens/round-2/D/ETQAN-QA-362-after.png and ETQAN-QA-362-after-rejected.png (admin AR 1440x900 /app/payroll/withdrawals, status Rejected: amount, note and reason all sit at the cell's right/start edge); WithdrawalsPage.test.tsx 15/15; tsc only error is FamilySessions.test.tsx, another group). Previous: FIXED-UNVERIFIED (round 2, cycle 2). Previous: OPEN: REOPENED (round 2, Agent 2, 2026-10-28): qa/manual/screens/round-2/D/ETQAN-QA-362-after.png (AR, status=rejected): the note and "السبب: …" now sit at the cell start (right), but the amount (`<Money>`, first line of the flex-col) is laid out at the far LEFT edge of the cell, so the reason is still not aligned with the amount. Fix: give the Money line `self-start` (or stop it stretching with its own LTR direction) so amount, note and reason share the start edge.
 
 ## ETQAN-QA-363: Withdrawals: "موافقة" (approve) is red like a destructive action and looks identical to "إلغاء الطلب"; "رفض الطلب" is the green primary
 - **Feature:** M09 Withdrawals (`WithdrawalActions.tsx` button variants). **Severity:** P3. **Type:** UI-layout. **Easy P3:** yes. **Priority:** low
@@ -3511,10 +3608,11 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** Title "كشف راتب" + endless spinner; 3× 404 GET /api/v1/payroll/payslips/43/. No data leaks. Same class as ETQAN-QA-106 (student/invoice pages), new pages.
 - **Evidence:** `qa/manual/screens/M09/M09-F-022-payslip-not-found-spinner.png`, `qa/manual/screens/M09/M09-F-022b-print-not-found-spinner.png`, `qa/manual/screens/M09/M09-F-022c-admin-unknown-payslip-spinner.png`, `qa/manual/screens/M09/triage/T-F022-not-found-spinner.png`
 - **Root cause (Agent 2 pointer):** Error state on the payslip queries; share the QA-106 no-retry-on-4xx fix.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-366: English projection column "Paid so far" for money nothing has paid yet (Arabic says "المستحق حتى الآن")
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** 403 (another teacher's payslip) was treated as a load error, not "not found" (404 retries were already fixed by ETQAN-QA-677).
+  - **Fix (files):** `payroll/PayslipPage.tsx` and `PayslipPrint.tsx`: 403 reads as not found, with the back link. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `payroll/PayslipPage.test.tsx` "says 'not found' at once for another teacher's payslip".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-365-after.png)## ETQAN-QA-366: English projection column "Paid so far" for money nothing has paid yet (Arabic says "المستحق حتى الآن")
 - **Feature:** M09 Projections (`locales/en/payroll.json` `paidSoFar`, also the intro sentence). **Severity:** P3. **Type:** translation. **Easy P3:** yes. **Priority:** low
 - **Environment:** local docker stack (backend 68e95e1c + uncommitted QA fixes, dashboard 626d0e7 on branch `qa/manual-2026-10`), academy `qa` (Africa/Cairo, EGP), Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M09 (M09-F-023); reproduced by Agent 2 on 2026-10-27.
@@ -3572,8 +3670,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** Payslips: table 892 px in a 341 px box — only الرقم (wrapped "PAY-"/"000014"), المعلم, الحصص visible. Withdrawals: 490/341 — actions column off-screen. Same layout class as ETQAN-QA-118/173, other tables.
 - **Evidence:** `qa/manual/screens/M09/M09-F-027a-mobile-payslips-net-hidden.png`, `qa/manual/screens/M09/M09-F-027b-mobile-withdrawals-actions-hidden.png`, `qa/manual/screens/M09/triage/T-F027a-mobile-payslips.png`, `qa/manual/screens/M09/triage/T-F027b-mobile-withdrawals.png`
 - **Root cause (Agent 2 pointer):** Card view on narrow screens → proposal, as QA-118.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** A plain `<table>` inside a sideways scroller with no phone layout, so on 375 px the row actions and status sit off-screen behind a hidden scroll.
+- **Fix (files):** one shared phone-card recipe `phoneCards` in `dashboard/src/ui/styles.ts` (below `sm` each row is a card and each cell shows its `data-label` and value; unchanged from `sm` up), applied with a `data-label` on every cell: `dashboard/src/features/payroll/PayslipsList.tsx`, `dashboard/src/features/payroll/WithdrawalsPage.tsx`.
+- **Regression test:** `dashboard/src/ui/phone-cards.test.ts`.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-369-after.png + ETQAN-QA-369-withdrawals-after.png (375: net, status, actions in cards, 341/341))
 
 ## ETQAN-QA-370: "تعيين لعدة معلمين" dialog shows the per-student-rates sentence as its description; mixes "الأجور" and "الأسعار"
 - **Feature:** M09 Rates bulk dialog (`BulkRatesDialog.tsx` / `payroll.json` ar). **Severity:** P3. **Type:** copy. **Easy P3:** yes. **Priority:** low
@@ -3601,8 +3701,10 @@ Next ID: **ETQAN-QA-067**
 - **Expected:** Every active student reachable (search / async select).
 - **Actual:** Student select 101 options (100 + empty), academy count 149; no search input. Same class as ETQAN-QA-202 (subscription form), different component.
 - **Evidence:** `qa/manual/screens/M09/triage/T-F029-student-rate-dropdown.png`, `qa/manual/screens/M09/s069.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** Each dialog asked `usePeople("students", {page_size: 100})` once, with no server search (or, in the subscription form, a search but no hint), so students past the first page, most Arabic names, could not be chosen.
+- **Fix (files):** one shared searchable picker `dashboard/src/features/people/StudentPicker.tsx` (`useStudentPicker` + `StudentPicker`: server `q` search, "showing the first N of M, type a name" hint, the picked/edited student kept as an option), exported from `features/people/index.ts`; locales `people.picker` (ar/en/es); used in `dashboard/src/features/payroll/StudentRateDialog.tsx`.
+- **Regression test:** `dashboard/src/features/people/StudentPicker.test.tsx`; `dashboard/src/features/payroll/StudentRates.test.tsx`.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-371-after.png; browser: hint 100 of 110, search 'منى' narrows to her)
 
 ## ETQAN-QA-372: Payslips list: a filter with no match says "لا توجد كشوف رواتب لهذا الشهر."; month/status/teacher are not in the URL, so refresh/Back drop them
 - **Feature:** M09 Payslips list (`PayslipsList.tsx` empty state and filter state). **Severity:** P3. **Type:** functional. **Easy P3:** no. **Priority:** low
@@ -3616,10 +3718,11 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** Empty card "لا توجد كشوف رواتب لهذا الشهر."; `location.search` empty. (The CSV link does carry the filters: `?status=draft&teacher=7&year=2026&month=9&format=csv`.)
 - **Evidence:** `qa/manual/screens/M09/M09-F-030-filter-empty-says-no-payslips.png`, `qa/manual/screens/M09/triage/T-F030-filter-empty.png`
 - **Root cause (Agent 2 pointer):** Empty-state text is easy; URL search params are the bigger part.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-373: "تعديل التسوية" dialog doesn't show which teacher the adjustment belongs to
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** one empty text for both cases; month/filters lived in component state only.
+  - **Fix (files):** `payroll/PayslipsList.tsx` "No payslips match these filters" + Clear filters; month/status/teacher/page kept in the URL via `routes/_authed/payroll.payslips.index.tsx` validateSearch + navigate(replace). (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `payroll/PayslipsList.test.tsx` "keeps the month and filters in the address, and says when none match".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-372-after.png; status filter kept in URL across reload)## ETQAN-QA-373: "تعديل التسوية" dialog doesn't show which teacher the adjustment belongs to
 - **Feature:** M09 Adjustments (`AdjustmentDialog.tsx` edit mode). **Severity:** P3. **Type:** UI-layout. **Easy P3:** yes. **Priority:** low
 - **Environment:** local docker stack (backend 68e95e1c + uncommitted QA fixes, dashboard 626d0e7 on branch `qa/manual-2026-10`), academy `qa` (Africa/Cairo, EGP), Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M09 (M09-F-032); reproduced by Agent 2 on 2026-10-27.
@@ -3647,7 +3750,8 @@ Next ID: **ETQAN-QA-067**
 - **Evidence:** `qa/manual/screens/M09/M09-F-035-pay-dialog-no-amount.png`, `qa/manual/screens/M09/M09-F-035b-cancel-dialog-which-request.png`, `qa/manual/screens/M09/triage/T-F035-pay-dialog.png`, `qa/manual/screens/M09/triage/T-F035b-cancel-dialog.png`
 - **Root cause (Agent 2 pointer):** fixed i18n keys `payroll.withdrawals.payTitle/payBody`, `cancelTitle`, approve title, with no interpolation; pass `withdrawal.amount_minor/currency` (+ teacher name for the office, isolated with `bidiName`) into the titles.
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: Fixed i18n titles with no interpolation. Fix: New `payroll/withdrawal-text.ts` (amount isolated, teacher via `bidiName`); approve/pay/reject titles in `WithdrawalActions.tsx` and the cancel title in `CancelWithdrawal.tsx` (now takes the withdrawal; office and My balance) name the request; `*TitleFor` keys ar/en/es. Regression test: `WithdrawalsPage.test.tsx` "names the request in its approve, pay and reject dialogs"; `MyBalance.test.tsx` "names the request it cancels".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: payroll vitest suite (withdrawal dialog titles); dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ## ETQAN-QA-375: Teacher "رصيدي" (AR): in a request card with a long note, the amount is not lined up with the date and note
 - **Feature:** M09/M14 teacher My balance (`MyBalance.tsx` request card). **Severity:** P4. **Type:** UI-layout. **Easy P3:** no (P4). **Priority:** low
@@ -3660,8 +3764,10 @@ Next ID: **ETQAN-QA-067**
 - **Actual:** the amount "1.50 ج.م." starts ~25 px left of the date's right edge on such cards (7.50, 5.00, 119.00, 120.00 cards too), so the amounts in the list don't line up. Office list sibling: ETQAN-QA-362.
 - **Evidence:** `qa/manual/screens/M09/M09-F-036-balance-amount-misaligned.png`, `qa/manual/screens/M09/triage/T-F036-card.png`, `qa/manual/screens/M09/triage/T-F036-balance.png`
 - **Root cause (Agent 2 pointer):** the three spans share one column as wide as the widest child; the amount span is `dir="ltr"` (Money), so its text is left-aligned inside that width while the date/note align right. Give the amount `text-align: end`/`self-end` or wrap it in an inline element.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The LTR Money span stretched as a flex-column item and aligned to its own left.
+- **Fix (files):** dashboard/src/features/payroll/MyBalance.tsx (items-start column)
+- **Regression test:** MyBalance.test.tsx (ETQAN-QA-375)
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-375-after.png)
 
 ## --- M07 manual bugs ---
 
@@ -3758,8 +3864,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** green chip "مولَّدة" on every scheduled row (`locales/ar/scheduling.json` `today.state.generated`).
 - **Evidence:** `qa/manual/screens/M07/M07-F-008-today-generated-vs-scheduled.png`, `qa/manual/screens/M07/triage/t008-today-generated-chip.png`
 - **Notes:** The column is the generation state (generated/missing) by design; only the wording is the bug.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** `today.state.generated` used the internal word.
+- **Fix (files):** dashboard/src/locales/{ar,en,es}/scheduling.json (Scheduled / مجدولة)
+- **Regression test:** TodayBoard.test.tsx (Scheduled); src/qa-round2-a2.test.ts
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-256-after.png)
 
 ## ETQAN-QA-257: Postpone dialog (AR) shows the raw English server error "Choose a time further ahead and within two weeks."
 - **Feature:** M07 postpone (student/parent/teacher). **Severity:** P3. **Type:** translation. **Easy P3:** yes. **Priority:** medium
@@ -3782,8 +3890,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Expected:** aligned columns (fixed table layout / column widths).
 - **Actual:** each entry's table auto-sizes, so "Before"/"After" jump horizontally from entry to entry.
 - **Evidence:** `qa/manual/screens/M07/M07-F-010-activity-columns-misaligned.png`, `qa/manual/screens/M07/triage/t011-session-409-en-full.png`, `qa/manual/screens/M07/triage/t003-undo-one-click-activity.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** Each entry's table auto-sized its columns.
+- **Fix (files):** dashboard/src/features/scheduling/SessionActivity.tsx (table-fixed + colgroup thirds, wrapping)
+- **Regression test:** SessionActivity.test.tsx: same fixed columns (ETQAN-QA-258)
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-258-after.png)
 
 ## ETQAN-QA-259: Session page doesn't show which subscription it belongs to or how many lessons are left
 - **Feature:** M07 session detail. **Severity:** P3. **Type:** functional. **Easy P3:** no. **Priority:** low
@@ -3793,7 +3903,8 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** no subscription, package or progress anywhere on the page (the session payload has `subscription`). Numbers themselves are right (sub 91: 7 left / 1 used after present; back after undo).
 - **Evidence:** `qa/manual/screens/M07/M07-F-011-no-subscription-on-session.png`, `qa/manual/screens/M07/triage/t011-session-409-en-full.png`
 - **Root cause / Fix / Regression tests:** _Agent 3_ (may need the API to return the subscription's counts: proposal if so)
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: `SessionPage` never read the session's `subscription_id`. Fix: New `scheduling/SessionContext.tsx` `SubscriptionFact`: package (linked for the office) and "X of Y used, Z left" from `useSubscription`; placed in `SessionPage`. Regression test: `SessionPage.test.tsx` "names its subscription with the lessons used and left (ETQAN-QA-259)".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/D/ETQAN-QA-259-after.png (session 481: subscription F03 package, 3 of 8 used, 5 left); dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ## ETQAN-QA-260: "Add a session": the Subscription list shows many identical "Student — Course" entries with nothing to tell them apart
 - **Feature:** M07 Add session dialog. **Severity:** P3. **Type:** UI. **Easy P3:** no. **Priority:** medium
@@ -3803,18 +3914,21 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** 50 options; "QA6 Student 4 — QA6 Quran" six times, "QA student — Tajweed QA" repeatedly. DB: QA student has 10 live `active` subscriptions (ids 3, 4, 7, 9, 10, 11, 12, 82, 83…) of the same course, some starting 19/11 (future renewals). Picking the wrong one puts the lesson on the wrong package.
 - **Evidence:** `qa/manual/screens/M07/M07-F-012-identical-subscriptions.png`, `qa/manual/screens/M07/triage/t012-add-session-dialog.png`
 - **Notes:** Related to ETQAN-QA-200 (future renewal looks like a second identical active subscription), different screen.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-261: Session kind wording differs: list tabs "Core / أساسية" vs session page and Add dialog "Regular / عادية"; "المقرر" vs "الدورة"
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** the option text was only "Student — Course".
+  - **Fix (files):** `scheduling/AddSessionDialog.tsx` option adds dates, teacher and status (`sessionClasses.add.subscriptionOptionDated` ar/en/es). (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `scheduling/AddSessionDialog.test.tsx` "offers paused subscriptions…" (dated option).
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-260-after.png)## ETQAN-QA-261: Session kind wording differs: list tabs "Core / أساسية" vs session page and Add dialog "Regular / عادية"; "المقرر" vs "الدورة"
 - **Feature:** M07 sessions list, detail, Add dialog. **Severity:** P4. **Type:** copy. **Easy P3:** yes. **Priority:** low
 - **Found by:** M07-F-013.
 - **Reproduction steps:** 1. Admin EN `/app/scheduling/sessions` (tabs) → "Add session" (Kind) → any session page (card title).
 - **Expected:** one word per kind and per field.
 - **Actual:** tabs "Core", Kind select "Regular", card "Regular"/"عادية"; AR column "المقرر" next to the filter "كل الدورات" and the detail label "الدورة".
 - **Evidence:** `qa/manual/screens/M07/M07-F-013-kind-terms.png`, `qa/manual/screens/M07/triage/t012-add-session-dialog.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** tabs.regular said Core/أساسية and the AR course columns said المقرر.
+- **Fix (files):** dashboard/src/locales/{ar,en,es}/sessionClasses.json tabs.regular, ar/scheduling.json list/mine columns.course
+- **Regression test:** src/qa-round2-a2.test.ts (wording)
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-261-after.png)
 
 ## ETQAN-QA-262: Bulk "أرشفة" / "استرجاع" act at once with no confirmation, and the result only says "تم: 1. تُخطّي: 0."
 - **Feature:** M07 sessions list bulk bar, archive page. **Severity:** P3. **Type:** UI (missing confirmation/message). **Easy P3:** yes. **Priority:** medium
@@ -3838,8 +3952,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** "آدم النجار (Adam Al-Najjar) · التجويد للمبتدئين · الأستاذة مريم الخطيب …" on every row; the moved lesson looks like any other.
 - **Evidence:** `qa/manual/screens/M07/M07-F-015-own-name-repeated.png`, `qa/manual/screens/M07/triage/t009-postpone-english-error.png`
 - **Notes:** Not ETQAN-QA-112 (that is the order of the parts, fixed); this is the content.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** FamilySessions used one sessionLine for student and parent and ignored original_starts_at.
+- **Fix (files):** dashboard/src/features/scheduling/FamilySessions.tsx (sessionLineOwn for students, 'Postponed from …' chip), locales scheduling.family.*
+- **Regression test:** FamilySessions.test.tsx: drops the student's own name and marks a moved lesson
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-263-after.png)
 
 ## ETQAN-QA-264: "مستويات طلابي": the first-level dialog shows an empty picker with no explanation when the course has no levels
 - **Feature:** M07 student levels (teacher). **Severity:** P3. **Type:** UI (missing empty state). **Easy P3:** yes. **Priority:** low
@@ -3862,10 +3978,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Evidence:** `qa/manual/screens/M07/M07-F-019-upgrade-double-submit-500.png`, `qa/manual/screens/M07/triage/t019-upgrade-double-submit-500.png`
 - **Root cause (Agent 2 pointer):** `backend/etqan/learning/services/upgrades.py:request_upgrade` checks `exists()` then `create()` with no lock, so two concurrent requests both pass the check; the DB constraint then raises unhandled. Catch the IntegrityError (→ ConflictError `learning.request_pending`) or lock; also disable the submit button while pending.
 - **Notes:** Data is protected by the constraint (no duplicate rows). Agent 2's repro request was rejected afterwards ("M07 triage cleanup"); Aisha stays on M07 Level 1.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-266: Homework linked to a session never shows which session (no column in the list, nothing on the session page)
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** `learning/services/upgrades.py:request_upgrade` checked `exists()` then `create()`; the second concurrent create hit the DB constraint unhandled; the form could submit twice before re-rendering.
+  - **Fix (files):** create inside a savepoint, IntegrityError → ConflictError `learning.request_pending`; `curriculum/ProgressPanel.tsx` drops a second submit while one is in flight. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `learning/tests/test_upgrades.py::test_a_double_click_that_passes_the_check_is_a_409_not_a_500`; Vitest `curriculum/ProgressPanel.test.tsx` "sends one request on a double click".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47))## ETQAN-QA-266: Homework linked to a session never shows which session (no column in the list, nothing on the session page)
 - **Feature:** M07 homework ↔ sessions. **Severity:** P3. **Type:** functional. **Easy P3:** no. **Priority:** low
 - **Found by:** M07-F-021.
 - **Reproduction steps:** 1. Teacher Maryam AR `/app/teaching/homework` (homework "M07-واجب 1 أحكام النون", linked to 27/10). 2. Admin `/app/scheduling/sessions/409`.
@@ -3873,7 +3990,8 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** columns are الطالب / الدورة / العنوان / النوع / تمت الإجابة / الحالة / تاريخ التكليف; the session page has no homework section.
 - **Evidence:** `qa/manual/screens/M07/M07-F-021-homework-no-session.png`, `qa/manual/screens/M07/triage/t020-file-input-english.png` (list behind the dialog)
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: The homework list had no session column and the API no session filter, so the session page could not list its homework. Fix: Backend: additive `session` filter (`learning/services/homework.py` `homework_queryset(session=)`, `homework_views.py`). Dashboard: `HomeworkList` Session column (`session_on`), `SessionContext.tsx` `SessionHomework` card on `SessionPage`; `homework.columns.session`, `scheduling.session.homework`. Regression test: pytest `learning/tests/test_api_homework.py::test_list_filters_by_session`; `HomeworkList.test.tsx` "shows the session a homework belongs to"; `SessionPage.test.tsx` "lists the homework set for the session".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/D/ETQAN-QA-259-after.png (session 481 shows its homework); HomeworkList.test.tsx; pytest learning; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ## ETQAN-QA-267: Homework page: subtitle grammar "الأعمال التي تُكلَّف بها الطالب" and an empty "تمت الإجابة" cell
 - **Feature:** M07 homework list. **Severity:** P4. **Type:** copy. **Easy P3:** yes. **Priority:** low
@@ -3882,8 +4000,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Expected:** "الأعمال التي يُكلَّف بها الطالب بعد حصصه."; "لا" / "—" when there is no answer.
 - **Actual:** feminine "تُكلَّف" (`locales/ar/homework.json` `subtitle`); the "تمت الإجابة" cell is blank.
 - **Evidence:** `qa/manual/screens/M07/M07-F-021-homework-no-session.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** Feminine verb in homework.subtitle; the answered cell rendered ''.
+- **Fix (files):** dashboard/src/locales/ar/homework.json, features/homework/HomeworkList.tsx (No), locales homework.notAnswered
+- **Regression test:** HomeworkList.test.tsx (ETQAN-QA-267); src/qa-round2-a2.test.ts
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-267-after.png; HomeworkList.test.tsx + locale subtitle 'يُكلَّف')
 
 ## ETQAN-QA-268: Phone (375): admin "اليوم" table is 519 px in a 341 px box; names wrap into 3–5 lines and "التقدم"/"الحصة" are off-screen
 - **Feature:** M07 Today page. **Severity:** P3. **Type:** mobile. **Easy P3:** no. **Priority:** low
@@ -3893,8 +4013,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** "QA6 Teacher B" in 3 lines, "الشيخ أحمد الحداد (Ahmad Al-Haddad)" in 5; progress cut at the left edge ("1 من 8"); the status column needs a hidden sideways scroll (table 519 px, box 341 px).
 - **Evidence:** `qa/manual/screens/M07/M07-F-022-mobile-today-cut.png`, `qa/manual/screens/M07/triage/t022-mobile-today.png`
 - **Notes:** Same pattern as ETQAN-QA-118 (teacher table) and ETQAN-QA-173 (students list) — layout proposal.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** A plain `<table>` inside a sideways scroller with no phone layout, so on 375 px the row actions and status sit off-screen behind a hidden scroll.
+- **Fix (files):** one shared phone-card recipe `phoneCards` in `dashboard/src/ui/styles.ts` (below `sm` each row is a card and each cell shows its `data-label` and value; unchanged from `sm` up), applied with a `data-label` on every cell: `dashboard/src/features/scheduling/TodayBoard.tsx`.
+- **Regression test:** `dashboard/src/ui/phone-cards.test.ts`.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-268-after.png (375 admin today: cards, progress + status visible, 341/341))
 
 ## ETQAN-QA-269: Session page header: the office note (e.g. "M07-makeup-1") and the cancel/disposal reason float under "المعلم" with no label
 - **Feature:** M07 session detail. **Severity:** P3. **Type:** UI-layout. **Easy P3:** yes. **Priority:** low
@@ -3931,18 +4053,21 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** `ID,Date,Starts at (UTC),Ends at (UTC),…`; the Cairo 08:00 lesson is `2026-10-27 05:00:00+00:00`; only `Date` is local.
 - **Evidence:** `qa/manual/screens/M07/M07-F-025-sessions-csv-sample.txt`, `qa/manual/screens/M07/M07-F-025-csv-export-button.png`, `qa/manual/screens/M07/triage/t025-sessions-csv-ar.txt`
 - **Notes:** Same family as ETQAN-QA-161 (students CSV); the UTC-only time is specific to sessions. Fix with QA-161.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-272: Wording of two cycle-1 strings: the attendance-undo dialog's keep button says "إبقاؤها", and an ended session with no link says "لا يوجد رابط بعد"
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** same as ETQAN-QA-161, plus only UTC instants.
+  - **Fix (files):** shared CSV translation (see 161); `scheduling/api/session_views.py` + `payloads.csv_session_row` add "Starts/Ends at (academy time)". (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `scheduling/tests/test_api_sessions.py::test_csv_in_arabic_has_arabic_words_and_the_academy_time`.
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); live Arabic CSV fetched: Arabic headers/words, academy-time columns)## ETQAN-QA-272: Wording of two cycle-1 strings: the attendance-undo dialog's keep button says "إبقاؤها", and an ended session with no link says "لا يوجد رابط بعد"
 - **Feature:** M07 session detail, teacher "حصصي". **Severity:** P4. **Type:** copy. **Easy P3:** yes. **Priority:** low
 - **Found by:** M07 Agent 2 during the gate retest, 2026-10-27T21:07:50Z.
 - **Reproduction steps:** 1. Admin AR `/app/scheduling/sessions/362`, set "حضور المعلم" to "حاضر" and then to "لم يُحدَّد". 2. Teacher Maryam AR `/app/teaching/sessions`, open "السجل".
 - **Expected:** a keep button that fits the mark (for example "إبقاء التسجيل" or "تراجع"); on a lesson that is over, "بلا رابط" or "—" rather than "not yet".
 - **Actual:** the button reuses `scheduling.session.keep` "إبقاؤها", which refers to the session. The finished 27/10 15:00 lesson shows "لا يوجد رابط بعد".
 - **Evidence:** `qa/manual/screens/M07/fix/g252a-undo-dialog.png`, `qa/manual/screens/M07/fix/g255c-maryam-history.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause:** The attendance-undo dialog reused `scheduling.session.keep`; `JoinLink` said "no link yet" regardless of the lesson being over.
+- **Fix (files):** New `scheduling.attendance.keepMark` ("إبقاء التسجيل") in AttendanceControls; `JoinLink` shows `scheduling.session.noLinkPast` ("بلا رابط") once the lesson ended or is completed (`dashboard/src/features/scheduling/AttendanceControls.tsx`, `bits.tsx`; ar/en/es).
+- **Regression test:** `AttendanceControls.test.tsx` (Keep the record), `SessionPage.test.tsx` "says No link, not No link yet, on a finished lesson".
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: qa/manual/screens/round-2/B/ETQAN-QA-272-after.png (session 362 shows "بلا رابط"); keepMark covered by AttendanceControls.test.tsx)
 
 ## ETQAN-QA-273: "إضافة حصة" with kind "إضافية": the Student list stops at the first 100 active students, with no search; Arabic-named students can't get an extra session
 - **Feature:** M07 Sessions list → "إضافة حصة" (`AddSessionDialog`, kind extra). **Severity:** P3. **Type:** functional. **Easy P3:** no. **Priority:** medium
@@ -3952,8 +4077,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** 101 options (100 + blank), last "QA5 UI 526170"; Adam Al-Najjar (236), Omar Al-Sharif (232) are absent; no search input in the dialog. The code asks `usePeople("students", {is_active, page_size: 100})` with no `q`.
 - **Evidence:** `qa/manual/screens/M07/M07-F-026-extra-student-list-capped.png`, `qa/manual/screens/M07/triage/t026-extra-student-list.png` (eval: n=101, has236=false, has232=false, search=false)
 - **Notes:** Same family as ETQAN-QA-202 (new subscription) and ETQAN-QA-371 (student rate); different dialog. A shared searchable student picker would fix all three. Workaround for the office: none for the "extra" kind (make-up from a session page is a different kind).
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** Each dialog asked `usePeople("students", {page_size: 100})` once, with no server search (or, in the subscription form, a search but no hint), so students past the first page, most Arabic names, could not be chosen.
+- **Fix (files):** one shared searchable picker `dashboard/src/features/people/StudentPicker.tsx` (`useStudentPicker` + `StudentPicker`: server `q` search, "showing the first N of M, type a name" hint, the picked/edited student kept as an option), exported from `features/people/index.ts`; locales `people.picker` (ar/en/es); used in `dashboard/src/features/scheduling/AddSessionDialog.tsx` (kind "extra"; reset on close).
+- **Regression test:** `dashboard/src/features/people/StudentPicker.test.tsx`; `dashboard/src/features/scheduling/AddSessionDialog.test.tsx`.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-273-after.png; browser: kind extra, hint 100 of 133, search 'منى' finds her; AddSessionDialog test passes)
 
 ## ETQAN-QA-274: "إضافة حصة" (إضافية): "الدقائق" is required but has no asterisk and no hint, while for "عادية" it is optional
 - **Feature:** M07 "إضافة حصة" (`AddSessionDialog` / `SessionFields`). **Severity:** P4. **Type:** UI (form). **Easy P3:** yes. **Priority:** low
@@ -3962,8 +4089,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Expected:** "الدقائق" carries the red * like the other required fields (or empty uses the course's usual length, as for "عادية").
 - **Actual:** red "بين 15 و240 دقيقة." under an unstarred "الدقائق"; the regular kind shows "اتركها فارغة للمدة المعتادة" for the same field.
 - **Evidence:** `qa/manual/screens/M07/M07-F-027-extra-minutes-required-no-star.png`, `qa/manual/screens/M07/triage/t027-extra-minutes-no-star.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** SessionFields never marked Minutes required; the extra kind had no hint.
+- **Fix (files):** dashboard/src/features/scheduling/SessionFields.tsx (minutesRequired), AddSessionDialog.tsx, locales sessionClasses.add.minutesExtra
+- **Regression test:** AddSessionDialog.test.tsx: stars and explains Minutes for an extra session only
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-274-after.png)
 
 ## ETQAN-QA-275: Cancelled session page still shows the "الرابط" / "Link" label with nothing under it
 - **Feature:** M07 session detail header (`JoinLink` in `bits.tsx`, used with `showEmpty` by `SessionPage`). **Severity:** P4. **Type:** UI (empty state). **Easy P3:** yes. **Priority:** low
@@ -3973,8 +4102,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** the heading "الرابط" with a blank value. `JoinLink` returns `null` for `status === "cancelled"` before the ETQAN-QA-250 `showEmpty` branch, so the label stays and the value is empty.
 - **Evidence:** `qa/manual/screens/M07/M07-F-028-link-blank-cancelled.png`, `qa/manual/screens/M07/triage/t028-cancelled-link-blank.png`
 - **Notes:** A gap left by the ETQAN-QA-250 fix (which covered non-cancelled sessions and is VERIFIED). Fix together with ETQAN-QA-272 (wording on ended sessions).
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** JoinLink returned null for cancelled sessions but the Fact label stayed.
+- **Fix (files):** dashboard/src/features/scheduling/SessionPage.tsx (no Link fact on a cancelled session)
+- **Regression test:** SessionPage.test.tsx: shows no Link fact on a cancelled session
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-275-after.png)
 
 ## ETQAN-QA-276: Simplified view: "Student present" / "Student absent" are greyed out on sessions that haven't started, with no reason given
 - **Feature:** M07 sessions simplified view (`SimpleSessions.tsx` `QuickMark`). **Severity:** P3. **Type:** UI (missing hint). **Easy P3:** yes. **Priority:** low
@@ -3983,9 +4114,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Expected:** the same hint the session page and the teacher's list give: "Attendance opens at the start time." / "يُفتح تسجيل الحضور عند موعد البدء."
 - **Actual:** all 18 buttons (9 cards) disabled, no text on the page explains why.
 - **Evidence:** `qa/manual/screens/M07/M07-F-029-simple-disabled-no-hint.png`, `qa/manual/screens/M07/triage/t029-simple-disabled-no-hint.png` (eval: 18 buttons, 18 disabled, no "opens" text)
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** `SimpleSessions.QuickMark` disabled the buttons with no text.
+  - **Fix (files):** shows `scheduling.attendance.opensAtStart` under the buttons before the start. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `scheduling/SimpleSessions.test.tsx` "says why the buttons are closed before the start".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-276-after.png)
 ## --- M08 manual bugs ---
 
 ## ETQAN-QA-300: KWD payment with 4 decimals says "enter an amount greater than zero, like 150 or 150.50"
@@ -4061,7 +4194,8 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** form prefills 1200.00 and the description with no hint; creation succeeds silently.
 - **Evidence:** `qa/manual/screens/M08/M08-F-005-second-sub-invoice-no-warning.png`, `qa/manual/screens/M08/triage/F-005-repro.png`
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: `InvoiceForm` never looked for existing invoices of the chosen subscription. Fix: `InvoiceForm.tsx` reads `useInvoices({subscription})` (now with `enabled`) and shows "already invoiced: INV-… (status)" for non-void ones, isolated with `@/lib/bidi`; creating stays allowed; `billing.form.alreadyInvoiced`. Regression test: `InvoiceForm.test.tsx` "warns that the subscription is already invoiced (ETQAN-QA-304)".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: InvoiceForm.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ## ETQAN-QA-305: The payment "Reference" typed on an invoice is not shown in Payment records and search can't find it
 - **Feature:** M08 Payment records (`services/records.py` search, records table). **Severity:** P3. **Type:** functional. **Easy P3:** no. **Priority:** medium
@@ -4074,10 +4208,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Expected:** the reference appears on the record (Transaction or its own column) and the search finds it.
 - **Actual:** blank Transaction cell; search returns nothing. `Payment.reference` is a separate field from `transaction_number`; the search Q in `records.py:73-77` covers names, transaction_number and invoice number only.
 - **Evidence:** `qa/manual/screens/M08/M08-F-006-reference-not-found.png`, `qa/manual/screens/M08/triage/F-006-repro.png`, `qa/manual/screens/M08/triage/F-007-repro.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-306: Filtered empty results say "none yet": Payment records search ("No payment records yet.") and Online payments "needs attention" tab ("لا مدفوعات إلكترونية بعد.")
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** records search and table ignored `Payment.reference`.
+  - **Fix (files):** `billing/services/records.py` search includes `reference`; `billing/PaymentRecordsPage.tsx` shows it under the transaction number. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `billing/tests/test_records.py` (q="t2-ref"); Vitest `billing/PaymentRecordsPage.test.tsx` (reference shown).
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-305-after.png)## ETQAN-QA-306: Filtered empty results say "none yet": Payment records search ("No payment records yet.") and Online payments "needs attention" tab ("لا مدفوعات إلكترونية بعد.")
 - **Feature:** M08 Payment records, Online payments. **Severity:** P3. **Type:** copy. **Easy P3:** yes. **Priority:** low
 - **Environment:** local docker stack (backend adff9c9 + uncommitted QA fixes, dashboard 5ed775d + branch `qa/manual-2026-10`), academy `qa` (Africa/Cairo, EGP), Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M08 (M08-F-006 empty-state part, M08-F-015 empty-state part); reproduced by Agent 2 on 2026-10-27.
@@ -4134,10 +4269,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Expected:** decline: "Payment not completed" + "Try again" back to the link + what/how much; success: title, amount, reference, academy.
 - **Actual:** decline: title "دفعتك" + red "لم يتم الدفع." only. Success: "تم الدفع — شكرًا لك." + "حجزت استشارة؟ افتحها من الرابط الذي نرسله إلى بريدك بعد الدفع." (consultations key) for a registration fee. A signed-in parent paying an invoice gets "حاول مرة أخرى"/"العودة إلى الفاتورة", so only link payers are stuck. Admin side correct.
 - **Evidence:** `qa/manual/screens/M08/M08-F-009-declined-dead-end.png`, `qa/manual/screens/M08/triage/F-009-repro-decline.png`, `qa/manual/screens/M08/triage/F-009-repro-success.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-310: Parent wallet "شحن" (top-up) dialog opens with no buttons: no Cancel, no close, pay button hidden until an amount is typed
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** an anonymous checkout read has no purpose, so the return page had no link back and fell through to the consultation hint.
+  - **Fix (files):** new `gateways/payLink.ts` (the link page remembers the link per checkout in sessionStorage), `PublicLinkPage.tsx`, `ReturnPage.tsx` (amount line, "Try again" back to the link, no consultation hint for link payers), locales gateways.return.amount/notPaidHint ar/en/es. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `gateways/ReturnPage.test.tsx` "sends a declined payment-link payer back to their link".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47))## ETQAN-QA-310: Parent wallet "شحن" (top-up) dialog opens with no buttons: no Cancel, no close, pay button hidden until an amount is typed
 - **Feature:** M08 Parent/student wallet top-up dialog. **Severity:** P3. **Type:** UI. **Easy P3:** yes. **Priority:** medium
 - **Environment:** local docker stack (backend adff9c9 + uncommitted QA fixes, dashboard 5ed775d + branch `qa/manual-2026-10`), academy `qa` (Africa/Cairo, EGP), Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M08 (M08-F-010); reproduced by Agent 2 on 2026-10-27.
@@ -4225,8 +4361,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Expected:** a phone layout showing number, student, amount and status (cards, like the parent list); ids wrap inside the card.
 - **Actual:** `[754, 341]`: only الرقم/الطالب/باسم/part of المبلغ visible ("1,200.00 ج.م" clipped), names over 4–5 lines; "pi_sim_2548b…" reaches x≈20 of 375, past the card padding, and "· 2026/10/27 ·" breaks with a dot at the line start. Same family as ETQAN-QA-173 (students list).
 - **Evidence:** `qa/manual/screens/M08/M08-F-017-mobile-invoice-list.png`, `qa/manual/screens/M08/M08-F-017-mobile-txn-overflow.png`, `qa/manual/screens/M08/triage/F-017-repro-list.png`, `qa/manual/screens/M08/triage/F-017-repro-txn.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** A plain `<table>` inside a sideways scroller with no phone layout, so on 375 px the row actions and status sit off-screen behind a hidden scroll. The filters sat in the toolbar at every width; the payment details column could not shrink and the dots were ordinary spaces.
+- **Fix (files):** one shared phone-card recipe `phoneCards` in `dashboard/src/ui/styles.ts` (below `sm` each row is a card and each cell shows its `data-label` and value; unchanged from `sm` up), applied with a `data-label` on every cell: `dashboard/src/features/billing/InvoicesList.tsx`, filters in `PhoneFilters`; `dashboard/src/features/billing/InvoicePage.tsx`: the details column `min-w-0`, the transaction id `break-all`, a no-break space glues each "·" to the part before it.
+- **Regression test:** `dashboard/src/ui/phone-cards.test.ts`; `dashboard/src/components/PhoneFilters.test.tsx`; `dashboard/src/features/billing/InvoicePage.test.tsx` green.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-315-after.png (375 invoices: cards with status/balance/due, filters folded, 341/341) + ETQAN-QA-315-payments-after.png (payment ref stays inside card))
 
 ## ETQAN-QA-316: Parent's invoice list doesn't show what an invoice is for or its total: two "Adam, due 2026/11/03" invoices look identical
 - **Feature:** M08 Parent invoices list (`/learning/invoices`). **Severity:** P3. **Type:** UI. **Easy P3:** yes. **Priority:** medium
@@ -4253,8 +4391,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Expected:** the code on one line (`whitespace-nowrap`), as in AR.
 - **Actual:** "SYS-NZE8E-" / "D46F1"; "Course · package" header also wraps.
 - **Evidence:** `qa/manual/screens/M08/M08-F-019-code-wraps.png`, `qa/manual/screens/M08/triage/F-019-repro.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The code span could break at its hyphen; the headers could wrap.
+- **Fix (files):** `dashboard/src/features/vouchers/CodesPage.tsx`: code and headers `whitespace-nowrap`.
+- **Regression test:** `dashboard/src/features/vouchers/CodesPage.test.tsx`.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-317-after.png (EN codes 1440: SYS-NZE8E-D46F1 on one line); CodesPage test passes)
 
 
 ## ETQAN-QA-318: New payment link (AR): KWD 5.125 via Stripe is refused with raw English "This payment method cannot take this amount." under the gateway field, no reason or hint
@@ -4267,10 +4407,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Expected:** an Arabic message that names the problem and the fix (e.g. the gateway only takes KWD in steps of 0.010: use 5.120 or 5.130), placed on the amount. 5.120 is accepted.
 - **Actual:** 400 on `POST /api/v1/gateways/links/`; red English "This payment method cannot take this amount." under "بوابة الدفع" (server text shown as-is). Same class as ETQAN-QA-206 / 157 / 358 / 257 (raw English server messages), new screen.
 - **Evidence:** `qa/manual/screens/M08/M08-F-020-link-amount-english-error.png`, `qa/manual/screens/M08/triage/F-020-repro.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-319: Office staff see the family-worded "ادفع محليًا / Pay locally" box on the invoice page ("…ثم أخبر الأكاديمية لتسجّل دفعتك.")
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** one generic English refusal on the provider field for two different reasons.
+  - **Fix (files):** `gateways/services/fees.py:refusal`, `links.py:create_link` (step rule on `amount_minor`, untaken currency on `provider`); dashboard `lib/server-messages.ts` + `locales/{ar,en,es}/gateways.json` errors; `LinkDialog.tsx` puts `amount_minor` under the amount. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `gateways/tests/test_links.py::test_a_refused_amount_says_why_on_the_right_field`; Vitest `gateways/LinkDialog.test.tsx` "puts the step refusal, translated, under the amount".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47))## ETQAN-QA-319: Office staff see the family-worded "ادفع محليًا / Pay locally" box on the invoice page ("…ثم أخبر الأكاديمية لتسجّل دفعتك.")
 - **Feature:** M08 Invoice detail (office, `/app/billing/invoices/<id>`), local payment methods. **Severity:** P3. **Type:** UI/copy. **Easy P3:** yes. **Priority:** low
 - **Environment:** local docker stack (backend adff9c9 + uncommitted QA fixes, dashboard 5ed775d + branch `qa/manual-2026-10`), academy `qa` (Africa/Cairo, EGP), Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M08 confirmation sweep (M08-F-021); reproduced by Agent 2 on 2026-10-28.
@@ -4280,10 +4421,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Expected:** per `docs/features/billing.md` the local methods are "shown to families"; the office sees nothing, or an office-worded note ("طرق الدفع المحلية التي تظهر للعائلة").
 - **Actual:** a card "ادفع محليًا — ادفع بإحدى هذه الطرق، ثم أخبر الأكاديمية لتسجّل دفعتك." (EN "Pay locally — Pay with one of these, then tell the academy so it can record your payment.") tells the office to pay and to tell the academy, on the screen where they record payments.
 - **Evidence:** `qa/manual/screens/M08/M08-F-021-admin-sees-family-local-pay-box.png`, `qa/manual/screens/M08/triage/F-021-repro.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
-## ETQAN-QA-320: Arabic toast after applying a discount code ends with two full stops: "طُبّق خصم بقيمة 100.00 ج.م.."
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** `LocalPaymentMethods` had one family wording for both readers.
+  - **Fix (files):** `billing/LocalPayment.tsx` `office` prop (office title/body), `InvoicePage.tsx` passes `admin`; locales billing.local.officeTitle/officeBody ar/en. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `billing/InvoicePage.test.tsx` "shows the office the family's local methods".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-319-after.png)## ETQAN-QA-320: Arabic toast after applying a discount code ends with two full stops: "طُبّق خصم بقيمة 100.00 ج.م.."
 - **Feature:** M08 Family invoice → "استخدام كود" (`locales/ar/vouchers.json` "done": "طُبّق خصم بقيمة {{amount}}."). **Severity:** P4. **Type:** copy. **Easy P3:** yes. **Priority:** low
 - **Environment:** local docker stack (backend adff9c9 + uncommitted QA fixes, dashboard 5ed775d + branch `qa/manual-2026-10`), academy `qa` (Africa/Cairo, EGP), Chromium via `qa/manual/tools/step.mjs`, 1440x900 unless noted. **Tag:** REAL
 - **Found by:** Agent 1, manual M08 confirmation sweep (M08-F-022); reproduced by Agent 2 on 2026-10-28.
@@ -4293,8 +4435,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Expected:** "طُبّق خصم بقيمة 100.00 ج.م." (one stop). Amounts are right: paid 20.00 + 100.00 = 120.00, 80.00 left.
 - **Actual:** toast "طُبّق خصم بقيمة 100.00 ج.م.." – the EGP symbol ends with a dot and the string adds another. Any AR message ending in an EGP amount does the same.
 - **Evidence:** `qa/manual/screens/M08/M08-F-022-toast-double-period.png`, `qa/manual/screens/M08/triage/F-022-repro.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause:** The EGP symbol ends with a dot and the sentence adds another.
+- **Fix (files):** Shared i18next post-processor `singleFullStop` collapses a doubled final stop (ellipsis untouched), so every message ending in such an amount is fixed (`dashboard/src/lib/i18n.ts`).
+- **Regression test:** `lib/i18n-full-stop.test.ts`.
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: lib/i18n-full-stop.test.ts passes (real toast string and isolate form); postprocessor wired globally)
 
 ## ETQAN-QA-321: English UI: Arabic local-method instructions are laid out LTR and scrambled (phone number jumps before "ثم أرسل … واتساب")
 - **Feature:** M08 Invoice detail "Pay locally" card (office and family). **Severity:** P3. **Type:** RTL. **Easy P3:** yes. **Priority:** low
@@ -4306,8 +4450,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Expected:** the instructions keep their own direction (`dir="auto"` / plaintext bidi), reading as in AR.
 - **Actual:** the line is left-aligned in LTR base direction and renders as "حوّل المبلغ إلى m08@instapay 01000000000 ثم أرسل صورة الإيصال على واتساب" – the phone number sits mid-sentence.
 - **Evidence:** `qa/manual/screens/M08/M08-F-023-local-method-instructions-scrambled-en.png`, `qa/manual/screens/M08/triage/F-023-repro.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The instructions paragraph inherited the page direction (LTR in English), so an Arabic line with a number was laid out LTR.
+- **Fix (files):** `dashboard/src/features/billing/LocalPayment.tsx`: name and instructions `dir="auto"`, instructions `unicode-bidi: plaintext` (each line its own direction) and `text-start`.
+- **Regression test:** `dashboard/src/features/billing/LocalPayment.test.tsx`.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-321-after.png (EN invoice 170: Arabic instructions read RTL, phone number at the end); LocalPayment test passes)
 
 ## --- M12 manual bugs ---
 
@@ -4357,7 +4503,8 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Evidence:** `qa/manual/screens/M12/M12-F-003-file-inputs-english.png`, `qa/manual/screens/M12/triage/t001-colour-error.png`
 - **Notes:** The button wording of a native file input follows the browser's language, so an Arabic Chrome shows Arabic; the missing preview/hint holds in any browser. Logo upload itself was not exercised (Agent 1: not covered).
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: `BrandingForm.FileRow` used a bare native input with no hint. Fix: `website/BrandingForm.tsx` uses the shared `ui/FilePicker` (translated button, file name) with the types and size hint, shows the current or the newly picked image (object URL) or "No image yet"; `website.branding.fileHint/noImage`. Regression test: `BrandingForm.test.tsx` "offers each image with a translated button, its types and size".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/D/ETQAN-QA-502-after.png (AR branding: translated picker, type/size hint, "No image yet"); dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -4372,8 +4519,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** "نظام الحصص المجانية للمشتركين" (and "نظام الروابط العامة") show "متوقفة" with the note "تعمل عند بنائها".
 - **Evidence:** `qa/manual/screens/M12/M12-F-004-features-built-copy.png`, `qa/manual/screens/M12/triage/t004-features-built.png`
 - **Notes:** feature-toggles.md: `built=False` switches (`free_sessions`, `public_links`) are an Etqan-console notion; the academy's read-only list exposes it. Contact/request link is a suggestion, not part of the bug.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** FeaturesPage printed features.unbuilt for built=False switches.
+- **Fix (files):** dashboard/src/features/academy/FeaturesPage.tsx (note removed), locales features.unbuilt removed
+- **Regression test:** FeaturesPage.test.tsx (no 'Takes effect when built')
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-503-after.png; FeaturesPage.test.tsx; features page shows no build note)
 
 ---
 
@@ -4389,9 +4538,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** Page height 10,960 px (24,788 px on a 375 phone, Agent 1); 592 labels say "(غير مستخدم بعد)" ("إجبار حذف أي", "استنساخ", …); because unused verbs take slots, "عرض"/"عرض الكل"/"تعديل" land in different columns per group (e.g. الوسوم, الدخول السريع).
 - **Evidence:** `qa/manual/screens/M12/M12-F-005-role-matrix-unused.png`, `qa/manual/screens/M12/M12-F-005c-role-editor-mobile.png`, `qa/manual/screens/M12/triage/t005-role-editor.png`
 - **Notes:** The registry exposes `in_use` per verb (roles-permissions.md), so hiding unused verbs and fixing a column per verb is possible client-side, but it reshapes the editor (not easy). Related to ETQAN-QA-021/024 (role editor limits) but a different defect.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** every registry verb was rendered, used or not, in a wrapping flex row per resource.
+  - **Fix (files):** `access/RoleEditor.tsx`: unused verbs hidden behind "Show permissions not used yet" (held ones always shown), one shared verb order on a fixed grid with placeholders; row Select all covers the shown verbs; locales access.roles.showUnused. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `access/RoleEditor.test.tsx` "keeps each verb in one column for every resource" + updated tests.
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-504-after.png)
 ---
 
 ## ETQAN-QA-505: Role editor never explains "عرض" vs "عرض الكل": a role with teachers "عرض" only opens nothing
@@ -4473,9 +4624,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** Saved toast; after reload the ID is stored while the card reads "تسجيل الدخول باستخدام Google غير مُعَدّ بعد: أدخل معرّف العميل وسر العميل كليهما."
 - **Evidence:** `qa/manual/screens/M12/M12-F-010-google-half-saved.png`, `qa/manual/screens/M12/triage/t010-google-half-saved.png`, `qa/manual/screens/M12/triage/t010b-google-cleared.png`
 - **Notes:** Restored to empty and verified after reload. Fix needs to know whether a secret is already stored (secret is write-only), hence not easy.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** `identity/google.py:update_settings` saved an ID with no stored secret.
+  - **Fix (files):** refuses it on `client_secret` ("Enter the client secret too."); dashboard translation via `lib/server-messages.ts` + `signInGoogle.secretToo`. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `identity/tests/test_google.py::test_a_client_id_alone_is_refused` (+ patch test); Vitest `GoogleSettingsCard.test.tsx` "asks for the secret, in Arabic…".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-509-after.png)
 ---
 
 ## ETQAN-QA-510: System status: a failed run shows the English server text "Timed out." in the Arabic UI
@@ -4587,9 +4740,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** Subtitle "تعمل كل خدمة على حساب إتقان الافتراضي حتى تربط حسابك الخاص." vs 4 cards "لا تقدّم إتقان حسابًا افتراضيًا لهذه الخدمة بعد."; الاجتماعات المرئية red "غير مُعدّة" while its text says a free Jitsi room is used; الدفع الإلكتروني has no pill although Stripe test keys are saved on بوابات الدفع.
 - **Evidence:** `qa/manual/screens/M12/M12-F-019b-integrations-status.png`, `qa/manual/screens/M12/M12-F-019-gateways-no-status.png`, `qa/manual/screens/M12/triage/t019-integrations.png`
 - **Notes:** integrations.md: `using=none` → "not set up"; for video the Jitsi fallback makes `none` still working, so the card needs its own state/wording.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** the page mapped `using=none` to "not set up" for every service, the payments chip only knew Connect, and the subtitle overpromised.
+  - **Fix (files):** `integrations/IntegrationsPage.tsx`: video none → "Free Jitsi room", payments `OwnKeysChip` from `useGatewaySettings` (now takes `enabled`), subtitle reworded (ar/en). (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `integrations/IntegrationsPage.test.tsx` (Jitsi chip, "says the academy's own Stripe keys take payments").
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-516-after.png)
 ---
 
 ## ETQAN-QA-517: Etqan billing: "878 مستخدمة · 0 مجانية · 0.00 US$ حتى الآن" can't be understood (no price, zero free yet zero cost) and the pay line gives no payment details
@@ -4603,9 +4758,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** "878 مستخدمة · 0 مجانية · $US 0.00 حتى الآن" (currency also mirrored in AR); "ادفع بتحويل بنكي أو بأي وسيلة تقبلها إتقان" with no details or contact.
 - **Evidence:** `qa/manual/screens/M12/M12-F-020-etqan-billing-usage.png`, `qa/manual/screens/M12/triage/t020-etqan-billing.png`
 - **Notes:** No `Price` row → amount 0 (etqan-billing.md). The usage API has no unit price, so the fix needs `current_prices` on this page (not easy). Invoice list / overdue banner NOT COVERED (no Etqan invoices exist).
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** the usage rows carried no price, so 0 free/0 cost read as a contradiction; the pay note had no pointer to details.
+  - **Fix (files):** `etqan_billing/services/pricing.py:month_usage` additive `price`; `EtqanBillingPage.tsx` priced/free summaries with isolated amounts, pay note points to the invoice PDF/email (ar/en). (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `etqan_billing/tests/test_api.py::test_usage_with_no_price_says_so` (+ updated shape tests); Vitest `EtqanBillingPage.test.tsx` "says a unit with no price is free for now".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-517-after.png)
 ---
 
 ## ETQAN-QA-518: Branding (AR): the empty WhatsApp field's example reads "966501234567+", with the plus sign at the wrong end
@@ -4619,9 +4776,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** It shows "966501234567+". The input has `unicode-bidi: plaintext; direction: rtl`. The placeholder has no strong letter, so it takes the page's RTL direction and the leading "+" moves to the end. A typed value "+966501234567" displays correctly (LTR), so only the example is wrong. That can still lead an admin to copy the wrong format.
 - **Evidence:** `qa/manual/screens/M12/M12-F-022-whatsapp-placeholder-plus.png`, `qa/manual/screens/M12/triage/fg022-whatsapp-field.png`, `qa/manual/screens/M12/triage/fg022-branding-form.png`, typed value OK: `qa/manual/screens/M12/triage/fg022b-whatsapp-typed.png`
 - **Notes:** `dashboard/src/features/website/BrandingForm.tsx:353` `placeholder="+966501234567"`. The same pattern is likely in `features/registration/RegisterForm.tsx:278` (`+201001234567`), but that screen wasn't opened. Fix idea: give phone or number inputs `dir="ltr"` (or `type="tel"` with LTR placeholder styling), or prefix the placeholder with U+200E. Don't change the shared `Input` plaintext rule, because ETQAN-QA-060 depends on it.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** the input inherits RTL; the placeholder has no strong letter.
+  - **Fix (files):** `website/BrandingForm.tsx` WhatsApp input `type=tel dir=ltr`. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `website/BrandingForm.test.tsx` "lays the WhatsApp number out left to right".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-518-after.png)
 ---
 
 ## --- M10 manual bugs ---
@@ -4659,7 +4818,8 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Evidence:** `qa/manual/screens/M10/M10-F-002-thread-pushes-composer-offscreen.png`, `qa/manual/screens/M10/s007.png`, `qa/manual/screens/M10/triage/t002-chat-thread.png`
 - **Notes:** `dashboard/src/features/chat/Thread.tsx` / `ChatPage.tsx`: give the panes a viewport-bound height with `overflow-y-auto` on the message list; keep scroll-to-newest behaviour.
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: The chat grid only had a `min-h`, so the page grew with the thread. Fix: `chat/ChatPage.tsx` grid bound to the screen (`h-[calc(100dvh-13rem)]`, `grid-rows-[minmax(0,1fr)]`), conversation pane scrolls; the thread's message list already scrolls inside. Regression test: `ChatPage.test.tsx` "keeps the thread in a screen-high pane that scrolls on its own" (visual check by Agent 2).
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/D/ETQAN-QA-601-after.png (AR 1440x900 /app/chat?c=1: composer bottom 846 < 900, thread scrolls inside); dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -4674,8 +4834,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** Each own bubble has a solid red "حذف" button under the text; a conversation becomes a column of red buttons (a confirmation does exist). Same red buttons in People → الرسائل.
 - **Evidence:** `qa/manual/screens/M10/M10-F-003-red-delete-on-every-message.png`, `qa/manual/screens/M10/triage/t002-chat-thread.png`
 - **Notes:** Delete itself is by design (B5e: delete on your own messages); only the styling is the bug. Same family as ETQAN-QA-301/214.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** Confirm's trigger was always the destructive variant.
+- **Fix (files):** dashboard/src/components/Confirm.tsx (ghost variant), features/chat/Thread.tsx (ghost Delete on own bubbles)
+- **Regression test:** Thread.test.tsx: keeps a read count in a group, and a quiet Delete
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-602-after.png)
 
 ---
 
@@ -4729,8 +4891,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** "قرأها 0" then "قرأها 1" (EN "Read by 1"): reads like a counter in a two-person chat; "قرأها 0" is awkward Arabic.
 - **Evidence:** `qa/manual/screens/M10/M10-F-006-read-by-zero-copy.png`, `qa/manual/screens/M10/triage/t002-chat-thread.png`
 - **Notes:** Read counts on own messages are by design (B5e); only the wording for direct conversations is the bug.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** One readCount string for every conversation kind.
+- **Fix (files):** dashboard/src/features/chat/Thread.tsx (direct: Read / Not read yet), locales chat.readDirect/unreadDirect/readCount_zero
+- **Regression test:** Thread.test.tsx: says Read on your own messages in a direct chat
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-605-after.png)
 
 ---
 
@@ -4764,8 +4928,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** Native file input text "Choose FileNo file chosen" (browser language, words glued) inside the Arabic dialog.
 - **Evidence:** `qa/manual/screens/M10/M10-F-009-group-image-native-english-file-input.png`, `qa/manual/screens/M10/triage/t009-010-group-dialog.png`
 - **Notes:** Same pattern as ETQAN-QA-502 (branding pickers), other screen (`features/chat/GroupDialog.tsx`).
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** A bare native file input in GroupDialog.
+- **Fix (files):** dashboard/src/features/chat/GroupDialog.tsx (shared FilePicker, image variant with hint)
+- **Regression test:** GroupsPage.test.tsx: picks the image with the app's own button
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-607-after.png)
 
 ---
 
@@ -4818,8 +4984,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** Save + Preview on the right; Cancel on a separate line at the bottom-left.
 - **Evidence:** `qa/manual/screens/M10/M10-F-017-template-dialog-cancel-alone.png`, `qa/manual/screens/M10/triage/t017-template-dialog.png`
 - **Notes:** `dashboard/src/features/notifications/TemplateDialog.tsx`.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** Cancel lived alone in a DialogFooter outside the language form's action row.
+- **Fix (files):** dashboard/src/features/notifications/TemplateDialog.tsx (DialogClose in the Preview/Save row)
+- **Regression test:** TemplatesPage.test.tsx: keeps Cancel in the row with Preview and Save
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-610-after.png)
 
 ---
 
@@ -4911,8 +5079,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** Red "فشل 0" next to green "مرسل 3" reads like an error.
 - **Evidence:** `qa/manual/screens/M10/M10-F-024-failed-zero-red-badge.png`, `qa/manual/screens/M10/triage/t021-024-broadcast-list.png`, `qa/manual/screens/M10/triage/t025-026-detail.png`
 - **Notes:** `BroadcastsPage.tsx` / `BroadcastDetail.tsx` status chips.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** EmailCounts always used the failed tone.
+- **Fix (files):** dashboard/src/features/notifications/BroadcastDetail.tsx (neutral at 0)
+- **Regression test:** BroadcastsPage.test.tsx: draws Failed 0 as a neutral chip
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-615-after.png)
 
 ---
 
@@ -4987,9 +5157,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** 22 enabled "أرسل على واتساب" boxes, nothing says messages will be skipped; the teacher's Account also shows a WhatsApp card.
 - **Evidence:** `qa/manual/screens/M10/M10-F-030-whatsapp-option-while-not-set-up.png`, `qa/manual/screens/M10/M10-F-030b-integrations-whatsapp-not-set-up.png`, `qa/manual/screens/M10/triage/t030-whatsapp-boxes.png`
 - **Notes:** The per-type column itself is by design (B5c: deliveries are `skipped` until an account exists); the missing explanation is the bug. Needs the integration status in the form (not a one-line fix). Related: ETQAN-QA-516.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** the notification settings form never read the WhatsApp integration status.
+  - **Fix (files):** `notifications/NotificationSettingsForm.tsx` reads `useIntegrations` (with `integration.view`) and shows a hint + link while WhatsApp resolves to none; locales notifications.settings.whatsappIdle/whatsappConnect ar/en/es. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `notifications/NotificationSettingsForm.test.tsx` "says WhatsApp is not connected yet, with a link".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-619-after.png)
 ---
 
 ## ETQAN-QA-620: Phone (375): the bell panel runs flush against the right screen edge
@@ -5063,7 +5235,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** `/http://qa.etqan.localhost` — the trailing slash jumps to the front because the footer cell is now `dir="rtl"` and the link has no `dir="ltr"`. Before QA-609 the footer was LTR, so this is new. The contact email/phone in the same line will be affected likewise.
 - **Evidence:** `qa/manual/screens/M10/fix/gate/g609-617-email-ar.png`, `qa/manual/screens/M10/fix/ETQAN-QA-609-after.png`
 - **Notes:** Fix idea: `dir="ltr"` (or `<bdi>`) on the home link and the contact address/phone in `backend/etqan/templates/email/layout.html`.
-- **Verification status:** OPEN
+- **Root cause:** The footer cell became `dir=rtl` (QA-609) and the URL/contact had no direction of their own.
+- **Fix (files):** `dir="ltr"` on the home link and spans around contact email/phone (`backend/etqan/templates/email/layout.html`).
+- **Regression test:** `backend/etqan/site/tests/test_emails.py::test_rtl_footer_keeps_link_and_contact_left_to_right`.
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: qa/manual/screens/round-2/B/ETQAN-QA-623-after.png (fresh AR reset email 19:15Z, footer link dir=ltr reads http://qa.etqan.localhost/); test_emails passes)
 
 ---
 
@@ -5078,9 +5253,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** The whole body takes the direction of the Arabic title "رسالة جديدة" (one `dir="auto"` wrapper for title + body, ETQAN-QA-102), so the Latin-led first line is an RTL paragraph: "M10-gate: موعد الحصة" / "PM. Please be on 6:00" / "time" — the time and "PM" are split and the sentence reads out of order.
 - **Evidence:** `qa/manual/screens/M10/M10-F-035-bell-broadcast-body-reordered.png`, `qa/manual/screens/M10/triage/fg035-bell-mobile.png`
 - **Notes:** Residual of ETQAN-QA-617 (it fixed the email; the dashboard details box was already `dir=auto`). Component: `dashboard/src/features/notifications/bits.tsx` `NotificationText` (shared by bell and page). Fix idea: for `broadcast` notices only, give the body its own per-line direction (`unicode-bidi: plaintext` / a `dir="auto"` element per line), keeping the QA-102 single direction for templated notices. An Arabic-led line (the older "M10-بث: … 5:00 PM. Please be on time 🙏") renders the same as in the composer and is not a bug.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** ETQAN-QA-102 gave title+body one `dir=auto`, so a typed broadcast's Latin-led line took the Arabic title's direction.
+  - **Fix (files):** `notifications/bits.tsx`: for `broadcast` notices each body line is its own `dir=auto` block; templated notices keep QA-102's single direction. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `notifications/bits.test.tsx` "gives each line of a broadcast its own direction".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-624-after.png)
 ---
 
 ## ETQAN-QA-625: Chat group dialog: saving with no participants shows the raw English server text "A group has 1 to 200 participants." in the Arabic UI
@@ -5094,8 +5271,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** ".A group has 1 to 200 participants" in red (English, full stop mirrored).
 - **Evidence:** `qa/manual/screens/M10/M10-F-036-group-participants-error-english.png`, `qa/manual/screens/M10/triage/fg036-group-no-participants.png`
 - **Notes:** Residual of ETQAN-QA-608 (same dialog, same raw-server-message class as QA-157): the 608 fix mapped only the name sentence. Server text from `backend/etqan/chat/services/groups.py:76`; add a client check in `GroupDialog.tsx` and map the sentence (it carries `MAX_PARTICIPANTS`) in `dashboard/src/lib/server-messages.ts`.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** GroupDialog sent an empty participant list and showed the server's English field error raw; server-messages had only the name sentence.
+- **Fix (files):** dashboard/src/features/chat/GroupDialog.tsx (client check 1–200), dashboard/src/lib/server-messages.ts (sentence mapped), locales chat.groups.dialog.participantsInvalid (ar/en)
+- **Regression test:** GroupsPage.test.tsx: refuses no participants before sending; translates the server's participants refusal
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-625-after.png)
 
 ---
 
@@ -5110,7 +5289,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** Group name header, a large empty area and the composer; the list item has no preview line either.
 - **Evidence:** `qa/manual/screens/M10/M10-F-037-empty-group-thread-blank.png`, `qa/manual/screens/M10/triage/fg037-empty-group-thread.png`
 - **Notes:** Cosmetic: the composer is visible and works, so the member is not stuck. `dashboard/src/features/chat/` thread component.
-- **Verification status:** OPEN
+- **Root cause:** `Thread` rendered an empty list; `ConversationList` rendered nothing without `last_message`.
+- **Fix (files):** Both show `chat.groups.noMessages` (`dashboard/src/features/chat/Thread.tsx`, `ConversationList.tsx`).
+- **Regression test:** `Thread.test.tsx` "says No messages yet in an empty conversation", `ConversationList.test.tsx` "says No messages yet under a conversation with none".
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: qa/manual/screens/round-2/B/ETQAN-QA-626-after.png (student AR, chat c=4: "لا رسائل بعد" in thread and list))
 
 ---
 
@@ -5165,7 +5347,8 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Evidence:** `qa/manual/screens/M15/M15-F-017-course-purchase-no-receipt.png`, `qa/manual/screens/M15/triage/t003-invoices-list.png`, `qa/manual/screens/M15/triage/t015-store-nav.png`
 - **Notes:** recorded-courses.md: purchase → `billing.services.record_link_payment` (no invoice). No family read of standalone payments exists, so the fix needs an API (proposal-sized).
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: A purchase is a standalone `billing.Payment` with no family read and no notice. Fix: Backend: new `billing/services/receipts.py` (bilingual receipt email via `identity_services.send_notice`, sent on commit from `record_link_payment`; `family_receipts` scope) and additive `GET billing/receipts/` (`FamilyReceiptsView`, `payloads.receipt_row`). Dashboard: `FamilyReceipts.tsx` "Other payments (receipts)" with amount, fee, total, date, reference, Print, under `FamilyInvoices`. Regression test: pytest `billing/tests/test_receipts.py` (4 tests), consultations completion tests updated; `FamilyInvoices.test.tsx` "lists receipts for payments without an invoice".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: pytest billing test_receipts; FamilyInvoices.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -5182,7 +5365,8 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Evidence:** `qa/manual/screens/M15/M15-F-005-invoice-list-no-total-owed.png`, `qa/manual/screens/M15/M15-F-023-parent-home-no-money-due.png`, `qa/manual/screens/M15/triage/t003-invoices-list.png`, `qa/manual/screens/M15/triage/t027-student-home-overdue.png`, `qa/manual/screens/M15/triage/t026-parent-home.png`
 - **Notes:** Card description/amount was added by ETQAN-QA-316. The parent tile "قيّم حصصك" is ETQAN-QA-115 (reopened), not re-filed.
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: No API gave a family's open balance and the list had no open filter. Fix: Backend: `status=open` filter, `services.outstanding_totals`, additive `GET billing/invoices/outstanding/`. Dashboard: `billing/AmountDue.tsx` ("You owe now", overdue part, Pay to the invoice due first) on family Invoices and family Home; `FamilyInvoices` "To pay"/"All" tabs; `billing.due.*`, `billing.family.tabs.*`. Regression test: pytest `billing/tests/test_api.py::test_a_family_reads_what_it_still_owes`; `FamilyInvoices.test.tsx` "shows what is owed now…"; `routes/_authed/index.test.tsx` "tells a family what it owes on Home".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/D/ETQAN-QA-453-after.png (parent AR Home: "المستحق عليك الآن" per currency, overdue part, Pay); pytest billing; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -5197,9 +5381,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** 26/10, 25/10, 22/10, 21/10 … carry the same green "مجدولة" as upcoming lessons. Marked lessons do show attendance as plain text ("غائب" 28/10 03:30/03:45, "حاضر" 19/10 19:48), so the spec §6 "past ones with the attendance" works for marked lessons only.
 - **Evidence:** `qa/manual/screens/M15/M15-F-001-past-sessions-scheduled-no-attendance.png`, `qa/manual/screens/M15/triage/t001-sessions-ar.png`
 - **Notes:** Family twin of ETQAN-QA-412 (teacher history), different component. Agent 1's "attendance never shown" is not accurate: it is shown once marked.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** FamilySessions' past card used SessionStatusChip.
+  - **Fix (files):** uses the shared `SessionStateChip` (see 412). (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `scheduling/FamilySessions.test.tsx` "flags a past lesson nobody marked".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-454-after.png)
 ---
 
 ## ETQAN-QA-455: Subscription cards: "0 من 8 حصص" doesn't say used or left; no remaining count or start date
@@ -5229,9 +5415,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** "Cash", "Cash · TC028", "Cash · TC018 prep" inside the Arabic table (the English label is frozen into `WalletEntry.note` at write time).
 - **Evidence:** `qa/manual/screens/M15/M15-F-008-wallet-cash-english.png`, `qa/manual/screens/M15/triage/t008-wallet-ar.png`
 - **Notes:** Not a bug: the blank details on "تسوية" rows — `wallet/api/payloads.py:entry_row` hides the office's adjustment reason from families on purpose. Same frozen-label family as ETQAN-QA-313 / ETQAN-QA-403.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** the top-up note froze billing's English method label at write time.
+  - **Fix (files):** `wallet/api/payloads.py:entry_row` splits a known label into additive `method` + `note_detail`; `wallet/Statement.tsx` words the method via `billing.methods.*`. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `wallet/tests/test_payloads.py`; Vitest `wallet/Statement.test.tsx` "words a top-up's payment method in the reader's language".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-456-after.png)
 ---
 
 ## ETQAN-QA-457: Phone (375): wallet statement table is 491 px in 293 px — amounts clipped, "الرصيد بعده" off-screen, invoice numbers broken over two lines
@@ -5245,8 +5433,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** `[375, 491, 293]`; "+200.00 ج.م" cut at the left edge, "الرصيد بعده" hidden, "INV-/000143" and "منقول/من/فاتورة" wrap over 2–3 lines.
 - **Evidence:** `qa/manual/screens/M15/M15-F-028-mobile-wallet-table-cut.png`, `qa/manual/screens/M15/triage/t009-wallet-mobile.png`
 - **Notes:** Same family as ETQAN-QA-315 (office invoices table) and ETQAN-QA-173.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** A plain `<table>` inside a sideways scroller with no phone layout, so on 375 px the row actions and status sit off-screen behind a hidden scroll.
+- **Fix (files):** one shared phone-card recipe `phoneCards` in `dashboard/src/ui/styles.ts` (below `sm` each row is a card and each cell shows its `data-label` and value; unchanged from `sm` up), applied with a `data-label` on every cell: `dashboard/src/features/wallet/Statement.tsx`.
+- **Regression test:** `dashboard/src/ui/phone-cards.test.ts`.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-457-after.png (375 parent wallet: cards, amount + balance after visible, 293/293))
 
 ---
 
@@ -5338,9 +5528,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Expected:** no console errors.
 - **Actual:** 2× "Encountered two children with the same key, `1`…"; React may duplicate/omit list items (lessons or comments) once ids collide.
 - **Evidence:** `qa/manual/screens/M15/M15-F-015-course-player-duplicate-key-error.png`, `qa/manual/screens/M15/triage/t016-player.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** `CoursePlayer` gave sibling VideoPane and Discussion the same key (`current.id`).
+  - **Fix (files):** distinct keys `video-<id>` / `discussion-<id>`. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `recorded/CoursePlayer.test.tsx` "renders the lesson without a duplicate-key warning".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-463-after.png)
 ---
 
 ## ETQAN-QA-464: Consultation booking (AR): WhatsApp is required but not marked, the hint says empty fields use account data, and the error is English "Enter a WhatsApp number."
@@ -5387,7 +5579,8 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Evidence:** `qa/manual/screens/M15/M15-F-025-certificate-print-only-no-back.png`, `qa/manual/screens/M15/M15-F-016b-earned-certificate.png`, `qa/manual/screens/M15/triage/t019-cert-print.png`
 - **Notes:** Not a bug: no PDF download (certificates.md: "Printing and saving as PDF are done in the browser; there is no server-side PDF"). Side note: a parent opening another family's `/app/subject-certificates/1/print` gets 404s and "جارٍ التحميل" forever (data safe; ETQAN-QA-106 pattern), `qa/manual/screens/M15/triage/t018-subject-cert-print-asparent.png`.
 - **Root cause / Fix / Regression tests (Agent 3, M15 fix cycle 1, 2026-10-28):** Root cause: `certificates/CertificatePrint.tsx` (`CertificateSheet`, also used by `SubjectCertificatePrint`) had its own toolbar with Print only (the ETQAN-QA-420 back button is in `PrintSheet`, which certificates don't use), and set the message `<p>` in `italic` whatever its script. Fix: new shared `PrintBackButton` in `branding/PrintSheet.tsx` (history back, else home; `common.back`), placed beside Print in the certificate toolbar (hidden on paper); the message is italic only when it has no Arabic letters, with `dir="auto"`. `PrintSheet`'s own button left as is. Regression tests: `CertificatePrint.test.tsx` "offers a way back beside Print, off the paper (ETQAN-QA-466)", "sets an Arabic message upright and a Latin one in italics (ETQAN-QA-466)"; `SubjectCertificatePrint.test.tsx` asserts the Back button. Branch `qa/manual-2026-10` (dashboard); evidence `qa/manual/evidence/M15/fix-1/`.
-- **Verification status:** OPEN, fix rejected (Agent 2, 2026-10-28): the 'رجوع' button works (print → back to `/app/learning/certificates`) and the Arabic message is no longer slanted (font-style normal), BUT the new `dir="auto"` on the message makes it LTR whenever it starts with a Latin character: the issued certificate's message 'M15- مبارك يا آدم، نفخر بتقدّمك في التجويد.' now prints as 'M15- …التجويد' with the period pushed in front of 'مبارك' (computed direction ltr; it was correct RTL before). A message that starts with a Latin name, code or number gets scrambled punctuation on a printed certificate. Fix: drop `dir="auto"` (inherit the sheet's direction) or set dir from the same ARABIC_SCRIPT test. Evidence `qa/manual/screens/M15/fix/ETQAN-QA-466-after.png`, `qa/manual/screens/M15/fix/r466-msg.png`.
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: Round-1 fix set `dir="auto"` on the message, so a message starting with a Latin code became LTR. Fix: `certificates/CertificatePrint.tsx`: the message's `dir` follows the same Arabic-script test as the italics (`rtl` for Arabic, `ltr` otherwise). Regression test: `CertificatePrint.test.tsx` "sets an Arabic message upright and a Latin one in italics" now uses "M15- مبارك …" and asserts `dir=rtl`/`ltr`.
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/D/ETQAN-QA-466-after.png (certificate 4 print: Back button, Arabic message upright RTL); CertificatePrint.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -5434,8 +5627,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** second line "pi_sim_0a82e186b84a4b3981c30089652e36ef · 2026/10/28" — a 40-character unlabelled technical id ahead of the date.
 - **Evidence:** `qa/manual/screens/M15/M15-F-004-raw-transaction-id.png`, `qa/manual/screens/M15/triage/t004-inv144.png`
 - **Notes:** Its phone overflow is ETQAN-QA-315.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The payments line printed the raw provider id for everyone.
+- **Fix (files):** dashboard/src/features/billing/InvoicePage.tsx (labelled ref; families see `shortRef`), locales billing.payments.transactionRef
+- **Regression test:** InvoicePage.test.tsx: shows a family a short labelled reference (ETQAN-QA-469)
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-469-after.png)
 
 ---
 
@@ -5450,8 +5645,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** native `<input type="file">` "Choose FileNo file chosen" (its label follows the browser's language, not the app's), left-aligned in the RTL dialog, no type/size hint.
 - **Evidence:** `qa/manual/screens/M15/M15-F-009-homework-file-input-english.png`, `qa/manual/screens/M15/triage/t011-homework-dialog.png`
 - **Notes:** Same pattern as ETQAN-QA-502 (branding pickers) and M10-F-009 (chat group image); one shared file-picker component would fix all.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** A bare native `<input type=file>` with no hint.
+- **Fix (files):** dashboard/src/ui/file-picker.tsx (new shared FilePicker, locales common.filePicker.*), features/homework/MyHomework.tsx, locales homework.dialog.answerFileHint
+- **Regression test:** MyHomework.test.tsx: offers the app's own file button with the types and size
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-470-after.png)
 
 ---
 
@@ -5468,9 +5665,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** "الحالة: قيد المراجعة · الدفع: لم يُدفع بعد · موعدك محجوز حتى 28/10/2026, 13:30." at 15:30 Cairo, then "ادفع عبر Stripe". The line is shown whenever `hold_until` is set, past or not. Data is safe: `paying.rehold` re-holds the slot on Pay or refuses with `slot_taken` if someone else booked it.
 - **Evidence:** `qa/manual/screens/M15/M15-F-030-consult-held-until-past-time.png`, `qa/manual/screens/M15/triage/final/M15-F-030-repro-held-until-past.png`
 - **Notes:** Side detail on this page (same `when()` helper, ManagePage.tsx:65): the date and time are joined with a Latin ", " ("02/11/2026, 20:30") where the rest of the Arabic portal uses "،"; fix together. The status line "قيد المراجعة" above "لم يُدفع بعد" was already noted under ETQAN-QA-451. The ~25 h auto-cancel delay is the ETQAN-QA-451 owner proposal. Data left: CR-000004 (unpaid, checkout expired in the simulator; `cancel_unpaid` cancels it).
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** `ManagePage` showed the hold line whenever `hold_until` was set.
+  - **Fix (files):** past hold → `consultations.manage.holdEnded` (ar/en; the feature has no es catalogue); the date/time join was already fixed by ETQAN-QA-765. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `consultations/ManagePage.test.tsx` "says a past hold has ended instead of promising it".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-471-after.png)
 ---
 
 ## ETQAN-QA-472: Phone receipt: payment amounts wrap onto their own line and read as belonging to the next payment
@@ -5484,8 +5683,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** row 1 "28/10/2026 · الرصيد — 720.00" fits; row 2 "28/10/2026 · كود النظام · SYS-A2335-4PRJA" fills the width and its "100.00 ج.م." drops onto its own line; row 3 "28/10/2026 · Stripe · رسوم 34.00 ج.م." then "680.00 ج.م." alone. With no dividers the lone amounts sit right above the next label, so a parent checking the receipt pairs them wrongly. Totals block is fine.
 - **Evidence:** `qa/manual/screens/M15/M15-F-031-phone-receipt-payment-amounts-wrap.png`, `qa/manual/screens/M15/triage/final/M15-F-031-repro-phone-receipt.png`
 - **Notes:** The longer Stripe label comes from the ETQAN-QA-450 fee fix (correct content). Not ETQAN-QA-315 (admin invoices table) nor ETQAN-QA-469 (raw provider id on the invoice page). Likely fix: `flex-nowrap` row, `min-w-0` + wrapping on the label span, `shrink-0 whitespace-nowrap` on the amount.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** Each payment row was `flex flex-wrap justify-between` with no dividers, so a long label pushed the amount onto its own line under the next payment.
+- **Fix (files):** `dashboard/src/features/billing/InvoicePrint.tsx`: rows no longer wrap, the label is `min-w-0` and wraps, the amount is `shrink-0 whitespace-nowrap`, rows have dividers.
+- **Regression test:** `dashboard/src/features/billing/InvoicePrint.test.tsx` green (layout checked by Agent 2's screenshot).
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-472-after.png (375 receipt: each payment's amount on its own row, divided))
 
 ---
 
@@ -5502,8 +5703,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** Order is اللغة العربية للناطقين بغيرها, F03 قرآن, M05 دورة التلاوة المعدلة, عربي, قرآن, حفظ القرآن الكريم, scn, ... - the API sorts by `name_en` (Arabic for…, F03 Quran, M05…, QA6 Arabic…).
 - **Evidence:** `qa/manual/screens/M05/M05-F-001-courses-order-ar.png`, `qa/manual/screens/M05/triage/t001-courses-order.png`
 - **Notes:** `backend/etqan/catalogue/models.py:33` and `:64` `ordering = ["name_en", "id"]` for Course and Package; no locale-aware order in the list view or the dashboard.
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** `catalogue/api/views.py` ordered by `name_en` always; the dashboard sent no UI language.
+  - **Fix (files):** orders by `name_ar` for Arabic readers; `lib/api.ts` sends Accept-Language = UI language on every call. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `catalogue/tests/test_api.py::test_catalogue_is_ordered_by_the_readers_name`; Vitest `lib/api.test.ts` "sends the interface's language on every API call".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-550-after.png)
 ---
 
 ## ETQAN-QA-551: Status/yes-no filters have no visible label: bare "الكل / نعم / لا" dropdowns on courses, packages, recorded courses and consultations
@@ -5573,7 +5777,8 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** Title "الدورة" and a spinner that never stops; `404 GET /api/v1/catalogue/courses/13/` retried.
 - **Evidence:** `qa/manual/screens/M05/M05-F-005-deleted-course-spins.png`, `qa/manual/screens/M05/triage/t005-deleted-course-spins.png`
 - **Notes:** Same class as ETQAN-QA-106 (student page) and QA-365 (payslip); new page. Packages page likely the same (same route pattern).
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: Default retries kept the 404 spinning (fixed globally by ETQAN-QA-677's `retryUnlessRefused`); the not-found alert had no way back. Fix: `CourseForm.tsx` and `PackageForm.tsx` not-found alerts link back to their list (`catalogue.*.backToList`). Regression test: `PackageForm.test.tsx` "links back to the list when the package is gone (ETQAN-QA-554)".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: PackageForm.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -5588,8 +5793,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** `ID,Name (English),Name (Arabic),Language,Active,Teacher IDs` / `1,F03 Quran,F03 قرآن,ar,yes,7; 16; 36; 37; ...` - teachers only as internal ids.
 - **Evidence:** `qa/manual/screens/M05/M05-F-006-courses-csv.png`, `qa/manual/screens/M05/triage/t006-courses-csv.png`, `qa/manual/evidence/M05/courses-csv-ar.txt`
 - **Notes:** Headers/codes part is the ETQAN-QA-161/271 pattern; the teacher-id column is new and makes the file useless for an owner.
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** courses CSV listed `teacher_ids`; headers/codes English.
+  - **Fix (files):** `catalogue/api/views.py` CSV column "Teachers" with names (prefetch teachers__user) + shared CSV translation (see 161). (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `catalogue/tests/test_api.py::test_courses_csv_in_arabic_names_teachers_and_words`.
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); live Arabic CSV fetched: Arabic headers/words, teacher names)
 ---
 
 ## ETQAN-QA-556: Package form: "المدة" and its unit "وحدة المدة" sit on different rows, diagonally apart
@@ -5622,7 +5830,8 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** "تم الحفظ."; API `price_minor` = 150055; list shows 1,500.55 ج.م. - the extra digit is dropped without a word (truncated, not even rounded).
 - **Evidence:** `qa/manual/screens/M05/M05-F-008-price-truncated.png`, `qa/manual/screens/M05/triage/t008-price-3dec.png`
 - **Notes:** `dashboard/src/lib/money.ts:48 toMinor` pads/slices the fraction to `minorDigits(currency)`; the package schema does not check precision (the invoice forms do, ETQAN-QA-30x). Shared helper - fix in the package/country-price schemas, not by changing toMinor.
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: `packageFormSchema` accepted 3 decimals for any currency and `toMinor` cut the rest. Fix: `catalogue/schemas.ts` package schema checks the fraction against `minorDigits(currency)` (`catalogue.errors.priceTooManyDecimals` / `priceNoDecimals`). Regression test: `PackageForm.test.tsx` "refuses more decimals than the currency has (ETQAN-QA-557)".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: PackageForm.test.tsx (schema refuses extra decimals per minorDigits); dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -5638,7 +5847,8 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** No delete; a mistaken package can only be deactivated and stays in the list forever.
 - **Evidence:** `qa/manual/screens/M05/M05-F-010-package-no-delete.png`, `qa/manual/screens/M05/triage/t010-035-package21-main.png`
 - **Notes:** Backend `delete_package` exists; dashboard `PackageForm` lacks the button.
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: `PackageForm` had no Delete button (backend `delete_package` exists). Fix: `PackageForm.tsx` Delete with confirmation, as courses; in-use refusal toasted through `errorText`; `catalogue.packages.deleteTitle/deleted`. Regression test: `PackageForm.test.tsx` "says edits reach new subscriptions only, and offers Delete".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: PackageForm.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -5653,7 +5863,8 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** Only "تم الحفظ."; subscription 108 keeps 16 sessions / 300 ر.س. (correct by design) with nothing telling the owner.
 - **Evidence:** `qa/manual/screens/M05/M05-F-011-package-edit-no-notice.png`, `qa/manual/screens/M05/triage/t010-035-package21-main.png`
 - **Notes:** Behaviour is documented (catalogue.md "Package edits never reach existing subscriptions"); only the hint is missing.
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: No hint on the package edit form. Fix: `PackageForm.tsx` note "Changes apply to new subscriptions only…" when editing; `catalogue.packages.editNewOnly`. Regression test: `PackageForm.test.tsx` (same test as ETQAN-QA-558).
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: PackageForm.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -5745,7 +5956,8 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** No order control and no hint on the default view.
 - **Evidence:** `qa/manual/screens/M05/M05-F-018-level-order-hidden.png`, `qa/manual/screens/M05/triage/t012-level-dialog.png`, `qa/manual/screens/M05/triage/t018-level-order-after-filter.png`
 - **Notes:** Per-course ordering is reasonable; only the hint is missing.
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: Order controls show only with one course; nothing said so. Fix: `curriculum/LevelsList.tsx` hint "Choose a course to reorder its levels." on the all-courses view; `curriculum.levels.chooseCourseToReorder`. Regression test: `LevelsList.test.tsx` "says how to reorder while every course is shown".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: LevelsList.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -5760,8 +5972,11 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** Cell reads just "الملف"; no link in the table (0 anchors); the edit dialog shows an empty file picker for a file material.
 - **Evidence:** `qa/manual/screens/M05/M05-F-020-material-file-not-openable.png`, `qa/manual/screens/M05/triage/t020-materials-list.png`
 - **Notes:** Teachers get a تنزيل button on their page; admins don't.
-- **Verification status:** OPEN
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** `ContentAdmin` printed only the kind word.
+  - **Fix (files):** `content/ContentAdmin.tsx` `MaterialSource`: the file name as a download button, the URL as a link. (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** Vitest `content/ContentAdmin.test.tsx` "names each material's file or link and opens it".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-565-after.png)
 ---
 
 ## ETQAN-QA-566: Educational content: the chosen course is forgotten on refresh (not in the URL)
@@ -5774,7 +5989,8 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Expected:** Same course still chosen (`?course=10`).
 - **Actual:** "اختر دورة." with an empty picker.
 - **Evidence:** `qa/manual/screens/M05/M05-F-021-content-course-lost-on-refresh.png`, `qa/manual/screens/M05/triage/t021-reload-loses-course.png`
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: `ContentAdmin` kept the course in component state only. Fix: `routes/_authed/catalogue.content.tsx` validates `?course=` and passes it with `onCourseChange` (replace) to `ContentAdmin` (props optional, local state otherwise). Regression test: `ContentAdmin.test.tsx` "opens the course the URL names and reports a new choice".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: ContentAdmin.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -5915,7 +6131,10 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** "السعر () *" until a currency is chosen.
 - **Evidence:** `qa/manual/screens/M05/M05-F-035-country-price-empty-parens.png`, `qa/manual/screens/M05/triage/t010-035-package21-main.png`
 - **Notes:** Same pattern as ETQAN-QA-215 (subscription form), here in `CountryPricesCard`.
-- **Verification status:** OPEN
+- **Root cause:** Label always interpolated `{{currency}}`; a new row started with no currency.
+- **Fix (files):** Plain "Price" label until a currency is set; a new row starts in the academy's default currency (`dashboard/src/features/catalogue/CountryPricesCard.tsx`).
+- **Regression test:** `CountryPricesCard.test.tsx` "starts a new row in the academy's currency, with no empty brackets".
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: qa/manual/screens/round-2/B/ETQAN-QA-574-after.png; DOM after "إضافة دولة": label "السعر (EGP)", currency EGP)
 
 ---
 
@@ -5931,7 +6150,8 @@ Common fields for every M07 bug below unless stated: **Environment:** local dock
 - **Actual:** no hint at all; the summary reads "24 حصة، مدة كل منها 45 دقيقة، خلال شهرين". Subscription 110 is created with الحصص المتبقية 24, ends 31/12/2026, one Saturday slot (≈9 sessions possible in the term); invoice INV-000181 450.50 ر.س. bills all 24. The subscription form never reads `sessions_per_week` (only `catalogue/PackageForm.tsx` / `sessions-total.ts` do).
 - **Evidence:** `qa/manual/screens/M05/M05-F-036-one-slot-for-3-per-week-form.png`, `qa/manual/screens/M05/M05-F-036-one-slot-for-3-per-week-sub.png`, `qa/manual/screens/M05/triage/t036-form-no-warning.png`, `qa/manual/screens/M05/triage/t036-sub110.png`
 - **Notes:** `docs/features/subscriptions.md` / `catalogue.md` define the total as sessions_per_week × weeks but set no rule on slot count, so this is a missing warning rather than a broken rule. Suggested fix: under the slots, "الباقة: 3 حصص أسبوعيًا — اخترت 1" when the ticked weekdays across slot rows are fewer than `sessions_per_week`. The admin can still add slots later via "أضف مواعيد".
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: The subscription form never read `sessions_per_week`. Fix: `scheduling/SubscriptionForm.tsx` counts ticked weekdays over slot rows: note "The package is N sessions a week", warning when fewer; `scheduling.slots.fewerThanPackage/packagePerWeek_*`. Regression test: `SubscriptionForm.test.tsx` "warns when the slots give fewer lessons a week than the package".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: SubscriptionForm.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -6003,7 +6223,8 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** HTTP 500 "DataError at /admin/tenants/academy/add/ — value too long for type character varying(120)". Nothing created (no row, no schema).
 - **Evidence:** `qa/manual/screens/M01/triage/t007-after.png`; Agent 1: `qa/manual/screens/M01/M01-F-007-long-name-500.png`.
 - **Notes:** Same class as ETQAN-QA-016 (the `create_academy` command), different entry point. Fix: cap the form's name at the shortest column it is copied to.
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: The form allowed the model's 200 characters; the name is copied into 120-character site columns. Fix: `tenants/services.py` `validate_name` (NAME_MAX 120) used by `create_academy`; `tenants/admin.py` `clean_name` and maxlength 120. Regression test: pytest `tenants/tests/test_admin.py::test_a_name_longer_than_its_copies_is_a_form_error`, `::test_create_academy_refuses_an_overlong_name`.
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: pytest tenants test_admin (name > 120 is a form error); dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -6084,7 +6305,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** "Changed Family accounts (نظام حسابات العائلات) and Contracts (نظام العقود).", "Changed Status." Times show no zone (UTC).
 - **Evidence:** `qa/manual/screens/M01/triage/t004-history-no-direction.png`; Agent 1: `qa/manual/screens/M01/M01-F-004-history-no-direction.png`.
 - **Notes:** Related to ETQAN-QA-007 (action-driven suspends leave no entry at all).
-- **Verification status:** OPEN
+- **Root cause (round 2):** Django's default change message lists only the changed field names.
+- **Fix (files):** backend/etqan/tenants/admin.py (AcademyAdmin.construct_change_message, `_shown`)
+- **Regression test:** backend tenants/tests/test_admin_round2_qa.py::test_the_history_says_which_way_each_field_went
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: pytest tenants/tests/test_admin_round2_qa.py)
 
 ---
 
@@ -6175,7 +6399,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** first entry "Etqan" (the public schema row, absent from the Academies list), then "Etqan QA Other, Other Academy, QA Tmp R1 OK, E2E Journey…, …, Demo Academy, Etqan QA Academy, أكاديمية النور QA Tmp M01, QA Tmp M01b" (id order). The Connect fee academy select correctly excludes "Etqan".
 - **Evidence:** `qa/manual/screens/M01/triage/t012-pricing-filter-etqan.png`, `qa/manual/screens/M01/triage/t013-017-invoice-list.png`; Agent 1: `qa/manual/screens/M01/M01-F-012-pricing-filter-etqan-public.png`.
 - **Notes:** Also covers the ordering parts of M01-F-006 and M01-F-010.
-- **Verification status:** OPEN
+- **Root cause (round 2):** Billing filters used the plain `academy` filter (includes the public row) and no picker ordered academies.
+- **Fix (files):** backend/etqan/etqan_billing/admin.py (AcademyFilter, `_academies()` ordered by name), backend/etqan/tenants/admin.py (copy_from, Domain tenant, AcademyAdmin.ordering)
+- **Regression test:** etqan_billing/tests/test_admin_round2_qa.py::test_by_academy_lists_academies_by_name_without_the_platform; tenants/tests/test_admin_round2_qa.py::test_academy_pickers_are_sorted_by_name
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-814-after.png; By academy filter sorted, no platform row)
 
 ---
 
@@ -6186,7 +6413,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Expected:** "Etqan" capitalised, as in the sidebar.
 - **Actual:** "Select etqan invoice to change", "ADD ETQAN INVOICE" (button capitalises), "2 etqan invoices", "Search etqan invoices", "Select etqan invoice line to view".
 - **Evidence:** `qa/manual/screens/M01/triage/t013-017-invoice-list.png`, `qa/manual/screens/M01/triage/t015-lines-list-landing-raw-amounts.png`; Agent 1: `qa/manual/screens/M01/M01-F-013-etqan-lowercase.png`.
-- **Verification status:** OPEN
+- **Root cause (round 2):** EtqanInvoice / EtqanInvoiceLine had no verbose_name.
+- **Fix (files):** backend/etqan/etqan_billing/models.py + migrations/0003_etqan_capitalised.py (options only)
+- **Regression test:** etqan_billing/tests/test_admin_round2_qa.py::test_etqan_is_capitalised_in_the_console
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-815-after.png)
 
 ---
 
@@ -6213,7 +6443,8 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Expected:** back on the invoice with the new line and the new total.
 - **Actual:** "Select etqan invoice line to view" with every invoice's lines.
 - **Evidence:** `qa/manual/screens/M01/triage/t015-lines-list-landing-raw-amounts.png` (the landing page); Agent 1: `qa/manual/screens/M01/M01-F-015-line-save-lands-on-lines-list.png`. Reproduced from code (no draft left to add to without new throwaway data).
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: `EtqanInvoiceLineAdmin` had no change permission, so Django's `response_add` fell back to the changelist. Fix: `etqan_billing/admin.py` `response_add` redirects to the invoice's change page with a success message ("Save and add another" unchanged). Regression test: pytest `etqan_billing/tests/test_admin.py::test_etqan_adds_a_credit_line_to_a_draft` asserts the Location.
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: pytest etqan_billing test_admin; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -6224,7 +6455,13 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Expected:** the extra inputs only for the action that needs them (or laid out with spacing), a date picker/format hint on "Paid on", all columns visible.
 - **Actual:** "Action ▾Paid on [ ] / Method ▾Reference [ ] Void reason [ ] Run"; NUMBER wraps "ETQ-2026-" / "10-0001", TOTAL "12.50" / "USD", DUE AT cut, EMAILED AT and PAID ON off the right edge. Messages start with "· ".
 - **Evidence:** `qa/manual/screens/M01/triage/t013-017-invoice-list.png`; Agent 1: `qa/manual/screens/M01/M01-F-017-invoice-list-cramped.png`.
-- **Verification status:** OPEN
+- **Root cause (round 2):** Django renders every ActionForm field for every action, with no spacing between a field and the next label; the number/total columns had no nowrap.
+- **Fix (files):** `backend/etqan/etqan_billing/admin.py` (`Media`), new `backend/etqan/static/etqan_billing/invoice-actions.js` (shows only the chosen action's inputs) and `invoice-actions.css` (spacing, nowrap number/total, scrollable results).
+- **Regression test:** `backend/etqan/etqan_billing/tests/test_admin_layout_qa.py::test_the_invoice_list_loads_its_action_bar_script_and_styles`.
+- **Root cause (round 2, cycle 2):** the invoice list showed four separate datetime columns (Draft until, Due at, Emailed at, Paid on) in Django's long date format, so the table was 1175 px in a 791 px box.
+- **Fix (files, cycle 2):** `backend/etqan/etqan_billing/admin.py`: the four columns replaced by one `Dates` column (`key_date`) showing the date that matters for the status (Draft until / Due · emailed / Paid on / Voided) as ISO dates.
+- **Regression test (cycle 2):** `backend/etqan/etqan_billing/tests/test_admin_layout_qa.py::test_the_invoice_list_shows_one_date_column_so_it_fits`; `test_admin.py::test_etqan_emails_issued_invoices_again` updated to the new column.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate cycle 2 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-818-after.png (1440 EN: table 791/791, one 'Dates' column e.g. 'Paid on 2026-10-28', action bar shows only the select); billing test_admin_layout_qa + test_admin 24 passed)
 
 ---
 
@@ -6236,7 +6473,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** From "etqan <noreply@etqan.academy>"; no HTML part (Text tab only); English body.
 - **Evidence:** `qa/manual/screens/M01/triage/t018-invoice-email-lowercase-text-only.png`; Agent 1: `qa/manual/screens/M01/M01-F-018-invoice-email-sender-lowercase.png`.
 - **Notes:** The generic "Pay by bank transfer to the account Etqan gave you" comes from `ETQAN_BILLING_PAYMENT_INSTRUCTIONS` (configuration, not a bug).
-- **Verification status:** OPEN
+- **Root cause (round 2):** DEFAULT_FROM_EMAIL default was lower-case 'etqan'; the task sent a text-only English message.
+- **Fix (files):** backend/config/settings/base.py, infra/.env.*.example (Etqan), backend/etqan/etqan_billing/tasks.py (HTML layout alternative, Arabic message per admin's preferred_language)
+- **Regression test:** etqan_billing/tests/test_admin_round2_qa.py::test_the_invoice_email_is_from_etqan_in_html_and_each_admins_language
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: pytest etqan_billing/tests/test_admin_round2_qa.py)
 
 ---
 
@@ -6247,7 +6487,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Expected:** "Enter a valid date (YYYY-MM-DD)." with the inputs kept.
 - **Actual:** yellow "No action selected."; Paid on and Method emptied.
 - **Evidence:** `qa/manual/screens/M01/triage/t019-mark-paid-bad-date.png`; Agent 1: `qa/manual/screens/M01/M01-F-019-mark-paid-bad-date-no-action-selected.png`.
-- **Verification status:** OPEN
+- **Root cause (round 2):** `paid_on` was a DateField on the ActionForm; an invalid action form makes Django say 'No action selected.'.
+- **Fix (files):** backend/etqan/etqan_billing/admin.py (paid_on text + date input, parsed in mark_paid with a clear error)
+- **Regression test:** etqan_billing/tests/test_admin_round2_qa.py::test_a_mistyped_paid_on_date_says_so_and_marks_nothing
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: pytest etqan_billing/tests/test_admin_round2_qa.py)
 
 ---
 
@@ -6274,7 +6517,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Expected:** each job says what it does; columns fit.
 - **Actual:** `devices.push`, `scheduling.provision_meetings`, `etqan_billing.issue_due`…; scheduler `*/5 * * * * (m/h/dM/MY/d) UTC` over three lines; LAST RUN DATETIME cut "Oct. 28, 2026, 2:". Actions Delete / Enable / Disable / Toggle / Run offered to the superuser with no explanation (Delete has Django's confirmation; view-only staff see none, ETQAN-QA-013).
 - **Evidence:** `qa/manual/screens/M01/triage/t022-periodic-tasks.png`; Agent 1: `qa/manual/screens/M01/M01-F-022-periodic-tasks-raw.png`.
-- **Verification status:** OPEN
+- **Root cause (round 2):** The rows come from CELERY_BEAT_SCHEDULE with no description, and the library admin shows the raw cron/interval plus start-time and one-off columns.
+- **Fix (files):** `backend/etqan/platform/admin.py` `EtqanPeriodicTaskAdmin`: "What it does" column (row description, else `JOB_PURPOSES` by task name), "Runs" in words (`crontab.human_readable`, e.g. "Every 5 minutes UTC"), start-time/one-off/interval columns dropped so Last run fits.
+- **Regression test:** `backend/etqan/etqan_billing/tests/test_admin_layout_qa.py::test_periodic_tasks_say_what_they_do_and_when`.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-822-after.png ('What it does' + 'Runs' in words, Last run fits, table 791/791); test_admin_layout_qa passes)
 
 ---
 
@@ -6316,7 +6562,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** saved and shown as "ZZ". Labels "Percent bp" (help "Basis points: 250 = 2.5 %.") and "Fixed amount — Minor units per payment." with no currency context.
 - **Evidence:** `qa/manual/screens/M01/triage/t026-connect-fee-zz.png`; Agent 1: `qa/manual/screens/M01/M01-F-026-connect-fee-two-letter-currency.png`.
 - **Notes:** Related to ETQAN-QA-022 (any three letters accepted for academy/invoice currency); here there is no check at all, on a different field. The raw title is ETQAN-QA-813.
-- **Verification status:** OPEN
+- **Root cause (round 2):** ConnectFeeForm only upper-cased the currency.
+- **Fix (files):** backend/etqan/etqan_billing/admin.py (platform.validators.clean_currency; clearer labels/help)
+- **Regression test:** etqan_billing/tests/test_admin_round2_qa.py::test_a_connect_fee_currency_is_three_letters
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: pytest etqan_billing/tests/test_admin_round2_qa.py)
 
 ---
 
@@ -6327,7 +6576,8 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Expected:** Academies, Domains, Etqan billing, Integrations first; internals hidden or grouped.
 - **Actual:** alphabetical: ACCOUNTS, AUTHENTICATION AND AUTHORIZATION, ETQAN BILLING, IDENTITY (Guardianships, Parent/Student/Teacher profiles — empty on the platform), INTEGRATIONS, MFA, PERIODIC TASKS (5), SITES, SOCIAL ACCOUNTS (3), TENANTS last below the fold.
 - **Evidence:** `qa/manual/screens/M01/triage/t027-console-home.png`; Agent 1: `qa/manual/screens/M01/M01-F-027-console-index-clutter.png`.
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: Django's admin index lists apps alphabetically. Fix: `platform/admin.py` `console_order` wraps `admin.site.get_app_list`: Tenants, Etqan billing, Integrations, Gateways first; auth/identity/accounts/social/MFA/sites/periodic tasks last. Regression test: pytest `platform/tests/test_console_order.py` (2 tests).
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: pytest platform test_console_order; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ## ETQAN-QA-827: On a phone, a suspended academy's login header (host name fallback) is wider than the screen: 397 px page on a 375 px phone
 - **Feature:** M01 suspension effect on the academy login (dashboard login header). **Severity:** P3. **Type:** UI-layout. **Easy P3:** yes. **Priority:** low
@@ -6424,8 +6674,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** Header links: الدورات المسجلة, الاستشارات, المقالات, الفيديوهات, الأسئلة الشائعة, English, تسجيل الدخول. No link to `/app/register` anywhere on the site; only the sign-in page has "جديد هنا؟ إنشاء حساب".
 - **Evidence:** `qa/manual/screens/M16/M16-F-002-no-register-link-header.png`, `qa/manual/screens/M16/triage/t001-home-ar-full.png`
 - **Notes:** The site payload would need a `registration_open` flag (registration switch) so the marketing header can show the link only when it works; hence not easy.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The site payload had no registration flag, so the marketing header could not offer sign-up safely.
+- **Fix (files):** backend/etqan/site/api/views.py (additive `registration_open`), marketing/src/lib/site.ts, components/Header.astro (desktop + phone menu), Hero.astro, Footer.astro, lib/i18n.ts signUp
+- **Regression test:** backend site/tests/test_public_api.py::test_registration_open_follows_self_registration; marketing test/round2-a2.test.ts (sign-up link)
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-751-after.png; registration_open=true on GET /api/v1/site/; إنشاء حساب in header/hero/footer)
 
 ---
 
@@ -6441,8 +6693,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** Lands on `/app/login` "مرحبًا بعودتك / سجّل الدخول لمتابعة دراستك." - no course, no price, no back link; the hint under the button on the site says only "سجّل الدخول ثم افتح الدورات المسجلة". After signing in the deep link is lost (known ETQAN-QA-058).
 - **Evidence:** `qa/manual/screens/M16/M16-F-003-buy-goes-to-plain-login.png`, `qa/manual/screens/M16/triage/t003-buy-login.png`
 - **Notes:** Related: ETQAN-QA-058 (deep link lost after sign-in) - this bug is the missing context/back path, not the redirect.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The buy link reached a bare sign-in page with no context and no way back; the site hint said only 'sign in then open'.
+- **Fix (files):** dashboard/src/routes/login.tsx (buy note when next is a store page, 'Back to the academy's site'), locales auth.signInToBuy/backToSite; marketing/src/lib/i18n.ts signInToBuy
+- **Regression test:** login.test.tsx: tells a buyer why to sign in (ETQAN-QA-752); marketing test/round2-a2.test.ts copy
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-752-after.png)
 
 ---
 
@@ -6574,8 +6828,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** Plain text "أوافق على شروط الأكاديمية وعلى احتفاظها بهذه البيانات." with no link, then only the code box and the checkbox.
 - **Evidence:** `qa/manual/screens/M16/M16-F-011-terms-not-link-no-summary.png`, `qa/manual/screens/M16/triage/t009-invalid-code.png`
 - **Notes:** There is no academy terms content type today (website.md), so a link needs a terms page/setting; the review summary is a suggestion. Not easy.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The consent cited academy terms that do not exist, and step 4 showed nothing of what is sent.
+- **Fix (files):** dashboard/src/features/registration/RegisterForm.tsx (ReviewSummary), locales registration.fields.consent, review.*; decision in round-2/decisions.md
+- **Regression test:** RegisterPage.test.tsx: lists what will be sent (ETQAN-QA-759)
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: RegisterPage.test.tsx)
 
 ---
 
@@ -6628,8 +6884,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** Green circle with a lone "ا" for "الشيخ أحمد الحداد (Ahmad Al-Haddad)", on the site and on the booking page.
 - **Evidence:** `qa/manual/screens/M16/M16-F-014-avatar-initial-alif.png`, `qa/manual/screens/M16/triage/t014-consult-avatar.png`, `qa/manual/screens/M16/triage/t015-consult-booking-bare.png`
 - **Notes:** Initial helper in marketing and dashboard (`BookingWizard`).
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The API's `initial` was `name[:1]`, the article's alef.
+- **Fix (files):** backend/etqan/consultations/services/consultants.py (`name_initial`), api/booking_serializers.py
+- **Regression test:** backend consultations/tests/test_name_initial.py
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-762-after.png)
 
 ---
 
@@ -6646,7 +6904,8 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Evidence:** `qa/manual/screens/M16/M16-F-015-consult-booking-no-header.png`, `qa/manual/screens/M16/triage/t015-consult-booking-bare.png`, `qa/manual/screens/M16/triage/t016-checkout-no-appointment.png`, `qa/manual/screens/M16/triage/t018-manage-paid-mobile.png`, `qa/manual/screens/M16/triage/t021-verify-invalid.png`
 - **Notes:** Wrap the public consult routes in the same public shell the verify/login routes use.
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: The public consult/pay routes used a bare `PublicFrame` (`<main>` only). Fix: `gateways/PublicFrame.tsx` now has the academy header (BrandWordmark, LocaleToggle, ThemeToggle) and "Back to the academy's website" (`/ar/`|`/en/`); covers `/consult/*` and `/pay/*`; `common.backToSite`. Regression test: `gateways/PublicFrame.test.tsx`.
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/D/ETQAN-QA-763-after.png (anon AR phone /app/consult/1: academy header, language switch; back-to-site link in page text); dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -6720,7 +6979,8 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Evidence:** `qa/manual/screens/M16/M16-F-020-paid-link-no-receipt.png`, `qa/manual/screens/M16/triage/t020-paid-link.png`
 - **Notes:** online-payments.md documents no payer notice for links; needs a notice on link `complete` plus paid fields in the public payload.
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: `record_link_payment` sent nothing and the public link payload had no paid fields. Fix: Receipt email on commit (`billing/services/receipts.py`, shared with ETQAN-QA-452); `gateways/services/links.py` `PublicLink.paid_at/reference` + `api/payloads.public_link`; `PublicLinkPage.tsx` shows Paid on / Reference. Regression test: pytest `billing/tests/test_receipts.py`, `gateways/tests/test_links.py::test_a_paid_links_public_page_shows_when_and_its_reference`, `test_pay_links.py` payload; `PublicLinkPage.test.tsx` "shows when a paid link was paid and its reference".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/D/ETQAN-QA-767-after.png (paid link YEwsi8…: date 27/10/2026 + reference shown); pytest gateways/billing receipts; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -6754,8 +7014,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** "من نحن" twice, one above the other.
 - **Evidence:** `qa/manual/screens/M16/M16-F-023-about-title-duplicated.png`, `qa/manual/screens/M16/triage/t023-about-dup.png`
 - **Notes:** marketing i18n strings for the about SectionHeader.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** aboutEyebrow repeated the title.
+- **Fix (files):** marketing/src/lib/i18n.ts (قصتنا / Our story)
+- **Regression test:** marketing test/round2-a2.test.ts (about eyebrow)
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: marketing test/round2-a2.test.ts + i18n diff (qa home has no about section now))
 
 ---
 
@@ -6774,8 +7036,11 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Fix (Agent 3, fix-1, 2026-10-28):** not built: needs new public payloads (API change) and an owner decision on public teacher fields. PROPOSAL written in `qa/coverage-gaps.md` § "M16 manual, Agent 3 fix cycle 1" (incl. the interim option to hide/label the three switches in M13's HomePageForm).
 - **Regression test:** none (no code change).
 - **Gate decision (Agent 2, 2026-10-28T14:58:46Z):** proposal accepted. Needs public catalogue and teacher payloads (an API change) and an owner decision on which teacher fields are public (academy-sites spec §3.2, Plan 3). Interim: hide or label the three switches in M13's HomePageForm.
-- **Verification status:** PROPOSAL-accepted (owner decision)
-
+- **Round 2 (Agent 3, group A1, 2026-10-28):**
+  - **Root cause:** landing payload sent only the three switches; no public catalogue/teacher data and no home sections.
+  - **Fix (files):** backend `catalogue/services.py` public_courses/packages/teachers, `site/api/serializers.py:landing_payload` adds `courses/packages/teachers` (empty while each switch is off), `pyproject.toml` import-linter ignore for site→catalogue.services; marketing `lib/site.ts` types+defaults, new `components/LiveCatalogue.astro`, `pages/[lang]/index.astro`, `lib/i18n.ts` ar/en strings (decision in round-2/decisions.md). (branch qa/manual-round-2, uncommitted)
+  - **Regression test:** pytest `site/tests/test_public_api.py::test_the_home_page_switches_bring_live_courses_packages_and_teachers`; marketing `test/components.test.ts` "LiveCatalogue (ETQAN-QA-770)".
+- **Verification status:** VERIFIED (round 2, Agent 2 A1, pytest/Vitest regression tests re-run green 2026-10-28 (backend 520, dashboard 511, marketing 47); qa/manual/screens/round-2/A1/ETQAN-QA-770-after.png)
 ---
 
 ## ETQAN-QA-771: English site: Arabic-only course titles and text are laid out LTR and scrambled ("M15- (مدفوعة) حفظ جزء عمّ"), in the Latin display serif
@@ -6885,8 +7150,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** "Etqan QA Academy · Etqan QA Academy" above "الموقع تحت الصيانة / Under maintenance" (503).
 - **Evidence:** `qa/manual/screens/M16/triage/g001-closed-site-name-twice.png`
 - **Notes:** `marketing/src/components/ClosedPage.astro:49` prints `pick(name,'ar') · pick(name,'en')` unconditionally.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** ClosedPage printed both names unconditionally.
+- **Fix (files):** marketing/src/components/ClosedPage.astro (once when equal, each in `<bdi>`)
+- **Regression test:** marketing test/round2-a2.test.ts (closed page)
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: marketing test/round2-a2.test.ts (site not closed for the check))
 
 ---
 
@@ -6900,8 +7167,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** Bidi reorders the chip text with the date's leading digit: the chip is split in two gold pieces, "فئة بوابة" + "1" + "M16", and the date reads "أكتوبر 2026".
 - **Evidence:** `qa/manual/screens/M16/fix/g774-article-cover-m.png`, `qa/manual/screens/M16/fix/g774-article-cover-d.png`
 - **Notes:** `marketing/src/pages/[lang]/articles/[slug].astro:95-96`: isolate the chip and the date (`<bdi>`, `dir="auto"` + `inline-block`/`unicode-bidi: isolate`).
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The chip and the date shared one bidi run.
+- **Fix (files):** marketing/src/pages/[lang]/articles/[slug].astro (chip dir=auto + isolate, date in `<bdi>`)
+- **Regression test:** marketing test/round2-a2.test.ts (sources)
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: marketing test/round2-a2.test.ts (qa has no published article))
 
 ---
 
@@ -6917,8 +7186,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** Under the button "استلمنا طلب الحصة التجريبية، سنتواصل معك قريبًا لتحديد الموعد.", but the heading is "تواصل معنا", the trial note is hidden and the hidden `kind` is `contact` (eval). A second send is stored as a contact inquiry.
 - **Evidence:** `qa/manual/screens/M16/M16-F-030-trial-heading-resets.png`, `qa/manual/screens/M16/triage/t030-trial-heading-resets-ar-m.png`
 - **Notes:** `marketing/src/components/ContactForm.astro` submit handler calls `setKind("contact")` after `form.reset()` (deliberate in the 753 fix). Keep `wasTrial` kind after a successful send (still reset on `pageshow`). Test data: inquiry "M16 بوابة نهائية" (trial) on qa.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The submit handler reset the kind to contact after every successful send (753 fix).
+- **Fix (files):** marketing/src/components/ContactForm.astro (`setKind(wasTrial ? "trial" : "contact")`; pageshow still resets)
+- **Regression test:** marketing test/round2-a2.test.ts: keeps a sent trial request a trial request
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: marketing test/round2-a2.test.ts + ContactForm.astro wasTrial)
 
 ---
 
@@ -6933,8 +7204,13 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** "أدخل رقم هاتف صحيحًا: أرقام فقط، ويمكن أن يبدأ بعلامة +." in `rgb(14, 124, 102)` (the primary green used for "استلمنا طلب…"), under the button; phone box unchanged. EN same ("digits only, optionally starting with +"). On a phone it reads like a sent confirmation.
 - **Evidence:** `qa/manual/screens/M16/M16-F-031-phone-error-green-ar.png`, `qa/manual/screens/M16/M16-F-031-phone-error-green-en.png`, `qa/manual/screens/M16/triage/t031-phone-error-green-ar-m.png`
 - **Notes:** `ContactForm.astro`: `[data-result]` is always `text-[var(--primary)]`; switch to the destructive colour when `role=alert`, set `aria-invalid` + focus on the phone input, and mention the 6–15 digit length in `phoneInvalid` (marketing `lib/i18n.ts` ar/en). The "contact method required" alert has the same colour.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** `[data-result]` was always the primary green, the script never marked the phone field, and `phoneInvalid` named only the character rule.
+- **Fix (files):** `marketing/src/components/ContactForm.astro`: phone error shown under the field (`#inquiry-phone-error`, role=alert, red-700), `aria-invalid` + focus on the phone input, the result line turns red-700 for alerts (`data-tone=error`); `marketing/src/lib/i18n.ts` phoneInvalid mentions 6–15 digits (ar/en; the site has no es).
+- **Regression test:** `marketing/test/components.test.ts` ("shows a phone error at the field … ETQAN-QA-779").
+- **Root cause (round 2, cycle 2):** the always-present empty error span was a grid row (plus gap) in the phone label, and the two-column row stretched both labels to the taller one, so the email input grew.
+- **Fix (files, cycle 2):** `marketing/src/components/ContactForm.astro`: `items-start` on the sm:grid-cols-2 row; the error span gets `empty:hidden` so it takes no space until it has text.
+- **Regression test (cycle 2):** `marketing/test/components.test.ts` (ETQAN-QA-779 test now also asserts `empty:hidden` and `items-start`).
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate cycle 2 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-779-after.png (375 AR: phone '12' -> red error under the field 'أدخل رقم هاتف صحيحًا من 6 إلى 15 رقمًا…', field aria-invalid + red ring, result line empty) and ETQAN-QA-779-after-1440.png (email input 51.6 px before and after the error, no stretch); marketing components test 26/26)
 
 ---
 
@@ -6949,8 +7225,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** Day headings "2026/10/29", "2026/10/31", "2026/11/02" only.
 - **Evidence:** `qa/manual/screens/M16/M16-F-032-slot-dates-no-weekday.png`, `qa/manual/screens/M16/triage/t032-slot-dates-no-weekday.png`
 - **Notes:** `dashboard/src/features/consultations/BookingSlots.tsx:43` groups by `dayIn(...)`; show a weekday + day-month label (e.g. `formatDay` / the `appointmentText` date part). `SlotPicker.tsx:49` (signed-in booking) uses the same `dayIn` heading and likely needs the same change.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** Slot days were grouped and titled with `dayIn` (date only).
+- **Fix (files):** dashboard/src/features/consultations/time.ts (`slotDay`), BookingSlots.tsx, SlotPicker.tsx
+- **Regression test:** consultations/time.test.ts: slotDay (ETQAN-QA-780)
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: consultations/time.test.ts + slotDay wired in BookingSlots/SlotPicker (qa has no open slots to show))
 
 ---
 
@@ -7004,8 +7282,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Expected:** One footer row: primary action(s) together, "إغلاق" secondary, delete set apart.
 - **Actual:** Row 1 "حفظ" (outline) · "إغلاق" · solid red "حذف الواجب"; row 2 "تحديد كمكتمل" alone. Which button saves the comment is unclear.
 - **Evidence:** `qa/manual/screens/M11/M11-F-003-homework-dialog-buttons-two-rows.png`, `qa/manual/screens/M11/triage/t003-hw-dialog-footer.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The shared `DialogFooter` is one wrapping row, so with four buttons the last (the main action) dropped alone onto a second row.
+- **Fix (files):** `dashboard/src/ui/dialog.tsx`: `DialogFooter` takes a `start` slot (destructive/rare actions set apart at the start; close + main actions grouped at the end, each group wraps whole); `dashboard/src/features/homework/HomeworkDialog.tsx` puts Delete in `start`.
+- **Regression test:** `dashboard/src/ui/dialog.test.tsx`; `dashboard/src/features/homework/HomeworkDialog.test.tsx` ("keeps Close and the main action together … ETQAN-QA-652").
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-652-after.png (Close/Save/'تحديد كمكتمل' together with the main action at the end; delete set apart on its own row at the start - the 384 px dialog can't hold all four in one row); HomeworkDialog + dialog tests pass)
 
 ---
 
@@ -7054,8 +7334,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Expected:** The same kind of control for both (a button "فتح الرابط" / "تنزيل").
 - **Actual:** Link row: small green underlined "فتح" at the far end; file row: a proper outline "تنزيل" button. The link is easy to miss.
 - **Evidence:** `qa/manual/screens/M11/M11-F-011-materials-open-link-vs-download-button.png`, `qa/manual/screens/M11/triage/t011-student-materials.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The link row used an underlined text link.
+- **Fix (files):** dashboard/src/features/content/Materials.tsx (outline button 'Open link'), locales content.openLink
+- **Regression test:** Materials.test.tsx: draws a link as the same outline button
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-655-after.png)
 
 ---
 
@@ -7088,7 +7370,8 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Evidence:** `qa/manual/screens/M11/M11-F-013-progress-topic-no-surah-verses.png`, `qa/manual/screens/M11/triage/t013-topic-no-surah.png`
 - **Notes:** The level payload carries `chapter` (id) and verses (`learning/api/serializers.py:82`), but a teacher can't read the chapter list (GET quran-chapters needs `quran_chapter.view_any`/`level.*`), so showing the name likely needs the chapter name in the progress payload (API change → proposal).
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: The progress payload carried only the chapter number; the teacher can't read the chapter list. Fix: Backend `learning/services/progress.py` additive `chapter_name_arabic/simple` per topic. Dashboard `curriculum/chapterLabel.ts` `topicPassage` (verse range isolated); shown in `ProgressPanel` (teacher + office drawer) and `MyProgress` (student). Regression test: pytest `learning/tests/test_progress.py::test_progress_names_a_topics_surah`; `chapterLabel.test.ts` topicPassage; `ProgressPanel.test.tsx` "shows the surah and verses a topic points at".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: curriculum vitest (ProgressPanel, chapterLabel); pytest learning test_progress; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -7122,8 +7405,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** No badge on "طلبات الترقية"; the page tab says "قيد الانتظار (1)".
 - **Evidence:** `qa/manual/screens/M11/M11-F-015-upgrades-no-sidebar-count-one-click-approve.png`, `qa/manual/screens/M11/triage/t015-upgrades-no-count.png`
 - **Notes:** Not a bug: one-click "قبول" with no confirm. The row already shows from→to level, approval is the documented single action (`approve_request`), and the office can set any level from student levels, so it is reversible. Notifications `level.upgrade_requested` exist (curriculum.md).
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The office nav item had no badge; only Registrations had a count.
+- **Fix (files):** dashboard/src/features/shell/nav.ts (badge pendingUpgrades), AppShell.tsx, features/curriculum/queries.ts (usePendingUpgradeCount), locales curriculum.nav.upgradesBadge
+- **Regression test:** AppShell.test.tsx: level upgrades badge (ETQAN-QA-659); nav.test.ts badges list
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: badge '1' on طلبات الترقية in ETQAN-QA-101-after.png)
 
 ---
 
@@ -7192,8 +7477,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** 101 options (blank + 100), last "QA5 RT1 ok"; the dialog has no search input (inputs: text, text, month, checkbox).
 - **Evidence:** `qa/manual/screens/M11/M11-F-019-honour-student-picker-100-no-search.png`, `qa/manual/screens/M11/triage/t019-021-honour-dialog.png`
 - **Notes:** Same family as ETQAN-QA-202 / 273 / 371 (100-cap pickers, OPEN); the owner has a pending proposal for one shared searchable student picker.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** Each dialog asked `usePeople("students", {page_size: 100})` once, with no server search (or, in the subscription form, a search but no hint), so students past the first page, most Arabic names, could not be chosen.
+- **Fix (files):** one shared searchable picker `dashboard/src/features/people/StudentPicker.tsx` (`useStudentPicker` + `StudentPicker`: server `q` search, "showing the first N of M, type a name" hint, the picked/edited student kept as an option), exported from `features/people/index.ts`; locales `people.picker` (ar/en/es); used in `dashboard/src/features/honour/HonourDialog.tsx` (the edited entry's student pinned).
+- **Regression test:** `dashboard/src/features/people/StudentPicker.test.tsx`; `dashboard/src/features/honour/HonourAdmin.test.tsx`.
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-663-after.png; browser: hint 100 of 156, search 'منى' narrows to her)
 
 ---
 
@@ -7260,8 +7547,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Expected:** A visible "عرض الشهادة" button or an arrow.
 - **Actual:** A plain card "شهادة إتمام · F03 قرآن · حصة مكتملة واحدة · 2026/10/28"; the whole card is one link to `/app/certificates/2/print` with no affordance.
 - **Evidence:** `qa/manual/screens/M11/M11-F-024-student-cert-card-no-view-print-affordance.png`, `qa/manual/screens/M11/triage/t024-student-cert-card-mobile.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The card's only action was the whole-card link.
+- **Fix (files):** dashboard/src/features/certificates/MyCertificates.tsx ('View / print' button), locales certificates.viewPrint
+- **Regression test:** MyCertificates.test.tsx: visible View / print action
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-667-after.png)
 
 ---
 
@@ -7403,8 +7692,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** 409 POST `/api/v1/ai/drafts/`, then "الذكاء الاصطناعي غير مُعدّ لهذه الأكاديمية." + link to Integrations. Panel title "سجلات هذا الشهر".
 - **Evidence:** `qa/manual/screens/M11/M11-F-032-ai-draft-not-configured-after-generate.png`, `qa/manual/screens/M11/triage/t032-ai-draft-not-set-up.png`
 - **Notes:** The 409 itself is documented (ai.md: `integrations.resolve("ai")` None → 409 `ai.not_set_up`; `ETQAN_AI_FAKE` fakes the model, it still needs an account), and the message is clear Arabic. Same class as ETQAN-QA-619 (WhatsApp offered while not set up). Nothing saved.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The AI button didn't know the integration state; the panel title was fixed text.
+- **Fix (files):** dashboard/src/features/ai/AiDraftButton.tsx (up-front not-set-up state via integrations, hint), features/integrations/queries.ts (enabled), studentReports/FactsPanel.tsx (month in title), locales ai.notSetUpShort, studentReports.facts.*
+- **Regression test:** AiDraftButton.test.tsx (ETQAN-QA-675); FactsPanel.test.tsx: titles the panel with the chosen month
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-675-after.png)
 
 ---
 
@@ -7418,8 +7709,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Expected:** Student and month once, in an aligned header.
 - **Actual:** As titled.
 - **Evidence:** `qa/manual/screens/M11/M11-F-033-report-print-name-month-twice.png`, `qa/manual/screens/M11/triage/t033-report-print-twice.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** ReportPrint repeated student and month in a fields row; PrintSheet's number line was a dir=ltr block aligned to its own end.
+- **Fix (files):** dashboard/src/features/studentReports/ReportPrint.tsx (row removed), features/branding/PrintSheet.tsx (number in `<bdi>`)
+- **Regression test:** ReportPrint.test.tsx: names the student and the month once
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-676-after.png)
 
 ---
 
@@ -7470,8 +7763,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Expected:** 4½ stars (or 4 + half), matching the number.
 - **Actual:** "متوسط التقييم 4.5 ★★★★★".
 - **Evidence:** `qa/manual/screens/M11/M11-F-036-teacher-average-4-5-shows-5-stars.png`, `qa/manual/screens/M11/triage/t036-avg-4-5-five-stars.png`
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** MyReviews rounded the average; StarRating had no half star.
+- **Fix (files):** dashboard/src/features/reviews/StarRating.tsx (half star, label), MyReviews.tsx, locales reviews.starsHalf
+- **Regression test:** StarRating.test.tsx: draws 4.5 as four and a half stars
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-679-after.png)
 
 ---
 
@@ -7487,8 +7782,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** Wrapped card: chip at the bottom start under the date; others at the far end. Student chip uses `homework.completed` = "Completed"; teacher/office `homework.status.complete` = "Complete".
 - **Evidence:** `qa/manual/screens/M11/M11-F-037-homework-card-badge-jumps-complete-vs-completed.png`, `qa/manual/screens/M11/triage/t037a-parent-hw-cards.png`
 - **Notes:** EN student session could not be re-created (login stayed on /login once); wording confirmed in code.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The card was `flex-wrap`, so a wrapped title pushed the chip to a new line; the student list used `homework.completed` ("Completed") instead of `homework.status.complete`.
+- **Fix (files):** `dashboard/src/features/homework/MyHomework.tsx`: card `items-start` without wrap, title `min-w-0 flex-1`, chip `shrink-0`; list chip and detail chip use `homework.status.complete`.
+- **Regression test:** `dashboard/src/features/homework/MyHomework.test.tsx` ("… ETQAN-QA-680").
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-680-after.png (parent AR: chip at the same end on wrapped and short cards, 'مكتمل'); EN locale uses status.complete 'Complete' for students; MyHomework test passes)
 
 ---
 
@@ -7503,8 +7800,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** Both required selects are empty white boxes; the first option of each is an empty string (student select 21 options, course select 10).
 - **Evidence:** `qa/manual/screens/M11/M11-F-038-cert-dialog-student-course-blank.png`, `qa/manual/screens/M11/triage/t038-cert-issue-blank-selects.png`
 - **Notes:** Reuse the `homework.dialog.pickStudent` / `pickCourse` pattern (certificates locale keys). Agent 1 also saw the Course select list every course in the academy, not only the student's; not filed as a bug (the office may issue a certificate for any course; the backend refuses a non-granting course with ETQAN-QA-665's message).
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** The selects' first option was an empty `<option value="" />`.
+- **Fix (files):** dashboard/src/features/certificates/IssueCertificateDialog.tsx, locales certificates.dialog.pickStudent/pickCourse
+- **Regression test:** IssueCertificateDialog.test.tsx: says what to pick in the empty selects
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-681-after.png)
 
 ---
 
@@ -7519,8 +7818,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** Button tops: "حذف الشهادة"/"إبطال الشهادة"/"إغلاق" at y=666, "حفظ" alone at y=718.
 - **Evidence:** `qa/manual/screens/M11/M11-F-039-cert-dialog-footer-two-rows.png`, `qa/manual/screens/M11/triage/t039-cert-detail-footer.png`
 - **Notes:** Same shape as ETQAN-QA-652 (homework dialog footer); the two can share one footer layout fix.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** Same as ETQAN-QA-652: one wrapping footer row.
+- **Fix (files):** `dashboard/src/ui/dialog.tsx` `start` slot; `dashboard/src/features/certificates/CertificateDialog.tsx` puts Delete and Revoke in `start`, Close + Save at the end.
+- **Regression test:** `dashboard/src/ui/dialog.test.tsx`; `dashboard/src/features/certificates/CertificateDialog.test.tsx` ("… ETQAN-QA-682").
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: qa/manual/screens/round-2/C/ETQAN-QA-682-after.png (Close + green Save together; delete/revoke set apart); CertificateDialog test passes)
 
 ---
 
@@ -7537,8 +7838,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** (1) "عمر الشريف (-Omar Al" / "(Sharif"; (2) "Omar Al-) عمر الشريف" / "(Sharif" in the big name line of the certificate; (3) "(Omar" / "Al-Sharif)" and "(Adam" / "Al-Najjar)" in the Student column. The certificate is what families print and share, and the verify page is public.
 - **Evidence:** `qa/manual/screens/M11/M11-F-040-verify-page-name-brackets-flip.png`, `qa/manual/screens/M11/M11-F-040-cert-print-name-brackets-flip-mobile.png`, `qa/manual/screens/M11/M11-F-040-admin-cert-list-mobile-brackets.png`, `qa/manual/screens/M11/triage/t040a-verify-name-brackets.png`, `qa/manual/screens/M11/triage/t040b-print-name-brackets-m.png`, `qa/manual/screens/M11/triage/t040c-admin-list-m.png`
 - **Notes:** Same class as ETQAN-QA-209/216/218 (fixed with `scheduling/bits.PersonName`); the certificate surfaces don't use it. Also check `MyCertificates.tsx`, `SubjectCertificatePrint.tsx` and `CertificateDialog.tsx` subtitle. EN verify reads correctly.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause:** Certificate surfaces rendered bare names.
+- **Fix (files):** Shared `PersonName` on the print page (also used by the subject certificate), the public verify page, the office list and the dialog subtitle; `bidiName` for "Issued by" (`dashboard/src/features/certificates/CertificatePrint.tsx`, `VerifyCertificate.tsx`, `CertificatesList.tsx`, `CertificateDialog.tsx`). `MyCertificates` child `<option>` can't hold markup and was left as is.
+- **Regression test:** `components/PersonName.test.tsx`; `CertificateDialog.test.tsx` updated for the isolated issuer.
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: qa/manual/screens/round-2/B/ETQAN-QA-683-after.png (print), qa/manual/screens/round-2/B/ETQAN-QA-683-verify-after.png (public verify 375); office list DOM uses <bdi>)
 
 ---
 
@@ -7554,8 +7857,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** The title `<span dir="auto" class="truncate …">` is a block spanning x=282–1099 with computed `direction: ltr`, so its text sits at the far left next to "نسخ الرابط / فتح / حذف", while the checkbox and "PNG · 592 بايت · QA Admin · 2026/10/28" stay at the right. A Latin-led name is the usual case because the name defaults to the file name. Same on the student homework cards with a Latin-led title.
 - **Evidence:** `qa/manual/screens/M11/M11-F-041-library-latin-title-jumps-to-far-side.png`, `qa/manual/screens/M11/triage/t041-library-latin-title-far-side.png`
 - **Notes:** `dir="auto"` on a block-level (`truncate`/`block`) element also flips its alignment. Keep the alignment of the page direction (e.g. put `dir="auto"` on an inline `<bdi>` inside the block, or add `text-align: right` under `[dir=rtl]`). Test file deleted again after the repro.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** `dir="auto"` sat on a block-level title, so a Latin-led name also flipped the block's alignment.
+- **Fix (files):** dashboard/src/features/library/LibraryList.tsx, homework/MyHomework.tsx (title text in `<bdi>`, block keeps page alignment)
+- **Regression test:** LibraryList.test.tsx (Syllabus.pdf is a BDI, parent has no dir); MyHomework.test.tsx (ETQAN-QA-684)
+- **Verification status:** VERIFIED (round 2, A2 Agent 2, 2026-10-28; evidence: qa/manual/screens/round-2/A2/ETQAN-QA-684-after.png)
 
 ---
 
@@ -7748,7 +8053,8 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Evidence:** `qa/manual/screens/M13/M13-F-014-slug-change-hint.png`, `qa/manual/screens/M13/triage/t014-slug-hint.png`
 - **Notes:** Wording of the same box is part of ETQAN-QA-705. Pre-filling the redirects form needs route state; not a pure copy change.
 - **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Round 2 fix (Agent 3, group D, cycle 1, 2026-10-28):** Root cause: The hint was static text. Fix: `website/ArticleEditor.tsx`: shows the old address and a ticked "redirect the old Arabic and English addresses" option; on save it creates permanent redirects `/ar|en/articles/<old>` → new (`useCreateRedirect`; refusals toasted); `website.articles.oldAddress/addRedirects`. Regression test: `ArticleEditor.test.tsx` "shows the old address and adds its redirects on save (ETQAN-QA-709)".
+- **Verification status:** VERIFIED (round 2, Agent 2, 2026-10-28; evidence: ArticleEditor.test.tsx; dashboard vitest 57 files/589 tests green + tsc (only error is another group's FamilySessions.test.tsx) + backend pytest touched apps)
 
 ---
 
@@ -7781,8 +8087,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** 0 mailto/tel links; on a phone the owner must copy the number by hand.
 - **Evidence:** `qa/manual/screens/M13/M13-F-023-inquiries-no-date.png`, `qa/manual/screens/M13/triage/t023-inquiries.png`
 - **Notes:** The date, WhatsApp mark and Latin direction parts of M13-F-023 are ETQAN-QA-766 (already rendering in the working tree at triage).
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause (round 2):** Email and phone were plain spans.
+- **Fix (files):** `dashboard/src/features/website/InquiriesList.tsx`: `mailto:` and `tel:` links (`telHref` keeps a leading +).
+- **Regression test:** `dashboard/src/features/website/InquiriesList.test.tsx` ("… ETQAN-QA-711").
+- **Verification status:** VERIFIED (round 2, Agent 2 C gate 2026-10-28, evidence: browser /app/website/inquiries: 7 mailto + 7 tel links (tel:+201001112255); InquiriesList test passes; qa/manual/screens/round-2/C/ETQAN-QA-711-after.png)
 
 ---
 
@@ -7799,8 +8107,10 @@ ENV: local docker stack (backend + dashboard with uncommitted qa/manual-2026-10 
 - **Actual:** The row silently disappears (المجموع 5 → 4), no toast; in the handled list only a grey "تمت معالجته" chip. The API already returns `handled_by_email` (qa-admin@…) but the card doesn't show it; there is no re-open endpoint (`POST …/handle/` only).
 - **Evidence:** `qa/manual/screens/M13/M13-F-024-inquiry-handled-no-undo.png`, `qa/manual/screens/M13/triage/t024a-handled-click.png`, `qa/manual/screens/M13/triage/t024-handled-view.png`
 - **Notes:** Toast + showing `handled_by_email` are small dashboard changes; re-open/undo needs an API action (proposal) — hence not easy as a whole. `handled_at` isn't stored.
-- **Root cause / Fix / Regression tests:** _Agent 3_
-- **Verification status:** OPEN
+- **Root cause:** No toast/undo in `InquiriesList`; no re-open action or `handled_at` in the API.
+- **Fix (files):** Backend (additive): `Inquiry.handled_at` nullable (migration `site/0008_inquiry_handled_at`), `services.handle_inquiry/reopen_inquiry`, `POST admin/inquiries/<id>/reopen/`, `handled_at` in the serializer (`backend/etqan/site/{models,services}.py`, `api/admin_views.py`, `api/urls.py`, `api/admin_serializers.py`). Dashboard: success toast with Undo, handled rows show "By <email> · <when>" and a "Mark as new" button (`dashboard/src/features/website/InquiriesList.tsx`, `api.ts`, `queries.ts`, `schemas.ts`; keys in ar/en/es website.json). migrate_schemas applied locally. Decision in round-2/decisions.md.
+- **Regression test:** `backend/etqan/site/tests/test_admin_api.py::test_a_handled_inquiry_can_be_reopened`; `website/InquiriesList.test.tsx` "confirms Mark handled with an undo…" and "shows who handled an inquiry and when…".
+- **Verification status:** VERIFIED (round 2, Agent 2 B gate 2026-10-28, evidence: qa/manual/screens/round-2/B/ETQAN-QA-712-after.png (toast with تراجع); handled view shows "بواسطة qa-admin@… · 28/10/2026، 10:08 م"; reopen endpoint returned the row to new (test data restored); test_admin_api passes)
 
 ---
 

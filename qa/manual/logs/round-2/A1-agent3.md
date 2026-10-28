@@ -1,0 +1,23 @@
+# A1 agent 3 (fixer, cycle 1)
+- 2026-10-28T18:42:00Z start: read README, group-A1, register entries
+- 2026-10-28T18:48:31Z CSV/lang (161,271,555,550) + wallet method (456) done, tests added
+- 2026-10-28T18:54:03Z done 066,115,154,175,176,276,409,412,429,454 (tests added)
+- 2026-10-28T19:00:29Z done 102,319,351,463,471,518,624 (tests)
+- 2026-10-28T19:03:09Z done 059,106,365 (tests)
+- 2026-10-28T19:07:34Z done 053,055 (tests)
+- 2026-10-28T19:12:10Z done 159,164,166 (tests)
+- 2026-10-28T19:15:16Z done 265,305 (tests)
+- 2026-10-28T19:17:10Z done 309
+- 2026-10-28T19:19:43Z done 318
+- 2026-10-28T19:20:46Z done 354
+- 2026-10-28T19:24:43Z done 354,357,372
+- 2026-10-28T19:28:02Z done 403
+- 2026-10-28T19:35:53Z done 200,201,260
+- 2026-10-28T19:37:13Z done 565
+- 2026-10-28T19:39:43Z done 509
+- 2026-10-28T19:41:14Z done 516
+- 2026-10-28T19:42:12Z done 619
+- 2026-10-28T19:48:36Z done 517
+- 2026-10-28T19:51:54Z done 504; starting 770
+- 2026-10-28T20:13:27Z done 770 (backend+marketing), decisions written; next: register + checklist
+- 2026-10-28T20:15:15Z register updated (48 entries FIXED-UNVERIFIED round 2), group-A1 all ticked. Checks: backend scoped pytest (identity 891, scheduling/wallet/billing/learning/platform/notifications 2817, gateways 476, payroll 441, site+catalogue 841, etqan_billing 156) green, ruff clean, lint-imports 54 kept; dashboard touched Vitest green, tsc only error is FamilySessions.test.tsx:202 onTestFinished (another group's test); marketing components/site tests green (articles/videos canonical failures pre-existing, not A1).
