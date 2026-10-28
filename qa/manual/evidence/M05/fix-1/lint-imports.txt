@@ -1,0 +1,75 @@
+
+╔══╗─────────▶╔╗ ╔╗      ╔╗◀───┐
+╚╣╠╝◀─────┐  ╔╝╚╗║║────▶╔╝╚╗   │
+ ║║   ╔══╦══╦╩╗╔╝║║  ╔╦═╩╗╔╝╔═╦══╗
+ ║║╔══╣╔╗║╔╗║╔╣║ ║║ ╔╬╣╔╗║║ ║│║╔═╝
+╔╣╠╣║║║╚╝║╚╝║║║╚╗║╚═╝║║║║║╚╗║═╣║
+╚══╩╩╩╣╔═╩══╩╝╚═╝╚═══╩╩╝╚╩═╩╩═╩╝
+  └──▶║║                    ▲ 
+      ╚╝────────────────────┘
+
+
+---------
+Contracts
+---------
+
+Analyzed 1301 files, 4105 dependencies.
+---------------------------------------
+
+platform imports no business modules KEPT
+identity does not import tenants KEPT
+site imports neither identity nor tenants KEPT (5 ignored imports)
+academy imports no other business module KEPT
+catalogue reaches identity only through its services KEPT (1 ignored import)
+identity core does not import the catalogue KEPT
+scheduling reaches other apps only through their services KEPT
+scheduling's core never imports billing KEPT
+other apps reach scheduling only through its services KEPT
+billing reaches other apps only through their services KEPT
+other apps reach billing only through its services KEPT
+payroll reaches other apps only through their services KEPT
+scheduling never imports payroll KEPT
+other apps reach payroll only through its services KEPT
+notifications reaches other apps only through their services KEPT
+no app imports notifications KEPT (4 ignored imports)
+access reaches other apps only through their services KEPT (6 ignored imports)
+other apps reach access only through its services KEPT
+integrations imports only the platform and etqan_billing's services KEPT (77 ignored imports)
+other apps reach integrations only through its services KEPT (8 ignored imports)
+etqan_billing's core imports only the platform KEPT
+etqan_billing reaches identity and integrations only through their services KEPT (33 ignored imports)
+other apps reach etqan_billing only through its services KEPT (7 ignored imports)
+finance reaches other apps only through their services KEPT
+other apps reach finance only through its services KEPT
+billing never imports finance KEPT
+gateways imports no business app KEPT (126 ignored imports)
+gateways reaches identity and academy only through their services KEPT (128 ignored imports)
+other apps reach gateways only through its services KEPT (1 ignored import)
+wallet reaches other apps only through their services KEPT (64 ignored imports)
+other apps reach wallet only through its services KEPT
+billing never imports wallet KEPT
+scheduling never imports wallet KEPT
+vouchers reaches other apps only through their services KEPT (68 ignored imports)
+other apps reach vouchers only through its services KEPT (2 ignored imports)
+billing never imports vouchers KEPT
+scheduling never imports vouchers KEPT
+catalogue never imports vouchers KEPT
+notifications never imports learning or chat internals KEPT
+chat reaches other apps only through their services KEPT (1 ignored import)
+no app imports chat KEPT (2 ignored imports)
+learning reaches other apps only through their services KEPT (11 ignored imports)
+recorded reaches other apps only through their services KEPT (116 ignored imports)
+vouchers never imports recorded KEPT
+consultations reach other apps only through their services KEPT (171 ignored imports)
+library imports only the platform KEPT
+employment reaches identity only through its services KEPT (1 ignored import)
+systemstatus reaches scheduling only through its services KEPT
+registration imports only the platform and identity's services KEPT (12 ignored imports)
+translations imports only the platform KEPT
+ai reaches other apps only through their services KEPT (78 ignored imports)
+other apps reach ai only through its services KEPT
+devices reaches other apps only through their services KEPT (27 ignored imports)
+no app imports devices KEPT
+
+Contracts: 54 kept, 0 broken.
+exit 0

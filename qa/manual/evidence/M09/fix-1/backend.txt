@@ -1,0 +1,26 @@
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+439 passed, 111 warnings in 44.51s
+E501 Line too long (89 > 88)
+   --> etqan/payroll/tests/test_pay_to_balance.py:122:89
+    |
+120 |     number = "PAY-000001"
+121 |     assert (
+122 |         salary_title("Bilal", number, "ar") == f"راتب المعلم – Bilal – كشف راتب {number}"
+    |                                                                                         ^
+123 |     )
+124 |     assert salary_title("Bilal", number, "es") == (
+    |
+
+Found 1 error.
+Would reformat: etqan/payroll/tests/test_pay_to_balance.py
+1 file would be reformatted, 1 file already formatted
+devices reaches other apps only through their services KEPT (27 ignored imports)
+no app imports devices KEPT
+
+Contracts: 54 kept, 0 broken.
+All checks passed!
+2 files already formatted
+20 passed in 5.24s

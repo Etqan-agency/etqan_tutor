@@ -1,0 +1,1247 @@
+diff --git a/src/features/identity/api.ts b/src/features/identity/api.ts
+index b75cdda..3f2a45a 100644
+--- a/src/features/identity/api.ts
++++ b/src/features/identity/api.ts
+@@ -1,4 +1,5 @@
+ import { AxiosError, isAxiosError } from "axios";
++import type { TFunction } from "i18next";
+ import { api } from "@/lib/api";
+ import {
+ 	type AddEmailInput,
+@@ -26,6 +27,8 @@ export interface ParsedApiError {
+ 	/** The rule a 409 names, e.g. `scheduling.already_renewed` (plan 4 D10). */
+ 	code?: string;
+ 	throttled: boolean;
++	/** A 429's `Retry-After`, in seconds, when the server sent one. */
++	retryAfter?: number;
+ 	/** The HTTP status, when the server answered. */
+ 	status?: number;
+ }
+@@ -65,12 +68,25 @@ export function parseApiError(error: unknown): ParsedApiError {
+ 		return result;
+ 	}
+ 	result.status = error.response.status;
+-	if (error.response.status === 429) result.throttled = true;
++	if (error.response.status === 429) {
++		result.throttled = true;
++		const wait = Number(error.response.headers?.["retry-after"]);
++		if (Number.isFinite(wait) && wait > 0) result.retryAfter = wait;
++	}
+ 	const data = error.response.data as Record<string, unknown> | undefined;
+ 	if (data && typeof data === "object") collect("", data, result);
+ 	return result;
+ }
+ 
++/** ETQAN-QA-063: "try again in about N minutes" when the server said how
++ * long (`Retry-After`), else the plain "try again later". */
++export function throttledMessage(parsed: ParsedApiError, t: TFunction): string {
++	if (!parsed.retryAfter) return t("signIn.throttled");
++	return t("signIn.throttledWait", {
++		count: Math.ceil(parsed.retryAfter / 60),
++	});
++}
++
+ export const identityApi = {
+ 	// ETQAN-QA-006: the server checks CSRF on every step that signs in, so
+ 	// each fetches the CSRF cookie first (nothing has set it on a fresh visit).
+diff --git a/src/features/identity/components/AddEmailForm.tsx b/src/features/identity/components/AddEmailForm.tsx
+index e8195de..4baddda 100644
+--- a/src/features/identity/components/AddEmailForm.tsx
++++ b/src/features/identity/components/AddEmailForm.tsx
+@@ -1,6 +1,7 @@
+ import { zodResolver } from "@hookform/resolvers/zod";
+ import { useForm } from "react-hook-form";
+ import { useTranslation } from "react-i18next";
++import { useFieldError } from "@/lib/field-error";
+ import {
+ 	Alert,
+ 	AlertDescription,
+@@ -19,6 +20,7 @@ export function AddEmailForm({
+ 	onSuccess: (email: string) => void;
+ }) {
+ 	const { t } = useTranslation();
++	const fieldError = useFieldError();
+ 	const add = useAddEmail();
+ 	const {
+ 		register,
+@@ -56,7 +58,7 @@ export function AddEmailForm({
+ 			<Field
+ 				id="new_email"
+ 				label={t("account.newEmail")}
+-				error={errors.email?.message}
++				error={fieldError(errors.email?.message)}
+ 			>
+ 				{/* autoFocus for the same reason as AddChildForm: this form
+ 				    replaces the disclosure that opened it, so without it focus
+@@ -72,7 +74,7 @@ export function AddEmailForm({
+ 			<Field
+ 				id="add_email_password"
+ 				label={t("account.currentPassword")}
+-				error={errors.current_password?.message}
++				error={fieldError(errors.current_password?.message)}
+ 			>
+ 				<PasswordInput
+ 					autoComplete="current-password"
+diff --git a/src/features/identity/components/ChangePasswordCard.test.tsx b/src/features/identity/components/ChangePasswordCard.test.tsx
+index 7f8068a..9b47230 100644
+--- a/src/features/identity/components/ChangePasswordCard.test.tsx
++++ b/src/features/identity/components/ChangePasswordCard.test.tsx
+@@ -66,6 +66,16 @@ describe("ChangePasswordCard", () => {
+ 		});
+ 	});
+ 
++	it("words a short new password for people, not zod (ETQAN-QA-048)", async () => {
++		render(<ChangePasswordCard />, { wrapper });
++		await fillAndSubmit("current-pw", "123");
++		expect(
++			await screen.findByText("Use at least 8 characters."),
++		).toBeInTheDocument();
++		expect(screen.queryByText(/too small/i)).not.toBeInTheDocument();
++		expect(identityApi.changePassword).not.toHaveBeenCalled();
++	});
++
+ 	it("posts the right payload", async () => {
+ 		vi.mocked(identityApi.changePassword).mockResolvedValue(undefined);
+ 		render(
+diff --git a/src/features/identity/components/ChangePasswordCard.tsx b/src/features/identity/components/ChangePasswordCard.tsx
+index 5ffbb2b..aa351bc 100644
+--- a/src/features/identity/components/ChangePasswordCard.tsx
++++ b/src/features/identity/components/ChangePasswordCard.tsx
+@@ -1,6 +1,7 @@
+ import { zodResolver } from "@hookform/resolvers/zod";
+ import { useForm } from "react-hook-form";
+ import { useTranslation } from "react-i18next";
++import { useFieldError } from "@/lib/field-error";
+ import {
+ 	Alert,
+ 	AlertDescription,
+@@ -19,6 +20,7 @@ import { type ChangePasswordInput, changePasswordSchema } from "../schemas";
+ 
+ export function ChangePasswordCard() {
+ 	const { t } = useTranslation();
++	const fieldError = useFieldError();
+ 	const change = useChangePassword();
+ 	const {
+ 		register,
+@@ -63,7 +65,7 @@ export function ChangePasswordCard() {
+ 					<Field
+ 						id="current_password"
+ 						label={t("account.currentPassword")}
+-						error={errors.current_password?.message}
++						error={fieldError(errors.current_password?.message)}
+ 						required
+ 					>
+ 						<PasswordInput
+@@ -74,7 +76,7 @@ export function ChangePasswordCard() {
+ 					<Field
+ 						id="new_password"
+ 						label={t("account.newPassword")}
+-						error={errors.new_password?.message}
++						error={fieldError(errors.new_password?.message)}
+ 						required
+ 					>
+ 						<PasswordInput
+diff --git a/src/features/identity/components/CodeResetFlow.tsx b/src/features/identity/components/CodeResetFlow.tsx
+index 89d2529..cfbe5fb 100644
+--- a/src/features/identity/components/CodeResetFlow.tsx
++++ b/src/features/identity/components/CodeResetFlow.tsx
+@@ -394,7 +394,14 @@ type Step =
+ /** B9c C-3, C-4: identifier → code → (account) and new password. The
+  * answer to a request is the same whoever the identifier names; the
+  * accounts appear only once the code is right. */
+-export function CodeResetFlow({ channel }: { channel: CodeChannel }) {
++export function CodeResetFlow({
++	channel,
++	onStarted,
++}: {
++	channel: CodeChannel;
++	/** True once a code was sent (past the first step), false back on it. */
++	onStarted?: (started: boolean) => void;
++}) {
+ 	const { t } = useTranslation();
+ 	const [identifier, setIdentifier] = useState("");
+ 	const [step, setStep] = useState<Step>({ name: "request" });
+@@ -403,6 +410,7 @@ export function CodeResetFlow({ channel }: { channel: CodeChannel }) {
+ 	function go(next: Step) {
+ 		setMoved(true);
+ 		setStep(next);
++		onStarted?.(next.name !== "request");
+ 	}
+ 
+ 	switch (step.name) {
+diff --git a/src/features/identity/components/LoginForm.test.tsx b/src/features/identity/components/LoginForm.test.tsx
+index 6c1536b..8f8ecea 100644
+--- a/src/features/identity/components/LoginForm.test.tsx
++++ b/src/features/identity/components/LoginForm.test.tsx
+@@ -227,6 +227,55 @@ describe("LoginForm", () => {
+ 		expect(screen.queryByRole("button", { name: /resend/i })).toBeNull();
+ 	});
+ 
++	it("says how long to wait when the server sends Retry-After (ETQAN-QA-063)", async () => {
++		const { AxiosError } = await import("../api");
++		const err = new AxiosError("bad");
++		// @ts-expect-error minimal response
++		err.response = {
++			status: 429,
++			data: { detail: "Request was throttled." },
++			headers: { "retry-after": "290" },
++		};
++		vi.mocked(identityApi.login).mockRejectedValue(err);
++		render(<LoginForm onSuccess={vi.fn()} onNotVerified={vi.fn()} />, {
++			wrapper,
++		});
++		await fillAndSubmit();
++		expect(
++			await screen.findByText(
++				"Too many attempts. Try again in about 5 minutes.",
++			),
++		).toBeInTheDocument();
++	});
++
++	it("shows empty fields and wrong credentials in Arabic (ETQAN-QA-048, QA-049)", async () => {
++		await act(() => i18n.changeLanguage("ar"));
++		try {
++			await failWith(400, { non_field_errors: ["Invalid credentials."] });
++			render(<LoginForm onSuccess={vi.fn()} onNotVerified={vi.fn()} />, {
++				wrapper,
++			});
++			const submit = screen.getByRole("button", { name: "تسجيل الدخول" });
++			await userEvent.click(submit);
++			expect(await screen.findAllByText("هذا الحقل مطلوب.")).toHaveLength(2);
++			expect(screen.queryByText(/too small/i)).not.toBeInTheDocument();
++			await userEvent.type(screen.getByLabelText(/البريد/), "a@b.com");
++			await userEvent.type(
++				screen.getByLabelText(/كلمة المرور/, { selector: "input" }),
++				"nope-123",
++			);
++			await userEvent.click(submit);
++			expect(
++				await screen.findByText("بيانات الدخول غير صحيحة."),
++			).toBeInTheDocument();
++			expect(
++				screen.queryByText(/invalid credentials/i),
++			).not.toBeInTheDocument();
++		} finally {
++			await act(() => i18n.changeLanguage("en"));
++		}
++	});
++
+ 	it("translates a registrant's refusal into Arabic", async () => {
+ 		await act(() => i18n.changeLanguage("ar"));
+ 		try {
+diff --git a/src/features/identity/components/LoginForm.tsx b/src/features/identity/components/LoginForm.tsx
+index 5418448..a25c7ee 100644
+--- a/src/features/identity/components/LoginForm.tsx
++++ b/src/features/identity/components/LoginForm.tsx
+@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
+ import { useState } from "react";
+ import { useForm } from "react-hook-form";
+ import { useTranslation } from "react-i18next";
++import { useFieldError } from "@/lib/field-error";
+ import {
+ 	Alert,
+ 	AlertDescription,
+@@ -10,7 +11,7 @@ import {
+ 	Input,
+ 	PasswordInput,
+ } from "@/ui";
+-import { parseApiError } from "../api";
++import { parseApiError, throttledMessage } from "../api";
+ import { useLogin, useSignInOptions } from "../queries";
+ import { type LoginInput, loginSchema } from "../schemas";
+ import { GoogleSignInButton } from "./GoogleSignInButton";
+@@ -23,6 +24,12 @@ const REGISTRANT_KEYS: Record<string, string> = {
+ 	"registration.rejected": "signIn.registrant.registrationRejected",
+ };
+ 
++/** ETQAN-QA-049: the login endpoint's literal refusal carries no code, so
++ * its fixed English text is mapped to the reader's language here. */
++const SERVER_MESSAGES: Record<string, string> = {
++	"Invalid credentials.": "auth.invalidCredentials",
++};
++
+ export function LoginForm({
+ 	onSuccess,
+ 	onNotVerified,
+@@ -37,6 +44,7 @@ export function LoginForm({
+ 	secondStep?: boolean;
+ }) {
+ 	const { t } = useTranslation();
++	const fieldError = useFieldError();
+ 	const login = useLogin();
+ 	const options = useSignInOptions().data;
+ 	const phoneLogin = options?.phone_login === true;
+@@ -65,7 +73,7 @@ export function LoginForm({
+ 		} catch (error) {
+ 			const parsed = parseApiError(error);
+ 			if (parsed.throttled) {
+-				setError("root.server", { message: t("signIn.throttled") });
++				setError("root.server", { message: throttledMessage(parsed, t) });
+ 				return;
+ 			}
+ 			for (const [field, message] of Object.entries(parsed.fieldErrors)) {
+@@ -83,7 +91,10 @@ export function LoginForm({
+ 			} else if (parsed.message?.toLowerCase().includes("not verified")) {
+ 				setError("root.notVerified", { message: t("auth.notVerified") });
+ 			} else if (parsed.message) {
+-				setError("root.server", { message: parsed.message });
++				const known = SERVER_MESSAGES[parsed.message];
++				setError("root.server", {
++					message: known ? t(known) : parsed.message,
++				});
+ 			}
+ 		}
+ 	}
+@@ -114,7 +125,7 @@ export function LoginForm({
+ 			<Field
+ 				id="identifier"
+ 				label={phoneLogin ? t("signIn.emailOrPhone") : t("auth.email")}
+-				error={errors.identifier?.message}
++				error={fieldError(errors.identifier?.message)}
+ 				required
+ 			>
+ 				<Input
+@@ -127,7 +138,7 @@ export function LoginForm({
+ 			<Field
+ 				id="password"
+ 				label={t("auth.password")}
+-				error={errors.password?.message}
++				error={fieldError(errors.password?.message)}
+ 				required
+ 			>
+ 				<PasswordInput
+diff --git a/src/features/identity/components/RemoveEmailDialog.test.tsx b/src/features/identity/components/RemoveEmailDialog.test.tsx
+index df70b4a..3d811bf 100644
+--- a/src/features/identity/components/RemoveEmailDialog.test.tsx
++++ b/src/features/identity/components/RemoveEmailDialog.test.tsx
+@@ -5,6 +5,8 @@ import { axe } from "jest-axe";
+ import type { ReactNode } from "react";
+ import { beforeEach, describe, expect, it, vi } from "vitest";
+ import "@/lib/i18n";
++import { Toaster } from "@/ui";
++import { __resetToasts } from "@/ui/toast";
+ import { identityApi } from "../api";
+ import { RemoveEmailDialog } from "./RemoveEmailDialog";
+ 
+@@ -23,7 +25,10 @@ function wrapper({ children }: { children: ReactNode }) {
+ const address = { id: 9, email: "old@b.com", verified: true, primary: false };
+ 
+ describe("RemoveEmailDialog", () => {
+-	beforeEach(() => vi.clearAllMocks());
++	beforeEach(() => {
++		vi.clearAllMocks();
++		__resetToasts();
++	});
+ 
+ 	it("removes on confirm", async () => {
+ 		vi.mocked(identityApi.removeEmail).mockResolvedValue(undefined);
+@@ -38,6 +43,44 @@ describe("RemoveEmailDialog", () => {
+ 		);
+ 	});
+ 
++	it("confirms the removal with a toast (ETQAN-QA-054)", async () => {
++		vi.mocked(identityApi.removeEmail).mockResolvedValue(undefined);
++		render(
++			<>
++				<RemoveEmailDialog address={address} />
++				<Toaster />
++			</>,
++			{ wrapper },
++		);
++		await userEvent.click(screen.getByRole("button", { name: /^remove$/i }));
++		const dialog = await screen.findByRole("alertdialog");
++		await userEvent.click(
++			within(dialog).getByRole("button", { name: /^remove$/i }),
++		);
++		expect(
++			await screen.findByText("old@b.com was removed."),
++		).toBeInTheDocument();
++	});
++
++	it("says so when the removal fails (ETQAN-QA-054)", async () => {
++		vi.mocked(identityApi.removeEmail).mockRejectedValue(new Error("x"));
++		render(
++			<>
++				<RemoveEmailDialog address={address} />
++				<Toaster />
++			</>,
++			{ wrapper },
++		);
++		await userEvent.click(screen.getByRole("button", { name: /^remove$/i }));
++		const dialog = await screen.findByRole("alertdialog");
++		await userEvent.click(
++			within(dialog).getByRole("button", { name: /^remove$/i }),
++		);
++		expect(
++			await screen.findByText(/something went wrong/i),
++		).toBeInTheDocument();
++	});
++
+ 	it("does not remove on cancel", async () => {
+ 		render(<RemoveEmailDialog address={address} />, { wrapper });
+ 		await userEvent.click(screen.getByRole("button", { name: /^remove$/i }));
+diff --git a/src/features/identity/components/RemoveEmailDialog.tsx b/src/features/identity/components/RemoveEmailDialog.tsx
+index 65155e1..6517451 100644
+--- a/src/features/identity/components/RemoveEmailDialog.tsx
++++ b/src/features/identity/components/RemoveEmailDialog.tsx
+@@ -9,6 +9,7 @@ import {
+ 	AlertDialogTitle,
+ 	AlertDialogTrigger,
+ 	Button,
++	toast,
+ } from "@/ui";
+ import { useRemoveEmail } from "../queries";
+ import type { EmailAddress } from "../schemas";
+@@ -38,7 +39,23 @@ export function RemoveEmailDialog({ address }: { address: EmailAddress }) {
+ 						<Button
+ 							type="button"
+ 							variant="destructive"
+-							onClick={() => remove.mutate(address.id)}
++							onClick={() =>
++								// ETQAN-QA-054: say so either way, like the rest of the card.
++								remove.mutate(address.id, {
++									onSuccess: () =>
++										toast({
++											description: t("account.removed", {
++												email: address.email,
++											}),
++											variant: "success",
++										}),
++									onError: () =>
++										toast({
++											description: t("account.genericError"),
++											variant: "destructive",
++										}),
++								})
++							}
+ 						>
+ 							{t("account.remove")}
+ 						</Button>
+diff --git a/src/features/identity/components/SetPrimaryDialog.tsx b/src/features/identity/components/SetPrimaryDialog.tsx
+index a0b3b54..6b98876 100644
+--- a/src/features/identity/components/SetPrimaryDialog.tsx
++++ b/src/features/identity/components/SetPrimaryDialog.tsx
+@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
+ import { useState } from "react";
+ import { useForm } from "react-hook-form";
+ import { useTranslation } from "react-i18next";
++import { useFieldError } from "@/lib/field-error";
+ import {
+ 	Alert,
+ 	AlertDescription,
+@@ -26,6 +27,7 @@ import {
+ 
+ export function SetPrimaryDialog({ address }: { address: EmailAddress }) {
+ 	const { t } = useTranslation();
++	const fieldError = useFieldError();
+ 	const [open, setOpen] = useState(false);
+ 	const setPrimary = useSetPrimaryEmail();
+ 	const {
+@@ -84,7 +86,7 @@ export function SetPrimaryDialog({ address }: { address: EmailAddress }) {
+ 					<Field
+ 						id="current_password"
+ 						label={t("account.currentPassword")}
+-						error={errors.current_password?.message}
++						error={fieldError(errors.current_password?.message)}
+ 					>
+ 						<PasswordInput
+ 							autoComplete="current-password"
+diff --git a/src/features/identity/schemas.test.ts b/src/features/identity/schemas.test.ts
+index 3fb8bf9..55e42cf 100644
+--- a/src/features/identity/schemas.test.ts
++++ b/src/features/identity/schemas.test.ts
+@@ -1,12 +1,19 @@
+ import { describe, expect, it } from "vitest";
++import en from "@/locales/en/auth.json";
+ import {
++	addEmailSchema,
++	changePasswordSchema,
+ 	codeEntrySchema,
+ 	codeRequestFormSchema,
+ 	codeResetFormSchema,
++	forgotPasswordSchema,
+ 	googleSettingsFormSchema,
+ 	googleSettingsSchema,
+ 	loginSchema,
+ 	profileEditSchema,
++	resetPasswordSchema,
++	setPrimarySchema,
++	twoFactorSchema,
+ } from "./schemas";
+ 
+ describe("identity schemas", () => {
+@@ -16,6 +23,52 @@ describe("identity schemas", () => {
+ 	});
+ });
+ 
++// ETQAN-QA-048 (and QA-011): every sign-in/account message is an i18n key
++// that exists in the catalogue, never zod's English developer default.
++describe("identity schema messages", () => {
++	const messages = (result: { success: boolean; error?: unknown }) =>
++		(
++			(result.error as { issues?: { message: string }[] } | undefined)
++				?.issues ?? []
++		).map((issue) => issue.message);
++
++	it.each([
++		["login", loginSchema.safeParse({ identifier: "", password: "" })],
++		["two-factor", twoFactorSchema.safeParse({ code: "" })],
++		["forgot", forgotPasswordSchema.safeParse({ email: "" })],
++		["reset", resetPasswordSchema.safeParse({ new_password: "123" })],
++		[
++			"change",
++			changePasswordSchema.safeParse({
++				current_password: "",
++				new_password: "1",
++			}),
++		],
++		[
++			"add email",
++			addEmailSchema.safeParse({ email: "x", current_password: "" }),
++		],
++		["set primary", setPrimarySchema.safeParse({ current_password: "" })],
++		[
++			"profile",
++			profileEditSchema.safeParse({
++				full_name: " ",
++				phone: "",
++				preferred_language: "en",
++				timezone: "",
++			}),
++		],
++	])("%s answers with catalogue keys", (_name, result) => {
++		const keys = messages(result);
++		expect(keys.length).toBeGreaterThan(0);
++		for (const key of keys) {
++			expect(key).toMatch(/^auth\.errors\./);
++			const leaf = key.split(".")[2] as keyof typeof en.errors;
++			expect(en.errors[leaf]).toBeTypeOf("string");
++		}
++	});
++});
++
+ describe("profile edit schema", () => {
+ 	it("accepts an empty or international phone and rejects others", () => {
+ 		const base = { full_name: "A", preferred_language: "ar", timezone: "UTC" };
+diff --git a/src/features/identity/schemas.ts b/src/features/identity/schemas.ts
+index 56fc70d..282b711 100644
+--- a/src/features/identity/schemas.ts
++++ b/src/features/identity/schemas.ts
+@@ -1,8 +1,14 @@
+ import { z } from "zod";
+ 
++// ETQAN-QA-048: every message below is an i18n key (rendered through
++// `useFieldError`), never zod's English developer default.
++const REQUIRED = "auth.errors.required";
++const EMAIL = "auth.errors.email";
++const PASSWORD_SHORT = "auth.errors.passwordShort";
++
+ export const loginSchema = z.object({
+-	identifier: z.string().trim().min(1),
+-	password: z.string().min(1),
++	identifier: z.string().trim().min(1, REQUIRED),
++	password: z.string().min(1, REQUIRED),
+ });
+ 
+ /** The form's values plus the browser's IANA time zone (plan 23, S-8). */
+@@ -11,7 +17,9 @@ export type LoginInput = z.infer<typeof loginSchema> & { timezone?: string };
+ /** `login/` answers the user, or asks for the second factor (S-3). */
+ export type LoginResult = Me | { mfa_required: true };
+ 
+-export const twoFactorSchema = z.object({ code: z.string().trim().min(1) });
++export const twoFactorSchema = z.object({
++	code: z.string().trim().min(1, REQUIRED),
++});
+ export type TwoFactorInput = z.infer<typeof twoFactorSchema>;
+ 
+ export interface SignInOptions {
+@@ -37,10 +45,10 @@ export const phoneSchema = z
+ 	.regex(/^(\+[1-9]\d{6,14})?$/, "account.phoneInvalid");
+ 
+ export const profileEditSchema = z.object({
+-	full_name: z.string().trim().min(1),
++	full_name: z.string().trim().min(1, REQUIRED),
+ 	phone: phoneSchema,
+ 	preferred_language: z.enum(LANGUAGES),
+-	timezone: z.string().min(1),
++	timezone: z.string().min(1, REQUIRED),
+ });
+ 
+ export type ProfileEditInput = z.infer<typeof profileEditSchema>;
+@@ -55,13 +63,13 @@ export interface EmailAddress {
+ }
+ 
+ export const addEmailSchema = z.object({
+-	email: z.email(),
+-	current_password: z.string().min(1),
++	email: z.email(EMAIL),
++	current_password: z.string().min(1, REQUIRED),
+ });
+ export type AddEmailInput = z.infer<typeof addEmailSchema>;
+ 
+ export const setPrimarySchema = z.object({
+-	current_password: z.string().min(1),
++	current_password: z.string().min(1, REQUIRED),
+ });
+ export type SetPrimaryInput = z.infer<typeof setPrimarySchema>;
+ 
+@@ -232,18 +240,18 @@ export interface Me {
+ }
+ 
+ export const changePasswordSchema = z.object({
+-	current_password: z.string().min(1),
+-	new_password: z.string().min(8),
++	current_password: z.string().min(1, REQUIRED),
++	new_password: z.string().min(8, PASSWORD_SHORT),
+ });
+ export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
+ 
+ export const forgotPasswordSchema = z.object({
+-	email: z.email(),
++	email: z.email(EMAIL),
+ });
+ export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
+ 
+ export const resetPasswordSchema = z.object({
+-	new_password: z.string().min(8),
++	new_password: z.string().min(8, PASSWORD_SHORT),
+ });
+ export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+ 
+diff --git a/src/features/quicklogin/QuickLoginPage.test.tsx b/src/features/quicklogin/QuickLoginPage.test.tsx
+index e287b0f..cd92803 100644
+--- a/src/features/quicklogin/QuickLoginPage.test.tsx
++++ b/src/features/quicklogin/QuickLoginPage.test.tsx
+@@ -94,6 +94,8 @@ describe("QuickLoginPage", () => {
+ 		expect(
+ 			screen.getByRole("link", { name: "Go to sign in" }),
+ 		).toBeInTheDocument();
++		// ETQAN-QA-057: a refused link cannot be tried again.
++		expect(screen.queryByRole("button", { name: "Sign in" })).toBeNull();
+ 	});
+ 
+ 	it("says so when throttled", async () => {
+@@ -103,6 +105,26 @@ describe("QuickLoginPage", () => {
+ 			await screen.findByRole("button", { name: "Sign in" }),
+ 		);
+ 		expect(await screen.findByText(/too many attempts/i)).toBeInTheDocument();
++		// A wait is not a dead link: the button stays.
++		expect(screen.getByRole("button", { name: "Sign in" })).toBeEnabled();
++	});
++
++	it("explains a page without its token instead of a dead button (ETQAN-QA-057)", async () => {
++		window.history.replaceState(null, "", "/quick-login");
++		renderWithRouter(
++			<ThemeProvider>
++				<QuickLoginPage />
++			</ThemeProvider>,
++			{ path: "/quick-login", initial: "/quick-login", extraPaths: ["/login"] },
++		);
++		expect(
++			await screen.findByText(/open the link from your email again/i),
++		).toBeInTheDocument();
++		expect(screen.queryByRole("button", { name: "Sign in" })).toBeNull();
++		expect(screen.queryByText(/select the button/i)).toBeNull();
++		expect(
++			screen.getByRole("link", { name: "Go to sign in" }),
++		).toBeInTheDocument();
+ 	});
+ 
+ 	it("moves to the two-factor step and signs in with the code", async () => {
+diff --git a/src/features/quicklogin/QuickLoginPage.tsx b/src/features/quicklogin/QuickLoginPage.tsx
+index 7b60bb4..57d325c 100644
+--- a/src/features/quicklogin/QuickLoginPage.tsx
++++ b/src/features/quicklogin/QuickLoginPage.tsx
+@@ -31,6 +31,11 @@ export function QuickLoginPage() {
+ 	);
+ 	const [step, setStep] = useState<"start" | "twoFactor">("start");
+ 	const [error, setError] = useState<string>();
++	// ETQAN-QA-057: a link the server refused cannot be tried again.
++	const [spent, setSpent] = useState(false);
++	// No token (the page was reloaded or opened bare) or a refused one:
++	// there is nothing to sign in with, so no button, only the way out.
++	const dead = !token || spent;
+ 
+ 	// biome-ignore lint/correctness/useExhaustiveDependencies: once, on mount
+ 	useEffect(() => {
+@@ -63,6 +68,9 @@ export function QuickLoginPage() {
+ 			},
+ 			onError: (e) => {
+ 				const parsed = parseApiError(e);
++				if (!parsed.throttled && (parsed.status === 400 || !token)) {
++					setSpent(true);
++				}
+ 				setError(
+ 					parsed.throttled
+ 						? t("signIn.throttled")
+@@ -79,7 +87,7 @@ export function QuickLoginPage() {
+ 			<PageHeader
+ 				className="pb-4"
+ 				title={t("quickLogin.pageTitle")}
+-				description={t("quickLogin.pageHint")}
++				description={dead ? undefined : t("quickLogin.pageHint")}
+ 			/>
+ 			{step === "twoFactor" ? (
+ 				<TwoFactorStep
+@@ -95,19 +103,23 @@ export function QuickLoginPage() {
+ 				/>
+ 			) : (
+ 				<div className="flex flex-col gap-4">
+-					{error ? (
++					{error || !token ? (
+ 						<Alert variant="destructive">
+-							<AlertDescription>{error}</AlertDescription>
++							<AlertDescription>
++								{error ?? t("quickLogin.noToken")}
++							</AlertDescription>
+ 						</Alert>
+ 					) : null}
+-					<Button
+-						type="button"
+-						disabled={exchange.isPending || !token}
+-						onClick={submit}
+-					>
+-						{t("quickLogin.signIn")}
+-					</Button>
+-					{!token || error ? (
++					{dead ? null : (
++						<Button
++							type="button"
++							disabled={exchange.isPending}
++							onClick={submit}
++						>
++							{t("quickLogin.signIn")}
++						</Button>
++					)}
++					{dead || error ? (
+ 						<p className="text-sm">
+ 							<Link
+ 								to="/login"
+diff --git a/src/features/shell/UserMenu.tsx b/src/features/shell/UserMenu.tsx
+index b316141..b3c5318 100644
+--- a/src/features/shell/UserMenu.tsx
++++ b/src/features/shell/UserMenu.tsx
+@@ -28,7 +28,8 @@ export function UserMenu({
+ 					{/* Name is hidden on the smallest screens to keep the topbar within
+ 					    the viewport (no horizontal scroll); the aria-label keeps it
+ 					    accessible. It returns at the sm breakpoint. */}
+-					<span className="hidden max-w-[12ch] truncate sm:block">
++					{/* dir="auto": a Latin name keeps its order in Arabic (QA-060). */}
++					<span dir="auto" className="hidden max-w-[12ch] truncate sm:block">
+ 						{userName}
+ 					</span>
+ 					<ChevronDown className="size-4" />
+diff --git a/src/lib/direction.tsx b/src/lib/direction.tsx
+index 43047e4..269f3f3 100644
+--- a/src/lib/direction.tsx
++++ b/src/lib/direction.tsx
+@@ -2,6 +2,15 @@ import { useEffect } from "react";
+ import { useTranslation } from "react-i18next";
+ import { type Locale, RTL_LOCALES } from "./i18n";
+ 
++/** The page's text direction, from the current language. Radix primitives
++ * need it as a prop: without a `dir` (or Radix's own provider) they default
++ * to `ltr` and stamp `dir="ltr"` on their root, overriding the page's `rtl`
++ * (ETQAN-QA-061). */
++export function useDir(): "rtl" | "ltr" {
++	const { i18n } = useTranslation();
++	return RTL_LOCALES.includes(i18n.language as Locale) ? "rtl" : "ltr";
++}
++
+ export function DirectionProvider({ children }: { children: React.ReactNode }) {
+ 	const { i18n } = useTranslation();
+ 	const lng = i18n.language as Locale;
+diff --git a/src/locales/ar/account.json b/src/locales/ar/account.json
+index 761b8d0..da420dc 100644
+--- a/src/locales/ar/account.json
++++ b/src/locales/ar/account.json
+@@ -29,5 +29,6 @@
+ 	"preferredLanguage": "اللغة المفضلة",
+ 	"timezone": "المنطقة الزمنية",
+ 	"myProfile": "ملفي",
+-	"children": "أبنائي"
++	"children": "أبنائي",
++	"removed": "تمت إزالة {{email}}."
+ }
+diff --git a/src/locales/ar/auth.json b/src/locales/ar/auth.json
+index bc38bf4..805147f 100644
+--- a/src/locales/ar/auth.json
++++ b/src/locales/ar/auth.json
+@@ -46,5 +46,10 @@
+ 	"studentCta": "عرض الجدول",
+ 	"parentSubtitle": "أدِر تعلّم عائلتك",
+ 	"studentSubtitle": "دراستك في لمحة",
+-	"verifyEmailTitle": "تأكيد بريدك الإلكتروني"
++	"verifyEmailTitle": "تأكيد بريدك الإلكتروني",
++	"errors": {
++		"required": "هذا الحقل مطلوب.",
++		"email": "أدخل بريدًا إلكترونيًا صحيحًا.",
++		"passwordShort": "استخدم 8 أحرف على الأقل."
++	}
+ }
+diff --git a/src/locales/ar/codeReset.json b/src/locales/ar/codeReset.json
+index 49e9c4c..80b5a35 100644
+--- a/src/locales/ar/codeReset.json
++++ b/src/locales/ar/codeReset.json
+@@ -16,7 +16,7 @@
+ 	},
+ 	"email": "البريد الإلكتروني",
+ 	"phone": "الهاتف",
+-	"phoneHint": "رقمك مع رمز الدولة، مثل ‎+20 100 123 4567.",
++	"phoneHint": "رقمك مع رمز الدولة، مثل ⁦+20 100 123 4567⁩.",
+ 	"send": "إرسال الرمز",
+ 	"sent": "إن وُجد حساب مطابق فقد أرسلنا رمزًا من 6 أرقام. تنتهي صلاحيته خلال 10 دقائق.",
+ 	"code": "الرمز",
+@@ -39,5 +39,9 @@
+ 		"account": "اختر الحساب الذي تريد إعادة تعيينه.",
+ 		"passwordShort": "استخدم 8 أحرف على الأقل.",
+ 		"passwordLong": "استخدم 128 حرفًا أو أقل."
++	},
++	"subtitle": {
++		"email": "أدخل بريدك الإلكتروني وسنرسل إليك رمزًا من 6 أرقام.",
++		"phone": "أدخل رقم هاتفك وسنرسل إليك رمزًا من 6 أرقام في رسالة نصية."
+ 	}
+ }
+diff --git a/src/locales/ar/quickLogin.json b/src/locales/ar/quickLogin.json
+index d814ca2..6a08cf3 100644
+--- a/src/locales/ar/quickLogin.json
++++ b/src/locales/ar/quickLogin.json
+@@ -46,5 +46,6 @@
+ 			"link_used": "استخدام رابط دخول",
+ 			"mfa_disabled": "إيقاف التحقق بخطوتين"
+ 		}
+-	}
++	},
++	"noToken": "لم يعد رابط الدخول في هذه الصفحة. افتح الرابط من بريدك الإلكتروني مرة أخرى، أو سجّل الدخول بكلمة المرور."
+ }
+diff --git a/src/locales/ar/signIn.json b/src/locales/ar/signIn.json
+index 816b279..97e524a 100644
+--- a/src/locales/ar/signIn.json
++++ b/src/locales/ar/signIn.json
+@@ -17,5 +17,11 @@
+ 		"emailUnverified": "أكّد بريدك الإلكتروني أولًا: افتح الرابط الذي أرسلناه إليك.",
+ 		"registrationPending": "تسجيلك بانتظار موافقة الأكاديمية.",
+ 		"registrationRejected": "لم توافق الأكاديمية على تسجيلك."
+-	}
++	},
++	"throttledWait_zero": "محاولات كثيرة. حاول مرة أخرى بعد قليل.",
++	"throttledWait_one": "محاولات كثيرة. حاول مرة أخرى بعد دقيقة تقريبًا.",
++	"throttledWait_two": "محاولات كثيرة. حاول مرة أخرى بعد دقيقتين تقريبًا.",
++	"throttledWait_few": "محاولات كثيرة. حاول مرة أخرى بعد {{count}} دقائق تقريبًا.",
++	"throttledWait_many": "محاولات كثيرة. حاول مرة أخرى بعد {{count}} دقيقة تقريبًا.",
++	"throttledWait_other": "محاولات كثيرة. حاول مرة أخرى بعد {{count}} دقيقة تقريبًا."
+ }
+diff --git a/src/locales/en/account.json b/src/locales/en/account.json
+index 58d8806..8b26fb2 100644
+--- a/src/locales/en/account.json
++++ b/src/locales/en/account.json
+@@ -29,5 +29,6 @@
+ 	"preferredLanguage": "Preferred language",
+ 	"timezone": "Time zone",
+ 	"myProfile": "My profile",
+-	"children": "My children"
++	"children": "My children",
++	"removed": "{{email}} was removed."
+ }
+diff --git a/src/locales/en/auth.json b/src/locales/en/auth.json
+index 9a0440a..8d2ea76 100644
+--- a/src/locales/en/auth.json
++++ b/src/locales/en/auth.json
+@@ -46,5 +46,10 @@
+ 	"studentCta": "View schedule",
+ 	"parentSubtitle": "Manage your family's learning",
+ 	"studentSubtitle": "Your studies at a glance",
+-	"verifyEmailTitle": "Verify your email"
++	"verifyEmailTitle": "Verify your email",
++	"errors": {
++		"required": "Fill this in.",
++		"email": "Enter a valid email address.",
++		"passwordShort": "Use at least 8 characters."
++	}
+ }
+diff --git a/src/locales/en/codeReset.json b/src/locales/en/codeReset.json
+index fbf3b72..d48c792 100644
+--- a/src/locales/en/codeReset.json
++++ b/src/locales/en/codeReset.json
+@@ -39,5 +39,9 @@
+ 		"account": "Choose the account to reset.",
+ 		"passwordShort": "Use at least 8 characters.",
+ 		"passwordLong": "Use 128 characters or fewer."
++	},
++	"subtitle": {
++		"email": "Enter your email and we'll send you a 6-digit code.",
++		"phone": "Enter your phone number and we'll text you a 6-digit code."
+ 	}
+ }
+diff --git a/src/locales/en/quickLogin.json b/src/locales/en/quickLogin.json
+index 53ecd95..7943d3f 100644
+--- a/src/locales/en/quickLogin.json
++++ b/src/locales/en/quickLogin.json
+@@ -46,5 +46,6 @@
+ 			"link_used": "Sign-in link used",
+ 			"mfa_disabled": "Two-factor turned off"
+ 		}
+-	}
++	},
++	"noToken": "This page has no sign-in link any more. Open the link from your email again, or sign in with your password."
+ }
+diff --git a/src/locales/en/signIn.json b/src/locales/en/signIn.json
+index d341d7c..bc2d5f6 100644
+--- a/src/locales/en/signIn.json
++++ b/src/locales/en/signIn.json
+@@ -17,5 +17,7 @@
+ 		"emailUnverified": "Confirm your email address first: open the link we emailed you.",
+ 		"registrationPending": "Your registration is waiting for the academy's approval.",
+ 		"registrationRejected": "The academy did not approve your registration."
+-	}
++	},
++	"throttledWait_one": "Too many attempts. Try again in about {{count}} minute.",
++	"throttledWait_other": "Too many attempts. Try again in about {{count}} minutes."
+ }
+diff --git a/src/locales/es/account.json b/src/locales/es/account.json
+index 9b0ffff..20b979e 100644
+--- a/src/locales/es/account.json
++++ b/src/locales/es/account.json
+@@ -29,5 +29,6 @@
+ 	"preferredLanguage": "Idioma preferido",
+ 	"timezone": "Zona horaria",
+ 	"myProfile": "Mi perfil",
+-	"children": "Mis hijos"
++	"children": "Mis hijos",
++	"removed": "Se eliminó {{email}}."
+ }
+diff --git a/src/locales/es/auth.json b/src/locales/es/auth.json
+index b9cfa02..27c5861 100644
+--- a/src/locales/es/auth.json
++++ b/src/locales/es/auth.json
+@@ -46,5 +46,10 @@
+ 	"studentCta": "Ver horario",
+ 	"parentSubtitle": "Gestiona el aprendizaje de tu familia",
+ 	"studentSubtitle": "Tus estudios de un vistazo",
+-	"verifyEmailTitle": "Verifica tu correo"
++	"verifyEmailTitle": "Verifica tu correo",
++	"errors": {
++		"required": "Completa este campo.",
++		"email": "Escribe un correo electrónico válido.",
++		"passwordShort": "Usa al menos 8 caracteres."
++	}
+ }
+diff --git a/src/locales/es/codeReset.json b/src/locales/es/codeReset.json
+index 283f9b5..6564e90 100644
+--- a/src/locales/es/codeReset.json
++++ b/src/locales/es/codeReset.json
+@@ -39,5 +39,9 @@
+ 		"account": "Elige la cuenta que quieres restablecer.",
+ 		"passwordShort": "Usa al menos 8 caracteres.",
+ 		"passwordLong": "Usa 128 caracteres o menos."
++	},
++	"subtitle": {
++		"email": "Escribe tu correo y te enviaremos un código de 6 dígitos.",
++		"phone": "Escribe tu teléfono y te enviaremos un código de 6 dígitos por SMS."
+ 	}
+ }
+diff --git a/src/locales/es/quickLogin.json b/src/locales/es/quickLogin.json
+index 8cb5888..8076b73 100644
+--- a/src/locales/es/quickLogin.json
++++ b/src/locales/es/quickLogin.json
+@@ -45,5 +45,6 @@
+ 			"link_used": "Enlace de acceso usado",
+ 			"mfa_disabled": "Verificación en dos pasos desactivada"
+ 		}
+-	}
++	},
++	"noToken": "Esta página ya no tiene el enlace de inicio de sesión. Vuelve a abrir el enlace de tu correo o inicia sesión con tu contraseña."
+ }
+diff --git a/src/locales/es/signIn.json b/src/locales/es/signIn.json
+index 9c209f1..c802c8f 100644
+--- a/src/locales/es/signIn.json
++++ b/src/locales/es/signIn.json
+@@ -17,5 +17,7 @@
+ 		"emailUnverified": "Primero confirma tu correo electrónico: abre el enlace que te enviamos.",
+ 		"registrationPending": "Tu registro está esperando la aprobación de la academia.",
+ 		"registrationRejected": "La academia no aprobó tu registro."
+-	}
++	},
++	"throttledWait_one": "Demasiados intentos. Inténtalo de nuevo en {{count}} minuto aproximadamente.",
++	"throttledWait_other": "Demasiados intentos. Inténtalo de nuevo en unos {{count}} minutos."
+ }
+diff --git a/src/routes/forgot-password.test.tsx b/src/routes/forgot-password.test.tsx
+index 415cbcd..30916a8 100644
+--- a/src/routes/forgot-password.test.tsx
++++ b/src/routes/forgot-password.test.tsx
+@@ -196,4 +196,65 @@ describe("ForgotPasswordPage", () => {
+ 			screen.getByRole("button", { name: /send reset link/i }),
+ 		).toBeInTheDocument();
+ 	});
++
++	// ETQAN-QA-056
++	it("words the subtitle for the chosen method and drops the cards once sent", async () => {
++		vi.mocked(identityApi.signInOptions).mockResolvedValue({
++			phone_login: false,
++			code_reset: { email: true, phone: false },
++		});
++		vi.mocked(identityApi.requestResetCode).mockResolvedValue(undefined);
++		renderPage();
++		expect(
++			await screen.findByText(/we'll send you a reset link/i),
++		).toBeInTheDocument();
++		await userEvent.click(
++			await screen.findByRole("radio", { name: /a code by email/i }),
++		);
++		expect(screen.getByText(/send you a 6-digit code/i)).toBeInTheDocument();
++		expect(screen.queryByText(/reset link/i)).toBeNull();
++		await userEvent.type(screen.getByLabelText(/^email/i), "a@b.com");
++		await userEvent.click(screen.getByRole("button", { name: /send code/i }));
++		expect(
++			await screen.findByRole("heading", { name: /enter the code/i }),
++		).toBeInTheDocument();
++		expect(screen.queryByRole("radiogroup")).toBeNull();
++		// Starting over brings the choice back.
++		await userEvent.click(
++			screen.getByRole("button", { name: /use a different email/i }),
++		);
++		expect(await screen.findByRole("radiogroup")).toBeInTheDocument();
++	});
++
++	it("drops the method cards once the reset link is sent (ETQAN-QA-056)", async () => {
++		vi.mocked(identityApi.signInOptions).mockResolvedValue({
++			phone_login: false,
++			code_reset: { email: true, phone: false },
++		});
++		vi.mocked(identityApi.requestPasswordReset).mockResolvedValue(undefined);
++		renderPage();
++		await screen.findByRole("radiogroup");
++		await userEvent.type(
++			screen.getByRole("textbox", { name: /email/i }),
++			"a@b.com",
++		);
++		await userEvent.click(
++			screen.getByRole("button", { name: /send reset link/i }),
++		);
++		expect(
++			await screen.findByText(/a reset link is on its way/i),
++		).toBeInTheDocument();
++		expect(screen.queryByRole("radiogroup")).toBeNull();
++	});
++
++	it("shows a translated email error, not zod's text (ETQAN-QA-048)", async () => {
++		renderPage();
++		await userEvent.click(
++			await screen.findByRole("button", { name: /send reset link/i }),
++		);
++		expect(
++			await screen.findByText("Enter a valid email address."),
++		).toBeInTheDocument();
++		expect(screen.queryByText(/invalid email address/i)).toBeNull();
++	});
+ });
+diff --git a/src/routes/forgot-password.tsx b/src/routes/forgot-password.tsx
+index 95c6092..473671d 100644
+--- a/src/routes/forgot-password.tsx
++++ b/src/routes/forgot-password.tsx
+@@ -15,6 +15,7 @@ import {
+ 	forgotPasswordSchema,
+ } from "@/features/identity/schemas";
+ import { cn } from "@/lib/cn";
++import { useFieldError } from "@/lib/field-error";
+ import {
+ 	Alert,
+ 	AlertDescription,
+@@ -50,6 +51,9 @@ export function ForgotPasswordPage() {
+ 	usePageTitle(t("auth.forgotPasswordTitle"));
+ 	const codes = useSignInOptions().data?.code_reset;
+ 	const [method, setMethod] = useState<Method>("link");
++	// ETQAN-QA-056: once a link or code is on its way, the choice is made:
++	// the method cards go (they come back if the person starts over).
++	const [chosen, setChosen] = useState(false);
+ 	const methods: Method[] = [
+ 		"link",
+ 		...(codes?.email ? (["email"] as const) : []),
+@@ -60,10 +64,14 @@ export function ForgotPasswordPage() {
+ 			<PageHeader
+ 				className="pb-4"
+ 				title={t("auth.forgotPasswordTitle")}
+-				description={t("auth.forgotPasswordSubtitle")}
++				description={
++					method === "link"
++						? t("auth.forgotPasswordSubtitle")
++						: t(`codeReset.subtitle.${method}`)
++				}
+ 			/>
+ 			<div className="flex flex-col gap-4">
+-				{methods.length > 1 ? (
++				{methods.length > 1 && !chosen ? (
+ 					<RadioCardGroup
+ 						label={t("codeReset.methods.label")}
+ 						value={method}
+@@ -76,9 +84,9 @@ export function ForgotPasswordPage() {
+ 					/>
+ 				) : null}
+ 				{method === "link" ? (
+-					<ResetLinkForm />
++					<ResetLinkForm onSent={() => setChosen(true)} />
+ 				) : (
+-					<CodeResetFlow key={method} channel={method} />
++					<CodeResetFlow key={method} channel={method} onStarted={setChosen} />
+ 				)}
+ 				<BackToSignIn />
+ 			</div>
+@@ -87,8 +95,9 @@ export function ForgotPasswordPage() {
+ }
+ 
+ /** The email-link reset (B1): the same neutral answer for every address. */
+-function ResetLinkForm() {
++function ResetLinkForm({ onSent }: { onSent?: () => void }) {
+ 	const { t } = useTranslation();
++	const fieldError = useFieldError();
+ 	const [sent, setSent] = useState(false);
+ 	const request = useRequestPasswordReset();
+ 	const {
+@@ -108,6 +117,7 @@ function ResetLinkForm() {
+ 		}
+ 		// Always show the neutral message (no enumeration).
+ 		setSent(true);
++		onSent?.();
+ 	}
+ 
+ 	if (sent) {
+@@ -126,7 +136,7 @@ function ResetLinkForm() {
+ 			<Field
+ 				id="forgot_email"
+ 				label={t("auth.email")}
+-				error={errors.email?.message}
++				error={fieldError(errors.email?.message)}
+ 			>
+ 				<Input type="email" autoComplete="email" {...register("email")} />
+ 			</Field>
+diff --git a/src/routes/reset-password.tsx b/src/routes/reset-password.tsx
+index 2efed15..877e138 100644
+--- a/src/routes/reset-password.tsx
++++ b/src/routes/reset-password.tsx
+@@ -10,6 +10,7 @@ import {
+ 	type ResetPasswordInput,
+ 	resetPasswordSchema,
+ } from "@/features/identity/schemas";
++import { useFieldError } from "@/lib/field-error";
+ import {
+ 	Alert,
+ 	AlertDescription,
+@@ -30,6 +31,7 @@ export function ResetPasswordPage({
+ 	token: string;
+ }) {
+ 	const { t } = useTranslation();
++	const fieldError = useFieldError();
+ 	usePageTitle(t("auth.resetPasswordTitle"));
+ 	const [state, setState] = useState<State>(
+ 		uid.length === 0 || token.length === 0 ? "invalid" : "form",
+@@ -98,7 +100,7 @@ export function ResetPasswordPage({
+ 					<Field
+ 						id="new_password"
+ 						label={t("auth.newPassword")}
+-						error={errors.new_password?.message}
++						error={fieldError(errors.new_password?.message)}
+ 						required
+ 					>
+ 						<PasswordInput
+diff --git a/src/ui/input.test.tsx b/src/ui/input.test.tsx
+index 8becf08..51269d6 100644
+--- a/src/ui/input.test.tsx
++++ b/src/ui/input.test.tsx
+@@ -24,6 +24,15 @@ describe("Input", () => {
+ 		expect(cls).toContain("text-base");
+ 		expect(cls).toContain("sm:text-sm");
+ 	});
++	// ETQAN-QA-060: no forced right alignment; each value takes its own
++	// direction (a Latin name or email reads LTR in an Arabic form).
++	it("lets each value keep its own direction", () => {
++		render(<Input aria-label="x" />);
++		const cls = screen.getByLabelText("x").className;
++		expect(cls).toContain("[unicode-bidi:plaintext]");
++		expect(cls).toContain("text-start");
++		expect(cls).not.toContain("rtl:text-right");
++	});
+ 	it("has no axe violations when labelled", async () => {
+ 		const { container } = render(
+ 			<>
+diff --git a/src/ui/input.tsx b/src/ui/input.tsx
+index 3512e3f..68aacef 100644
+--- a/src/ui/input.tsx
++++ b/src/ui/input.tsx
+@@ -23,7 +23,12 @@ export const Input = React.forwardRef<
+ 			// Invalid (set by <Field> via aria-invalid): red border always; red ring
+ 			// only while NOT focus-visible, so the green focus ring still wins on focus.
+ 			"aria-invalid:border-destructive aria-invalid:not-focus-visible:ring-2 aria-invalid:not-focus-visible:ring-destructive",
+-			"rtl:text-right",
++			// ETQAN-QA-060: each value takes its own direction from its first
++			// strong letter (a Latin name, an email or a phone reads LTR in an
++			// Arabic form) and an empty field keeps the page's; `text-start`
++			// then aligns it to that start. A forced right alignment made
++			// "Aisha R." read ".Aisha R".
++			"text-start [unicode-bidi:plaintext]",
+ 			className,
+ 		)}
+ 		{...props}
+diff --git a/src/ui/radio-card-group.test.tsx b/src/ui/radio-card-group.test.tsx
+index 784a66d..630e57a 100644
+--- a/src/ui/radio-card-group.test.tsx
++++ b/src/ui/radio-card-group.test.tsx
+@@ -1,9 +1,10 @@
+-import { render, screen } from "@testing-library/react";
++import { act, render, screen } from "@testing-library/react";
+ import userEvent from "@testing-library/user-event";
+ import { axe } from "jest-axe";
+ import { Sparkles, User, Users } from "lucide-react";
+ import { useState } from "react";
+ import { describe, expect, it, vi } from "vitest";
++import i18n from "@/lib/i18n";
+ import { RadioCardGroup, type RadioCardOption } from "./radio-card-group";
+ 
+ const options: RadioCardOption[] = [
+@@ -33,6 +34,20 @@ function Controlled({ onChange }: { onChange?: (v: string) => void }) {
+ }
+ 
+ describe("RadioCardGroup", () => {
++	// ETQAN-QA-061: Radix defaults to ltr and stamps dir="ltr" on the group,
++	// overriding the page's rtl, unless it is told the direction.
++	it("follows the language's direction", async () => {
++		await act(() => i18n.changeLanguage("ar"));
++		try {
++			render(<Controlled />);
++			expect(screen.getByRole("radiogroup")).toHaveAttribute("dir", "rtl");
++		} finally {
++			await act(() => i18n.changeLanguage("en"));
++		}
++		render(<Controlled />);
++		expect(screen.getAllByRole("radiogroup")[1]).toHaveAttribute("dir", "ltr");
++	});
++
+ 	it("exposes a labelled radiogroup with one radio per option", () => {
+ 		render(<Controlled />);
+ 		const group = screen.getByRole("radiogroup", {
+diff --git a/src/ui/radio-card-group.tsx b/src/ui/radio-card-group.tsx
+index e0b84f4..163591c 100644
+--- a/src/ui/radio-card-group.tsx
++++ b/src/ui/radio-card-group.tsx
+@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
+ import { RadioGroup } from "radix-ui";
+ import { useId } from "react";
+ import { cn } from "@/lib/cn";
++import { useDir } from "@/lib/direction";
+ import { focusRing } from "./styles";
+ 
+ export interface RadioCardOption {
+@@ -41,12 +42,14 @@ export function RadioCardGroup({
+ 	invalid,
+ }: RadioCardGroupProps) {
+ 	const labelId = useId();
++	const dir = useDir();
+ 	return (
+ 		<div className="flex flex-col gap-2">
+ 			<span id={labelId} className="text-sm font-medium text-foreground">
+ 				{label}
+ 			</span>
+ 			<RadioGroup.Root
++				dir={dir}
+ 				aria-labelledby={labelId}
+ 				aria-describedby={describedBy}
+ 				aria-invalid={invalid || undefined}

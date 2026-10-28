@@ -1,0 +1,13 @@
+[vite:react-swc] We recommend switching to `@vitejs/plugin-react` for improved performance as no swc plugins are used. More information at https://vite.dev/rolldown
+
+ RUN  v3.2.6 /app
+
+ ✓ src/locales/locales.test.ts (9 tests) 38ms
+ ✓ src/lib/i18n.test.ts (4 tests) 136ms
+ ✓ src/locales/bidi.test.ts (2 tests) 11ms
+
+ Test Files  3 passed (3)
+      Tests  15 passed (15)
+   Start at  20:53:40
+   Duration  3.25s (transform 629ms, setup 1.34s, collect 1.59s, tests 185ms, environment 1.66s, prepare 254ms)
+

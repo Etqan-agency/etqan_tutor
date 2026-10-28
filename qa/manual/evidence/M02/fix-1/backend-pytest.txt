@@ -1,0 +1,10 @@
+............................                                             [100%]
+=============================== warnings summary ===============================
+etqan/identity/tests/test_email_branding.py::test_confirmation_email_is_branded_with_academy_name_and_html_alternative
+etqan/identity/tests/test_email_branding.py::test_confirmation_body_has_no_pii_and_is_branded
+etqan/identity/tests/test_email_branding.py::test_confirmation_subject_has_only_the_academy_prefix
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+28 passed, 3 warnings in 3.64s

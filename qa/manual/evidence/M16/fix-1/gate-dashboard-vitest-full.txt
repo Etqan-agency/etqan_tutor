@@ -1,0 +1,178 @@
+[vite:react-swc] We recommend switching to `@vitejs/plugin-react` for improved performance as no swc plugins are used. More information at https://vite.dev/rolldown
+
+ RUN  v3.2.6 /app
+
+ ✓ src/lib/theme.test.tsx (3 tests) 553ms
+   ✓ ThemeProvider > toggles the .dark class on <html> and persists  478ms
+ ✓ src/ui/radio-card-group.test.tsx (8 tests) 1510ms
+   ✓ RadioCardGroup > keeps Radix's hidden form radios inside the group (no RTL page overflow)  495ms
+   ✓ RadioCardGroup > has no axe violations  383ms
+ ✓ src/features/website/InquiriesList.test.tsx (8 tests) 3575ms
+   ✓ InquiriesList > lists rows from site/admin/inquiries/?status=new  664ms
+   ✓ InquiriesList > shows when it arrived and links the WhatsApp the visitor ticked (ETQAN-QA-766)  938ms
+   ✓ InquiriesList > shows the total and loads the next page on demand  760ms
+   ✓ InquiriesList > marks an inquiry handled and removes the row  309ms
+   ✓ InquiriesList > shows an error toast when marking handled fails  466ms
+ ✓ src/lib/direction.test.tsx (3 tests) 1137ms
+   ✓ DirectionProvider > opens Radix menus right-to-left in Arabic  1065ms
+ ✓ src/features/consultations/ManagePage.test.tsx (9 tests) 3255ms
+   ✓ ManagePage > shows the booking on the booker's clock, with no link before confirmation  1163ms
+   ✓ ManagePage > asks to move to an offered time  895ms
+   ✓ ManagePage > rates a completed consultation once  560ms
+ ✓ src/ui/select.test.tsx (5 tests) 555ms
+   ✓ Select > renders its options and reflects the value  424ms
+ ✓ src/lib/countries.test.ts (1 test) 56ms
+ ✓ src/features/registration/admin/CodesPage.test.tsx (12 tests) 7149ms
+   ✓ CodesPage > lists the codes with their uses, expiry and state  2258ms
+   ✓ CodesPage > pages through the codes  330ms
+   ✓ CodesPage > deactivates an active code after confirming  712ms
+   ✓ CodesPage > says why a deactivation failed  582ms
+   ✓ CodesPage > adding a code > creates a code with uses and an expiry on the academy's clock  1159ms
+   ✓ CodesPage > adding a code > checks the form before sending it  593ms
+   ✓ CodesPage > adding a code > puts the server's errors on their fields  742ms
+ ✓ src/features/registration/admin/RegistrationsPage.test.tsx (20 tests) 7700ms
+   ✓ RegistrationsPage > opens on the waiting tab and lists its registrations  1884ms
+   ✓ RegistrationsPage > switches tabs and pages  732ms
+   ✓ RegistrationsPage > shows the details in the academy's time zone  398ms
+   ✓ RegistrationsPage > says a expired registrant's email was released  310ms
+   ✓ RegistrationsPage > moves focus to the details when they open  386ms
+   ✓ RegistrationsPage > approves a waiting registration and refreshes the list and badge  520ms
+   ✓ RegistrationsPage > names a decision another admin already made  373ms
+   ✓ RegistrationsPage > maps an unconfirmed refusal and falls back to the server's words  434ms
+   ✓ RegistrationsPage > rejects with a reason and refreshes the list and badge  901ms
+   ✓ RegistrationsPage > keeps the reject dialog open with the server's error  348ms
+ ✓ src/lib/i18n.test.ts (4 tests) 622ms
+   ✓ i18n Spanish resources > starts in a stored es locale and keeps it left-to-right  607ms
+ ✓ src/lib/zoned-time.test.ts (26 tests) 69ms
+ ✓ src/lib/cn.test.ts (1 test) 10ms
+ ✓ src/lib/bidi.test.ts (3 tests) 48ms
+ ✓ src/lib/money.test.ts (8 tests) 56ms
+ ✓ src/lib/timezones.test.ts (1 test) 8ms
+ ✓ src/features/registration/schemas.test.ts (16 tests) 47ms
+ ✓ src/features/registration/admin/schemas.test.ts (12 tests) 35ms
+ ✓ src/locales/locales.test.ts (9 tests) 57ms
+stderr | src/lib/field-error.test.ts > useFieldError > translates a known server sentence
+An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/lib/field-error.test.ts (4 tests) 32ms
+ ✓ src/lib/form-errors.test.ts (6 tests) 9ms
+ ✓ src/locales/bidi.test.ts (2 tests) 14ms
+ ✓ src/features/registration/admin/api.test.ts (4 tests) 21ms
+ ✓ src/lib/query-retry.test.ts (2 tests) 4ms
+ ✓ src/lib/api.test.ts (3 tests) 5ms
+ ✓ src/lib/catalogue.test.ts (3 tests) 4ms
+ ✓ src/locales/people-copy.test.ts (2 tests) 4ms
+ ✓ src/locales/catalogue-bidi.test.ts (2 tests) 4ms
+ ✓ src/features/gateways/PublicLinkPage.test.tsx (12 tests) 1057ms
+   ✓ PublicLinkPage > shows the academy, title, amount, fee and total, and pays with the provider  507ms
+stderr | src/features/consultations/BookingWizard.test.tsx > BookingWizard > asks a signed-in booker without a phone for WhatsApp, in their language (ETQAN-QA-464)
+An update to Toaster inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to BookingSlots inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to BookingWizard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | src/features/consultations/BookingWizard.test.tsx > BookingWizard > asks a signed-in booker without a phone for WhatsApp, in their language (ETQAN-QA-464)
+An update to BookingSlots inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to BookingWizard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Toaster inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/features/consultations/BookingWizard.test.tsx (8 tests) 8316ms
+   ✓ BookingWizard > books a visitor: teacher, time, details, provider, then the total and the link  2141ms
+   ✓ BookingWizard > skips the time for an email consultation  856ms
+   ✓ BookingWizard > keeps the booking when the payment does not start  1981ms
+   ✓ BookingWizard > lets a signed-in parent book for a child  592ms
+   ✓ BookingWizard > shows the server's field errors  1861ms
+   ✓ BookingWizard > asks a signed-in booker without a phone for WhatsApp, in their language (ETQAN-QA-464)  797ms
+ ✓ src/features/registration/RegisterPage.test.tsx (31 tests) 40717ms
+   ✓ RegisterPage > says registration is closed when the switch is off  1426ms
+   ✓ RegisterPage > offers a retry, not 'closed', when the options can't load  885ms
+   ✓ RegisterPage > offers only the adult path while parent registration is off  304ms
+   ✓ RegisterPage > shows the server's refusal of the parent path on the first step  3283ms
+   ✓ RegisterPage > ties the consent error to its checkbox  2062ms
+   ✓ RegisterPage > ties a preferred-days error to the day checkboxes  2063ms
+   ✓ RegisterPage > registers an adult and ends on the check-your-email screen  1113ms
+   ✓ RegisterPage > keeps each step until its fields are valid  1149ms
+   ✓ RegisterPage > checks preferences: hours and an intro call's date with its time  1335ms
+   ✓ RegisterPage > needs consent before submitting  844ms
+   ✓ RegisterPage > registers a parent with children, adding and removing one  1407ms
+   ✓ RegisterPage > allows at most five children  647ms
+   ✓ RegisterPage > puts a server error on a child's field and opens its step  1095ms
+   ✓ RegisterPage > puts a server error on the field and its step (password)  1562ms
+   ✓ RegisterPage > maps the intro call's server error onto its date  1127ms
+   ✓ RegisterPage > offers the code with the waiting list and shows an invalid code  1094ms
+   ✓ RegisterPage > tells a waiting-list registrant about the approval, the address isolated (ETQAN-QA-760)  1265ms
+   ✓ RegisterPage > shows the phone example as a hint, not a placeholder (ETQAN-QA-755)  359ms
+   ✓ RegisterPage > says try later when throttled  912ms
+   ✓ RegisterPage > shows the server's message for an error on no field of the form  657ms
+   ✓ RegisterPage > shows a generic failure when the server can't be reached  740ms
+   ✓ RegisterPage > turns into 'closed' when the switch went off meanwhile (404)  725ms
+   ✓ RegisterPage > sends what a bot typed into the hidden field  650ms
+   ✓ RegisterPage > has no axe violations on each step  13341ms
+
+ Test Files  30 passed (30)
+      Tests  228 passed (228)
+   Start at  14:41:56
+   Duration  49.73s (transform 23.85s, setup 29.37s, collect 79.16s, tests 76.63s, environment 36.92s, prepare 4.88s)
+

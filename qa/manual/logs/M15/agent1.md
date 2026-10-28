@@ -1,0 +1,24 @@
+# M15 agent1 log
+- 2026-10-28T00:40:56Z start: read README, environment, bug register
+- 2026-10-28T00:41:52Z student AR: home, sessions walked; F-001
+- 2026-10-28T00:44:58Z student AR: subscriptions, invoices, pay INV-000144 via simulator (decline then pay) OK -> paid; receipt; F-002..F-005
+- 2026-10-28T00:47:50Z wallet; pay INV-143 from wallet (720 partial, dblclick → one payment); codes page empty/invalid/expired/lowercase-valid; discount on INV-143; F-006,F-007. NOTE: shared scratchpad s.sh was overwritten by another area; switched to scratchpad/m15a1/st.sh
+- 2026-10-28T00:50:41Z wallet top-up via simulator OK; progress empty; homework submit with PDF OK (dblclick single); review view OK; F-008..F-010
+- 2026-10-28T01:04:15Z SETUP as qa-admin (for portal testing): certificate (تقدير) for Adam Al-Najjar (236); honour entry 'M15- نجم الشهر في التجويد' for QA student, published; recorded courses 1 'M15- أساسيات التجويد (مجانية)' free + video, 2 'M15- حفظ جزء عمّ (مدفوعة)' 250-50 EGP + video; material 'M15- ملخص أحكام النون الساكنة' on course تجويد; teacher 228 set 'يقدم استشارات'; consultation product 'M15- استشارة خطة الحفظ' 200 EGP.
+- 2026-10-28T01:08:16Z student: materials (download btn), honour (entry shows), store browse, free enrol (dblclick → 1 enrolment), player, mark watched, comment, course cert; F-014..F-016
+- 2026-10-28T01:12:55Z paid course via simulator (expire then pay) OK; consultations booking: whatsapp error, 3 bookings created (2 unpaid holds); F-017..F-019
+- 2026-10-28T01:14:15Z chat send OK (F-020); EN pass started: home, sessions (F-021), invoice 143 (F-022)
+- 2026-10-28T01:19:18Z parent Najjar AR: home (F-023), invoices (all paid), progress + child switch (F-024), IDOR probes (API 404 for other families = OK). parent Otaibi AR: INV-000156 paid via simulator (back mid-flow, switched to EN on simulator) → receipt EN OK
+- 2026-10-28T01:21:05Z parent sessions child filter, certificates (F-025); teacher direct URLs → silent redirect (F-026). Starting mobile AR
+- 2026-10-28T01:25:30Z mobile AR pass (student: home, sessions, invoices F-027, invoice pay dialog, wallet F-028, homework, store, consult booking, reviews, chat; parent: invoices, subscriptions); parent EN nav/progress; parent enrols Salma in free course (F-029). Wrapping up.
+- 2026-10-28T01:25:44Z DONE. 29 findings (M15-F-001..029), ~160 step.mjs calls. Covered list appended to findings/M15.md
+- 2026-10-28T02:16:18Z CONFIRMATION SWEEP start (agent1, run 2): read README/env/findings/triage; logging in M15-sw-* sessions
+- 2026-10-28T12:11:53Z CONFIRMATION SWEEP run 3 start (previous run-2 sweep stopped after 10 shots); sessions M15-s3-*, shots screens/M15/sweep2/
+- 2026-10-28T12:15:50Z student AR: home, sessions, subs, invoices; INV-000085 paid via SIMULATOR (525 incl 25 fee) → paid + receipt OK; INV-000094 paid from wallet (180) OK
+- 2026-10-28T12:18:02Z homework list/review OK; rated 15/10 session OK; consultation CR-000001 'ادفع الآن' → detail says held until 28/10 04:41 (past) → paid via SIMULATOR OK (F-030)
+- 2026-10-28T12:19:51Z student EN: consultation detail (paid), INV-000081 decline→retry→pay via SIMULATOR OK
+- 2026-10-28T12:22:24Z parent Najjar AR: home, progress + switch Adam/Salma OK, other family's INV-156 URL → 404 'لم نعثر على هذه الفاتورة' (after ~7s loading), recorded courses empty text names the child (fix OK)
+- 2026-10-28T12:23:25Z parent Sharif AR: invoices list, INV-000178 (80 left) paid via SIMULATOR (84 incl fee) → paid OK
+- 2026-10-28T12:24:12Z parent Sharif EN sessions (name order = known M03-F-024); teacher ahmad.haddad → /app/learning/invoices/178 → silent redirect home (known dup), no data. Starting mobile AR
+- 2026-10-28T12:25:34Z mobile AR student: consultations list, INV-000143 (680 left) paid via SIMULATOR on phone (714) → paid; receipt on phone (F-031)
+- 2026-10-28T12:26:14Z DONE sweep run 3: ~45 step.mjs calls, new findings M15-F-030, M15-F-031 appended

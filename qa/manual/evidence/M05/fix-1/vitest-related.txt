@@ -1,0 +1,655 @@
+[vite:react-swc] We recommend switching to `@vitejs/plugin-react` for improved performance as no swc plugins are used. More information at https://vite.dev/rolldown
+
+ RUN  v3.2.6 /app
+
+ ✓ src/features/catalogue/CountryPricesCard.test.tsx (9 tests) 2376ms
+   ✓ CountryPricesCard > shows each row's price in its own currency  476ms
+   ✓ CountryPricesCard > saves the whole list, converting each row with its currency  778ms
+   ✓ CountryPricesCard > refuses too many decimals for the currency, then a repeated country  468ms
+ ✓ src/features/recorded/EnrolmentDialog.test.tsx (24 tests) 2920ms
+   ✓ EnrolmentDialog > a manual enrolment asks how it was paid and sends minor units  481ms
+ ✓ src/features/recorded/PlaylistForm.test.tsx (14 tests) 4433ms
+   ✓ PlaylistForm > sends a new course as multipart with minor units  573ms
+   ✓ PlaylistForm > converts JPY 1500 to 1500 minor units  448ms
+   ✓ PlaylistForm > converts KWD 1.250 to 1250 minor units  627ms
+   ✓ PlaylistForm > rejects the price abc inline and sends nothing  463ms
+   ✓ PlaylistForm > rejects the price -5 inline and sends nothing  417ms
+   ✓ PlaylistForm > rejects the price 1,5 inline and sends nothing  336ms
+   ✓ PlaylistForm > rejects the price 1.234 inline and sends nothing  361ms
+   ✓ PlaylistForm > rejects a bad discount and a discount above the price  422ms
+ ✓ src/features/content/ContentDialog.test.tsx (10 tests) 2591ms
+   ✓ ContentDialog > requires a title, then a file or link  361ms
+   ✓ ContentDialog > creates a file item as FormData  330ms
+   ✓ ContentDialog > checks a link is https, then sends only the url  679ms
+   ✓ ContentDialog > switches a file item to a link by sending the url  341ms
+ ✓ src/features/recorded/VideoDialog.test.tsx (3 tests) 1801ms
+   ✓ VideoDialog > asks for a link for link and live, a file for file  354ms
+   ✓ VideoDialog > checks the duration and the link, then sends seconds  1315ms
+ ✓ src/features/recorded/Discussion.test.tsx (7 tests) 916ms
+   ✓ Discussion > shows threads with the academy's reply and posts a comment  388ms
+ ✓ src/features/consultations/ProductDialog.test.tsx (10 tests) 4230ms
+   ✓ ProductDialog > creates across the three tabs, defaulting the currency  1463ms
+   ✓ ProductDialog > refuses a bad price or share before sending  580ms
+   ✓ ProductDialog > asks for a description in words before sending (ETQAN-QA-570)  396ms
+   ✓ ProductDialog > explains who is listed on the Teachers tab and what the share is (ETQAN-QA-572)  565ms
+stderr | src/features/recorded/CoursePlayer.test.tsx > CoursePlayer > lists lessons in order and opens the first unwatched
+Encountered two children with the same key, `11`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+
+stderr | src/features/recorded/CoursePlayer.test.tsx > CoursePlayer > marks watched at once and rolls back on an error
+Encountered two children with the same key, `11`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+
+stderr | src/features/recorded/CoursePlayer.test.tsx > CoursePlayer > marks watched at once and rolls back on an error
+Encountered two children with the same key, `11`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+
+stderr | src/features/recorded/CoursePlayer.test.tsx > CoursePlayer > stays on the lesson when it is marked watched (PF11)
+Encountered two children with the same key, `11`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+
+stderr | src/features/recorded/CoursePlayer.test.tsx > CoursePlayer > stays on the lesson when it is marked watched (PF11)
+Encountered two children with the same key, `11`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+
+stderr | src/features/recorded/CoursePlayer.test.tsx > CoursePlayer > switches lesson on click
+Encountered two children with the same key, `11`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+
+stderr | src/features/recorded/CoursePlayer.test.tsx > CoursePlayer > switches lesson on click
+Encountered two children with the same key, `12`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+
+stderr | src/features/recorded/CoursePlayer.test.tsx > CoursePlayer > shows the course panels
+Encountered two children with the same key, `11`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+
+stderr | src/features/recorded/CoursePlayer.test.tsx > CoursePlayer > shows the discussion and the review button to the student only
+Encountered two children with the same key, `11`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+
+stderr | src/features/recorded/CoursePlayer.test.tsx > CoursePlayer > clears a comment draft when another lesson is opened
+Encountered two children with the same key, `11`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+
+stderr | src/features/recorded/CoursePlayer.test.tsx > CoursePlayer > clears a comment draft when another lesson is opened
+Encountered two children with the same key, `10`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+
+stderr | src/features/recorded/CoursePlayer.test.tsx > CoursePlayer > links to the student's certificate, and only when there is one
+Encountered two children with the same key, `11`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+
+stderr | src/features/recorded/CoursePlayer.test.tsx > CoursePlayer > links to the student's certificate, and only when there is one
+Encountered two children with the same key, `11`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+
+stderr | src/features/recorded/CoursePlayer.test.tsx > CoursePlayer > hides the link while the certificates feature is off
+Encountered two children with the same key, `11`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+
+ ✓ src/features/recorded/CoursePlayer.test.tsx (13 tests) 1615ms
+   ✓ CoursePlayer > lists lessons in order and opens the first unwatched  706ms
+ ✓ src/features/curriculum/UpgradesList.test.tsx (5 tests) 886ms
+ ✓ src/features/recorded/BuyPanel.test.tsx (7 tests) 665ms
+   ✓ BuyPanel > buys only after the terms are accepted, then shows the fee sheet  476ms
+ ✓ src/features/curriculum/StudentLevelsList.test.tsx (7 tests) 1189ms
+   ✓ StudentLevelsList > searches after a pause  372ms
+ ✓ src/features/recorded/StoreDetail.test.tsx (4 tests) 497ms
+   ✓ StoreDetailPage > shows the outline (titles and durations only), the terms and the intro  310ms
+ ✓ src/features/recorded/EnrolmentsTab.test.tsx (3 tests) 533ms
+stderr | src/features/curriculum/LevelDialog.test.tsx > LevelDialog > builds a tree with a chapter-linked topic and submits it
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/features/curriculum/ProgressPanel.test.tsx > ProgressPanel > shows no level text while loading
+An update to Transitioner inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Transitioner inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to MatchesInner inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to MatchesInner inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Transitioner inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Portal inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Portal inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to ForwardRef inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | src/features/curriculum/LevelDialog.test.tsx > LevelDialog > shows a nested server error under its field and a 409 at the top
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/features/curriculum/LevelDialog.test.tsx > LevelDialog > asks for a course in words and shows a form-level 400
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/features/curriculum/LevelDialog.test.tsx > LevelDialog > hides the chapter picker while quran_chapters is off
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/features/curriculum/LevelDialog.test.tsx > LevelDialog > puts the Arabic name first and marks both names required (ETQAN-QA-560)
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ ✓ src/features/curriculum/ProgressPanel.test.tsx (15 tests) 1787ms
+   ✓ ProgressPanel > ticks and unticks topics  651ms
+stderr | src/features/curriculum/LevelDialog.test.tsx > LevelDialog > checks a topic's verses in words before saving (ETQAN-QA-561)
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/features/curriculum/LevelDialog.test.tsx > LevelDialog > says where to load the chapters when there are none (ETQAN-QA-562)
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ ✓ src/features/curriculum/LevelDialog.test.tsx (7 tests) 3177ms
+   ✓ LevelDialog > builds a tree with a chapter-linked topic and submits it  1932ms
+   ✓ LevelDialog > checks a topic's verses in words before saving (ETQAN-QA-561)  505ms
+ ✓ src/features/recorded/PlaylistPage.test.tsx (4 tests) 813ms
+   ✓ PlaylistPage > shows only the tabs the codes allow  370ms
+ ✓ src/features/recorded/ReviewDialog.test.tsx (2 tests) 587ms
+   ✓ ReviewDialog > starts empty and sends a new review  464ms
+ ✓ src/features/recorded/ReviewsTab.test.tsx (2 tests) 623ms
+   ✓ ReviewsTab > approves, and rejects with a reason  561ms
+ ✓ src/features/content/Materials.test.tsx (6 tests) 2340ms
+   ✓ Materials > groups materials under their course  1159ms
+   ✓ Materials > shows why a download failed  508ms
+ ✓ src/features/catalogue/PriceByPermission.test.tsx (1 test) 839ms
+   ✓ the renew dialog's price without student.view_any > still renews, at the package's price  837ms
+ ✓ src/features/content/ContentAdmin.test.tsx (11 tests) 3861ms
+   ✓ ContentAdmin > needs a course before it lists anything  550ms
+   ✓ ContentAdmin > reorders with the new id order  343ms
+   ✓ ContentAdmin > shows why a reorder failed  313ms
+   ✓ ContentAdmin > confirms a delete  403ms
+   ✓ ContentAdmin > warns about the file only when the material has one (ETQAN-QA-568)  624ms
+   ✓ ContentAdmin > shows why a delete failed  382ms
+   ✓ ContentAdmin > opens the add dialog for the chosen course  359ms
+   ✓ ContentAdmin > opens the edit dialog  450ms
+ ✓ src/features/recorded/Store.test.tsx (3 tests) 1060ms
+   ✓ Store > lists courses with the struck price and an enrolled badge  748ms
+ ✓ src/features/recorded/CommentsTab.test.tsx (2 tests) 481ms
+   ✓ CommentsTab > lists a video's threads with full names and moderates them  450ms
+ ✓ src/features/catalogue/CourseForm.test.tsx (11 tests) 2869ms
+   ✓ CourseForm > requires both names and links teachers  1728ms
+   ✓ CourseForm > deletes an existing course after confirmation  417ms
+   ✓ CourseForm > drafts a course description with AI, appending to what is there  329ms
+stderr | src/features/curriculum/StudentLevelCard.test.tsx > StudentLevelCard > renders nothing when the viewer may not read the student
+An update to Transitioner inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Transitioner inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to MatchesInner inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to MatchesInner inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Transitioner inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/features/curriculum/StudentLevelCard.test.tsx (5 tests) 302ms
+ ✓ src/features/catalogue/PackageForm.test.tsx (5 tests) 881ms
+   ✓ PackageForm > shows sessions_total live and saves minor units  567ms
+ ✓ src/features/catalogue/CatalogueList.test.tsx (7 tests) 571ms
+ ✓ src/features/recorded/VideoPane.test.tsx (8 tests) 179ms
+stderr | src/features/curriculum/ChaptersTable.test.tsx > ChaptersTable > shows the chapters and edits a chapter's names
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/features/curriculum/ChaptersTable.test.tsx > ChaptersTable > titles the edit dialog with the Arabic name in Arabic (ETQAN-QA-563)
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/features/curriculum/ChaptersTable.test.tsx > ChaptersTable > titles the edit dialog with the Arabic name in Arabic (ETQAN-QA-563)
+An update to Toaster inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to ChaptersTable inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to EditNames inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/features/curriculum/ChaptersTable.test.tsx (5 tests) 1175ms
+   ✓ ChaptersTable > offers a sync from the empty state and reports the counts  312ms
+   ✓ ChaptersTable > shows the chapters and edits a chapter's names  496ms
+ ✓ src/features/curriculum/LevelsList.test.tsx (5 tests) 720ms
+ ✓ src/features/recorded/VideosTab.test.tsx (7 tests) 625ms
+ ✓ src/features/curriculum/MyProgress.test.tsx (10 tests) 470ms
+ ✓ src/features/recorded/PlaylistsAdmin.test.tsx (4 tests) 505ms
+ ✓ src/features/recorded/MyCourses.test.tsx (5 tests) 356ms
+ ✓ src/features/catalogue/queries.test.tsx (5 tests) 244ms
+ ✓ src/lib/i18n.test.ts (4 tests) 96ms
+ ✓ src/features/content/api.test.ts (3 tests) 9ms
+ ✓ src/features/recorded/api.test.ts (6 tests) 8ms
+ ✓ src/features/recorded/RatingSummary.test.tsx (2 tests) 139ms
+ ✓ src/features/catalogue/sessions-total.test.ts (17 tests) 5ms
+ ✓ src/features/recorded/errors.test.ts (6 tests) 8ms
+stderr | src/lib/field-error.test.ts > useFieldError > translates a known server sentence
+An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/lib/field-error.test.ts (4 tests) 24ms
+ ✓ src/lib/form-errors.test.ts (6 tests) 10ms
+ ✓ src/features/catalogue/api.test.ts (2 tests) 3ms
+ ✓ src/locales/locales.test.ts (9 tests) 43ms
+ ✓ src/features/curriculum/api.test.ts (3 tests) 5ms
+ ✓ src/features/recorded/duration.test.ts (2 tests) 3ms
+ ✓ src/features/consultations/errors.test.ts (2 tests) 4ms
+ ✓ src/locales/bidi.test.ts (2 tests) 9ms
+ ✓ src/features/reviews/errors.test.ts (5 tests) 5ms
+ ✓ src/features/curriculum/errors.test.ts (8 tests) 6ms
+ ✓ src/features/certificates/errors.test.ts (3 tests) 7ms
+ ✓ src/features/curriculum/chapterLabel.test.ts (2 tests) 3ms
+ ✓ src/locales/people-copy.test.ts (2 tests) 3ms
+ ✓ src/locales/catalogue-bidi.test.ts (2 tests) 2ms
+
+ Test Files  55 passed (55)
+      Tests  336 passed (336)
+   Start at  01:58:13
+   Duration  77.83s (transform 5.56s, setup 25.97s, collect 33.12s, tests 49.51s, environment 33.27s, prepare 4.18s)
+
+exit 0

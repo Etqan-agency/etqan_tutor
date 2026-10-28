@@ -1,0 +1,91 @@
+[vite:react-swc] We recommend switching to `@vitejs/plugin-react` for improved performance as no swc plugins are used. More information at https://vite.dev/rolldown
+
+ RUN  v3.2.6 /app
+
+ ✓ src/features/people/ParentForm.test.tsx (5 tests) 1965ms
+   ✓ ParentForm > shows children as links and saves WhatsApp  938ms
+   ✓ ParentForm > shows staff without parent.update the parent, read-only  594ms
+ ✓ src/features/people/AdminsList.test.tsx (4 tests) 2421ms
+   ✓ AdminsList > invites a new admin  1675ms
+   ✓ AdminsList > requires an email to invite an admin  475ms
+ ✓ src/features/people/StudentForm.test.tsx (18 tests) 3863ms
+   ✓ StudentForm > creates a student without email and opens the new record  671ms
+   ✓ StudentForm > shows a nested server error under the email field  553ms
+   ✓ StudentForm > edits an existing student and shows account and guardians  334ms
+   ✓ StudentForm > saves tags, XP and nationality, keeping a retired tag the student has  442ms
+ ✓ src/features/people/StudentsList.test.tsx (23 tests) 5522ms
+   ✓ StudentsList > lists students with their account state  507ms
+   ✓ StudentsList > filters by status tab and searches  384ms
+   ✓ StudentsList > applies a bulk status change to the selected rows  379ms
+   ✓ StudentsList > adds and removes a tag on the selected rows  449ms
+   ✓ StudentsList > creates a family from the selection and reports who was skipped  405ms
+   ✓ StudentsList > creates a family by submitting with Enter and still moves focus off body  354ms
+   ✓ StudentsList > adds the selection to an active family and removes it from one  350ms
+ ✓ src/features/access/StaffList.test.tsx (8 tests) 1094ms
+ ✓ src/features/employment/ContractDialog.test.tsx (10 tests) 2226ms
+   ✓ ContractDialog > needs a teacher  517ms
+   ✓ ContractDialog > starts each edit afresh: no stale file, refetched values  452ms
+ ✓ src/features/people/TeacherForm.test.tsx (11 tests) 2064ms
+   ✓ TeacherForm > requires gender and payout details when a payout method is chosen  550ms
+   ✓ TeacherForm > creates a teacher with courses, pay currency from the academy  528ms
+   ✓ TeacherForm > tags a teacher with teacher tags  411ms
+ ✓ src/features/people/FamiliesList.test.tsx (5 tests) 848ms
+   ✓ FamiliesList > lists each family's students, payer and status  347ms
+ ✓ src/features/people/TeachersList.test.tsx (5 tests) 510ms
+   ✓ TeachersList > shows course names and filters by course  313ms
+ ✓ src/features/people/AccountActions.test.tsx (14 tests) 796ms
+ ✓ src/features/employment/ContractsList.test.tsx (8 tests) 633ms
+ ✓ src/features/people/UserFieldsSection.test.tsx (4 tests) 318ms
+ ✓ src/routes/verify-email.test.tsx (8 tests) 551ms
+ ✓ src/features/people/ParentsList.test.tsx (4 tests) 417ms
+ ✓ src/features/scheduling/StudyGroupsList.test.tsx (5 tests) 757ms
+ ✓ src/ui/input.test.tsx (5 tests) 208ms
+ ✓ src/features/people/FamilyPage.test.tsx (3 tests) 237ms
+ ✓ src/lib/i18n.test.ts (4 tests) 75ms
+ ✓ src/locales/bidi.test.ts (2 tests) 7ms
+stderr | src/lib/field-error.test.ts > useFieldError > translates a known server sentence
+An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/lib/field-error.test.ts (4 tests) 20ms
+stderr | src/components/NameList.test.tsx > NameList > isolates each name and uses the reader's comma
+An update to NameList inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | src/components/NameList.test.tsx > NameList > uses a Latin comma in English and a dash for none
+An update to NameList inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/components/NameList.test.tsx (2 tests) 25ms
+ ✓ src/lib/form-errors.test.ts (6 tests) 7ms
+ ✓ src/locales/people-copy.test.ts (2 tests) 3ms
+
+ Test Files  23 passed (23)
+      Tests  160 passed (160)
+   Start at  19:46:07
+   Duration  28.02s (transform 1.49s, setup 7.70s, collect 8.43s, tests 24.57s, environment 10.56s, prepare 1.30s)
+

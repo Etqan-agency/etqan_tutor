@@ -1,0 +1,10 @@
+   ✓ AppShell > opens the mobile drawer from the hamburger and closes on Escape  334ms
+   ✓ AppShell > closes the drawer when a nav item is chosen  400ms
+
+ Test Files  9 passed (9)
+      Tests  99 passed (99)
+   Start at  15:31:43
+   Duration  13.55s (transform 5.12s, setup 15.66s, collect 21.53s, tests 12.46s, environment 23.57s, prepare 3.54s)
+
+Checked 3 files in 72ms. No fixes applied.
+tsc-exit=0

@@ -1,0 +1,1920 @@
+[vite:react-swc] We recommend switching to `@vitejs/plugin-react` for improved performance as no swc plugins are used. More information at https://vite.dev/rolldown
+
+ RUN  v3.2.6 /app
+
+stderr | src/features/scheduling/RevertDialog.test.tsx > RevertDialog > speaks Arabic
+An update to Toaster inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/features/scheduling/RevertDialog.test.tsx (15 tests) 1322ms
+ ✓ src/features/scheduling/SessionPage.test.tsx (24 tests) 2082ms
+   ✓ SessionPage > shows the details in the academy's time and the student's  363ms
+   ✓ SessionPage > cancels with a reason  359ms
+ ✓ src/features/scheduling/SessionsList.test.tsx (21 tests) 2587ms
+   ✓ SessionsList > shows today's sessions in the academy's time and the student's  303ms
+   ✓ SessionsList > filters, searches and exports what it shows  408ms
+ ✓ src/features/scheduling/SessionClasses.test.tsx (16 tests) 1043ms
+   ✓ SessionClasses > adds the make-up with the original's id  304ms
+stderr | src/features/scheduling/SessionActivity.test.tsx > SessionActivity > isolates the actor and the date in an Arabic line (ETQAN-QA-253)
+An update to Toaster inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to SessionActivity inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to SessionActivity inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ❯ src/features/scheduling/SessionActivity.test.tsx (16 tests | 2 failed) 1979ms
+   ✓ SessionActivity > lists the entries newest first, then the creation line 210ms
+   ✓ SessionActivity > shows each change as field, before and after, translated 89ms
+   ✓ SessionActivity > labels every cell for the phone layout 46ms
+   ✓ SessionActivity > marks a reverted entry and a revert 54ms
+   ✓ SessionActivity > formats instants, days, minutes, people and yes / no 39ms
+   × SessionActivity > names the system and a removed account 39ms
+     → [2mexpect([22m[31melement[39m[2m).toHaveTextContent()[22m
+
+Expected element to have text content:
+[32m  System ·[39m
+Received:
+[31m  Session cancelled⁨System⁩ · ⁨Jun 1, 2026 18:10⁩FieldBeforeAfterStatusScheduledCancelledCancel reason—Eid[39m
+   ✓ SessionActivity > writes the creation line for a named creator and for the system 33ms
+   ✓ SessionActivity > says when older entries exist, and only then 55ms
+   ✓ SessionActivity > says so when nothing has changed, keeping the creation line 16ms
+   ✓ SessionActivity > says when the log can't be loaded 14ms
+   ✓ SessionActivity > shows Revert only on the entries the server flagged 39ms
+   ✓ SessionActivity > shows no Revert when nothing is flagged 31ms
+   ✓ SessionActivity > keeps the refusal scheduling.changed_since on screen after the reload drops can_revert 154ms
+   ✓ SessionActivity > keeps the refusal scheduling.not_revertible on screen after the reload drops can_revert 110ms
+   × SessionActivity > isolates the actor and the date in an Arabic line (ETQAN-QA-253) 1018ms
+     → Unable to find role="list" and name "Activity"
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mstyle[39m=[32m""[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm"[39m
+      [33mdata-slot[39m=[32m"card"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 [.border-b]:pb-6 border-b border-border"[39m
+        [33mdata-slot[39m=[32m"card-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"font-display text-lg leading-snug font-semibold tracking-tight"[39m
+          [33mdata-slot[39m=[32m"card-title"[39m
+        [36m>[39m
+          [0mالنشاط[0m
+        [36m</h2>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"px-6 flex flex-col gap-4"[39m
+        [33mdata-slot[39m=[32m"card-content"[39m
+      [36m>[39m
+        [36m<ol[39m
+          [33maria-label[39m=[32m"النشاط"[39m
+          [33mclass[39m=[32m"flex flex-col gap-4"[39m
+        [36m>[39m
+          [36m<li[39m
+            [33mclass[39m=[32m"flex flex-col gap-2 border-b border-border pb-4 last:border-b-0"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex flex-wrap items-center justify-between gap-2"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"font-medium"[39m
+                [36m>[39m
+                  [0mإلغاء الحصة[0m
+                [36m</p>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+                [36m>[39m
+                  [0m⁨QA Admin⁩ · ⁨01‏/06‏/2026 18:10⁩[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"flex flex-wrap items-center gap-1"[39m
+              [36m/>[39m
+            [36m</div>[39m
+            [36m<table[39m
+              [33mclass[39m=[32m"block w-full text-sm sm:table"[39m
+            [36m>[39m
+              [36m<thead[39m
+                [33mclass[39m=[32m"sr-only sm:not-sr-only sm:table-header-group"[39m
+              [36m>[39m
+                [36m<tr[39m
+                  [33mclass[39m=[32m"sm:border-b sm:border-border"[39m
+                [36m>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"px-2 py-1 text-start text-xs font-normal text-muted-foreground"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mالحقل[0m
+                  [36m</th>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"px-2 py-1 text-start text-xs font-normal text-muted-foreground"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mقبل[0m
+                  [36m</th>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"px-2 py-1 text-start text-xs font-normal text-muted-foreground"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mبعد[0m
+                  [36m</th>[39m
+                [36m</tr>[39m
+              [36m</thead>[39m
+              [36m<tbody[39m
+                [33mclass[39m=[32m"block sm:table-row-group"[39m
+              [36m>[39m
+                [36m<tr[39m
+                  [33mclass[39m=[32m"block border-b border-border py-1 last:border-b-0 sm:table-row"[39m
+                [36m>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden font-medium"[39m
+                    [33mdata-label[39m=[32m"الحقل"[39m
+                  [36m>[39m
+                    [0mالحالة[0m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"قبل"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0mمجدولة[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"بعد"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0mملغاة[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                [36m</tr>[39m
+                [36m<tr[39m
+                  [33mclass[39m=[32m"block border-b border-border py-1 last:border-b-0 sm:table-row"[39m
+                [36m>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden font-medium"[39m
+                    [33mdata-label[39m=[32m"الحقل"[39m
+                  [36m>[39m
+                    [0mسبب الإلغاء[0m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"قبل"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0m—[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"بعد"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0mEid[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                [36m</tr>[39m
+              [36m</tbody>[39m
+            [36m</table>[39m
+          [36m</li>[39m
+          [36m<li[39m
+            [33mclass[39m=[32m"text-sm text-muted-foreground"[39m
+          [36m>[39m
+            [0mأُنشئت من الجدول الأسبوعي[0m
+            [36m<span[39m
+              [33mclass[39m=[32m"block text-xs"[39m
+            [36m>[39m
+              [0m20‏/05‏/2026 09:00[0m
+            [36m</span>[39m
+          [36m</li>[39m
+        [36m</ol>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33maria-label[39m=[32m"Notifications (F8)"[39m
+      [33mrole[39m=[32m"region"[39m
+      [33mstyle[39m=[32m"pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<ol[39m
+        [33mclass[39m=[32m"fixed bottom-0 end-0 z-100 flex max-h-screen w-full flex-col gap-2 p-4 pb-24 sm:max-w-sm sm:pb-4"[39m
+        [33mtabindex[39m=[32m"-1"[39m
+      [36m/>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mstyle[39m=[32m""[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm"[39m
+      [33mdata-slot[39m=[32m"card"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 [.border-b]:pb-6 border-b border-border"[39m
+        [33mdata-slot[39m=[32m"card-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"font-display text-lg leading-snug font-semibold tracking-tight"[39m
+          [33mdata-slot[39m=[32m"card-title"[39m
+        [36m>[39m
+          [0mالنشاط[0m
+        [36m</h2>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"px-6 flex flex-col gap-4"[39m
+        [33mdata-slot[39m=[32m"card-content"[39m
+      [36m>[39m
+        [36m<ol[39m
+          [33maria-label[39m=[32m"النشاط"[39m
+          [33mclass[39m=[32m"flex flex-col gap-4"[39m
+        [36m>[39m
+          [36m<li[39m
+            [33mclass[39m=[32m"flex flex-col gap-2 border-b border-border pb-4 last:border-b-0"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex flex-wrap items-center justify-between gap-2"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"font-medium"[39m
+                [36m>[39m
+                  [0mإلغاء الحصة[0m
+                [36m</p>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+                [36m>[39m
+                  [0m⁨QA Admin⁩ · ⁨01‏/06‏/2026 18:10⁩[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"flex flex-wrap items-center gap-1"[39m
+              [36m/>[39m
+            [36m</div>[39m
+            [36m<table[39m
+              [33mclass[39m=[32m"block w-full text-sm sm:table"[39m
+            [36m>[39m
+              [36m<thead[39m
+                [33mclass[39m=[32m"sr-only sm:not-sr-only sm:table-header-group"[39m
+              [36m>[39m
+                [36m<tr[39m
+                  [33mclass[39m=[32m"sm:border-b sm:border-border"[39m
+                [36m>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"px-2 py-1 text-start text-xs font-normal text-muted-foreground"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mالحقل[0m
+                  [36m</th>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"px-2 py-1 text-start text-xs font-normal text-muted-foreground"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mقبل[0m
+                  [36m</th>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"px-2 py-1 text-start text-xs font-normal text-muted-foreground"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mبعد[0m
+                  [36m</th>[39m
+                [36m</tr>[39m
+              [36m</thead>[39m
+              [36m<tbody[39m
+                [33mclass[39m=[32m"block sm:table-row-group"[39m
+              [36m>[39m
+                [36m<tr[39m
+                  [33mclass[39m=[32m"block border-b border-border py-1 last:border-b-0 sm:table-row"[39m
+                [36m>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden font-medium"[39m
+                    [33mdata-label[39m=[32m"الحقل"[39m
+                  [36m>[39m
+                    [0mالحالة[0m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"قبل"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0mمجدولة[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"بعد"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0mملغاة[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                [36m</tr>[39m
+                [36m<tr[39m
+                  [33mclass[39m=[32m"block border-b border-border py-1 last:border-b-0 sm:table-row"[39m
+                [36m>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden font-medium"[39m
+                    [33mdata-label[39m=[32m"الحقل"[39m
+                  [36m>[39m
+                    [0mسبب الإلغاء[0m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"قبل"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0m—[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"بعد"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0mEid[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                [36m</tr>[39m
+              [36m</tbody>[39m
+            [36m</table>[39m
+          [36m</li>[39m
+          [36m<li[39m
+            [33mclass[39m=[32m"text-sm text-muted-foreground"[39m
+          [36m>[39m
+            [0mأُنشئت من الجدول الأسبوعي[0m
+            [36m<span[39m
+              [33mclass[39m=[32m"block text-xs"[39m
+            [36m>[39m
+              [0m20‏/05‏/2026 09:00[0m
+            [36m</span>[39m
+          [36m</li>[39m
+        [36m</ol>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33maria-label[39m=[32m"Notifications (F8)"[39m
+      [33mrole[39m=[32m"region"[39m
+      [33mstyle[39m=[32m"pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<ol[39m
+        [33mclass[39m=[32m"fixed bottom-0 end-0 z-100 flex max-h-screen w-full flex-col gap-2 p-4 pb-24 sm:max-w-sm sm:pb-4"[39m
+        [33mtabindex[39m=[32m"-1"[39m
+      [36m/>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+   ✓ SessionActivity > titles an undo of attendance as such (ETQAN-QA-252) 31ms
+ ✓ src/features/scheduling/AddSessionDialog.test.tsx (7 tests) 1792ms
+   ✓ AddSessionDialog > offers paused subscriptions and searches by student name  499ms
+ ✓ src/features/scheduling/SimpleSessions.test.tsx (6 tests) 749ms
+   ✓ SimpleSessions > lists the academy's today compactly, one row per session  309ms
+stderr | src/features/curriculum/ProgressPanel.test.tsx > ProgressPanel > shows no level text while loading
+An update to Transitioner inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Transitioner inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to MatchesInner inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to MatchesInner inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Transitioner inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Portal inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Portal inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to ForwardRef inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/features/scheduling/AttendanceControls.test.tsx (13 tests) 909ms
+   ✓ AttendanceControls > marks the student and the teacher separately  314ms
+ ✓ src/features/curriculum/ProgressPanel.test.tsx (15 tests) 1478ms
+   ✓ ProgressPanel > ticks and unticks topics  377ms
+ ✓ src/features/scheduling/PostponeDialog.test.tsx (6 tests) 1365ms
+   ✓ PostponeDialog > sends the day and time as typed, with the student's time shown  519ms
+ ❯ src/features/scheduling/TeacherSessions.test.tsx (16 tests | 1 failed) 1950ms
+   ✓ TeacherSessions > shows today's sessions on the teacher's own clock  317ms
+   ✓ TeacherSessions > has no attendance or report while the academy has those off 43ms
+   ✓ TeacherSessions > moves between Today, This week and History 119ms
+   ✓ TeacherSessions > on Home, an empty day links to My sessions 25ms
+   ✓ TeacherSessions > says when there are none, and when loading failed 33ms
+   ✓ TeacherSessions > puts today's sessions on the teacher's home 42ms
+   ✓ TeacherSessions > labels the two attendance selects in each row on screen 55ms
+   ✓ TeacherSessions > isolates the bracketed part of a student's name 35ms
+   ✓ TeacherSessions > shows the teacher which group a session belongs to 33ms
+   ✓ TeacherSessions > tells the teacher whom a substituted session stands in for 31ms
+   ✓ TeacherSessions > times and postponing > offers I'm in on an upcoming row, and I'm out once in 42ms
+   ✓ TeacherSessions > times and postponing > keeps I'm out on a completed row, and offers nothing on a cancelled one 37ms
+   ✓ TeacherSessions > times and postponing > has no I'm in on History 51ms
+   ✓ TeacherSessions > times and postponing > follows the server's can_postpone 50ms
+   × TeacherSessions > times and postponing > says when the server's deadline has passed, in the academy's time 1012ms
+     → Unable to find an element with the text: Postponing closed at 19:00. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-col gap-4"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Which sessions"[39m
+        [33mclass[39m=[32m"flex flex-wrap gap-2 border-b border-border pb-2"[39m
+        [33mrole[39m=[32m"tablist"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"true"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mToday[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mThis week[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mHistory[0m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"overflow-x-auto rounded-lg border border-border"[39m
+        [36m>[39m
+          [36m<table[39m
+            [33mclass[39m=[32m"w-full text-sm"[39m
+          [36m>[39m
+            [36m<thead[39m
+              [33mclass[39m=[32m"bg-secondary text-muted-foreground"[39m
+            [36m>[39m
+              [36m<tr>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mWhen[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mStudent[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mCourse[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mStatus[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mLink[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mActions[0m
+                [36m</th>[39m
+              [36m</tr>[39m
+            [36m</thead>[39m
+            [36m<tbody>[39m
+              [36m<tr[39m
+                [33mclass[39m=[32m"border-t border-border"[39m
+              [36m>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"block"[39m
+                  [36m>[39m
+                    [0mJun 1, 2026[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"font-medium"[39m
+                    [33mdir[39m=[32m"ltr"[39m
+                  [36m>[39m
+                    [0m19:00[0m
+                  [36m</span>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [0mYusuf[0m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [0mTajweed[0m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex flex-wrap items-center gap-1"[39m
+                  [36m>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium bg-success text-success-foreground"[39m
+                    [36m>[39m
+                      [0mScheduled[0m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<a[39m
+                    [33maria-label[39m=[32m"Join the session with Yusuf"[39m
+                    [33mclass[39m=[32m"font-medium text-primary-text underline-offset-4 hover:underline"[39m
+                    [33mhref[39m=[32m"https://meet.test/bilal"[39m
+                    [33mrel[39m=[32m"noreferrer"[39m
+                    [33mtarget[39m=[32m"_blank"[39m
+                  [36m>[39m
+                    [0mJoin[0m
+                  [36m</a>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex flex-wrap items-center gap-2"[39m
+                  [36m/>[39m
+                [36m</td>[39m
+              [36m</tr>[39m
+            [36m</tbody>[39m
+          [36m</table>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33maria-label[39m=[32m"Notifications (F8)"[39m
+      [33mrole[39m=[32m"region"[39m
+      [33mstyle[39m=[32m"pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<ol[39m
+        [33mclass[39m=[32m"fixed bottom-0 end-0 z-100 flex max-h-screen w-full flex-col gap-2 p-4 pb-24 sm:max-w-sm sm:pb-4"[39m
+        [33mtabindex[39m=[32m"-1"[39m
+      [36m/>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-col gap-4"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Which sessions"[39m
+        [33mclass[39m=[32m"flex flex-wrap gap-2 border-b border-border pb-2"[39m
+        [33mrole[39m=[32m"tablist"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"true"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mToday[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mThis week[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mHistory[0m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"overflow-x-auto rounded-lg border border-border"[39m
+        [36m>[39m
+          [36m<table[39m
+            [33mclass[39m=[32m"w-full text-sm"[39m
+          [36m>[39m
+            [36m<thead[39m
+              [33mclass[39m=[32m"bg-secondary text-muted-foreground"[39m
+            [36m>[39m
+              [36m<tr>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mWhen[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mStudent[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mCourse[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mStatus[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mLink[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mActions[0m
+                [36m</th>[39m
+              [36m</tr>[39m
+            [36m</thead>[39m
+            [36m<tbody>[39m
+              [36m<tr[39m
+                [33mclass[39m=[32m"border-t border-border"[39m
+              [36m>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"block"[39m
+                  [36m>[39m
+                    [0mJun 1, 2026[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"font-medium"[39m
+                    [33mdir[39m=[32m"ltr"[39m
+                  [36m>[39m
+                    [0m19:00[0m
+                  [36m</span>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [0mYusuf[0m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [0mTajweed[0m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex flex-wrap items-center gap-1"[39m
+                  [36m>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium bg-success text-success-foreground"[39m
+                    [36m>[39m
+                      [0mScheduled[0m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<a[39m
+                    [33maria-label[39m=[32m"Join the session with Yusuf"[39m
+                    [33mclass[39m=[32m"font-medium text-primary-text underline-offset-4 hover:underline"[39m
+                    [33mhref[39m=[32m"https://meet.test/bilal"[39m
+                    [33mrel[39m=[32m"noreferrer"[39m
+                    [33mtarget[39m=[32m"_blank"[39m
+                  [36m>[39m
+                    [0mJoin[0m
+                  [36m</a>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex flex-wrap items-center gap-2"[39m
+                  [36m/>[39m
+                [36m</td>[39m
+              [36m</tr>[39m
+            [36m</tbody>[39m
+          [36m</table>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33maria-label[39m=[32m"Notifications (F8)"[39m
+      [33mrole[39m=[32m"region"[39m
+      [33mstyle[39m=[32m"pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<ol[39m
+        [33mclass[39m=[32m"fixed bottom-0 end-0 z-100 flex max-h-screen w-full flex-col gap-2 p-4 pb-24 sm:max-w-sm sm:pb-4"[39m
+        [33mtabindex[39m=[32m"-1"[39m
+      [36m/>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+   ✓ TeacherSessions > times and postponing > shows neither with postponement off 22ms
+ ✓ src/features/scheduling/bits.test.tsx (9 tests) 350ms
+ ✓ src/features/scheduling/activityFormat.test.ts (12 tests) 35ms
+stderr | src/lib/field-error.test.ts > useFieldError > translates a known server sentence
+An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/lib/field-error.test.ts (4 tests) 88ms
+ ✓ src/lib/form-errors.test.ts (6 tests) 10ms
+ ✓ src/features/scheduling/postponing.test.ts (3 tests) 3ms
+stderr | src/features/scheduling/PostponeDialog.errors.test.tsx > PostponeDialog server refusals > shows the two-weeks refusal in Arabic
+An update to Toaster inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to PostponeDialog inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to PostponeDialog inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to FocusScope inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Presence inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to DismissableLayer inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/features/scheduling/PostponeDialog.errors.test.tsx (1 test) 436ms
+   ✓ PostponeDialog server refusals > shows the two-weeks refusal in Arabic  434ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/features/scheduling/SessionActivity.test.tsx > SessionActivity > names the system and a removed account
+Error: [2mexpect([22m[31melement[39m[2m).toHaveTextContent()[22m
+
+Expected element to have text content:
+[32m  System ·[39m
+Received:
+[31m  Session cancelled⁨System⁩ · ⁨Jun 1, 2026 18:10⁩FieldBeforeAfterStatusScheduledCancelledCancel reason—Eid[39m
+ ❯ src/features/scheduling/SessionActivity.test.tsx:173:18
+    171|   show();
+    172|   const [system, removed] = await items();
+    173|   expect(system).toHaveTextContent("System ·");
+       |                  ^
+    174|   expect(removed).toHaveTextContent("A removed account ·");
+    175|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/features/scheduling/SessionActivity.test.tsx > SessionActivity > isolates the actor and the date in an Arabic line (ETQAN-QA-253)
+TestingLibraryElementError: Unable to find role="list" and name "Activity"
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mstyle[39m=[32m""[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm"[39m
+      [33mdata-slot[39m=[32m"card"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 [.border-b]:pb-6 border-b border-border"[39m
+        [33mdata-slot[39m=[32m"card-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"font-display text-lg leading-snug font-semibold tracking-tight"[39m
+          [33mdata-slot[39m=[32m"card-title"[39m
+        [36m>[39m
+          [0mالنشاط[0m
+        [36m</h2>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"px-6 flex flex-col gap-4"[39m
+        [33mdata-slot[39m=[32m"card-content"[39m
+      [36m>[39m
+        [36m<ol[39m
+          [33maria-label[39m=[32m"النشاط"[39m
+          [33mclass[39m=[32m"flex flex-col gap-4"[39m
+        [36m>[39m
+          [36m<li[39m
+            [33mclass[39m=[32m"flex flex-col gap-2 border-b border-border pb-4 last:border-b-0"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex flex-wrap items-center justify-between gap-2"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"font-medium"[39m
+                [36m>[39m
+                  [0mإلغاء الحصة[0m
+                [36m</p>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+                [36m>[39m
+                  [0m⁨QA Admin⁩ · ⁨01‏/06‏/2026 18:10⁩[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"flex flex-wrap items-center gap-1"[39m
+              [36m/>[39m
+            [36m</div>[39m
+            [36m<table[39m
+              [33mclass[39m=[32m"block w-full text-sm sm:table"[39m
+            [36m>[39m
+              [36m<thead[39m
+                [33mclass[39m=[32m"sr-only sm:not-sr-only sm:table-header-group"[39m
+              [36m>[39m
+                [36m<tr[39m
+                  [33mclass[39m=[32m"sm:border-b sm:border-border"[39m
+                [36m>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"px-2 py-1 text-start text-xs font-normal text-muted-foreground"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mالحقل[0m
+                  [36m</th>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"px-2 py-1 text-start text-xs font-normal text-muted-foreground"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mقبل[0m
+                  [36m</th>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"px-2 py-1 text-start text-xs font-normal text-muted-foreground"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mبعد[0m
+                  [36m</th>[39m
+                [36m</tr>[39m
+              [36m</thead>[39m
+              [36m<tbody[39m
+                [33mclass[39m=[32m"block sm:table-row-group"[39m
+              [36m>[39m
+                [36m<tr[39m
+                  [33mclass[39m=[32m"block border-b border-border py-1 last:border-b-0 sm:table-row"[39m
+                [36m>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden font-medium"[39m
+                    [33mdata-label[39m=[32m"الحقل"[39m
+                  [36m>[39m
+                    [0mالحالة[0m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"قبل"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0mمجدولة[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"بعد"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0mملغاة[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                [36m</tr>[39m
+                [36m<tr[39m
+                  [33mclass[39m=[32m"block border-b border-border py-1 last:border-b-0 sm:table-row"[39m
+                [36m>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden font-medium"[39m
+                    [33mdata-label[39m=[32m"الحقل"[39m
+                  [36m>[39m
+                    [0mسبب الإلغاء[0m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"قبل"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0m—[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"بعد"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0mEid[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                [36m</tr>[39m
+              [36m</tbody>[39m
+            [36m</table>[39m
+          [36m</li>[39m
+          [36m<li[39m
+            [33mclass[39m=[32m"text-sm text-muted-foreground"[39m
+          [36m>[39m
+            [0mأُنشئت من الجدول الأسبوعي[0m
+            [36m<span[39m
+              [33mclass[39m=[32m"block text-xs"[39m
+            [36m>[39m
+              [0m20‏/05‏/2026 09:00[0m
+            [36m</span>[39m
+          [36m</li>[39m
+        [36m</ol>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33maria-label[39m=[32m"Notifications (F8)"[39m
+      [33mrole[39m=[32m"region"[39m
+      [33mstyle[39m=[32m"pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<ol[39m
+        [33mclass[39m=[32m"fixed bottom-0 end-0 z-100 flex max-h-screen w-full flex-col gap-2 p-4 pb-24 sm:max-w-sm sm:pb-4"[39m
+        [33mtabindex[39m=[32m"-1"[39m
+      [36m/>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mstyle[39m=[32m""[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm"[39m
+      [33mdata-slot[39m=[32m"card"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 [.border-b]:pb-6 border-b border-border"[39m
+        [33mdata-slot[39m=[32m"card-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"font-display text-lg leading-snug font-semibold tracking-tight"[39m
+          [33mdata-slot[39m=[32m"card-title"[39m
+        [36m>[39m
+          [0mالنشاط[0m
+        [36m</h2>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"px-6 flex flex-col gap-4"[39m
+        [33mdata-slot[39m=[32m"card-content"[39m
+      [36m>[39m
+        [36m<ol[39m
+          [33maria-label[39m=[32m"النشاط"[39m
+          [33mclass[39m=[32m"flex flex-col gap-4"[39m
+        [36m>[39m
+          [36m<li[39m
+            [33mclass[39m=[32m"flex flex-col gap-2 border-b border-border pb-4 last:border-b-0"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex flex-wrap items-center justify-between gap-2"[39m
+            [36m>[39m
+              [36m<div>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"font-medium"[39m
+                [36m>[39m
+                  [0mإلغاء الحصة[0m
+                [36m</p>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+                [36m>[39m
+                  [0m⁨QA Admin⁩ · ⁨01‏/06‏/2026 18:10⁩[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"flex flex-wrap items-center gap-1"[39m
+              [36m/>[39m
+            [36m</div>[39m
+            [36m<table[39m
+              [33mclass[39m=[32m"block w-full text-sm sm:table"[39m
+            [36m>[39m
+              [36m<thead[39m
+                [33mclass[39m=[32m"sr-only sm:not-sr-only sm:table-header-group"[39m
+              [36m>[39m
+                [36m<tr[39m
+                  [33mclass[39m=[32m"sm:border-b sm:border-border"[39m
+                [36m>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"px-2 py-1 text-start text-xs font-normal text-muted-foreground"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mالحقل[0m
+                  [36m</th>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"px-2 py-1 text-start text-xs font-normal text-muted-foreground"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mقبل[0m
+                  [36m</th>[39m
+                  [36m<th[39m
+                    [33mclass[39m=[32m"px-2 py-1 text-start text-xs font-normal text-muted-foreground"[39m
+                    [33mscope[39m=[32m"col"[39m
+                  [36m>[39m
+                    [0mبعد[0m
+                  [36m</th>[39m
+                [36m</tr>[39m
+              [36m</thead>[39m
+              [36m<tbody[39m
+                [33mclass[39m=[32m"block sm:table-row-group"[39m
+              [36m>[39m
+                [36m<tr[39m
+                  [33mclass[39m=[32m"block border-b border-border py-1 last:border-b-0 sm:table-row"[39m
+                [36m>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden font-medium"[39m
+                    [33mdata-label[39m=[32m"الحقل"[39m
+                  [36m>[39m
+                    [0mالحالة[0m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"قبل"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0mمجدولة[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"بعد"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0mملغاة[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                [36m</tr>[39m
+                [36m<tr[39m
+                  [33mclass[39m=[32m"block border-b border-border py-1 last:border-b-0 sm:table-row"[39m
+                [36m>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden font-medium"[39m
+                    [33mdata-label[39m=[32m"الحقل"[39m
+                  [36m>[39m
+                    [0mسبب الإلغاء[0m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"قبل"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0m—[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                  [36m<td[39m
+                    [33mclass[39m=[32m"block py-0.5 before:block before:text-xs before:text-muted-foreground before:content-[attr(data-label)] sm:table-cell sm:px-2 sm:py-1.5 sm:before:hidden"[39m
+                    [33mdata-label[39m=[32m"بعد"[39m
+                  [36m>[39m
+                    [36m<bdi>[39m
+                      [0mEid[0m
+                    [36m</bdi>[39m
+                  [36m</td>[39m
+                [36m</tr>[39m
+              [36m</tbody>[39m
+            [36m</table>[39m
+          [36m</li>[39m
+          [36m<li[39m
+            [33mclass[39m=[32m"text-sm text-muted-foreground"[39m
+          [36m>[39m
+            [0mأُنشئت من الجدول الأسبوعي[0m
+            [36m<span[39m
+              [33mclass[39m=[32m"block text-xs"[39m
+            [36m>[39m
+              [0m20‏/05‏/2026 09:00[0m
+            [36m</span>[39m
+          [36m</li>[39m
+        [36m</ol>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33maria-label[39m=[32m"Notifications (F8)"[39m
+      [33mrole[39m=[32m"region"[39m
+      [33mstyle[39m=[32m"pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<ol[39m
+        [33mclass[39m=[32m"fixed bottom-0 end-0 z-100 flex max-h-screen w-full flex-col gap-2 p-4 pb-24 sm:max-w-sm sm:pb-4"[39m
+        [33mtabindex[39m=[32m"-1"[39m
+      [36m/>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ waitForWrapper node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ findByRole node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ items src/features/scheduling/SessionActivity.test.tsx:46:22
+     44| }
+     45| const items = async () =>
+     46|  within(await screen.findByRole("list", { name: "Activity" })).getAllB…
+       |                      ^
+     47|   "listitem",
+     48|  );
+ ❯ src/features/scheduling/SessionActivity.test.tsx:324:26
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/features/scheduling/TeacherSessions.test.tsx > TeacherSessions > times and postponing > says when the server's deadline has passed, in the academy's time
+TestingLibraryElementError: Unable to find an element with the text: Postponing closed at 19:00. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-col gap-4"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Which sessions"[39m
+        [33mclass[39m=[32m"flex flex-wrap gap-2 border-b border-border pb-2"[39m
+        [33mrole[39m=[32m"tablist"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"true"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mToday[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mThis week[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mHistory[0m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"overflow-x-auto rounded-lg border border-border"[39m
+        [36m>[39m
+          [36m<table[39m
+            [33mclass[39m=[32m"w-full text-sm"[39m
+          [36m>[39m
+            [36m<thead[39m
+              [33mclass[39m=[32m"bg-secondary text-muted-foreground"[39m
+            [36m>[39m
+              [36m<tr>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mWhen[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mStudent[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mCourse[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mStatus[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mLink[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mActions[0m
+                [36m</th>[39m
+              [36m</tr>[39m
+            [36m</thead>[39m
+            [36m<tbody>[39m
+              [36m<tr[39m
+                [33mclass[39m=[32m"border-t border-border"[39m
+              [36m>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"block"[39m
+                  [36m>[39m
+                    [0mJun 1, 2026[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"font-medium"[39m
+                    [33mdir[39m=[32m"ltr"[39m
+                  [36m>[39m
+                    [0m19:00[0m
+                  [36m</span>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [0mYusuf[0m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [0mTajweed[0m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex flex-wrap items-center gap-1"[39m
+                  [36m>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium bg-success text-success-foreground"[39m
+                    [36m>[39m
+                      [0mScheduled[0m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<a[39m
+                    [33maria-label[39m=[32m"Join the session with Yusuf"[39m
+                    [33mclass[39m=[32m"font-medium text-primary-text underline-offset-4 hover:underline"[39m
+                    [33mhref[39m=[32m"https://meet.test/bilal"[39m
+                    [33mrel[39m=[32m"noreferrer"[39m
+                    [33mtarget[39m=[32m"_blank"[39m
+                  [36m>[39m
+                    [0mJoin[0m
+                  [36m</a>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex flex-wrap items-center gap-2"[39m
+                  [36m/>[39m
+                [36m</td>[39m
+              [36m</tr>[39m
+            [36m</tbody>[39m
+          [36m</table>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33maria-label[39m=[32m"Notifications (F8)"[39m
+      [33mrole[39m=[32m"region"[39m
+      [33mstyle[39m=[32m"pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<ol[39m
+        [33mclass[39m=[32m"fixed bottom-0 end-0 z-100 flex max-h-screen w-full flex-col gap-2 p-4 pb-24 sm:max-w-sm sm:pb-4"[39m
+        [33mtabindex[39m=[32m"-1"[39m
+      [36m/>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-col gap-4"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Which sessions"[39m
+        [33mclass[39m=[32m"flex flex-wrap gap-2 border-b border-border pb-2"[39m
+        [33mrole[39m=[32m"tablist"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"true"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mToday[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mThis week[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33maria-selected[39m=[32m"false"[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary aria-selected:bg-secondary aria-selected:text-foreground"[39m
+          [33mrole[39m=[32m"tab"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mHistory[0m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"overflow-x-auto rounded-lg border border-border"[39m
+        [36m>[39m
+          [36m<table[39m
+            [33mclass[39m=[32m"w-full text-sm"[39m
+          [36m>[39m
+            [36m<thead[39m
+              [33mclass[39m=[32m"bg-secondary text-muted-foreground"[39m
+            [36m>[39m
+              [36m<tr>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mWhen[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mStudent[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mCourse[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mStatus[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mLink[0m
+                [36m</th>[39m
+                [36m<th[39m
+                  [33mclass[39m=[32m"p-3 text-start font-medium"[39m
+                  [33mscope[39m=[32m"col"[39m
+                [36m>[39m
+                  [0mActions[0m
+                [36m</th>[39m
+              [36m</tr>[39m
+            [36m</thead>[39m
+            [36m<tbody>[39m
+              [36m<tr[39m
+                [33mclass[39m=[32m"border-t border-border"[39m
+              [36m>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"block"[39m
+                  [36m>[39m
+                    [0mJun 1, 2026[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"font-medium"[39m
+                    [33mdir[39m=[32m"ltr"[39m
+                  [36m>[39m
+                    [0m19:00[0m
+                  [36m</span>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [0mYusuf[0m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [0mTajweed[0m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex flex-wrap items-center gap-1"[39m
+                  [36m>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium bg-success text-success-foreground"[39m
+                    [36m>[39m
+                      [0mScheduled[0m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<a[39m
+                    [33maria-label[39m=[32m"Join the session with Yusuf"[39m
+                    [33mclass[39m=[32m"font-medium text-primary-text underline-offset-4 hover:underline"[39m
+                    [33mhref[39m=[32m"https://meet.test/bilal"[39m
+                    [33mrel[39m=[32m"noreferrer"[39m
+                    [33mtarget[39m=[32m"_blank"[39m
+                  [36m>[39m
+                    [0mJoin[0m
+                  [36m</a>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mclass[39m=[32m"p-3"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex flex-wrap items-center gap-2"[39m
+                  [36m/>[39m
+                [36m</td>[39m
+              [36m</tr>[39m
+            [36m</tbody>[39m
+          [36m</table>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33maria-label[39m=[32m"Notifications (F8)"[39m
+      [33mrole[39m=[32m"region"[39m
+      [33mstyle[39m=[32m"pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<ol[39m
+        [33mclass[39m=[32m"fixed bottom-0 end-0 z-100 flex max-h-screen w-full flex-col gap-2 p-4 pb-24 sm:max-w-sm sm:pb-4"[39m
+        [33mtabindex[39m=[32m"-1"[39m
+      [36m/>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ waitForWrapper node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ findByText node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ src/features/scheduling/TeacherSessions.test.tsx:314:18
+    312|    );
+    313|    expect(
+    314|     await screen.findByText("Postponing closed at 19:00"),
+       |                  ^
+    315|    ).toBeInTheDocument();
+    316|    expect(screen.queryByRole("button", { name: "Postpone" })).toBeNull…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  2 failed | 15 passed (17)
+      Tests  3 failed | 187 passed (190)
+   Start at  20:52:38
+   Duration  27.23s (transform 3.26s, setup 7.55s, collect 13.04s, tests 18.18s, environment 10.97s, prepare 1.34s)
+
+

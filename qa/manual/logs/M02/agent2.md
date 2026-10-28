@@ -1,0 +1,14 @@
+# M02 Agent 2 (triage) log
+
+2026-10-27T18:48:38Z start triage of 20 findings in findings/M02.md; read README, environment, sign-in.md, bug-register (Next ID 048).
+2026-10-27T19:00:34Z reproduced all 20 findings with step.mjs (sessions T02-*), screenshots t001..t023 in screens/M02/triage/, each opened and checked.
+2026-10-27T19:00:34Z F-005 only reproduces with two clicks in the same task (dblclick / 60 ms gap blocked); Mailpit shows two alerts 17 ms apart -> confirmed.
+2026-10-27T19:00:34Z F-014 root cause seen: radiogroup dir="ltr" (Radix default) - affects desktop too and every RadioCardGroup.
+2026-10-27T19:00:34Z not a bug: F-016 (+99 RTL form), F-018 (locale-toggle.tsx: toggle shows target when 2 langs, menu shows current when 3+), F-019 (anon me/ probe 403 is the contract).
+2026-10-27T19:00:34Z filed ETQAN-QA-048..064 (Next ID now 065); triage.md rows added; progress.md M02 = TRIAGED.
+2026-10-27T19:00:34Z state: student.ind5 restored (password QA-People-2026! via reset link, name Aisha Rahman, extra email aisha.tri removed, phone empty, 2FA off); one quick-login link for ind5 used; student.ind6 lock untouched beyond 1 more 429 attempt.
+2026-10-27T19:16:37Z GATE start: retest of Agent 3 fix cycle 1 (QA-048,049,051,054,056,057,060,061,062,063). Diff reviewed (dashboard+backend on qa/manual-2026-10): root-cause fixes, no test hacks. Re-ran: vitest 38 files/296 tests pass (identity, quicklogin, forgot-password, ui/input, radio-card-group, locales/bidi, lib), tsc 0, biome clean (214 files), pytest identity+site emails 879 passed.
+2026-10-27T19:24:50Z GATE retest: 9 fixes VERIFIED (048,049,051,054,056,057,060,061,063) + QA-011 VERIFIED; QA-062 closed not-a-bug on retest (before/after render identical and correct; LRM already sufficed). Composites screens/M02/fix/<BUG>-after.png (raw *-after-raw.png). 4 proposals accepted. Smoke: teacher-ar, parent-en, staff-ar, admin-en, student ar/en, qaother cross refused. Register, triage.md, coverage-gaps, progress updated. M02 GATE = PASSED. Open non-blocking: 050,052,053,055,058,059 (P3), 064 (P4).
+2026-10-27T19:43:17Z FINAL GATE start: triage of sweep findings M02-F-021, M02-F-022 (Agent 1 confirmation sweep).
+2026-10-27T19:43:17Z reproduced both with own shots: t030/t031 (qaother login AR "جديد على إتقان؟" vs EN "New here?"), t032/t033 (student 246 Account card: AR "آخر دخول: Africa/Cairo · حاسوب · 192.168.65.1" from <span dir="ltr">, EN correct order). Filed ETQAN-QA-065 (P3 RTL easy, AR order; missing time = not a bug per B9b S-8 -> PROPOSAL in coverage-gaps), ETQAN-QA-066 (P3 copy easy). Next ID 067. triage rows added.
+2026-10-27T19:43:17Z FINAL GATE decision: PASSED (no P0/P1/P2; sweep re-confirmed fixes 048,049,051,054,056,057,060,061,063 and main jobs for every role AR+EN). 065/066 are easy P3s queued for the next fix cycle, non-blocking. progress.md + findings/M02.md summary updated.

@@ -1,0 +1,2863 @@
+diff --git a/src/features/certificates/CertificatePrint.test.tsx b/src/features/certificates/CertificatePrint.test.tsx
+index b7ab7cf..9f3201c 100644
+--- a/src/features/certificates/CertificatePrint.test.tsx
++++ b/src/features/certificates/CertificatePrint.test.tsx
+@@ -105,6 +105,32 @@ describe("CertificatePrint", () => {
+ 		expect(within(sheet).queryByText(/Check this certificate/)).toBeNull();
+ 	});
+ 
++	it("offers a way back beside Print, off the paper (ETQAN-QA-466)", async () => {
++		renderWithRouter(<CertificatePrint certificateId="1" />);
++		await screen.findByRole("article", { name: "Certificate of Completion" });
++		const back = screen.getByRole("button", { name: "Back" });
++		expect(back.closest(".print\\:hidden")).not.toBeNull();
++	});
++
++	it("sets an Arabic message upright and a Latin one in italics (ETQAN-QA-466)", async () => {
++		vi.mocked(certificatesApi.get).mockResolvedValue({
++			...customCertificate,
++			message: "مبارك يا آدم، نفخر بتقدّمك.",
++		});
++		const { unmount } = renderWithRouter(
++			<CertificatePrint certificateId="2" />,
++		);
++		const arabic = await screen.findByText("مبارك يا آدم، نفخر بتقدّمك.");
++		expect(arabic).not.toHaveClass("italic");
++		expect(arabic).toHaveAttribute("dir", "auto");
++		unmount();
++		vi.mocked(certificatesApi.get).mockResolvedValue(customCertificate);
++		renderWithRouter(<CertificatePrint certificateId="2" />);
++		expect(await screen.findByText("Excellent recitation.")).toHaveClass(
++			"italic",
++		);
++	});
++
+ 	it("falls back to the built-in frame when the template can't be loaded", async () => {
+ 		vi.mocked(certificatesApi.get).mockResolvedValue(customCertificate);
+ 		vi.mocked(certificatesApi.background).mockRejectedValue(notFound());
+@@ -156,4 +182,27 @@ describe("CertificatePrint", () => {
+ 			await screen.findByText("The certificate could not be loaded."),
+ 		).toBeInTheDocument();
+ 	});
++
++	it("says a refused certificate is not theirs, with a way back (ETQAN-QA-677)", async () => {
++		vi.mocked(certificatesApi.get).mockRejectedValue(
++			new AxiosError("Forbidden", "403", undefined, undefined, {
++				status: 403,
++			} as never),
++		);
++		renderWithRouter(<CertificatePrint certificateId="2" />);
++		expect(
++			await screen.findByText("You don't have access to this certificate."),
++		).toBeInTheDocument();
++		expect(screen.getByRole("button", { name: "Back" })).toBeInTheDocument();
++	});
++
++	it("keeps the A4 shape from sm up and lets a phone sheet grow (ETQAN-QA-668)", async () => {
++		renderWithRouter(<CertificatePrint certificateId="1" />);
++		const sheet = await screen.findByRole("article", {
++			name: "Certificate of Completion",
++		});
++		const classes = sheet.className.split(/\s+/);
++		expect(classes).toContain("sm:aspect-[297/210]");
++		expect(classes).not.toContain("aspect-[297/210]");
++	});
+ });
+diff --git a/src/features/certificates/CertificatePrint.tsx b/src/features/certificates/CertificatePrint.tsx
+index 3df1b62..841f581 100644
+--- a/src/features/certificates/CertificatePrint.tsx
++++ b/src/features/certificates/CertificatePrint.tsx
+@@ -1,7 +1,12 @@
+ import { isAxiosError } from "axios";
+ import { type ReactNode, useId } from "react";
+ import { useTranslation } from "react-i18next";
+-import { PrintPage, useBranding, useBrandName } from "@/features/branding";
++import {
++	PrintBackButton,
++	PrintPage,
++	useBranding,
++	useBrandName,
++} from "@/features/branding";
+ import { localName } from "@/features/curriculum";
+ import { formatDay } from "@/lib/zoned-time";
+ import { Alert, AlertDescription, Button, Spinner } from "@/ui";
+@@ -12,6 +17,8 @@ import {
+ } from "./queries";
+ import type { Certificate } from "./schemas";
+ 
++const ARABIC_SCRIPT = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/;
++
+ /** T-6: its own page size; the app's `@page` (invoices, payslips) is A4
+  * portrait. Rendered later in the document, so it wins while this page is
+  * open. */
+@@ -41,13 +48,21 @@ export function CertificatePrint({ certificateId }: { certificateId: string }) {
+ 	let body: ReactNode;
+ 	if (invalidId || isError) {
+ 		body = (
+-			<Alert variant="destructive">
+-				<AlertDescription>
+-					{invalidId || status === 404
+-						? t("certificates.print.notFound")
+-						: t("certificates.print.loadError")}
+-				</AlertDescription>
+-			</Alert>
++			// ETQAN-QA-677: say why, with a way back.
++			<>
++				<div className="print:hidden">
++					<PrintBackButton />
++				</div>
++				<Alert variant="destructive">
++					<AlertDescription>
++						{invalidId || status === 404
++							? t("certificates.print.notFound")
++							: status === 403
++								? t("certificates.print.forbidden")
++								: t("certificates.print.loadError")}
++					</AlertDescription>
++				</Alert>
++			</>
+ 		);
+ 	} else if (!cert) {
+ 		body = <Spinner />;
+@@ -126,7 +141,8 @@ export function CertificateSheet({
+ 
+ 	return (
+ 		<>
+-			<div className="flex justify-end print:hidden">
++			<div className="flex justify-between gap-2 print:hidden">
++				<PrintBackButton />
+ 				<Button onClick={() => window.print()}>
+ 					{t("certificates.print.print")}
+ 				</Button>
+@@ -137,9 +153,11 @@ export function CertificateSheet({
+ 					<AlertDescription>{t("certificates.print.revoked")}</AlertDescription>
+ 				</Alert>
+ 			) : null}
++			{/* ETQAN-QA-668: a phone is too narrow for the A4 shape, so the sheet
++			    grows with its text there; from `sm` (and on paper) it is A4. */}
+ 			<article
+ 				aria-labelledby={titleId}
+-				className="certificate-sheet relative aspect-[297/210] w-full overflow-hidden rounded-lg bg-card text-card-foreground shadow-sm print:shadow-none"
++				className="certificate-sheet relative w-full overflow-hidden sm:aspect-[297/210] rounded-lg bg-card text-card-foreground shadow-sm print:shadow-none"
+ 			>
+ 				{backgroundUrl ? (
+ 					<img
+@@ -158,7 +176,7 @@ export function CertificateSheet({
+ 						<div className="absolute inset-[1.5%] border border-primary/40" />
+ 					</div>
+ 				)}
+-				<div className="relative flex h-full flex-col items-center justify-center gap-2 px-[12%] py-[7%] text-center">
++				<div className="relative flex h-full flex-col items-center justify-center gap-2 px-[12%] py-12 text-center sm:py-[7%]">
+ 					<header className="flex items-center gap-3">
+ 						{brand?.logo_url ? (
+ 							<img src={brand.logo_url} alt={academy} className="h-12 w-auto" />
+@@ -188,7 +206,14 @@ export function CertificateSheet({
+ 					<p className="text-xl font-medium">{subjectLabel}</p>
+ 					<p className="text-sm">{countText}</p>
+ 					{message ? (
+-						<p className="max-w-prose whitespace-pre-wrap text-sm italic">
++						// ETQAN-QA-466: Arabic has no italic; the browser would slant
++						// it artificially, so only other scripts are set in italics.
++						<p
++							dir="auto"
++							className={`max-w-prose whitespace-pre-wrap text-sm${
++								ARABIC_SCRIPT.test(message) ? "" : " italic"
++							}`}
++						>
+ 							{message}
+ 						</p>
+ 					) : null}
+diff --git a/src/features/certificates/CertificatesList.test.tsx b/src/features/certificates/CertificatesList.test.tsx
+index 339bba8..084f0cc 100644
+--- a/src/features/certificates/CertificatesList.test.tsx
++++ b/src/features/certificates/CertificatesList.test.tsx
+@@ -99,6 +99,12 @@ describe("CertificatesList", () => {
+ 		expect(table.getAllByText("12")).toHaveLength(3);
+ 	});
+ 
++	it("keeps the sr-only header inside its scroller on a phone (ETQAN-QA-669)", async () => {
++		show();
++		const table = await screen.findByRole("table");
++		expect(table.parentElement).toHaveClass("relative", "overflow-x-auto");
++	});
++
+ 	it("filters by course, type and student", async () => {
+ 		const user = userEvent.setup();
+ 		show();
+diff --git a/src/features/certificates/CertificatesList.tsx b/src/features/certificates/CertificatesList.tsx
+index f2d1063..658d652 100644
+--- a/src/features/certificates/CertificatesList.tsx
++++ b/src/features/certificates/CertificatesList.tsx
+@@ -178,7 +178,10 @@ export function CertificatesList() {
+ 					</CardContent>
+ 				</Card>
+ 			) : (
+-				<div className="overflow-x-auto rounded-lg border border-border">
++				<div className="relative overflow-x-auto rounded-lg border border-border">
++					{/* `relative` keeps the sr-only header inside this scroller: without
++					    it the span escaped and widened the page on a phone (ETQAN-QA-669,
++					    as ETQAN-QA-573). */}
+ 					<table className="w-full text-sm">
+ 						<thead className="bg-secondary text-start text-muted-foreground">
+ 							<tr>
+diff --git a/src/features/certificates/IssueCertificateDialog.test.tsx b/src/features/certificates/IssueCertificateDialog.test.tsx
+index d58ca2e..21e038c 100644
+--- a/src/features/certificates/IssueCertificateDialog.test.tsx
++++ b/src/features/certificates/IssueCertificateDialog.test.tsx
+@@ -252,6 +252,22 @@ describe("IssueCertificateDialog", () => {
+ 		).not.toBeInTheDocument();
+ 	});
+ 
++	it("refuses a completion certificate in such a course before sending (ETQAN-QA-665)", async () => {
++		const user = userEvent.setup();
++		show();
++		await pick(user, "8");
++		await screen.findAllByText(
++			"This course does not award completion certificates.",
++		);
++		await user.click(screen.getByRole("button", { name: "Issue certificate" }));
++		expect(
++			await screen.findAllByText(
++				"This course does not award completion certificates.",
++			),
++		).toHaveLength(2);
++		expect(certificatesApi.create).not.toHaveBeenCalled();
++	});
++
+ 	it("offers only active templates for a custom certificate and needs one", async () => {
+ 		const user = userEvent.setup();
+ 		show();
+diff --git a/src/features/certificates/IssueCertificateDialog.tsx b/src/features/certificates/IssueCertificateDialog.tsx
+index 849668f..23abf70 100644
+--- a/src/features/certificates/IssueCertificateDialog.tsx
++++ b/src/features/certificates/IssueCertificateDialog.tsx
+@@ -115,6 +115,8 @@ export function IssueCertificateDialog({ open, onOpenChange }: Props) {
+ 		const next: Record<string, string> = {};
+ 		if (!chosen) next.student = t("certificates.required.student");
+ 		if (!course) next.course = t("certificates.required.course");
++		// ETQAN-QA-665: the hint already says so; refuse before sending.
++		else if (courseOff) next.course = t("certificates.dialog.courseOff");
+ 		if (kind === "custom" && !template)
+ 			next.template = t("certificates.required.template");
+ 		const count = sessionsValue(sessionsText);
+diff --git a/src/features/certificates/SubjectCertificatePrint.tsx b/src/features/certificates/SubjectCertificatePrint.tsx
+index de41cdf..4d35c42 100644
+--- a/src/features/certificates/SubjectCertificatePrint.tsx
++++ b/src/features/certificates/SubjectCertificatePrint.tsx
+@@ -1,7 +1,7 @@
+ import { isAxiosError } from "axios";
+ import type { ReactNode } from "react";
+ import { useTranslation } from "react-i18next";
+-import { PrintPage } from "@/features/branding";
++import { PrintBackButton, PrintPage } from "@/features/branding";
+ import { localName } from "@/features/curriculum";
+ import { Alert, AlertDescription, Spinner } from "@/ui";
+ import { CertificateSheet } from "./CertificatePrint";
+@@ -32,13 +32,21 @@ export function SubjectCertificatePrint({
+ 	let body: ReactNode;
+ 	if (invalidId || isError) {
+ 		body = (
+-			<Alert variant="destructive">
+-				<AlertDescription>
+-					{invalidId || status === 404
+-						? t("certificates.print.notFound")
+-						: t("certificates.print.loadError")}
+-				</AlertDescription>
+-			</Alert>
++			// ETQAN-QA-677: say why, with a way back.
++			<>
++				<div className="print:hidden">
++					<PrintBackButton />
++				</div>
++				<Alert variant="destructive">
++					<AlertDescription>
++						{invalidId || status === 404
++							? t("certificates.print.notFound")
++							: status === 403
++								? t("certificates.print.forbidden")
++								: t("certificates.print.loadError")}
++					</AlertDescription>
++				</Alert>
++			</>
+ 		);
+ 	} else if (!cert) {
+ 		body = <Spinner />;
+diff --git a/src/features/certificates/errors.test.ts b/src/features/certificates/errors.test.ts
+index 9881e56..a0097f0 100644
+--- a/src/features/certificates/errors.test.ts
++++ b/src/features/certificates/errors.test.ts
+@@ -41,3 +41,19 @@ describe("certificateErrorText", () => {
+ 		).toBe(i18n.t("certificates.errors.certificate_revoked"));
+ 	});
+ });
++
++describe("the server's course refusal (ETQAN-QA-665)", () => {
++	it("reads in the reader's language under the course", async () => {
++		const bad = failed(400, {
++			course: ["Completion certificates are not enabled for this course."],
++		});
++		await i18n.changeLanguage("ar");
++		try {
++			expect(formErrors(bad, i18n.t, ["course"]).fields).toEqual({
++				course: "هذه الدورة لا تمنح شهادات إتمام.",
++			});
++		} finally {
++			await i18n.changeLanguage("en");
++		}
++	});
++});
+diff --git a/src/features/curriculum/ChaptersTable.test.tsx b/src/features/curriculum/ChaptersTable.test.tsx
+index 86c536b..0fdf3e4 100644
+--- a/src/features/curriculum/ChaptersTable.test.tsx
++++ b/src/features/curriculum/ChaptersTable.test.tsx
+@@ -1,8 +1,8 @@
+ import { screen, waitFor, within } from "@testing-library/react";
+ import userEvent from "@testing-library/user-event";
+ import { beforeEach, describe, expect, it, vi } from "vitest";
+-import "@/lib/i18n";
+ import { CanProvider } from "@/features/identity/permissions";
++import i18n from "@/lib/i18n";
+ import { staffMe } from "@/test/access-fixtures";
+ import { renderWithRouter } from "@/test/render";
+ import { curriculumApi } from "./api";
+@@ -62,7 +62,8 @@ describe("ChaptersTable", () => {
+ 		expect(screen.getByText("1–1")).toBeInTheDocument();
+ 		await user.click(screen.getByRole("button", { name: "Edit names 1" }));
+ 		const dialog = await screen.findByRole("dialog");
+-		const simple = within(dialog).getByLabelText("Simple name");
++		// ETQAN-QA-661: the labels say these are Latin-letter names.
++		const simple = within(dialog).getByLabelText(/^Latin name(?! with)/);
+ 		await user.clear(simple);
+ 		await user.type(simple, "The Opening");
+ 		await user.click(within(dialog).getByRole("button", { name: "Save" }));
+@@ -75,6 +76,51 @@ describe("ChaptersTable", () => {
+ 		);
+ 	});
+ 
++	it("marks the names required and checks an empty one before sending (ETQAN-QA-662)", async () => {
++		const user = userEvent.setup();
++		vi.mocked(curriculumApi.chapters).mockResolvedValue([fatiha]);
++		renderTable();
++		await user.click(
++			await screen.findByRole("button", { name: "Edit names 1" }),
++		);
++		const dialog = await screen.findByRole("dialog");
++		const arabic = within(dialog).getByLabelText(/^Arabic name/);
++		expect(arabic).toBeRequired();
++		expect(
++			within(dialog).getByLabelText(/^Latin name with accents/),
++		).toBeRequired();
++		await user.clear(arabic);
++		await user.click(within(dialog).getByRole("button", { name: "Save" }));
++		expect(
++			await within(dialog).findByText("Enter this name."),
++		).toBeInTheDocument();
++		expect(curriculumApi.updateChapter).not.toHaveBeenCalled();
++	});
++
++	it("keeps the sr-only header inside its scroller on a phone (ETQAN-QA-573)", async () => {
++		vi.mocked(curriculumApi.chapters).mockResolvedValue([fatiha]);
++		renderTable();
++		const table = await screen.findByRole("table");
++		expect(table.parentElement).toHaveClass("relative", "overflow-x-auto");
++	});
++
++	it("titles the edit dialog with the Arabic name in Arabic (ETQAN-QA-563)", async () => {
++		const user = userEvent.setup();
++		await i18n.changeLanguage("ar");
++		try {
++			vi.mocked(curriculumApi.chapters).mockResolvedValue([fatiha]);
++			renderTable();
++			await user.click(
++				await screen.findByRole("button", { name: "تعديل الأسماء 1" }),
++			);
++			expect(
++				await screen.findByRole("heading", { name: "1 - الفاتحة" }),
++			).toBeInTheDocument();
++		} finally {
++			await i18n.changeLanguage("en");
++		}
++	});
++
+ 	it("has no sync button without quran_chapter.create", async () => {
+ 		vi.mocked(curriculumApi.chapters).mockResolvedValue([fatiha]);
+ 		renderTable(["quran_chapter.view_any"]);
+diff --git a/src/features/curriculum/ChaptersTable.tsx b/src/features/curriculum/ChaptersTable.tsx
+index 03bbcd0..e251057 100644
+--- a/src/features/curriculum/ChaptersTable.tsx
++++ b/src/features/curriculum/ChaptersTable.tsx
+@@ -21,11 +21,12 @@ import {
+ 	Spinner,
+ 	toast,
+ } from "@/ui";
++import { chapterLabel } from "./chapterLabel";
+ import { useChapters, useSyncChapters, useUpdateChapter } from "./queries";
+ import type { Chapter } from "./schemas";
+ 
+ function EditNames({ chapter }: { chapter: Chapter }) {
+-	const { t } = useTranslation();
++	const { t, i18n } = useTranslation();
+ 	const update = useUpdateChapter();
+ 	const [open, setOpen] = useState(false);
+ 	const [names, setNames] = useState({
+@@ -38,6 +39,16 @@ function EditNames({ chapter }: { chapter: Chapter }) {
+ 
+ 	async function submit(e: React.FormEvent) {
+ 		e.preventDefault();
++		// ETQAN-QA-662: all three names are required by the server; say so
++		// here, in the product's words, before sending.
++		const missing: Record<string, string> = {};
++		for (const [field] of fields)
++			if (!names[field].trim()) missing[field] = t("curriculum.quran.required");
++		if (Object.keys(missing).length > 0) {
++			setErrors(missing);
++			setFormError(undefined);
++			return;
++		}
+ 		try {
+ 			await update.mutateAsync({ id: chapter.id, ...names });
+ 			toast({ description: t("curriculum.quran.saved"), variant: "success" });
+@@ -80,9 +91,7 @@ function EditNames({ chapter }: { chapter: Chapter }) {
+ 				</Button>
+ 			</DialogTrigger>
+ 			<DialogContent>
+-				<DialogTitle>
+-					{chapter.number}. {chapter.name_simple}
+-				</DialogTitle>
++				<DialogTitle>{chapterLabel(chapter, i18n.language, t)}</DialogTitle>
+ 				<form onSubmit={submit} className="mt-4 flex flex-col gap-4" noValidate>
+ 					{fields.map(([field, label]) => (
+ 						<Field
+@@ -90,6 +99,7 @@ function EditNames({ chapter }: { chapter: Chapter }) {
+ 							id={`chapter-${chapter.id}-${field}`}
+ 							label={t(`curriculum.quran.${label}`)}
+ 							error={errors[field]}
++							required
+ 						>
+ 							<Input
+ 								dir={field === "name_arabic" ? "rtl" : undefined}
+@@ -166,7 +176,9 @@ export function ChaptersTable() {
+ 	return (
+ 		<div className="flex flex-col gap-4">
+ 			{syncButton ? <div className="flex justify-end">{syncButton}</div> : null}
+-			<div className="overflow-x-auto rounded-lg border border-border">
++			<div className="relative overflow-x-auto rounded-lg border border-border">
++				{/* `relative` keeps the sr-only header inside this scroller: without
++					    it the span escaped and widened the page on a phone (ETQAN-QA-573). */}
+ 				<table className="w-full text-sm">
+ 					<thead className="bg-secondary text-start text-muted-foreground">
+ 						<tr>
+diff --git a/src/features/curriculum/LevelDialog.test.tsx b/src/features/curriculum/LevelDialog.test.tsx
+index 3162304..e7bcb1c 100644
+--- a/src/features/curriculum/LevelDialog.test.tsx
++++ b/src/features/curriculum/LevelDialog.test.tsx
+@@ -58,11 +58,14 @@ describe("LevelDialog", () => {
+ 	it("builds a tree with a chapter-linked topic and submits it", async () => {
+ 		const user = userEvent.setup();
+ 		await open();
+-		await user.type(screen.getByLabelText("Name (English)"), "Juz' Amma");
+-		await user.type(screen.getByLabelText("Name (Arabic)"), "جزء عمّ");
++		await user.type(screen.getByLabelText(/^Name \(English\)/), "Juz' Amma");
++		await user.type(screen.getByLabelText(/^Name \(Arabic\)/), "جزء عمّ");
+ 		await user.click(screen.getByRole("button", { name: "Add sub-level" }));
+-		await user.type(screen.getAllByLabelText("Name (English)")[1], "Opening");
+-		await user.type(screen.getAllByLabelText("Name (Arabic)")[1], "البداية");
++		await user.type(
++			screen.getAllByLabelText(/^Name \(English\)/)[1],
++			"Opening",
++		);
++		await user.type(screen.getAllByLabelText(/^Name \(Arabic\)/)[1], "البداية");
+ 		await user.click(screen.getByRole("button", { name: "Add topic" }));
+ 		await user.selectOptions(await screen.findByLabelText("Chapter"), "1");
+ 		await user.type(screen.getByLabelText("From verse"), "1");
+@@ -92,6 +95,34 @@ describe("LevelDialog", () => {
+ 		});
+ 	});
+ 
++	it("titles each sub-level and topic block, its actions on its top row (ETQAN-QA-656)", async () => {
++		const user = userEvent.setup();
++		await open();
++		await user.click(screen.getByRole("button", { name: "Add sub-level" }));
++		await user.click(screen.getByRole("button", { name: "Add topic" }));
++		const sub = screen.getByText("Sub-level 1");
++		const topic = screen.getByText("Topic 1");
++		// Each title shares a row with its own Remove, before its name fields.
++		const subRow = sub.parentElement as HTMLElement;
++		const topicRow = topic.parentElement as HTMLElement;
++		expect(subRow).toContainElement(
++			screen.getAllByRole("button", { name: "Remove" })[0],
++		);
++		expect(topicRow).toContainElement(
++			screen.getAllByRole("button", { name: "Remove" })[1],
++		);
++		const subNames = screen.getAllByLabelText(/^Name \(Arabic\)/)[1];
++		expect(
++			subRow.compareDocumentPosition(subNames) &
++				Node.DOCUMENT_POSITION_FOLLOWING,
++		).toBeTruthy();
++		const topicNames = screen.getAllByLabelText(/^Name \(Arabic\)/)[2];
++		expect(
++			topicRow.compareDocumentPosition(topicNames) &
++				Node.DOCUMENT_POSITION_FOLLOWING,
++		).toBeTruthy();
++	});
++
+ 	it("shows a nested server error under its field and a 409 at the top", async () => {
+ 		const user = userEvent.setup();
+ 		vi.mocked(curriculumApi.updateLevel).mockRejectedValueOnce(
+@@ -144,4 +175,73 @@ describe("LevelDialog", () => {
+ 		await userEvent.click(await screen.findByRole("button", { name: "open" }));
+ 		expect(screen.queryByLabelText("Chapter")).not.toBeInTheDocument();
+ 	});
++
++	it("puts the Arabic name first and marks both names required (ETQAN-QA-560)", async () => {
++		const user = userEvent.setup();
++		await open();
++		await user.click(screen.getByRole("button", { name: "Add sub-level" }));
++		await user.click(screen.getByRole("button", { name: "Add topic" }));
++		const inputs = Array.from(
++			document.querySelectorAll<HTMLInputElement>("input[id*='name-']"),
++		).map((el) => el.id);
++		// level, sub-level, topic: each pair Arabic then English.
++		expect(inputs.map((id) => id.slice(-2))).toEqual([
++			"ar",
++			"en",
++			"ar",
++			"en",
++			"ar",
++			"en",
++		]);
++		for (const id of inputs) {
++			expect(document.getElementById(id)).toHaveAttribute(
++				"aria-required",
++				"true",
++			);
++			expect(document.querySelector(`label[for="${id}"]`)?.textContent).toMatch(
++				/\*$/,
++			);
++		}
++	});
++
++	it("checks a topic's verses in words before saving (ETQAN-QA-561)", async () => {
++		const user = userEvent.setup();
++		await open();
++		await user.type(screen.getByLabelText(/^Name \(English\)/), "L");
++		await user.type(screen.getByLabelText(/^Name \(Arabic\)/), "م");
++		await user.click(screen.getByRole("button", { name: "Add sub-level" }));
++		await user.click(screen.getByRole("button", { name: "Add topic" }));
++		// Verses with no chapter.
++		await user.type(await screen.findByLabelText("From verse"), "9");
++		await user.type(screen.getByLabelText("To verse"), "1");
++		await user.click(screen.getByRole("button", { name: "Save" }));
++		expect(
++			await screen.findByText("Choose a chapter for a verse range."),
++		).toBeInTheDocument();
++		// A range past the chapter's last verse.
++		await user.selectOptions(screen.getByLabelText("Chapter"), "1");
++		await user.clear(screen.getByLabelText("From verse"));
++		await user.type(screen.getByLabelText("From verse"), "1");
++		await user.clear(screen.getByLabelText("To verse"));
++		await user.type(screen.getByLabelText("To verse"), "20");
++		await user.click(screen.getByRole("button", { name: "Save" }));
++		expect(
++			await screen.findByText(
++				`This chapter has verses 1 to ${fatiha.verses_count}; the first comes before the last.`,
++			),
++		).toBeInTheDocument();
++		expect(curriculumApi.createLevel).not.toHaveBeenCalled();
++	});
++
++	it("says where to load the chapters when there are none (ETQAN-QA-562)", async () => {
++		const user = userEvent.setup();
++		vi.mocked(curriculumApi.chapters).mockResolvedValue([]);
++		await open();
++		await user.click(screen.getByRole("button", { name: "Add sub-level" }));
++		await user.click(screen.getByRole("button", { name: "Add topic" }));
++		expect(
++			await screen.findByRole("link", { name: "Qur'an chapters" }),
++		).toHaveAttribute("href", "/catalogue/quran");
++		expect(screen.getByText(/No chapters yet/)).toBeInTheDocument();
++	});
+ });
+diff --git a/src/features/curriculum/LevelDialog.tsx b/src/features/curriculum/LevelDialog.tsx
+index f647290..b659681 100644
+--- a/src/features/curriculum/LevelDialog.tsx
++++ b/src/features/curriculum/LevelDialog.tsx
+@@ -1,3 +1,4 @@
++import { Link } from "@tanstack/react-router";
+ import { type ReactNode, useState } from "react";
+ import { useTranslation } from "react-i18next";
+ import { type Course, useCatalogue } from "@/features/catalogue";
+@@ -18,7 +19,8 @@ import {
+ 	Select,
+ 	toast,
+ } from "@/ui";
+-import { curriculumErrorText } from "./errors";
++import { chapterLabel } from "./chapterLabel";
++import { curriculumErrorText, serverText } from "./errors";
+ import { useChapters, useSaveLevel } from "./queries";
+ import {
+ 	type Chapter,
+@@ -203,18 +205,53 @@ export function LevelDialog({
+ 			setErrors({ course: t("curriculum.levels.courseRequired") });
+ 			return;
+ 		}
++		// The verse rules the server applies, checked here in the reader's
++		// language: the server's own sentences are English (ETQAN-QA-561).
++		const verseErrors: Record<string, string> = {};
++		if (withChapters)
++			draft.sub_levels.forEach((sub, s) => {
++				sub.topics.forEach((topic, i) => {
++					const path = `sub_levels.${s}.topics.${i}`;
++					const first = topic.from_verse ?? null;
++					const last = topic.to_verse ?? null;
++					if (first === null && last === null) return;
++					const chapter = chapterList.find((c) => c.id === topic.chapter);
++					if (!chapter)
++						verseErrors[`${path}.chapter`] = t(
++							"curriculum.levels.chapterForVerses",
++						);
++					else if (first === null || last === null)
++						verseErrors[`${path}.to_verse`] = t("curriculum.levels.bothVerses");
++					else if (
++						!(1 <= first && first <= last && last <= chapter.verses_count)
++					)
++						verseErrors[`${path}.to_verse`] = t(
++							"curriculum.levels.versesRange",
++							{ last: chapter.verses_count },
++						);
++				});
++			});
++		if (Object.keys(verseErrors).length > 0) {
++			setErrors(verseErrors);
++			setFormError(undefined);
++			return;
++		}
+ 		try {
+ 			await save.mutateAsync(toInput(draft));
+ 			toast({ description: t("curriculum.levels.saved"), variant: "success" });
+ 			if (!level) reset();
+ 			setOpen(false);
+ 		} catch (error) {
+-			const { fieldErrors, status, message } = parseApiError(error);
++			const { fieldErrors: raw, status, message } = parseApiError(error);
++			const fieldErrors = Object.fromEntries(
++				Object.entries(raw).map(([k, v]) => [k, serverText(v, t)]),
++			);
+ 			setErrors(fieldErrors);
+ 			setFormError(
+ 				status === 409 || Object.keys(fieldErrors).length === 0
+ 					? curriculumErrorText(error, t)
+-					: (fieldErrors.non_field_errors ?? message),
++					: (fieldErrors.non_field_errors ??
++							(message && serverText(message, t))),
+ 			);
+ 		}
+ 	}
+@@ -265,27 +302,29 @@ export function LevelDialog({
+ 					</Field>
+ 					<div className="grid gap-4 sm:grid-cols-2">
+ 						<Field
+-							id="level-name-en"
+-							label={t("curriculum.levels.nameEn")}
+-							error={errors.name_en}
++							id="level-name-ar"
++							label={t("curriculum.levels.nameAr")}
++							required
++							error={errors.name_ar}
+ 						>
+ 							<Input
+-								value={draft.name_en}
++								dir="rtl"
++								value={draft.name_ar}
+ 								onChange={(e) =>
+-									setDraft((d) => ({ ...d, name_en: e.target.value }))
++									setDraft((d) => ({ ...d, name_ar: e.target.value }))
+ 								}
+ 							/>
+ 						</Field>
+ 						<Field
+-							id="level-name-ar"
+-							label={t("curriculum.levels.nameAr")}
+-							error={errors.name_ar}
++							id="level-name-en"
++							label={t("curriculum.levels.nameEn")}
++							required
++							error={errors.name_en}
+ 						>
+ 							<Input
+-								dir="rtl"
+-								value={draft.name_ar}
++								value={draft.name_en}
+ 								onChange={(e) =>
+-									setDraft((d) => ({ ...d, name_ar: e.target.value }))
++									setDraft((d) => ({ ...d, name_en: e.target.value }))
+ 								}
+ 							/>
+ 						</Field>
+@@ -315,46 +354,49 @@ export function LevelDialog({
+ 								key={sub.k}
+ 								className="flex flex-col gap-3 rounded-lg border border-border p-3"
+ 							>
++								<RowButtons
++									t={t}
++									title={t("curriculum.levels.subLevelN", { n: s + 1 })}
++									index={s}
++									count={draft.sub_levels.length}
++									onMove={(by) => setSubs((subs) => move(subs, s, by))}
++									onRemove={() =>
++										setSubs((subs) => subs.filter((_, i) => i !== s))
++									}
++								/>
+ 								<div className="grid gap-3 sm:grid-cols-2">
+ 									<Field
+-										id={`sub-${sub.k}-name-en`}
+-										label={t("curriculum.levels.nameEn")}
+-										error={errors[`sub_levels.${s}.name_en`]}
++										id={`sub-${sub.k}-name-ar`}
++										label={t("curriculum.levels.nameAr")}
++										required
++										error={errors[`sub_levels.${s}.name_ar`]}
+ 									>
+ 										<Input
+-											value={sub.name_en}
++											dir="rtl"
++											value={sub.name_ar}
+ 											onChange={(e) =>
+ 												setSubs((subs) =>
+-													patch(subs, s, { name_en: e.target.value }),
++													patch(subs, s, { name_ar: e.target.value }),
+ 												)
+ 											}
+ 										/>
+ 									</Field>
+ 									<Field
+-										id={`sub-${sub.k}-name-ar`}
+-										label={t("curriculum.levels.nameAr")}
+-										error={errors[`sub_levels.${s}.name_ar`]}
++										id={`sub-${sub.k}-name-en`}
++										label={t("curriculum.levels.nameEn")}
++										required
++										error={errors[`sub_levels.${s}.name_en`]}
+ 									>
+ 										<Input
+-											dir="rtl"
+-											value={sub.name_ar}
++											value={sub.name_en}
+ 											onChange={(e) =>
+ 												setSubs((subs) =>
+-													patch(subs, s, { name_ar: e.target.value }),
++													patch(subs, s, { name_en: e.target.value }),
+ 												)
+ 											}
+ 										/>
+ 									</Field>
+ 								</div>
+-								<RowButtons
+-									t={t}
+-									index={s}
+-									count={draft.sub_levels.length}
+-									onMove={(by) => setSubs((subs) => move(subs, s, by))}
+-									onRemove={() =>
+-										setSubs((subs) => subs.filter((_, i) => i !== s))
+-									}
+-								/>
+ 								{errors[`sub_levels.${s}.topics`] ? (
+ 									<FormError>{errors[`sub_levels.${s}.topics`]}</FormError>
+ 								) : null}
+@@ -368,32 +410,48 @@ export function LevelDialog({
+ 											key={topic.k}
+ 											className="flex flex-col gap-3 rounded-md bg-secondary/50 p-3"
+ 										>
++											<RowButtons
++												t={t}
++												title={t("curriculum.levels.topicN", { n: i + 1 })}
++												index={i}
++												count={sub.topics.length}
++												onMove={(by) =>
++													setTopics(s, (topics) => move(topics, i, by))
++												}
++												onRemove={() =>
++													setTopics(s, (topics) =>
++														topics.filter((_, j) => j !== i),
++													)
++												}
++											/>
+ 											<div className="grid gap-3 sm:grid-cols-2">
+ 												<Field
+-													id={`topic-${topic.k}-name-en`}
+-													label={t("curriculum.levels.nameEn")}
+-													error={errors[`${path}.name_en`]}
++													id={`topic-${topic.k}-name-ar`}
++													label={t("curriculum.levels.nameAr")}
++													required
++													error={errors[`${path}.name_ar`]}
+ 												>
+ 													<Input
+-														value={topic.name_en}
++														dir="rtl"
++														value={topic.name_ar}
+ 														onChange={(e) =>
+ 															setTopics(s, (topics) =>
+-																patch(topics, i, { name_en: e.target.value }),
++																patch(topics, i, { name_ar: e.target.value }),
+ 															)
+ 														}
+ 													/>
+ 												</Field>
+ 												<Field
+-													id={`topic-${topic.k}-name-ar`}
+-													label={t("curriculum.levels.nameAr")}
+-													error={errors[`${path}.name_ar`]}
++													id={`topic-${topic.k}-name-en`}
++													label={t("curriculum.levels.nameEn")}
++													required
++													error={errors[`${path}.name_en`]}
+ 												>
+ 													<Input
+-														dir="rtl"
+-														value={topic.name_ar}
++														value={topic.name_en}
+ 														onChange={(e) =>
+ 															setTopics(s, (topics) =>
+-																patch(topics, i, { name_ar: e.target.value }),
++																patch(topics, i, { name_en: e.target.value }),
+ 															)
+ 														}
+ 													/>
+@@ -417,7 +475,7 @@ export function LevelDialog({
+ 															</option>
+ 															{chapterList.map((c) => (
+ 																<option key={c.id} value={c.id}>
+-																	{c.number}. {c.name_simple}
++																	{chapterLabel(c, i18n.language, t)}
+ 																</option>
+ 															))}
+ 														</Select>
+@@ -458,19 +516,23 @@ export function LevelDialog({
+ 													</Field>
+ 												</div>
+ 											) : null}
+-											<RowButtons
+-												t={t}
+-												index={i}
+-												count={sub.topics.length}
+-												onMove={(by) =>
+-													setTopics(s, (topics) => move(topics, i, by))
+-												}
+-												onRemove={() =>
+-													setTopics(s, (topics) =>
+-														topics.filter((_, j) => j !== i),
+-													)
+-												}
+-											/>
++											{withChapters &&
++											chapters.isSuccess &&
++											chapterList.length === 0 ? (
++												// The list is filled only by "Sync chapters" on the
++												// Qur'an page; say so instead of an empty picker
++												// (ETQAN-QA-562).
++												<p className="text-sm text-muted-foreground">
++													{t("curriculum.levels.noChapters")}{" "}
++													<Link
++														to="/catalogue/quran"
++														className="text-primary-text underline underline-offset-4"
++													>
++														{t("curriculum.levels.noChaptersLink")}
++													</Link>
++													.
++												</p>
++											) : null}
+ 										</div>
+ 									);
+ 								})}
+@@ -516,42 +578,55 @@ export function LevelDialog({
+ 	);
+ }
+ 
++/** ETQAN-QA-656: a block's own title ("Sub-level 2", "Topic 1") with its
++ * move and remove actions on the same top row, so each block says what it
++ * is and its actions can't be read as the next block's. */
+ function RowButtons({
+ 	t,
++	title,
+ 	index,
+ 	count,
+ 	onMove,
+ 	onRemove,
+ }: {
+ 	t: (key: string) => string;
++	title: string;
+ 	index: number;
+ 	count: number;
+ 	onMove: (by: -1 | 1) => void;
+ 	onRemove: () => void;
+ }) {
+ 	return (
+-		<div className="flex flex-wrap gap-2">
+-			<Button
+-				type="button"
+-				size="sm"
+-				variant="outline"
+-				disabled={index === 0}
+-				onClick={() => onMove(-1)}
+-			>
+-				{t("curriculum.levels.moveUp")}
+-			</Button>
+-			<Button
+-				type="button"
+-				size="sm"
+-				variant="outline"
+-				disabled={index === count - 1}
+-				onClick={() => onMove(1)}
+-			>
+-				{t("curriculum.levels.moveDown")}
+-			</Button>
+-			<Button type="button" size="sm" variant="destructive" onClick={onRemove}>
+-				{t("curriculum.levels.remove")}
+-			</Button>
++		<div className="flex flex-wrap items-center justify-between gap-2">
++			<p className="font-medium text-sm">{title}</p>
++			<div className="flex flex-wrap gap-2">
++				<Button
++					type="button"
++					size="sm"
++					variant="outline"
++					disabled={index === 0}
++					onClick={() => onMove(-1)}
++				>
++					{t("curriculum.levels.moveUp")}
++				</Button>
++				<Button
++					type="button"
++					size="sm"
++					variant="outline"
++					disabled={index === count - 1}
++					onClick={() => onMove(1)}
++				>
++					{t("curriculum.levels.moveDown")}
++				</Button>
++				<Button
++					type="button"
++					size="sm"
++					variant="destructive"
++					onClick={onRemove}
++				>
++					{t("curriculum.levels.remove")}
++				</Button>
++			</div>
+ 		</div>
+ 	);
+ }
+diff --git a/src/features/curriculum/MyProgress.test.tsx b/src/features/curriculum/MyProgress.test.tsx
+index 802adbb..0aefdaf 100644
+--- a/src/features/curriculum/MyProgress.test.tsx
++++ b/src/features/curriculum/MyProgress.test.tsx
+@@ -41,7 +41,10 @@ describe("MyProgress", () => {
+ 		renderWithRouter(<MyProgress />);
+ 		expect(await screen.findByText("Quran")).toBeInTheDocument();
+ 		expect(screen.getByText("Juz' Amma")).toBeInTheDocument();
+-		expect(screen.getByText("1 / 2")).toBeInTheDocument();
++		// ETQAN-QA-660: the count is the whole course's, and says so.
++		expect(
++			screen.getByText("Course topics completed: 1 of 2"),
++		).toBeInTheDocument();
+ 		expect(curriculumApi.summary).toHaveBeenCalledWith(11);
+ 		await user.click(screen.getByText("Quran"));
+ 		expect(await screen.findByText("An-Nas")).toBeInTheDocument();
+@@ -72,6 +75,44 @@ describe("MyProgress", () => {
+ 		await waitFor(() => expect(curriculumApi.summary).toHaveBeenCalledWith(12));
+ 	});
+ 
++	it("says a level has no topics instead of a bare 0 / 0 (ETQAN-QA-465)", async () => {
++		vi.mocked(identityApi.me).mockResolvedValue(student);
++		vi.mocked(curriculumApi.summary).mockResolvedValue([
++			{ ...summaryRow, completed: 0, total: 0 },
++		]);
++		renderWithRouter(<MyProgress />);
++		expect(
++			await screen.findByText("No topics in this level yet."),
++		).toBeInTheDocument();
++		expect(screen.queryByText("0 / 0")).toBeNull();
++		expect(screen.queryByRole("progressbar")).toBeNull();
++	});
++
++	it("opens on the child kept in the URL and reports a new pick (ETQAN-QA-465)", async () => {
++		const user = userEvent.setup();
++		const onChildChange = vi.fn();
++		vi.mocked(identityApi.me).mockResolvedValue(
++			parent([
++				{ id: 11, full_name: "Yusuf", student_profile_id: 1 },
++				{ id: 12, full_name: "Aisha", student_profile_id: 2 },
++			]),
++		);
++		renderWithRouter(<MyProgress child={12} onChildChange={onChildChange} />);
++		await waitFor(() => expect(curriculumApi.summary).toHaveBeenCalledWith(12));
++		expect(curriculumApi.summary).not.toHaveBeenCalledWith(11);
++		await user.selectOptions(await screen.findByLabelText("Child"), "11");
++		expect(onChildChange).toHaveBeenCalledWith(11);
++	});
++
++	it("ignores a child id from another family in the URL (ETQAN-QA-465)", async () => {
++		vi.mocked(identityApi.me).mockResolvedValue(
++			parent([{ id: 11, full_name: "Yusuf", student_profile_id: 1 }]),
++		);
++		renderWithRouter(<MyProgress child={99} />);
++		await waitFor(() => expect(curriculumApi.summary).toHaveBeenCalledWith(11));
++		expect(curriculumApi.summary).not.toHaveBeenCalledWith(99);
++	});
++
+ 	it("shows an empty state for a parent without children", async () => {
+ 		vi.mocked(identityApi.me).mockResolvedValue(parent([]));
+ 		renderWithRouter(<MyProgress />);
+diff --git a/src/features/curriculum/ProgressPanel.test.tsx b/src/features/curriculum/ProgressPanel.test.tsx
+index c396e69..778b241 100644
+--- a/src/features/curriculum/ProgressPanel.test.tsx
++++ b/src/features/curriculum/ProgressPanel.test.tsx
+@@ -146,6 +146,20 @@ describe("ProgressPanel", () => {
+ 		expect(screen.queryByLabelText("Change level")).not.toBeInTheDocument();
+ 	});
+ 
++	it("says why there is no level to choose (ETQAN-QA-416)", async () => {
++		vi.mocked(curriculumApi.progress).mockResolvedValue({
++			...noLevelProgress,
++			levels: [],
++		});
++		show(teacher);
++		expect(
++			await screen.findByText(
++				"This course has no levels yet. Ask the administration to add them.",
++			),
++		).toBeInTheDocument();
++		expect(screen.queryByLabelText("Set first level")).not.toBeInTheDocument();
++	});
++
+ 	it("lets a teacher set the first level", async () => {
+ 		const user = userEvent.setup();
+ 		vi.mocked(curriculumApi.progress).mockResolvedValue(noLevelProgress);
+@@ -195,6 +209,33 @@ describe("ProgressPanel", () => {
+ 		);
+ 	});
+ 
++	it("names the target level in the upgrade form (ETQAN-QA-658)", async () => {
++		const user = userEvent.setup();
++		show(teacher);
++		await user.click(
++			await screen.findByRole("button", { name: "Request upgrade" }),
++		);
++		expect(
++			screen.getByText("Upgrade from Juz' Amma to Juz' Tabarak"),
++		).toBeInTheDocument();
++	});
++
++	it("marks the student's current level card (ETQAN-QA-658)", async () => {
++		const { container } = show(office);
++		await screen.findByRole("checkbox", { name: "Al-Falaq" });
++		const summaries = [...container.ownerDocument.querySelectorAll("summary")];
++		expect(summaries[0]).toHaveTextContent("Juz' AmmaCurrent level");
++		expect(summaries[1]).not.toHaveTextContent("Current level");
++		expect(summaries[0].closest("details")).toHaveClass("border-primary");
++	});
++
++	it("says when a level has no topics (ETQAN-QA-678)", async () => {
++		show(office);
++		await screen.findByRole("checkbox", { name: "Al-Falaq" });
++		const empty = screen.getByText("No topics in this level yet.");
++		expect(empty.closest("details")).toHaveTextContent("Juz' Tabarak");
++	});
++
+ 	it("hides the request button while one is pending", async () => {
+ 		vi.mocked(curriculumApi.progress).mockResolvedValue({
+ 			...progress,
+diff --git a/src/features/curriculum/ProgressPanel.tsx b/src/features/curriculum/ProgressPanel.tsx
+index 7671bf3..8136176 100644
+--- a/src/features/curriculum/ProgressPanel.tsx
++++ b/src/features/curriculum/ProgressPanel.tsx
+@@ -15,6 +15,7 @@ import {
+ 	FormError,
+ 	Select,
+ 	Spinner,
++	StatusChip,
+ 	Textarea,
+ 	toast,
+ } from "@/ui";
+@@ -111,7 +112,16 @@ export function ProgressPanel({
+ 					</div>
+ 				) : (
+ 					<div className="mt-4 flex max-h-[70vh] flex-col gap-4 overflow-y-auto">
+-						{showLevelControl ? (
++						{showLevelControl && !data.levels.some((l) => l.is_active) ? (
++							// ETQAN-QA-416: say why there is nothing to choose.
++							<p className="text-sm text-muted-foreground">
++								{t(
++									isTeacher
++										? "curriculum.progress.noLevels"
++										: "curriculum.progress.noLevelsOffice",
++								)}
++							</p>
++						) : showLevelControl ? (
+ 							<form
+ 								className="flex flex-wrap items-end gap-2"
+ 								onSubmit={(e) => {
+@@ -157,12 +167,30 @@ export function ProgressPanel({
+ 								<details
+ 									key={level.id}
+ 									open={level.id === data.current?.level_id}
+-									className="rounded-lg border border-border p-3"
++									className={`rounded-lg border p-3 ${
++										level.id === data.current?.level_id
++											? "border-primary"
++											: "border-border"
++									}`}
+ 								>
+ 									<summary className="cursor-pointer font-medium">
+ 										{levelName(level)}
++										{/* ETQAN-QA-658: which card is the student's level. */}
++										{level.id === data.current?.level_id ? (
++											<StatusChip tone="live" className="ms-2 align-middle">
++												{t("curriculum.progress.current")}
++											</StatusChip>
++										) : null}
+ 									</summary>
+ 									<div className="mt-3 flex flex-col gap-3">
++										{/* ETQAN-QA-678: an empty level says so. */}
++										{level.sub_levels.every(
++											(sub) => sub.topics.length === 0,
++										) ? (
++											<p className="text-sm text-muted-foreground">
++												{t("curriculum.progress.noTopics")}
++											</p>
++										) : null}
+ 										{level.sub_levels.map((sub) => (
+ 											<fieldset key={sub.id} className="flex flex-col gap-2">
+ 												<legend className="mb-1 text-sm font-medium text-muted-foreground">
+@@ -242,6 +270,8 @@ export function ProgressPanel({
+ 								<UpgradeForm
+ 									studentId={studentId}
+ 									courseId={courseId}
++									from={levelName(data.current)}
++									to={levelName(next)}
+ 									onDone={() => setAsking(false)}
+ 									onCancel={() => setAsking(false)}
+ 								/>
+@@ -270,11 +300,15 @@ export function ProgressPanel({
+ function UpgradeForm({
+ 	studentId,
+ 	courseId,
++	from,
++	to,
+ 	onDone,
+ 	onCancel,
+ }: {
+ 	studentId: number;
+ 	courseId: number;
++	from: string;
++	to: string;
+ 	onDone: () => void;
+ 	onCancel: () => void;
+ }) {
+@@ -307,6 +341,10 @@ function UpgradeForm({
+ 			className="flex flex-col gap-3 rounded-lg border border-border p-3"
+ 		>
+ 			{formError ? <FormError>{formError}</FormError> : null}
++			{/* ETQAN-QA-658: the target is the next active level (curriculum.md). */}
++			<p className="text-sm font-medium">
++				{t("curriculum.progress.upgradeFromTo", { from, to })}
++			</p>
+ 			<Field
+ 				id="upgrade-note"
+ 				label={t("curriculum.progress.note")}
+diff --git a/src/features/homework/HomeworkDialog.test.tsx b/src/features/homework/HomeworkDialog.test.tsx
+index f3901bc..60c99a8 100644
+--- a/src/features/homework/HomeworkDialog.test.tsx
++++ b/src/features/homework/HomeworkDialog.test.tsx
+@@ -92,6 +92,34 @@ describe("HomeworkDialog", () => {
+ 		);
+ 	});
+ 
++	it("shows an answered, unreviewed homework as awaiting review (ETQAN-QA-650)", async () => {
++		show(answeredHomework);
++		expect(await screen.findByText("Awaiting review")).toBeInTheDocument();
++		expect(screen.queryByText("Incomplete")).not.toBeInTheDocument();
++	});
++
++	it("lets each user text and file name take its own direction (ETQAN-QA-651)", async () => {
++		show({
++			...answeredHomework,
++			title: "حفظ سورة الملك (١-١٠).",
++			instructions: "اقرأ الآيات.",
++			file_name: "M11-ورقة-الواجب.pdf",
++			answer_text: "حفظت الآيات.",
++		});
++		expect(await screen.findByText("حفظت الآيات.")).toHaveAttribute(
++			"dir",
++			"auto",
++		);
++		expect(
++			screen.getByRole("heading", { name: "حفظ سورة الملك (١-١٠)." }),
++		).toHaveAttribute("dir", "auto");
++		expect(screen.getByText("M11-ورقة-الواجب.pdf")).toHaveAttribute(
++			"dir",
++			"auto",
++		);
++		expect(screen.getByText("answer.pdf")).toHaveAttribute("dir", "auto");
++	});
++
+ 	it("marks complete with a status and the comment", async () => {
+ 		const user = userEvent.setup();
+ 		show(answeredHomework);
+@@ -267,6 +295,46 @@ describe("HomeworkDialog", () => {
+ 		).toBeInTheDocument();
+ 	});
+ 
++	it("offers the teacher Delete only while unanswered (ETQAN-QA-418)", async () => {
++		const teacher = {
++			...staffMe(),
++			role: "teacher",
++			features: ["homework"],
++		} as Me;
++		show(answeredHomework, teacher);
++		await screen.findByText("Done.");
++		expect(
++			screen.queryByRole("button", { name: "Delete homework" }),
++		).not.toBeInTheDocument();
++	});
++
++	it("lets the teacher delete an unanswered homework (ETQAN-QA-418)", async () => {
++		const teacher = {
++			...staffMe(),
++			role: "teacher",
++			features: ["homework"],
++		} as Me;
++		show(homework, teacher);
++		expect(
++			await screen.findByRole("button", { name: "Delete homework" }),
++		).toBeInTheDocument();
++	});
++
++	it("asks for instructions on a written-answer homework (ETQAN-QA-419)", async () => {
++		const user = userEvent.setup();
++		show(homework);
++		const box = await screen.findByLabelText(/^Instructions/);
++		expect(box).toBeRequired();
++		await user.clear(box);
++		await user.click(screen.getByRole("button", { name: "Save" }));
++		expect(
++			await screen.findByText(
++				"Write the instructions for a written-answer homework.",
++			),
++		).toBeInTheDocument();
++		expect(homeworkApi.update).not.toHaveBeenCalled();
++	});
++
+ 	it("deletes and closes", async () => {
+ 		const user = userEvent.setup();
+ 		vi.mocked(homeworkApi.remove).mockResolvedValue(undefined);
+diff --git a/src/features/homework/HomeworkDialog.tsx b/src/features/homework/HomeworkDialog.tsx
+index bd603c8..31f51fd 100644
+--- a/src/features/homework/HomeworkDialog.tsx
++++ b/src/features/homework/HomeworkDialog.tsx
+@@ -29,7 +29,7 @@ import {
+ 	toast,
+ } from "@/ui";
+ import { homeworkApi } from "./api";
+-import { ACCEPT, instantFormat, MAX_BYTES } from "./bits";
++import { ACCEPT, instantFormat, MAX_BYTES, useSessionLabel } from "./bits";
+ import { formErrors, homeworkErrorText } from "./errors";
+ import { useStudentSessions } from "./pickers";
+ import { useDeleteHomework, useHomework, useUpdateHomework } from "./queries";
+@@ -62,10 +62,15 @@ function Inner({
+ 	onOpenChange: (open: boolean) => void;
+ }) {
+ 	const { t, i18n } = useTranslation();
++	const sessionLabel = useSessionLabel();
+ 	const can = useCan();
+ 	const isTeacher = useRole() === "teacher";
+ 	const canUpdate = isTeacher || can("homework.update");
+-	const canDelete = isTeacher || can("homework.delete");
++	// ETQAN-QA-418: the teacher may delete only while it is unanswered
++	// (homework-content.md); the office at any time.
++	const canDelete = isTeacher
++		? hw.answered_at === null
++		: can("homework.delete");
+ 	const update = useUpdateHomework(hw.id);
+ 	const remove = useDeleteHomework();
+ 	const [title, setTitle] = useState(hw.title);
+@@ -125,6 +130,10 @@ function Inner({
+ 			setErrors({ title: t("homework.required.title") });
+ 			return undefined;
+ 		}
++		if (hw.kind === "text" && !instructions.trim()) {
++			setErrors({ instructions: t("homework.required.instructions") });
++			return undefined;
++		}
+ 		if (file && file.size > MAX_BYTES) {
+ 			setErrors({ file: t("homework.errors.fileTooLarge") });
+ 			return undefined;
+@@ -174,14 +183,21 @@ function Inner({
+ 	return (
+ 		<Dialog open onOpenChange={onOpenChange}>
+ 			<DialogContent>
+-				<DialogTitle>{hw.title}</DialogTitle>
++				<DialogTitle dir="auto">{hw.title}</DialogTitle>
+ 				<DialogDescription>
+ 					{hw.student.full_name} · {localName(hw.course, i18n.language)}
+ 				</DialogDescription>
+ 				<div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+-					<StatusChip tone={complete ? "live" : "neutral"}>
+-						{t(`homework.status.${hw.status}`)}
+-					</StatusChip>
++					{/* ETQAN-QA-650: the same chip as the list (ETQAN-QA-415). */}
++					{!complete && hw.answered_at ? (
++						<StatusChip className="bg-primary text-primary-foreground">
++							{t("homework.status.awaitingReview")}
++						</StatusChip>
++					) : (
++						<StatusChip tone={complete ? "live" : "neutral"}>
++							{t(`homework.status.${hw.status}`)}
++						</StatusChip>
++					)}
+ 					<span>{t(`homework.kind.${hw.kind}`)}</span>
+ 					{hw.set_by ? (
+ 						<span>
+@@ -213,6 +229,7 @@ function Inner({
+ 								error={errors.title}
+ 							>
+ 								<Input
++									dir="auto"
+ 									maxLength={200}
+ 									value={title}
+ 									onChange={(e) => setTitle(e.target.value)}
+@@ -222,8 +239,10 @@ function Inner({
+ 								id="hw-edit-instructions"
+ 								label={t("homework.dialog.instructions")}
+ 								error={errors.instructions}
++								required={hw.kind === "text"}
+ 							>
+ 								<Textarea
++									dir="auto"
+ 									maxLength={5000}
+ 									value={instructions}
+ 									onChange={(e) => setInstructions(e.target.value)}
+@@ -249,18 +268,20 @@ function Inner({
+ 									) : null}
+ 									{sessions.map((s) => (
+ 										<option key={s.id} value={s.id}>
+-											{formatDay(s.occurs_on, i18n.language)}
++											{sessionLabel(s)}
+ 										</option>
+ 									))}
+ 								</Select>
+ 							</Field>
+ 						</>
+ 					) : hw.instructions ? (
+-						<p className="whitespace-pre-wrap text-sm">{hw.instructions}</p>
++						<p dir="auto" className="whitespace-pre-wrap text-sm">
++							{hw.instructions}
++						</p>
+ 					) : null}
+ 					{hw.has_file ? (
+ 						<div className="flex flex-wrap items-center gap-3 text-sm">
+-							<span>{hw.file_name}</span>
++							<span dir="auto">{hw.file_name}</span>
+ 							<Button
+ 								type="button"
+ 								size="sm"
+@@ -316,11 +337,13 @@ function Inner({
+ 									</span>
+ 								</p>
+ 								{hw.answer_text ? (
+-									<p className="whitespace-pre-wrap">{hw.answer_text}</p>
++									<p dir="auto" className="whitespace-pre-wrap">
++										{hw.answer_text}
++									</p>
+ 								) : null}
+ 								{hw.has_answer_file ? (
+ 									<div className="flex items-center gap-3">
+-										<span>{hw.answer_file_name}</span>
++										<span dir="auto">{hw.answer_file_name}</span>
+ 										<Button
+ 											type="button"
+ 											size="sm"
+@@ -345,13 +368,16 @@ function Inner({
+ 							error={errors.teacher_comment}
+ 						>
+ 							<Textarea
++								dir="auto"
+ 								maxLength={5000}
+ 								value={comment}
+ 								onChange={(e) => setComment(e.target.value)}
+ 							/>
+ 						</Field>
+ 					) : hw.teacher_comment ? (
+-						<p className="whitespace-pre-wrap text-sm">{hw.teacher_comment}</p>
++						<p dir="auto" className="whitespace-pre-wrap text-sm">
++							{hw.teacher_comment}
++						</p>
+ 					) : null}
+ 					<DialogFooter className="mt-0">
+ 						{canDelete ? (
+diff --git a/src/features/homework/HomeworkList.tsx b/src/features/homework/HomeworkList.tsx
+index 2d90e32..62a0683 100644
+--- a/src/features/homework/HomeworkList.tsx
++++ b/src/features/homework/HomeworkList.tsx
+@@ -147,7 +147,9 @@ export function HomeworkList({ asTeacher = false }: { asTeacher?: boolean }) {
+ 					</CardContent>
+ 				</Card>
+ 			) : (
+-				<div className="overflow-x-auto rounded-lg border border-border">
++				// ETQAN-QA-426 (as ETQAN-QA-204): `relative` keeps the sr-only
++				// header inside this scroller, so it can't widen the page.
++				<div className="relative overflow-x-auto rounded-lg border border-border">
+ 					<table className="w-full text-sm">
+ 						<thead className="bg-secondary text-start text-muted-foreground">
+ 							<tr>
+@@ -182,7 +184,9 @@ export function HomeworkList({ asTeacher = false }: { asTeacher?: boolean }) {
+ 									<td className="p-3">
+ 										{localName(row.course, i18n.language)}
+ 									</td>
+-									<td className="p-3">{row.title}</td>
++									<td className="p-3">
++										<span dir="auto">{row.title}</span>
++									</td>
+ 									<td className="p-3">{t(`homework.kind.${row.kind}`)}</td>
+ 									<td className="p-3">
+ 										{row.answered_at
+@@ -190,11 +194,19 @@ export function HomeworkList({ asTeacher = false }: { asTeacher?: boolean }) {
+ 											: ""}
+ 									</td>
+ 									<td className="p-3">
+-										<StatusChip
+-											tone={row.status === "complete" ? "live" : "neutral"}
+-										>
+-											{t(`homework.status.${row.status}`)}
+-										</StatusChip>
++										{/* ETQAN-QA-415: answered but not complete is the
++										    teacher's to review, so it stands out. */}
++										{row.status !== "complete" && row.answered_at ? (
++											<StatusChip className="bg-primary text-primary-foreground">
++												{t("homework.status.awaitingReview")}
++											</StatusChip>
++										) : (
++											<StatusChip
++												tone={row.status === "complete" ? "live" : "neutral"}
++											>
++												{t(`homework.status.${row.status}`)}
++											</StatusChip>
++										)}
+ 									</td>
+ 									<td className="p-3">
+ 										{when.format(new Date(row.created_at))}
+diff --git a/src/features/homework/MyHomework.test.tsx b/src/features/homework/MyHomework.test.tsx
+index 4d5c6d3..819f111 100644
+--- a/src/features/homework/MyHomework.test.tsx
++++ b/src/features/homework/MyHomework.test.tsx
+@@ -124,6 +124,31 @@ describe("MyHomework", () => {
+ 		expect(screen.queryByLabelText("Your answer")).not.toBeInTheDocument();
+ 	});
+ 
++	it("lets the student's texts and file names take their own direction (ETQAN-QA-651)", async () => {
++		const user = userEvent.setup();
++		vi.mocked(homeworkApi.list).mockResolvedValue(
++			page([
++				{
++					...completeHomework,
++					instructions: "اقرأ الآيات.",
++					file_name: "M11-ورقة-الواجب.pdf",
++				},
++			]),
++		);
++		renderWithRouter(<MyHomework />);
++		await user.click(await screen.findByRole("button", { name: /Memorise/ }));
++		expect(await screen.findByText("Well done.")).toHaveAttribute(
++			"dir",
++			"auto",
++		);
++		expect(screen.getByText("اقرأ الآيات.")).toHaveAttribute("dir", "auto");
++		expect(screen.getByText("M11-ورقة-الواجب.pdf")).toHaveAttribute(
++			"dir",
++			"auto",
++		);
++		expect(screen.getByText("Done.")).toHaveAttribute("dir", "auto");
++	});
++
+ 	it("lets a parent switch child", async () => {
+ 		const user = userEvent.setup();
+ 		vi.mocked(identityApi.me).mockResolvedValue(
+@@ -146,6 +171,18 @@ describe("MyHomework", () => {
+ 		);
+ 	});
+ 
++	it("marks an answered homework as awaiting review, not incomplete (ETQAN-QA-458)", async () => {
++		vi.mocked(homeworkApi.list).mockResolvedValue(
++			page([homework, answeredHomework]),
++		);
++		renderWithRouter(<MyHomework />);
++		await screen.findAllByText("Memorise Al-Naba 1-10");
++		const items = screen.getAllByRole("listitem");
++		expect(items[0]).toHaveTextContent("Incomplete");
++		expect(items[1]).toHaveTextContent("Awaiting review");
++		expect(items[1]).not.toHaveTextContent("Incomplete");
++	});
++
+ 	it("shows an empty state", async () => {
+ 		vi.mocked(homeworkApi.list).mockResolvedValue(page([]));
+ 		renderWithRouter(<MyHomework />);
+diff --git a/src/features/homework/MyHomework.tsx b/src/features/homework/MyHomework.tsx
+index 835ee6a..58f8e3b 100644
+--- a/src/features/homework/MyHomework.tsx
++++ b/src/features/homework/MyHomework.tsx
+@@ -101,19 +101,29 @@ export function MyHomework() {
+ 										className="cursor-pointer text-start"
+ 										onClick={() => setOpen(h.id)}
+ 									>
+-										<span className="block font-medium">{h.title}</span>
++										<span dir="auto" className="block font-medium">
++											{h.title}
++										</span>
+ 										<span className="block text-sm text-muted-foreground">
+ 											{localName(h.course, i18n.language)} ·{" "}
+ 											{when.format(new Date(h.created_at))}
+ 										</span>
+ 									</button>
+-									<StatusChip
+-										tone={h.status === "complete" ? "live" : "neutral"}
+-									>
+-										{h.status === "complete"
+-											? t("homework.completed")
+-											: t("homework.status.incomplete")}
+-									</StatusChip>
++									{/* ETQAN-QA-458 (student twin of ETQAN-QA-415): an
++									    answer sent but not yet reviewed isn't "incomplete". */}
++									{h.status !== "complete" && h.answered_at ? (
++										<StatusChip className="bg-primary text-primary-foreground">
++											{t("homework.status.awaitingReview")}
++										</StatusChip>
++									) : (
++										<StatusChip
++											tone={h.status === "complete" ? "live" : "neutral"}
++										>
++											{h.status === "complete"
++												? t("homework.completed")
++												: t("homework.status.incomplete")}
++										</StatusChip>
++									)}
+ 								</CardContent>
+ 							</Card>
+ 						</li>
+@@ -196,7 +206,7 @@ function AnswerDialog({ hw, onClose }: { hw: Homework; onClose: () => void }) {
+ 	return (
+ 		<Dialog open onOpenChange={(next) => !next && onClose()}>
+ 			<DialogContent>
+-				<DialogTitle>{hw.title}</DialogTitle>
++				<DialogTitle dir="auto">{hw.title}</DialogTitle>
+ 				<DialogDescription>
+ 					{localName(hw.course, i18n.language)}
+ 				</DialogDescription>
+@@ -206,11 +216,13 @@ function AnswerDialog({ hw, onClose }: { hw: Homework; onClose: () => void }) {
+ 					</StatusChip>
+ 				) : null}
+ 				{hw.instructions ? (
+-					<p className="mt-3 whitespace-pre-wrap text-sm">{hw.instructions}</p>
++					<p dir="auto" className="mt-3 whitespace-pre-wrap text-sm">
++						{hw.instructions}
++					</p>
+ 				) : null}
+ 				{hw.has_file ? (
+ 					<div className="mt-3 flex items-center gap-3 text-sm">
+-						<span>{hw.file_name}</span>
++						<span dir="auto">{hw.file_name}</span>
+ 						<Button
+ 							type="button"
+ 							size="sm"
+@@ -240,11 +252,13 @@ function AnswerDialog({ hw, onClose }: { hw: Homework; onClose: () => void }) {
+ 				{complete ? (
+ 					<div className="mt-3 flex flex-col gap-2 text-sm">
+ 						{hw.answer_text ? (
+-							<p className="whitespace-pre-wrap">{hw.answer_text}</p>
++							<p dir="auto" className="whitespace-pre-wrap">
++								{hw.answer_text}
++							</p>
+ 						) : null}
+ 						{hw.has_answer_file ? (
+ 							<div className="flex items-center gap-3">
+-								<span>{hw.answer_file_name}</span>
++								<span dir="auto">{hw.answer_file_name}</span>
+ 								<Button
+ 									type="button"
+ 									size="sm"
+@@ -260,7 +274,9 @@ function AnswerDialog({ hw, onClose }: { hw: Homework; onClose: () => void }) {
+ 								<span className="block text-xs text-muted-foreground">
+ 									{t("homework.dialog.comment")}
+ 								</span>
+-								{hw.teacher_comment}
++								<span dir="auto" className="block whitespace-pre-wrap">
++									{hw.teacher_comment}
++								</span>
+ 							</p>
+ 						) : null}
+ 						{hw.completed_at ? (
+@@ -290,7 +306,9 @@ function AnswerDialog({ hw, onClose }: { hw: Homework; onClose: () => void }) {
+ 								<span className="block text-xs text-muted-foreground">
+ 									{t("homework.dialog.comment")}
+ 								</span>
+-								{hw.teacher_comment}
++								<span dir="auto" className="block whitespace-pre-wrap">
++									{hw.teacher_comment}
++								</span>
+ 							</p>
+ 						) : null}
+ 						<Field
+@@ -299,6 +317,7 @@ function AnswerDialog({ hw, onClose }: { hw: Homework; onClose: () => void }) {
+ 							error={errors.answer_text}
+ 						>
+ 							<Textarea
++								dir="auto"
+ 								maxLength={10000}
+ 								value={text}
+ 								onChange={(e) => setText(e.target.value)}
+@@ -306,7 +325,7 @@ function AnswerDialog({ hw, onClose }: { hw: Homework; onClose: () => void }) {
+ 						</Field>
+ 						{hw.has_answer_file ? (
+ 							<div className="flex flex-wrap items-center gap-3 text-sm">
+-								<span>{hw.answer_file_name}</span>
++								<span dir="auto">{hw.answer_file_name}</span>
+ 								<Button
+ 									type="button"
+ 									size="sm"
+diff --git a/src/features/homework/NewHomeworkDialog.test.tsx b/src/features/homework/NewHomeworkDialog.test.tsx
+index ed4ef05..1bcea83 100644
+--- a/src/features/homework/NewHomeworkDialog.test.tsx
++++ b/src/features/homework/NewHomeworkDialog.test.tsx
+@@ -149,6 +149,7 @@ describe("NewHomeworkDialog", () => {
+ 		show(office);
+ 		await pickOfficeStudent(user);
+ 		await user.type(screen.getByLabelText(/^Title/), "Read");
++		await user.type(screen.getByLabelText(/^Instructions/), "Page 2");
+ 		const file = new File(["x"], "n.pdf", { type: "application/pdf" });
+ 		await user.upload(
+ 			screen.getByLabelText(/^File/, { selector: "input[type=file]" }),
+@@ -186,6 +187,10 @@ describe("NewHomeworkDialog", () => {
+ 			o.getAttribute("value"),
+ 		);
+ 		expect(values).toEqual(["", "2", "1"]);
++		// ETQAN-QA-413: each option names its day and start time.
++		expect(select.querySelectorAll("option")[1]?.textContent).toMatch(
++			/Oct 1, 2026.*·.*10:00/,
++		);
+ 	});
+ 
+ 	it("refuses a file over 10 MiB", async () => {
+@@ -250,6 +255,27 @@ describe("NewHomeworkDialog", () => {
+ 		expect(curriculumApi.studentLevels).not.toHaveBeenCalled();
+ 	});
+ 
++	it("says what to pick and lists a teacher's students by name (ETQAN-QA-653)", async () => {
++		const user = userEvent.setup();
++		vi.mocked(schedulingApi.list).mockResolvedValue(
++			page([
++				{ ...sub(1, "active"), student: { id: 9, full_name: "Zaid" } },
++				sub(2, "active"),
++				{ ...sub(3, "active"), student: { id: 8, full_name: "Omar" } },
++			]) as never,
++		);
++		show(teacher, true);
++		await screen.findByRole("option", { name: "Omar" });
++		const students = screen.getByLabelText(/^Student/);
++		expect(
++			[...students.querySelectorAll("option")].map((o) => o.textContent),
++		).toEqual(["Choose a student", "Omar", "Sara Ali", "Zaid"]);
++		const courses = screen.getByLabelText(/^Course/);
++		expect(courses).toHaveTextContent("Choose the student first");
++		await user.selectOptions(students, "8");
++		expect(courses).toHaveTextContent("Choose a course");
++	});
++
+ 	it("puts a server field error under its input", async () => {
+ 		const user = userEvent.setup();
+ 		const { AxiosError } = await import("axios");
+@@ -262,7 +288,23 @@ describe("NewHomeworkDialog", () => {
+ 		show(office);
+ 		await pickOfficeStudent(user);
+ 		await user.type(screen.getByLabelText(/^Title/), "T");
++		await user.type(screen.getByLabelText(/^Instructions/), "Page 2");
+ 		await user.click(screen.getByRole("button", { name: "Add homework" }));
+ 		expect(await screen.findByText("Too silly.")).toBeInTheDocument();
+ 	});
++
++	it("asks for instructions on a written-answer homework before sending (ETQAN-QA-419)", async () => {
++		const user = userEvent.setup();
++		show(office);
++		await pickOfficeStudent(user);
++		await user.type(screen.getByLabelText(/^Title/), "Read");
++		expect(screen.getByLabelText(/^Instructions/)).toBeRequired();
++		await user.click(screen.getByRole("button", { name: "Add homework" }));
++		expect(
++			await screen.findByText(
++				"Write the instructions for a written-answer homework.",
++			),
++		).toBeInTheDocument();
++		expect(homeworkApi.create).not.toHaveBeenCalled();
++	});
+ });
+diff --git a/src/features/homework/NewHomeworkDialog.tsx b/src/features/homework/NewHomeworkDialog.tsx
+index 2d79660..21db6c0 100644
+--- a/src/features/homework/NewHomeworkDialog.tsx
++++ b/src/features/homework/NewHomeworkDialog.tsx
+@@ -1,7 +1,6 @@
+ import { useState } from "react";
+ import { useTranslation } from "react-i18next";
+ import { localName } from "@/features/curriculum";
+-import { formatDay } from "@/lib/zoned-time";
+ import {
+ 	Button,
+ 	Dialog,
+@@ -16,7 +15,7 @@ import {
+ 	Textarea,
+ 	toast,
+ } from "@/ui";
+-import { ACCEPT, MAX_BYTES, useDebounced } from "./bits";
++import { ACCEPT, MAX_BYTES, useDebounced, useSessionLabel } from "./bits";
+ import { formErrors } from "./errors";
+ import {
+ 	useCourseOptions,
+@@ -48,6 +47,7 @@ export function NewHomeworkDialog({
+ 	onOpenChange,
+ }: Props) {
+ 	const { t, i18n } = useTranslation();
++	const sessionLabel = useSessionLabel();
+ 	const create = useSetHomework();
+ 	const [search, setSearch] = useState("");
+ 	const q = useDebounced(search.trim(), 300);
+@@ -77,6 +77,9 @@ export function NewHomeworkDialog({
+ 		if (!chosen) next.student = t("homework.required.student");
+ 		if (!course) next.course = t("homework.required.course");
+ 		if (!title.trim()) next.title = t("homework.required.title");
++		// ETQAN-QA-419: the server's rule, checked here in the reader's language.
++		if (kind === "text" && !instructions.trim())
++			next.instructions = t("homework.required.instructions");
+ 		if (kind === "file" && !file) next.file = t("homework.errors.fileRequired");
+ 		else if (file && file.size > MAX_BYTES)
+ 			next.file = t("homework.errors.fileTooLarge");
+@@ -133,7 +136,8 @@ export function NewHomeworkDialog({
+ 								setSession("");
+ 							}}
+ 						>
+-							<option value="" />
++							{/* ETQAN-QA-653: say what to pick. */}
++							<option value="">{t("homework.dialog.pickStudent")}</option>
+ 							{students.map((s) => (
+ 								<option key={s.id} value={s.id}>
+ 									{s.name}
+@@ -154,7 +158,11 @@ export function NewHomeworkDialog({
+ 								setSession("");
+ 							}}
+ 						>
+-							<option value="" />
++							<option value="">
++								{chosen
++									? t("homework.dialog.pickCourse")
++									: t("homework.dialog.pickStudentFirst")}
++							</option>
+ 							{courses.map((c) => (
+ 								<option key={c.id} value={c.id}>
+ 									{localName(c, i18n.language)}
+@@ -174,7 +182,7 @@ export function NewHomeworkDialog({
+ 							<option value="">{t("homework.dialog.noSession")}</option>
+ 							{sessions.map((s) => (
+ 								<option key={s.id} value={s.id}>
+-									{formatDay(s.occurs_on, i18n.language)}
++									{sessionLabel(s)}
+ 								</option>
+ 							))}
+ 						</Select>
+@@ -215,6 +223,7 @@ export function NewHomeworkDialog({
+ 						id="hw-instructions"
+ 						label={t("homework.dialog.instructions")}
+ 						error={errors.instructions}
++						required={kind === "text"}
+ 					>
+ 						<Textarea
+ 							maxLength={5000}
+diff --git a/src/features/homework/pickers.ts b/src/features/homework/pickers.ts
+index afbdeeb..0f74f22 100644
+--- a/src/features/homework/pickers.ts
++++ b/src/features/homework/pickers.ts
+@@ -66,6 +66,8 @@ export function useStudentOptions(asTeacher: boolean, search: string) {
+ 			)
+ 				options.push({ id: sub.student.id, name: sub.student.full_name });
+ 		}
++		// ETQAN-QA-653: by name, as the office's search lists them.
++		options.sort((a, b) => a.name.localeCompare(b.name));
+ 	} else {
+ 		for (const p of people.data?.results ?? [])
+ 			options.push({ id: p.id, name: p.user.full_name });
+diff --git a/src/features/honour/HonourAdmin.test.tsx b/src/features/honour/HonourAdmin.test.tsx
+index fddd0d0..220a83d 100644
+--- a/src/features/honour/HonourAdmin.test.tsx
++++ b/src/features/honour/HonourAdmin.test.tsx
+@@ -229,6 +229,22 @@ describe("HonourAdmin", () => {
+ 		);
+ 	});
+ 
++	it("orders the dialog buttons like the other dialogs (ETQAN-QA-664)", async () => {
++		const user = userEvent.setup();
++		renderAdmin();
++		await screen.findByText("Student of the month");
++		await user.click(screen.getByRole("button", { name: "Add entry" }));
++		const dialog = await screen.findByRole("dialog");
++		const save = within(dialog).getByRole("button", { name: "Save" });
++		const footer = save.closest('[data-slot="dialog-footer"]');
++		expect(footer).not.toBeNull();
++		expect(
++			[...(footer as HTMLElement).querySelectorAll("button")].map(
++				(b) => b.textContent,
++			),
++		).toEqual(["Cancel", "Save"]);
++	});
++
+ 	it("waits for the academy's month before adding an entry", async () => {
+ 		let settle: (value: unknown) => void = () => {};
+ 		vi.mocked(academyApi.get).mockReturnValue(
+diff --git a/src/features/honour/HonourDialog.tsx b/src/features/honour/HonourDialog.tsx
+index 9239e3d..b4a0320 100644
+--- a/src/features/honour/HonourDialog.tsx
++++ b/src/features/honour/HonourDialog.tsx
+@@ -7,6 +7,7 @@ import {
+ 	Checkbox,
+ 	Dialog,
+ 	DialogContent,
++	DialogFooter,
+ 	DialogTitle,
+ 	Field,
+ 	FormError,
+@@ -174,14 +175,16 @@ export function HonourDialog({
+ 							{t("honour.fields.isPublished")}
+ 						</Label>
+ 					</div>
+-					<div className="flex flex-wrap gap-2">
+-						<Button type="submit" disabled={save.isPending}>
+-							{t("honour.save")}
+-						</Button>
++					{/* ETQAN-QA-664: the shared footer, so the order matches the
++					    other dialogs (cancel, then the main action at the end). */}
++					<DialogFooter className="mt-0">
+ 						<Button type="button" variant="outline" onClick={onClose}>
+ 							{t("honour.cancel")}
+ 						</Button>
+-					</div>
++						<Button type="submit" disabled={save.isPending}>
++							{t("honour.save")}
++						</Button>
++					</DialogFooter>
+ 				</form>
+ 			</DialogContent>
+ 		</Dialog>
+diff --git a/src/features/library/LibraryList.test.tsx b/src/features/library/LibraryList.test.tsx
+index 9d11bdf..0635c6d 100644
+--- a/src/features/library/LibraryList.test.tsx
++++ b/src/features/library/LibraryList.test.tsx
+@@ -54,8 +54,10 @@ describe("LibraryList", () => {
+ 		renderWithRouter(<LibraryList />);
+ 		expect(await screen.findByText("Syllabus.pdf")).toBeInTheDocument();
+ 		expect(screen.getAllByText(/1\.2 MB/)).toHaveLength(2);
+-		expect(screen.getByText(/^PDF ·/)).toBeInTheDocument();
+-		expect(screen.getByText(/^TXT ·/)).toBeInTheDocument();
++		// ETQAN-QA-672: each part of the meta line is isolated.
++		expect(screen.getByText("PDF").tagName).toBe("BDI");
++		expect(screen.getByText("TXT").tagName).toBe("BDI");
++		expect(screen.getAllByText("1.2 MB")[0].tagName).toBe("BDI");
+ 		expect(screen.getByText(/Huda Admin/)).toBeInTheDocument();
+ 		expect(screen.getAllByText(/Sep 20, 2026/)).toHaveLength(2);
+ 		expect(libraryApi.list).toHaveBeenCalledWith("", 1);
+@@ -104,13 +106,13 @@ describe("LibraryList", () => {
+ 		await user.click(screen.getByRole("checkbox", { name: "Syllabus.pdf" }));
+ 		await user.click(screen.getByRole("checkbox", { name: "Notes.txt" }));
+ 		await user.click(screen.getByRole("button", { name: "Delete selected" }));
+-		expect(await screen.findByText(/Delete 2 file\(s\)\?/)).toBeInTheDocument();
++		expect(await screen.findByText(/Delete 2 files\?/)).toBeInTheDocument();
+ 		const dialog = screen.getByRole("alertdialog");
+ 		await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+ 		await waitFor(() =>
+ 			expect(libraryApi.bulkRemove).toHaveBeenCalledWith([1, 2]),
+ 		);
+-		expect(await screen.findByText("2 file(s) deleted.")).toBeInTheDocument();
++		expect(await screen.findByText("2 files deleted.")).toBeInTheDocument();
+ 	});
+ 
+ 	it("asks before deleting one file; cancel keeps it", async () => {
+@@ -123,7 +125,8 @@ describe("LibraryList", () => {
+ 		);
+ 		let dialog = await screen.findByRole("alertdialog");
+ 		expect(
+-			within(dialog).getByText(/Delete 1 file\(s\)\?/),
++			// ETQAN-QA-674: one file is "this file", not "1 file(s)".
++			within(dialog).getByText("Delete this file? Links to it stop working."),
+ 		).toBeInTheDocument();
+ 		await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+ 		expect(libraryApi.remove).not.toHaveBeenCalled();
+@@ -152,7 +155,9 @@ describe("LibraryList", () => {
+ 		await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+ 		await waitFor(() => expect(screen.queryByText("Syllabus.pdf")).toBeNull());
+ 		await user.click(screen.getByRole("button", { name: "Delete selected" }));
+-		expect(await screen.findByText(/Delete 1 file\(s\)\?/)).toBeInTheDocument();
++		expect(
++			await screen.findByText("Delete 1 file? Links to it stop working."),
++		).toBeInTheDocument();
+ 	});
+ 
+ 	it("clears the selection when the search changes", async () => {
+@@ -182,6 +187,28 @@ describe("LibraryList", () => {
+ 		expect(await screen.findByText("Link copied.")).toBeInTheDocument();
+ 	});
+ 
++	it("says a refused copy failed and offers the link to open (ETQAN-QA-673)", async () => {
++		const user = userEvent.setup();
++		vi.spyOn(navigator.clipboard, "writeText").mockRejectedValue(
++			new Error("denied"),
++		);
++		const open = vi.spyOn(window, "open").mockImplementation(() => null);
++		renderWithRouter(<LibraryList />);
++		await screen.findByText("Syllabus.pdf");
++		expect(screen.getAllByRole("link", { name: "Open" })[0]).toHaveAttribute(
++			"href",
++			syllabus.url,
++		);
++		await user.click(screen.getAllByRole("button", { name: "Copy link" })[0]);
++		expect(
++			await screen.findByText(
++				"Couldn't copy the link. Use Open, then copy the address from the browser.",
++			),
++		).toBeInTheDocument();
++		await user.click(screen.getByRole("button", { name: "Open" }));
++		expect(open).toHaveBeenCalledWith(syllabus.url, "_blank", "noopener");
++	});
++
+ 	it("hides upload and delete controls without the permissions", async () => {
+ 		renderWithRouter(
+ 			<CanProvider me={staffMe("library_file.view_any")}>
+diff --git a/src/features/library/LibraryList.tsx b/src/features/library/LibraryList.tsx
+index c2b9682..3db793e 100644
+--- a/src/features/library/LibraryList.tsx
++++ b/src/features/library/LibraryList.tsx
+@@ -61,7 +61,15 @@ export function LibraryList() {
+ 			await navigator.clipboard.writeText(url);
+ 			toast({ description: t("library.copied"), variant: "success" });
+ 		} catch {
+-			toast({ description: t("errors.generic"), variant: "destructive" });
++			// ETQAN-QA-673: say what failed and give the way to the link.
++			toast({
++				description: t("library.copyFailed"),
++				variant: "destructive",
++				action: {
++					label: t("library.open"),
++					onClick: () => window.open(url, "_blank", "noopener"),
++				},
++			});
+ 		}
+ 	}
+ 
+@@ -155,13 +163,22 @@ export function LibraryList() {
+ 										/>
+ 									) : null}
+ 									<div className="flex min-w-0 flex-1 flex-col gap-1">
+-										<span className="truncate font-medium">{file.name}</span>
++										<span dir="auto" className="truncate font-medium">
++											{file.name}
++										</span>
++										{/* ETQAN-QA-672: each part isolated, so a Latin type,
++										    a size and a date don't run together in Arabic. */}
+ 										<span className="text-sm text-muted-foreground">
+-											{fileType(file)} · {formatBytes(file.size)}
+-											{file.uploaded_by
+-												? ` · ${file.uploaded_by.full_name}`
+-												: ""}
+-											{` · ${date.format(new Date(file.created_at))}`}
++											<bdi>{fileType(file)}</bdi> ·{" "}
++											<bdi>{formatBytes(file.size, t, i18n.language)}</bdi>
++											{file.uploaded_by ? (
++												<>
++													{" · "}
++													<bdi>{file.uploaded_by.full_name}</bdi>
++												</>
++											) : null}
++											{" · "}
++											<bdi>{date.format(new Date(file.created_at))}</bdi>
+ 										</span>
+ 									</div>
+ 									<Button
+@@ -171,6 +188,16 @@ export function LibraryList() {
+ 									>
+ 										{t("library.copyLink")}
+ 									</Button>
++									{/* ETQAN-QA-673: the link itself, to open or copy by hand. */}
++									<Button size="sm" variant="outline" asChild>
++										<a
++											href={file.url}
++											target="_blank"
++											rel="noopener noreferrer"
++										>
++											{t("library.open")}
++										</a>
++									</Button>
+ 									{can("library_file.delete") ? (
+ 										<AlertDialog>
+ 											<AlertDialogTrigger asChild>
+@@ -186,7 +213,7 @@ export function LibraryList() {
+ 											<AlertDialogContent>
+ 												<AlertDialogTitle>{file.name}</AlertDialogTitle>
+ 												<AlertDialogDescription>
+-													{t("library.confirmDelete", { count: 1 })}
++													{t("library.confirmDeleteOne")}
+ 												</AlertDialogDescription>
+ 												<AlertDialogFooter>
+ 													<AlertDialogCancel asChild>
+diff --git a/src/features/library/UploadDialog.test.tsx b/src/features/library/UploadDialog.test.tsx
+index 843cfbf..7564f78 100644
+--- a/src/features/library/UploadDialog.test.tsx
++++ b/src/features/library/UploadDialog.test.tsx
+@@ -110,6 +110,41 @@ describe("UploadDialog", () => {
+ 		);
+ 	});
+ 
++	it("translates the server's file-type refusal (ETQAN-QA-671)", async () => {
++		vi.mocked(libraryApi.upload).mockRejectedValue(
++			badRequest({ file: ["This type of file is not allowed."] }),
++		);
++		const user = await openDialog();
++		await user.upload(
++			screen.getByLabelText("File"),
++			new File(["x"], "a.exe", { type: "application/x-msdownload" }),
++		);
++		await submit(user);
++		expect(
++			await screen.findByText("This type of file isn't allowed."),
++		).toBeInTheDocument();
++	});
++
++	it("isolates each allowed type and gives the size limit (ETQAN-QA-670)", async () => {
++		await openDialog();
++		const description = screen.getByText("Up to 20 MB per file.").parentElement;
++		const items = [...(description?.querySelectorAll("bdi") ?? [])].map(
++			(b) => b.textContent,
++		);
++		expect(items).toEqual([
++			"Images",
++			"PDF",
++			"Word",
++			"Excel",
++			"PowerPoint",
++			"text",
++			"CSV",
++			"MP3",
++			"M4A",
++			"MP4",
++		]);
++	});
++
+ 	it("asks for a file when none is chosen", async () => {
+ 		const user = await openDialog();
+ 		await submit(user);
+diff --git a/src/features/library/UploadDialog.tsx b/src/features/library/UploadDialog.tsx
+index 6ac1a45..950d2fb 100644
+--- a/src/features/library/UploadDialog.tsx
++++ b/src/features/library/UploadDialog.tsx
+@@ -1,6 +1,7 @@
+-import { useState } from "react";
++import { Fragment, useState } from "react";
+ import { useTranslation } from "react-i18next";
+ import { parseApiError } from "@/features/identity/api";
++import { serverMessageKey } from "@/lib/server-messages";
+ import {
+ 	Button,
+ 	Dialog,
+@@ -21,6 +22,21 @@ import { LIBRARY_MAX_BYTES } from "./schemas";
+ /** As the server's ``etqan.library.services.NAME_MAX``. */
+ const NAME_MAX = 120;
+ 
++/** What the library takes (the server checks the content). Brand and format
++ * names stay as they are; "images" and "text" are words. */
++const ACCEPTED = [
++	"library.typeImages",
++	"PDF",
++	"Word",
++	"Excel",
++	"PowerPoint",
++	"library.typeText",
++	"CSV",
++	"MP3",
++	"M4A",
++	"MP4",
++] as const;
++
+ export function UploadDialog() {
+ 	const { t } = useTranslation();
+ 	const upload = useUploadFile();
+@@ -71,9 +87,16 @@ export function UploadDialog() {
+ 			setOpen(false);
+ 		} catch (error) {
+ 			const { fieldErrors, message } = parseApiError(error);
+-			setFileError(fieldErrors.file);
+-			setNameError(fieldErrors.name);
+-			setFormError(fieldErrors.file || fieldErrors.name ? undefined : message);
++			// ETQAN-QA-671: a known server sentence in the reader's language.
++			const say = (text?: string) => {
++				const key = text ? serverMessageKey(text) : undefined;
++				return key ? t(key) : text;
++			};
++			setFileError(say(fieldErrors.file));
++			setNameError(say(fieldErrors.name));
++			setFormError(
++				fieldErrors.file || fieldErrors.name ? undefined : say(message),
++			);
+ 		}
+ 	}
+ 
+@@ -90,7 +113,17 @@ export function UploadDialog() {
+ 			</DialogTrigger>
+ 			<DialogContent>
+ 				<DialogTitle>{t("library.upload")}</DialogTitle>
+-				<DialogDescription>{t("library.accepted")}</DialogDescription>
++				{/* ETQAN-QA-670: each type isolated, so Latin names with Arabic
++				    commas keep their order; then the size limit. */}
++				<DialogDescription>
++					{ACCEPTED.map((item, i) => (
++						<Fragment key={item}>
++							{i > 0 ? t("library.listSeparator") : null}
++							<bdi>{item.startsWith("library.") ? t(item) : item}</bdi>
++						</Fragment>
++					))}
++					<span className="block">{t("library.maxSize")}</span>
++				</DialogDescription>
+ 				<form onSubmit={submit} className="mt-4 flex flex-col gap-4" noValidate>
+ 					<Field id="library-file" label={t("library.file")} error={fileError}>
+ 						<Input
+diff --git a/src/features/library/schemas.test.ts b/src/features/library/schemas.test.ts
+index 52f6af4..24844eb 100644
+--- a/src/features/library/schemas.test.ts
++++ b/src/features/library/schemas.test.ts
+@@ -1,4 +1,5 @@
+ import { describe, expect, it } from "vitest";
++import i18n from "@/lib/i18n";
+ import {
+ 	fileType,
+ 	formatBytes,
+@@ -33,10 +34,25 @@ describe("library schemas", () => {
+ 	});
+ 
+ 	it("formats sizes", () => {
+-		expect(formatBytes(500)).toBe("500 B");
+-		expect(formatBytes(2048)).toBe("2.0 KB");
+-		expect(formatBytes(1258291)).toBe("1.2 MB");
+-		expect(formatBytes(3 * 1024 ** 3)).toBe("3.0 GB");
++		const t = i18n.getFixedT("en");
++		expect(formatBytes(500, t, "en")).toBe("500 B");
++		expect(formatBytes(2048, t, "en")).toBe("2.0 KB");
++		expect(formatBytes(1258291, t, "en")).toBe("1.2 MB");
++		expect(formatBytes(3 * 1024 ** 3, t, "en")).toBe("3.0 GB");
++	});
++
++	it("formats sizes in Arabic words (ETQAN-QA-672)", () => {
++		const t = i18n.getFixedT("ar");
++		expect(formatBytes(45, t, "ar")).toBe("45 بايت");
++	});
++
++	it("words the Arabic delete confirm by number (ETQAN-QA-674)", () => {
++		const t = i18n.getFixedT("ar");
++		expect(t("library.confirmDeleteOne")).toBe(
++			"حذف هذا الملف؟ ستتوقف الروابط المؤدية إليه عن العمل.",
++		);
++		expect(t("library.confirmDelete", { count: 2 })).toMatch(/^حذف ملفين؟/);
++		expect(t("library.confirmDelete", { count: 3 })).toMatch(/^حذف 3 ملفات؟/);
+ 	});
+ 
+ 	it("names the type from the stored file's extension, else the MIME subtype", () => {
+diff --git a/src/features/library/schemas.ts b/src/features/library/schemas.ts
+index 2b9027f..1fdac14 100644
+--- a/src/features/library/schemas.ts
++++ b/src/features/library/schemas.ts
+@@ -23,16 +23,27 @@ export interface PaginatedResponse<T> {
+ }
+ 
+ /** `1.2 MB` style size, base 1024. */
+-export function formatBytes(bytes: number): string {
+-	if (bytes < 1024) return `${bytes} B`;
+-	const units = ["KB", "MB", "GB"];
++/** A file size in the reader's language and digits (ETQAN-QA-672, as
++ * ETQAN-QA-603: "45 بايت", not an English "B"). */
++export function formatBytes(
++	bytes: number,
++	t: (key: string, values: { n: string }) => string,
++	locale: string,
++): string {
++	const digits = (n: number, fraction: number) =>
++		new Intl.NumberFormat(locale, {
++			minimumFractionDigits: fraction,
++			maximumFractionDigits: fraction,
++		}).format(n);
++	if (bytes < 1024) return t("library.sizes.b", { n: digits(bytes, 0) });
++	const units = ["kb", "mb", "gb"];
+ 	let value = bytes / 1024;
+ 	let i = 0;
+ 	while (value >= 1024 && i < units.length - 1) {
+ 		value /= 1024;
+ 		i += 1;
+ 	}
+-	return `${value.toFixed(1)} ${units[i]}`;
++	return t(`library.sizes.${units[i]}`, { n: digits(value, 1) });
+ }
+ 
+ /** Short type label: the stored file's extension (its URL always ends in
+diff --git a/src/features/studentReports/ReportPrint.test.tsx b/src/features/studentReports/ReportPrint.test.tsx
+index d1764fd..9e87358 100644
+--- a/src/features/studentReports/ReportPrint.test.tsx
++++ b/src/features/studentReports/ReportPrint.test.tsx
+@@ -53,4 +53,17 @@ describe("ReportPrint", () => {
+ 			).toHaveLength(2),
+ 		);
+ 	});
++
++	it("says a refused report is not theirs, with a way back (ETQAN-QA-677)", async () => {
++		vi.mocked(studentReportsApi.get).mockRejectedValue(
++			new AxiosError("no", "403", undefined, undefined, {
++				status: 403,
++			} as never),
++		);
++		renderWithRouter(<ReportPrint reportId="1" />);
++		expect(
++			await screen.findByText("You don't have access to this report."),
++		).toBeInTheDocument();
++		expect(screen.getByRole("button", { name: "Back" })).toBeInTheDocument();
++	});
+ });
+diff --git a/src/features/studentReports/ReportPrint.tsx b/src/features/studentReports/ReportPrint.tsx
+index 50b6bf4..6e492aa 100644
+--- a/src/features/studentReports/ReportPrint.tsx
++++ b/src/features/studentReports/ReportPrint.tsx
+@@ -2,7 +2,7 @@ import { isAxiosError } from "axios";
+ import type { ReactNode } from "react";
+ import { useTranslation } from "react-i18next";
+ import { Fact } from "@/components/Fact";
+-import { PrintPage, PrintSheet } from "@/features/branding";
++import { PrintBackButton, PrintPage, PrintSheet } from "@/features/branding";
+ import { Alert, AlertDescription, Spinner } from "@/ui";
+ import { monthLabel } from "./month";
+ import { useStudentReport } from "./queries";
+@@ -21,13 +21,21 @@ export function ReportPrint({ reportId }: { reportId: string }) {
+ 	let body: ReactNode;
+ 	if (invalid || isError) {
+ 		body = (
+-			<Alert variant="destructive">
+-				<AlertDescription>
+-					{invalid || status === 404
+-						? t("studentReports.notFound")
+-						: t("studentReports.loadError")}
+-				</AlertDescription>
+-			</Alert>
++			// ETQAN-QA-677: say why, with a way back.
++			<>
++				<div className="print:hidden">
++					<PrintBackButton />
++				</div>
++				<Alert variant="destructive">
++					<AlertDescription>
++						{invalid || status === 404
++							? t("studentReports.notFound")
++							: status === 403
++								? t("studentReports.forbidden")
++								: t("studentReports.loadError")}
++					</AlertDescription>
++				</Alert>
++			</>
+ 		);
+ 	} else if (!report) {
+ 		body = <Spinner />;
+diff --git a/src/locales/ar/certificates.json b/src/locales/ar/certificates.json
+index 8fb1ecb..d36d9cf 100644
+--- a/src/locales/ar/certificates.json
++++ b/src/locales/ar/certificates.json
+@@ -31,7 +31,7 @@
+ 	},
+ 	"status": {
+ 		"active": "سارية",
+-		"revoked": "ملغاة"
++		"revoked": "مُبطَلة"
+ 	},
+ 	"filters": {
+ 		"student": "الطالب",
+@@ -61,13 +61,13 @@
+ 		"issuedBy": "أصدرها {{name}}",
+ 		"courseOff": "هذه الدورة لا تمنح شهادات إتمام.",
+ 		"print": "فتح الشهادة للطباعة",
+-		"revoke": "إلغاء الشهادة",
+-		"revokeTitle": "إلغاء هذه الشهادة؟",
+-		"revokeHint": "تبقى ظاهرة هنا، وتختفي عند الطالب، وتظهر ملغاة عند التحقق منها. لا يمكن التراجع عن ذلك.",
++		"revoke": "إبطال الشهادة",
++		"revokeTitle": "إبطال هذه الشهادة؟",
++		"revokeHint": "تبقى ظاهرة هنا، وتختفي عند الطالب، وتظهر مُبطَلة عند التحقق منها. لا يمكن التراجع عن ذلك.",
+ 		"reason": "السبب",
+-		"revokedOn": "أُلغيت في {{day}}",
++		"revokedOn": "أُبطلت في {{day}}",
+ 		"revokedReason": "السبب: {{reason}}",
+-		"revokedLocked": "لا يمكن تعديل شهادة ملغاة.",
++		"revokedLocked": "لا يمكن تعديل شهادة مُبطَلة.",
+ 		"delete": "حذف الشهادة",
+ 		"deleteConfirm": "حذف هذه الشهادة؟ ستُحذف صورتها أيضًا."
+ 	},
+@@ -113,8 +113,9 @@
+ 		"issuedOn": "صدرت في {{day}}",
+ 		"verifyAt": "تحقق من هذه الشهادة على {{url}}",
+ 		"photoAlt": "صورة {{name}}",
+-		"revoked": "أُلغيت هذه الشهادة.",
++		"revoked": "أُبطلت هذه الشهادة.",
+ 		"notFound": "تعذّر العثور على هذه الشهادة.",
++		"forbidden": "ليست لديك صلاحية لعرض هذه الشهادة.",
+ 		"loadError": "تعذّر تحميل الشهادة."
+ 	},
+ 	"verify": {
+@@ -122,8 +123,8 @@
+ 		"checking": "جارٍ التحقق من الشهادة…",
+ 		"valid": "شهادة صحيحة",
+ 		"validHint": "أصدرت {{academy}} هذه الشهادة وهي صحيحة.",
+-		"revoked": "ملغاة",
+-		"revokedHint": "ألغت {{academy}} هذه الشهادة.",
++		"revoked": "مُبطَلة",
++		"revokedHint": "أبطلت {{academy}} هذه الشهادة.",
+ 		"notFound": "غير موجودة",
+ 		"notFoundHint": "لا توجد شهادة تطابق هذا الرابط. تأكد من نسخه كاملًا.",
+ 		"failed": "تعذّر التحقق من الشهادة. حاول مرة أخرى بعد دقيقة.",
+@@ -135,7 +136,7 @@
+ 	"toast": {
+ 		"issued": "صدرت الشهادة.",
+ 		"updated": "حُدّثت الشهادة.",
+-		"revoked": "أُلغيت الشهادة.",
++		"revoked": "أُبطلت الشهادة.",
+ 		"deleted": "حُذفت الشهادة.",
+ 		"templateSaved": "حُفظ القالب.",
+ 		"templateDeleted": "حُذف القالب.",
+@@ -149,7 +150,7 @@
+ 	},
+ 	"errors": {
+ 		"template_in_use": "هناك شهادات تستخدم هذا القالب: عطّله بدلًا من حذفه.",
+-		"certificate_revoked": "أُلغيت هذه الشهادة ولم يعد بالإمكان تعديلها.",
++		"certificate_revoked": "أُبطلت هذه الشهادة ولم يعد بالإمكان تعديلها.",
+ 		"imageRequired": "اختر صورة.",
+ 		"imageTooLarge": "حجم الصورة أكبر من 5 ميغابايت.",
+ 		"photoTooLarge": "حجم الصورة أكبر من 2 ميغابايت.",
+diff --git a/src/locales/ar/curriculum.json b/src/locales/ar/curriculum.json
+index 4e002cf..c5c4e4e 100644
+--- a/src/locales/ar/curriculum.json
++++ b/src/locales/ar/curriculum.json
+@@ -15,8 +15,8 @@
+ 		"courseRequired": "اختر دورة.",
+ 		"course": "الدورة",
+ 		"allCourses": "كل الدورات",
+-		"nameEn": "الاسم (بالإنجليزية)",
+-		"nameAr": "الاسم (بالعربية)",
++		"nameEn": "الاسم (الإنجليزية)",
++		"nameAr": "الاسم (العربية)",
+ 		"active": "نشط",
+ 		"inactive": "غير نشط",
+ 		"subLevels": "المستويات الفرعية",
+@@ -24,11 +24,19 @@
+ 		"topicCount": "{{count}} موضوعات",
+ 		"addSubLevel": "إضافة مستوى فرعي",
+ 		"addTopic": "إضافة موضوع",
++		"subLevelN": "المستوى الفرعي {{n}}",
++		"topicN": "الموضوع {{n}}",
+ 		"remove": "إزالة",
+ 		"moveUp": "تحريك لأعلى",
+ 		"moveDown": "تحريك لأسفل",
+ 		"chapter": "السورة",
+ 		"noChapter": "بلا سورة",
++		"noChapters": "لا توجد سور بعد. حمّلها بزر «مزامنة السور» في صفحة",
++		"noChaptersLink": "سور القرآن",
++		"chapterForVerses": "اختر السورة لتحديد الآيات.",
++		"bothVerses": "أدخل الآيتين معًا (من وإلى) أو اتركهما فارغتين.",
++		"chooseChapter": "اختر سورة.",
++		"versesRange": "آيات هذه السورة من 1 إلى {{last}}، والأولى قبل الأخيرة.",
+ 		"fromVerse": "من الآية",
+ 		"toVerse": "إلى الآية",
+ 		"empty": "لا توجد مستويات بعد.",
+@@ -44,12 +52,13 @@
+ 		"title": "سور القرآن",
+ 		"subtitle": "السور الـ114 من البيانات المضمّنة.",
+ 		"sync": "مزامنة السور",
++		"chapterLabel": "{{number}} - {{name}}",
+ 		"synced": "تمت إضافة {{created}} وإعادة ضبط {{reset}}.",
+ 		"empty": "لا توجد سور بعد. زامن لتحميل السور الـ114.",
+ 		"number": "الرقم",
+ 		"arabic": "الاسم بالعربية",
+-		"simple": "الاسم المبسّط",
+-		"complex": "الاسم المشكّل",
++		"simple": "الاسم بالحروف اللاتينية",
++		"complex": "الاسم اللاتيني بعلامات النطق",
+ 		"place": "مكان النزول",
+ 		"order": "ترتيب النزول",
+ 		"verses": "الآيات",
+@@ -57,7 +66,8 @@
+ 		"makkah": "مكية",
+ 		"madinah": "مدنية",
+ 		"edit": "تعديل الأسماء",
+-		"saved": "تم حفظ السورة."
++		"saved": "تم حفظ السورة.",
++		"required": "أدخل هذا الاسم."
+ 	},
+ 	"progress": {
+ 		"title": "مستويات الطلاب",
+@@ -67,18 +77,22 @@
+ 		"noLevel": "بلا مستوى",
+ 		"onlyNoLevel": "بدون مستوى",
+ 		"since": "منذ",
+-		"completed": "المنجز",
++		"completed": "المنجز في الدورة",
+ 		"completedOf": "{{completed}} / {{total}}",
++		"topicsOf": "موضوعات الدورة المكتملة: {{completed}} من {{total}}",
++		"noTopics": "لا موضوعات في هذا المستوى بعد.",
+ 		"search": "بحث عن الطلاب",
+ 		"empty": "لا يوجد طلاب للعرض.",
+ 		"open": "فتح التقدّم",
+ 		"changeLevel": "تغيير المستوى",
+ 		"setFirstLevel": "تحديد المستوى الأول",
+ 		"chooseLevel": "اختر مستوى",
++		"noLevels": "لا توجد مستويات لهذه الدورة بعد. اطلب من الإدارة إضافتها.",
+ 		"save": "حفظ",
+ 		"history": "سجل المستويات",
+ 		"current": "المستوى الحالي",
+ 		"requestUpgrade": "طلب ترقية",
++		"upgradeFromTo": "ترقية من {{from}} إلى {{to}}",
+ 		"note": "ملاحظة",
+ 		"send": "إرسال الطلب",
+ 		"pending": "طلب ترقية: {{from}} ← {{to}}",
+@@ -91,7 +105,8 @@
+ 		"loadMore": "عرض المزيد",
+ 		"close": "إغلاق",
+ 		"previous": "السابق",
+-		"next": "التالي"
++		"next": "التالي",
++		"noLevelsOffice": "لا توجد مستويات لهذه الدورة بعد. أضفها إلى الدورة أولًا."
+ 	},
+ 	"upgrades": {
+ 		"title": "طلبات الترقية",
+diff --git a/src/locales/ar/homework.json b/src/locales/ar/homework.json
+index 236d213..15dafb2 100644
+--- a/src/locales/ar/homework.json
++++ b/src/locales/ar/homework.json
+@@ -25,7 +25,8 @@
+ 	},
+ 	"status": {
+ 		"incomplete": "غير مكتمل",
+-		"complete": "مكتمل"
++		"complete": "مكتمل",
++		"awaitingReview": "بانتظار المراجعة"
+ 	},
+ 	"kind": {
+ 		"text": "إجابة كتابية",
+@@ -45,6 +46,9 @@
+ 		"course": "الدورة",
+ 		"session": "الحصة (اختياري)",
+ 		"noSession": "بلا حصة",
++		"pickStudent": "اختر طالبًا",
++		"pickCourse": "اختر دورة",
++		"pickStudentFirst": "اختر الطالب أولًا",
+ 		"title": "العنوان",
+ 		"kind": "النوع",
+ 		"instructions": "التعليمات",
+@@ -92,7 +96,8 @@
+ 	"required": {
+ 		"student": "اختر طالبًا.",
+ 		"course": "اختر دورة.",
+-		"title": "أدخل عنوانًا."
++		"title": "أدخل عنوانًا.",
++		"instructions": "اكتب التعليمات للواجب ذي الإجابة المكتوبة."
+ 	},
+ 	"cancel": "إلغاء",
+ 	"close": "إغلاق",
+diff --git a/src/locales/ar/library.json b/src/locales/ar/library.json
+index 3a03d34..5108c98 100644
+--- a/src/locales/ar/library.json
++++ b/src/locales/ar/library.json
+@@ -8,18 +8,40 @@
+ 	"file": "الملف",
+ 	"fileRequired": "اختر ملفًا.",
+ 	"size": "الحجم",
++	"sizes": {
++		"b": "{{n}} بايت",
++		"kb": "{{n}} ك.ب",
++		"mb": "{{n}} م.ب",
++		"gb": "{{n}} ج.ب"
++	},
+ 	"uploadedBy": "رفعه",
+ 	"date": "التاريخ",
+ 	"copyLink": "نسخ الرابط",
+ 	"copied": "تم نسخ الرابط.",
++	"copyFailed": "تعذّر نسخ الرابط. افتح الملف من «فتح» ثم انسخ عنوانه من المتصفح.",
++	"open": "فتح",
+ 	"cancel": "إلغاء",
+ 	"delete": "حذف",
+-	"deleted": "تم حذف {{count}} ملف.",
++	"deleted_zero": "لم يُحذف أي ملف.",
++	"deleted_one": "تم حذف ملف واحد.",
++	"deleted_two": "تم حذف ملفين.",
++	"deleted_few": "تم حذف {{count}} ملفات.",
++	"deleted_many": "تم حذف {{count}} ملفًا.",
++	"deleted_other": "تم حذف {{count}} ملف.",
+ 	"deleteSelected": "حذف المحدد",
+-	"confirmDelete": "حذف {{count}} ملف؟ ستتوقف الروابط المؤدية إليها عن العمل.",
++	"confirmDelete_zero": "حذف الملفات المحددة؟ ستتوقف الروابط المؤدية إليها عن العمل.",
++	"confirmDelete_one": "حذف ملف واحد؟ ستتوقف الروابط المؤدية إليه عن العمل.",
++	"confirmDelete_two": "حذف ملفين؟ ستتوقف الروابط المؤدية إليهما عن العمل.",
++	"confirmDelete_few": "حذف {{count}} ملفات؟ ستتوقف الروابط المؤدية إليها عن العمل.",
++	"confirmDelete_many": "حذف {{count}} ملفًا؟ ستتوقف الروابط المؤدية إليها عن العمل.",
++	"confirmDelete_other": "حذف {{count}} ملف؟ ستتوقف الروابط المؤدية إليها عن العمل.",
++	"confirmDeleteOne": "حذف هذا الملف؟ ستتوقف الروابط المؤدية إليه عن العمل.",
+ 	"empty": "لا توجد ملفات بعد.",
+ 	"search": "ابحث في الملفات",
+ 	"loadMore": "تحميل المزيد",
+ 	"tooLarge": "الحد الأقصى لحجم الملف 20 ميغابايت.",
+-	"accepted": "صور، PDF، Word، Excel، PowerPoint، نص، CSV، MP3، M4A، MP4"
++	"typeImages": "صور",
++	"typeText": "نص",
++	"listSeparator": "، ",
++	"maxSize": "حتى 20 ميغابايت للملف الواحد."
+ }
+diff --git a/src/locales/ar/studentReports.json b/src/locales/ar/studentReports.json
+index 6a8b74b..5f8a609 100644
+--- a/src/locales/ar/studentReports.json
++++ b/src/locales/ar/studentReports.json
+@@ -30,6 +30,7 @@
+ 	"copyFailed": "تعذّر النسخ. حدّد النص وانسخه يدويًا.",
+ 	"print": "طباعة",
+ 	"notFound": "تعذّر العثور على هذا التقرير.",
++	"forbidden": "ليست لديك صلاحية لعرض هذا التقرير.",
+ 	"loadError": "تعذّر تحميل التقرير.",
+ 	"exists": "لهذا الطالب تقرير لهذا الشهر بالفعل.",
+ 	"openExisting": "افتح ذلك التقرير",
+diff --git a/src/locales/en/certificates.json b/src/locales/en/certificates.json
+index 25bdb73..c6d0b31 100644
+--- a/src/locales/en/certificates.json
++++ b/src/locales/en/certificates.json
+@@ -107,6 +107,7 @@
+ 		"photoAlt": "Photo of {{name}}",
+ 		"revoked": "This certificate has been revoked.",
+ 		"notFound": "This certificate couldn't be found.",
++		"forbidden": "You don't have access to this certificate.",
+ 		"loadError": "The certificate could not be loaded."
+ 	},
+ 	"verify": {
+diff --git a/src/locales/en/curriculum.json b/src/locales/en/curriculum.json
+index 806474f..73d1bca 100644
+--- a/src/locales/en/curriculum.json
++++ b/src/locales/en/curriculum.json
+@@ -24,11 +24,19 @@
+ 		"topicCount": "{{count}} topics",
+ 		"addSubLevel": "Add sub-level",
+ 		"addTopic": "Add topic",
++		"subLevelN": "Sub-level {{n}}",
++		"topicN": "Topic {{n}}",
+ 		"remove": "Remove",
+ 		"moveUp": "Move up",
+ 		"moveDown": "Move down",
+ 		"chapter": "Chapter",
+ 		"noChapter": "No chapter",
++		"noChapters": "No chapters yet. Load them with “Sync chapters” on the page",
++		"noChaptersLink": "Qur'an chapters",
++		"chapterForVerses": "Choose a chapter for a verse range.",
++		"bothVerses": "Give both verses or neither.",
++		"chooseChapter": "Choose a chapter.",
++		"versesRange": "This chapter has verses 1 to {{last}}; the first comes before the last.",
+ 		"fromVerse": "From verse",
+ 		"toVerse": "To verse",
+ 		"empty": "No levels yet.",
+@@ -44,12 +52,13 @@
+ 		"title": "Qur'an chapters",
+ 		"subtitle": "The 114 chapters, from the bundled data.",
+ 		"sync": "Sync chapters",
++		"chapterLabel": "{{number}}. {{name}}",
+ 		"synced": "{{created}} added, {{reset}} reset.",
+ 		"empty": "No chapters yet. Sync to load the 114 chapters.",
+ 		"number": "No.",
+ 		"arabic": "Arabic name",
+-		"simple": "Simple name",
+-		"complex": "Complex name",
++		"simple": "Latin name",
++		"complex": "Latin name with accents",
+ 		"place": "Revelation place",
+ 		"order": "Revelation order",
+ 		"verses": "Verses",
+@@ -57,7 +66,8 @@
+ 		"makkah": "Makkah",
+ 		"madinah": "Madinah",
+ 		"edit": "Edit names",
+-		"saved": "Chapter saved."
++		"saved": "Chapter saved.",
++		"required": "Enter this name."
+ 	},
+ 	"progress": {
+ 		"title": "Student levels",
+@@ -67,18 +77,22 @@
+ 		"noLevel": "No level",
+ 		"onlyNoLevel": "Without a level",
+ 		"since": "Since",
+-		"completed": "Completed",
++		"completed": "Completed in the course",
+ 		"completedOf": "{{completed}} / {{total}}",
++		"topicsOf": "Course topics completed: {{completed}} of {{total}}",
++		"noTopics": "No topics in this level yet.",
+ 		"search": "Search students",
+ 		"empty": "No students to show.",
+ 		"open": "Open progress",
+ 		"changeLevel": "Change level",
+ 		"setFirstLevel": "Set first level",
+ 		"chooseLevel": "Choose a level",
++		"noLevels": "This course has no levels yet. Ask the administration to add them.",
+ 		"save": "Save",
+ 		"history": "Level history",
+ 		"current": "Current level",
+ 		"requestUpgrade": "Request upgrade",
++		"upgradeFromTo": "Upgrade from {{from}} to {{to}}",
+ 		"note": "Note",
+ 		"send": "Send request",
+ 		"pending": "Upgrade requested: {{from}} → {{to}}",
+@@ -91,7 +105,8 @@
+ 		"loadMore": "Load more",
+ 		"close": "Close",
+ 		"previous": "Previous",
+-		"next": "Next"
++		"next": "Next",
++		"noLevelsOffice": "This course has no levels yet. Add them to the course first."
+ 	},
+ 	"upgrades": {
+ 		"title": "Level upgrades",
+diff --git a/src/locales/en/homework.json b/src/locales/en/homework.json
+index 9902339..2bec1b3 100644
+--- a/src/locales/en/homework.json
++++ b/src/locales/en/homework.json
+@@ -25,7 +25,8 @@
+ 	},
+ 	"status": {
+ 		"incomplete": "Incomplete",
+-		"complete": "Complete"
++		"complete": "Complete",
++		"awaitingReview": "Awaiting review"
+ 	},
+ 	"kind": {
+ 		"text": "Written answer",
+@@ -45,6 +46,9 @@
+ 		"course": "Course",
+ 		"session": "Session (optional)",
+ 		"noSession": "No session",
++		"pickStudent": "Choose a student",
++		"pickCourse": "Choose a course",
++		"pickStudentFirst": "Choose the student first",
+ 		"title": "Title",
+ 		"kind": "Type",
+ 		"instructions": "Instructions",
+@@ -92,7 +96,8 @@
+ 	"required": {
+ 		"student": "Choose a student.",
+ 		"course": "Choose a course.",
+-		"title": "Enter a title."
++		"title": "Enter a title.",
++		"instructions": "Write the instructions for a written-answer homework."
+ 	},
+ 	"cancel": "Cancel",
+ 	"close": "Close",
+diff --git a/src/locales/en/library.json b/src/locales/en/library.json
+index 22596f2..7e0930e 100644
+--- a/src/locales/en/library.json
++++ b/src/locales/en/library.json
+@@ -8,18 +8,32 @@
+ 	"file": "File",
+ 	"fileRequired": "Choose a file.",
+ 	"size": "Size",
++	"sizes": {
++		"b": "{{n}} B",
++		"kb": "{{n}} KB",
++		"mb": "{{n}} MB",
++		"gb": "{{n}} GB"
++	},
+ 	"uploadedBy": "Uploaded by",
+ 	"date": "Date",
+ 	"copyLink": "Copy link",
+ 	"copied": "Link copied.",
++	"copyFailed": "Couldn't copy the link. Use Open, then copy the address from the browser.",
++	"open": "Open",
+ 	"cancel": "Cancel",
+ 	"delete": "Delete",
+-	"deleted": "{{count}} file(s) deleted.",
++	"deleted_one": "{{count}} file deleted.",
++	"deleted_other": "{{count}} files deleted.",
+ 	"deleteSelected": "Delete selected",
+-	"confirmDelete": "Delete {{count}} file(s)? Links to them stop working.",
++	"confirmDelete_one": "Delete {{count}} file? Links to it stop working.",
++	"confirmDelete_other": "Delete {{count}} files? Links to them stop working.",
++	"confirmDeleteOne": "Delete this file? Links to it stop working.",
+ 	"empty": "No files yet.",
+ 	"search": "Search files",
+ 	"loadMore": "Load more",
+ 	"tooLarge": "Files can be at most 20 MB.",
+-	"accepted": "Images, PDF, Word, Excel, PowerPoint, text, CSV, MP3, M4A, MP4"
++	"typeImages": "Images",
++	"typeText": "text",
++	"listSeparator": ", ",
++	"maxSize": "Up to 20 MB per file."
+ }
+diff --git a/src/locales/en/studentReports.json b/src/locales/en/studentReports.json
+index c772bc3..59605da 100644
+--- a/src/locales/en/studentReports.json
++++ b/src/locales/en/studentReports.json
+@@ -30,6 +30,7 @@
+ 	"copyFailed": "Couldn't copy. Select the text and copy it instead.",
+ 	"print": "Print",
+ 	"notFound": "This report couldn't be found.",
++	"forbidden": "You don't have access to this report.",
+ 	"loadError": "The report couldn't be loaded.",
+ 	"exists": "This student already has a report for this month.",
+ 	"openExisting": "Open that report",
+diff --git a/src/locales/es/library.json b/src/locales/es/library.json
+index e98d652..cb2e667 100644
+--- a/src/locales/es/library.json
++++ b/src/locales/es/library.json
+@@ -12,14 +12,22 @@
+ 	"date": "Fecha",
+ 	"copyLink": "Copiar enlace",
+ 	"copied": "Enlace copiado.",
++	"copyFailed": "No se pudo copiar el enlace. Usa Abrir y copia la dirección desde el navegador.",
++	"open": "Abrir",
+ 	"cancel": "Cancelar",
+ 	"delete": "Eliminar",
+-	"deleted": "{{count}} archivo(s) eliminado(s).",
++	"deleted_one": "{{count}} archivo eliminado.",
++	"deleted_other": "{{count}} archivos eliminados.",
+ 	"deleteSelected": "Eliminar seleccionados",
+-	"confirmDelete": "¿Eliminar {{count}} archivo(s)? Sus enlaces dejarán de funcionar.",
++	"confirmDelete_one": "¿Eliminar {{count}} archivo? Su enlace dejará de funcionar.",
++	"confirmDelete_other": "¿Eliminar {{count}} archivos? Sus enlaces dejarán de funcionar.",
++	"confirmDeleteOne": "¿Eliminar este archivo? Su enlace dejará de funcionar.",
+ 	"empty": "Todavía no hay archivos.",
+ 	"search": "Buscar archivos",
+ 	"loadMore": "Cargar más",
+ 	"tooLarge": "Los archivos pueden pesar como máximo 20 MB.",
+-	"accepted": "Imágenes, PDF, Word, Excel, PowerPoint, texto, CSV, MP3, M4A, MP4"
++	"typeImages": "Imágenes",
++	"typeText": "texto",
++	"listSeparator": ", ",
++	"maxSize": "Hasta 20 MB por archivo."
+ }
+diff --git a/src/main.tsx b/src/main.tsx
+index bfc64e2..26b16f7 100644
+--- a/src/main.tsx
++++ b/src/main.tsx
+@@ -6,6 +6,7 @@ import { PaletteProvider } from "@/features/appearance";
+ import { BrandProvider } from "@/features/branding";
+ import { TranslationOverrides } from "@/features/translations";
+ import { DirectionProvider } from "@/lib/direction";
++import { retryUnlessRefused } from "@/lib/query-retry";
+ import { ThemeProvider } from "@/lib/theme";
+ import { Toaster } from "@/ui";
+ import { routeTree } from "./routeTree.gen";
+@@ -13,7 +14,9 @@ import "@/lib/i18n";
+ import "@/features/apps/install";
+ import "./index.css";
+ 
+-const queryClient = new QueryClient();
++const queryClient = new QueryClient({
++	defaultOptions: { queries: { retry: retryUnlessRefused } },
++});
+ const router = createRouter({
+ 	routeTree,
+ 	context: { queryClient },
+diff --git a/src/ui/dialog.test.tsx b/src/ui/dialog.test.tsx
+index b9d8407..6f3a041 100644
+--- a/src/ui/dialog.test.tsx
++++ b/src/ui/dialog.test.tsx
+@@ -110,6 +110,18 @@ describe("Dialog", () => {
+ 		expect(overlay?.className).not.toContain(["bg", "black"].join("-"));
+ 	});
+ 
++	it("scrims on the panel's own layer, so a nested confirm dims its dialog (ETQAN-QA-666)", async () => {
++		const { baseElement } = render(<Sample />);
++		await userEvent.click(screen.getByRole("button", { name: "Open" }));
++		const content = await screen.findByRole("dialog");
++		const overlay = baseElement.querySelector<HTMLElement>(
++			'[data-slot="dialog-overlay"]',
++		);
++		// A later overlay on the same layer paints over an earlier panel.
++		expect(overlay).toHaveClass("z-50");
++		expect(content.parentElement).toHaveClass("z-50");
++	});
++
+ 	it("honours prefers-reduced-motion on both animated surfaces", async () => {
+ 		const { baseElement } = render(<Sample />);
+ 		await userEvent.click(screen.getByRole("button", { name: "Open" }));
+diff --git a/src/ui/dialog.tsx b/src/ui/dialog.tsx
+index baf5cc4..a57d2df 100644
+--- a/src/ui/dialog.tsx
++++ b/src/ui/dialog.tsx
+@@ -62,9 +62,15 @@ const POSITIONER =
+  * `motion-reduce:` duplicates the global backstop in `index.css` on purpose.
+  * The backstop is a blanket rule that a future `!important` could outrank; the
+  * utility states the intent at the component, where it is reviewable.
++ *
++ * `z-50`, the positioner's own layer, so a confirmation opened from inside a
++ * dialog scrims that dialog too: at `z-40` its overlay slid under the first
++ * panel and the two cards blended (ETQAN-QA-666, ETQAN-QA-414). Within one
++ * layer the later portal wins, so each overlay covers exactly what came
++ * before it.
+  */
+ const OVERLAY =
+-	"fixed inset-0 z-40 bg-overlay animate-overlay-in motion-reduce:animate-none";
++	"fixed inset-0 z-50 bg-overlay animate-overlay-in motion-reduce:animate-none";
+ const OVERLAY_BLUR = "backdrop-blur-sm";
+ 
+ /**
+diff --git a/src/ui/toast.test.tsx b/src/ui/toast.test.tsx
+index 2660cd5..e2fdcf1 100644
+--- a/src/ui/toast.test.tsx
++++ b/src/ui/toast.test.tsx
+@@ -39,3 +39,14 @@ test("toaster with a toast has no a11y violations", async () => {
+ 	act(() => toast({ description: "Saved!", variant: "success" }));
+ 	expect(await axe(container)).toHaveNoViolations();
+ });
++
++test("sits at the top on a phone, the bottom end corner from sm (ETQAN-QA-654)", () => {
++	render(<Toaster />);
++	act(() => toast({ description: "Saved!" }));
++	const viewport = screen.getByText("Saved!").closest("ol");
++	const classes = viewport?.className.split(/\s+/) ?? [];
++	expect(classes).toEqual(
++		expect.arrayContaining(["top-0", "sm:top-auto", "sm:bottom-0"]),
++	);
++	expect(classes).not.toContain("bottom-0");
++});
+diff --git a/src/ui/toast.tsx b/src/ui/toast.tsx
+index 48524f4..2e54ac9 100644
+--- a/src/ui/toast.tsx
++++ b/src/ui/toast.tsx
+@@ -196,16 +196,12 @@ export function Toaster() {
+ 					</ToastPrimitive.Close>
+ 				</ToastPrimitive.Root>
+ 			))}
+-			{/* `pb-24` below `sm`, where this viewport is full-width and sits
+-			    flush with the bottom edge: a call's control bar is 5rem tall
+-			    at the same edge, so a five-second toast was landing squarely
+-			    on the mute and leave buttons of a live lesson. 6rem of bottom
+-			    padding clears it with room to spare. From `sm` up the
+-			    viewport is `max-w-sm` in the end corner and the (centred)
+-			    control bar is nowhere near it, so the ordinary `p-4` stands.
+-			    The call e2e measures this overlap at 360px rather than
+-			    trusting the arithmetic. */}
+-			<ToastPrimitive.Viewport className="fixed bottom-0 end-0 z-100 flex max-h-screen w-full flex-col gap-2 p-4 pb-24 sm:max-w-sm sm:pb-4" />
++			{/* Below `sm` the viewport is full-width, so it sits at the top
++			    edge: at the bottom a toast landed on a live lesson's control
++			    bar (mute, leave) and, on a phone dialog, on its footer buttons
++			    (ETQAN-QA-654). From `sm` up it is `max-w-sm` in the bottom end
++			    corner, clear of the centred control bar and of dialogs. */}
++			<ToastPrimitive.Viewport className="fixed top-0 end-0 z-100 flex max-h-screen w-full flex-col gap-2 p-4 sm:top-auto sm:bottom-0 sm:max-w-sm" />
+ 		</ToastPrimitive.Provider>
+ 	);
+ }
+?? src/features/certificates/copy.test.ts
+?? src/lib/query-retry.test.ts
+?? src/lib/query-retry.ts

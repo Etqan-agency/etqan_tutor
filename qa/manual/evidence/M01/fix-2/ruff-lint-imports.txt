@@ -1,0 +1,12 @@
+# ruff check (scoped)
+etqan/etqan_billing/services/__init__.py:3:1: I001 [*] Import block is un-sorted or un-formatted
+etqan/etqan_billing/services/__init__.py:58:11: RUF022 [*] `__all__` is not sorted
+Found 2 errors.
+[*] 2 fixable with the `--fix` option.
+
+# note: the 2 findings in etqan_billing/services/__init__.py come from another area's uncommitted edit, not cycle 2
+# ruff format --check
+84 files already formatted
+# lint-imports
+
+Contracts: 54 kept, 0 broken.

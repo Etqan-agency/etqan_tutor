@@ -1,0 +1,4 @@
+- 2026-10-28T14:11:44Z Agent 3 cycle 1 start: 16 bugs (800,801,802,804,805,806,807,809,810,811,812,813,816,821,823,824)
+- 2026-10-28T14:35:37Z fixed (FIXED-UNVERIFIED) 800,801,802,804,805,806,807,809,810,811,812,813,816,821,823,824; proposal for 804 header (coverage-gaps.md); evidence qa/manual/evidence/M01/fix-1/
+- 2026-10-28T15:33:37Z Agent 3 cycle 2 start: 012, 806 (reopened), 827, 828, 829, 830; reproduced 012 in pytest (KeyError etqan_defaults_suspended) and 806 from Agent 2's retest (help text HTML)
+- 2026-10-28T15:58:22Z fixed (FIXED-UNVERIFIED) 012, 806, 827, 828, 829, 830; no migration/API change, no proposal needed. Checks: pytest tenants+etqan_billing 350 passed; edited QA files 28 passed; vitest 99 passed; biome+tsc clean; ruff clean on touched files (2 findings in etqan_billing/services/__init__.py are another area's edit); lint-imports 54 kept. Evidence qa/manual/evidence/M01/fix-2/

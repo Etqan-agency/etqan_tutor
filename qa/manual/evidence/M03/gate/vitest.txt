@@ -1,0 +1,26 @@
+   ✓ AppTopbar > renders the brand, toggles, the bell and the user menu  892ms
+   ✓ AppTopbar > has no axe violations  407ms
+ ✓ src/features/payroll/ProjectionsPage.test.tsx (13 tests) 2193ms
+   ✓ ProjectionsPage > names the server's month, explains itself and has no month picker  654ms
+   ✓ ProjectionsPage > shows each teacher's row in its currency, with a missing-rate badge  378ms
+ ✓ src/lib/direction.test.tsx (3 tests) 475ms
+   ✓ DirectionProvider > opens Radix menus right-to-left in Arabic  428ms
+ ✓ src/features/shell/nav.test.ts (27 tests) 26ms
+ ✓ src/features/notifications/bits.test.tsx (3 tests) 200ms
+ ✓ src/features/notifications/api.test.ts (3 tests) 7ms
+ ✓ src/routes/_authed/index.test.tsx (18 tests) 6093ms
+   ✓ Home > shows an admin the finance card for the finance features that are on  1589ms
+   ✓ Home > shows an admin this month's money and no session panel  1399ms
+   ✓ Home > hides the local methods tile while the academy's setting is off  566ms
+   ✓ Home > shows the local methods tile while the academy's setting is on  574ms
+   ✓ Home > shows a student their next session, progress and own menu  423ms
+ ✓ src/lib/bidi.test.ts (3 tests) 24ms
+ ✓ src/locales/bidi.test.ts (2 tests) 21ms
+ ✓ src/features/scheduling/countCopy.test.ts (2 tests) 9ms
+
+ Test Files  31 passed (31)
+      Tests  324 passed (324)
+   Start at  19:52:44
+   Duration  24.99s (transform 16.31s, setup 25.11s, collect 58.77s, tests 86.81s, environment 31.85s, prepare 4.96s)
+
+tsc=0

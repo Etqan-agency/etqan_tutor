@@ -1,0 +1,1643 @@
+diff --git a/src/features/billing/FamilyInvoices.tsx b/src/features/billing/FamilyInvoices.tsx
+index 6879266..f72d8e9 100644
+--- a/src/features/billing/FamilyInvoices.tsx
++++ b/src/features/billing/FamilyInvoices.tsx
+@@ -51,10 +51,16 @@ export function FamilyInvoices() {
+ 											to="/learning/invoices/$invoiceId"
+ 											params={{ invoiceId: String(invoice.id) }}
+ 											dir="ltr"
+-											className="font-medium text-primary-text underline-offset-4 hover:underline"
++											// ETQAN-QA-467 (as ETQAN-QA-511): a stretched LTR item
++											// starts its text on the left of an RTL card; at its own
++											// width it sits at the card's start, over its lines.
++											className="max-w-full self-start font-medium text-primary-text underline-offset-4 hover:underline"
+ 										>
+ 											{invoice.number}
+ 										</Link>
++										{/* ETQAN-QA-316: what it is for, so two invoices due
++										    the same day can be told apart. */}
++										<span className="text-sm">{invoice.description}</span>
+ 										<span className="text-sm text-muted-foreground">
+ 											{t("billing.family.line", {
+ 												student: invoice.student.full_name,
+@@ -63,6 +69,13 @@ export function FamilyInvoices() {
+ 										</span>
+ 									</div>
+ 									<div className="flex flex-col items-end gap-1">
++										<span className="text-sm">
++											{t("billing.columns.amount")}:{" "}
++											<Money
++												minor={invoice.amount_minor}
++												currency={invoice.currency}
++											/>
++										</span>
+ 										<span className="text-sm">
+ 											{t("billing.columns.balance")}:{" "}
+ 											<Money
+diff --git a/src/features/billing/InvoicePrint.tsx b/src/features/billing/InvoicePrint.tsx
+index ad7d953..a2a1227 100644
+--- a/src/features/billing/InvoicePrint.tsx
++++ b/src/features/billing/InvoicePrint.tsx
+@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
+ import { useTranslation } from "react-i18next";
+ import { Fact } from "@/components/Fact";
+ import { PrintPage, PrintSheet } from "@/features/branding";
++import { formatMoney } from "@/lib/money";
+ import { formatDay } from "@/lib/zoned-time";
+ import { Alert, AlertDescription, Spinner } from "@/ui";
+ import { Money } from "./bits";
+@@ -46,6 +47,10 @@ export function InvoicePrint({ invoiceId }: { invoiceId: string }) {
+ 	} else {
+ 		const isReceipt = invoice.status === "paid";
+ 		const isVoid = invoice.status === "void";
++		// Fees of the payments that count toward "Paid" (ETQAN-QA-450).
++		const fees = invoice.payments
++			.filter((payment) => payment.status === "completed")
++			.reduce((sum, payment) => sum + payment.fee_minor, 0);
+ 		const title = isVoid
+ 			? t("billing.print.void")
+ 			: isReceipt
+@@ -103,12 +108,32 @@ export function InvoicePrint({ invoiceId }: { invoiceId: string }) {
+ 							{invoice.payments.map((payment) => (
+ 								<li
+ 									key={payment.id}
+-									className="flex flex-wrap justify-between gap-2"
++									// ETQAN-QA-302: a refunded payment, or one moved to the
++									// balance, no longer counts toward "Paid": struck out and
++									// muted so the listed amounts add up to it.
++									className={`flex flex-wrap justify-between gap-2${
++										payment.status === "completed"
++											? ""
++											: " text-muted-foreground line-through"
++									}`}
+ 								>
+ 									<span>
+ 										{day(payment.paid_on)} ·{" "}
+ 										{t(`billing.methods.${payment.method}`)}
+ 										{payment.reference ? ` · ${payment.reference}` : ""}
++										{/* ETQAN-QA-450: what the payer was charged on top. */}
++										{payment.fee_minor > 0 ? (
++											<>
++												{" · "}
++												{t("billing.payments.fee", {
++													amount: formatMoney(
++														payment.fee_minor,
++														invoice.currency,
++														i18n.language,
++													),
++												})}
++											</>
++										) : null}
+ 										{payment.status !== "completed" ? (
+ 											<>
+ 												{" · "}
+@@ -136,6 +161,24 @@ export function InvoicePrint({ invoiceId }: { invoiceId: string }) {
+ 					<dd className="text-end">
+ 						<Money minor={invoice.paid_minor} currency={invoice.currency} />
+ 					</dd>
++					{/* ETQAN-QA-450: an online payment's service fee is charged on
++					    top of the amount, so the receipt shows it and the total
++					    the payer's statement will show. */}
++					{fees > 0 ? (
++						<>
++							<dt>{t("billing.print.serviceFees")}</dt>
++							<dd className="text-end">
++								<Money minor={fees} currency={invoice.currency} />
++							</dd>
++							<dt>{t("billing.print.totalCharged")}</dt>
++							<dd className="text-end">
++								<Money
++									minor={invoice.paid_minor + fees}
++									currency={invoice.currency}
++								/>
++							</dd>
++						</>
++					) : null}
+ 					{isVoid ? null : (
+ 						<>
+ 							<dt className="font-semibold">{t("billing.print.balanceDue")}</dt>
+diff --git a/src/features/branding/index.ts b/src/features/branding/index.ts
+index 1b451b9..ce49650 100644
+--- a/src/features/branding/index.ts
++++ b/src/features/branding/index.ts
+@@ -2,5 +2,5 @@ export type { Branding, Pair } from "./api";
+ export { brandingApi } from "./api";
+ export { applyBranding } from "./apply";
+ export { BrandProvider, BrandWordmark, usePageTitle } from "./BrandProvider";
+-export { PrintPage, PrintSheet } from "./PrintSheet";
++export { PrintBackButton, PrintPage, PrintSheet } from "./PrintSheet";
+ export { brandingQueryKey, useBranding, useBrandName } from "./queries";
+diff --git a/src/features/certificates/CertificatePrint.test.tsx b/src/features/certificates/CertificatePrint.test.tsx
+index b7ab7cf..0d5e1b8 100644
+--- a/src/features/certificates/CertificatePrint.test.tsx
++++ b/src/features/certificates/CertificatePrint.test.tsx
+@@ -105,6 +105,32 @@ describe("CertificatePrint", () => {
+ 		expect(within(sheet).queryByText(/Check this certificate/)).toBeNull();
+ 	});
+ 
++	it("offers a way back beside Print, off the paper (ETQAN-QA-466)", async () => {
++		renderWithRouter(<CertificatePrint certificateId="1" />);
++		await screen.findByRole("article", { name: "Certificate of Completion" });
++		const back = screen.getByRole("button", { name: "Back" });
++		expect(back.closest(".print\\:hidden")).not.toBeNull();
++	});
++
++	it("sets an Arabic message upright and a Latin one in italics (ETQAN-QA-466)", async () => {
++		vi.mocked(certificatesApi.get).mockResolvedValue({
++			...customCertificate,
++			message: "مبارك يا آدم، نفخر بتقدّمك.",
++		});
++		const { unmount } = renderWithRouter(
++			<CertificatePrint certificateId="2" />,
++		);
++		const arabic = await screen.findByText("مبارك يا آدم، نفخر بتقدّمك.");
++		expect(arabic).not.toHaveClass("italic");
++		expect(arabic).toHaveAttribute("dir", "auto");
++		unmount();
++		vi.mocked(certificatesApi.get).mockResolvedValue(customCertificate);
++		renderWithRouter(<CertificatePrint certificateId="2" />);
++		expect(await screen.findByText("Excellent recitation.")).toHaveClass(
++			"italic",
++		);
++	});
++
+ 	it("falls back to the built-in frame when the template can't be loaded", async () => {
+ 		vi.mocked(certificatesApi.get).mockResolvedValue(customCertificate);
+ 		vi.mocked(certificatesApi.background).mockRejectedValue(notFound());
+diff --git a/src/features/certificates/CertificatePrint.tsx b/src/features/certificates/CertificatePrint.tsx
+index 3df1b62..ea4c3f9 100644
+--- a/src/features/certificates/CertificatePrint.tsx
++++ b/src/features/certificates/CertificatePrint.tsx
+@@ -1,7 +1,12 @@
+ import { isAxiosError } from "axios";
+ import { type ReactNode, useId } from "react";
+ import { useTranslation } from "react-i18next";
+-import { PrintPage, useBranding, useBrandName } from "@/features/branding";
++import {
++	PrintBackButton,
++	PrintPage,
++	useBranding,
++	useBrandName,
++} from "@/features/branding";
+ import { localName } from "@/features/curriculum";
+ import { formatDay } from "@/lib/zoned-time";
+ import { Alert, AlertDescription, Button, Spinner } from "@/ui";
+@@ -12,6 +17,8 @@ import {
+ } from "./queries";
+ import type { Certificate } from "./schemas";
+ 
++const ARABIC_SCRIPT = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/;
++
+ /** T-6: its own page size; the app's `@page` (invoices, payslips) is A4
+  * portrait. Rendered later in the document, so it wins while this page is
+  * open. */
+@@ -126,7 +133,8 @@ export function CertificateSheet({
+ 
+ 	return (
+ 		<>
+-			<div className="flex justify-end print:hidden">
++			<div className="flex justify-between gap-2 print:hidden">
++				<PrintBackButton />
+ 				<Button onClick={() => window.print()}>
+ 					{t("certificates.print.print")}
+ 				</Button>
+@@ -188,7 +196,14 @@ export function CertificateSheet({
+ 					<p className="text-xl font-medium">{subjectLabel}</p>
+ 					<p className="text-sm">{countText}</p>
+ 					{message ? (
+-						<p className="max-w-prose whitespace-pre-wrap text-sm italic">
++						// ETQAN-QA-466: Arabic has no italic; the browser would slant
++						// it artificially, so only other scripts are set in italics.
++						<p
++							dir="auto"
++							className={`max-w-prose whitespace-pre-wrap text-sm${
++								ARABIC_SCRIPT.test(message) ? "" : " italic"
++							}`}
++						>
+ 							{message}
+ 						</p>
+ 					) : null}
+diff --git a/src/features/certificates/SubjectCertificatePrint.test.tsx b/src/features/certificates/SubjectCertificatePrint.test.tsx
+index aef69a7..7f57e0b 100644
+--- a/src/features/certificates/SubjectCertificatePrint.test.tsx
++++ b/src/features/certificates/SubjectCertificatePrint.test.tsx
+@@ -39,6 +39,8 @@ describe("SubjectCertificatePrint", () => {
+ 		expect(screen.getByText("Tajweed basics")).toBeInTheDocument();
+ 		expect(screen.getByText(/5 lessons/)).toBeInTheDocument();
+ 		expect(screen.getByText(/verify\/abc/)).toBeInTheDocument();
++		// ETQAN-QA-466: a way back beside Print.
++		expect(screen.getByRole("button", { name: "Back" })).toBeInTheDocument();
+ 	});
+ 
+ 	it("says not found for a bad id without a request", async () => {
+diff --git a/src/features/consultations/BookingWizard.test.tsx b/src/features/consultations/BookingWizard.test.tsx
+index 87d4489..d051f2a 100644
+--- a/src/features/consultations/BookingWizard.test.tsx
++++ b/src/features/consultations/BookingWizard.test.tsx
+@@ -2,9 +2,9 @@ import { screen, waitFor, within } from "@testing-library/react";
+ import userEvent from "@testing-library/user-event";
+ import { AxiosError } from "axios";
+ import { beforeEach, describe, expect, it, vi } from "vitest";
+-import "@/lib/i18n";
+ import { go } from "@/features/gateways/redirect";
+ import { identityApi } from "@/features/identity/api";
++import i18n from "@/lib/i18n";
+ import { renderWithRouter } from "@/test/render";
+ import { BookingWizard } from "./BookingWizard";
+ import { BookPicker } from "./BookPicker";
+@@ -153,6 +153,7 @@ describe("BookingWizard", () => {
+ 			id: 31,
+ 			email: "omar@x.test",
+ 			full_name: "Omar",
++			phone: "+201001234567",
+ 			role: "parent",
+ 			profiles: [],
+ 			children: [{ id: 21, full_name: "Yusuf Omar" }],
+@@ -191,6 +192,46 @@ describe("BookingWizard", () => {
+ 		expect(await screen.findByText("Enter a valid email.")).toBeInTheDocument();
+ 	});
+ 
++	it("asks a signed-in booker without a phone for WhatsApp, in their language (ETQAN-QA-464)", async () => {
++		vi.mocked(identityApi.me).mockResolvedValue({
++			id: 7,
++			email: "s@x.test",
++			full_name: "Sara",
++			role: "student",
++			profiles: [],
++			children: [],
++		} as never);
++		vi.mocked(bookingApi.book).mockRejectedValue(
++			new AxiosError("Bad", "400", undefined, undefined, {
++				status: 400,
++				data: { whatsapp: ["Enter a WhatsApp number."] },
++			} as never),
++		);
++		const user = userEvent.setup();
++		renderWithRouter(<BookingWizard productId={3} signedIn />, {
++			extraPaths: PATHS,
++		});
++		await choose(user);
++		expect(
++			screen.getByText(
++				"Leave name and email empty to use your account's. Your account has no phone number, so enter a WhatsApp number.",
++			),
++		).toBeInTheDocument();
++		const whatsapp = screen.getByLabelText(/WhatsApp/);
++		expect(whatsapp).toHaveAttribute("aria-required", "true");
++		const pay = screen.getByRole("button", { name: "Pay with Stripe" });
++		expect(pay).toBeDisabled();
++		await user.type(whatsapp, "x");
++		await user.click(pay);
++		await i18n.changeLanguage("ar");
++		try {
++			expect(await screen.findByText("أدخل رقم واتساب.")).toBeInTheDocument();
++			expect(screen.queryByText("Enter a WhatsApp number.")).toBeNull();
++		} finally {
++			await i18n.changeLanguage("en");
++		}
++	});
++
+ 	it("says when the consultation cannot be booked", async () => {
+ 		vi.mocked(bookingApi.product).mockRejectedValue(
+ 			new AxiosError("Not found", "404", undefined, undefined, {
+diff --git a/src/features/consultations/BookingWizard.tsx b/src/features/consultations/BookingWizard.tsx
+index ecf0626..7d1f963 100644
+--- a/src/features/consultations/BookingWizard.tsx
++++ b/src/features/consultations/BookingWizard.tsx
+@@ -93,11 +93,16 @@ export function BookingWizard({
+ 	const children =
+ 		signedIn && me.data?.role === "parent" ? (me.data.children ?? []) : [];
+ 	const errors = book.error ? formErrors(book.error, t, INPUTS) : null;
++	// ETQAN-QA-464: the server's only WhatsApp refusal is "none given"
++	// (English); say it in the reader's language.
++	if (errors?.fields.whatsapp)
++		errors.fields.whatsapp = t("consultations.book.whatsappRequired");
++	// ETQAN-QA-464: a blank WhatsApp falls back to the account's phone; an
++	// account without one must give a number, so the field says so.
++	const needsWhatsapp = !signedIn || !me.data?.phone;
+ 	const filled =
+-		signedIn ||
+-		(form.name.trim() !== "" &&
+-			form.email.trim() !== "" &&
+-			form.whatsapp.trim() !== "");
++		(signedIn || (form.name.trim() !== "" && form.email.trim() !== "")) &&
++		(!needsWhatsapp || form.whatsapp.trim() !== "");
+ 	const ready =
+ 		teacher !== undefined && (!slotted || startsAt !== "") && filled;
+ 	const set = (key: keyof typeof form) => (e: { target: { value: string } }) =>
+@@ -196,7 +201,9 @@ export function BookingWizard({
+ 				</legend>
+ 				{signedIn ? (
+ 					<p className="text-sm text-muted-foreground">
+-						{t("consultations.book.accountHint")}
++						{needsWhatsapp
++							? t("consultations.book.accountHintNoPhone")
++							: t("consultations.book.accountHint")}
+ 					</p>
+ 				) : null}
+ 				{children.length > 0 ? (
+@@ -240,7 +247,7 @@ export function BookingWizard({
+ 				<Field
+ 					id="book-whatsapp"
+ 					label={t("consultations.book.whatsapp")}
+-					required={!signedIn}
++					required={needsWhatsapp}
+ 					error={errors?.fields.whatsapp}
+ 				>
+ 					<Input
+diff --git a/src/features/consultations/FamilyConsultations.test.tsx b/src/features/consultations/FamilyConsultations.test.tsx
+index 3f68566..ab2629e 100644
+--- a/src/features/consultations/FamilyConsultations.test.tsx
++++ b/src/features/consultations/FamilyConsultations.test.tsx
+@@ -8,6 +8,12 @@ import { familyRequest } from "./fixtures";
+ 
+ vi.mock("./bookingApi", () => ({ bookingApi: { mine: vi.fn() } }));
+ 
++const paidRequest = {
++	...familyRequest,
++	payment: { ...familyRequest.payment, paid: true, method: "stripe" as const },
++	actions: { ...familyRequest.actions, pay: false },
++};
++
+ const PATHS = [
+ 	"/learning/consultations/$requestId",
+ 	"/learning/consultations/book",
+@@ -17,7 +23,7 @@ describe("FamilyConsultations", () => {
+ 	beforeEach(() => vi.clearAllMocks());
+ 
+ 	it("lists the family's consultations, each opening its page", async () => {
+-		vi.mocked(bookingApi.mine).mockResolvedValue([familyRequest]);
++		vi.mocked(bookingApi.mine).mockResolvedValue([paidRequest]);
+ 		renderWithRouter(<FamilyConsultations />, { extraPaths: PATHS });
+ 		const link = await screen.findByRole("link", {
+ 			name: /Placement consultation/,
+@@ -30,6 +36,26 @@ describe("FamilyConsultations", () => {
+ 		expect(within(link).getByText(/For Yusuf Omar/)).toBeInTheDocument();
+ 	});
+ 
++	it("tells an unpaid booking from the paid one and points to Pay (ETQAN-QA-451)", async () => {
++		vi.mocked(bookingApi.mine).mockResolvedValue([
++			familyRequest,
++			{ ...paidRequest, id: 6 },
++		]);
++		renderWithRouter(<FamilyConsultations />, { extraPaths: PATHS });
++		const links = await screen.findAllByRole("link", {
++			name: /Placement consultation/,
++		});
++		expect(links[0]).toHaveAttribute(
++			"href",
++			expect.stringContaining("/learning/consultations/5"),
++		);
++		expect(within(links[0]).getByText("Awaiting payment")).toBeInTheDocument();
++		expect(within(links[0]).getByText("Pay now")).toBeInTheDocument();
++		expect(within(links[0]).queryByText("Under review")).toBeNull();
++		expect(within(links[1]).getByText("Under review")).toBeInTheDocument();
++		expect(within(links[1]).queryByText("Awaiting payment")).toBeNull();
++	});
++
+ 	it("says when there are none", async () => {
+ 		vi.mocked(bookingApi.mine).mockResolvedValue([]);
+ 		renderWithRouter(<FamilyConsultations />, { extraPaths: PATHS });
+diff --git a/src/features/consultations/FamilyConsultations.tsx b/src/features/consultations/FamilyConsultations.tsx
+index af1a444..408f252 100644
+--- a/src/features/consultations/FamilyConsultations.tsx
++++ b/src/features/consultations/FamilyConsultations.tsx
+@@ -84,9 +84,25 @@ function FamilyRow({ row }: { row: FamilyRequest }) {
+ 							: ""}
+ 					</span>
+ 				</span>
+-				<StatusChip tone={TONE[row.status]}>
+-					{t(`consultations.statuses.${row.status}`)}
+-				</StatusChip>
++				{/* ETQAN-QA-451: a booking still waiting for its payment (one
++				    left at the checkout) must not read like the paid one
++				    "Under review"; it says so and points to Pay on its page. */}
++				{row.actions.pay ? (
++					<span className="flex flex-wrap items-center gap-2">
++						<StatusChip tone="warning">
++							{t("consultations.family.awaitingPayment")}
++						</StatusChip>
++						<span
++							className={buttonVariants({ size: "sm", variant: "outline" })}
++						>
++							{t("consultations.family.payNow")}
++						</span>
++					</span>
++				) : (
++					<StatusChip tone={TONE[row.status]}>
++						{t(`consultations.statuses.${row.status}`)}
++					</StatusChip>
++				)}
+ 			</Link>
+ 		</li>
+ 	);
+diff --git a/src/features/consultations/ProductDialog.test.tsx b/src/features/consultations/ProductDialog.test.tsx
+index 5643f11..d4a6b07 100644
+--- a/src/features/consultations/ProductDialog.test.tsx
++++ b/src/features/consultations/ProductDialog.test.tsx
+@@ -203,6 +203,36 @@ describe("ProductDialog", () => {
+ 		).toBeInTheDocument();
+ 	});
+ 
++	it("asks for a description in words before sending (ETQAN-QA-570)", async () => {
++		const user = userEvent.setup();
++		renderWithRouter(<ProductDialog open onOpenChange={vi.fn()} />);
++		await user.type(await screen.findByLabelText("Name (Arabic)"), "استشارة");
++		await user.type(screen.getByLabelText("Name (English)"), "Placement");
++		await user.type(screen.getByLabelText("Price"), "100");
++		await user.click(screen.getByRole("tab", { name: "Teachers" }));
++		await user.click(await screen.findByLabelText("Ustadh Bilal"));
++		await user.click(screen.getByRole("button", { name: "Save" }));
++		expect(
++			await screen.findByText("Write a description in Arabic or English."),
++		).toBeVisible();
++		expect(screen.queryByText(/consult_product_has_description/)).toBeNull();
++		expect(consultationsApi.createProduct).not.toHaveBeenCalled();
++	});
++
++	it("explains who is listed on the Teachers tab and what the share is (ETQAN-QA-572)", async () => {
++		const user = userEvent.setup();
++		renderWithRouter(<ProductDialog open onOpenChange={vi.fn()} />);
++		await user.click(await screen.findByRole("tab", { name: "Teachers" }));
++		expect(
++			screen.getByText(
++				/Only teachers who have “Offers consultations” turned on/,
++			),
++		).toBeVisible();
++		expect(
++			screen.getByLabelText("Teacher's share (%)"),
++		).toHaveAccessibleDescription(/goes to the teacher/);
++	});
++
+ 	it("shows the product_in_use message when delete is refused", async () => {
+ 		const user = userEvent.setup();
+ 		vi.mocked(consultationsApi.removeProduct).mockRejectedValue(
+diff --git a/src/features/consultations/ProductDialog.tsx b/src/features/consultations/ProductDialog.tsx
+index a1b8db7..8f5401e 100644
+--- a/src/features/consultations/ProductDialog.tsx
++++ b/src/features/consultations/ProductDialog.tsx
+@@ -187,6 +187,12 @@ export function ProductDialog({
+ 		}
+ 		if (form.teacher_ids.length === 0)
+ 			next.teachers = t("consultations.products.validation.teachersRequired");
++		// One description is required (DB check consult_product_has_description);
++		// said here, the server's refusal named the raw constraint (ETQAN-QA-570).
++		if (!form.description_ar.trim() && !form.description_en.trim())
++			next.description_ar = t(
++				"consultations.products.validation.descriptionRequired",
++			);
+ 		setErrors(next);
+ 		setFormError(undefined);
+ 		if (Object.keys(next).length > 0) {
+@@ -452,6 +458,11 @@ export function ProductDialog({
+ 							<legend className="text-sm font-medium">
+ 								{t("consultations.products.fields.teachers")}
+ 							</legend>
++							{/* Only opted-in teachers are listed (consultations.md);
++							    say so and where to opt in (ETQAN-QA-572). */}
++							<p className="text-sm text-muted-foreground">
++								{t("consultations.products.teachersHint")}
++							</p>
+ 							{teachers.data?.length === 0 && choices.length === 0 ? (
+ 								<p className="text-sm text-muted-foreground">
+ 									{t("consultations.products.noTeachers")}
+@@ -497,10 +508,17 @@ export function ProductDialog({
+ 						>
+ 							<Input
+ 								inputMode="decimal"
++								aria-describedby="product-share-hint"
+ 								value={form.share}
+ 								onChange={(e) => set("share", e.target.value)}
+ 							/>
+ 						</Field>
++						<p
++							id="product-share-hint"
++							className="text-sm text-muted-foreground"
++						>
++							{t("consultations.products.shareHint")}
++						</p>
+ 					</div>
+ 					<DialogFooter>
+ 						{product && can("consultation.delete") ? (
+diff --git a/src/features/consultations/ProductsAdmin.test.tsx b/src/features/consultations/ProductsAdmin.test.tsx
+index 0619dbf..7a74d9d 100644
+--- a/src/features/consultations/ProductsAdmin.test.tsx
++++ b/src/features/consultations/ProductsAdmin.test.tsx
+@@ -71,6 +71,17 @@ describe("ProductsAdmin", () => {
+ 		).toBeNull();
+ 	});
+ 
++	it("names every filter with a visible label (ETQAN-QA-551)", async () => {
++		show();
++		for (const name of ["Delivery", "Featured", "Status"]) {
++			const select = await screen.findByLabelText(name);
++			expect(select.tagName).toBe("SELECT");
++			expect(
++				document.querySelector(`label[for="${select.id}"]`)?.textContent,
++			).toBe(name);
++		}
++	});
++
+ 	it("shows an empty state", async () => {
+ 		vi.mocked(consultationsApi.products).mockResolvedValue([]);
+ 		show("consultation.view_any");
+@@ -87,4 +98,12 @@ describe("ProductsAdmin", () => {
+ 		);
+ 		expect(await screen.findByRole("tab", { name: "Booking" })).toBeVisible();
+ 	});
++
++	it("styles the editable name as a link (ETQAN-QA-571)", async () => {
++		show("consultation.view_any", "consultation.update");
++		const name = await screen.findByRole("button", {
++			name: /Placement consultation/,
++		});
++		expect(name).toHaveClass("text-primary-text", "cursor-pointer");
++	});
+ });
+diff --git a/src/features/consultations/ProductsAdmin.tsx b/src/features/consultations/ProductsAdmin.tsx
+index f520484..f6813e4 100644
+--- a/src/features/consultations/ProductsAdmin.tsx
++++ b/src/features/consultations/ProductsAdmin.tsx
+@@ -1,6 +1,7 @@
+ import { MessagesSquare } from "lucide-react";
+ import { useState } from "react";
+ import { useTranslation } from "react-i18next";
++import { FilterSelect } from "@/components/FilterSelect";
+ import { useCan } from "@/features/identity/permissions";
+ import { formatMoney } from "@/lib/money";
+ import {
+@@ -9,7 +10,6 @@ import {
+ 	CardContent,
+ 	EmptyState,
+ 	FormError,
+-	Select,
+ 	Spinner,
+ 	StatusChip,
+ } from "@/ui";
+@@ -38,9 +38,8 @@ export function ProductsAdmin() {
+ 	return (
+ 		<div className="flex flex-col gap-4">
+ 			<div className="flex flex-wrap items-end gap-2">
+-				<Select
+-					aria-label={t("consultations.products.filters.mode")}
+-					className="w-auto"
++				<FilterSelect
++					label={t("consultations.products.filters.mode")}
+ 					value={mode}
+ 					onChange={(e) => setMode(e.target.value)}
+ 				>
+@@ -50,20 +49,18 @@ export function ProductsAdmin() {
+ 							{t(`consultations.modes.${m}`)}
+ 						</option>
+ 					))}
+-				</Select>
+-				<Select
+-					aria-label={t("consultations.products.filters.featured")}
+-					className="w-auto"
++				</FilterSelect>
++				<FilterSelect
++					label={t("consultations.products.filters.featured")}
+ 					value={featured}
+ 					onChange={(e) => setFeatured(e.target.value)}
+ 				>
+ 					<option value="">{t("consultations.any")}</option>
+ 					<option value="true">{t("consultations.yes")}</option>
+ 					<option value="false">{t("consultations.no")}</option>
+-				</Select>
+-				<Select
+-					aria-label={t("consultations.products.filters.status")}
+-					className="w-auto"
++				</FilterSelect>
++				<FilterSelect
++					label={t("consultations.products.filters.status")}
+ 					value={status}
+ 					onChange={(e) => setStatus(e.target.value)}
+ 				>
+@@ -74,7 +71,7 @@ export function ProductsAdmin() {
+ 					<option value="archived">
+ 						{t("consultations.products.productStatuses.archived")}
+ 					</option>
+-				</Select>
++				</FilterSelect>
+ 				{can("consultation.create") ? (
+ 					<Button className="ms-auto" onClick={() => setEditing("new")}>
+ 						{t("consultations.products.add")}
+@@ -129,7 +126,9 @@ export function ProductsAdmin() {
+ 										{can("consultation.update") ? (
+ 											<button
+ 												type="button"
+-												className="flex items-center gap-3 font-medium text-start"
++												// Styled as the courses/packages name links: it is the
++												// row's only way to edit (ETQAN-QA-571).
++												className="flex cursor-pointer items-center gap-3 font-medium text-start text-primary-text underline-offset-4 hover:underline"
+ 												onClick={() => setEditing(p)}
+ 											>
+ 												{p.cover_url ? (
+diff --git a/src/features/curriculum/MyProgress.test.tsx b/src/features/curriculum/MyProgress.test.tsx
+index 802adbb..617d008 100644
+--- a/src/features/curriculum/MyProgress.test.tsx
++++ b/src/features/curriculum/MyProgress.test.tsx
+@@ -41,7 +41,7 @@ describe("MyProgress", () => {
+ 		renderWithRouter(<MyProgress />);
+ 		expect(await screen.findByText("Quran")).toBeInTheDocument();
+ 		expect(screen.getByText("Juz' Amma")).toBeInTheDocument();
+-		expect(screen.getByText("1 / 2")).toBeInTheDocument();
++		expect(screen.getByText("Topics completed: 1 of 2")).toBeInTheDocument();
+ 		expect(curriculumApi.summary).toHaveBeenCalledWith(11);
+ 		await user.click(screen.getByText("Quran"));
+ 		expect(await screen.findByText("An-Nas")).toBeInTheDocument();
+@@ -72,6 +72,44 @@ describe("MyProgress", () => {
+ 		await waitFor(() => expect(curriculumApi.summary).toHaveBeenCalledWith(12));
+ 	});
+ 
++	it("says a level has no topics instead of a bare 0 / 0 (ETQAN-QA-465)", async () => {
++		vi.mocked(identityApi.me).mockResolvedValue(student);
++		vi.mocked(curriculumApi.summary).mockResolvedValue([
++			{ ...summaryRow, completed: 0, total: 0 },
++		]);
++		renderWithRouter(<MyProgress />);
++		expect(
++			await screen.findByText("No topics in this level yet."),
++		).toBeInTheDocument();
++		expect(screen.queryByText("0 / 0")).toBeNull();
++		expect(screen.queryByRole("progressbar")).toBeNull();
++	});
++
++	it("opens on the child kept in the URL and reports a new pick (ETQAN-QA-465)", async () => {
++		const user = userEvent.setup();
++		const onChildChange = vi.fn();
++		vi.mocked(identityApi.me).mockResolvedValue(
++			parent([
++				{ id: 11, full_name: "Yusuf", student_profile_id: 1 },
++				{ id: 12, full_name: "Aisha", student_profile_id: 2 },
++			]),
++		);
++		renderWithRouter(<MyProgress child={12} onChildChange={onChildChange} />);
++		await waitFor(() => expect(curriculumApi.summary).toHaveBeenCalledWith(12));
++		expect(curriculumApi.summary).not.toHaveBeenCalledWith(11);
++		await user.selectOptions(await screen.findByLabelText("Child"), "11");
++		expect(onChildChange).toHaveBeenCalledWith(11);
++	});
++
++	it("ignores a child id from another family in the URL (ETQAN-QA-465)", async () => {
++		vi.mocked(identityApi.me).mockResolvedValue(
++			parent([{ id: 11, full_name: "Yusuf", student_profile_id: 1 }]),
++		);
++		renderWithRouter(<MyProgress child={99} />);
++		await waitFor(() => expect(curriculumApi.summary).toHaveBeenCalledWith(11));
++		expect(curriculumApi.summary).not.toHaveBeenCalledWith(99);
++	});
++
+ 	it("shows an empty state for a parent without children", async () => {
+ 		vi.mocked(identityApi.me).mockResolvedValue(parent([]));
+ 		renderWithRouter(<MyProgress />);
+diff --git a/src/features/curriculum/MyProgress.tsx b/src/features/curriculum/MyProgress.tsx
+index aa359d2..206900b 100644
+--- a/src/features/curriculum/MyProgress.tsx
++++ b/src/features/curriculum/MyProgress.tsx
+@@ -17,13 +17,22 @@ import { curriculumErrorText } from "./errors";
+ import { useProgress, useProgressSummary } from "./queries";
+ import { localName, type ProgressSummary } from "./schemas";
+ 
+-export function MyProgress() {
++export function MyProgress({
++	child,
++	onChildChange,
++}: {
++	/** ETQAN-QA-465: the child chosen before (the page's `?student=`), so a
++	 * refresh keeps them; ignored unless it is one of the parent's own. */
++	child?: number;
++	onChildChange?: (id: number) => void;
++} = {}) {
+ 	const { t } = useTranslation();
+ 	const { data: me, isPending } = useMe();
+ 	const children = me?.children ?? [];
+ 	const isParent = me?.role === "parent";
+-	const [picked, setPicked] = useState<number>();
+-	const student = isParent ? (picked ?? children[0]?.id) : me?.id;
++	const [picked, setPicked] = useState<number | undefined>(child);
++	const own = children.some((c) => c.id === picked) ? picked : undefined;
++	const student = isParent ? (own ?? children[0]?.id) : me?.id;
+ 	const summary = useProgressSummary(student);
+ 
+ 	if (isPending) {
+@@ -41,7 +50,11 @@ export function MyProgress() {
+ 					<Select
+ 						className="w-auto"
+ 						value={student ?? ""}
+-						onChange={(e) => setPicked(Number(e.target.value))}
++						onChange={(e) => {
++							const id = Number(e.target.value);
++							setPicked(id);
++							onChildChange?.(id);
++						}}
+ 					>
+ 						{children.map((child) => (
+ 							<option key={child.id} value={child.id}>
+@@ -110,18 +123,28 @@ function CourseCard({
+ 						? localName(row.level, i18n.language)
+ 						: t("curriculum.progress.noLevel")}
+ 				</p>
+-				<p className="text-sm">
+-					{t("curriculum.progress.completedOf", {
+-						completed: row.completed,
+-						total: row.total,
+-					})}
+-				</p>
+-				<Meter
+-					role="progressbar"
+-					label={t("curriculum.progress.completed")}
+-					value={row.completed}
+-					max={row.total}
+-				/>
++				{/* ETQAN-QA-465: say what is counted, and a level with no
++				    topics says so instead of a bare "0 / 0" and an empty bar. */}
++				{row.total > 0 ? (
++					<>
++						<p className="text-sm">
++							{t("curriculum.progress.topicsOf", {
++								completed: row.completed,
++								total: row.total,
++							})}
++						</p>
++						<Meter
++							role="progressbar"
++							label={t("curriculum.progress.completed")}
++							value={row.completed}
++							max={row.total}
++						/>
++					</>
++				) : (
++					<p className="text-sm text-muted-foreground">
++						{t("curriculum.progress.noTopics")}
++					</p>
++				)}
+ 			</CardContent>
+ 		</Card>
+ 	);
+diff --git a/src/features/homework/MyHomework.test.tsx b/src/features/homework/MyHomework.test.tsx
+index 4d5c6d3..e705d6b 100644
+--- a/src/features/homework/MyHomework.test.tsx
++++ b/src/features/homework/MyHomework.test.tsx
+@@ -146,6 +146,18 @@ describe("MyHomework", () => {
+ 		);
+ 	});
+ 
++	it("marks an answered homework as awaiting review, not incomplete (ETQAN-QA-458)", async () => {
++		vi.mocked(homeworkApi.list).mockResolvedValue(
++			page([homework, answeredHomework]),
++		);
++		renderWithRouter(<MyHomework />);
++		await screen.findAllByText("Memorise Al-Naba 1-10");
++		const items = screen.getAllByRole("listitem");
++		expect(items[0]).toHaveTextContent("Incomplete");
++		expect(items[1]).toHaveTextContent("Awaiting review");
++		expect(items[1]).not.toHaveTextContent("Incomplete");
++	});
++
+ 	it("shows an empty state", async () => {
+ 		vi.mocked(homeworkApi.list).mockResolvedValue(page([]));
+ 		renderWithRouter(<MyHomework />);
+diff --git a/src/features/homework/MyHomework.tsx b/src/features/homework/MyHomework.tsx
+index 835ee6a..f3bbfef 100644
+--- a/src/features/homework/MyHomework.tsx
++++ b/src/features/homework/MyHomework.tsx
+@@ -107,13 +107,21 @@ export function MyHomework() {
+ 											{when.format(new Date(h.created_at))}
+ 										</span>
+ 									</button>
+-									<StatusChip
+-										tone={h.status === "complete" ? "live" : "neutral"}
+-									>
+-										{h.status === "complete"
+-											? t("homework.completed")
+-											: t("homework.status.incomplete")}
+-									</StatusChip>
++									{/* ETQAN-QA-458 (student twin of ETQAN-QA-415): an
++									    answer sent but not yet reviewed isn't "incomplete". */}
++									{h.status !== "complete" && h.answered_at ? (
++										<StatusChip className="bg-primary text-primary-foreground">
++											{t("homework.status.awaitingReview")}
++										</StatusChip>
++									) : (
++										<StatusChip
++											tone={h.status === "complete" ? "live" : "neutral"}
++										>
++											{h.status === "complete"
++												? t("homework.completed")
++												: t("homework.status.incomplete")}
++										</StatusChip>
++									)}
+ 								</CardContent>
+ 							</Card>
+ 						</li>
+diff --git a/src/features/recorded/MyCourses.test.tsx b/src/features/recorded/MyCourses.test.tsx
+index ec611ec..6b83f60 100644
+--- a/src/features/recorded/MyCourses.test.tsx
++++ b/src/features/recorded/MyCourses.test.tsx
+@@ -77,6 +77,34 @@ describe("MyCourses", () => {
+ 		).toBeInTheDocument();
+ 	});
+ 
++	it("names the chosen child in a parent's empty state (ETQAN-QA-468)", async () => {
++		const user = userEvent.setup();
++		asMe({
++			id: 30,
++			role: "parent",
++			children: [
++				{ id: 21, full_name: "Yusuf", student_profile_id: 1 },
++				{ id: 22, full_name: "Maryam", student_profile_id: 2 },
++			],
++		});
++		vi.mocked(recordedApi.my).mockResolvedValue([]);
++		renderWithRouter(<MyCourses />);
++		expect(
++			await screen.findByText(
++				"\u2068Yusuf\u2069 is not enrolled in any recorded course yet.",
++			),
++		).toBeInTheDocument();
++		expect(
++			screen.queryByText("You are not enrolled in any recorded course yet."),
++		).toBeNull();
++		await user.selectOptions(screen.getByLabelText("Child"), "22");
++		expect(
++			await screen.findByText(
++				"\u2068Maryam\u2069 is not enrolled in any recorded course yet.",
++			),
++		).toBeInTheDocument();
++	});
++
+ 	it("shows an error", async () => {
+ 		asMe({ id: 21, role: "student" });
+ 		vi.mocked(recordedApi.my).mockRejectedValue(new Error("x"));
+diff --git a/src/features/recorded/MyCourses.tsx b/src/features/recorded/MyCourses.tsx
+index b38c007..a2ca60e 100644
+--- a/src/features/recorded/MyCourses.tsx
++++ b/src/features/recorded/MyCourses.tsx
+@@ -3,6 +3,7 @@ import { Clapperboard } from "lucide-react";
+ import { useState } from "react";
+ import { useTranslation } from "react-i18next";
+ import { useMe } from "@/features/identity/queries";
++import { bidiName } from "@/lib/bidi";
+ import {
+ 	Card,
+ 	CardContent,
+@@ -24,6 +25,7 @@ export function MyCourses() {
+ 	const isParent = me?.role === "parent";
+ 	const [picked, setPicked] = useState<number>();
+ 	const child = isParent ? (picked ?? children[0]?.id) : undefined;
++	const childName = children.find((c) => c.id === child)?.full_name;
+ 	const list = useMyCourses(
+ 		child,
+ 		!isPending && (!isParent || child !== undefined),
+@@ -57,7 +59,16 @@ export function MyCourses() {
+ 			) : !list.data || list.data.length === 0 ? (
+ 				<Card>
+ 					<CardContent>
+-						<EmptyState icon={Clapperboard} title={t("recorded.my.empty")} />
++						{/* ETQAN-QA-468: a parent reads about the chosen child,
++						    not "you are not enrolled". */}
++						<EmptyState
++							icon={Clapperboard}
++							title={
++								isParent && childName
++									? t("recorded.my.emptyChild", { name: bidiName(childName) })
++									: t("recorded.my.empty")
++							}
++						/>
+ 					</CardContent>
+ 				</Card>
+ 			) : (
+diff --git a/src/features/reviews/RateLessons.test.tsx b/src/features/reviews/RateLessons.test.tsx
+index bef0531..24592ed 100644
+--- a/src/features/reviews/RateLessons.test.tsx
++++ b/src/features/reviews/RateLessons.test.tsx
+@@ -1,4 +1,4 @@
+-import { screen, waitFor, within } from "@testing-library/react";
++import { fireEvent, screen, waitFor, within } from "@testing-library/react";
+ import userEvent from "@testing-library/user-event";
+ import { AxiosError, type AxiosResponse } from "axios";
+ import { beforeEach, describe, expect, it, vi } from "vitest";
+@@ -220,4 +220,58 @@ describe("RateLessons", () => {
+ 		expect(group).toHaveAttribute("aria-invalid", "true");
+ 		expect(group.getAttribute("aria-describedby")).toBe(error.id);
+ 	});
++
++	it("tells two lessons on one day apart by their start time (ETQAN-QA-459)", async () => {
++		vi.mocked(reviewsApi.reviewable).mockResolvedValue([
++			{ ...session, id: 248, starts_at: "2026-10-01T10:00:00Z" },
++			{ ...session, id: 249, starts_at: "2026-10-01T12:30:00Z" },
++		]);
++		renderWithRouter(<RateLessons />);
++		expect(
++			await screen.findByRole("radiogroup", {
++				name: "Rating for \u2068Oct 1, 2026\u2069 \u206810:00\u2069",
++			}),
++		).toBeInTheDocument();
++		expect(
++			screen.getByRole("radiogroup", {
++				name: "Rating for \u2068Oct 1, 2026\u2069 \u206812:30\u2069",
++			}),
++		).toBeInTheDocument();
++		expect(screen.getByText(/12:30.*Quran · Bilal/)).toBeVisible();
++	});
++
++	it("caps the comment at the server's 2000 characters and counts them (ETQAN-QA-460)", async () => {
++		const user = userEvent.setup();
++		renderWithRouter(<RateLessons />);
++		const scope = within(
++			(await screen.findByText("To review")).closest("section") as HTMLElement,
++		);
++		const box = await scope.findByLabelText("Comment");
++		expect(box).toHaveAttribute("maxLength", "2000");
++		expect(scope.getByText("Characters: 0 of 2000")).toBeVisible();
++		await user.type(box, "Good");
++		expect(scope.getByText("Characters: 4 of 2000")).toBeVisible();
++		expect(box.getAttribute("aria-describedby")).toContain(
++			scope.getByText("Characters: 4 of 2000").id,
++		);
++	});
++
++	it("saves once on a double click (ETQAN-QA-461)", async () => {
++		const user = userEvent.setup();
++		let finish: (r: typeof review) => void = () => {};
++		vi.mocked(reviewsApi.write).mockReturnValue(
++			new Promise((resolve) => {
++				finish = resolve;
++			}),
++		);
++		renderWithRouter(<RateLessons />);
++		await user.click(await screen.findByRole("radio", { name: "5 stars" }));
++		const save = screen.getByRole("button", { name: "Save review" });
++		fireEvent.click(save);
++		fireEvent.click(save);
++		finish(review);
++		await waitFor(() => expect(reviewsApi.write).toHaveBeenCalledTimes(1));
++		await screen.findAllByText("Review saved.");
++		expect(reviewsApi.write).toHaveBeenCalledTimes(1);
++	});
+ });
+diff --git a/src/features/reviews/RateLessons.tsx b/src/features/reviews/RateLessons.tsx
+index 244c961..84231a5 100644
+--- a/src/features/reviews/RateLessons.tsx
++++ b/src/features/reviews/RateLessons.tsx
+@@ -3,7 +3,7 @@ import { useState } from "react";
+ import { useTranslation } from "react-i18next";
+ import { Pager } from "@/components/Pager";
+ import { useMe } from "@/features/identity/queries";
+-import { formatDay } from "@/lib/zoned-time";
++import { formatDay, wallTime } from "@/lib/zoned-time";
+ import {
+ 	Button,
+ 	Card,
+@@ -23,22 +23,35 @@ import { localName, type Review, type SessionRef } from "./schemas";
+ 
+ const PAGE_SIZE = 25;
+ 
++/** ETQAN-QA-459: a lesson as its day and start time on the viewer's clock,
++ * so two lessons on one day read apart. Each part is isolated (FSI…PDI) so
++ * an Arabic day and a time don't run together (ETQAN-QA-207). */
++function useLessonWhen() {
++	const { i18n } = useTranslation();
++	const { data: me } = useMe();
++	const zone = me?.timezone ?? "UTC";
++	return (session: SessionRef) => {
++		const day = formatDay(session.occurs_on, i18n.language);
++		if (!session.starts_at) return day;
++		const time = wallTime(new Date(session.starts_at), zone, i18n.language);
++		return `\u2068${day}\u2069 \u2068${time}\u2069`;
++	};
++}
++
+ function ToReview({ session }: { session: SessionRef }) {
+ 	const { t, i18n } = useTranslation();
++	const when = useLessonWhen()(session);
+ 	return (
+ 		<Card>
+ 			<CardContent className="flex flex-col gap-3 pt-4">
+ 				<p className="text-sm font-medium">
+-					{formatDay(session.occurs_on, i18n.language)} ·{" "}
+-					{localName(session.course, i18n.language)}
++					{when} · {localName(session.course, i18n.language)}
+ 					{session.teacher ? ` · ${session.teacher.full_name}` : ""}
+ 				</p>
+ 				<ReviewEditor
+ 					sessionId={session.id}
+ 					idPrefix={`rate-${session.id}`}
+-					groupLabel={t("reviews.ratingFor", {
+-						date: formatDay(session.occurs_on, i18n.language),
+-					})}
++					groupLabel={t("reviews.ratingFor", { date: when })}
+ 					submitLabel={t("reviews.save")}
+ 				/>
+ 			</CardContent>
+@@ -50,20 +63,19 @@ function Mine({ review }: { review: Review }) {
+ 	const { t, i18n } = useTranslation();
+ 	const [editing, setEditing] = useState(false);
+ 	const { session } = review;
++	const when = useLessonWhen()(session);
+ 	return (
+ 		<Card>
+ 			<CardContent className="flex flex-col gap-2 pt-4">
+ 				<p className="text-sm font-medium">
+-					{formatDay(session.occurs_on, i18n.language)} ·{" "}
+-					{localName(session.course, i18n.language)}
++					{when} · {localName(session.course, i18n.language)}
++					{session.teacher ? ` · ${session.teacher.full_name}` : ""}
+ 				</p>
+ 				{editing ? (
+ 					<ReviewEditor
+ 						sessionId={session.id}
+ 						idPrefix={`mine-${review.id}`}
+-						groupLabel={t("reviews.ratingFor", {
+-							date: formatDay(session.occurs_on, i18n.language),
+-						})}
++						groupLabel={t("reviews.ratingFor", { date: when })}
+ 						initial={{ rating: review.rating, comment: review.comment }}
+ 						submitLabel={t("reviews.update")}
+ 						onSaved={() => setEditing(false)}
+diff --git a/src/features/reviews/ReviewEditor.tsx b/src/features/reviews/ReviewEditor.tsx
+index 8570c41..8dadcb2 100644
+--- a/src/features/reviews/ReviewEditor.tsx
++++ b/src/features/reviews/ReviewEditor.tsx
+@@ -1,10 +1,13 @@
+-import { type ReactNode, useState } from "react";
++import { type ReactNode, useRef, useState } from "react";
+ import { useTranslation } from "react-i18next";
+ import { Button, Field, FormError, Textarea, toast } from "@/ui";
+ import { formErrors } from "./errors";
+ import { useWriteReview } from "./queries";
+ import { StarRating } from "./StarRating";
+ 
++/** The server's limit on a comment (spec B6c, ReviewInput). */
++export const COMMENT_MAX = 2000;
++
+ interface Props {
+ 	/** Which session the review is for; undefined disables saving. */
+ 	sessionId?: number;
+@@ -34,14 +37,18 @@ export function ReviewEditor({
+ 	const [comment, setComment] = useState(initial?.comment ?? "");
+ 	const [errors, setErrors] = useState<Record<string, string>>({});
+ 	const [formError, setFormError] = useState<string>();
++	// ETQAN-QA-461: `isPending` disables the button only after a render, so a
++	// double click would send two saves; this ref stops the second at once.
++	const saving = useRef(false);
+ 
+ 	async function submit(e: React.FormEvent) {
+ 		e.preventDefault();
+-		if (sessionId === undefined) return;
++		if (sessionId === undefined || saving.current) return;
+ 		if (rating < 1) {
+ 			setErrors({ rating: t("reviews.ratingRequired") });
+ 			return;
+ 		}
++		saving.current = true;
+ 		try {
+ 			await write.mutateAsync({ sessionId, rating, comment });
+ 			setErrors({});
+@@ -56,6 +63,8 @@ export function ReviewEditor({
+ 			const result = formErrors(error, t, ["rating", "comment"]);
+ 			setErrors(result.fields);
+ 			setFormError(result.form);
++		} finally {
++			saving.current = false;
+ 		}
+ 	}
+ 
+@@ -81,12 +90,26 @@ export function ReviewEditor({
+ 				label={t("reviews.comment")}
+ 				error={errors.comment}
+ 			>
++				{/* ETQAN-QA-460: the field holds what the server keeps, and
++				    says how much room is left, so a long comment can't fail
++				    only after saving. */}
+ 				<Textarea
+ 					value={comment}
++					maxLength={COMMENT_MAX}
++					aria-describedby={`${idPrefix}-comment-count`}
+ 					placeholder={t("reviews.commentPlaceholder")}
+ 					onChange={(e) => setComment(e.target.value)}
+ 				/>
+ 			</Field>
++			<p
++				id={`${idPrefix}-comment-count`}
++				className="-mt-2 text-end text-xs text-muted-foreground"
++			>
++				{t("reviews.commentCount", {
++					used: comment.length,
++					max: COMMENT_MAX,
++				})}
++			</p>
+ 			<div className="flex flex-wrap gap-2">
+ 				<Button
+ 					type="submit"
+diff --git a/src/features/reviews/schemas.ts b/src/features/reviews/schemas.ts
+index df5022e..a0595e6 100644
+--- a/src/features/reviews/schemas.ts
++++ b/src/features/reviews/schemas.ts
+@@ -20,6 +20,8 @@ export interface Named {
+ export interface SessionRef {
+ 	id: number;
+ 	occurs_on: string;
++	/** The start instant (UTC); ETQAN-QA-459. Optional for older payloads. */
++	starts_at?: string;
+ 	course: Named;
+ 	teacher: Person | null;
+ 	student: Person | null;
+diff --git a/src/features/scheduling/FamilySubscriptions.test.tsx b/src/features/scheduling/FamilySubscriptions.test.tsx
+index 7158378..b5751c6 100644
+--- a/src/features/scheduling/FamilySubscriptions.test.tsx
++++ b/src/features/scheduling/FamilySubscriptions.test.tsx
+@@ -53,7 +53,12 @@ describe("FamilySubscriptions", () => {
+ 	it("shows used of total, extras, the end date and the grace notice", async () => {
+ 		renderWithRouter(<FamilySubscriptions />);
+ 		expect(await screen.findByText("3 of 8 sessions")).toBeInTheDocument();
+-		expect(screen.getByText("Ends on Jun 30, 2026")).toBeInTheDocument();
++		// ETQAN-QA-455: used and left in words, and the period's start.
++		expect(screen.getByText("Used: 3 · Left: 5")).toBeInTheDocument();
++		expect(screen.getByText("Used: 10 · Left: 0")).toBeInTheDocument();
++		expect(
++			screen.getAllByText("From Jun 1, 2026 to Jun 30, 2026"),
++		).toHaveLength(2);
+ 		expect(screen.getByText("10 of 8 sessions")).toBeInTheDocument();
+ 		expect(screen.getByText("+2 extra")).toBeInTheDocument();
+ 		expect(screen.getByText("In grace until Jul 7, 2026")).toBeInTheDocument();
+diff --git a/src/features/scheduling/FamilySubscriptions.tsx b/src/features/scheduling/FamilySubscriptions.tsx
+index c5ac9b9..007053c 100644
+--- a/src/features/scheduling/FamilySubscriptions.tsx
++++ b/src/features/scheduling/FamilySubscriptions.tsx
+@@ -48,11 +48,25 @@ export function SubscriptionCard({ sub }: { sub: Subscription }) {
+ 					total={sub.sessions_total}
+ 					extra={sub.extra_sessions}
+ 				/>
++				{/* ETQAN-QA-455: say which number is used and how many are
++				    left, and when the period started, not only "3 of 8". */}
++				<p className="text-sm font-medium">
++					{t("scheduling.family.usedLeft", {
++						used: sub.sessions_used + sub.carried_over_sessions,
++						left: Math.max(0, sub.sessions_remaining),
++					})}
++				</p>
+ 				<p className="text-sm">
+-					{sub.in_grace
+-						? t("scheduling.inGraceUntil", { date: day(sub.grace_ends_on) })
+-						: t("scheduling.family.endsOn", { date: day(sub.ends_on) })}
++					{t("scheduling.family.period", {
++						start: day(sub.starts_on),
++						end: day(sub.ends_on),
++					})}
+ 				</p>
++				{sub.in_grace ? (
++					<p className="text-sm">
++						{t("scheduling.inGraceUntil", { date: day(sub.grace_ends_on) })}
++					</p>
++				) : null}
+ 			</CardContent>
+ 		</Card>
+ 	);
+diff --git a/src/features/shell/AppSidebar.test.tsx b/src/features/shell/AppSidebar.test.tsx
+index 21ed595..6f3b712 100644
+--- a/src/features/shell/AppSidebar.test.tsx
++++ b/src/features/shell/AppSidebar.test.tsx
+@@ -27,8 +27,18 @@ function renderSidebar(onNavigate = () => {}, initial = "/") {
+ 		path: "/account",
+ 		component: () => null,
+ 	});
++	const bundle = createRoute({
++		getParentRoute: () => rootRoute,
++		path: "/scheduling/bundles/$bundleId",
++		component: () => null,
++	});
++	const store = createRoute({
++		getParentRoute: () => rootRoute,
++		path: "/learning/recorded/store/$playlistId",
++		component: () => null,
++	});
+ 	const router = createRouter({
+-		routeTree: rootRoute.addChildren([idx, profile]),
++		routeTree: rootRoute.addChildren([idx, profile, bundle, store]),
+ 		history: createMemoryHistory({ initialEntries: [initial] }),
+ 	});
+ 	return render(<RouterProvider router={router} />);
+@@ -44,6 +54,28 @@ describe("AppSidebar", () => {
+ 		);
+ 	});
+ 
++	it("keeps Subscriptions active on a bundle's page (ETQAN-QA-211)", async () => {
++		renderSidebar(() => {}, "/scheduling/bundles/9");
++		const subscriptions = await screen.findByRole("link", {
++			name: "Subscriptions",
++		});
++		expect(subscriptions).toHaveAttribute("aria-current", "page");
++		expect(screen.getByRole("link", { name: /^home$/i })).not.toHaveAttribute(
++			"aria-current",
++		);
++	});
++
++	it("marks only the store active on a store page, not My recorded courses too (ETQAN-QA-462)", async () => {
++		renderSidebar(() => {}, "/learning/recorded/store/1");
++		const store = await screen.findByRole("link", {
++			name: "Recorded courses store",
++		});
++		expect(store).toHaveAttribute("aria-current", "page");
++		expect(
++			screen.getByRole("link", { name: "My recorded courses" }),
++		).not.toHaveAttribute("aria-current");
++	});
++
+ 	it("gives each nav link a 44px-minimum touch target", async () => {
+ 		renderSidebar(() => {}, "/");
+ 		const home = await screen.findByRole("link", { name: /^home$/i });
+diff --git a/src/features/shell/AppSidebar.tsx b/src/features/shell/AppSidebar.tsx
+index 8cf93b8..aedec1e 100644
+--- a/src/features/shell/AppSidebar.tsx
++++ b/src/features/shell/AppSidebar.tsx
+@@ -1,16 +1,22 @@
+-import { Link } from "@tanstack/react-router";
++import { Link, useRouterState } from "@tanstack/react-router";
+ import { Fragment } from "react";
+ import { useTranslation } from "react-i18next";
++import type { Role } from "@/features/identity/schemas";
+ import {
+ 	groupNavItems,
+ 	NAV_BADGE_LABELS,
+ 	type NavBadge,
+ 	type NavItem,
++	roleLabelKey,
+ } from "./nav";
+ 
+ const LINK_CLASSES =
+ 	"relative flex min-h-11 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground aria-[current=page]:bg-[color-mix(in_oklab,var(--color-accent)_14%,var(--color-card))] aria-[current=page]:font-semibold aria-[current=page]:text-foreground aria-[current=page]:before:absolute aria-[current=page]:before:inset-y-1.5 aria-[current=page]:before:start-0 aria-[current=page]:before:w-1 aria-[current=page]:before:rounded-full aria-[current=page]:before:bg-accent aria-[current=page]:before:content-['']";
+ 
++/** `path` is `to` or a page below it. */
++const under = (path: string, to: string) =>
++	path === to || path.startsWith(`${to}/`);
++
+ // As the notification bell's count.
+ const MAX_BADGE = 99;
+ 
+@@ -18,36 +24,49 @@ export function AppSidebar({
+ 	items,
+ 	onNavigate,
+ 	badges = {},
++	role,
+ }: {
+ 	items: NavItem[];
+ 	onNavigate?: () => void;
+ 	/** B9c: the counts beside the items that name a badge. */
+ 	badges?: Partial<Record<NavBadge, number>>;
++	/** ETQAN-QA-115: a parent's learning labels name their children. */
++	role?: Role;
+ }) {
+ 	const { t } = useTranslation();
++	const path = useRouterState({ select: (s) => s.location.pathname });
+ 	return (
+ 		<nav aria-label={t("nav.primary")} className="flex flex-col gap-1 p-3">
+ 			{groupNavItems(items).map((group, index) => (
+ 				<Fragment key={group.group ?? `ungrouped-${index}`}>
+ 					{group.group ? (
+ 						<p className="px-3 pt-4 pb-1 text-xs font-semibold text-muted-foreground">
+-							{t(`nav.group.${group.group}`)}
++							{t(roleLabelKey(`nav.group.${group.group}`, role))}
+ 						</p>
+ 					) : null}
+ 					{group.items.map((item) => {
+ 						const Icon = item.icon;
+ 						const count = item.badge ? (badges[item.badge] ?? 0) : 0;
++						const alsoHere = item.also?.some((p) => path.startsWith(p));
++						// ETQAN-QA-462: a deeper item that matches the page (the
++						// store under "my recorded courses") owns it, so this one
++						// matches only its exact path.
++						const deeperHere = items.some(
++							(other) =>
++								other.to.startsWith(`${item.to}/`) && under(path, other.to),
++						);
+ 						return (
+ 							<Link
+ 								key={item.to}
+ 								to={item.to}
+-								activeOptions={{ exact: item.to === "/" }}
++								activeOptions={{ exact: item.to === "/" || deeperHere }}
+ 								activeProps={{ "aria-current": "page" }}
++								aria-current={alsoHere ? "page" : undefined}
+ 								onClick={onNavigate}
+ 								className={LINK_CLASSES}
+ 							>
+ 								<Icon className="size-4 shrink-0" />
+-								{t(item.labelKey)}
++								{t(roleLabelKey(item.labelKey, role))}
+ 								{item.badge && count > 0 ? (
+ 									<span className="ms-auto min-w-5 rounded-full bg-destructive px-1.5 text-center text-xs font-semibold leading-5 text-destructive-foreground">
+ 										<span aria-hidden="true">
+diff --git a/src/locales/ar/consultations.json b/src/locales/ar/consultations.json
+index c901417..d33b18a 100644
+--- a/src/locales/ar/consultations.json
++++ b/src/locales/ar/consultations.json
+@@ -60,6 +60,8 @@
+ 		"empty": "لا توجد استشارات بعد.",
+ 		"notOffering": "لم يعد يقدّم الاستشارات",
+ 		"noTeachers": "لا يوجد معلم يقدم استشارات بعد. فعّل ذلك من صفحة المعلم.",
++		"teachersHint": "تظهر هنا فقط أسماء المعلمين الذين فعّلوا «يقدم استشارات». فعّلها لمعلم آخر من صفحته في قائمة المعلمين.",
++		"shareHint": "النسبة التي يحصل عليها المعلم من المبلغ المدفوع لكل استشارة مكتملة. اتركه فارغًا لـ 0٪.",
+ 		"deleteConfirm": "حذف هذه الاستشارة؟ لا يمكن التراجع.",
+ 		"saved": "تم حفظ الاستشارة.",
+ 		"deleted": "تم حذف الاستشارة.",
+@@ -80,6 +82,7 @@
+ 		"validation": {
+ 			"amountInvalid": "أدخل مبلغًا صحيحًا.",
+ 			"shareInvalid": "أدخل نسبة من 0 إلى 100.",
++			"descriptionRequired": "اكتب وصفًا بالعربية أو بالإنجليزية.",
+ 			"teachersRequired": "اختر معلمًا واحدًا على الأقل."
+ 		},
+ 		"productStatuses": {
+@@ -303,6 +306,8 @@
+ 		"academyTime": "بتوقيت الأكاديمية: {{time}}",
+ 		"details": "بياناتك",
+ 		"accountHint": "اترك الحقل فارغًا لاستخدام بيانات حسابك.",
++		"accountHintNoPhone": "اترك الاسم والبريد فارغين لاستخدام بيانات حسابك. حسابك بلا رقم هاتف، فأدخل رقم واتساب.",
++		"whatsappRequired": "أدخل رقم واتساب.",
+ 		"child": "لـ",
+ 		"self": "لي",
+ 		"name": "الاسم",
+@@ -351,7 +356,9 @@
+ 		"subtitle": "احجز استشارة وتابع حجوزاتك.",
+ 		"book": "احجز استشارة",
+ 		"empty": "لا توجد استشارات بعد.",
+-		"for": "لـ {{name}}"
++		"for": "لـ {{name}}",
++		"awaitingPayment": "بانتظار الدفع",
++		"payNow": "ادفع الآن"
+ 	},
+ 	"reviews": {
+ 		"empty": "لا توجد تقييمات.",
+diff --git a/src/locales/ar/curriculum.json b/src/locales/ar/curriculum.json
+index 4e002cf..56e2d01 100644
+--- a/src/locales/ar/curriculum.json
++++ b/src/locales/ar/curriculum.json
+@@ -15,8 +15,8 @@
+ 		"courseRequired": "اختر دورة.",
+ 		"course": "الدورة",
+ 		"allCourses": "كل الدورات",
+-		"nameEn": "الاسم (بالإنجليزية)",
+-		"nameAr": "الاسم (بالعربية)",
++		"nameEn": "الاسم (الإنجليزية)",
++		"nameAr": "الاسم (العربية)",
+ 		"active": "نشط",
+ 		"inactive": "غير نشط",
+ 		"subLevels": "المستويات الفرعية",
+@@ -29,6 +29,12 @@
+ 		"moveDown": "تحريك لأسفل",
+ 		"chapter": "السورة",
+ 		"noChapter": "بلا سورة",
++		"noChapters": "لا توجد سور بعد. حمّلها بزر «مزامنة السور» في صفحة",
++		"noChaptersLink": "سور القرآن",
++		"chapterForVerses": "اختر السورة لتحديد الآيات.",
++		"bothVerses": "أدخل الآيتين معًا (من وإلى) أو اتركهما فارغتين.",
++		"chooseChapter": "اختر سورة.",
++		"versesRange": "آيات هذه السورة من 1 إلى {{last}}، والأولى قبل الأخيرة.",
+ 		"fromVerse": "من الآية",
+ 		"toVerse": "إلى الآية",
+ 		"empty": "لا توجد مستويات بعد.",
+@@ -44,6 +50,7 @@
+ 		"title": "سور القرآن",
+ 		"subtitle": "السور الـ114 من البيانات المضمّنة.",
+ 		"sync": "مزامنة السور",
++		"chapterLabel": "{{number}} - {{name}}",
+ 		"synced": "تمت إضافة {{created}} وإعادة ضبط {{reset}}.",
+ 		"empty": "لا توجد سور بعد. زامن لتحميل السور الـ114.",
+ 		"number": "الرقم",
+@@ -69,12 +76,15 @@
+ 		"since": "منذ",
+ 		"completed": "المنجز",
+ 		"completedOf": "{{completed}} / {{total}}",
++		"topicsOf": "الموضوعات المكتملة: {{completed}} من {{total}}",
++		"noTopics": "لا موضوعات في هذا المستوى بعد.",
+ 		"search": "بحث عن الطلاب",
+ 		"empty": "لا يوجد طلاب للعرض.",
+ 		"open": "فتح التقدّم",
+ 		"changeLevel": "تغيير المستوى",
+ 		"setFirstLevel": "تحديد المستوى الأول",
+ 		"chooseLevel": "اختر مستوى",
++		"noLevels": "لا توجد مستويات لهذه الدورة بعد. اطلب من الإدارة إضافتها.",
+ 		"save": "حفظ",
+ 		"history": "سجل المستويات",
+ 		"current": "المستوى الحالي",
+@@ -91,7 +101,8 @@
+ 		"loadMore": "عرض المزيد",
+ 		"close": "إغلاق",
+ 		"previous": "السابق",
+-		"next": "التالي"
++		"next": "التالي",
++		"noLevelsOffice": "لا توجد مستويات لهذه الدورة بعد. أضفها إلى الدورة أولًا."
+ 	},
+ 	"upgrades": {
+ 		"title": "طلبات الترقية",
+diff --git a/src/locales/ar/recorded.json b/src/locales/ar/recorded.json
+index 77ef069..619e626 100644
+--- a/src/locales/ar/recorded.json
++++ b/src/locales/ar/recorded.json
+@@ -72,6 +72,7 @@
+ 		"certificate": "شهادة معتمدة",
+ 		"appOnly": "تظهر في التطبيق فقط",
+ 		"required": "هذا الحقل مطلوب.",
++		"slugInvalid": "استخدم أحرفًا إنجليزية صغيرة وأرقامًا وشرطات فقط، مثل ⁦tajweed-1⁩.",
+ 		"thumbnailRequired": "اختر صورة مصغرة.",
+ 		"amountInvalid": "أدخل مبلغًا مثل 20 أو 20.50 دون زيادة على عدد الخانات العشرية للعملة.",
+ 		"discountTooHigh": "لا يمكن أن يزيد الخصم عن السعر.",
+@@ -99,7 +100,7 @@
+ 		"removeThumbnail": "إزالة الصورة المصغرة",
+ 		"moveUp": "تحريك للأعلى",
+ 		"moveDown": "تحريك للأسفل",
+-		"urlInvalid": "يجب أن يبدأ الرابط بـ https://.",
++		"urlInvalid": "يجب أن يبدأ الرابط بـ ⁦https://⁩.",
+ 		"deleteConfirm": "حذف هذا الفيديو؟ لا يمكن التراجع عن ذلك."
+ 	},
+ 	"enrolments": {
+@@ -142,6 +143,7 @@
+ 	"my": {
+ 		"certificate": "شهادتك",
+ 		"empty": "لست مشتركًا في أي دورة مسجلة بعد.",
++		"emptyChild": "لا يوجد اشتراك في أي دورة مسجلة باسم {{name}} بعد.",
+ 		"childPicker": "الابن",
+ 		"progress": "شوهد {{watched}} من {{total}}",
+ 		"lessons": "الدروس",
+diff --git a/src/locales/ar/reviews.json b/src/locales/ar/reviews.json
+index c5d6cd5..372a2e2 100644
+--- a/src/locales/ar/reviews.json
++++ b/src/locales/ar/reviews.json
+@@ -37,6 +37,7 @@
+ 	"ratingRequired": "اختر تقييمًا من 1 إلى 5.",
+ 	"comment": "التعليق",
+ 	"commentPlaceholder": "أخبرنا كيف كانت الحصة (اختياري)",
++	"commentCount": "الأحرف: {{used}} من {{max}}",
+ 	"session": "الحصة",
+ 	"chooseSession": "اختر حصة",
+ 	"chooseStudent": "اختر طالبًا",
+diff --git a/src/locales/en/consultations.json b/src/locales/en/consultations.json
+index 52df6b1..306e5ec 100644
+--- a/src/locales/en/consultations.json
++++ b/src/locales/en/consultations.json
+@@ -60,6 +60,8 @@
+ 		"empty": "No consultations yet.",
+ 		"notOffering": "No longer offers consultations",
+ 		"noTeachers": "No teacher offers consultations yet. Turn it on from a teacher's page.",
++		"teachersHint": "Only teachers who have “Offers consultations” turned on are listed. Turn it on for another teacher from their page under Teachers.",
++		"shareHint": "The part of each completed consultation's paid amount that goes to the teacher. Leave it empty for 0%.",
+ 		"deleteConfirm": "Delete this consultation? This cannot be undone.",
+ 		"saved": "Consultation saved.",
+ 		"deleted": "Consultation deleted.",
+@@ -80,6 +82,7 @@
+ 		"validation": {
+ 			"amountInvalid": "Enter a valid amount.",
+ 			"shareInvalid": "Enter a percentage from 0 to 100.",
++			"descriptionRequired": "Write a description in Arabic or English.",
+ 			"teachersRequired": "Choose at least one teacher."
+ 		},
+ 		"productStatuses": {
+@@ -303,6 +306,8 @@
+ 		"academyTime": "Academy time: {{time}}",
+ 		"details": "Your details",
+ 		"accountHint": "Leave a field blank to use your account's details.",
++		"accountHintNoPhone": "Leave name and email empty to use your account's. Your account has no phone number, so enter a WhatsApp number.",
++		"whatsappRequired": "Enter a WhatsApp number.",
+ 		"child": "For",
+ 		"self": "Myself",
+ 		"name": "Name",
+@@ -351,7 +356,9 @@
+ 		"subtitle": "Book a consultation and follow your bookings.",
+ 		"book": "Book a consultation",
+ 		"empty": "No consultations yet.",
+-		"for": "For {{name}}"
++		"for": "For {{name}}",
++		"awaitingPayment": "Awaiting payment",
++		"payNow": "Pay now"
+ 	},
+ 	"reviews": {
+ 		"empty": "No reviews.",
+diff --git a/src/locales/en/curriculum.json b/src/locales/en/curriculum.json
+index 806474f..9fa1a4a 100644
+--- a/src/locales/en/curriculum.json
++++ b/src/locales/en/curriculum.json
+@@ -29,6 +29,12 @@
+ 		"moveDown": "Move down",
+ 		"chapter": "Chapter",
+ 		"noChapter": "No chapter",
++		"noChapters": "No chapters yet. Load them with “Sync chapters” on the page",
++		"noChaptersLink": "Qur'an chapters",
++		"chapterForVerses": "Choose a chapter for a verse range.",
++		"bothVerses": "Give both verses or neither.",
++		"chooseChapter": "Choose a chapter.",
++		"versesRange": "This chapter has verses 1 to {{last}}; the first comes before the last.",
+ 		"fromVerse": "From verse",
+ 		"toVerse": "To verse",
+ 		"empty": "No levels yet.",
+@@ -44,6 +50,7 @@
+ 		"title": "Qur'an chapters",
+ 		"subtitle": "The 114 chapters, from the bundled data.",
+ 		"sync": "Sync chapters",
++		"chapterLabel": "{{number}}. {{name}}",
+ 		"synced": "{{created}} added, {{reset}} reset.",
+ 		"empty": "No chapters yet. Sync to load the 114 chapters.",
+ 		"number": "No.",
+@@ -69,12 +76,15 @@
+ 		"since": "Since",
+ 		"completed": "Completed",
+ 		"completedOf": "{{completed}} / {{total}}",
++		"topicsOf": "Topics completed: {{completed}} of {{total}}",
++		"noTopics": "No topics in this level yet.",
+ 		"search": "Search students",
+ 		"empty": "No students to show.",
+ 		"open": "Open progress",
+ 		"changeLevel": "Change level",
+ 		"setFirstLevel": "Set first level",
+ 		"chooseLevel": "Choose a level",
++		"noLevels": "This course has no levels yet. Ask the administration to add them.",
+ 		"save": "Save",
+ 		"history": "Level history",
+ 		"current": "Current level",
+@@ -91,7 +101,8 @@
+ 		"loadMore": "Load more",
+ 		"close": "Close",
+ 		"previous": "Previous",
+-		"next": "Next"
++		"next": "Next",
++		"noLevelsOffice": "This course has no levels yet. Add them to the course first."
+ 	},
+ 	"upgrades": {
+ 		"title": "Level upgrades",
+diff --git a/src/locales/en/recorded.json b/src/locales/en/recorded.json
+index b87d993..9b9562a 100644
+--- a/src/locales/en/recorded.json
++++ b/src/locales/en/recorded.json
+@@ -72,6 +72,7 @@
+ 		"certificate": "Accredited certificate",
+ 		"appOnly": "Show in the app only",
+ 		"required": "This field is required.",
++		"slugInvalid": "Use lower-case letters, digits and dashes, like tajweed-1.",
+ 		"thumbnailRequired": "Choose a thumbnail.",
+ 		"amountInvalid": "Enter an amount like 20 or 20.50, with no more decimals than the currency uses.",
+ 		"discountTooHigh": "The discount cannot be more than the price.",
+@@ -146,6 +147,7 @@
+ 	"my": {
+ 		"certificate": "Your certificate",
+ 		"empty": "You are not enrolled in any recorded course yet.",
++		"emptyChild": "{{name}} is not enrolled in any recorded course yet.",
+ 		"childPicker": "Child",
+ 		"progress": "{{watched}} of {{total}} watched",
+ 		"lessons": "Lessons",
+diff --git a/src/locales/en/reviews.json b/src/locales/en/reviews.json
+index c16f342..698372b 100644
+--- a/src/locales/en/reviews.json
++++ b/src/locales/en/reviews.json
+@@ -37,6 +37,7 @@
+ 	"ratingRequired": "Choose a rating from 1 to 5.",
+ 	"comment": "Comment",
+ 	"commentPlaceholder": "Tell us how the session went (optional)",
++	"commentCount": "Characters: {{used}} of {{max}}",
+ 	"session": "Session",
+ 	"chooseSession": "Choose a session",
+ 	"chooseStudent": "Choose a student",
+diff --git a/src/routes/_authed/learning.progress.tsx b/src/routes/_authed/learning.progress.tsx
+index bf8415b..cb0a7db 100644
+--- a/src/routes/_authed/learning.progress.tsx
++++ b/src/routes/_authed/learning.progress.tsx
+@@ -2,17 +2,36 @@ import { createFileRoute } from "@tanstack/react-router";
+ import { useTranslation } from "react-i18next";
+ import { usePageTitle } from "@/features/branding";
+ import { MyProgress } from "@/features/curriculum";
++import { useMe } from "@/features/identity/queries";
++import { roleLabelKey } from "@/features/shell/nav";
+ import { PageHeader } from "@/ui";
+ 
+ export const Route = createFileRoute("/_authed/learning/progress")({
+ 	staticData: { feature: "levels" },
++	// ETQAN-QA-465: a parent's chosen child lives in the URL, so a refresh
++	// keeps them.
++	validateSearch: (search: Record<string, unknown>): { student?: number } => {
++		const student = Number(search.student);
++		return Number.isInteger(student) && student > 0 ? { student } : {};
++	},
+ 	component: function LearningProgressRoute() {
+ 		const { t } = useTranslation();
+-		usePageTitle(t("curriculum.nav.myProgress"));
++		const { student } = Route.useSearch();
++		const navigate = Route.useNavigate();
++		// ETQAN-QA-115: a parent reads it about their children.
++		const title = t(
++			roleLabelKey("curriculum.nav.myProgress", useMe().data?.role),
++		);
++		usePageTitle(title);
+ 		return (
+ 			<>
+-				<PageHeader title={t("curriculum.nav.myProgress")} />
+-				<MyProgress />
++				<PageHeader title={title} />
++				<MyProgress
++					child={student}
++					onChildChange={(id) =>
++						navigate({ search: { student: id }, replace: true })
++					}
++				/>
+ 			</>
+ 		);
+ 	},

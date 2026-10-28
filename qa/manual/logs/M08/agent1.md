@@ -1,0 +1,17 @@
+# M08 Agent 1 log
+- 2026-10-27T20:03:58Z start: read README/env/data
+- 2026-10-27T20:07:35Z invoices list AR, new invoice INV-000171 KWD 12.345 (dblclick, no dup), partial 5.500 ok, overpay blocked; F-001
+- 2026-10-27T20:09:44Z full pay, refund, move-to-balance, pay from wallet, print view AR; F-002,F-003
+- 2026-10-27T20:12:13Z EN invoice detail, sub invoice INV-000173 created+voided; F-004,F-005
+- 2026-10-27T20:12:57Z payment records EN; F-006,F-007
+- 2026-10-27T20:16:14Z payment link created/anon/decline/pay(sim) OK; F-008,F-009
+- 2026-10-27T20:20:04Z parent najjar: invoices list/detail, online pay INV-000155 via simulator OK (replay no double), wallet top-up 200 sim OK, wallet spend on INV-000166 OK; F-010,F-011
+- 2026-10-27T20:24:35Z codes create fixed EGP 150.25 x2, student check/apply/used-twice OK; home revenue/net checked (KWD 19.190 = 12.345+6.845 credited); expense 1234.56 -> net -618.36; F-012
+- 2026-10-27T20:25:47Z exchange rates KWD/USD/SAR added, home estimate verified; F-013
+- 2026-10-27T20:27:45Z donations KWD 7.125 OK + home; checkouts AR; F-014,F-015
+- 2026-10-27T20:34:29Z local methods (added M08 إنستاباي EG), role M08 محاسب فواتير (id 34) + staff m08.clerk@ (pw set via shell); student/parent direct URLs; F-016
+- 2026-10-27T20:36:20Z mobile AR: admin list/detail, parent list/checkout/expire/retry/pay INV-000166 OK; F-017,F-018
+- 2026-10-27T20:38:14Z parent sharif EN KWD online pay OK; lang switch mid-form OK; codes EN; F-019; Covered list written. DONE (~146 step calls, 19 findings)
+- 2026-10-27T21:16:26Z CONFIRMATION SWEEP start (agent1 round 2)
+- 2026-10-28T00:26:53Z CONFIRMATION SWEEP round 3 start (prior round stopped after c03)
+- 2026-10-28T00:43:46Z sweep done (~55 step calls): new findings M08-F-020..023 (link KWD English error, office sees family local-pay box, double full stop toast, EN bidi of local instructions); set m08.clerk@ pw M08-Clerk-2026! via shell; created INV-000175..178, link M08-C رابط دينار, code SYS-NT8DT-4BX7D

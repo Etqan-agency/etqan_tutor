@@ -1,0 +1,42 @@
+diff --git a/etqan/learning/api/serializers.py b/etqan/learning/api/serializers.py
+index aa9569f0..1289c23a 100644
+--- a/etqan/learning/api/serializers.py
++++ b/etqan/learning/api/serializers.py
+@@ -270,6 +270,8 @@ def _session_ref(session) -> dict:
+     return {
+         "id": session.pk,
+         "occurs_on": session.occurs_on,
++        # ETQAN-QA-459: the start instant tells two lessons on one day apart.
++        "starts_at": session.starts_at,
+         "course": course_ref(session.course),
+         "teacher": person_ref(session.teacher.user),
+         "student": person_ref(session.student.user),
+diff --git a/etqan/learning/tests/test_api_reviews.py b/etqan/learning/tests/test_api_reviews.py
+index 5c1f29be..45a26ea1 100644
+--- a/etqan/learning/tests/test_api_reviews.py
++++ b/etqan/learning/tests/test_api_reviews.py
+@@ -60,6 +60,7 @@ def test_put_creates_then_replaces(session, world, student_client, parent_client
+     assert item["session"] == {
+         "id": session.id,
+         "occurs_on": "2026-06-03",
++        "starts_at": session.starts_at.isoformat().replace("+00:00", "Z"),
+         "course": {"id": world.course.id, "name_en": "Quran", "name_ar": "تحفيظ"},
+         "teacher": {"id": world.teacher.id, "full_name": "Bilal"},
+         "student": {"id": world.student.id, "full_name": "Yusuf"},
+@@ -201,7 +202,15 @@ def test_reviewable_student(session, attend, student_client, world):
+     assert resp.status_code == 200
+     items = resp.json()
+     assert [i["id"] for i in items] == [later.id, session.id]
+-    assert set(items[0]) == {"id", "occurs_on", "course", "teacher", "student"}
++    # ETQAN-QA-459: each lesson carries its start so same-day lessons differ.
++    assert set(items[0]) == {
++        "id",
++        "occurs_on",
++        "starts_at",
++        "course",
++        "teacher",
++        "student",
++    }
+     assert items[0]["student"]["id"] == world.student.id
+     other = as_user(world.other_student)
+     assert (

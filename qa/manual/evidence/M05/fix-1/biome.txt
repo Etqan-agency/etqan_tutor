@@ -1,0 +1,2 @@
+Checked 32 files in 2s. Fixed 7 files.
+exit 0

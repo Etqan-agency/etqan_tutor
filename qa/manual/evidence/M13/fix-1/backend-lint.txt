@@ -1,0 +1,5 @@
+All checks passed!
+2 files already formatted
+no app imports devices KEPT
+
+Contracts: 54 kept, 0 broken.

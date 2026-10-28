@@ -1,0 +1,4 @@
+ID,Name (English),Name (Arabic),Language,Active,Teacher IDs
+9,Arabic for Non-Native Speakers,اللغة العربية للناطقين بغيرها,ar,yes,229; 230
+1,F03 Quran,F03 قرآن,ar,yes,7; 16; 36; ...
+10,M05 Recitation Course,M05 دورة التلاوة المعدلة,both,no,228

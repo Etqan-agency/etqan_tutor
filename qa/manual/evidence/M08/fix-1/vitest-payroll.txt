@@ -1,0 +1,17 @@
+[vite:react-swc] We recommend switching to `@vitejs/plugin-react` for improved performance as no swc plugins are used. More information at https://vite.dev/rolldown
+
+ RUN  v3.2.6 /app
+
+ ✓ src/features/payroll/RatesPage.test.tsx (23 tests) 2295ms
+   ✓ RatesPage > adds a default rate in the teacher's currency  362ms
+ ✓ src/features/payroll/AdjustmentsList.test.tsx (19 tests) 2979ms
+   ✓ AdjustmentsList > lists bonuses and deductions, and changes only the unused ones  342ms
+   ✓ AdjustmentsList > adds one in the chosen teacher's currency, dated the academy's today  483ms
+   ✓ AdjustmentsList > adds a percentage bonus while percentages are on  314ms
+ ✓ src/features/payroll/schemas.test.ts (9 tests) 11ms
+
+ Test Files  3 passed (3)
+      Tests  51 passed (51)
+   Start at  21:03:28
+   Duration  10.35s (transform 3.35s, setup 2.10s, collect 9.16s, tests 5.29s, environment 2.19s, prepare 236ms)
+

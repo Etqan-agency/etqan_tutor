@@ -1,0 +1,1576 @@
+diff --git a/src/features/access/StaffList.tsx b/src/features/access/StaffList.tsx
+index 5e8ba01..4c1296e 100644
+--- a/src/features/access/StaffList.tsx
++++ b/src/features/access/StaffList.tsx
+@@ -126,7 +126,9 @@ export function StaffList() {
+ 						<tbody>
+ 							{rows.map((member) => (
+ 								<tr key={member.id} className="border-t border-border">
+-									<td className="p-3 font-medium">{member.full_name}</td>
++									<td className="p-3 font-medium">
++										<bdi>{member.full_name}</bdi>
++									</td>
+ 									<td className="p-3" dir="ltr">
+ 										{member.email}
+ 									</td>
+diff --git a/src/features/employment/ContractDialog.test.tsx b/src/features/employment/ContractDialog.test.tsx
+index 4a36be0..8c4aedc 100644
+--- a/src/features/employment/ContractDialog.test.tsx
++++ b/src/features/employment/ContractDialog.test.tsx
+@@ -130,6 +130,23 @@ describe("ContractDialog", () => {
+ 		).toBeInTheDocument();
+ 	});
+ 
++	// ETQAN-QA-157: the server's fixed file-type refusal is translated.
++	it("shows the server's file-type refusal in the reader's words", async () => {
++		vi.mocked(employmentApi.create).mockRejectedValue(
++			badRequest({ file: ["This type of file is not allowed."] }),
++		);
++		const user = await openAdd();
++		await user.selectOptions(screen.getByLabelText(/Teacher/), "9");
++		await user.upload(
++			screen.getByLabelText("Contract file"),
++			new File(["x"], "notes.txt", { type: "text/plain" }),
++		);
++		await save(user);
++		expect(
++			await screen.findByText("This type of file isn't allowed."),
++		).toBeInTheDocument();
++	});
++
+ 	it("edits with a Remove file checkbox", async () => {
+ 		vi.mocked(employmentApi.update).mockResolvedValue(withFile);
+ 		const user = userEvent.setup();
+diff --git a/src/features/employment/ContractDialog.tsx b/src/features/employment/ContractDialog.tsx
+index 0e9ff2f..bc512aa 100644
+--- a/src/features/employment/ContractDialog.tsx
++++ b/src/features/employment/ContractDialog.tsx
+@@ -4,6 +4,7 @@ import { AiDraftButton } from "@/features/ai/AiDraftButton";
+ import { parseApiError } from "@/features/identity/api";
+ import { usePeople } from "@/features/people/queries";
+ import type { TeacherProfile } from "@/features/people/schemas";
++import { serverMessageKey } from "@/lib/server-messages";
+ import {
+ 	Button,
+ 	Checkbox,
+@@ -96,6 +97,11 @@ export function ContractDialog({ contract, defaultTeacher }: Props) {
+ 			setOpen(false);
+ 		} catch (error) {
+ 			const { fieldErrors, message } = parseApiError(error);
++			// ETQAN-QA-157: the file-type refusal in the reader's language.
++			for (const [field, text] of Object.entries(fieldErrors)) {
++				const key = serverMessageKey(text);
++				if (key) fieldErrors[field] = t(key);
++			}
+ 			setErrors(fieldErrors);
+ 			setFormError(
+ 				fieldErrors.non_field_errors ??
+diff --git a/src/features/employment/ContractsList.test.tsx b/src/features/employment/ContractsList.test.tsx
+index 141c6df..bae24a7 100644
+--- a/src/features/employment/ContractsList.test.tsx
++++ b/src/features/employment/ContractsList.test.tsx
+@@ -56,9 +56,10 @@ describe("ContractsList", () => {
+ 
+ 	it("lists contracts and filters by the teacher it is given", async () => {
+ 		renderList(ALL, { teacher: 9 });
+-		expect(await screen.findByText(/Bilal · C-2026-01/)).toBeInTheDocument();
+-		expect(screen.getByText(/bilal\.pdf/)).toBeInTheDocument();
+-		expect(screen.getByText(/No file/)).toBeInTheDocument();
++		const reference = await screen.findByText("C-2026-01");
++		expect(reference.parentElement?.textContent).toBe("Bilal · C-2026-01");
++		expect(screen.getByText("bilal.pdf")).toBeInTheDocument();
++		expect(screen.getByText("No file")).toBeInTheDocument();
+ 		expect(employmentApi.list).toHaveBeenCalledWith({
+ 			teacher: 9,
+ 			q: "",
+@@ -66,6 +67,16 @@ describe("ContractsList", () => {
+ 		});
+ 	});
+ 
++	// ETQAN-QA-163: the file name and the date are isolated from each other.
++	it("isolates the file name and the date", async () => {
++		renderList(ALL);
++		const file = await screen.findByText("bilal.pdf");
++		expect(file.tagName).toBe("BDI");
++		const date = file.parentElement?.querySelectorAll("bdi")[1];
++		expect(date?.textContent).toMatch(/\d/);
++		expect(screen.getByText("No file").tagName).toBe("BDI");
++	});
++
+ 	it("shows the empty state", async () => {
+ 		vi.mocked(employmentApi.list).mockResolvedValue(page([]));
+ 		renderList(ALL);
+@@ -76,7 +87,7 @@ describe("ContractsList", () => {
+ 		const onTeacherChange = vi.fn();
+ 		const user = userEvent.setup();
+ 		renderList(ALL, { onTeacherChange });
+-		await screen.findByText(/Bilal · C-2026-01/);
++		await screen.findByText("C-2026-01");
+ 		await user.selectOptions(
+ 			await screen.findByRole("combobox", { name: "Teacher" }),
+ 			"9",
+@@ -113,7 +124,7 @@ describe("ContractsList", () => {
+ 
+ 	it("hides Add unless the staff can create and see teachers", async () => {
+ 		const { unmount } = renderList(["contract.view_any", "contract.create"]);
+-		await screen.findByText(/Bilal · C-2026-01/);
++		await screen.findByText("C-2026-01");
+ 		expect(screen.queryByRole("button", { name: "Add contract" })).toBeNull();
+ 		unmount();
+ 		renderList(ALL);
+@@ -124,7 +135,7 @@ describe("ContractsList", () => {
+ 
+ 	it("hides edit and delete without those codes", async () => {
+ 		renderList(["contract.view_any"]);
+-		await screen.findByText(/Bilal · C-2026-01/);
++		await screen.findByText("C-2026-01");
+ 		expect(screen.queryByRole("button", { name: /^Edit/ })).toBeNull();
+ 		expect(screen.queryByRole("button", { name: /^Delete/ })).toBeNull();
+ 	});
+diff --git a/src/features/employment/ContractsList.tsx b/src/features/employment/ContractsList.tsx
+index 52dcb72..e74ab09 100644
+--- a/src/features/employment/ContractsList.tsx
++++ b/src/features/employment/ContractsList.tsx
+@@ -119,13 +119,23 @@ export function ContractsList({ teacher, onTeacherChange }: Props) {
+ 							<Card>
+ 								<CardContent className="flex flex-wrap items-center gap-4">
+ 									<div className="flex min-w-0 flex-1 flex-col gap-1">
++										{/* ETQAN-QA-163: each part isolated, so a Latin file
++										    name and the date's digits can't swap places. */}
+ 										<span className="truncate font-medium">
+-											{c.teacher.full_name}
+-											{c.reference ? ` · ${c.reference}` : ""}
++											<bdi>{c.teacher.full_name}</bdi>
++											{c.reference ? (
++												<>
++													{" · "}
++													<bdi>{c.reference}</bdi>
++												</>
++											) : null}
+ 										</span>
+ 										<span className="text-sm text-muted-foreground">
+-											{c.has_file ? c.file_name : t("contracts.noFile")}
+-											{` · ${date.format(new Date(c.created_at))}`}
++											<bdi>
++												{c.has_file ? c.file_name : t("contracts.noFile")}
++											</bdi>
++											{" · "}
++											<bdi>{date.format(new Date(c.created_at))}</bdi>
+ 										</span>
+ 										{c.details ? (
+ 											<span className="line-clamp-2 text-sm">{c.details}</span>
+diff --git a/src/features/people/AccountActions.test.tsx b/src/features/people/AccountActions.test.tsx
+index b6eef2b..95ad207 100644
+--- a/src/features/people/AccountActions.test.tsx
++++ b/src/features/people/AccountActions.test.tsx
+@@ -40,11 +40,15 @@ const person = (
+ describe("AccountActions", () => {
+ 	beforeEach(() => vi.clearAllMocks());
+ 
+-	it("offers a fresh invite while the invite is pending", async () => {
++	// ETQAN-QA-156: the invite already went out, so the button resends it.
++	it("offers to resend the invite while it is pending", async () => {
+ 		vi.mocked(peopleApi.action).mockResolvedValue(person({}));
+ 		renderWithRouter(<AccountActions kind="students" person={person({})} />);
+ 		expect(await screen.findByText("Invite pending")).toBeInTheDocument();
+-		await userEvent.click(screen.getByRole("button", { name: "Send invite" }));
++		expect(screen.queryByRole("button", { name: "Send invite" })).toBeNull();
++		await userEvent.click(
++			screen.getByRole("button", { name: "Resend invite" }),
++		);
+ 		await waitFor(() =>
+ 			expect(peopleApi.action).toHaveBeenCalledWith("students", 7, "invite"),
+ 		);
+@@ -61,7 +65,7 @@ describe("AccountActions", () => {
+ 		expect(
+ 			await screen.findByRole("button", { name: "Send password reset" }),
+ 		).toBeInTheDocument();
+-		expect(screen.queryByRole("button", { name: "Send invite" })).toBeNull();
++		expect(screen.queryByRole("button", { name: "Resend invite" })).toBeNull();
+ 	});
+ 
+ 	it("says 'No login' for a student without email", async () => {
+@@ -114,11 +118,47 @@ describe("AccountActions", () => {
+ 		await userEvent.click(
+ 			await screen.findByRole("button", { name: "Deactivate" }),
+ 		);
++		await userEvent.click(
++			within(screen.getByRole("alertdialog")).getByRole("button", {
++				name: "Deactivate Yusuf",
++			}),
++		);
+ 		expect(
+ 			await screen.findByText("An academy needs at least one active admin."),
+ 		).toBeInTheDocument();
+ 	});
+ 
++	// ETQAN-QA-160: one click only opens the question; nothing changes
++	// until the admin confirms it.
++	it("asks before deactivating and acts only on confirm", async () => {
++		vi.mocked(peopleApi.action).mockResolvedValue(person({}));
++		renderWithRouter(<AccountActions kind="students" person={person({})} />);
++		await userEvent.click(
++			await screen.findByRole("button", { name: "Deactivate" }),
++		);
++		const dialog = screen.getByRole("alertdialog");
++		expect(
++			within(dialog).getByText(/Yusuf is signed out everywhere/),
++		).toBeInTheDocument();
++		await userEvent.click(
++			within(dialog).getByRole("button", { name: "Cancel" }),
++		);
++		expect(peopleApi.action).not.toHaveBeenCalled();
++		await userEvent.click(screen.getByRole("button", { name: "Deactivate" }));
++		await userEvent.click(
++			within(screen.getByRole("alertdialog")).getByRole("button", {
++				name: "Deactivate Yusuf",
++			}),
++		);
++		await waitFor(() =>
++			expect(peopleApi.action).toHaveBeenCalledWith(
++				"students",
++				7,
++				"deactivate",
++			),
++		);
++	});
++
+ 	it("reactivates an inactive account", async () => {
+ 		vi.mocked(peopleApi.action).mockResolvedValue(person({}));
+ 		renderWithRouter(
+@@ -142,7 +182,7 @@ describe("AccountActions", () => {
+ 			</CanProvider>,
+ 		);
+ 		expect(await screen.findByText("Invite pending")).toBeInTheDocument();
+-		expect(screen.queryByRole("button", { name: "Send invite" })).toBeNull();
++		expect(screen.queryByRole("button", { name: "Resend invite" })).toBeNull();
+ 		expect(screen.queryByRole("button", { name: "Deactivate" })).toBeNull();
+ 	});
+ 
+diff --git a/src/features/people/AccountActions.tsx b/src/features/people/AccountActions.tsx
+index 727b9a3..21d681b 100644
+--- a/src/features/people/AccountActions.tsx
++++ b/src/features/people/AccountActions.tsx
+@@ -1,4 +1,5 @@
+ import { useTranslation } from "react-i18next";
++import { Confirm } from "@/components/Confirm";
+ import { parseApiError } from "@/features/identity/api";
+ import {
+ 	ADMINS_ONLY,
+@@ -135,7 +136,9 @@ export function AccountActions({
+ 						disabled={run.isPending}
+ 						onClick={() => act("invite", "people.account.inviteSent")}
+ 					>
+-						{t("people.account.sendInvite")}
++						{/* ETQAN-QA-156: an invited person was already emailed one
++						    (at creation or on adding the email). */}
++						{t("people.account.resendInvite")}
+ 					</Button>
+ 				) : null}
+ 				{state === "active" ? (
+@@ -148,16 +151,28 @@ export function AccountActions({
+ 						{t("people.account.sendReset")}
+ 					</Button>
+ 				) : null}
+-				{person.user.is_active ? (
++				{person.user.is_active && blocked !== null ? (
+ 					<Button
+ 						size="sm"
+ 						variant="destructive"
+-						disabled={run.isPending || blocked !== null}
+-						aria-describedby={blocked ? reasonId : undefined}
+-						onClick={() => act("deactivate", "people.account.deactivated")}
++						disabled
++						aria-describedby={reasonId}
+ 					>
+ 						{t("people.account.deactivate")}
+ 					</Button>
++				) : person.user.is_active ? (
++					// ETQAN-QA-160: it signs the person out everywhere, so it asks.
++					<Confirm
++						action={t("people.account.deactivate")}
++						title={t("people.account.deactivateTitle", {
++							name: person.user.full_name,
++						})}
++						body={t("people.account.deactivateBody", {
++							name: person.user.full_name,
++						})}
++						disabled={run.isPending}
++						onConfirm={() => act("deactivate", "people.account.deactivated")}
++					/>
+ 				) : (
+ 					<Button
+ 						size="sm"
+diff --git a/src/features/people/AdminsList.tsx b/src/features/people/AdminsList.tsx
+index 1755e63..4744456 100644
+--- a/src/features/people/AdminsList.tsx
++++ b/src/features/people/AdminsList.tsx
+@@ -49,7 +49,7 @@ export function AdminsList() {
+ 							<Card>
+ 								<CardContent className="flex flex-wrap items-start justify-between gap-4">
+ 									<div className="flex flex-col gap-1">
+-										<span className="font-medium">{admin.user.full_name}</span>
++										<bdi className="font-medium">{admin.user.full_name}</bdi>
+ 										<span className="text-sm text-muted-foreground">
+ 											{admin.user.email}
+ 										</span>
+diff --git a/src/features/people/FamiliesList.test.tsx b/src/features/people/FamiliesList.test.tsx
+index 3089d3d..00bcae5 100644
+--- a/src/features/people/FamiliesList.test.tsx
++++ b/src/features/people/FamiliesList.test.tsx
+@@ -100,6 +100,15 @@ describe("FamiliesList", () => {
+ 		await user.click(
+ 			await screen.findByRole("button", { name: "Retire Omar family" }),
+ 		);
++		// ETQAN-QA-165: the first click only asks.
++		const dialog = screen.getByRole("alertdialog");
++		expect(
++			within(dialog).getByText(/Omar family stops paying/),
++		).toBeInTheDocument();
++		expect(peopleApi.updateFamily).not.toHaveBeenCalled();
++		await user.click(
++			within(dialog).getByRole("button", { name: "Retire Omar family" }),
++		);
+ 		await waitFor(() =>
+ 			expect(peopleApi.updateFamily).toHaveBeenCalledWith(4, {
+ 				is_active: false,
+diff --git a/src/features/people/FamiliesList.tsx b/src/features/people/FamiliesList.tsx
+index acec5c9..d64f2f1 100644
+--- a/src/features/people/FamiliesList.tsx
++++ b/src/features/people/FamiliesList.tsx
+@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
+ import { Search, UsersRound } from "lucide-react";
+ import { useState } from "react";
+ import { useTranslation } from "react-i18next";
++import { Confirm } from "@/components/Confirm";
+ import { Pager } from "@/components/Pager";
+ import { useCan } from "@/features/identity/permissions";
+ import { errorText } from "@/lib/form-errors";
+@@ -30,38 +31,51 @@ export function FamilyActiveToggle({ family }: { family: Family }) {
+ 	const { t } = useTranslation();
+ 	const update = useUpdateFamily();
+ 	const retiring = family.is_active;
++	const toggle = () =>
++		update.mutate(
++			{ id: family.id, body: { is_active: !retiring } },
++			{
++				onSuccess: () =>
++					toast({
++						description: t(
++							retiring
++								? "people.families.retiredDone"
++								: "people.families.restoredDone",
++						),
++						variant: "success",
++					}),
++				onError: (error) =>
++					toast({
++						description: errorText(error, t),
++						variant: "destructive",
++					}),
++			},
++		);
++	// ETQAN-QA-165: retiring stops the family paying for its students, so it
++	// asks first; restoring undoes nothing and stays one click.
++	if (retiring) {
++		const name = t("people.families.retireName", { name: family.name });
++		return (
++			<Confirm
++				action={t("people.families.retire")}
++				triggerVariant="outline"
++				triggerName={name}
++				title={name}
++				body={t("people.families.retireBody", { name: family.name })}
++				disabled={update.isPending}
++				onConfirm={toggle}
++			/>
++		);
++	}
+ 	return (
+ 		<Button
+ 			size="sm"
+ 			variant="outline"
+ 			disabled={update.isPending}
+-			aria-label={t(
+-				retiring ? "people.families.retireName" : "people.families.restoreName",
+-				{ name: family.name },
+-			)}
+-			onClick={() =>
+-				update.mutate(
+-					{ id: family.id, body: { is_active: !retiring } },
+-					{
+-						onSuccess: () =>
+-							toast({
+-								description: t(
+-									retiring
+-										? "people.families.retiredDone"
+-										: "people.families.restoredDone",
+-								),
+-								variant: "success",
+-							}),
+-						onError: (error) =>
+-							toast({
+-								description: errorText(error, t),
+-								variant: "destructive",
+-							}),
+-					},
+-				)
+-			}
++			aria-label={t("people.families.restoreName", { name: family.name })}
++			onClick={toggle}
+ 		>
+-			{t(retiring ? "people.families.retire" : "people.families.restore")}
++			{t("people.families.restore")}
+ 		</Button>
+ 	);
+ }
+@@ -71,7 +85,7 @@ export function FamilyPayerCell({ family }: { family: Family }) {
+ 	const { t } = useTranslation();
+ 	return (
+ 		<span className="flex flex-wrap items-center gap-2">
+-			<span>{family.payer.full_name}</span>
++			<bdi>{family.payer.full_name}</bdi>
+ 			{family.payer_needs_choosing ? (
+ 				<StatusChip tone="warning">
+ 					{t("people.families.chooseNewPayer")}
+@@ -179,7 +193,7 @@ export function FamiliesList() {
+ 													key={s.id}
+ 													className="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground"
+ 												>
+-													{s.full_name}
++													<bdi>{s.full_name}</bdi>
+ 												</li>
+ 											))}
+ 										</ul>
+diff --git a/src/features/people/ParentsList.tsx b/src/features/people/ParentsList.tsx
+index 9d85098..efcc707 100644
+--- a/src/features/people/ParentsList.tsx
++++ b/src/features/people/ParentsList.tsx
+@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
+ import { Plus } from "lucide-react";
+ import { useState } from "react";
+ import { useTranslation } from "react-i18next";
++import { NameList } from "@/components/NameList";
+ import { useCan } from "@/features/identity/permissions";
+ import { SendLinksButton, useCanQuickLogin } from "@/features/quicklogin";
+ import { Button, Select } from "@/ui";
+@@ -22,7 +23,9 @@ export function ParentsList() {
+ 		{
+ 			key: "name",
+ 			header: t("people.columns.name"),
+-			cell: (p) => p.user.full_name,
++			// ETQAN-QA-153: isolated, so "+cmd" or "Aisha R." keep their
++			// punctuation where it was typed in an Arabic row.
++			cell: (p) => <bdi>{p.user.full_name}</bdi>,
+ 		},
+ 		{
+ 			key: "phone",
+@@ -37,7 +40,9 @@ export function ParentsList() {
+ 		{
+ 			key: "children",
+ 			header: t("people.columns.children"),
+-			cell: (p) => p.profile.children.map((c) => c.full_name).join("، ") || "—",
++			cell: (p) => (
++				<NameList names={p.profile.children.map((c) => c.full_name)} />
++			),
+ 		},
+ 		{
+ 			key: "account",
+diff --git a/src/features/people/PeopleList.tsx b/src/features/people/PeopleList.tsx
+index ca64084..2b9365c 100644
+--- a/src/features/people/PeopleList.tsx
++++ b/src/features/people/PeopleList.tsx
+@@ -57,6 +57,12 @@ export function PeopleList<P>({
+ 	const rows = data?.results ?? [];
+ 	const page = Number(params.page ?? 1);
+ 	const pages = Math.max(1, Math.ceil((data?.count ?? 0) / PAGE_SIZE));
++	// ETQAN-QA-152: an empty page under a search or a filter is "no
++	// matches", not the academy's "no students yet".
++	const filtered = Object.entries(params).some(
++		([key, value]) =>
++			key !== "page" && value !== undefined && String(value) !== "",
++	);
+ 	const set = (patch: ListParams) =>
+ 		onParamsChange({ ...params, page: 1, ...patch });
+ 
+@@ -73,7 +79,9 @@ export function PeopleList<P>({
+ 	return (
+ 		<div className="flex flex-col gap-4">
+ 			<div className="flex flex-wrap items-end gap-3">
+-				<div className="relative min-w-48 flex-1">
++				{/* ETQAN-QA-150: wide enough for the whole hint; it was the
++				    narrowest control once the filters took the row. */}
++				<div className="relative min-w-72 flex-1">
+ 					<label htmlFor={`${kind}-search`} className="sr-only">
+ 						{t("people.search")}
+ 					</label>
+@@ -102,7 +110,10 @@ export function PeopleList<P>({
+ 			) : rows.length === 0 ? (
+ 				<Card>
+ 					<CardContent>
+-						<EmptyState icon={Users} title={emptyLabel} />
++						<EmptyState
++							icon={Users}
++							title={filtered ? t("people.noMatches") : emptyLabel}
++						/>
+ 					</CardContent>
+ 				</Card>
+ 			) : (
+@@ -110,7 +121,24 @@ export function PeopleList<P>({
+ 					<table className="w-full text-sm">
+ 						<thead className="bg-secondary text-start text-muted-foreground">
+ 							<tr>
+-								{selection ? <th className="w-10 p-3" /> : null}
++								{selection ? (
++									<th className="w-10 p-3">
++										{/* ETQAN-QA-167: select (or clear) the whole page. */}
++										<Checkbox
++											id={`${kind}-select-all`}
++											checked={
++												rows.length > 0 &&
++												rows.every((p) => selection.selected.includes(p.id))
++											}
++											onCheckedChange={(on) =>
++												selection.onChange(on ? rows.map((p) => p.id) : [])
++											}
++										/>
++										<label htmlFor={`${kind}-select-all`} className="sr-only">
++											{t("people.selectAll")}
++										</label>
++									</th>
++								) : null}
+ 								{columns.map((c) => (
+ 									<th
+ 										key={c.key}
+diff --git a/src/features/people/StudentForm.test.tsx b/src/features/people/StudentForm.test.tsx
+index 6068117..b2c7c8d 100644
+--- a/src/features/people/StudentForm.test.tsx
++++ b/src/features/people/StudentForm.test.tsx
+@@ -117,6 +117,8 @@ describe("StudentForm", () => {
+ 		expect(
+ 			await screen.findByText("This email is already in use."),
+ 		).toBeInTheDocument();
++		// ETQAN-QA-158: the refused field takes focus, so it scrolls into view.
++		await waitFor(() => expect(screen.getByLabelText(/^email/i)).toHaveFocus());
+ 	});
+ 
+ 	it("shows a translated message for a coded 409", async () => {
+@@ -341,6 +343,26 @@ describe("StudentForm", () => {
+ 		);
+ 	});
+ 
++	// ETQAN-QA-109: no link to a family page the user may not open.
++	it("shows the family as plain text without family.view", async () => {
++		vi.mocked(peopleApi.get).mockResolvedValue({
++			...saved,
++			profile: {
++				...saved.profile,
++				account_type: "family",
++				family: { id: 4, name: "Omar family" },
++			},
++		});
++		renderWithRouter(
++			<CanProvider me={staffMe("student.view", "student.view_any")}>
++				<StudentForm personId="5" />
++			</CanProvider>,
++			{ extraPaths: ["/people/families/$familyId"] },
++		);
++		expect(await screen.findByText("Omar family")).toBeInTheDocument();
++		expect(screen.queryByRole("link", { name: "Omar family" })).toBeNull();
++	});
++
+ 	it("shows no family and no guardians while those features are off", async () => {
+ 		vi.mocked(peopleApi.get).mockResolvedValue(saved);
+ 		renderWithRouter(
+diff --git a/src/features/people/StudentsList.test.tsx b/src/features/people/StudentsList.test.tsx
+index 1351788..ef969e6 100644
+--- a/src/features/people/StudentsList.test.tsx
++++ b/src/features/people/StudentsList.test.tsx
+@@ -109,6 +109,18 @@ describe("StudentsList", () => {
+ 		expect(screen.getByText("No login")).toBeInTheDocument();
+ 	});
+ 
++	// ETQAN-QA-153: each name (and family chip) is isolated, so "+cmd"
++	// stays "+cmd" in an Arabic row.
++	it("isolates each student's name and family", async () => {
++		renderWithRouter(<StudentsList />, {
++			extraPaths: ["/people/students/$personId", "/people/families/$familyId"],
++		});
++		const link = await screen.findByRole("link", { name: "Yusuf" });
++		expect(link.querySelector("bdi")?.textContent).toBe("Yusuf");
++		const chip = screen.getByRole("link", { name: "Omar family" });
++		expect(chip.querySelector("bdi")?.textContent).toBe("Omar family");
++	});
++
+ 	it("filters by status tab and searches", async () => {
+ 		const user = userEvent.setup();
+ 		renderWithRouter(<StudentsList />);
+@@ -154,6 +166,68 @@ describe("StudentsList", () => {
+ 		expect(await screen.findByText("No students yet.")).toBeInTheDocument();
+ 	});
+ 
++	// ETQAN-QA-152: an empty search is "no matches", not "no students yet".
++	it("says nothing matches when a search or filter empties the list", async () => {
++		const user = userEvent.setup();
++		renderWithRouter(<StudentsList />);
++		await screen.findByText("Aisha");
++		vi.mocked(peopleApi.list).mockResolvedValue(page([]));
++		await user.type(screen.getByRole("searchbox"), "zzq");
++		expect(
++			await screen.findByText("No one matches your search or filters."),
++		).toBeInTheDocument();
++		expect(screen.queryByText("No students yet.")).toBeNull();
++	});
++
++	// ETQAN-QA-150: the search box keeps room for its whole hint.
++	it("keeps the search box wide enough for its hint", async () => {
++		renderWithRouter(<StudentsList />);
++		await screen.findByText("Aisha");
++		expect(screen.getByRole("searchbox").parentElement?.className).toContain(
++			"min-w-72",
++		);
++	});
++
++	// ETQAN-QA-167: the header checkbox selects and clears the page.
++	it("selects every row on the page and clears them again", async () => {
++		const user = userEvent.setup();
++		renderWithRouter(<StudentsList />);
++		await screen.findByText("Aisha");
++		await user.click(screen.getByLabelText("Select all on this page"));
++		expect(
++			screen.getByRole("region", { name: "2 selected" }),
++		).toBeInTheDocument();
++		await user.click(screen.getByLabelText("Select all on this page"));
++		expect(screen.queryByRole("region", { name: /selected/ })).toBeNull();
++	});
++
++	// ETQAN-QA-160: bulk deactivation asks first.
++	it("asks before deactivating the selection", async () => {
++		vi.mocked(peopleApi.bulkStudents).mockResolvedValue({ updated: 2 });
++		const user = userEvent.setup();
++		renderWithRouter(<StudentsList />);
++		await screen.findByText("Aisha");
++		await user.click(screen.getByLabelText("Select all on this page"));
++		const bar = screen.getByRole("region", { name: "2 selected" });
++		await user.click(within(bar).getByRole("button", { name: "Deactivate" }));
++		expect(peopleApi.bulkStudents).not.toHaveBeenCalled();
++		const dialog = screen.getByRole("alertdialog");
++		expect(
++			within(dialog).getByText(/The 2 selected students/),
++		).toBeInTheDocument();
++		await user.click(
++			within(dialog).getByRole("button", {
++				name: "Deactivate the selected accounts",
++			}),
++		);
++		await waitFor(() =>
++			expect(peopleApi.bulkStudents).toHaveBeenCalledWith({
++				ids: [1, 2],
++				action: "deactivate",
++			}),
++		);
++	});
++
+ 	it("shows each row's tags and filters by tag, nationality and age", async () => {
+ 		const user = userEvent.setup();
+ 		renderWithRouter(<StudentsList />);
+@@ -192,7 +266,12 @@ describe("StudentsList", () => {
+ 		await user.click(screen.getByLabelText("Select Aisha"));
+ 		const bar = screen.getByRole("region", { name: "2 selected" });
+ 		const pick = within(bar).getByLabelText("Tag to add or remove");
+-		expect(pick).toHaveValue("1"); // the first active tag
++		// ETQAN-QA-167: nothing is picked for the admin; the buttons wait.
++		expect(pick).toHaveValue("");
++		expect(within(bar).getByRole("button", { name: "Add tag" })).toBeDisabled();
++		expect(
++			within(bar).getByRole("button", { name: "Remove tag" }),
++		).toBeDisabled();
+ 		await user.selectOptions(pick, "3");
+ 		await user.click(within(bar).getByRole("button", { name: "Add tag" }));
+ 		await waitFor(() =>
+@@ -233,6 +312,10 @@ describe("StudentsList", () => {
+ 		renderWithRouter(<StudentsList />);
+ 		await screen.findByText("Aisha");
+ 		await user.click(screen.getByLabelText("Select Aisha"));
++		await user.selectOptions(
++			screen.getByLabelText("Tag to add or remove"),
++			"1",
++		);
+ 		await user.click(screen.getByRole("button", { name: "Add tag" }));
+ 		expect(
+ 			await screen.findByText("A retired tag can't be added."),
+@@ -397,8 +480,15 @@ describe("StudentsList", () => {
+ 		const pick = within(bar).getByRole("combobox", {
+ 			name: "Family to add to",
+ 		});
+-		await waitFor(() => expect(pick).toHaveValue("4")); // retired ones not offered
+-		expect(within(pick).getAllByRole("option")).toHaveLength(1);
++		// ETQAN-QA-167: no family is preset; retired ones are not offered.
++		await waitFor(() =>
++			expect(within(pick).getAllByRole("option")).toHaveLength(2),
++		);
++		expect(pick).toHaveValue("");
++		expect(
++			within(bar).getByRole("button", { name: "Add to family" }),
++		).toBeDisabled();
++		await user.selectOptions(pick, "4");
+ 		await user.click(
+ 			within(bar).getByRole("button", { name: "Add to family" }),
+ 		);
+diff --git a/src/features/people/StudentsList.tsx b/src/features/people/StudentsList.tsx
+index 29e593d..9432945 100644
+--- a/src/features/people/StudentsList.tsx
++++ b/src/features/people/StudentsList.tsx
+@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
+ import { Plus } from "lucide-react";
+ import { useRef, useState } from "react";
+ import { useTranslation } from "react-i18next";
++import { Confirm } from "@/components/Confirm";
+ import { TagChips } from "@/components/TagChips";
+ import { useCan, useHasFeature } from "@/features/identity/permissions";
+ import { SendLinksButton, useCanQuickLogin } from "@/features/quicklogin";
+@@ -32,7 +33,19 @@ const TABS = ["all", ...STUDENT_STATUSES] as const;
+ /** A student's account type; a family's name is a chip linking to it. */
+ function AccountTypeCell({ profile }: { profile: StudentProfile }) {
+ 	const { t } = useTranslation();
++	const can = useCan();
+ 	if (!profile.family) return <>{t("people.accountType.individual")}</>;
++	// ETQAN-QA-109: a plain chip for those who may not open the family.
++	if (!can("family.view")) {
++		return (
++			<span className="flex flex-wrap items-center gap-1">
++				<span>{t("people.accountType.family")}</span>
++				<span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
++					<bdi>{profile.family.name}</bdi>
++				</span>
++			</span>
++		);
++	}
+ 	return (
+ 		<span className="flex flex-wrap items-center gap-1">
+ 			<span>{t("people.accountType.family")}</span>
+@@ -41,7 +54,7 @@ function AccountTypeCell({ profile }: { profile: StudentProfile }) {
+ 				params={{ familyId: String(profile.family.id) }}
+ 				className="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground underline-offset-4 hover:underline"
+ 			>
+-				{profile.family.name}
++				<bdi>{profile.family.name}</bdi>
+ 			</Link>
+ 		</span>
+ 	);
+@@ -109,9 +122,11 @@ export function StudentsList() {
+ 	);
+ 	const families = familyPage?.results ?? [];
+ 	const activeFamilies = families.filter((family) => family.is_active);
+-	const familyId = bulkFamily ?? activeFamilies[0]?.id;
+-	// The bulk bar's tag: the one chosen, else the first active tag.
+-	const tagId = bulkTag ?? tags.find((tag) => tag.is_active)?.id;
++	// ETQAN-QA-167: the bulk bar's family and tag are only what the admin
++	// picked: a preset first entry let one click put a child into a
++	// stranger's family.
++	const familyId = bulkFamily;
++	const tagId = bulkTag;
+ 	const tagRetired = tags.find((tag) => tag.id === tagId)?.is_active === false;
+ 	const current = String(params.status ?? "all");
+ 	const update = (patch: ListParams) => {
+@@ -128,7 +143,9 @@ export function StudentsList() {
+ 		{
+ 			key: "name",
+ 			header: t("people.columns.name"),
+-			cell: (p) => p.user.full_name,
++			// ETQAN-QA-153: isolated, so "+cmd" or "Aisha R." keep their
++			// punctuation where it was typed in an Arabic row.
++			cell: (p) => <bdi>{p.user.full_name}</bdi>,
+ 		},
+ 		{
+ 			key: "email",
+@@ -247,13 +264,17 @@ export function StudentsList() {
+ 							>
+ 								{t("people.account.activate")}
+ 							</Button>
+-							<Button
+-								size="sm"
+-								variant="outline"
+-								onClick={() => runBulk("deactivate")}
+-							>
+-								{t("people.account.deactivate")}
+-							</Button>
++							{/* ETQAN-QA-160: signs every selected student out; asks first. */}
++							<Confirm
++								action={t("people.account.deactivate")}
++								triggerVariant="outline"
++								title={t("people.bulk.deactivateTitle")}
++								body={t("people.bulk.deactivateBody", {
++									count: selected.length,
++								})}
++								disabled={bulk.isPending}
++								onConfirm={() => runBulk("deactivate")}
++							/>
+ 							{/* aria-label, not a wrapping <label>: a wrapping label's text
+ 					    would include every option's text. */}
+ 							<Select
+@@ -271,20 +292,25 @@ export function StudentsList() {
+ 							<Button size="sm" onClick={() => runBulk("set_status")}>
+ 								{t("people.bulk.setStatus")}
+ 							</Button>
+-							{tagId === undefined ? null : (
++							{tags.length === 0 ? null : (
+ 								<>
+ 									<Select
+ 										aria-label={t("people.bulk.tag")}
+ 										className="w-auto"
+-										value={String(tagId)}
+-										onChange={(e) => setBulkTag(Number(e.target.value))}
++										value={tagId === undefined ? "" : String(tagId)}
++										onChange={(e) =>
++											setBulkTag(
++												e.target.value ? Number(e.target.value) : undefined,
++											)
++										}
+ 									>
++										<option value="">{t("people.bulk.pickTag")}</option>
+ 										<TagOptions tags={tags} />
+ 									</Select>
+ 									<Button
+ 										size="sm"
+ 										variant="outline"
+-										disabled={tagRetired}
++										disabled={tagId === undefined || tagRetired}
+ 										onClick={() => runBulk("add_tag")}
+ 									>
+ 										{t("people.bulk.addTag")}
+@@ -292,6 +318,7 @@ export function StudentsList() {
+ 									<Button
+ 										size="sm"
+ 										variant="outline"
++										disabled={tagId === undefined}
+ 										onClick={() => runBulk("remove_tag")}
+ 									>
+ 										{t("people.bulk.removeTag")}
+@@ -309,19 +336,25 @@ export function StudentsList() {
+ 									onDone={done}
+ 								/>
+ 							) : null}
+-							{familyId === undefined ? null : (
++							{activeFamilies.length === 0 ? null : (
+ 								<>
+ 									<Select
+ 										aria-label={t("people.bulk.familyToAdd")}
+ 										className="w-auto"
+-										value={String(familyId)}
+-										onChange={(e) => setBulkFamily(Number(e.target.value))}
++										value={familyId === undefined ? "" : String(familyId)}
++										onChange={(e) =>
++											setBulkFamily(
++												e.target.value ? Number(e.target.value) : undefined,
++											)
++										}
+ 									>
++										<option value="">{t("people.bulk.pickFamily")}</option>
+ 										<FamilyOptions families={activeFamilies} />
+ 									</Select>
+ 									<Button
+ 										size="sm"
+ 										variant="outline"
++										disabled={familyId === undefined}
+ 										onClick={() => runBulk("add_to_family")}
+ 									>
+ 										{t("people.bulk.addToFamily")}
+diff --git a/src/features/people/TeachersList.tsx b/src/features/people/TeachersList.tsx
+index a26ec24..eb3f062 100644
+--- a/src/features/people/TeachersList.tsx
++++ b/src/features/people/TeachersList.tsx
+@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
+ import { Plus } from "lucide-react";
+ import { useState } from "react";
+ import { useTranslation } from "react-i18next";
++import { NameList } from "@/components/NameList";
+ import { TagChips } from "@/components/TagChips";
+ import { useCatalogue } from "@/features/catalogue/queries";
+ import type { Course } from "@/features/catalogue/schemas";
+@@ -44,7 +45,9 @@ export function TeachersList() {
+ 		{
+ 			key: "name",
+ 			header: t("people.columns.name"),
+-			cell: (p) => p.user.full_name,
++			// ETQAN-QA-153: isolated, so "+cmd" or "Aisha R." keep their
++			// punctuation where it was typed in an Arabic row.
++			cell: (p) => <bdi>{p.user.full_name}</bdi>,
+ 		},
+ 		{
+ 			key: "gender",
+@@ -57,11 +60,13 @@ export function TeachersList() {
+ 					{
+ 						key: "courses",
+ 						header: t("people.columns.courses"),
+-						cell: (p: Person<TeacherProfile>) =>
+-							p.profile.course_ids
+-								.map((id) => courseName.get(id))
+-								.filter(Boolean)
+-								.join("، ") || "—",
++						cell: (p: Person<TeacherProfile>) => (
++							<NameList
++								names={p.profile.course_ids
++									.map((id) => courseName.get(id))
++									.filter((name): name is string => Boolean(name))}
++							/>
++						),
+ 					} satisfies Column<TeacherProfile>,
+ 				]
+ 			: []),
+diff --git a/src/features/scheduling/StudyGroupsList.tsx b/src/features/scheduling/StudyGroupsList.tsx
+index ce4529a..6588e79 100644
+--- a/src/features/scheduling/StudyGroupsList.tsx
++++ b/src/features/scheduling/StudyGroupsList.tsx
+@@ -2,6 +2,7 @@ import { UsersRound } from "lucide-react";
+ import { useState } from "react";
+ import { useTranslation } from "react-i18next";
+ import { Confirm } from "@/components/Confirm";
++import { NameList } from "@/components/NameList";
+ import { Pager } from "@/components/Pager";
+ import { useCan } from "@/features/identity/permissions";
+ import type { QueryParams } from "@/lib/api";
+@@ -37,14 +38,16 @@ export function StudyGroupsList() {
+ 	const page = Number(params.page ?? 1);
+ 	const pages = Math.max(1, Math.ceil((data?.count ?? 0) / PAGE_SIZE));
+ 
+-	const students = (group: StudyGroup) =>
+-		group.members
+-			.map((m) =>
++	// ETQAN-QA-170: each name isolated, joined with the reader's comma.
++	const students = (group: StudyGroup) => (
++		<NameList
++			names={group.members.map((m) =>
+ 				m.is_active
+ 					? m.full_name
+ 					: t("studyGroups.inactiveMember", { name: m.full_name }),
+-			)
+-			.join(", ");
++			)}
++		/>
++	);
+ 
+ 	async function onDelete(group: StudyGroup) {
+ 		try {
+diff --git a/src/lib/field-error.test.ts b/src/lib/field-error.test.ts
+index 08ff5c9..47aabe1 100644
+--- a/src/lib/field-error.test.ts
++++ b/src/lib/field-error.test.ts
+@@ -13,11 +13,29 @@ describe("useFieldError", () => {
+ 
+ 	it("passes an unknown key (a verbatim server message) through unchanged", () => {
+ 		const { result } = renderHook(() => useFieldError());
+-		expect(result.current("This email is already in use.")).toBe(
+-			"This email is already in use.",
++		expect(result.current("Some other server sentence.")).toBe(
++			"Some other server sentence.",
+ 		);
+ 	});
+ 
++	// ETQAN-QA-157: a known fixed server sentence shows in the reader's
++	// language.
++	it("translates a known server sentence", async () => {
++		const { default: i18n } = await import("@/lib/i18n");
++		await i18n.changeLanguage("ar");
++		try {
++			const { result } = renderHook(() => useFieldError());
++			expect(result.current("This email is already in use.")).toBe(
++				"هذا البريد مستخدم بالفعل.",
++			);
++			expect(result.current("This type of file is not allowed.")).toBe(
++				"نوع هذا الملف غير مسموح.",
++			);
++		} finally {
++			await i18n.changeLanguage("en");
++		}
++	});
++
+ 	it("returns undefined for no message", () => {
+ 		const { result } = renderHook(() => useFieldError());
+ 		expect(result.current(undefined)).toBeUndefined();
+diff --git a/src/lib/field-error.ts b/src/lib/field-error.ts
+index a5caa69..60e592a 100644
+--- a/src/lib/field-error.ts
++++ b/src/lib/field-error.ts
+@@ -1,4 +1,5 @@
+ import { useTranslation } from "react-i18next";
++import { serverMessageKey } from "./server-messages";
+ 
+ /**
+  * A react-hook-form field's `error?.message` carries either an i18n key (zod
+@@ -13,5 +14,6 @@ import { useTranslation } from "react-i18next";
+ export function useFieldError() {
+ 	const { t } = useTranslation();
+ 	return (message: string | undefined): string | undefined =>
+-		message ? t(message) : undefined;
++		// A known fixed server sentence becomes its key (ETQAN-QA-157).
++		message ? t(serverMessageKey(message) ?? message) : undefined;
+ }
+diff --git a/src/lib/form-errors.test.ts b/src/lib/form-errors.test.ts
+index 4d056fd..b2a138b 100644
+--- a/src/lib/form-errors.test.ts
++++ b/src/lib/form-errors.test.ts
+@@ -51,9 +51,48 @@ describe("applyServerErrors", () => {
+ 		});
+ 		setError.mockClear();
+ 		applyServerErrors(httpError(400, { from_date: ["Too early."] }), setError);
+-		expect(setError).toHaveBeenCalledWith("from_date", {
+-			message: "Too early.",
+-		});
++		expect(setError).toHaveBeenCalledWith(
++			"from_date",
++			{ message: "Too early." },
++			{ shouldFocus: true },
++		);
+ 		expect(setError).toHaveBeenCalledTimes(1);
+ 	});
++
++	// ETQAN-QA-158: only the first refused field takes focus.
++	it("focuses the first refused field only", () => {
++		const setError = vi.fn();
++		applyServerErrors(
++			httpError(400, { user: { email: ["A."], full_name: ["B."] } }),
++			setError,
++		);
++		expect(setError).toHaveBeenNthCalledWith(
++			1,
++			"user.email",
++			{ message: "A." },
++			{ shouldFocus: true },
++		);
++		expect(setError).toHaveBeenNthCalledWith(
++			2,
++			"user.full_name",
++			{ message: "B." },
++			{ shouldFocus: false },
++		);
++	});
++});
++
++// ETQAN-QA-157: a fixed server sentence in a toast is translated.
++describe("errorText for known server sentences", () => {
++	it("translates the duplicate-email refusal", () => {
++		const error = httpError(400, {
++			user: { email: ["This email is already in use."] },
++		});
++		expect(errorText(error, t)).toBe("This email is already in use.");
++		i18n.changeLanguage("ar");
++		try {
++			expect(errorText(error, t)).toBe("هذا البريد مستخدم بالفعل.");
++		} finally {
++			i18n.changeLanguage("en");
++		}
++	});
+ });
+diff --git a/src/lib/form-errors.ts b/src/lib/form-errors.ts
+index 9851654..c3404d9 100644
+--- a/src/lib/form-errors.ts
++++ b/src/lib/form-errors.ts
+@@ -1,6 +1,7 @@
+ import type { TFunction } from "i18next";
+ import type { FieldValues, Path, UseFormSetError } from "react-hook-form";
+ import { type ParsedApiError, parseApiError } from "@/features/identity/api";
++import { serverMessageKey } from "./server-messages";
+ 
+ /** The i18n key for a 409's rule code: `errors.<code>` (plan 4 D10). */
+ export const codeKey = (code: string) => `errors.${code}`;
+@@ -13,9 +14,11 @@ export function applyServerErrors<T extends FieldValues>(
+ 	setError: UseFormSetError<T>,
+ ): ParsedApiError {
+ 	const parsed = parseApiError(error);
+-	for (const [field, message] of Object.entries(parsed.fieldErrors)) {
+-		setError(field as Path<T>, { message });
+-	}
++	// ETQAN-QA-158: focus (and so scroll to) the first refused field; the
++	// message used to appear above the view while Save seemed to do nothing.
++	Object.entries(parsed.fieldErrors).forEach(([field, message], index) => {
++		setError(field as Path<T>, { message }, { shouldFocus: index === 0 });
++	});
+ 	const root = parsed.code ? codeKey(parsed.code) : parsed.message;
+ 	if (root) setError("root.server", { message: root });
+ 	return parsed;
+@@ -29,10 +32,7 @@ export function errorText(error: unknown, t: TFunction): string {
+ 	const translated = parsed.code
+ 		? t(codeKey(parsed.code), { defaultValue: "" })
+ 		: "";
+-	return (
+-		translated ||
+-		parsed.message ||
+-		Object.values(parsed.fieldErrors)[0] ||
+-		t("errors.generic")
+-	);
++	const server = parsed.message || Object.values(parsed.fieldErrors)[0];
++	const known = server ? serverMessageKey(server) : undefined;
++	return translated || (known ? t(known) : server) || t("errors.generic");
+ }
+diff --git a/src/locales/ar/auth.json b/src/locales/ar/auth.json
+index bc38bf4..9d62168 100644
+--- a/src/locales/ar/auth.json
++++ b/src/locales/ar/auth.json
+@@ -16,7 +16,7 @@
+ 	"checkInbox": "تحقّق من بريدك",
+ 	"verifyPendingBody": "أرسلنا رابط تأكيد إلى {{email}}. اضغط عليه لتفعيل حسابك.",
+ 	"verifying": "جارٍ تأكيد بريدك…",
+-	"verified": "تم تأكيد البريد. يمكنك الآن تسجيل الدخول.",
++	"verified": "تم تأكيد البريد. سجّل الدخول، وإن كان تسجيلك ينتظر موافقة الأكاديمية فسنراسلك فور الموافقة عليه.",
+ 	"verifyFailed": "رابط التأكيد غير صالح أو منتهي الصلاحية.",
+ 	"goToSignIn": "اذهب إلى تسجيل الدخول",
+ 	"resendSent": "إذا كان الحساب بحاجة إلى تأكيد، فالرابط في طريقه إليك.",
+@@ -46,5 +46,10 @@
+ 	"studentCta": "عرض الجدول",
+ 	"parentSubtitle": "أدِر تعلّم عائلتك",
+ 	"studentSubtitle": "دراستك في لمحة",
+-	"verifyEmailTitle": "تأكيد بريدك الإلكتروني"
++	"verifyEmailTitle": "تأكيد بريدك الإلكتروني",
++	"errors": {
++		"required": "هذا الحقل مطلوب.",
++		"email": "أدخل بريدًا إلكترونيًا صحيحًا.",
++		"passwordShort": "استخدم 8 أحرف على الأقل."
++	}
+ }
+diff --git a/src/locales/ar/errors.json b/src/locales/ar/errors.json
+index 6b2bc25..21987fe 100644
+--- a/src/locales/ar/errors.json
++++ b/src/locales/ar/errors.json
+@@ -101,5 +101,9 @@
+ 	"chat": {
+ 		"recipient_unavailable": "لا يمكن لهذا الشخص استقبال الرسائل",
+ 		"message_deleted": "حُذفت هذه الرسالة."
++	},
++	"server": {
++		"emailInUse": "هذا البريد مستخدم بالفعل.",
++		"fileTypeNotAllowed": "نوع هذا الملف غير مسموح."
+ 	}
+ }
+diff --git a/src/locales/ar/notifications.json b/src/locales/ar/notifications.json
+index 1fdc077..6226c52 100644
+--- a/src/locales/ar/notifications.json
++++ b/src/locales/ar/notifications.json
+@@ -110,8 +110,8 @@
+ 		},
+ 		"hint": {
+ 			"sessions": "تذكيرات قبل الحصص والتأخر والغياب.",
+-			"payments": "الفواتير والمدفوعات المتأخرة والاشتراكات القاربة على الانتهاء.",
+-			"schedule": "التغييرات على جدولك.",
++			"payments": "الفواتير والمدفوعات المتأخرة والاشتراكات التي قاربت على الانتهاء.",
++			"schedule": "التغييرات على الجدول.",
+ 			"reports_homework": "تقارير الحصص والواجبات.",
+ 			"chat": "رسائل المحادثة الجديدة."
+ 		},
+diff --git a/src/locales/ar/people.json b/src/locales/ar/people.json
+index 72f4f76..5253c03 100644
+--- a/src/locales/ar/people.json
++++ b/src/locales/ar/people.json
+@@ -55,6 +55,7 @@
+ 	"saved": "تم الحفظ.",
+ 	"cancel": "إلغاء",
+ 	"loadError": "تعذّر تحميل هذه القائمة.",
++	"noMatches": "لا توجد نتائج مطابقة للبحث أو عوامل التصفية.",
+ 	"genericError": "حدث خطأ ما. حاول مرة أخرى.",
+ 	"tabs": {
+ 		"all": "الكل"
+@@ -100,7 +101,11 @@
+ 		"familyToAdd": "العائلة المراد الإضافة إليها",
+ 		"addToFamily": "إضافة إلى عائلة",
+ 		"removeFromFamily": "إزالة من العائلة",
+-		"skipped": "تم تخطي من هم في عائلة أخرى: {{names}}"
++		"skipped": "تم تخطي من هم في عائلة أخرى: {{names}}",
++		"pickTag": "اختر وسمًا…",
++		"pickFamily": "اختر عائلة…",
++		"deactivateTitle": "تعطيل الحسابات المحددة",
++		"deactivateBody": "سيُسجَّل خروج الطلاب المحددين ({{count}}) من كل الأجهزة وتتوقف روابط الدخول، ولن يستطيعوا الدخول حتى تعيد تفعيلهم."
+ 	},
+ 	"account": {
+ 		"title": "الحساب",
+@@ -119,8 +124,11 @@
+ 		"pendingEmail": "بانتظار تأكيد {{email}}.",
+ 		"blocked": {
+ 			"self": "لا يمكنك تعطيل حسابك.",
+-			"last_admin": "تحتاج الأكاديمية إلى مشرف نشط واحد على الأقل."
+-		}
++			"last_admin": "تحتاج الأكاديمية إلى مدير نشط واحد على الأقل."
++		},
++		"resendInvite": "إعادة إرسال الدعوة",
++		"deactivateTitle": "تعطيل حساب {{name}}",
++		"deactivateBody": "سيُسجَّل خروج {{name}} من كل الأجهزة وتتوقف روابط الدخول، ولن يستطيع الدخول حتى تعيد تفعيل الحساب."
+ 	},
+ 	"guardians": {
+ 		"title": "أولياء الأمور",
+@@ -160,8 +168,8 @@
+ 		"loadError": "تعذّر تحميل بيانات هذا المعلم."
+ 	},
+ 	"admins": {
+-		"invite": "دعوة مشرف",
+-		"inviteBody": "أرسل دعوة مشرف إلى عنوان بريد إلكتروني جديد."
++		"invite": "دعوة مدير",
++		"inviteBody": "أرسل دعوة مدير إلى عنوان بريد إلكتروني جديد."
+ 	},
+ 	"payout": {
+ 		"vodafone_cash": "فودافون كاش",
+@@ -277,6 +285,8 @@
+ 			"nameTooLong": "اجعل الاسم 120 حرفًا على الأكثر.",
+ 			"studentsRequired": "اختر طالبًا واحدًا على الأقل.",
+ 			"payerRequired": "اختر من يدفع."
+-		}
+-	}
++		},
++		"retireBody": "ستتوقف العائلة «{{name}}» عن دفع الفواتير الجديدة لطلابها؛ يبقى الطلاب مرتبطين بها ويمكنك إعادة تفعيل العائلة لاحقًا."
++	},
++	"selectAll": "تحديد الكل في هذه الصفحة"
+ }
+diff --git a/src/locales/en/auth.json b/src/locales/en/auth.json
+index 9a0440a..2717b11 100644
+--- a/src/locales/en/auth.json
++++ b/src/locales/en/auth.json
+@@ -16,7 +16,7 @@
+ 	"checkInbox": "Check your inbox",
+ 	"verifyPendingBody": "We've sent a verification link to {{email}}. Click it to activate your account.",
+ 	"verifying": "Verifying your email…",
+-	"verified": "Email verified. You can now sign in.",
++	"verified": "Email verified. Sign in; if your registration is waiting for the academy's approval, we'll email you as soon as it's approved.",
+ 	"verifyFailed": "This verification link is invalid or has expired.",
+ 	"goToSignIn": "Go to sign in",
+ 	"resendSent": "If that account needs verification, a new link is on its way.",
+@@ -46,5 +46,10 @@
+ 	"studentCta": "View schedule",
+ 	"parentSubtitle": "Manage your family's learning",
+ 	"studentSubtitle": "Your studies at a glance",
+-	"verifyEmailTitle": "Verify your email"
++	"verifyEmailTitle": "Verify your email",
++	"errors": {
++		"required": "Fill this in.",
++		"email": "Enter a valid email address.",
++		"passwordShort": "Use at least 8 characters."
++	}
+ }
+diff --git a/src/locales/en/errors.json b/src/locales/en/errors.json
+index 1221750..8abdb4a 100644
+--- a/src/locales/en/errors.json
++++ b/src/locales/en/errors.json
+@@ -101,5 +101,9 @@
+ 	"chat": {
+ 		"recipient_unavailable": "This person can't receive messages.",
+ 		"message_deleted": "This message has been deleted."
++	},
++	"server": {
++		"emailInUse": "This email is already in use.",
++		"fileTypeNotAllowed": "This type of file isn't allowed."
+ 	}
+ }
+diff --git a/src/locales/en/notifications.json b/src/locales/en/notifications.json
+index 5fe21d0..d6b8942 100644
+--- a/src/locales/en/notifications.json
++++ b/src/locales/en/notifications.json
+@@ -111,7 +111,7 @@
+ 		"hint": {
+ 			"sessions": "Reminders before sessions, lateness and absence.",
+ 			"payments": "Invoices, overdue payments and subscriptions running out.",
+-			"schedule": "Changes to your timetable.",
++			"schedule": "Changes to the timetable.",
+ 			"reports_homework": "Session reports and homework.",
+ 			"chat": "New chat messages."
+ 		},
+diff --git a/src/locales/en/people.json b/src/locales/en/people.json
+index 048b358..525442b 100644
+--- a/src/locales/en/people.json
++++ b/src/locales/en/people.json
+@@ -55,6 +55,7 @@
+ 	"saved": "Saved.",
+ 	"cancel": "Cancel",
+ 	"loadError": "Couldn't load this list.",
++	"noMatches": "No one matches your search or filters.",
+ 	"genericError": "Something went wrong. Please try again.",
+ 	"tabs": {
+ 		"all": "All"
+@@ -100,7 +101,11 @@
+ 		"familyToAdd": "Family to add to",
+ 		"addToFamily": "Add to family",
+ 		"removeFromFamily": "Remove from family",
+-		"skipped": "Skipped, already in another family: {{names}}"
++		"skipped": "Skipped, already in another family: {{names}}",
++		"pickTag": "Choose a tag…",
++		"pickFamily": "Choose a family…",
++		"deactivateTitle": "Deactivate the selected accounts",
++		"deactivateBody": "The {{count}} selected students are signed out everywhere, sign-in links stop working, and they can't sign in until you activate them again."
+ 	},
+ 	"account": {
+ 		"title": "Account",
+@@ -120,7 +125,10 @@
+ 		"blocked": {
+ 			"self": "You can't deactivate your own account.",
+ 			"last_admin": "The academy needs at least one active admin."
+-		}
++		},
++		"resendInvite": "Resend invite",
++		"deactivateTitle": "Deactivate {{name}}",
++		"deactivateBody": "{{name}} is signed out everywhere, sign-in links stop working, and they can't sign in until you activate the account again."
+ 	},
+ 	"guardians": {
+ 		"title": "Guardians",
+@@ -277,6 +285,8 @@
+ 			"nameTooLong": "Keep the name to 120 characters.",
+ 			"studentsRequired": "Choose at least one student.",
+ 			"payerRequired": "Choose who pays."
+-		}
+-	}
++		},
++		"retireBody": "{{name}} stops paying for its students' new invoices; the students stay linked and you can restore the family later."
++	},
++	"selectAll": "Select all on this page"
+ }
+diff --git a/src/locales/es/auth.json b/src/locales/es/auth.json
+index b9cfa02..62f86d5 100644
+--- a/src/locales/es/auth.json
++++ b/src/locales/es/auth.json
+@@ -16,7 +16,7 @@
+ 	"checkInbox": "Revisa tu bandeja de entrada",
+ 	"verifyPendingBody": "Enviamos un enlace de verificación a {{email}}. Haz clic en él para activar tu cuenta.",
+ 	"verifying": "Verificando tu correo…",
+-	"verified": "Correo verificado. Ya puedes iniciar sesión.",
++	"verified": "Correo verificado. Inicia sesión; si tu inscripción espera la aprobación de la academia, te escribiremos en cuanto la aprueben.",
+ 	"verifyFailed": "Este enlace de verificación no es válido o ya venció.",
+ 	"goToSignIn": "Ir a iniciar sesión",
+ 	"resendSent": "Si esa cuenta necesita verificación, va en camino un enlace nuevo.",
+@@ -46,5 +46,10 @@
+ 	"studentCta": "Ver horario",
+ 	"parentSubtitle": "Gestiona el aprendizaje de tu familia",
+ 	"studentSubtitle": "Tus estudios de un vistazo",
+-	"verifyEmailTitle": "Verifica tu correo"
++	"verifyEmailTitle": "Verifica tu correo",
++	"errors": {
++		"required": "Completa este campo.",
++		"email": "Escribe un correo electrónico válido.",
++		"passwordShort": "Usa al menos 8 caracteres."
++	}
+ }
+diff --git a/src/locales/es/errors.json b/src/locales/es/errors.json
+index 1947f73..71c79d3 100644
+--- a/src/locales/es/errors.json
++++ b/src/locales/es/errors.json
+@@ -47,5 +47,9 @@
+ 		"negative_net": "Las deducciones superan el pago.",
+ 		"adjustment_used": "Este ajuste está en un recibo de pago emitido, así que no se puede cambiar.",
+ 		"payslip_issued": "Esta sesión está en un recibo de pago emitido, así que no se puede cambiar."
++	},
++	"server": {
++		"emailInUse": "Este correo ya está en uso.",
++		"fileTypeNotAllowed": "Este tipo de archivo no está permitido."
+ 	}
+ }
+diff --git a/src/locales/es/people.json b/src/locales/es/people.json
+index ce2dc5b..afc828d 100644
+--- a/src/locales/es/people.json
++++ b/src/locales/es/people.json
+@@ -55,6 +55,7 @@
+ 	"saved": "Guardado.",
+ 	"cancel": "Cancelar",
+ 	"loadError": "No se pudo cargar esta lista.",
++	"noMatches": "Nadie coincide con tu búsqueda o filtros.",
+ 	"genericError": "Algo salió mal. Inténtalo de nuevo.",
+ 	"tabs": {
+ 		"all": "Todos"
+@@ -99,7 +100,11 @@
+ 		"familyToAdd": "Familia a la que agregar",
+ 		"addToFamily": "Agregar a la familia",
+ 		"removeFromFamily": "Quitar de la familia",
+-		"skipped": "Omitidos por estar ya en otra familia: {{names}}"
++		"skipped": "Omitidos por estar ya en otra familia: {{names}}",
++		"pickTag": "Elige una etiqueta…",
++		"pickFamily": "Elige una familia…",
++		"deactivateTitle": "Desactivar las cuentas seleccionadas",
++		"deactivateBody": "Los {{count}} estudiantes seleccionados cierran sesión en todos sus dispositivos, los enlaces de acceso dejan de funcionar y no podrán entrar hasta que los reactives."
+ 	},
+ 	"account": {
+ 		"title": "Cuenta",
+@@ -119,7 +124,10 @@
+ 		"blocked": {
+ 			"self": "No puedes desactivar tu propia cuenta.",
+ 			"last_admin": "La academia necesita al menos un administrador activo."
+-		}
++		},
++		"resendInvite": "Reenviar invitación",
++		"deactivateTitle": "Desactivar a {{name}}",
++		"deactivateBody": "{{name}} cierra sesión en todos sus dispositivos, los enlaces de acceso dejan de funcionar y no podrá entrar hasta que reactives la cuenta."
+ 	},
+ 	"guardians": {
+ 		"title": "Tutores legales",
+@@ -268,6 +276,8 @@
+ 			"nameTooLong": "Usa como máximo 120 caracteres para el nombre.",
+ 			"studentsRequired": "Elige al menos un estudiante.",
+ 			"payerRequired": "Elige quién paga."
+-		}
+-	}
++		},
++		"retireBody": "{{name}} deja de pagar las nuevas facturas de sus estudiantes; los estudiantes siguen vinculados y puedes restaurar la familia más tarde."
++	},
++	"selectAll": "Seleccionar todo en esta página"
+ }
+diff --git a/src/routes/verify-email.test.tsx b/src/routes/verify-email.test.tsx
+index df03fef..98ad9de 100644
+--- a/src/routes/verify-email.test.tsx
++++ b/src/routes/verify-email.test.tsx
+@@ -65,6 +65,16 @@ describe("VerifyEmailPage", () => {
+ 		);
+ 	});
+ 
++	// ETQAN-QA-172: the same page ends a self-registration that may still
++	// wait for approval, so it must not promise that sign-in works now.
++	it("does not promise sign-in to a registration awaiting approval", async () => {
++		vi.mocked(identityApi.verifyEmail).mockResolvedValue(undefined);
++		renderPage("good-key");
++		const text = await screen.findByText(/email verified/i);
++		expect(text.textContent).not.toMatch(/you can now sign in/i);
++		expect(text.textContent).toMatch(/waiting for the academy's approval/i);
++	});
++
+ 	it("shows an error on a bad key", async () => {
+ 		vi.mocked(identityApi.verifyEmail).mockRejectedValue(new Error("nope"));
+ 		renderPage("bad-key");
+diff --git a/src/ui/input.test.tsx b/src/ui/input.test.tsx
+index 8becf08..ead9793 100644
+--- a/src/ui/input.test.tsx
++++ b/src/ui/input.test.tsx
+@@ -24,6 +24,23 @@ describe("Input", () => {
+ 		expect(cls).toContain("text-base");
+ 		expect(cls).toContain("sm:text-sm");
+ 	});
++	// ETQAN-QA-060: no forced right alignment; each value takes its own
++	// direction (a Latin name or email reads LTR in an Arabic form).
++	it("lets each value keep its own direction", () => {
++		render(<Input aria-label="x" />);
++		const cls = screen.getByLabelText("x").className;
++		expect(cls).toContain("[unicode-bidi:plaintext]");
++		expect(cls).toContain("text-start");
++		expect(cls).not.toContain("rtl:text-right");
++	});
++	// ETQAN-QA-168: the search clear "×" keeps a gap from a value that
++	// aligns to its side (Latin text in an Arabic page).
++	it("keeps the search clear button apart from the text", () => {
++		render(<Input type="search" aria-label="q" />);
++		expect(screen.getByLabelText("q").className).toContain(
++			"[&::-webkit-search-cancel-button]:ms-2",
++		);
++	});
+ 	it("has no axe violations when labelled", async () => {
+ 		const { container } = render(
+ 			<>
+diff --git a/src/ui/input.tsx b/src/ui/input.tsx
+index 3512e3f..4bda557 100644
+--- a/src/ui/input.tsx
++++ b/src/ui/input.tsx
+@@ -23,7 +23,16 @@ export const Input = React.forwardRef<
+ 			// Invalid (set by <Field> via aria-invalid): red border always; red ring
+ 			// only while NOT focus-visible, so the green focus ring still wins on focus.
+ 			"aria-invalid:border-destructive aria-invalid:not-focus-visible:ring-2 aria-invalid:not-focus-visible:ring-destructive",
+-			"rtl:text-right",
++			// ETQAN-QA-060: each value takes its own direction from its first
++			// strong letter (a Latin name, an email or a phone reads LTR in an
++			// Arabic form) and an empty field keeps the page's; `text-start`
++			// then aligns it to that start. A forced right alignment made
++			// "Aisha R." read ".Aisha R".
++			"text-start [unicode-bidi:plaintext]",
++			// ETQAN-QA-168: a search box's clear "×" sits at the inline end; once
++			// a Latin value aligns to that same side (above) its first letter
++			// touched the "×". A gap on the "×"'s text side keeps them apart.
++			"[&::-webkit-search-cancel-button]:ms-2",
+ 			className,
+ 		)}
+ 		{...props}
++++ new src/components/NameList.tsx
+import { Fragment } from "react";
+import { useTranslation } from "react-i18next";
+import { type Locale, RTL_LOCALES } from "@/lib/i18n";
+
+/** Names (people, courses) in one line, each isolated in a `<bdi>` and
+ * joined with the reader's comma ("،" in Arabic). A plain ", "-join let a
+ * Latin name pull its neighbours and the commas out of order in an Arabic
+ * row (ETQAN-QA-170), and a hard-coded "،" showed in English. */
+export function NameList({ names }: { names: readonly string[] }) {
+	const { i18n } = useTranslation();
+	if (names.length === 0) return <>—</>;
+	const comma = RTL_LOCALES.includes(i18n.language as Locale) ? "، " : ", ";
+	return (
+		<>
+			{names.map((name, index) => (
+				// biome-ignore lint/suspicious/noArrayIndexKey: two people may share a name
+				<Fragment key={index}>
+					{index > 0 ? comma : null}
+					<bdi>{name}</bdi>
+				</Fragment>
+			))}
+		</>
+	);
+}
++++ new src/components/NameList.test.tsx
+import { render } from "@testing-library/react";
+import { afterEach, describe, expect, it } from "vitest";
+import i18n from "@/lib/i18n";
+import { NameList } from "./NameList";
+
+describe("NameList", () => {
+	afterEach(async () => {
+		await i18n.changeLanguage("en");
+	});
+
+	// ETQAN-QA-170: each name isolated, the Arabic comma in Arabic.
+	it("isolates each name and uses the reader's comma", async () => {
+		await i18n.changeLanguage("ar");
+		const { container } = render(
+			<NameList names={["M04 Adam Brooks", "سارة العتيبي"]} />,
+		);
+		expect(container.textContent).toBe("M04 Adam Brooks، سارة العتيبي");
+		expect(
+			[...container.querySelectorAll("bdi")].map((b) => b.textContent),
+		).toEqual(["M04 Adam Brooks", "سارة العتيبي"]);
+	});
+
+	it("uses a Latin comma in English and a dash for none", async () => {
+		await i18n.changeLanguage("en");
+		const { container, rerender } = render(<NameList names={["A", "B"]} />);
+		expect(container.textContent).toBe("A, B");
+		rerender(<NameList names={[]} />);
+		expect(container.textContent).toBe("—");
+	});
+});
++++ new src/lib/server-messages.ts
+/** The i18n keys for fixed English sentences the server sends without a
+ * rule code (a field error from `ValidationError(message, field=…)`), so an
+ * Arabic screen doesn't show ".This email is already in use"
+ * (ETQAN-QA-157). The backend has no translations of its own yet; a code on
+ * these errors is proposed in qa/coverage-gaps.md. Add a sentence here only
+ * when it is fixed text (no names or numbers inside). */
+const SERVER_MESSAGES: Record<string, string> = {
+	"This email is already in use.": "errors.server.emailInUse",
+	"This type of file is not allowed.": "errors.server.fileTypeNotAllowed",
+};
+
+/** The i18n key for a known server sentence, else `undefined`. */
+export function serverMessageKey(message: string): string | undefined {
+	return SERVER_MESSAGES[message.trim()];
+}
++++ new src/locales/people-copy.test.ts
+import { describe, expect, it } from "vitest";
+import arNotifications from "./ar/notifications.json";
+import arPeople from "./ar/people.json";
+import enNotifications from "./en/notifications.json";
+
+describe("M04 people copy", () => {
+	// ETQAN-QA-169: the admins page invites an admin ("مدير"), not a
+	// supervisor ("مشرف", a staff role of its own).
+	it("calls an admin an admin in Arabic", () => {
+		expect(arPeople.admins.invite).toBe("دعوة مدير");
+		expect(arPeople.admins.inviteBody).toContain("مدير");
+		expect(JSON.stringify(arPeople.admins)).not.toContain("مشرف");
+		expect(arPeople.account.blocked.last_admin).not.toContain("مشرف");
+	});
+
+	// ETQAN-QA-155: the hints suit an admin editing someone else's
+	// settings, and the Arabic is correct.
+	it("keeps the notification hints neutral and correct", () => {
+		const hint = arNotifications.preferences.hint;
+		expect(hint.schedule).not.toContain("جدولك");
+		expect(hint.payments).not.toContain("القاربة");
+		expect(hint.payments).toContain("التي قاربت على الانتهاء");
+		expect(enNotifications.preferences.hint.schedule).not.toMatch(/your/i);
+	});
+});

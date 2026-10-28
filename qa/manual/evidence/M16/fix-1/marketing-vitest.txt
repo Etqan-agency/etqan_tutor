@@ -1,0 +1,72 @@
+14:37:31 [@astrojs/node] Enabling sessions with filesystem storage
+
+ RUN  v3.2.7 /app
+
+ ✓ test/site.test.ts (19 tests) 34ms
+stderr | test/page-builder.test.ts > templates > renders every block in en
+[astro] `markdown.gfm` and `markdown.smartypants` are deprecated. Move them onto your processor instead (e.g. `unified({ gfm: false, smartypants: false })`). Will be removed in a future major.
+
+stderr | test/components.test.ts > Header > links the logo/name home, lists menu pages, and switches language
+[astro] `markdown.gfm` and `markdown.smartypants` are deprecated. Move them onto your processor instead (e.g. `unified({ gfm: false, smartypants: false })`). Will be removed in a future major.
+
+stderr | test/pages.test.ts > landing > renders the academy in English
+[astro] `markdown.gfm` and `markdown.smartypants` are deprecated. Move them onto your processor instead (e.g. `unified({ gfm: false, smartypants: false })`). Will be removed in a future major.
+
+stderr | test/closed.test.ts > closed sites > the maintenance page is branded, 503 and noindex
+[astro] `markdown.gfm` and `markdown.smartypants` are deprecated. Move them onto your processor instead (e.g. `unified({ gfm: false, smartypants: false })`). Will be removed in a future major.
+
+stderr | test/recorded.test.ts > header and sitemap > shows the Recorded courses link only when courses exist
+[astro] `markdown.gfm` and `markdown.smartypants` are deprecated. Move them onto your processor instead (e.g. `unified({ gfm: false, smartypants: false })`). Will be removed in a future major.
+
+stderr | test/consultations.test.ts > consultation strings, header and sitemap > shows the Consultations link only when one can be booked
+[astro] `markdown.gfm` and `markdown.smartypants` are deprecated. Move them onto your processor instead (e.g. `unified({ gfm: false, smartypants: false })`). Will be removed in a future major.
+
+ ✓ test/components.test.ts (25 tests) 274ms
+stderr | test/routes.test.ts > unknown paths on a live academy > an unknown first segment is an in-layout 404 in the visitor's language
+[astro] `markdown.gfm` and `markdown.smartypants` are deprecated. Move them onto your processor instead (e.g. `unified({ gfm: false, smartypants: false })`). Will be removed in a future major.
+
+ ✓ test/consultations.test.ts (14 tests) 263ms
+stderr | test/articles.test.ts > article list > renders cards in en
+[astro] `markdown.gfm` and `markdown.smartypants` are deprecated. Move them onto your processor instead (e.g. `unified({ gfm: false, smartypants: false })`). Will be removed in a future major.
+
+stderr | test/media.test.ts > VideoPlayer > renders the exact nocookie iframe for a valid YouTube id
+[astro] `markdown.gfm` and `markdown.smartypants` are deprecated. Move them onto your processor instead (e.g. `unified({ gfm: false, smartypants: false })`). Will be removed in a future major.
+
+ ✓ test/page-builder.test.ts (32 tests) 413ms
+ ✓ test/recorded.test.ts (27 tests) 326ms
+ ✓ test/closed.test.ts (17 tests) 515ms
+   ✓ closed sites > /closed-site on an open site is the ordinary 404 (Review Focus 4)  368ms
+ ✓ test/routes.test.ts (16 tests) 528ms
+   ✓ unknown paths on a live academy > an unknown first segment is an in-layout 404 in the visitor's language  388ms
+ ✓ test/articles.test.ts (38 tests) 804ms
+   ✓ header, payload and sitemap > shows the Articles link only with has_articles  421ms
+ ✓ test/media.test.ts (67 tests) 822ms
+ ✓ test/pages.test.ts (19 tests) 1160ms
+   ✓ landing > renders the academy in English  567ms
+ ✓ test/http.test.ts (5 tests) 252ms
+ ✓ test/redirects.test.ts (26 tests) 54ms
+ ✓ test/seo.test.ts (8 tests) 13ms
+ ✓ test/tracking.test.ts (2 tests) 13ms
+stderr | test/layout.test.ts > Layout > renders Arabic RTL with hreflang, canonical and brand colour
+[astro] `markdown.gfm` and `markdown.smartypants` are deprecated. Move them onto your processor instead (e.g. `unified({ gfm: false, smartypants: false })`). Will be removed in a future major.
+
+stderr | test/carousel.test.ts > hero carousel > stays a single hero with no slides
+[astro] `markdown.gfm` and `markdown.smartypants` are deprecated. Move them onto your processor instead (e.g. `unified({ gfm: false, smartypants: false })`). Will be removed in a future major.
+
+ ✓ test/layout.test.ts (7 tests) 48ms
+ ✓ test/carousel.test.ts (8 tests) 55ms
+stderr | test/b8b.test.ts > FAQ page > renders details/summary in en
+[astro] `markdown.gfm` and `markdown.smartypants` are deprecated. Move them onto your processor instead (e.g. `unified({ gfm: false, smartypants: false })`). Will be removed in a future major.
+
+stderr | test/settings.test.ts > site settings on the landing page > shows the footer text and keywords in the page language
+[astro] `markdown.gfm` and `markdown.smartypants` are deprecated. Move them onto your processor instead (e.g. `unified({ gfm: false, smartypants: false })`). Will be removed in a future major.
+
+ ✓ test/b8b.test.ts (10 tests) 764ms
+ ✓ test/settings.test.ts (7 tests) 797ms
+   ✓ site settings on the landing page > shows the footer text and keywords in the page language  369ms
+
+ Test Files  18 passed (18)
+      Tests  347 passed (347)
+   Start at  14:37:32
+   Duration  6.60s (transform 5.25s, setup 0ms, collect 30.52s, tests 7.13s, environment 27ms, prepare 4.16s)
+

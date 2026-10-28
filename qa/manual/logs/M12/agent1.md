@@ -1,0 +1,29 @@
+# M12 agent 1 log
+- 2026-10-28T00:43:40Z start: read README/env/register; settings routes: academy, features, roles, sign-in, security-log, system-status, quick-translate, registration-codes, tags, notification-templates, gateways, integrations, etqan-billing
+- 2026-10-28T00:45:59Z qaother academy BEFORE: tz=UTC cur=USD lang=ar horizon=14 grace=7 due=7; changed to Asia/Riyadh+SAR (AR) saved, persisted after reload; RESTORED UTC+USD (EN) verified after reload
+- 2026-10-28T00:47:18Z qaother branding BEFORE name_ar='Etqan QA Other' primary=#0E7C66; changed to 'أكاديمية M12 الاختبارية' + #AA2244, shown in top bar + accent after reload; RESTORED. F-001..003
+- 2026-10-28T00:50:42Z roles: created role id 35 'M12 مشاهد الطلاب / M12 Student viewer' (students view+view_all) via dblclick save → only 1 created; edited +teachers view, saved. F-004,F-005
+- 2026-10-28T00:51:11Z qa-staff-nocode BEFORE roles: none → assigned M12 role
+- 2026-10-28T00:55:01Z M12 role now also role.* (all 6); staff nocode as role editor → escalation refused (F-007)
+- 2026-10-28T00:55:54Z M12 role retired (member lost access) then restored. F-008, F-009
+- 2026-10-28T00:56:49Z sign-in: google client_id BEFORE empty; saved half value, RESTORED empty (verified). F-010, F-011
+- 2026-10-28T00:58:15Z system-status: ran reconcile now (dblclick → 1 run, 409 on 2nd). F-012, F-013
+- 2026-10-28T00:59:51Z quick-translate: nav.roles AR overridden twice (short, long) — sidebar updated for admin+staff; RESTORED both times (معدّل badge gone)
+- 2026-10-28T01:01:18Z reg codes: created m12-code-01 (dblclick → 1), retired it. F-014
+- 2026-10-28T01:02:58Z tags: created student tag 'M12 وسم اختبار' (emoji abc), retired it. F-015
+- 2026-10-28T01:04:30Z notif templates: session.early_reminder AR body edited (M12 prefix), saved+persisted, RESTORED default (verified)
+- 2026-10-28T01:06:17Z gateways/integrations viewed (no keys entered), etqan-billing qa+qaother (no invoices → overdue banner not testable). F-019, F-020
+- 2026-10-28T01:09:55Z CLEANUP: qa-staff-nocode back to no roles (verified 'لا أدوار'); role 35 'M12 مشاهد الطلاب' retired (0 members). qa-staff-codes probed: all settings URLs → no-permission page
+- 2026-10-28T01:10:19Z EN pass all 15 settings screens + phone AR (academy, roles, role editor, tags, templates, gateways). DONE: 21 findings M12-F-001..021, ~100 step.mjs calls
+- 2026-10-28T01:50:56Z CONFIRMATION SWEEP start (post-fix cycle 1). Shots screens/M12/c*.png
+- 2026-10-28T01:51:46Z qaother BEFORE: tz=UTC cur=USD lang=ar
+- 2026-10-28T01:52:41Z qaother tz/cur changed to Asia/Riyadh+SAR (AR, warning shown, persisted) and RESTORED UTC/USD (EN, verified after reload)
+- 2026-10-28T01:53:45Z branding AR: colour error now Arabic (500 ok), social labels Arabic (501 ok); nothing saved. New: WhatsApp placeholder reads 966501234567+ (F-022)
+- 2026-10-28T01:53:58Z BEFORE roles: role 35 'M12 مشاهد الطلاب' retired 0 members; restoring + editing
+- 2026-10-28T01:57:15Z role 35 restored, +teachers view_all saved; assigned to qa-staff-nocode (BEFORE: no roles)
+- 2026-10-28T02:00:58Z staff nocode EN: with role saw Teachers+Students+Roles; escalation refused EN (top msg names 'Students: create' + toast); retire confirm AR (members 1) → lost access; CLEANUP role 35 retired, nocode 'لا أدوار' (verified)
+- 2026-10-28T02:04:32Z etqan stack stopped/restarted by someone else (~3 min); waited, not restarted by me
+- 2026-10-28T02:05:29Z AR: reg codes layout ok (511), tag emoji 'abc' rejected in AR (512, nothing created), templates gutter + 'الحصص' (513/514), {foo} preview error single AR naming {foo} (515, not saved)
+- 2026-10-28T02:08:11Z EN quick-translate nav.roles → 'M12 Roles' (sidebar showed it) → RESTORED (verified 'Roles'); system status EN ok
+- 2026-10-28T02:09:00Z EN sign-in/security-log/features/integrations/gateways/etqan-billing viewed (no keys entered); only known issues (503,516,517)
+- 2026-10-28T02:09:42Z phone 375 AR academy + roles OK (no horizontal scroll). SWEEP DONE: ~45 step.mjs calls, every shot opened. Fixes 500,501,505,506,507,508,510-515 hold. New: M12-F-022. State: qaother UTC/USD, role 35 retired 0 members, nocode no roles, nav.roles EN restored, no tag/code/template created or changed.

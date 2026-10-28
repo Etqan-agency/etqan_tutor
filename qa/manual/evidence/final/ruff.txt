@@ -1,0 +1,135 @@
+I001 [*] Import block is un-sorted or un-formatted
+  --> etqan/etqan_billing/services/__init__.py:3:1
+   |
+ 1 |   """Public API of etqan_billing. Other apps import only this package."""
+ 2 |
+ 3 | / from etqan.etqan_billing.services.invoices import ADDABLE
+ 4 | | from etqan.etqan_billing.services.invoices import ALREADY_INVOICED
+ 5 | | from etqan.etqan_billing.services.invoices import CONNECT_FEES_TITLE
+ 6 | | from etqan.etqan_billing.services.invoices import DRAFT_HOURS
+ 7 | | from etqan.etqan_billing.services.invoices import DUE_DAYS
+ 8 | | from etqan.etqan_billing.services.invoices import NEGATIVE_TOTAL
+ 9 | | from etqan.etqan_billing.services.invoices import NOT_DRAFT
+10 | | from etqan.etqan_billing.services.invoices import NOT_ISSUED
+11 | | from etqan.etqan_billing.services.invoices import PAID
+12 | | from etqan.etqan_billing.services.invoices import SUSPEND_DAYS
+13 | | from etqan.etqan_billing.services.invoices import USAGE_LINE
+14 | | from etqan.etqan_billing.services.invoices import academy_invoice
+15 | | from etqan.etqan_billing.services.invoices import academy_invoices
+16 | | from etqan.etqan_billing.services.invoices import add_line
+17 | | from etqan.etqan_billing.services.invoices import awaiting_email
+18 | | from etqan.etqan_billing.services.invoices import build_month
+19 | | from etqan.etqan_billing.services.invoices import can_remove_line
+20 | | from etqan.etqan_billing.services.invoices import check_line
+21 | | from etqan.etqan_billing.services.invoices import create_draft
+22 | | from etqan.etqan_billing.services.invoices import has_invoice
+23 | | from etqan.etqan_billing.services.invoices import is_overdue
+24 | | from etqan.etqan_billing.services.invoices import issue
+25 | | from etqan.etqan_billing.services.invoices import issue_due
+26 | | from etqan.etqan_billing.services.invoices import mark_paid
+27 | | from etqan.etqan_billing.services.invoices import may_suspend
+28 | | from etqan.etqan_billing.services.invoices import oldest_unpaid_days
+29 | | from etqan.etqan_billing.services.invoices import remove_line
+30 | | from etqan.etqan_billing.services.invoices import void
+31 | | from etqan.etqan_billing.services.pricing import LINE_TITLES
+32 | | from etqan.etqan_billing.services.pricing import PER
+33 | | from etqan.etqan_billing.services.pricing import ConnectFeeTerms
+34 | | from etqan.etqan_billing.services.pricing import Terms
+35 | | from etqan.etqan_billing.services.pricing import UsageLine
+36 | | from etqan.etqan_billing.services.pricing import charge
+37 | | from etqan.etqan_billing.services.pricing import collected_fees
+38 | | from etqan.etqan_billing.services.pricing import connect_fee
+39 | | from etqan.etqan_billing.services.pricing import current_prices
+40 | | from etqan.etqan_billing.services.pricing import daily_usage
+41 | | from etqan.etqan_billing.services.pricing import has_activity
+42 | | from etqan.etqan_billing.services.pricing import money
+43 | | from etqan.etqan_billing.services.pricing import month_bounds
+44 | | from etqan.etqan_billing.services.pricing import month_usage
+45 | | from etqan.etqan_billing.services.pricing import next_month
+46 | | from etqan.etqan_billing.services.pricing import previous_month
+47 | | from etqan.etqan_billing.services.pricing import per_text
+48 | | from etqan.etqan_billing.services.pricing import price_text
+49 | | from etqan.etqan_billing.services.pricing import terms_for
+50 | | from etqan.etqan_billing.services.pricing import this_month
+51 | | from etqan.etqan_billing.services.pricing import usage_lines
+52 | | from etqan.etqan_billing.services.usage import ETQAN
+53 | | from etqan.etqan_billing.services.usage import UNITS
+54 | | from etqan.etqan_billing.services.usage import current_academy_id
+55 | | from etqan.etqan_billing.services.usage import record_collected_fee
+56 | | from etqan.etqan_billing.services.usage import record_usage
+   | |___________________________________________________________^
+57 |
+58 |   __all__ = [
+   |
+help: Organize imports
+
+RUF022 [*] `__all__` is not sorted
+   --> etqan/etqan_billing/services/__init__.py:58:11
+    |
+ 56 |   from etqan.etqan_billing.services.usage import record_usage
+ 57 |
+ 58 |   __all__ = [
+    |  ___________^
+ 59 | |     "ADDABLE",
+ 60 | |     "ALREADY_INVOICED",
+ 61 | |     "CONNECT_FEES_TITLE",
+ 62 | |     "DRAFT_HOURS",
+ 63 | |     "DUE_DAYS",
+ 64 | |     "ETQAN",
+ 65 | |     "LINE_TITLES",
+ 66 | |     "NEGATIVE_TOTAL",
+ 67 | |     "NOT_DRAFT",
+ 68 | |     "NOT_ISSUED",
+ 69 | |     "PAID",
+ 70 | |     "PER",
+ 71 | |     "SUSPEND_DAYS",
+ 72 | |     "UNITS",
+ 73 | |     "USAGE_LINE",
+ 74 | |     "ConnectFeeTerms",
+ 75 | |     "Terms",
+ 76 | |     "UsageLine",
+ 77 | |     "academy_invoice",
+ 78 | |     "academy_invoices",
+ 79 | |     "add_line",
+ 80 | |     "awaiting_email",
+ 81 | |     "build_month",
+ 82 | |     "can_remove_line",
+ 83 | |     "charge",
+ 84 | |     "check_line",
+ 85 | |     "collected_fees",
+ 86 | |     "connect_fee",
+ 87 | |     "create_draft",
+ 88 | |     "current_academy_id",
+ 89 | |     "current_prices",
+ 90 | |     "daily_usage",
+ 91 | |     "has_activity",
+ 92 | |     "has_invoice",
+ 93 | |     "is_overdue",
+ 94 | |     "issue",
+ 95 | |     "issue_due",
+ 96 | |     "mark_paid",
+ 97 | |     "may_suspend",
+ 98 | |     "money",
+ 99 | |     "month_bounds",
+100 | |     "month_usage",
+101 | |     "next_month",
+102 | |     "oldest_unpaid_days",
+103 | |     "previous_month",
+104 | |     "per_text",
+105 | |     "price_text",
+106 | |     "record_collected_fee",
+107 | |     "record_usage",
+108 | |     "remove_line",
+109 | |     "terms_for",
+110 | |     "this_month",
+111 | |     "usage_lines",
+112 | |     "void",
+113 | | ]
+    | |_^
+    |
+help: Apply an isort-style sorting to `__all__`
+
+Found 2 errors.
+[*] 2 fixable with the `--fix` option.
+
+RUFF EXIT=1

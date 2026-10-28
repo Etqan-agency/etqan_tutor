@@ -1,0 +1,3 @@
+src/features/website/AdsManager.tsx(114,16): error TS6133: 'other' is declared but its value is never read.
+
+exit 

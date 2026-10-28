@@ -1,0 +1,18 @@
+# M03 Agent 1 log
+- 2026-10-27T18:50:22Z start; read README, environment, bug-register, M02 findings
+- 2026-10-27T18:53:03Z admin home AR+EN walked; overdue link -> invoices?status=overdue (5 pages, consistent with 101); F-001, F-002
+- 2026-10-27T18:55:01Z bell panel, notifications page, unread filter, click-through to invoice 149 OK; F-003, F-004
+- 2026-10-27T18:57:32Z language menu (ar/en/es), theme dark on home/notifications/students (persists), account menu, bell AR; F-005..F-007
+- 2026-10-27T18:58:26Z 404 route, missing invoice/student ids; F-008, F-009
+- 2026-10-27T19:04:12Z admin sidebar sweep EN+AR: 68 links each, all load, h1 present, no console/network errors (screens/M03/sweep/admin-{en,ar}/)
+- 2026-10-27T19:06:34Z staff-nocode (home, chat, 4 forbidden URLs blocked, sign out + back), staff-codes (sweep 4 links + 6 forbidden URLs blocked); F-010..F-012
+- 2026-10-27T19:08:45Z supervisor EN: 12 links OK, 7 forbidden URLs blocked; families + notifications were blank once (server reload by parallel agents), retry OK -> not reported
+- 2026-10-27T19:10:51Z teacher (qa-teacher AR sweep 14 links + 6 forbidden -> silent home), maryam EN+AR home; F-013..F-015
+- 2026-10-27T19:13:18Z student AR home + 17 links + 5 forbidden (silent home); 3 pages hit 502 during reload, retry OK; F-016..F-018
+- 2026-10-27T19:14:18Z parent EN (qa-parent) + realistic parent.sharif AR: home, progress (child picker), invoices, chat (not available msg OK); next session 29/10 17:00 matches sub 90; F-019
+- 2026-10-27T19:17:55Z qaother admin AR: home (40-25=15 USD ok), 35 sidebar links OK, 6 switched-off features show proper 'غير مفعّلة' page, empty states OK; F-020
+- 2026-10-27T19:19:33Z mobile 375 AR: admin home (no h-scroll), drawer opens from right (RTL ok) but cannot scroll; student drawer cut; F-021
+- 2026-10-27T19:20:46Z mobile: student drawer nav+Escape close OK, bell mobile, teacher ahmad EN/AR home + user menu; F-022
+- 2026-10-27T19:23:50Z done: 23 findings (M03-F-001..023), Covered list appended
+- 2026-10-27T20:03:58Z agent1 confirmation sweep start (sessions M03-c-*, screens/M03/confirm/)
+- 2026-10-27T20:11:01Z confirmation sweep done: ~27 calls, screens/M03/confirm/c001..c026; fixes 100,103,104,105,107,108,109,110,112,116,117 look OK; new findings M03-F-024 (EN name order flipped, regression of QA-111/112 isolation), F-025 (parent 'قيّم حصصك' remains), F-026 (mobile invoice badge floating)

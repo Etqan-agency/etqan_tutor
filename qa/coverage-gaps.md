@@ -368,3 +368,190 @@ Results are in `specs/F01-tenancy-provisioning.md` § Gap-review results; eviden
 - **Owner heads-up, not F03:** `pytest etqan/access` still has 1 failure from the owner's `etqan/site/admin/*` routes
   (`evidence/F03/retest-1/pytest-access.txt`).
 
+
+## M02 manual, Agent 3 fix cycle 1 (2026-10-27): proposals, not built
+- **PROPOSAL (API change), ETQAN-QA-049:** `POST identity/login/` answers a wrong password with the bare English text
+  `{"non_field_errors": ["Invalid credentials."]}` and no `code`. Fix 1 maps that exact text to `auth.invalidCredentials`
+  in `LoginForm` (the same approach it already uses for "not verified"). The durable fix is additive: add
+  `"code": "identity.invalid_credentials"` (and `identity.email_unverified` for the unverified 400) and let the dashboard
+  key off the code. No migration.
+- **PROPOSAL (refactor), ETQAN-QA-061:** no Radix `Direction.Provider` wraps the app, so every Radix primitive defaults
+  to `ltr` under an Arabic page. Fix 1 passes `dir` to `RadioCardGroup` only (the reported component). `DropdownMenu`
+  (user menu, row menus) has the same default. Wrapping the app in `Direction.Provider` from `DirectionProvider` would
+  fix it everywhere, but it changes the alignment of every dropdown in Arabic, so it needs its own pass with screenshots.
+- **PROPOSAL (refactor), ETQAN-QA-048 / QA-011 family:** Fix 1 gives every identity schema (login, 2FA, forgot, reset,
+  change password, add email, set primary, profile) i18n keys rendered through `useFieldError`. About 25 other
+  feature schemas still use bare `z.string().min(1)` / `z.email()` without a key, so they can show zod's English
+  default. A global `z.config({ customError })` that returns `common`-level keys, plus `useFieldError` in every
+  `Field`, would close the family. Needs a sweep across areas.
+- **Follow-up (small), ETQAN-QA-060:** Fix 1 changes `Input` (`[unicode-bidi:plaintext]` + `text-start`) and isolates the
+  name in the header `UserMenu`. `Textarea` and other places that print a user name in Arabic chrome (tables, cards)
+  were not changed.
+- **Agent 2 gate M02 (2026-10-27):** all four above are **PROPOSAL-accepted** (P3 only, none blocks M02). QA-049 interim mapping is acceptable until the API code lands; QA-061 provider and the QA-048 schema sweep need their own cross-area pass with screenshots; QA-060 follow-up: Latin names in Arabic tables still read e.g. "cmd+" (seen on staff students list, `qa/manual/screens/M02/fix/g-smoke-staff-ar.png`).
+- **PROPOSAL (API change), M02-F-021 / ETQAN-QA-065 (Agent 2 final gate M02, 2026-10-27):** the "Last sign-in" line on student/teacher pages has no date or time; B9b S-8 defines it as "device · IP · zone" and `identity/api/payloads.py::user_payload` has no `last_login`. If wanted: add `last_login` (ISO, UTC) to the people payload and show it first, formatted in the academy time zone. P3, not blocking; the Arabic order of the existing parts is filed separately as ETQAN-QA-065 (easy).
+
+## M06 manual, Agent 3 fix cycle 1 (2026-10-27): proposals, not built
+- **PROPOSAL (refactor), ETQAN-QA-204 family:** the root cause (an `sr-only` header label is `position:absolute`;
+  inside a non-positioned `overflow-x-auto` scroller it escapes and widens the page to the table's width in RTL) is
+  fixed only on the subscriptions list (`relative` on its scroller). About 19 other tables use the same
+  `overflow-x-auto rounded-lg border` wrapper with `sr-only` text inside (`SessionsList`, `TrialsList`,
+  `MySupervision`, `StaffList`, `RolesList`, `FamiliesList`, curriculum, recorded, homework, certificates, …). A
+  shared `TableScroller` component (or `relative` on that wrapper class everywhere) would close the family; needs a
+  375px RTL sweep with screenshots.
+- **PROPOSAL (API change), ETQAN-QA-206 family:** `scheduling` services raise `ValidationError` with English prose and
+  no `code` (`add_pause` "End the pause on or after its start.", availability `_validated` "End the window after it
+  starts.", "Choose a day from Monday to Sunday.", "This window overlaps another one on the same day.", …). Fix 1 checks
+  the two reported cases in the dashboard before sending, so they never reach the server. Durable fix (additive, no
+  migration): give these field errors a `code` (`scheduling.pause_order`, `scheduling.window_order`,
+  `scheduling.window_overlap`) and map codes to keys in `errorText`/`applyServerErrors`. The overlap message is still
+  English in Arabic today.
+- **Follow-up (small), ETQAN-QA-207 family:** fix 1 adds `scheduling/bits.ZonedDateTime` (day and time each in
+  `<bdi>`) and uses it on the trials list and trial page. Other places still join an Arabic `dayIn(...)` and
+  `wallTime(...)` in one string or under `dir="ltr"` and can show the same "2720:00 2026/10/" scramble:
+  `MissingReports.tsx` (`when`), `registration/admin/bits.ts`, `SessionPage.tsx` (postponed-from `when`),
+  `FamilySessions.tsx`, `TeacherSessionTable.tsx`, `MySupervision.tsx`, `SessionSupervision.tsx`. Not changed (not
+  reported, other areas); worth one sweep.
+- **Follow-up (small), ETQAN-QA-211:** the bundle page now has the Subscriptions item highlighted (new `NavItem.also`),
+  a back link and a "<kind> bundle" card title. The page header and browser title are still the route's generic
+  "Subscription bundle": naming the owner there needs the route to read the bundle (its query is cached, so cheap), a
+  small change to `routes/_authed/scheduling.bundles.$bundleId.tsx`.
+- **Agent 2 gate decision (2026-10-27):** all four are **PROPOSAL-accepted**, P3 only (no P0-P2 behind any of them). The 204 family needs a 375px RTL sweep of the other tables. The 206 family (error codes) also covers the window-overlap message, which is still English in Arabic. The 207 family is a sweep of the other day+time joins. The 211 header/title naming is cosmetic. The fixes in cycle 1 are VERIFIED and do not depend on these proposals. Separate from them, the expanded calendar's name wrapping is filed as ETQAN-QA-216 (easy P3, next fix cycle).
+
+
+## M04 manual, Agent 3 fix cycle 1 (2026-10-27): proposals, not built
+- **PROPOSAL (API change), ETQAN-QA-157:** `identity.services` (`This email is already in use.`, 4 places) and
+  `platform/uploads.check_upload` (`This type of file is not allowed.`) raise `ValidationError` with fixed English text
+  and no `code`; the backend has no `.po` translations. Fix 1 maps those two exact sentences to `errors.server.*` keys in
+  one dashboard table (`src/lib/server-messages.ts`, used by `useFieldError`, `errorText` and `ContractDialog`). The
+  durable fix is additive: give these errors codes (`identity.email_in_use`, `uploads.file_type`, `uploads.too_large`
+  with `max_mb`) and key the dashboard off the code, retiring the table. No migration.
+- **PROPOSAL (API change), ETQAN-QA-172:** `POST identity/verify-email/` answers a bare 200, so the confirmation page
+  can't tell "you can sign in now" from "your registration waits for approval". Fix 1 rewords `auth.verified` so it is
+  true in both cases. Durable fix: return `{"can_sign_in": user.is_active}` (identity's own field, no registration
+  import) and show "تم تأكيد بريدك. سنراسلك عندما توافق الأكاديمية على تسجيلك." when false. No migration.
+- **Follow-up (small), ETQAN-QA-151:** Fix 1 folds Arabic spelling variants (أ/إ/آ/ٱ→ا, ة→ه, ى→ي, tatweel and harakat
+  dropped) in the people search (`?q=` on students/parents/teachers/admins) and the families search
+  (`etqan/platform/search.py`, computed in the query; no stored column, no migration). Other searches (contracts, study
+  groups, subscriptions, invoices, library, chat contacts) still use plain `icontains`; each can adopt
+  `with_folded`/`folded_q` in one line. If lists grow large, a stored normalised column with a trigram index would be
+  the next step (migration, owner approval).
+- **Follow-up (small), ETQAN-QA-156:** the button now reads "إعادة إرسال الدعوة". The create toast still says only
+  "تم الحفظ."; saying "Invite emailed" there would need the create response to say whether an invite went out (it is
+  skipped for an email-less student), so it is left for the people-forms pass.
+- **Note, ETQAN-QA-155:** `es/notifications.json` has no `preferences` section at all (falls back to English); not part
+  of the bug, left for the Spanish sweep.
+
+## M03 fix-1 proposals (Agent 3, 2026-10-27T19:51:23Z)
+- **ETQAN-QA-102 follow-up (backend, not built):** notification text stores amounts as `1,500.00 EGP` and dates as ISO in every language. Proposal: format `amount`/`due_on`/`from`/`to`/`time` per recipient language in `notifications/text.py` (Arabic currency name/digits policy to be decided by the owner), or store the raw facts and render on read (changes spec N8-4 "rendered once"). Needs a spec decision; isolation alone (done) already fixes the scrambled order.
+
+## M08 manual, Agent 3 fix cycle 1 (2026-10-28): proposals, not built
+- **PROPOSAL (API change), ETQAN-QA-314:** the New invoice form lists students from `GET people/students/`, gated by
+  `student.view_any`, so a billing clerk with `invoice.create` alone can never issue an invoice. Fix 1 (dashboard only)
+  stops the silent 403: without `student.view_any` the form says why ("Issuing an invoice needs permission to view
+  students…") instead of an empty picker, the subscription list is asked only with `subscription.view_any`, and the
+  invoice page links "Open the subscription" only with `subscription.view`. Durable fix: a billing-owned lookup
+  `GET billing/students/?q=` gated by `invoice.create` (id + full name only, active students, through
+  `identity.services`), like `billing/payers/`; or a role-editor hint that `invoice.create` needs `student.view_any`.
+  No migration. Owner decision on which.
+- **PROPOSAL (product decision), ETQAN-QA-307 currency part:** English shows USD as "$85.00" (Intl's symbol) next to
+  "EGP 1,200.00"/"KWD 3.000" (codes, no English symbol); Arabic shows "US$". Making it uniform means a
+  `currencyDisplay` choice in `lib/money.formatMoney` that changes every amount in the app (e.g. "code" everywhere, or
+  "USD" only for ambiguous dollar symbols). Not built: app-wide display change. Fix 1 did the table layout part.
+- **Follow-up (small), ETQAN-QA-313:** the server freezes checkout descriptions in English at start
+  (`wallet/topup_purpose.py` "Wallet top-up · <name>", `recorded/purpose.py` "Recorded course <code>",
+  `consultations/purpose.py` "Consultation <ref>"). Fix 1 translates them on the Online payments list from `purpose`
+  (the frozen prefix is replaced, the name/code kept). A durable fix would store only the subject and let each reader
+  render the label; the CSV export still carries the English text.
+
+## M12 manual, Agent 3 fix cycle 1 (2026-10-28): proposals, not built
+- **PROPOSAL (UI reshape), ETQAN-QA-506 follow-up:** fix 1 translates the anti-escalation refusals
+  (`access/services.py`), shows the refusal above the matrix plus a toast, and names the changed codes the staff editor
+  doesn't hold ("صلاحيات لا تملكها: الفواتير: عرض الكل."). Durable: for a staff editor, disable (or mark) the boxes of
+  codes they don't hold, from `me.permissions`, so the refusal can't happen. Also a stable `code` on these 403s
+  (`access.unheld_add` etc.) instead of matching the English sentence in `lib/server-messages.ts` (additive API change).
+- **PROPOSAL (list order), ETQAN-QA-508 follow-up:** fix 1 only fixes the Arabic status word ("موقوف"). Active roles
+  first: `access.services.roles_queryset()` orders by `name_en, id`; ordering by `-is_active, name_en, id` (or a
+  default "Active" filter in `RolesList`) changes the list's API order and the seed/tenant tests that read it; plus a
+  name search (`?search=`). Owner decision.
+- **PROPOSAL (API), ETQAN-QA-510 follow-up:** `JobRun.error` stores English text ("Timed out.", "Academy
+  suspended.", or an exception's text). Fix 1 maps the two fixed reasons to i18n keys in `SystemStatusPage`. Durable: an
+  `error_code` field on `JobRun` (migration) or fixed codes in `error`, with the exception text kept for staff only.
+- **PROPOSAL (API), ETQAN-QA-515 follow-up:** the `notifications.bad_placeholder` 400 carries an English field
+  sentence. Fix 1 shows one translated message under the field and names the bad `{name}` from the client's own copy of
+  the placeholders. Durable: return the bad names as data (`{"code": …, "names": ["foo"]}`) so no sentence is parsed.
+- **Note, ETQAN-QA-512:** the server now refuses a text emoji on create/change ("Use one emoji, like ⭐."); older tags
+  that already hold text (e.g. "ب", "abc" on qa) keep it until edited. A data clean-up would be a one-off script.
+- **Note, ETQAN-QA-505:** the hint explains view vs view all; whether ticking "view" alone should ever be offered for a
+  list-only resource is part of ETQAN-QA-504's editor reshape.
+
+## M15 manual, Agent 3 fix cycle 1 (2026-10-28): proposals, not built
+- **PROPOSAL (backend rule), ETQAN-QA-451 follow-up:** fix 1 makes an unpaid self-booking read "بانتظار الدفع" with
+  "ادفع الآن" on the family list (from the existing `actions.pay`), so it can't pass for the paid one. Still open:
+  `consultations/services/unpaid.py:_checkout_open` skips any request with a `pending` checkout, and an abandoned Stripe
+  checkout stays `pending` until `gateways.expire_checkouts` (~25 h), so abandoned holds stay listed (family and office
+  queue) for a day. Options (owner decision, consultations.md §5 says "skipping any with an open checkout"): (a) when the
+  hold runs out, expire the request's own pending checkouts at the provider (`gateways.services.expire_local` /
+  provider expire) and then cancel; or (b) cancel on hold expiry and let a late `complete` refund or move the money
+  to the wallet. Either changes a documented rule and the gateway flow; needs tests in `test_unpaid.py` and the
+  purpose's `complete`.
+- **PROPOSAL (API), ETQAN-QA-464 follow-up:** `clean_contact` raises English sentences with no `code`
+  ("Enter a WhatsApp number.", "Enter the person's name.", "Enter a valid email."). Fix 1 marks WhatsApp required when
+  the account has no phone, blocks Pay until it is filled and shows the WhatsApp refusal from the catalogue. Durable:
+  codes such as `consultations.whatsapp_required` on these field errors.
+- **Note, ETQAN-QA-459:** fix 1 adds an additive read-only `starts_at` to the review endpoints' session object
+  (`learning/api/serializers.py:_session_ref`); no migration, no input change.
+
+## M05 manual, Agent 3 fix cycle 1 (2026-10-28): proposals, not built
+- **PROPOSAL (backend behaviour), ETQAN-QA-562 follow-up:** the 114 Qur'an chapters are loaded only by "مزامنة السور"
+  (`learning/services/quran.py:sync_chapters`, curriculum.md "Reference data"); nothing loads them when an academy is
+  created, so a new academy's level-topic surah picker is empty. Fix 1 shows a hint in the picker with a link to the
+  Qur'an chapters page. Durable: call `sync_chapters` from academy provisioning (`tenants` create flow, inside
+  `tenant_context`) and once for existing academies (a data step, e.g. a management command over all schemas). No
+  schema change, but it changes the documented "load by hand" behaviour, so it needs the owner's nod.
+- **PROPOSAL (API), ETQAN-QA-561 follow-up:** the level-topic verse rule raises
+  `f"Verses run from 1 to {verses_count}, first to last."` (English, with a number) and the recorded slug rule
+  "Use lower-case letters, digits and dashes." with no `code`. Fix 1 checks both in the dialog before saving (Arabic
+  text) and maps the fixed sentences in `dashboard/src/lib/server-messages.ts`. Durable: codes such as
+  `learning.verses_out_of_range` (with `last` as data) and `recorded.slug_invalid` on these field errors.
+- **Note, ETQAN-QA-570:** `consultations/services/products.py` now checks "a description in Arabic or English" itself
+  before `full_clean`, so the API answers "Write a description in Arabic or English." on `description_en` (same field
+  as before) instead of Django's translated constraint text; the dialog also checks it before sending.
+- **Note, ETQAN-QA-567:** the same bare "https://" in Arabic text is in `ar/website.json` (`url`, `urlInvalid`, social
+  `tip`) and `ar/scheduling.json` (`urlInvalid`); outside M05, left for those areas.
+- **M05 gate (Agent 2, 2026-10-28) on the above:** 562 follow-up = PROPOSAL-accepted as a backlog item for the owner
+  (P3, behaviour change, not a blocker: the in-picker hint fixes the confusion); 561 follow-up = PROPOSAL-accepted
+  (API codes, P3, deferred); 567 note acknowledged (other areas' strings). None is P0–P2.
+
+## M16 manual, Agent 3 fix cycle 1 (2026-10-28): proposals, not built
+- **PROPOSAL (API + new site sections), ETQAN-QA-770 (P2):** the home page never shows live courses, packages or
+  teachers, and the admin switches "إظهار الدورات / الباقات / المعلمين" (`landing.show_courses/packages/teachers`) do
+  nothing. Root cause: the public site payload (`site/api/serializers.py:landing_payload`, `sections.courses/packages/
+  teachers`) carries only the three flags; there is no public catalogue/teacher payload, and
+  `marketing/src/pages/[lang]/index.astro` renders only `sections.testimonials` and `sections.contact` (academy-sites
+  spec §3.2 marks these sections as Plan 3). Durable: (1) public read-only endpoints (or fields in the landing payload)
+  for active courses (name pair, description, image), active packages (name, lessons, price minor + currency) and
+  teachers who opt in to be listed (name, photo, short bio; no contact data), each behind its switch and the site
+  status, served through `catalogue.services` / `identity.services` (no cross-app model import); (2) three marketing
+  sections + cards. Needs the owner's call on which teacher fields are public (privacy). Interim option (owner's
+  choice, not built, the form belongs to M13): hide the three switches or mark them "قريبًا" in `HomePageForm.tsx`.
+- **PROPOSAL (API), ETQAN-QA-757/756/761 follow-up:** registration's field refusals ("Invalid code.", "Choose a date
+  from today on.", "Choose a time in the future for the call.", "A date of birth can't be in the future.") carry no
+  `code`; fix 1 maps the fixed sentences in `dashboard/src/lib/server-messages.ts` (and the form checks dates itself
+  first). Durable: codes such as `registration.code_invalid`, `registration.date_past`, `registration.dob_future`.
+- **Note, ETQAN-QA-772:** `site/api/views.py:InquirySerializer.validate_phone` now refuses free text (digits with an
+  optional +, spaces, dashes, dots, brackets; 6-15 digits). Local numbers ("01001234567") stay accepted, as the public
+  form is not the registration form. No model or migration change.
+- **Note, ETQAN-QA-756:** `registration/services.py:_clean_preferences` now refuses `start_on` before the academy's
+  yesterday (one day of slack for a registrant in a zone behind the academy) and `intro_call_at` not after now. Input
+  shape unchanged.
+
+## M01 manual, Agent 3 fix cycle 1 (2026-10-28): proposals, not built
+- **PROPOSAL (middleware behaviour), ETQAN-QA-804 rest:** a suspended academy's login header shows the host name
+  because `tenants/middleware.py:SuspendedAcademyMiddleware` answers 403 to the public branding request too. Option:
+  let the public, unauthenticated branding read (`site` branding/name endpoint) through for a suspended academy so the
+  login keeps its name and logo. A policy call for the owner (what a suspended academy still exposes), so not built;
+  fix 1 only translates the `tenant.suspended` message and shows it on the login at once.
+- **Note, ETQAN-QA-801/802:** the confirmation step is a shared console helper (`etqan/platform/admin_confirm.py`,
+  `templates/admin/etqan_confirm_action.html`); the domain actions (ETQAN-QA-010) can use the same helper later.
+  `services.void` stays idempotent; the admin itself reports an already-void invoice.
+- **Note, ETQAN-QA-812:** the help texts are set on the admin forms, not on the model fields, so no migration.

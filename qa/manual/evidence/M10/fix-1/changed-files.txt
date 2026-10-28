@@ -1,0 +1,38 @@
+## dashboard
+ src/features/catalogue/CatalogueList.test.tsx     |  50 +++++++-
+ src/features/catalogue/CatalogueList.tsx          |  35 ++++--
+ src/features/catalogue/CourseForm.test.tsx        |   5 +
+ src/features/catalogue/CourseForm.tsx             |   8 +-
+ src/features/catalogue/PackageForm.test.tsx       |  16 +++
+ src/features/catalogue/PackageForm.tsx            |   7 ++
+ src/features/catalogue/queries.ts                 |   7 +-
+ src/features/consultations/ProductDialog.test.tsx |  30 +++++
+ src/features/consultations/ProductDialog.tsx      |  18 +++
+ src/features/consultations/ProductsAdmin.test.tsx |  19 +++
+ src/features/consultations/ProductsAdmin.tsx      |  27 +++--
+ src/features/content/ContentAdmin.test.tsx        |  20 ++++
+ src/features/content/ContentAdmin.tsx             |   7 +-
+ src/features/curriculum/ChaptersTable.test.tsx    |  26 ++++-
+ src/features/curriculum/ChaptersTable.tsx         |  11 +-
+ src/features/curriculum/LevelDialog.test.tsx      |  80 ++++++++++++-
+ src/features/curriculum/LevelDialog.tsx           | 134 ++++++++++++++++------
+ src/features/curriculum/LevelsList.test.tsx       |   7 ++
+ src/features/curriculum/LevelsList.tsx            |   4 +-
+ src/features/curriculum/errors.test.ts            |  23 ++++
+ src/features/curriculum/errors.ts                 |  15 ++-
+ src/features/recorded/PlaylistForm.test.tsx       |  15 +++
+ src/features/recorded/PlaylistForm.tsx            |   3 +
+ src/features/recorded/PlaylistsAdmin.test.tsx     |  11 ++
+ src/features/recorded/PlaylistsAdmin.tsx          |  16 ++-
+ src/features/recorded/VideosTab.test.tsx          |  15 ++-
+ src/features/recorded/VideosTab.tsx               |  22 ++--
+ 27 files changed, 534 insertions(+), 97 deletions(-)
+## backend
+ etqan/notifications/channels/email.py              | 29 +++++++++++++++++-----
+ etqan/notifications/tests/test_email.py            | 29 ++++++++++++++++++++++
+ etqan/site/emails.py                               | 17 ++++++++++---
+ etqan/templates/email/layout.html                  | 13 +++++-----
+ etqan/templates/email/layout.txt                   |  9 ++++---
+ etqan/templates/email/notifications/message.ar.txt |  5 +---
+ etqan/templates/email/notifications/message.en.txt |  5 +---
+ 7 files changed, 81 insertions(+), 26 deletions(-)

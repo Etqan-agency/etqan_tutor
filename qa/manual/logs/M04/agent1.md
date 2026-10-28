@@ -1,0 +1,14 @@
+# M04 Agent 1 log
+- 2026-10-27T18:50:14Z start M04 manual pass
+- 2026-10-27T18:52:30Z students list AR: search AR/EN/phone/email; F-001..004 filed
+- 2026-10-27T18:57:02Z add student AR (validation, double-click save = 1 row id 248, invite mail OK), detail page; F-005..009
+- 2026-10-27T18:59:41Z duplicate email, long name, bulk set status/deactivate, single deactivate/reactivate; F-010..013
+- 2026-10-27T19:02:46Z bulk create family (M04 عائلة عبد الرحمن, payer 248) OK; CSV export checked; F-014
+- 2026-10-27T19:06:55Z teachers list/new (validation, created 251), availability, contracts add/filter/delete-confirm/download; F-015..018. One transient blank page on teacher 251 (retry OK).
+- 2026-10-27T19:11:21Z parents (created 252, linked to 248), families (edit/remove/add/payer/retire); F-019..023
+- 2026-10-27T19:18:29Z staff add (role عرض الطلاب), admins, tags create/assign/filter, study group, self-registration end-to-end + approve; F-024..028. One 502 window on backend (~20 s) during staff add, retried.
+- 2026-10-27T19:21:42Z roles: staff-codes (students only, read-only; F-029), staff-nocode (all forbidden), supervisor (students/parents/families/teachers view), teacher (all people URLs → Home)
+- 2026-10-27T19:23:13Z mobile AR: list, add student (255), detail; edit own student 248 name+email (invite re-sent OK); unsaved-form test; F-030..031
+- 2026-10-27T19:23:50Z EN family 13 / teacher 228 checks; Covered list written. Done: 31 findings (F-001..F-031), ~100 step.mjs calls.
+- 2026-10-27T20:06:14Z confirmation sweep start (Agent 1, round 2)
+- 2026-10-27T20:16:40Z sweep done (~38 step.mjs calls, sessions M04-s-*): fixes F-001/002/003/004/009/010/011/013/018/021/023/024/025/026 hold; roles OK; created student 258 (M04 يوسف عبد الله, deactivated+reactivated); new F-032..F-035. Menu highlight on /people/groups after a sidebar click was mouse hover only (direct load OK), not filed.

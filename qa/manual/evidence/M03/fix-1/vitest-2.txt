@@ -1,0 +1,12 @@
+[vite:react-swc] We recommend switching to `@vitejs/plugin-react` for improved performance as no swc plugins are used. More information at https://vite.dev/rolldown
+
+ RUN  v3.2.6 /app
+
+ ✓ src/routes/_authed/$.test.tsx (2 tests) 257ms
+ ✓ src/features/finance/FinanceSummaryCard.test.tsx (14 tests) 817ms
+
+ Test Files  2 passed (2)
+      Tests  16 passed (16)
+   Start at  19:44:52
+   Duration  8.00s (transform 3.93s, setup 1.35s, collect 6.60s, tests 1.07s, environment 2.63s, prepare 311ms)
+
