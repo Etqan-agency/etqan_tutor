@@ -1,0 +1,8 @@
+# BuildKit reads this for docs-site/Dockerfile (context: the meta repo root).
+# Allowlist: only the docs and the site; never submodules, secrets or builds.
+*
+!docs/
+!docs-site/
+docs-site/node_modules
+docs-site/dist
+docs-site/.astro

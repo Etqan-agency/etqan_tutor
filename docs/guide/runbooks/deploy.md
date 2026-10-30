@@ -41,7 +41,9 @@ deployed stack. Setting up a staging server for the first time is covered step b
 
 ## What `ship.sh <sha>` does (blue/green)
 
-1. Refuses to start with less than 5 GiB free on `/var/lib/docker`.
+1. Refuses to start, before any `docker compose` call, without a non-empty
+   `/opt/etqan/caddy/docs-users.caddy` (see below), or with less than 5 GiB free on
+   `/var/lib/docker`.
 2. Reads `/opt/etqan/.active-color`; the new colour is the other one.
 3. Pulls images and makes sure `caddy`, `postgres`, `redis` and `flower` are up.
 4. Runs `manage.py migrate` (django-tenants' `migrate_schemas`: public, then every academy),
@@ -50,7 +52,7 @@ deployed stack. Setting up a staging server for the first time is covered step b
 5. Starts the new colour (`django-<c>`, `celery-worker-<c>`, `celery-beat-<c>`), then checks
    `/health/ready/` up to 10 times. On failure it removes the new colour.
 6. Writes `.active-color`, stops the old colour with a 30-second drain, restarts
-   `dashboard`, `marketing` and `website`, and prunes images older than 24 hours.
+   `dashboard`, `marketing`, `website` and `docs`, and prunes images older than 24 hours.
 
 Caddy sends traffic to whichever colour is healthy (`lb_policy first` with active health
 checks), so the switch has no 502 window.
@@ -101,6 +103,14 @@ Flower has no public route in production. Reach it through an SSH tunnel.
 
 ## Configuration and secrets
 
+- **`/opt/etqan/caddy/docs-users.caddy` is required.** It holds the basic_auth users for the
+  docs site at `docs.<base domain>` (one `name <bcrypt hash>` line each) and is mounted into
+  Caddy. It belongs to the server and is never in git (`infra/.gitignore`); `rsync` of
+  `infra/` leaves it alone. Without it Caddy would refuse the whole Caddyfile and take every
+  academy down, so `ship.sh` stops first with `docs-users.caddy is missing or empty`. Create
+  it before the first deploy that carries the docs site: see
+  [Docs site users](operations.md#docs-site-users). The docs host needs no DNS record of its
+  own: `*.<base domain>` covers it.
 - `/opt/etqan/.env.production` belongs to the server (chmod 600) and is never in git or CI.
   Templates: `infra/.env.production.example`, `infra/.env.staging.example`.
 - Production settings fail at startup without `DJANGO_SECRET_KEY`, `DJANGO_FRONTEND_URL`,

@@ -63,6 +63,29 @@ On the base domain's `/admin/`, or with `manage.sh`:
   the integrations and Etqan billing sections of the admin. See
   [Integrations](../../features/integrations.md) and [Etqan billing](../../features/etqan-billing.md).
 
+## Docs site users
+
+`docs.<base domain>` (this site) is behind Caddy's basic_auth; every path needs a user. The
+users live in `/opt/etqan/caddy/docs-users.caddy` on the server, one `name <bcrypt hash>`
+line per person, never in git. `ship.sh` refuses to deploy while the file is missing or
+empty, because Caddy cannot load its configuration without it.
+
+Add a person (in `/opt/etqan`):
+
+```sh
+docker compose -f docker-compose.production.yml --env-file .env.production exec caddy caddy hash-password
+# type the password twice; it prints a $2a$14$… hash
+echo 'alice $2a$14$…' >> caddy/docs-users.caddy
+docker compose -f docker-compose.production.yml --env-file .env.production exec caddy caddy reload --config /etc/caddy/Caddyfile
+```
+
+For the very first user Caddy is not running with the file yet: hash with
+`docker run --rm -it caddy:2.11.4-alpine caddy hash-password`, write the file, then deploy.
+On staging add `-f docker-compose.staging.yml` after the production file.
+
+Remove a person: delete their line from `caddy/docs-users.caddy` and run the same
+`caddy reload`. Never leave the file empty; keep at least one user.
+
 ## Backups: not in place yet
 
 There is no backup or restore tooling in the repo. PostgreSQL is a single container on the
