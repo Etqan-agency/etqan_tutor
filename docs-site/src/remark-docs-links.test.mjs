@@ -1,5 +1,6 @@
+import { readFileSync } from "node:fs";
 import { expect, test } from "vitest";
-import plugin, { rewriteHref } from "./remark-docs-links.mjs";
+import plugin, { rewriteHref, scanKnownIds } from "./remark-docs-links.mjs";
 
 const GH = "https://github.com/Etqan-agency";
 
@@ -13,6 +14,7 @@ test.each([
 	["../kaleem-archive/x.md", "features/ai", `${GH}/etqan_tutor/blob/master/docs/kaleem-archive/x.md`],
 	["../../backend/etqan/platform/features.py", "features/feature-toggles",
 		`${GH}/etqan_tutor_backend/blob/main/etqan/platform/features.py`],
+	["../../CLAUDE.md", "guide/README", `${GH}/etqan_tutor/blob/master/CLAUDE.md`],
 	["https://example.com/x", "features/ai", "https://example.com/x"],
 	["mailto:a@b.c", "features/ai", "mailto:a@b.c"],
 	["#concepts", "features/ai", "#concepts"],
@@ -31,4 +33,14 @@ test("plugin rewrites link nodes and throws on unknown targets", () => {
 	expect(tree.children[0].url).toBe("/features/sessions/");
 	const bad = { type: "root", children: [{ type: "link", url: "zzz.md" }] };
 	expect(() => plugin({ knownIds: known, docsDir: "/x/docs" })(bad, { path: "/x/docs/features/ai.md" })).toThrow(/broken doc link/);
+});
+
+test("every real link in the docs passes the check", () => {
+	const known = scanKnownIds();
+	for (const id of known) {
+		const text = readFileSync(new URL(`../../docs/${id}.md`, import.meta.url), "utf8");
+		for (const m of text.matchAll(/\[[^\]]*\]\(([^)\s]+)\)/g)) {
+			expect(() => rewriteHref(m[1], id, known), `${m[1]} in ${id}`).not.toThrow();
+		}
+	}
 });

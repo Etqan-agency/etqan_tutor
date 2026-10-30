@@ -46,6 +46,10 @@ export function rewriteHref(href, fromId, knownIds) {
 		if (!exists) throw new Error(`broken doc link ${href} in ${fromId}`);
 		return routeFor(id) + suffix;
 	}
+	// Any other path that leaves docs/ lands on a file in the meta repo root (CLAUDE.md, justfile...).
+	if (first === ".." && rest[0] && rest[0] !== "..") {
+		return `${GH}/etqan_tutor/blob/master/${rest.join("/")}${suffix}`;
+	}
 	throw new Error(`broken doc link ${href} in ${fromId}`);
 }
 
