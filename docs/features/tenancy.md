@@ -1,4 +1,6 @@
-# Tenancy: academies and domains
+---
+title: "Tenancy: academies and domains"
+---
 
 Every customer academy is a django-tenants tenant with its own PostgreSQL schema. The academy is
 picked from the request's `Host`: its Etqan subdomain or a custom domain it owns. Etqan staff create,

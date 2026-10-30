@@ -1,4 +1,6 @@
-# Student wallet (balances)
+---
+title: "Student wallet (balances)"
+---
 
 `etqan.wallet` holds money for a student: one balance per student and currency. The balance is
 kept as an append-only ledger of entries.

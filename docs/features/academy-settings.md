@@ -1,4 +1,6 @@
-# Academy settings, appearance, languages and system status
+---
+title: "Academy settings, appearance, languages and system status"
+---
 
 These are the per-academy knobs the academy itself controls: the settings row (timezone, currency,
 default language, scheduling and billing defaults), the browser's named theme, the dashboard

@@ -1,4 +1,6 @@
-# Online payments (gateways)
+---
+title: "Online payments (gateways)"
+---
 
 `etqan.gateways` lets families and anonymous payers pay online with Stripe Checkout or PayPal
 (Orders v2), and lets the office create payment links. It is generic: it does not know what is

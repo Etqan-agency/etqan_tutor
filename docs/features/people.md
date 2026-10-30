@@ -1,4 +1,6 @@
-# People
+---
+title: "People"
+---
 
 The academy's directory of accounts: admins, staff, teachers, students and parents, their role profiles, tags, guardian links and families. Academy admins and staff (with the right permission codes) manage everyone under People; every signed-in person reads and edits their own account under My account (`identity/me/`). Etqan staff never appear here: their accounts live in the `public` schema and only use the Django admin on the base domain.
 

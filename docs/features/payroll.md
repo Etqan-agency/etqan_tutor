@@ -1,4 +1,6 @@
-# Teacher payroll
+---
+title: "Teacher payroll"
+---
 
 Monthly teacher pay. The office sets hourly rates, adds bonuses and deductions, and can set a fixed
 monthly salary. It generates a draft payslip per teacher and month from the sessions the teacher taught,

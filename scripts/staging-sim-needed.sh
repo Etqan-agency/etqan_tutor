@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Does a pull request need the staging simulation (spec §5)? Prints true or
 # false. True when the meta diff since <base> touches the infra pointer, the
-# workflows, the Caddyfiles or the deploy and simulation scripts, or when a
+# workflows, the Caddyfiles, the docs site's Dockerfile or nginx.conf, or the
+# deploy and simulation scripts, or when a
 # backend, dashboard, marketing or website pointer moves what shapes its image (the
 # Dockerfile, .dockerignore, nginx.conf or requirements/) or what the
 # simulation itself exercises: dashboard's e2e/ and playwright.config.ts, or
@@ -13,7 +14,7 @@ set -euo pipefail
 
 BASE="${1:?Usage: staging-sim-needed.sh <base-sha>}"
 changed="$(git diff --name-only "$BASE" HEAD)"
-if grep -qE '^(infra$|\.github/workflows/|caddy/|scripts/(deploy-staging|staging-sim))' <<< "$changed"; then
+if grep -qE '^(infra$|\.github/workflows/|caddy/|docs-site/(Dockerfile|Dockerfile\.dockerignore|nginx\.conf)$|scripts/(deploy-staging|staging-sim))' <<< "$changed"; then
     echo true
     exit 0
 fi

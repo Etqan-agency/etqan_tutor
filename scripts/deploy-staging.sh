@@ -45,6 +45,16 @@ remote() {
     "${SSH[@]}" "$TARGET" "$@"
 }
 
+# Before anything changes on the server: docs.<base domain>'s basic_auth users
+# file must already be there (it is never generated or copied from here).
+# ship.sh checks the same; failing here leaves even infra/ uncopied.
+# shellcheck disable=SC2016 # expanded on the server
+if ! remote 'f=/opt/etqan/caddy/docs-users/users.caddy; [ -f "$f" ] && grep -qvE "^[[:space:]]*(#|\$)" "$f"'; then
+    echo "ERROR: /opt/etqan/caddy/docs-users/users.caddy on ${STAGING_SSH_HOST}: docs-users/users.caddy is missing or has no user: see docs/guide/runbooks/operations.md" >&2
+    echo "Nothing was changed on the server." >&2
+    exit 1
+fi
+
 echo "── 1/5 Copy infra/ to ${TARGET}:/opt/etqan/"
 # No --delete: files only the server has (backups, notes) stay. The two
 # server-owned files are excluded even if a stray copy sits in infra/.

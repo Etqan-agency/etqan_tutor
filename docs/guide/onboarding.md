@@ -1,4 +1,6 @@
-# Onboarding
+---
+title: "Onboarding"
+---
 
 Your first day on etqan_tutor: get the stack running, find your way around, and ship a
 change the way the team does.

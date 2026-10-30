@@ -34,6 +34,9 @@ jobs:
       - run: pip install -r requirements/local.txt
       - run: ruff check . && ruff format --check .
       - run: lint-imports
+      - name: Switches JSON is fresh (no DB needed)
+        run: python manage.py dump_features ../docs-site/src/data/features.json --check --skip-checks
+        env: { DJANGO_SETTINGS_MODULE: config.settings.test }
       - run: pytest --create-db --cov=etqan -q
 
   dashboard:
@@ -105,6 +108,20 @@ jobs:
       - run: pnpm check
       - run: pnpm build
 
+  # The internal docs site (docs.{$BASE_DOMAIN}); reads docs/ in place.
+  docs-site:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: docs-site } }
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with: { version: 10 }
+      - uses: actions/setup-node@v7
+        with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: docs-site/pnpm-lock.yaml }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm build
+
   caddy:
     runs-on: ubuntu-latest
     steps:
@@ -123,9 +140,15 @@ jobs:
       - name: Validate the production Caddyfile (infra) in every TLS mode
         run: |
           docker build -t etqan-edge infra/caddy
+          # docs.{$BASE_DOMAIN} imports the host's users file: a fixture here.
+          users="$(mktemp -d)"
+          printf 'ci %s\n' "$(docker run --rm etqan-edge caddy hash-password --plaintext ci-pass)" > "$users/users.caddy"
+          chmod 755 "$users"
+          chmod 644 "$users/users.caddy"
           edge() {
             docker run --rm -e BASE_DOMAIN=example.com -e ACME_EMAIL=ci@example.com \
-              -e CF_API_TOKEN=0000000000000000000000000000000000000000 "$@"
+              -e CF_API_TOKEN=0000000000000000000000000000000000000000 \
+              -v "$users:/etc/caddy/docs-users:ro" "$@"
           }
           validate=(caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile)
           adapt=(caddy adapt --config /etc/caddy/Caddyfile --adapter caddyfile)
@@ -140,6 +163,12 @@ jobs:
           if edge -e TLS_MODE=internl etqan-edge "${validate[@]}"; then
             echo "TLS_MODE=internl was accepted"; exit 1
           fi
+      # docs.{$BASE_DOMAIN}: 401 on every path without credentials, 200 with,
+      # and the academy wildcard still answers (TLS_MODE=internal).
+      - name: The docs site behind basic_auth, at the real edge
+        run: |
+          docker build -f docs-site/Dockerfile -t docs-site .
+          bash infra/scripts/tests/docs_edge_test.sh
 
   orchestra:
     runs-on: ubuntu-latest
@@ -304,7 +333,7 @@ jobs:
   # (its default target is production); the frontends read the private
   # @etqan/tokens repo through the tokens_token build secret.
   images:
-    needs: [backend, dashboard, marketing, website, caddy, e2e, infra-scripts, orchestra, security]
+    needs: [backend, dashboard, marketing, website, docs-site, caddy, e2e, infra-scripts, orchestra, security]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -313,6 +342,11 @@ jobs:
       fail-fast: false
       matrix:
         name: [backend, dashboard, marketing, website]
+        include:
+          # Built from the meta repo root: it reads docs/ in place.
+          - name: docs-site
+            context: .
+            file: docs-site/Dockerfile
     env:
       PUSH: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     steps:
@@ -327,7 +361,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v7
         with:
-          context: ${{ matrix.name }}
+          context: ${{ matrix.context || matrix.name }}
+          file: ${{ matrix.file || format('{0}/Dockerfile', matrix.name) }}
           push: ${{ env.PUSH == 'true' }}
           tags: |
             ghcr.io/etqan-agency/${{ matrix.name }}:${{ github.sha }}
@@ -434,6 +469,13 @@ jobs:
           load: true
           tags: localhost:15000/etqan-agency/website:${{ github.sha }}
           cache-from: type=gha,scope=website
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: docs-site/Dockerfile
+          load: true
+          tags: localhost:15000/etqan-agency/docs-site:${{ github.sha }}
+          cache-from: type=gha,scope=docs-site
       - name: Deploy twice, seed, smoke and walk the journey
         run: |
           bash scripts/staging-sim.sh run && exit 0

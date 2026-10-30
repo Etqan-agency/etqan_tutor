@@ -1,4 +1,6 @@
-# Monthly student reports
+---
+title: "Monthly student reports"
+---
 
 A monthly student report is the office's written report on one student for one calendar month. The
 report is plain text. Someone can write it by hand, or start it from an AI draft built from that month's

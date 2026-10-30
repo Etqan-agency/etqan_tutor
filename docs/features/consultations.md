@@ -1,4 +1,6 @@
-# Consultations
+---
+title: "Consultations"
+---
 
 An academy sells one-off paid consultations: a video call, a live chat or an email answer with one of its teachers.
 The office defines consultation products, chooses which teachers offer them, records requests (by phone, say) and

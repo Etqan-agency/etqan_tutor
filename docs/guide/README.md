@@ -1,4 +1,6 @@
-# Developer guide
+---
+title: "Developer guide"
+---
 
 For developers joining etqan_tutor. Read the pages in this order:
 

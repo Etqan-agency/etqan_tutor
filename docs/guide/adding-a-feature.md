@@ -1,4 +1,6 @@
-# Adding a feature
+---
+title: "Adding a feature"
+---
 
 The end-to-end recipe for a new feature, from spec to merged. It assumes you have read
 [Architecture](architecture.md). The finance app (`backend/etqan/finance/`, expenses and

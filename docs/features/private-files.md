@@ -1,4 +1,6 @@
-# Private files
+---
+title: "Private files"
+---
 
 Some uploaded files must never be reachable by URL. These are homework files and answers, teaching
 content, certificate template images and student photos, employment contracts, chat attachments and

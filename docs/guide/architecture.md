@@ -1,4 +1,6 @@
-# Architecture
+---
+title: "Architecture"
+---
 
 How etqan_tutor fits together: the repos, the request path, tenancy, the backend's module
 rules and the dashboard's structure. Read this before [Adding a feature](adding-a-feature.md).

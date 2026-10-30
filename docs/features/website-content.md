@@ -1,4 +1,6 @@
-# Website content: FAQs, advertisements, redirects, articles, videos
+---
+title: "Website content: FAQs, advertisements, redirects, articles, videos"
+---
 
 These are the optional content types an academy can publish on its public website, beyond the home
 page and pages covered in [website.md](website.md). Each one is a feature Etqan switches on per

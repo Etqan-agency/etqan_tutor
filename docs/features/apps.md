@@ -1,4 +1,6 @@
-# Apps (installable app and web push)
+---
+title: "Apps (installable app and web push)"
+---
 
 Phase B11 gives every role (office, teacher, student, parent) an academy "app". This app is the existing
 dashboard installed as a Progressive Web App (PWA). It carries the academy's name, colours and an icon built

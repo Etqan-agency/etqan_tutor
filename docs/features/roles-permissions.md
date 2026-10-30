@@ -1,4 +1,6 @@
-# Roles and permissions
+---
+title: "Roles and permissions"
+---
 
 Decides who can do what inside an academy. It combines three things:
 

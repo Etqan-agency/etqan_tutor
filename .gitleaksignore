@@ -51,3 +51,6 @@
 3bfb070559fa59e30f9e7ce8a3c8e3eb2944b99f:portal-snapshot.md:generic-api-key:59
 3bfb070559fa59e30f9e7ce8a3c8e3eb2944b99f:portal-snapshot.md:generic-api-key:73
 3bfb070559fa59e30f9e7ce8a3c8e3eb2944b99f:portal-snapshot.md:generic-api-key:82
+# Runbook placeholder (curl -u 'alice:<their password>'), not a secret.
+e9d3768889e97c97c5b5eb1bb6ecc33dcd58e2bc:docs/guide/runbooks/operations.md:curl-auth-user:107
+/repo/docs/guide/runbooks/operations.md:curl-auth-user:107

@@ -1,0 +1,901 @@
+[
+  {
+    "code": "families",
+    "label_en": "Family accounts",
+    "label_ar": "نظام حسابات العائلات",
+    "group": "people",
+    "default": true,
+    "built": true,
+    "requires": [],
+    "doc": "features/people"
+  },
+  {
+    "code": "parents",
+    "label_en": "Parents and guardians",
+    "label_ar": "نظام أولياء الأمور",
+    "group": "people",
+    "default": true,
+    "built": true,
+    "requires": [],
+    "doc": "features/people"
+  },
+  {
+    "code": "supervision",
+    "label_en": "General supervision",
+    "label_ar": "نظام الإشراف العام",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/sessions"
+  },
+  {
+    "code": "session_reports",
+    "label_en": "Session reports",
+    "label_ar": "نظام تقارير الحصص",
+    "group": "teaching",
+    "default": true,
+    "built": true,
+    "requires": [],
+    "doc": "features/sessions"
+  },
+  {
+    "code": "invoices",
+    "label_en": "Invoices and receipts",
+    "label_ar": "نظام الفواتير والإيصالات",
+    "group": "money",
+    "default": true,
+    "built": true,
+    "requires": [],
+    "doc": "features/billing"
+  },
+  {
+    "code": "auto_notifications",
+    "label_en": "Automatic notifications",
+    "label_ar": "نظام الإشعارات التلقائية",
+    "group": "communication",
+    "default": true,
+    "built": true,
+    "requires": [],
+    "doc": "features/notifications"
+  },
+  {
+    "code": "teacher_attendance",
+    "label_en": "Teachers record attendance",
+    "label_ar": "تسجيل المعلم للحضور",
+    "group": "teaching",
+    "default": true,
+    "built": true,
+    "requires": [],
+    "doc": "features/sessions"
+  },
+  {
+    "code": "export",
+    "label_en": "Excel export (CSV)",
+    "label_ar": "نظام تصدير إكسل",
+    "group": "platform",
+    "default": true,
+    "built": true,
+    "requires": [],
+    "doc": "features/billing"
+  },
+  {
+    "code": "levels",
+    "label_en": "Levels",
+    "label_ar": "نظام المستويات",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/curriculum"
+  },
+  {
+    "code": "file_uploads",
+    "label_en": "File uploads",
+    "label_ar": "نظام رفع الملفات",
+    "group": "content",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/library"
+  },
+  {
+    "code": "url_redirects",
+    "label_en": "URL redirects",
+    "label_ar": "نظام تحويل الروابط",
+    "group": "platform",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/website-content"
+  },
+  {
+    "code": "ai_assistant",
+    "label_en": "AI assistant",
+    "label_ar": "المساعد الذكي",
+    "group": "platform",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/ai"
+  },
+  {
+    "code": "payment_links",
+    "label_en": "Payment links",
+    "label_ar": "نظام روابط الدفع",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [
+      "online_payments"
+    ],
+    "doc": "features/online-payments"
+  },
+  {
+    "code": "verified_certificates",
+    "label_en": "Verified certificates",
+    "label_ar": "نظام الشهادات الموثقة",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [
+      "certificates"
+    ],
+    "doc": "features/certificates"
+  },
+  {
+    "code": "incentives_deductions",
+    "label_en": "Incentives and deductions",
+    "label_ar": "نظام الحوافز والخصومات",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/payroll"
+  },
+  {
+    "code": "free_sessions",
+    "label_en": "Free sessions for subscribers",
+    "label_ar": "نظام الحصص المجانية للمشتركين",
+    "group": "money",
+    "default": false,
+    "built": false,
+    "requires": [],
+    "doc": "features/feature-toggles"
+  },
+  {
+    "code": "homework",
+    "label_en": "Homework",
+    "label_ar": "نظام الواجبات",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/homework-content"
+  },
+  {
+    "code": "internal_chat",
+    "label_en": "Internal chat",
+    "label_ar": "نظام المحادثات الداخلية",
+    "group": "communication",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/chat"
+  },
+  {
+    "code": "recorded_courses",
+    "label_en": "Recorded courses",
+    "label_ar": "نظام الدورات المسجلة",
+    "group": "content",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/recorded-courses"
+  },
+  {
+    "code": "articles",
+    "label_en": "Articles",
+    "label_ar": "نظام المقالات",
+    "group": "content",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/website-content"
+  },
+  {
+    "code": "country_pricing",
+    "label_en": "Per-country pricing",
+    "label_ar": "نظام التسعير حسب الدولة",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/catalogue"
+  },
+  {
+    "code": "consultations",
+    "label_en": "Consultations",
+    "label_ar": "نظام الاستشارات",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/consultations"
+  },
+  {
+    "code": "study_groups",
+    "label_en": "Study groups",
+    "label_ar": "نظام المجموعات الدراسية",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/scheduling-tools"
+  },
+  {
+    "code": "balances",
+    "label_en": "Balances",
+    "label_ar": "نظام الأرصدة",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/wallet"
+  },
+  {
+    "code": "student_teacher_rate",
+    "label_en": "Per-student teacher rate",
+    "label_ar": "سعر المعلم لكل طالب",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/payroll"
+  },
+  {
+    "code": "donations",
+    "label_en": "Donations",
+    "label_ar": "نظام التبرعات",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/finance"
+  },
+  {
+    "code": "ai_reports",
+    "label_en": "AI reports",
+    "label_ar": "تقارير الذكاء الاصطناعي",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/student-reports"
+  },
+  {
+    "code": "contracts",
+    "label_en": "Contracts",
+    "label_ar": "نظام العقود",
+    "group": "people",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/employment"
+  },
+  {
+    "code": "subscription_archive",
+    "label_en": "Subscription archive",
+    "label_ar": "أرشيف الاشتراكات",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/subscriptions"
+  },
+  {
+    "code": "session_archive",
+    "label_en": "Session archive",
+    "label_ar": "أرشيف الحصص",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/sessions"
+  },
+  {
+    "code": "report_deductions",
+    "label_en": "Report deductions",
+    "label_ar": "خصومات التقارير",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [
+      "session_reports",
+      "payroll_rules"
+    ],
+    "doc": "features/payroll"
+  },
+  {
+    "code": "fixed_teacher_salary",
+    "label_en": "Fixed teacher salary",
+    "label_ar": "الراتب الثابت للمعلم",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/payroll"
+  },
+  {
+    "code": "registration_waitlist",
+    "label_en": "Student registration waiting list",
+    "label_ar": "قائمة انتظار تسجيل الطلاب",
+    "group": "people",
+    "default": false,
+    "built": true,
+    "requires": [
+      "self_registration"
+    ],
+    "doc": "features/registration"
+  },
+  {
+    "code": "payment_receipts",
+    "label_en": "Payment receipt records",
+    "label_ar": "سجلات إيصالات الدفع",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [
+      "invoices"
+    ],
+    "doc": "features/billing"
+  },
+  {
+    "code": "zoom_api",
+    "label_en": "Zoom API",
+    "label_ar": "ربط Zoom API",
+    "group": "platform",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/meetings"
+  },
+  {
+    "code": "public_links",
+    "label_en": "Public links",
+    "label_ar": "نظام الروابط العامة",
+    "group": "platform",
+    "default": false,
+    "built": false,
+    "requires": [],
+    "doc": "features/feature-toggles"
+  },
+  {
+    "code": "manual_sessions",
+    "label_en": "Add sessions by hand",
+    "label_ar": "إضافة الحصص يدويًا",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/sessions"
+  },
+  {
+    "code": "extra_sessions",
+    "label_en": "Extra sessions",
+    "label_ar": "الحصص الإضافية",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/sessions"
+  },
+  {
+    "code": "compensation_sessions",
+    "label_en": "Compensation sessions",
+    "label_ar": "الحصص التعويضية",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/sessions"
+  },
+  {
+    "code": "disposal_status",
+    "label_en": "At the administration's disposal",
+    "label_ar": "تحت تصرف الإدارة",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/sessions"
+  },
+  {
+    "code": "session_times",
+    "label_en": "In / out times",
+    "label_ar": "أوقات الدخول والخروج",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/sessions"
+  },
+  {
+    "code": "postponement",
+    "label_en": "Session postponement",
+    "label_ar": "تأجيل الحصص",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/sessions"
+  },
+  {
+    "code": "activity_log",
+    "label_en": "Session activity log",
+    "label_ar": "سجل نشاط الحصص",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/sessions"
+  },
+  {
+    "code": "simplified_sessions",
+    "label_en": "Simplified sessions view",
+    "label_ar": "عرض الحصص المبسّط",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/sessions"
+  },
+  {
+    "code": "trial_sessions",
+    "label_en": "Trial sessions",
+    "label_ar": "الحصص التجريبية",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/scheduling-tools"
+  },
+  {
+    "code": "teacher_availability",
+    "label_en": "Teacher availability",
+    "label_ar": "مواعيد المعلمين المتاحة",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/scheduling-tools"
+  },
+  {
+    "code": "multi_course_subscriptions",
+    "label_en": "Multi-course subscriptions",
+    "label_ar": "الاشتراكات متعددة الدورات",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/scheduling-tools"
+  },
+  {
+    "code": "family_subscriptions",
+    "label_en": "Family subscriptions",
+    "label_ar": "اشتراكات العائلات",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [
+      "families"
+    ],
+    "doc": "features/scheduling-tools"
+  },
+  {
+    "code": "group_subscriptions",
+    "label_en": "Group subscriptions",
+    "label_ar": "اشتراكات المجموعات",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [
+      "study_groups"
+    ],
+    "doc": "features/scheduling-tools"
+  },
+  {
+    "code": "weekly_schedules",
+    "label_en": "Weekly schedules",
+    "label_ar": "الجداول الأسبوعية",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/scheduling-tools"
+  },
+  {
+    "code": "expenses",
+    "label_en": "Expenses",
+    "label_ar": "نظام المصروفات",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/finance"
+  },
+  {
+    "code": "online_payments",
+    "label_en": "Online payments",
+    "label_ar": "الدفع الإلكتروني",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [
+      "invoices"
+    ],
+    "doc": "features/online-payments"
+  },
+  {
+    "code": "exchange_rates",
+    "label_en": "Exchange rates",
+    "label_ar": "أسعار الصرف",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/finance"
+  },
+  {
+    "code": "system_codes",
+    "label_en": "System codes",
+    "label_ar": "أكواد النظام",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/vouchers"
+  },
+  {
+    "code": "payroll_rules",
+    "label_en": "Payroll rules",
+    "label_ar": "قواعد الرواتب",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/payroll"
+  },
+  {
+    "code": "bulk_teacher_rates",
+    "label_en": "Bulk teacher rates",
+    "label_ar": "أسعار المعلمين بالجملة",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/payroll"
+  },
+  {
+    "code": "teacher_balance",
+    "label_en": "Teacher balance",
+    "label_ar": "رصيد المعلم",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/payroll"
+  },
+  {
+    "code": "payslip_acknowledgement",
+    "label_en": "Payslip receipt confirmation",
+    "label_ar": "تأكيد استلام الراتب",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/payroll"
+  },
+  {
+    "code": "salary_expenses",
+    "label_en": "Salary expenses",
+    "label_ar": "مصروفات الرواتب",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/payroll"
+  },
+  {
+    "code": "salary_projections",
+    "label_en": "Salary projections",
+    "label_ar": "توقعات الرواتب",
+    "group": "money",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/payroll"
+  },
+  {
+    "code": "notification_templates",
+    "label_en": "Notification templates",
+    "label_ar": "قوالب الإشعارات",
+    "group": "communication",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/notifications"
+  },
+  {
+    "code": "notification_preferences",
+    "label_en": "Notification preferences",
+    "label_ar": "تفضيلات الإشعارات",
+    "group": "communication",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/notifications"
+  },
+  {
+    "code": "broadcasts",
+    "label_en": "Broadcasts and notification log",
+    "label_ar": "الرسائل الجماعية وسجل الإشعارات",
+    "group": "communication",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/notifications"
+  },
+  {
+    "code": "whatsapp",
+    "label_en": "WhatsApp messages",
+    "label_ar": "رسائل واتساب",
+    "group": "communication",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/email-whatsapp"
+  },
+  {
+    "code": "session_reviews",
+    "label_en": "Session reviews",
+    "label_ar": "تقييمات الحصص",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/reviews-honour"
+  },
+  {
+    "code": "honour_board",
+    "label_en": "Honour board",
+    "label_ar": "لوحة الشرف",
+    "group": "people",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/reviews-honour"
+  },
+  {
+    "code": "quran_chapters",
+    "label_en": "Qur'an chapters",
+    "label_ar": "سور القرآن الكريم",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/curriculum"
+  },
+  {
+    "code": "educational_content",
+    "label_en": "Educational content",
+    "label_ar": "المحتوى التعليمي",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/homework-content"
+  },
+  {
+    "code": "certificates",
+    "label_en": "Certificates",
+    "label_ar": "الشهادات",
+    "group": "teaching",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/certificates"
+  },
+  {
+    "code": "site_status",
+    "label_en": "Site status modes",
+    "label_ar": "أوضاع حالة الموقع",
+    "group": "content",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/website"
+  },
+  {
+    "code": "site_tracking",
+    "label_en": "Analytics and ads",
+    "label_ar": "التحليلات والإعلانات",
+    "group": "content",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/website"
+  },
+  {
+    "code": "faqs",
+    "label_en": "FAQs",
+    "label_ar": "الأسئلة الشائعة",
+    "group": "content",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/website-content"
+  },
+  {
+    "code": "advertisements",
+    "label_en": "Advertisements",
+    "label_ar": "الإعلانات الترويجية",
+    "group": "content",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/website-content"
+  },
+  {
+    "code": "video_library",
+    "label_en": "Video library",
+    "label_ar": "مكتبة الفيديوهات",
+    "group": "content",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/website-content"
+  },
+  {
+    "code": "testimonial_media",
+    "label_en": "Audio and video testimonials",
+    "label_ar": "آراء صوتية ومرئية",
+    "group": "content",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/website-content"
+  },
+  {
+    "code": "page_builder",
+    "label_en": "Page builder",
+    "label_ar": "منشئ الصفحات",
+    "group": "content",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/website"
+  },
+  {
+    "code": "themes",
+    "label_en": "Named themes",
+    "label_ar": "القوالب",
+    "group": "platform",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/academy-settings"
+  },
+  {
+    "code": "system_status",
+    "label_en": "System status",
+    "label_ar": "حالة النظام",
+    "group": "platform",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/academy-settings"
+  },
+  {
+    "code": "two_factor",
+    "label_en": "Two-factor sign-in",
+    "label_ar": "المصادقة الثنائية",
+    "group": "platform",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/sign-in"
+  },
+  {
+    "code": "phone_login",
+    "label_en": "Sign in by phone",
+    "label_ar": "الدخول برقم الهاتف",
+    "group": "platform",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/sign-in"
+  },
+  {
+    "code": "quick_login",
+    "label_en": "Quick login",
+    "label_ar": "الدخول السريع",
+    "group": "people",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/sign-in"
+  },
+  {
+    "code": "self_registration",
+    "label_en": "Self-registration",
+    "label_ar": "التسجيل الذاتي",
+    "group": "people",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/registration"
+  },
+  {
+    "code": "google_sign_in",
+    "label_en": "Sign in with Google",
+    "label_ar": "الدخول بحساب Google",
+    "group": "platform",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/sign-in"
+  },
+  {
+    "code": "code_reset",
+    "label_en": "Password reset by code",
+    "label_ar": "استعادة كلمة المرور برمز",
+    "group": "platform",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/sign-in"
+  },
+  {
+    "code": "spanish",
+    "label_en": "Spanish",
+    "label_ar": "الإسبانية",
+    "group": "platform",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/academy-settings"
+  },
+  {
+    "code": "quick_translate",
+    "label_en": "Quick translate",
+    "label_ar": "الترجمة السريعة",
+    "group": "platform",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/academy-settings"
+  },
+  {
+    "code": "installable_app",
+    "label_en": "Installable app (desktop and mobile)",
+    "label_ar": "تطبيق قابل للتثبيت (سطح المكتب والجوال)",
+    "group": "platform",
+    "default": false,
+    "built": true,
+    "requires": [],
+    "doc": "features/apps"
+  },
+  {
+    "code": "push_notifications",
+    "label_en": "Push notifications",
+    "label_ar": "الإشعارات الفورية",
+    "group": "communication",
+    "default": false,
+    "built": true,
+    "requires": [
+      "installable_app"
+    ],
+    "doc": "features/web-push"
+  }
+]

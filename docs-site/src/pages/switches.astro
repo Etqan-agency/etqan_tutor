@@ -1,0 +1,69 @@
+---
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+import { getCollection } from "astro:content";
+import features from "../data/features.json";
+import { checkDocs, groupFeatures } from "../switches.mjs";
+
+const pageIds = new Set((await getCollection("docs")).map((entry) => entry.id));
+const missing = checkDocs(features, pageIds);
+if (missing.length) throw new Error(`switches with no doc page: ${missing.join(", ")}`);
+
+const groups = groupFeatures(features);
+const docHref = (doc) => {
+	const [page, anchor] = doc.split("#");
+	return `/${page}/${anchor ? `#${anchor}` : ""}`;
+};
+---
+
+<StarlightPage frontmatter={{ title: "Switches", description: "Every per-academy feature switch, generated from the backend registry." }}>
+	<p>
+		Generated from the backend feature registry ({features.length} switches). A switch is effectively on only when its own value
+		and every switch it requires are on.
+	</p>
+	<input type="search" id="switch-filter" placeholder="Filter by code or name" aria-label="Filter switches" />
+	{
+		[...groups].map(([group, list]) => (
+			<section class="switch-group">
+				<h2 id={`group-${group}`}>{group}</h2>
+				<div class="table-wrap">
+					<table>
+						<thead>
+							<tr><th>Switch</th><th>Name</th><th>Default</th><th>Built</th><th>Requires</th><th>Doc</th></tr>
+						</thead>
+						<tbody>
+							{list.map((f) => (
+								<tr id={`switch-${f.code}`} data-filter={`${f.code} ${f.label_en} ${f.label_ar}`.toLowerCase()}>
+									<td><code>{f.code}</code></td>
+									<td>{f.label_en} / <span dir="rtl" lang="ar">{f.label_ar}</span></td>
+									<td>{f.default ? "on" : "off"}</td>
+									<td>{f.built ? "yes" : "no"}</td>
+									<td>
+										{f.requires.map((r, i) => (
+											<>{i > 0 && ", "}<a href={`#switch-${r}`}><code>{r}</code></a></>
+										))}
+									</td>
+									<td><a href={docHref(f.doc)}>{f.doc.split("#")[0]}</a></td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+			</section>
+		))
+	}
+</StarlightPage>
+
+<script>
+	const input = document.getElementById("switch-filter") as HTMLInputElement | null;
+	input?.addEventListener("input", () => {
+		const q = input.value.trim().toLowerCase();
+		document.querySelectorAll<HTMLElement>("tr[data-filter]").forEach((row) => {
+			row.hidden = q !== "" && !(row.dataset.filter ?? "").includes(q);
+		});
+	});
+</script>
+
+<style>
+	#switch-filter { width: 100%; max-width: 24rem; padding: 0.5rem; margin: 1rem 0; }
+	.table-wrap { overflow-x: auto; }
+</style>

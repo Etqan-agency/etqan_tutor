@@ -2,7 +2,7 @@
 # The staging deploy, proven against a simulated server (spec §5).
 #   scripts/staging-sim.sh all        up, build, run, then down (`just staging-sim`)
 #   scripts/staging-sim.sh up         a local registry and the simulated server
-#   scripts/staging-sim.sh build      build the three images, tagged for the registry
+#   scripts/staging-sim.sh build      build the five images, tagged for the registry
 #   scripts/staging-sim.sh run        push, deploy A (+ seed, smoke), deploy B under
 #                                     a health poll, a failing deploy, then the full
 #                                     journey; no secret may show in the output
@@ -41,7 +41,7 @@ ACADEMY_URL="https://demo.${BASE_DOMAIN}"
 NET=etqan-sim
 SERVER=etqan-sim-server
 REGISTRY_CONTAINER=etqan-sim-registry
-IMAGES=(backend dashboard marketing website)
+IMAGES=(backend dashboard marketing website docs-site)
 
 # SIM_DIR is removed with rm -rf and chmodded: refuse anything that does not
 # look like a simulation work directory.
@@ -120,8 +120,10 @@ build() {
         docker build -q --secret "id=tokens_token,src=${token_file}" \
             -t "$(image "$name"):${SHA_A}" "${ROOT}/${name}" >/dev/null
     done
+    # The docs site builds from the meta repo root: it reads docs/ in place.
+    docker build -q -f "${ROOT}/docs-site/Dockerfile" -t "$(image docs-site):${SHA_A}" "$ROOT" >/dev/null
     if [ "$cleanup" = 1 ]; then rm -f "$token_file"; fi
-    echo "Built the four images as ${SHA_A}."
+    echo "Built the five images as ${SHA_A}."
 }
 
 # The server's .env.production, from .env.staging.example: fresh secrets,
@@ -143,6 +145,39 @@ write_env() {
         exit 1
     fi
     on_server 'umask 077 && mkdir -p /opt/etqan && cat > /opt/etqan/.env.production' <<< "$env"
+}
+
+# docs.{$BASE_DOMAIN}'s basic_auth users file, which ship.sh and
+# deploy-staging.sh require (written before the first deploy): one
+# user, `sim`, with a fresh password kept in SIM_DIR (checked by check_docs).
+write_docs_users() {
+    (umask 077 && openssl rand -hex 16 > "${SIM_DIR}/docs-password")
+    printf '%s\n' "$(cat "${SIM_DIR}/docs-password")" |
+        docker run -i --rm caddy:2.11.4-alpine caddy hash-password |
+        sed 's/^/sim /' |
+        on_server 'umask 022 && mkdir -p /opt/etqan/caddy/docs-users && cat > /opt/etqan/caddy/docs-users/users.caddy'
+}
+
+# docs.{$BASE_DOMAIN}: 401 without credentials, 200 with the sim's, for a page,
+# the search index and a fingerprinted asset path.
+check_docs() {
+    local path code
+    for path in / /switches/ /pagefind/pagefind.js; do
+        code="$(curl -s -o /dev/null -w '%{http_code}' --cacert "${SIM_DIR}/root.crt" \
+            --connect-to "::127.0.0.1:${SIM_HTTPS_PORT}" "https://docs.${BASE_DOMAIN}${path}")"
+        if [ "$code" != 401 ]; then
+            echo "ERROR: docs.${BASE_DOMAIN}${path} answered ${code} without credentials, not 401." >&2
+            exit 1
+        fi
+        code="$(curl -s -o /dev/null -w '%{http_code}' --cacert "${SIM_DIR}/root.crt" \
+            --connect-to "::127.0.0.1:${SIM_HTTPS_PORT}" -K - "https://docs.${BASE_DOMAIN}${path}" \
+            <<< "user = \"sim:$(cat "${SIM_DIR}/docs-password")\"")"
+        if [ "$code" != 200 ]; then
+            echo "ERROR: docs.${BASE_DOMAIN}${path} answered ${code} with credentials, not 200." >&2
+            exit 1
+        fi
+        echo "docs.${BASE_DOMAIN}${path}: 401 without credentials, 200 with."
+    done
 }
 
 deploy() { # deploy <sha> <seed 0|1>
@@ -192,6 +227,7 @@ run_steps() {
         < "${SIM_DIR}/registry-password" >/dev/null
     push "$SHA_A"
     write_env
+    write_docs_users
 
     echo "━━ Deploy A (${SHA_A}), seed, smoke"
     deploy "$SHA_A" 1
@@ -208,6 +244,8 @@ run_steps() {
     echo "━━ Deploy B (${SHA_B}) while /health/ready/ is polled"
     push "$SHA_B"
     on_server bash /opt/etqan/scripts/edge-ca.sh > "${SIM_DIR}/root.crt"
+    echo "━━ docs.${BASE_DOMAIN} is behind basic_auth"
+    check_docs
     before="$(on_server cat /opt/etqan/.active-color)"
     : > "${SIM_DIR}/polls"
     rm -f "${SIM_DIR}/stop-polling"
@@ -291,16 +329,17 @@ no_secret_in() {
         fi
     done < <(
         cat "${SIM_DIR}/registry-password"
+        cat "${SIM_DIR}/docs-password"
         on_server "sed -n -E 's/^(DJANGO_SECRET_KEY|POSTGRES_PASSWORD|AWS_SECRET_ACCESS_KEY|DJANGO_STAGING_DEMO_PASSWORD)=//p' /opt/etqan/.env.production"
     )
     if [ "$found" = 1 ]; then
         echo "ERROR: a secret appeared in the run's output." >&2
         return 1
     fi
-    # The registry password and the server's four: fewer means the check
-    # read nothing to compare with.
-    if [ "$count" -lt 5 ]; then
-        echo "ERROR: only $count of 5 secrets were read; the output was not checked." >&2
+    # The registry and docs passwords and the server's four: fewer means the
+    # check read nothing to compare with.
+    if [ "$count" -lt 6 ]; then
+        echo "ERROR: only $count of 6 secrets were read; the output was not checked." >&2
         return 1
     fi
     echo "No secret in the run's output."

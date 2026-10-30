@@ -1,4 +1,6 @@
-# Notifications
+---
+title: "Notifications"
+---
 
 In-app notices for every signed-in role, with each notice's email (and optionally WhatsApp and web push)
 delivered from the same row. Notices are produced by a once-a-minute **scanner** that polls other apps'

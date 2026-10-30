@@ -1,4 +1,6 @@
-# Curriculum and student progress
+---
+title: "Curriculum and student progress"
+---
 
 Each course can have a ladder of **levels**, and each level has **sub-levels** and **topics**. A topic can
 point at a Qur'an chapter and a verse range. Each student has a **current level** per course and a set of

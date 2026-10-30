@@ -1,4 +1,6 @@
-# File library
+---
+title: "File library"
+---
 
 The file library is an academy-wide list of files that the office uploads to get a **public URL**, for
 example to paste into an article, a page or a message. Staff upload a file and copy its link. Files

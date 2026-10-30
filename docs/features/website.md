@@ -1,4 +1,6 @@
-# Public website and branding
+---
+title: "Public website and branding"
+---
 
 Every academy has its own bilingual (Arabic and English) public website at the root of each of its
 hosts. It shows a home page, extra pages, testimonials and a contact or trial form. Its name, logo

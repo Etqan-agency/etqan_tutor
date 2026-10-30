@@ -1,4 +1,6 @@
-# Integrations
+---
+title: "Integrations"
+---
 
 Every outside service an academy uses (email, WhatsApp, online payments, video meetings, AI) runs on one of two
 accounts: the academy's own account, or Etqan's default account. `etqan.integrations` holds both kinds of account

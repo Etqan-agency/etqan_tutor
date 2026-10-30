@@ -1,4 +1,6 @@
-# Operations
+---
+title: "Operations"
+---
 
 Keeping a deployed stack healthy: health checks, logs and errors, background jobs, academy
 administration, and the known gaps. For deploys and rollback see [Deploy](deploy.md).
@@ -60,6 +62,52 @@ On the base domain's `/admin/`, or with `manage.sh`:
 - Etqan's default provider accounts, prices, Connect fee, usage and invoices to academies:
   the integrations and Etqan billing sections of the admin. See
   [Integrations](../../features/integrations.md) and [Etqan billing](../../features/etqan-billing.md).
+
+## Docs site users
+
+`docs.<base domain>` (this site) is behind Caddy's basic_auth; every path needs a user. The
+users live in `/opt/etqan/caddy/docs-users/users.caddy` on the server, one
+`name <bcrypt hash>` line per person, never in git. Caddy gets the whole `docs-users/`
+directory (read-only), so it sees the file however it is edited. `ship.sh` and
+`deploy-staging.sh` refuse to deploy unless it is a regular file with at least one user
+line, because Caddy cannot load its configuration without it.
+
+In `/opt/etqan` (on staging add `-f docker-compose.staging.yml` after the production file):
+
+```sh
+dc() { docker compose -f docker-compose.production.yml --env-file .env.production "$@"; }
+```
+
+Add a person:
+
+```sh
+dc exec caddy caddy hash-password          # type the password twice; prints $2a$14$…
+echo 'alice $2a$14$…' >> caddy/docs-users/users.caddy
+dc exec caddy caddy reload --config /etc/caddy/Caddyfile
+```
+
+`>>` appends one line without touching the others, so a typo cannot wipe the file the way a
+`>` would. Put the hash in single quotes: it contains `$`.
+
+The very first user, before a deploy that carries the docs site (Caddy is not running with
+the file yet):
+
+```sh
+install -d -m 755 caddy/docs-users
+docker run --rm -it caddy:2.11.4-alpine caddy hash-password
+echo 'alice $2a$14$…' > caddy/docs-users/users.caddy
+```
+
+Remove a person, then check they are gone:
+
+```sh
+sed -i '/^alice /d' caddy/docs-users/users.caddy
+dc exec caddy caddy reload --config /etc/caddy/Caddyfile
+dc exec caddy grep -c '^alice ' /etc/caddy/docs-users/users.caddy   # prints 0
+curl -s -o /dev/null -w '%{http_code}\n' -u 'alice:<their password>' https://docs.<base domain>/   # 401
+```
+
+Keep at least one user: a file with none stops the next deploy.
 
 ## Backups: not in place yet
 
