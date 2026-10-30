@@ -1,4 +1,6 @@
-# System codes (vouchers)
+---
+title: "System codes (vouchers)"
+---
 
 `etqan.vouchers` covers what TutorHamster calls "system codes". The office generates batches of
 single-use codes. A student or parent (or the office on their behalf) redeems one to do one of

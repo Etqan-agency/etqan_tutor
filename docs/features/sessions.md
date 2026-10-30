@@ -1,4 +1,6 @@
-# Sessions: lifecycle, attendance, classes, postponement, archives and the activity log
+---
+title: "Sessions: lifecycle, attendance, classes, postponement, archives and the activity log"
+---
 
 A session is one lesson: a student, a teacher, a course and a UTC start instant with a
 length. Most sessions are generated from a subscription's weekly slots

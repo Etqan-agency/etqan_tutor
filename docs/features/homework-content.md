@@ -1,4 +1,6 @@
-# Homework and educational content
+---
+title: "Homework and educational content"
+---
 
 **Homework** is set for one student in one course. The office or the student's current teacher sets it,
 and it can be linked to one of the student's sessions. The student or a parent answers it with text

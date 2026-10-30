@@ -1,4 +1,6 @@
-# Recorded courses
+---
+title: "Recorded courses"
+---
 
 An academy sells pre-recorded video courses. TutorHamster calls them "playlists" and so does the code. The office
 (admins and staff with the right codes) builds a course from videos and enrols students by hand: paid manually or free.

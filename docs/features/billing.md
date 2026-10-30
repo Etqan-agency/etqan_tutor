@@ -1,4 +1,6 @@
-# Billing: invoices and payments
+---
+title: "Billing: invoices and payments"
+---
 
 `etqan.billing` holds an academy's invoices to families and every payment the academy receives:
 by hand at the office, online through a provider, from a student's wallet, or by a system code.

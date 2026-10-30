@@ -1,4 +1,6 @@
-# AI
+---
+title: "AI"
+---
 
 The office (admins, and staff who hold the right codes) can ask Claude to draft text for a form field. The
 fields are: article summary, body, SEO title, SEO description and keywords; article category description;

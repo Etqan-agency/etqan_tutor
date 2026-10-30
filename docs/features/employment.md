@@ -1,4 +1,6 @@
-# Employment contracts
+---
+title: "Employment contracts"
+---
 
 The `etqan.employment` app stores teachers' employment contracts. It does not handle hiring, job
 applications or staff records; it holds only contracts. Each contract belongs to one teacher and has an

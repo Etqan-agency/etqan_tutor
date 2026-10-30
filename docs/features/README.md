@@ -1,4 +1,6 @@
-# Feature reference
+---
+title: "Feature reference"
+---
 
 How each feature works **today**: what it is for, its models, rules, API, screens, jobs and
 settings, and where the code is. Each page was checked against the code, and where the code

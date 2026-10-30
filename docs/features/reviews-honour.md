@@ -1,4 +1,6 @@
-# Session reviews and honour board
+---
+title: "Session reviews and honour board"
+---
 
 **Session reviews** are 1–5 star ratings, with an optional comment, of one attended session. The student
 or a parent writes them, and the office can also write them. The session's teacher reads them but never

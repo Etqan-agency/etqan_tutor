@@ -255,3 +255,7 @@ orchestra-dev:
 orchestra-test:
     cd orchestra/server && python3 -m unittest discover -s tests -t .
     cd orchestra/web && npx pnpm@10 test:coverage && npx pnpm@10 build && npx pnpm@10 lint
+
+# Docs site (Starlight, reads docs/ in place): http://localhost:4323
+docs:
+    cd docs-site && pnpm install --frozen-lockfile && pnpm dev --port 4323

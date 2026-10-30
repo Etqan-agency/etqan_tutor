@@ -1,4 +1,6 @@
-# Scheduling tools: trials, availability, groups, bundles, weekly schedules
+---
+title: "Scheduling tools: trials, availability, groups, bundles, weekly schedules"
+---
 
 These are the office tools built on top of subscriptions and sessions in phase B2:
 

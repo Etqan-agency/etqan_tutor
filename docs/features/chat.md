@@ -1,4 +1,6 @@
-# Chat
+---
+title: "Chat"
+---
 
 Internal chat inside an academy: one-to-one conversations and office-managed groups, with plain-text messages,
 up to three file attachments, read pointers and read counts. Admins, staff, teachers and students can be in chat;

@@ -1,4 +1,6 @@
-# Certificates
+---
+title: "Certificates"
+---
 
 The office issues certificates to students for a course. There are four kinds: completion, appreciation,
 pride, and custom (which is drawn on an uploaded template image). Students and parents read their own

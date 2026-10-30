@@ -1,4 +1,6 @@
-# Email, WhatsApp and broadcasts
+---
+title: "Email, WhatsApp and broadcasts"
+---
 
 How a notice leaves the app. Every `Notification` row (see [notifications.md](notifications.md)) is the in-app item
 **and** the record of its email and WhatsApp delivery. Email goes to anyone with an address; WhatsApp only to

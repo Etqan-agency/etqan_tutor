@@ -41,3 +41,6 @@ page-*.png
 
 # Brainstorming visual-companion scratch output
 .superpowers/
+docs-site/node_modules
+docs-site/dist
+docs-site/.astro

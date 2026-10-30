@@ -1,4 +1,6 @@
-# Operations
+---
+title: "Operations"
+---
 
 Keeping a deployed stack healthy: health checks, logs and errors, background jobs, academy
 administration, and the known gaps. For deploys and rollback see [Deploy](deploy.md).

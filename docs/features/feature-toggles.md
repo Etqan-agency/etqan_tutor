@@ -1,4 +1,6 @@
-# Feature toggles
+---
+title: "Feature toggles"
+---
 
 Etqan switches whole parts of the product on or off for each academy. A feature that is off
 disappears from that academy's API (404), dashboard (nav hidden, a "feature off" screen) and

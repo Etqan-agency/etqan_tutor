@@ -1,4 +1,6 @@
-# Sign-in and account security
+---
+title: "Sign-in and account security"
+---
 
 How people get into an academy's dashboard. This covers session login by email or phone, two-factor sign-in, password resets (by link or by code), Google sign-in, email address management, quick login (impersonation) and quick-login links, and the security log. Every academy role (admin, staff, teacher, student, parent) signs in through the same `/app/login` page on the academy's host. Etqan staff are different: they sign in only to the Django admin on the bare base domain (`config/urls_public.py`), and none of these API routes exist there.
 

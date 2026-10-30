@@ -1,4 +1,6 @@
-# Self-registration
+---
+title: "Self-registration"
+---
 
 Lets a public visitor create their own account on an academy's site. There are two paths:
 

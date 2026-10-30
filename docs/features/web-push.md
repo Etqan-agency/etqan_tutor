@@ -1,4 +1,6 @@
-# Web push
+---
+title: "Web push"
+---
 
 Browser push notifications for the installable dashboard app. Every in-app `Notification` (see
 [notifications.md](notifications.md)) created after a browser subscribed is pushed to that browser once, as its

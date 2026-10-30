@@ -1,4 +1,6 @@
-# Etqan billing
+---
+title: "Etqan billing"
+---
 
 This page covers how Etqan bills academies for using its default accounts (email, WhatsApp, video meetings,
 AI). It is separate from an academy billing its own students, which lives in `etqan.billing`.

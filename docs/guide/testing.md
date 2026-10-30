@@ -1,4 +1,6 @@
-# Testing
+---
+title: "Testing"
+---
 
 What runs where, how to write tests for a multi-academy app, and the bars CI holds you to.
 

@@ -1,4 +1,6 @@
-# Video meetings: session links, Zoom, Jitsi and the host link
+---
+title: "Video meetings: session links, Zoom, Jitsi and the host link"
+---
 
 Every session can carry a `meeting_url` that the teacher, student, parent and supervisor
 use to join the lesson. A link can come from three places:

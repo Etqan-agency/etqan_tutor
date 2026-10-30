@@ -1,4 +1,6 @@
-# Deploy
+---
+title: "Deploy"
+---
 
 How code gets from `master` to a server, how to roll back, and how to run commands on a
 deployed stack. Setting up a staging server for the first time is covered step by step in

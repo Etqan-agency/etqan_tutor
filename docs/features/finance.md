@@ -1,4 +1,6 @@
-# Finance: expenses, donations, net profit and exchange rates
+---
+title: "Finance: expenses, donations, net profit and exchange rates"
+---
 
 `etqan.finance` records what an academy spends (expenses) and what it is given (donations). It
 works out the month's net profit (revenue minus expenses, per currency) and stores exchange rates

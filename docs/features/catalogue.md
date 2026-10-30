@@ -1,4 +1,6 @@
-# Catalogue: courses and packages
+---
+title: "Catalogue: courses and packages"
+---
 
 The catalogue is what an academy sells and teaches. **Courses** are the subjects taught
 (Quran, Arabic, and so on), each with the teachers allowed to teach it. **Packages** are

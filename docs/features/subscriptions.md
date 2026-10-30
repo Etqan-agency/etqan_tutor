@@ -1,4 +1,6 @@
-# Subscriptions
+---
+title: "Subscriptions"
+---
 
 A subscription sells one **package** of one **course** to one **student**, taught by one
 **teacher**, starting on a date. Its weekly **slots** produce the **sessions**
