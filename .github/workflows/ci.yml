@@ -138,13 +138,14 @@ jobs:
         run: |
           docker build -t etqan-edge infra/caddy
           # docs.{$BASE_DOMAIN} imports the host's users file: a fixture here.
-          users="$(mktemp)"
-          printf 'ci %s\n' "$(docker run --rm etqan-edge caddy hash-password --plaintext ci-pass)" > "$users"
-          chmod 644 "$users"
+          users="$(mktemp -d)"
+          printf 'ci %s\n' "$(docker run --rm etqan-edge caddy hash-password --plaintext ci-pass)" > "$users/users.caddy"
+          chmod 755 "$users"
+          chmod 644 "$users/users.caddy"
           edge() {
             docker run --rm -e BASE_DOMAIN=example.com -e ACME_EMAIL=ci@example.com \
               -e CF_API_TOKEN=0000000000000000000000000000000000000000 \
-              -v "$users:/etc/caddy/docs-users.caddy:ro" "$@"
+              -v "$users:/etc/caddy/docs-users:ro" "$@"
           }
           validate=(caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile)
           adapt=(caddy adapt --config /etc/caddy/Caddyfile --adapter caddyfile)

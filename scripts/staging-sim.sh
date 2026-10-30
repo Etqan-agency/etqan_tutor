@@ -147,14 +147,15 @@ write_env() {
     on_server 'umask 077 && mkdir -p /opt/etqan && cat > /opt/etqan/.env.production' <<< "$env"
 }
 
-# docs.{$BASE_DOMAIN}'s basic_auth users file, which ship.sh requires: one
+# docs.{$BASE_DOMAIN}'s basic_auth users file, which ship.sh and
+# deploy-staging.sh require (written before the first deploy): one
 # user, `sim`, with a fresh password kept in SIM_DIR (checked by check_docs).
 write_docs_users() {
     (umask 077 && openssl rand -hex 16 > "${SIM_DIR}/docs-password")
     printf '%s\n' "$(cat "${SIM_DIR}/docs-password")" |
         docker run -i --rm caddy:2.11.4-alpine caddy hash-password |
         sed 's/^/sim /' |
-        on_server 'umask 022 && mkdir -p /opt/etqan/caddy && cat > /opt/etqan/caddy/docs-users.caddy'
+        on_server 'umask 022 && mkdir -p /opt/etqan/caddy/docs-users && cat > /opt/etqan/caddy/docs-users/users.caddy'
 }
 
 # docs.{$BASE_DOMAIN}: 401 without credentials, 200 with the sim's, for a page,

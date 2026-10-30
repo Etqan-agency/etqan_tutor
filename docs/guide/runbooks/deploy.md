@@ -42,7 +42,7 @@ deployed stack. Setting up a staging server for the first time is covered step b
 ## What `ship.sh <sha>` does (blue/green)
 
 1. Refuses to start, before any `docker compose` call, without a non-empty
-   `/opt/etqan/caddy/docs-users.caddy` (see below), or with less than 5 GiB free on
+   `/opt/etqan/caddy/docs-users/users.caddy` (see below), or with less than 5 GiB free on
    `/var/lib/docker`.
 2. Reads `/opt/etqan/.active-color`; the new colour is the other one.
 3. Pulls images and makes sure `caddy`, `postgres`, `redis` and `flower` are up.
@@ -103,14 +103,22 @@ Flower has no public route in production. Reach it through an SSH tunnel.
 
 ## Configuration and secrets
 
-- **`/opt/etqan/caddy/docs-users.caddy` is required.** It holds the basic_auth users for the
-  docs site at `docs.<base domain>` (one `name <bcrypt hash>` line each) and is mounted into
-  Caddy. It belongs to the server and is never in git (`infra/.gitignore`); `rsync` of
-  `infra/` leaves it alone. Without it Caddy would refuse the whole Caddyfile and take every
-  academy down, so `ship.sh` stops first with `docs-users.caddy is missing or empty`. Create
-  it before the first deploy that carries the docs site: see
-  [Docs site users](operations.md#docs-site-users). The docs host needs no DNS record of its
-  own: `*.<base domain>` covers it.
+- **`/opt/etqan/caddy/docs-users/users.caddy` is required.** It holds the basic_auth users
+  for the docs site at `docs.<base domain>` (one `name <bcrypt hash>` line each); its
+  directory is mounted into Caddy. It belongs to the server and is never in git
+  (`infra/.gitignore`); `rsync` of `infra/` leaves it alone. Without it Caddy would refuse
+  the whole Caddyfile and take every academy down, so `deploy-staging.sh` (before copying
+  anything) and `ship.sh` (before any compose call) stop with
+  `docs-users/users.caddy is missing or has no user`. See
+  [Docs site users](operations.md#docs-site-users).
+- **Rolling out the docs site (once per server), in this order:** 1. create
+  `caddy/docs-users/users.caddy` with at least one user on staging, as in
+  [the first user](operations.md#docs-site-users); 2. deploy the change to staging and check
+  `https://docs.<staging domain>/` answers 401, then 200 with that user; 3. do the same on
+  production: users file first, then deploy. The docs host needs no DNS record of its own:
+  `*.<base domain>` covers it. Its certificate is its own: under `TLS_MODE=cloudflare` a
+  separate DNS-01 certificate for `docs.<base domain>` (the snippet the base domain uses, not
+  the academy wildcard), under `http` an HTTP-01 one, under `internal` Caddy's CA.
 - `/opt/etqan/.env.production` belongs to the server (chmod 600) and is never in git or CI.
   Templates: `infra/.env.production.example`, `infra/.env.staging.example`.
 - Production settings fail at startup without `DJANGO_SECRET_KEY`, `DJANGO_FRONTEND_URL`,
