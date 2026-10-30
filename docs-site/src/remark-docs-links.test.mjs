@@ -18,6 +18,7 @@ test.each([
 	["https://example.com/x", "features/ai", "https://example.com/x"],
 	["mailto:a@b.c", "features/ai", "mailto:a@b.c"],
 	["#concepts", "features/ai", "#concepts"],
+	["/switches/", "features/feature-toggles", "/switches/"],
 ])("%s from %s", (href, from, want) => expect(rewriteHref(href, from)).toBe(want));
 
 test("broken in-site link fails the build", () => {

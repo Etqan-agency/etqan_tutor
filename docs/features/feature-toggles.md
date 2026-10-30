@@ -21,13 +21,8 @@ default.
   feature off.
 - **`built=False`**: a switch that is stored and editable but has no code checking it yet. Only
   `free_sessions` and `public_links` are left.
-- Defaults that are on: `families`, `parents`, `session_reports`, `invoices`, `auto_notifications`,
-  `teacher_attendance`, `export`. Everything else is off by default.
-- Prerequisite pairs: `online_payments`→`invoices`, `payment_links`→`online_payments`,
-  `payment_receipts`→`invoices`, `verified_certificates`→`certificates`,
-  `report_deductions`→`session_reports`+`payroll_rules`, `registration_waitlist`→`self_registration`,
-  `family_subscriptions`→`families`, `group_subscriptions`→`study_groups`,
-  `push_notifications`→`installable_app`.
+- Each switch's default, whether it is built, and its prerequisites are listed in [Switches](/switches/)
+  (generated from the registry; on GitHub see `docs-site/src/data/features.json`).
 
 ## How it works
 
