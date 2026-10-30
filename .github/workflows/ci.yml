@@ -34,6 +34,9 @@ jobs:
       - run: pip install -r requirements/local.txt
       - run: ruff check . && ruff format --check .
       - run: lint-imports
+      - name: Switches JSON is fresh (no DB needed)
+        run: python manage.py dump_features ../docs-site/src/data/features.json --check --skip-checks
+        env: { DJANGO_SETTINGS_MODULE: config.settings.test }
       - run: pytest --create-db --cov=etqan -q
 
   dashboard:
