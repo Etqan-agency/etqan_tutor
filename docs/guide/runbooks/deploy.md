@@ -116,9 +116,9 @@ Flower has no public route in production. Reach it through an SSH tunnel.
   [the first user](operations.md#docs-site-users); 2. deploy the change to staging and check
   `https://docs.<staging domain>/` answers 401, then 200 with that user; 3. do the same on
   production: users file first, then deploy. The docs host needs no DNS record of its own:
-  `*.<base domain>` covers it. Its certificate is its own: under `TLS_MODE=cloudflare` a
-  separate DNS-01 certificate for `docs.<base domain>` (the snippet the base domain uses, not
-  the academy wildcard), under `http` an HTTP-01 one, under `internal` Caddy's CA.
+  `*.<base domain>` covers it. Its certificate comes the academy subdomains' way: under
+  `TLS_MODE=cloudflare` the zone's DNS-01 certificate, under `http` issued on demand on the
+  first visit (`/internal/tls-allowed` allows `docs.<base domain>`), under `internal` Caddy's CA.
 - `/opt/etqan/.env.production` belongs to the server (chmod 600) and is never in git or CI.
   Templates: `infra/.env.production.example`, `infra/.env.staging.example`.
 - Production settings fail at startup without `DJANGO_SECRET_KEY`, `DJANGO_FRONTEND_URL`,
