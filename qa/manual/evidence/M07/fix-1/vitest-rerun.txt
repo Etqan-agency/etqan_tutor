@@ -1,0 +1,45 @@
+[vite:react-swc] We recommend switching to `@vitejs/plugin-react` for improved performance as no swc plugins are used. More information at https://vite.dev/rolldown
+
+ RUN  v3.2.6 /app
+
+stderr | src/features/scheduling/SessionActivity.test.tsx > SessionActivity > isolates the actor and the date in an Arabic line (ETQAN-QA-253)
+An update to Toaster inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to SessionActivity inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to SessionActivity inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/features/scheduling/SessionActivity.test.tsx (16 tests) 1244ms
+ ✓ src/features/scheduling/TeacherSessions.test.tsx (16 tests) 1301ms
+   ✓ TeacherSessions > shows today's sessions on the teacher's own clock  430ms
+
+ Test Files  2 passed (2)
+      Tests  32 passed (32)
+   Start at  20:53:24
+   Duration  7.96s (transform 3.90s, setup 1.21s, collect 6.42s, tests 2.54s, environment 1.52s, prepare 226ms)
+

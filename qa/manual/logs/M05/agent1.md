@@ -1,0 +1,21 @@
+# M05 agent1 log
+- 2026-10-28T00:45:43Z start; read README/env/bug-register
+- 2026-10-28T00:49:30Z created course 10 'M05 دورة التلاوة' (double-click save -> 1 row). F-001
+- 2026-10-28T00:52:55Z course edit/deactivate/duplicate x2/delete copies 11,12 done. F-002..F-005. (delete attempt on in-use course 1 blocked by permission classifier; skipped)
+- 2026-10-28T00:55:16Z package 'M05 باقة حدود' created (14/wk,240min,365d, 1500.555->1500.55). F-007,F-008
+- 2026-10-28T01:00:11Z package 21 'M05 باقة الكويت' 12.750 KWD + country prices EG 2000 EGP, SA 300 SAR; sub 108 (QA6 Student SA, F03, F02 Teacher, Sun 10:00) -> INV-000179 300 SAR correct. F-009
+- 2026-10-28T01:01:56Z EN pass packages; lang switch mid-form keeps values (OK). F-010, F-011
+- 2026-10-28T01:06:31Z levels dialog tested (validation, sublevels reorder, topic). Quran: synced 114 surahs (was empty). F-012..F-016
+- 2026-10-28T01:09:25Z levels: created 'M05 المستوى الأول' (sub+topic Fatiha 1-7) and 'M05 المستوى التمهيدي', reordered. F-017, F-018
+- 2026-10-28T01:13:38Z content: PDF material added (dbl-click -> 1), link added/edited/deleted, reorder ok. F-019..F-023
+- 2026-10-28T01:18:09Z recorded: created playlist 3 'M05 دورة مسجلة تجريبية' (m05-rec), video M05V1 uploaded (tiny mp4); looked at subs/comments/reviews tabs of playlist 1. No sections concept in UI. F-024..F-027
+- 2026-10-28T01:21:14Z consultations product 'M05 استشارة تقييم التلاوة' 150.50 EGP 45min Ahmad 50% created. F-028..F-030. Next: teacher/student/staff roles, EN, mobile
+- 2026-10-28T01:24:31Z teacher Ahmad: materials, levels, direct /catalogue -> home. student Mona: recorded store (published M05 playlist 3). F-031..F-033
+- 2026-10-28T01:28:11Z mobile AR: courses list/form, packages list/detail OK; levels 451px, quran 555px; recorded/consult tables hidden cols. F-034. Staff nocode/codes: no access page. Student API 403 on catalogue.
+- 2026-10-28T01:29:29Z sub 109 Aisha KWD 15.000 -> INV-000180 correct. EN levels edit dialog OK. F-035. Covered list written. Done (~122 step calls).
+- 2026-10-28T02:20:30Z agent1 CONFIRMATION SWEEP start
+- 2026-10-28T12:11:38Z confirmation sweep (re)start, nothing captured earlier; shots in screens/M05/sweep/
+- 2026-10-28T12:18:02Z AR admin: courses create/edit/delete (course 15) OK, filter label+no-match fixed; package 22 'M05 باقة المسح' 450.50 SAR + EG 1800 EGP; sub form EG->1800 EGP, US->450.50 SAR; sub 110 Hamza -> INV-000181 450.50 SAR OK. New: F-036 (1 slot accepted for 3/wk package)
+- 2026-10-28T12:21:21Z levels dialog/verse errors Arabic OK (accidentally cleared topic 1 chapter via بلا سورة, restored Fatiha 1-7); quran dialog Arabic OK; content link add/delete OK
+- 2026-10-28T12:24:12Z recorded video M05SW1 uploaded (toast + لا shown OK); consult 'M05 استشارة المسح' 99.99 EGP without EN desc saved OK. Starting EN
+- 2026-10-28T12:27:21Z sweep done (~45 step calls). New: M05-F-036. Data left: course 15 deleted; package 22 'M05 باقة المسح' (+EG price); sub 110 Hamza + INV-000181 unpaid; video M05SW1 draft on playlist 3; consult 'M05 استشارة المسح'. Topic 1 restored to Fatiha 1-7.

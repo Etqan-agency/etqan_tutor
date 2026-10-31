@@ -1,0 +1,114 @@
+diff --git a/etqan/identity/adapter.py b/etqan/identity/adapter.py
+index 5603cc25..bc148c48 100644
+--- a/etqan/identity/adapter.py
++++ b/etqan/identity/adapter.py
+@@ -1,5 +1,6 @@
+ from allauth.account.adapter import DefaultAccountAdapter
+ from django.template import TemplateDoesNotExist
++from django.utils.encoding import force_str
+ 
+ from etqan.identity.services import effective_language
+ from etqan.integrations.services import queue_email
+@@ -35,6 +36,13 @@ class CeleryAccountAdapter(DefaultAccountAdapter):
+             reply_to=branded["reply_to"],
+         )
+ 
++    def format_email_subject(self, subject):
++        # ETQAN-QA-051: `brand_email` alone prefixes the subject (the academy's
++        # name, or "[Etqan] " in the public schema). allauth's own prefix
++        # (ACCOUNT_EMAIL_SUBJECT_PREFIX, or the Site name when unset) on top
++        # gave "[Academy] [Etqan] …".
++        return force_str(subject)
++
+     def get_email_confirmation_url(self, request, emailconfirmation):
+         # Land the user in the dashboard's /verify-email route, which POSTs the
+         # key to the confirm endpoint — not allauth's server-rendered page.
+diff --git a/etqan/identity/tests/test_email_branding.py b/etqan/identity/tests/test_email_branding.py
+index 692f7c11..9c688e48 100644
+--- a/etqan/identity/tests/test_email_branding.py
++++ b/etqan/identity/tests/test_email_branding.py
+@@ -6,6 +6,7 @@ from allauth.account.models import EmailAddress
+ from django.conf import settings
+ from django.contrib.sites.models import Site
+ from django.core.cache import cache
++from django.test import override_settings
+ from rest_framework.test import APIClient
+ 
+ from etqan.identity.models import User
+@@ -76,3 +77,18 @@ def test_confirmation_body_has_no_pii_and_is_branded(api, mailoutbox):
+     assert "/app/verify-email?key=" in body  # the activate_url
+     assert "ahmad@example.com" not in body  # no email echoed into the body
+     assert "example.com" not in body  # no placeholder domain
++
++
++@pytest.mark.django_db
++@override_settings(ACCOUNT_EMAIL_SUBJECT_PREFIX="[Etqan] ")
++def test_confirmation_subject_has_only_the_academy_prefix(api, mailoutbox):
++    """ETQAN-QA-051: allauth's own prefix (from DJANGO_EMAIL_SUBJECT_PREFIX in
++    .env) is not added on top of the academy's: "[Academy] [Etqan] …"."""
++    ensure_site_defaults("x")
++    Branding.objects.update(name_en="Noor Academy")
++    _unverified_user()
++    resp = api.post(RESEND_URL, {"email": "ahmad@example.com"}, format="json")
++    assert resp.status_code == 200
++    subject = mailoutbox[-1].subject
++    assert subject.startswith("[Noor Academy] ")
++    assert "[Etqan]" not in subject
+diff --git a/etqan/site/tests/test_emails.py b/etqan/site/tests/test_emails.py
+index c43e3ee8..a7feeafd 100644
+--- a/etqan/site/tests/test_emails.py
++++ b/etqan/site/tests/test_emails.py
+@@ -164,3 +164,20 @@ def test_replies_go_to_the_academys_contact_address(branded):
+ def test_public_mail_has_no_reply_to():
+     connection.set_schema_to_public()
+     assert brand_email(subject="Hello", body="Body")["reply_to"] == []
++
++
++@pytest.mark.django_db
++def test_an_academy_named_alike_in_both_languages_is_named_once(branded):
++    """ETQAN-QA-051: "Etqan QA Academy · Etqan QA Academy" in header and footer."""
++    Branding.objects.update(name_en="Etqan QA Academy", name_ar="Etqan QA Academy")
++    out = brand_email(subject="s", body="b")
++    assert "Etqan QA Academy · Etqan QA Academy" not in out["body"]
++    assert out["body"].count("Etqan QA Academy") == 2  # header + footer
++    assert out["html"].count("Etqan QA Academy") == 2
++    assert "·" not in out["html"].split("</strong>")[1].split("</td>")[0]
++
++
++@pytest.mark.django_db
++def test_two_names_are_both_shown(branded):
++    out = brand_email(subject="s", body="b")
++    assert out["body"].count("Noor Academy · أكاديمية نور") == 2
+diff --git a/etqan/templates/email/layout.html b/etqan/templates/email/layout.html
+index fe3c8ff9..b2498488 100644
+--- a/etqan/templates/email/layout.html
++++ b/etqan/templates/email/layout.html
+@@ -4,10 +4,10 @@
+ <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:12px;overflow:hidden">
+ <tr><td style="background:{{ primary_color }};color:{{ primary_text }};padding:20px 24px">
+ {% if logo_url %}<img src="{{ logo_url }}" alt="" height="40" style="vertical-align:middle;margin-inline-end:12px">{% endif %}
+-<strong style="font-size:18px">{{ name_en }}</strong> <span dir="rtl" style="font-size:16px">· {{ name_ar }}</span>
++<strong style="font-size:18px">{{ name_en }}</strong>{% if name_ar and name_ar != name_en %} <span dir="rtl" style="font-size:16px">· {{ name_ar }}</span>{% endif %}
+ </td></tr>
+ <tr><td dir="{{ dir }}" lang="{{ lang }}" style="padding:24px;font-size:15px;line-height:1.6;white-space:pre-line;text-align:start">{{ body|urlize }}</td></tr>
+ <tr><td style="padding:16px 24px;border-top:1px solid #eee;font-size:13px;color:#555">
+-{{ name_en }} · <span dir="rtl">{{ name_ar }}</span>{% if contact_email %} · {{ contact_email }}{% endif %}{% if contact_phone %} · {{ contact_phone }}{% endif %}<br>
++{{ name_en }}{% if name_ar and name_ar != name_en %} · <span dir="rtl">{{ name_ar }}</span>{% endif %}{% if contact_email %} · {{ contact_email }}{% endif %}{% if contact_phone %} · {{ contact_phone }}{% endif %}<br>
+ <a href="{{ home_url }}" style="color:{{ primary_color }}">{{ home_url }}</a>
+ </td></tr></table></td></tr></table></body></html>
+diff --git a/etqan/templates/email/layout.txt b/etqan/templates/email/layout.txt
+index c236f5d6..f2ef4c29 100644
+--- a/etqan/templates/email/layout.txt
++++ b/etqan/templates/email/layout.txt
+@@ -1,9 +1,9 @@
+-{% autoescape off %}{{ name_en }} · {{ name_ar }}
++{% autoescape off %}{{ name_en }}{% if name_ar and name_ar != name_en %} · {{ name_ar }}{% endif %}
+ 
+ {{ body }}
+ 
+ --
+-{{ name_en }} · {{ name_ar }}
++{{ name_en }}{% if name_ar and name_ar != name_en %} · {{ name_ar }}{% endif %}
+ {% if contact_email %}{{ contact_email }}{% endif %}{% if contact_phone %} · {{ contact_phone }}{% endif %}
+ {{ home_url }}
+ {% endautoescape %}

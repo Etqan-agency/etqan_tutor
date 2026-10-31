@@ -1,0 +1,15 @@
+- 2026-10-28T01:12:57Z start triage M12 (21 findings). Logged in M12-t-admin-ar. Repro F-001..F-005 done (t001,t001b,t004,t005).
+- 2026-10-28T01:13:21Z BEFORE: role 35 'M12 مشاهد الطلاب' retired, 0 members; qa-staff-nocode@ no roles. Restoring role 35 + assigning to nocode for F-006/007/008 repro; will undo.
+- 2026-10-28T01:15:45Z F-006 (t006), F-007 (t007), F-008 (t008,t008b) reproduced. CLEANUP: role 35 retired again (0 members), qa-staff-nocode back to 'لا أدوار' (verified). F-009 t009.
+- 2026-10-28T01:16:32Z F-010 reproduced (t010); Google client_id RESTORED to empty, verified after reload (t010b). F-011 checked on same page.
+- 2026-10-28T01:17:00Z F-012 (t012, scope matches sign-in.md), F-013 (t013) checked.
+- 2026-10-28T01:17:26Z F-014 (t014), F-015 (t015) reproduced.
+- 2026-10-28T01:18:14Z F-016/F-017 (t016), F-018 (t018, preview only, nothing saved) reproduced.
+- 2026-10-28T01:19:01Z F-019 (t019), F-020 (t020), F-021 (t021) checked. Decisions: 18 confirmed (QA-500..517), 3 not a bug (F-011, F-012, F-021).
+- 2026-10-28T01:20:33Z Filed ETQAN-QA-500..517 in qa/bug-register.md (M12 range; 'Next ID' left untouched per parallel-run rule), 21 rows in triage.md, progress M12=TRIAGED. State left as found: role 35 retired/0 members, qa-staff-nocode no roles, Google client_id empty, no template/academy changes.
+- 2026-10-28T01:41:13Z GATE cycle 1 start. Diff reviewed (dashboard 19 files + 1 new test, backend services.py+tests): no test hacks, no API/migration changes. Vitest 27 files/168 passed, locale tests 13 passed, tsc exit 0, pytest tags 40 passed.
+- 2026-10-28T01:42:24Z BEFORE roles retest: role 35 'M12 مشاهد الطلاب' is_active=false, qa-staff-nocode no roles. Will restore+assign, then undo.
+- 2026-10-28T01:45:14Z Roles retest done (505 hint, 506 AR refusal top+toast+named code, 507 confirm w/ count, 508 wording). CLEANUP: role 35 retired again via confirm (is_active=f), nocode 0 roles (DB-verified). No 'M12 escalation' role created (403).
+- 2026-10-28T01:50:25Z GATE M12: 12 VERIFIED (500,501,505-508,510-515), composites in screens/M12/fix/<BUG>-after.png. Open (non-blocking): 502,503,504,509,516,517. State restored (role 35 retired, nocode 0 roles, tags 51, qa tz Cairo/EGP). Decision PASSED; progress.md row + '### M12 gate' written.
+- 2026-10-28T02:10:15Z FINAL GATE start: triage M12-F-022 (1 new from sweep).
+- 2026-10-28T02:12:09Z F-022 reproduced (fg022*, typed value fine; nothing saved). Filed ETQAN-QA-518 (P3 RTL easy), triage row added. Smoke: roles EN OK. DB: qa Cairo/EGP, qaother UTC/USD. FINAL GATE M12 = PASSED (no P0–P2). progress row + '### M12 final gate' written.

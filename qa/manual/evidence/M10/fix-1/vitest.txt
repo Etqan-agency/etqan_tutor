@@ -1,0 +1,8 @@
+ ✓ src/features/notifications/bits.test.tsx (3 tests) 147ms
+ ✓ src/locales/locales.test.ts (9 tests) 31ms
+
+ Test Files  17 passed (17)
+      Tests  194 passed (194)
+   Start at  01:55:11
+   Duration  37.92s (transform 2.21s, setup 10.04s, collect 10.43s, tests 35.39s, environment 13.74s, prepare 1.59s)
+

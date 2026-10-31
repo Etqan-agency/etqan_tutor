@@ -1,0 +1,12 @@
+........................................................................ [ 94%]
+....                                                                     [100%]
+=============================== warnings summary ===============================
+etqan/identity/tests/test_people_api.py: 41 warnings
+etqan/identity/tests/test_families_api.py: 13 warnings
+etqan/identity/tests/test_people_depth_lists.py: 11 warnings
+etqan/identity/tests/test_family_people.py: 9 warnings
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+76 passed, 74 warnings in 6.04s

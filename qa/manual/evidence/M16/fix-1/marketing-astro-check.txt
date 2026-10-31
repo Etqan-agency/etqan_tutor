@@ -1,0 +1,9 @@
+14:37:49 [@astrojs/node] Enabling sessions with filesystem storage
+EACCES: permission denied, mkdir '/app/node_modules/.vite/deps_temp_a18d70d3'
+  Stack trace:
+    at Object.mkdirSync (node:fs:1370:26)
+    at optimizeExplicitEnvironmentDeps (file:///app/node_modules/.pnpm/vite@7.3.6_@types+node@22.20.4_jiti@2.7.0_lightningcss@1.32.0_yaml@2.9.1/node_modules/vite/dist/node/chunks/config.js:31920:23)
+    at async DevEnvironment.listen (file:///app/node_modules/.pnpm/vite@7.3.6_@types+node@22.20.4_jiti@2.7.0_lightningcss@1.32.0_yaml@2.9.1/node_modules/vite/dist/node/chunks/config.js:34908:3)
+    at async file:///app/node_modules/.pnpm/vite@7.3.6_@types+node@22.20.4_jiti@2.7.0_lightningcss@1.32.0_yaml@2.9.1/node_modules/vite/dist/node/chunks/config.js:25713:38
+    at async createTempViteServer (file:///app/node_modules/.pnpm/astro@6.4.8_@types+node@22.20.4_jiti@2.7.0_lightningcss@1.32.0_rollup@4.63.4_yaml@2.9.1/node_modules/astro/dist/core/sync/index.js:168:26)
+

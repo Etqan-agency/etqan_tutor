@@ -1,0 +1,773 @@
+
+ RUN  v3.2.6 /app
+
+ ❯ src/lib/money.test.ts (8 tests | 1 failed) 42ms
+   ✓ money > reads Arabic-Indic digits and the Arabic decimal point 3ms
+   ✓ money > knows each currency's minor digits 1ms
+   ✓ money > converts without floating-point drift 1ms
+   ✓ money > agrees with the server where Intl does not 0ms
+   ✓ money > keeps the currency where a positive has it for an Arabic negative 25ms
+   × money > signs a statement amount on the number's side 10ms
+     → expected '+EGP 300.00' to be '+EGP 300.00' // Object.is equality
+   ✓ money > formats for display 0ms
+   ✓ money > shows every minor digit the server stores 0ms
+ ❯ src/features/payroll/schemas.test.ts (9 tests | 2 failed) 40ms
+   ✓ rateFormSchema > takes a zero rate and checks the decimals of the currency 5ms
+   × adjustmentFormSchema > checks the amount against the chosen teacher's currency 14ms
+     → expected { code: 'custom', …(2) } to match object { path: [ 'amount' ], …(1) }
+(1 matching property omitted from actual)
+   ✓ adjustmentFormSchema > needs a teacher, a date and a reason 3ms
+   ✓ adjustmentFormSchema > only needs an amount before a teacher (and so a currency) is chosen 2ms
+   ✓ adjustmentFormSchema > checks a percentage bonus instead of an amount 3ms
+   ✓ percentages > turns a percentage into basis points and back in integers 1ms
+   ✓ withdrawalProblem > takes an amount up to the available balance 1ms
+   ✓ withdrawalProblem > reads Arabic-Indic and Persian digits as 0-9 1ms
+   × withdrawalProblem > refuses more than available, a bad amount and an unknown currency 5ms
+     → expected { field: 'amount', …(1) } to deeply equal { field: 'amount', …(1) }
+ ✓ src/features/payroll/BulkRatesDialog.test.tsx (3 tests) 2771ms
+   ✓ offers only teachers of the chosen currency and sends one batch  1534ms
+   ✓ adds a course rate row  888ms
+   ✓ shows mixed_currencies translated  348ms
+ ✓ src/features/payroll/SettingsPage.test.tsx (10 tests) 3256ms
+   ✓ SettingsPage > shows the weights as percentages and saves basis points  947ms
+   ✓ SettingsPage > accepts a weight with two decimals and saves whole basis points  544ms
+   ✓ SettingsPage > shows a stored 3333 bp as 33.33 and saves it unchanged  337ms
+   ✓ SettingsPage > saves the missing report share as basis points  391ms
+ ✓ src/features/payroll/FixedSalary.test.tsx (11 tests) 4229ms
+   ✓ FixedSalaryRow > sets one from a chosen month  1225ms
+   ✓ FixedSalaryRow > starts this month when no month is chosen  674ms
+   ✓ FixedSalaryRow > shows the salary, its month and an old currency, and edits it  557ms
+   ✓ FixedSalaryRow > translates a duplicate  314ms
+   ✓ FixedSalaryRow > leaves the amount blank for an old-currency salary  340ms
+   ✓ FixedSalaryRow > puts a 400's field errors on the amount and month  425ms
+ ✓ src/features/payroll/PayslipsList.test.tsx (15 tests) 6459ms
+   ✓ PayslipsList > opens on last month in the academy's calendar  676ms
+   ✓ PayslipsList > shows each payslip's sessions, hours, money and status  588ms
+   ✓ PayslipsList > generates the chosen month and names who is missing a rate  587ms
+   ✓ PayslipsList > names no one when every session was paid  422ms
+   ✓ PayslipsList > shows a failed generate  430ms
+   ✓ PayslipsList > filters by status and teacher, and exports the same as CSV  386ms
+   ✓ PayslipsList > adds the counter columns behind one toggle and remembers it  515ms
+   ✓ PayslipsList > adds the report and absence counters to the counts columns  798ms
+   ✓ PayslipsList > names teachers whose fixed salary is in an old currency  409ms
+   ✓ PayslipsList > keeps each payslip number on one line  507ms
+   ✓ PayslipsList > words the generate summary for one teacher or two in Arabic  304ms
+ ✓ src/features/payroll/PayslipPage.test.tsx (23 tests) 7043ms
+   ✓ PayslipPage > pays an issued payslip to the balance with the same date dialog  1124ms
+   ✓ PayslipPage > marks each session line's class, weight and group role  325ms
+   ✓ PayslipPage > shows an admin a draft's lines, totals and Issue  313ms
+   ✓ PayslipPage > issues after confirming  513ms
+   ✓ PayslipPage > translates an issue refusal  445ms
+   ✓ PayslipPage > marks an issued payslip paid, dated the academy's today  1073ms
+   ✓ PayslipPage > shows the server's refusal of a future date on the field  510ms
+   ✓ PayslipPage > is read-only for the teacher, who can still print  472ms
+ ✓ src/features/payroll/MyBalance.test.tsx (5 tests) 1702ms
+   ✓ MyBalance > shows the balance and the requests, with a rejection's reason  535ms
+   ✓ MyBalance > requests a withdrawal for themselves, never naming a teacher  671ms
+ ✓ src/features/payroll/WithdrawalsPage.test.tsx (13 tests) 8654ms
+   ✓ WithdrawalsPage > lists requests with amount, status, date and payout, filtered by status  1389ms
+   ✓ WithdrawalsPage > shows the picked teacher's balances above the list  596ms
+   ✓ WithdrawalsPage > approves, rejects with a reason, pays and cancels  2922ms
+   ✓ WithdrawalsPage > translates a refusal  941ms
+   ✓ WithdrawalsPage > makes a request for a teacher, no more than available  683ms
+   ✓ WithdrawalsPage > asks for a teacher before sending an office request  337ms
+   ✓ WithdrawalsPage > colours approve as primary and reject as destructive  542ms
+   ✓ WithdrawalsPage > checks the payment day against the request day and today  407ms
+   ✓ WithdrawalsPage > says a teacher has no balance and offers no request  351ms
+ ❯ src/features/payroll/RatesPage.test.tsx (23 tests | 1 failed) 9251ms
+   ✓ RatesPage > lists each teacher's rates and warns about a missing default  656ms
+   ✓ RatesPage > adds a default rate in the teacher's currency  1574ms
+   ✓ RatesPage > adds a course rate, and shows the server's refusal on the course  667ms
+   × RatesPage > checks the amount before sending it 1993ms
+     → Unable to find an element with the text: Enter an amount of zero or more, like 150 or 150.50.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<div[39m
+  [33maria-describedby[39m=[32m"radix-_r_43_"[39m
+  [33maria-labelledby[39m=[32m"radix-_r_42_"[39m
+  [33mclass[39m=[32m"pointer-events-auto w-full max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-lg border border-border bg-background p-6 text-start text-foreground shadow-lg outline-none animate-dialog-in motion-reduce:animate-none max-w-sm"[39m
+  [33mdata-slot[39m=[32m"dialog-content"[39m
+  [33mdata-state[39m=[32m"open"[39m
+  [33mid[39m=[32m"radix-_r_41_"[39m
+  [33mrole[39m=[32m"dialog"[39m
+  [33mstyle[39m=[32m"pointer-events: auto;"[39m
+  [33mtabindex[39m=[32m"-1"[39m
+[36m>[39m
+  [36m<h2[39m
+    [33mclass[39m=[32m"font-display text-lg font-semibold"[39m
+    [33mdata-slot[39m=[32m"dialog-title"[39m
+    [33mid[39m=[32m"radix-_r_42_"[39m
+  [36m>[39m
+    [0mAdd a rate for ⁨Bilal⁩[0m
+  [36m</h2>[39m
+  [36m<p[39m
+    [33mclass[39m=[32m"mt-1 text-sm text-muted-foreground"[39m
+    [33mdata-slot[39m=[32m"dialog-description"[39m
+    [33mid[39m=[32m"radix-_r_43_"[39m
+  [36m>[39m
+    [0mPer hour, in the teacher's pay currency. Issued payslips keep the rates they were issued with.[0m
+  [36m</p>[39m
+  [36m<form[39m
+    [33mclass[39m=[32m"mt-4 flex flex-col gap-4"[39m
+    [33mnovalidate[39m=[32m""[39m
+  [36m>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-col gap-1.5"[39m
+    [36m>[39m
+      [36m<label[39m
+        [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+        [33mdata-slot[39m=[32m"label"[39m
+        [33mfor[39m=[32m"rate-course"[39m
+      [36m>[39m
+        [0mCourse[0m
+      [36m</label>[39m
+      [36m<select[39m
+        [33mclass[39m=[32m"flex h-11 w-full cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 text-start"[39m
+        [33mid[39m=[32m"rate-course"[39m
+        [33mname[39m=[32m"course"[39m
+      [36m>[39m
+        [36m<option[39m
+          [33mvalue[39m=[32m"4"[39m
+        [36m>[39m
+          [0mHifz[0m
+        [36m</option>[39m
+      [36m</select>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-col gap-1.5"[39m
+    [36m>[39m
+      [36m<label[39m
+        [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+        [33mdata-slot[39m=[32m"label"[39m
+        [33mfor[39m=[32m"rate-amount"[39m
+      [36m>[39m
+        [0mPer hour (USD)[0m
+        [36m<span[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"text-destructive"[39m
+        [36m>[39m
+          [0m*[0m
+        [36m</span>[39m
+      [36m</label>[39m
+      [36m<input[39m
+        [33maria-describedby[39m=[32m"rate-amount-error"[39m
+        [33maria-invalid[39m=[32m"true"[39m
+        [33maria-required[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 aria-invalid:border-destructive aria-invalid:not-focus-visible:ring-2 aria-invalid:not-focus-visible:ring-destructive text-start [unicode-bidi:plaintext] [&::-webkit-search-cancel-button]:ms-2"[39m
+        [33mdir[39m=[32m"ltr"[39m
+        [33mid[39m=[32m"rate-amount"[39m
+        [33minputmode[39m=[32m"decimal"[39m
+        [33mname[39m=[32m"amount"[39m
+      [36m/>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"text-sm text-destructive"[39m
+        [33mid[39m=[32m"rate-amount-error"[39m
+        [33mrole[39m=[32m"alert"[39m
+      [36m>[39m
+        [0mUse at most 2 decimal places, like 150.50.[0m
+      [36m</p>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-wrap justify-end gap-2 mt-0"[39m
+      [33mdata-slot[39m=[32m"dialog-footer"[39m
+    [36m>[39m
+      [36m<button[39m
+        [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary h-11 px-4"[39m
+        [33mtype[39m=[32m"button"[39m
+      [36m>[39m
+        [0mCancel[0m
+      [36m</button>[39m
+      [36m<button[39m
+        [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-[color-mix(in_oklab,var(--color-primary)_90%,black)] h-11 px-4"[39m
+        [33mtype[39m=[32m"submit"[39m
+      [36m>[39m
+        [0mSave rate[0m
+      [36m</button>[39m
+    [36m</div>[39m
+  [36m</form>[39m
+[36m</div>[39m
+
+Ignored nodes: comments, script, style
+[36m<div[39m
+  [33maria-describedby[39m=[32m"radix-_r_43_"[39m
+  [33maria-labelledby[39m=[32m"radix-_r_42_"[39m
+  [33mclass[39m=[32m"pointer-events-auto w-full max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-lg border border-border bg-background p-6 text-start text-foreground shadow-lg outline-none animate-dialog-in motion-reduce:animate-none max-w-sm"[39m
+  [33mdata-slot[39m=[32m"dialog-content"[39m
+  [33mdata-state[39m=[32m"open"[39m
+  [33mid[39m=[32m"radix-_r_41_"[39m
+  [33mrole[39m=[32m"dialog"[39m
+  [33mstyle[39m=[32m"pointer-events: auto;"[39m
+  [33mtabindex[39m=[32m"-1"[39m
+[36m>[39m
+  [36m<h2[39m
+    [33mclass[39m=[32m"font-display text-lg font-semibold"[39m
+    [33mdata-slot[39m=[32m"dialog-title"[39m
+    [33mid[39m=[32m"radix-_r_42_"[39m
+  [36m>[39m
+    [0mAdd a rate for ⁨Bilal⁩[0m
+  [36m</h2>[39m
+  [36m<p[39m
+    [33mclass[39m=[32m"mt-1 text-sm text-muted-foreground"[39m
+    [33mdata-slot[39m=[32m"dialog-description"[39m
+    [33mid[39m=[32m"radix-_r_43_"[39m
+  [36m>[39m
+    [0mPer hour, in the teacher's pay currency. Issued payslips keep the rates they were issued with.[0m
+  [36m</p>[39m
+  [36m<form[39m
+    [33mclass[39m=[32m"mt-4 flex flex-col gap-4"[39m
+    [33mnovalidate[39m=[32m""[39m
+  [36m>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-col gap-1.5"[39m
+    [36m>[39m
+      [36m<label[39m
+        [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+        [33mdata-slot[39m=[32m"label"[39m
+        [33mfor[39m=[32m"rate-course"[39m
+      [36m>[39m
+        [0mCourse[0m
+      [36m</label>[39m
+      [36m<select[39m
+        [33mclass[39m=[32m"flex h-11 w-full cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 text-start"[39m
+        [33mid[39m=[32m"rate-course"[39m
+        [33mname[39m=[32m"course"[39m
+      [36m>[39m
+        [36m<option[39m
+          [33mvalue[39m=[32m"4"[39m
+        [36m>[39m
+          [0mHifz[0m
+        [36m</option>[39m
+      [36m</select>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-col gap-1.5"[39m
+    [36m>[39m
+      [36m<label[39m
+        [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+        [33mdata-slot[39m=[32m"label"[39m
+        [33mfor[39m=[32m"rate-amount"[39m
+      [36m>[39m
+        [0mPer hour (USD)[0m
+        [36m<span[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"text-destructive"[39m
+        [36m>[39m
+          [0m*[0m
+        [36m</span>[39m
+      [36m</label>[39m
+      [36m<input[39m
+        [33maria-describedby[39m=[32m"rate-amount-error"[39m
+        [33maria-invalid[39m=[32m"true"[39m
+        [33maria-required[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 aria-invalid:border-destructive aria-invalid:not-focus-visible:ring-2 aria-invalid:not-focus-visible:ring-destructive text-start [unicode-bidi:plaintext] [&::-webkit-search-cancel-button]:ms-2"[39m
+        [33mdir[39m=[32m"ltr"[39m
+        [33mid[39m=[32m"rate-amount"[39m
+        [33minputmode[39m=[32m"decimal"[39m
+        [33mname[39m=[32m"amount"[39m
+      [36m/>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"text-sm text-destructive"[39m
+        [33mid[39m=[32m"rate-amount-error"[39m
+        [33mrole[39m=[32m"alert"[39m
+      [36m>[39m
+        [0mUse at most 2 decimal places, like 150.50.[0m
+      [36m</p>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-wrap justify-end gap-2 mt-0"[39m
+      [33mdata-slot[39m=[32m"dialog-footer"[39m
+    [36m>[39m
+      [36m<button[39m
+        [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary h-11 px-4"[39m
+        [33mtype[39m=[32m"button"[39m
+      [36m>[39m
+        [0mCancel[0m
+      [36m</button>[39m
+      [36m<button[39m
+        [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-[color-mix(in_oklab,var(--color-primary)_90%,black)] h-11 px-4"[39m
+        [33mtype[39m=[32m"submit"[39m
+      [36m>[39m
+        [0mSave rate[0m
+      [36m</button>[39m
+    [36m</div>[39m
+  [36m</form>[39m
+[36m</div>[39m
+   ✓ RatesPage > edits a rate's amount  893ms
+   ✓ RatesPage > edits a rate left in an old currency in the teacher's current one  442ms
+   ✓ RatesPage > deletes a rate after confirming  455ms
+   ✓ RatesPage > offers no Add once the default and every course have a rate 147ms
+   ✓ RatesPage > does not fetch the courses list without course.view_any 74ms
+   ✓ RatesPage > offers only the default rate and withholds per-course Add without course.view_any 172ms
+   ✓ RatesPage > reads in Arabic, its dialog too  590ms
+   ✓ RatesPage > shows an empty state and a load error 104ms
+   ✓ RatesPage > shows staff who may only view the rates, with no way to change them 80ms
+   ✓ RatesPage > builds teacher names from the rates payload, and shows no error, without teacher.view_any 93ms
+   ✓ RatesPage > offers Edit in a counting rate's currency for a stand-in teacher who has one 223ms
+   ✓ RatesPage > offers no Add or Edit, with a note, for a stand-in teacher with no counting rate 205ms
+   ✓ RatesPage > shows a truthful empty message in stand-in mode 24ms
+   ✓ RatesPage > shows the per-student rates while the feature is on 203ms
+   ✓ RatesPage > hides the per-student rates, and skips their query, while the feature is off 127ms
+   ✓ RatesPage > offers the bulk dialog to an admin with the feature on 224ms
+   ✓ RatesPage > hides the bulk button from staff who can only create rates 105ms
+   ✓ RatesPage > shows each teacher's fixed salary while the switch is on 123ms
+   ✓ RatesPage > asks for no fixed salary while the switch is off 72ms
+ ✓ src/features/payroll/PayslipBody.test.tsx (6 tests) 833ms
+   ✓ PayslipBody > puts a fixed salary first and lists the sessions with no rate  479ms
+ ❯ src/features/payroll/AdjustmentsList.test.tsx (19 tests | 1 failed) 10170ms
+   ✓ AdjustmentsList > lists bonuses and deductions, and changes only the unused ones  919ms
+   ✓ AdjustmentsList > filters by teacher and by used  552ms
+   × AdjustmentsList > adds one in the chosen teacher's currency, dated the academy's today 2395ms
+     → Unable to find an element with the text: Enter an amount above zero, like 150 or 150.50.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<div[39m
+  [33maria-describedby[39m=[32m"radix-_r_k_"[39m
+  [33maria-labelledby[39m=[32m"radix-_r_j_"[39m
+  [33mclass[39m=[32m"pointer-events-auto w-full max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-lg border border-border bg-background p-6 text-start text-foreground shadow-lg outline-none animate-dialog-in motion-reduce:animate-none max-w-lg"[39m
+  [33mdata-slot[39m=[32m"dialog-content"[39m
+  [33mdata-state[39m=[32m"open"[39m
+  [33mid[39m=[32m"radix-_r_i_"[39m
+  [33mrole[39m=[32m"dialog"[39m
+  [33mstyle[39m=[32m"pointer-events: auto;"[39m
+  [33mtabindex[39m=[32m"-1"[39m
+[36m>[39m
+  [36m<h2[39m
+    [33mclass[39m=[32m"font-display text-lg font-semibold"[39m
+    [33mdata-slot[39m=[32m"dialog-title"[39m
+    [33mid[39m=[32m"radix-_r_j_"[39m
+  [36m>[39m
+    [0mAdd adjustment[0m
+  [36m</h2>[39m
+  [36m<p[39m
+    [33mclass[39m=[32m"mt-1 text-sm text-muted-foreground"[39m
+    [33mdata-slot[39m=[32m"dialog-description"[39m
+    [33mid[39m=[32m"radix-_r_k_"[39m
+  [36m>[39m
+    [0mA bonus or a deduction, in the teacher's pay currency. It goes on the teacher's next payslip issued for its month or a later one.[0m
+  [36m</p>[39m
+  [36m<form[39m
+    [33mclass[39m=[32m"mt-4 flex flex-col gap-4"[39m
+    [33mnovalidate[39m=[32m""[39m
+  [36m>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"grid gap-4 sm:grid-cols-2"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-1.5"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+          [33mdata-slot[39m=[32m"label"[39m
+          [33mfor[39m=[32m"adjustment-teacher"[39m
+        [36m>[39m
+          [0mTeacher[0m
+          [36m<span[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"text-destructive"[39m
+          [36m>[39m
+            [0m*[0m
+          [36m</span>[39m
+        [36m</label>[39m
+        [36m<select[39m
+          [33maria-required[39m=[32m"true"[39m
+          [33mclass[39m=[32m"flex h-11 w-full cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 text-start"[39m
+          [33mid[39m=[32m"adjustment-teacher"[39m
+          [33mname[39m=[32m"teacher"[39m
+        [36m>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m""[39m
+          [36m>[39m
+            [0mChoose a teacher[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"21"[39m
+          [36m>[39m
+            [0mBilal[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"22"[39m
+          [36m>[39m
+            [0mMaryam[0m
+          [36m</option>[39m
+        [36m</select>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-1.5"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+          [33mdata-slot[39m=[32m"label"[39m
+          [33mfor[39m=[32m"adjustment-kind"[39m
+        [36m>[39m
+          [0mKind[0m
+          [36m<span[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"text-destructive"[39m
+          [36m>[39m
+            [0m*[0m
+          [36m</span>[39m
+        [36m</label>[39m
+        [36m<select[39m
+          [33maria-required[39m=[32m"true"[39m
+          [33mclass[39m=[32m"flex h-11 w-full cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 text-start"[39m
+          [33mid[39m=[32m"adjustment-kind"[39m
+          [33mname[39m=[32m"kind"[39m
+        [36m>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"bonus"[39m
+          [36m>[39m
+            [0mBonus[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"deduction"[39m
+          [36m>[39m
+            [0mDeduction[0m
+          [36m</option>[39m
+        [36m</select>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-1.5"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+          [33mdata-slot[39m=[32m"label"[39m
+          [33mfor[39m=[32m"adjustment-amount"[39m
+        [36m>[39m
+          [0mAmount (JPY)[0m
+          [36m<span[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"text-destructive"[39m
+          [36m>[39m
+            [0m*[0m
+          [36m</span>[39m
+        [36m</label>[39m
+        [36m<input[39m
+          [33maria-describedby[39m=[32m"adjustment-amount-error"[39m
+          [33maria-invalid[39m=[32m"true"[39m
+          [33maria-required[39m=[32m"true"[39m
+          [33mclass[39m=[32m"flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 aria-invalid:border-destructive aria-invalid:not-focus-visible:ring-2 aria-invalid:not-focus-visible:ring-destructive text-start [unicode-bidi:plaintext] [&::-webkit-search-cancel-button]:ms-2"[39m
+          [33mdir[39m=[32m"ltr"[39m
+          [33mid[39m=[32m"adjustment-amount"[39m
+          [33minputmode[39m=[32m"decimal"[39m
+          [33mname[39m=[32m"amount"[39m
+        [36m/>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-sm text-destructive"[39m
+          [33mid[39m=[32m"adjustment-amount-error"[39m
+          [33mrole[39m=[32m"alert"[39m
+        [36m>[39m
+          [0mUse whole numbers only, like 150.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-1.5"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+          [33mdata-slot[39m=[32m"label"[39m
+          [33mfor[39m=[32m"adjustment-effective_on"[39m
+        [36m>[39m
+          [0mDate[0m
+          [36m<span[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"text-destructive"[39m
+          [36m>[39m
+            [0m*[0m
+          [36m</span>[39m
+        [36m</label>[39m
+        [36m<input[39m
+          [33maria-required[39m=[32m"true"[39m
+          [33mclass[39m=[32m"flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 aria-invalid:border-destructive aria-invalid:not-focus-visible:ring-2 aria-invalid:not-focus-visible:ring-destructive text-start [unicode-bidi:plaintext] [&::-webkit-search-cancel-button]:ms-2"[39m
+          [33mdir[39m=[32m"ltr"[39m
+          [33mid[39m=[32m"adjustment-effective_on"[39m
+          [33mname[39m=[32m"effective_on"[39m
+          [33mtype[39m=[32m"date"[39m
+        [36m/>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-col gap-1.5"[39m
+    [36m>[39m
+      [36m<label[39m
+        [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+        [33mdata-slot[39m=[32m"label"[39m
+        [33mfor[39m=[32m"adjustment-reason"[39m
+      [36m>[39m
+        [0mReason[0m
+        [36m<span[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"text-destructive"[39m
+        [36m>[39m
+          [0m*[0m
+        [36m</span>[39m
+      [36m</label>[39m
+      [36m<textarea[39m
+        [33maria-required[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-invalid:border-destructive text-start"[39m
+        [33mid[39m=[32m"adjustment-reason"[39m
+        [33mname[39m=[32m"reason"[39m
+        [33mrows[39m=[32m"2"[39m
+      [36m/>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-wrap justify-end gap-2 mt-0"[39m
+      [33mdata-slot[39m=[32m"dialog-footer"[39m
+    [36m>[39m
+      [36m<button[39m
+        [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary h-11 px-4"[39m
+        [33mtype[39m=[32m"button"[39m
+      [36m>[39m
+        [0mCancel[0m
+      [36m</button>[39m
+      [36m<button[39m
+        [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-[color-mix(in_oklab,var(--color-primary)_90%,black)] h-11 px-4"[39m
+        [33mtype[39m=[32m"submit"[39m
+      [36m>[39m
+        [0mSave adjustment[0m
+      [36m</button>[39m
+    [36m</div>[39m
+  [36m</form>[39m
+[36m</div>[39m
+
+Ignored nodes: comments, script, style
+[36m<div[39m
+  [33maria-describedby[39m=[32m"radix-_r_k_"[39m
+  [33maria-labelledby[39m=[32m"radix-_r_j_"[39m
+  [33mclass[39m=[32m"pointer-events-auto w-full max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-lg border border-border bg-background p-6 text-start text-foreground shadow-lg outline-none animate-dialog-in motion-reduce:animate-none max-w-lg"[39m
+  [33mdata-slot[39m=[32m"dialog-content"[39m
+  [33mdata-state[39m=[32m"open"[39m
+  [33mid[39m=[32m"radix-_r_i_"[39m
+  [33mrole[39m=[32m"dialog"[39m
+  [33mstyle[39m=[32m"pointer-events: auto;"[39m
+  [33mtabindex[39m=[32m"-1"[39m
+[36m>[39m
+  [36m<h2[39m
+    [33mclass[39m=[32m"font-display text-lg font-semibold"[39m
+    [33mdata-slot[39m=[32m"dialog-title"[39m
+    [33mid[39m=[32m"radix-_r_j_"[39m
+  [36m>[39m
+    [0mAdd adjustment[0m
+  [36m</h2>[39m
+  [36m<p[39m
+    [33mclass[39m=[32m"mt-1 text-sm text-muted-foreground"[39m
+    [33mdata-slot[39m=[32m"dialog-description"[39m
+    [33mid[39m=[32m"radix-_r_k_"[39m
+  [36m>[39m
+    [0mA bonus or a deduction, in the teacher's pay currency. It goes on the teacher's next payslip issued for its month or a later one.[0m
+  [36m</p>[39m
+  [36m<form[39m
+    [33mclass[39m=[32m"mt-4 flex flex-col gap-4"[39m
+    [33mnovalidate[39m=[32m""[39m
+  [36m>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"grid gap-4 sm:grid-cols-2"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-1.5"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+          [33mdata-slot[39m=[32m"label"[39m
+          [33mfor[39m=[32m"adjustment-teacher"[39m
+        [36m>[39m
+          [0mTeacher[0m
+          [36m<span[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"text-destructive"[39m
+          [36m>[39m
+            [0m*[0m
+          [36m</span>[39m
+        [36m</label>[39m
+        [36m<select[39m
+          [33maria-required[39m=[32m"true"[39m
+          [33mclass[39m=[32m"flex h-11 w-full cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 text-start"[39m
+          [33mid[39m=[32m"adjustment-teacher"[39m
+          [33mname[39m=[32m"teacher"[39m
+        [36m>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m""[39m
+          [36m>[39m
+            [0mChoose a teacher[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"21"[39m
+          [36m>[39m
+            [0mBilal[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"22"[39m
+          [36m>[39m
+            [0mMaryam[0m
+          [36m</option>[39m
+        [36m</select>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-1.5"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+          [33mdata-slot[39m=[32m"label"[39m
+          [33mfor[39m=[32m"adjustment-kind"[39m
+        [36m>[39m
+          [0mKind[0m
+          [36m<span[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"text-destructive"[39m
+          [36m>[39m
+            [0m*[0m
+          [36m</span>[39m
+        [36m</label>[39m
+        [36m<select[39m
+          [33maria-required[39m=[32m"true"[39m
+          [33mclass[39m=[32m"flex h-11 w-full cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 text-start"[39m
+          [33mid[39m=[32m"adjustment-kind"[39m
+          [33mname[39m=[32m"kind"[39m
+        [36m>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"bonus"[39m
+          [36m>[39m
+            [0mBonus[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mvalue[39m=[32m"deduction"[39m
+          [36m>[39m
+            [0mDeduction[0m
+          [36m</option>[39m
+        [36m</select>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-1.5"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+          [33mdata-slot[39m=[32m"label"[39m
+          [33mfor[39m=[32m"adjustment-amount"[39m
+        [36m>[39m
+          [0mAmount (JPY)[0m
+          [36m<span[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"text-destructive"[39m
+          [36m>[39m
+            [0m*[0m
+          [36m</span>[39m
+        [36m</label>[39m
+        [36m<input[39m
+          [33maria-describedby[39m=[32m"adjustment-amount-error"[39m
+          [33maria-invalid[39m=[32m"true"[39m
+          [33maria-required[39m=[32m"true"[39m
+          [33mclass[39m=[32m"flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 aria-invalid:border-destructive aria-invalid:not-focus-visible:ring-2 aria-invalid:not-focus-visible:ring-destructive text-start [unicode-bidi:plaintext] [&::-webkit-search-cancel-button]:ms-2"[39m
+          [33mdir[39m=[32m"ltr"[39m
+          [33mid[39m=[32m"adjustment-amount"[39m
+          [33minputmode[39m=[32m"decimal"[39m
+          [33mname[39m=[32m"amount"[39m
+        [36m/>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-sm text-destructive"[39m
+          [33mid[39m=[32m"adjustment-amount-error"[39m
+          [33mrole[39m=[32m"alert"[39m
+        [36m>[39m
+          [0mUse whole numbers only, like 150.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-1.5"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+          [33mdata-slot[39m=[32m"label"[39m
+          [33mfor[39m=[32m"adjustment-effective_on"[39m
+        [36m>[39m
+          [0mDate[0m
+          [36m<span[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"text-destructive"[39m
+          [36m>[39m
+            [0m*[0m
+          [36m</span>[39m
+        [36m</label>[39m
+        [36m<input[39m
+          [33maria-required[39m=[32m"true"[39m
+          [33mclass[39m=[32m"flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 aria-invalid:border-destructive aria-invalid:not-focus-visible:ring-2 aria-invalid:not-focus-visible:ring-destructive text-start [unicode-bidi:plaintext] [&::-webkit-search-cancel-button]:ms-2"[39m
+          [33mdir[39m=[32m"ltr"[39m
+          [33mid[39m=[32m"adjustment-effective_on"[39m
+          [33mname[39m=[32m"effective_on"[39m
+          [33mtype[39m=[32m"date"[39m
+        [36m/>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-col gap-1.5"[39m
+    [36m>[39m
+      [36m<label[39m
+        [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+        [33mdata-slot[39m=[32m"label"[39m
+        [33mfor[39m=[32m"adjustment-reason"[39m
+      [36m>[39m
+        [0mReason[0m
+        [36m<span[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"text-destructive"[39m
+        [36m>[39m
+          [0m*[0m
+        [36m</span>[39m
+      [36m</label>[39m
+      [36m<textarea[39m
+        [33maria-required[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-base text-foreground sm:text-sm transition-colors motion-reduce:transition-none hover:border-ring/60 placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-invalid:border-destructive text-start"[39m
+        [33mid[39m=[32m"adjustment-reason"[39m
+        [33mname[39m=[32m"reason"[39m
+        [33mrows[39m=[32m"2"[39m
+      [36m/>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex flex-wrap justify-end gap-2 mt-0"[39m
+      [33mdata-slot[39m=[32m"dialog-footer"[39m
+    [36m>[39m
+      [36m<button[39m
+        [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 border border-border bg-transparent hover:bg-secondary h-11 px-4"[39m
+        [33mtype[39m=[32m"button"[39m
+      [36m>[39m
+        [0mCancel[0m
+      [36m</button>[39m
+      [36m<button[39m
+        [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-[color-mix(in_oklab,var(--color-primary)_90%,black)] h-11 px-4"[39m
+        [33mtype[39m=[32m"submit"[39m
+      [36m>[39m
+        [0mSave adjustment[0m
+      [36m</button>[39m
+    [36m</div>[39m
+  [36m</form>[39m
+[36m</div>[39m
+   ✓ AdjustmentsList > edits an unused one and shows a refusal translated  792ms
+   ✓ AdjustmentsList > edits one left in an old currency in the teacher's current one  1067ms
+   ✓ AdjustmentsList > deletes an unused one after confirming  484ms
+   ✓ AdjustmentsList > reads in Arabic, its dialog too 229ms
+   ✓ AdjustmentsList > shows an empty state and a load error 109ms
+   ✓ AdjustmentsList > shows staff who may only view the adjustments, with no way to change them 104ms
+   ✓ AdjustmentsList > fetches no teacher filter, and shows no error, without teacher.view_any 59ms
+   ✓ AdjustmentsList > adds a percentage bonus while percentages are on  737ms
+   ✓ AdjustmentsList > never offers a percentage for a deduction 258ms
+   ✓ AdjustmentsList > shows a percentage bonus as a percentage 150ms
+   ✓ AdjustmentsList > keeps a pending percentage while percentages are off  349ms
+   ✓ AdjustmentsList > shows the server's percentage refusal on its field  570ms
+   ✓ AdjustmentsList > switching an unused one's form while percentages are on > sends a fixed bonus made a percentage with its amount cleared  475ms
+   ✓ AdjustmentsList > switching an unused one's form while percentages are on > sends a percentage bonus made a fixed amount with its percentage cleared  402ms
+   ✓ AdjustmentsList > switching an unused one's form while percentages are on > sends a percentage bonus made a deduction with its percentage cleared  393ms
+   ✓ AdjustmentsList > reads a percentage in Arabic 123ms
+ ✓ src/features/payroll/PayslipPrint.test.tsx (7 tests) 1189ms
+   ✓ PayslipPrint > prints the academy's payslip with its lines and totals  539ms
+ ✓ src/features/payroll/api.test.ts (7 tests) 14ms
+ ✓ src/features/payroll/StudentRates.test.tsx (10 tests) 2357ms
+   ✓ adds a rate for an active student  834ms
+   ✓ shows a 409 rate_exists translated  341ms
+   ✓ edits only the amount of a rate  342ms
+ ✓ src/features/payroll/TeacherPayslips.test.tsx (5 tests) 600ms
+   ✓ TeacherPayslips > lists the teacher's payslips, each opening its page  417ms
+ ✓ src/features/payroll/ProjectionsPage.test.tsx (13 tests) 1445ms
+   ✓ ProjectionsPage > names the server's month, explains itself and has no month picker  692ms
+
+ Test Files  4 failed | 13 passed (17)
+      Tests  5 failed | 182 passed (187)
+   Start at  20:59:30
+   Duration  21.56s (transform 7.65s, setup 15.68s, collect 68.94s, tests 60.06s, environment 24.62s, prepare 3.52s)
+

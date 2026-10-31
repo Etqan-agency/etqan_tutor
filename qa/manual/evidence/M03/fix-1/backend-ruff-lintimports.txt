@@ -1,0 +1,65 @@
+I001 [*] Import block is un-sorted or un-formatted
+  --> etqan/notifications/tests/test_chat_notice.py:4:1
+   |
+ 2 |   real time, so the scan is asked at the real time plus the wait."""
+ 3 |
+ 4 | / from datetime import timedelta
+ 5 | |
+ 6 | | import pytest
+ 7 | | from django.utils import timezone
+ 8 | |
+ 9 | | from etqan.chat import services as chat_services
+10 | | from etqan.notifications import finders
+11 | | from etqan.notifications import kinds
+12 | | from etqan.notifications import recipients
+13 | | from etqan.notifications.text import isolate
+14 | | from etqan.notifications import services
+15 | | from etqan.notifications import text
+16 | | from etqan.notifications.links import path_for
+17 | | from etqan.notifications.models import Notification
+18 | | from etqan.notifications.services import preferences
+19 | | from etqan.notifications.services import templates
+20 | | from etqan.notifications.tests.conftest import subscribe
+   | |________________________________________________________^
+21 |
+22 |   pytestmark = pytest.mark.django_db
+   |
+help: Organize imports
+
+PLE2502 Contains control characters that can permit obfuscated code
+   --> etqan/notifications/tests/test_text.py:267:1
+    |
+265 |     _, body = render(kinds.INVOICE_OVERDUE, facts, language="ar", timezone="UTC")
+266 |     assert body == (
+267 |         "كانت الفاتورة INV-000149 لـSCN Student B1 "
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+268 |         "(50.00 EGP) مستحقة في 2026-10-26."
+269 |     )
+    |
+
+PLE2502 Contains control characters that can permit obfuscated code
+   --> etqan/notifications/tests/test_text.py:268:1
+    |
+266 |     assert body == (
+267 |         "كانت الفاتورة INV-000149 لـSCN Student B1 "
+268 |         "(50.00 EGP) مستحقة في 2026-10-26."
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+269 |     )
+270 |     _, english = render(kinds.INVOICE_OVERDUE, facts, language="en", timezone="UTC")
+    |
+
+PLE2502 Contains control characters that can permit obfuscated code
+   --> etqan/notifications/tests/test_text.py:271:1
+    |
+269 |     )
+270 |     _, english = render(kinds.INVOICE_OVERDUE, facts, language="en", timezone="UTC")
+271 |     assert "" not in english
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+272 |     assert isolate("") == ""
+    |
+
+Found 4 errors.
+[*] 1 fixable with the `--fix` option.
+no app imports devices KEPT
+
+Contracts: 54 kept, 0 broken.

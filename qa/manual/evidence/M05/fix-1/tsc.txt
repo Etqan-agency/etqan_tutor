@@ -1,0 +1,2 @@
+First run (02:02Z, after all code edits, before `biome check --write`): `pnpm tsc --noEmit` exit 0, no output.
+Re-run after Biome (formatting/import order only) at 2026-10-28T02:04:09Z: blocked, the whole docker stack had been stopped (all containers Exited ~2 min earlier, not by Agent 3); not restarted because the stop looked deliberate. vitest-related.txt (55 files / 336 tests) ran after Biome and passed.

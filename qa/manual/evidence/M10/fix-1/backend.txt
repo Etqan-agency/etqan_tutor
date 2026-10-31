@@ -1,0 +1,6 @@
+619 passed, 204 warnings in 36.06s
+All checks passed!
+3 files already formatted
+Contracts: 54 kept, 0 broken.
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+59 passed, 4 warnings in 3.86s

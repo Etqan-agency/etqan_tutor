@@ -1,0 +1,15 @@
+learning reaches other apps only through their services KEPT (11 ignored imports)
+recorded reaches other apps only through their services KEPT (116 ignored imports)
+vouchers never imports recorded KEPT
+consultations reach other apps only through their services KEPT (171 ignored imports)
+library imports only the platform KEPT
+employment reaches identity only through its services KEPT (1 ignored import)
+systemstatus reaches scheduling only through its services KEPT
+registration imports only the platform and identity's services KEPT (12 ignored imports)
+translations imports only the platform KEPT
+ai reaches other apps only through their services KEPT (78 ignored imports)
+other apps reach ai only through its services KEPT
+devices reaches other apps only through their services KEPT (27 ignored imports)
+no app imports devices KEPT
+
+Contracts: 54 kept, 0 broken.

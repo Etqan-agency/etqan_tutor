@@ -1,0 +1,40 @@
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to ForwardRef inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/features/notifications/NotificationSettingsForm.test.tsx (14 tests) 17009ms
+   ✓ NotificationSettingsForm > scrolls to itself when the page opens at #notifications (ETQAN-QA-618)  2742ms
+   ✓ NotificationSettingsForm > does not scroll without the anchor (ETQAN-QA-618)  1242ms
+   ✓ NotificationSettingsForm > shows each type's switch and number  1906ms
+   ✓ NotificationSettingsForm > shows the types in groups, the chat notice under Chat  1748ms
+   ✓ NotificationSettingsForm > shows the schedule, homework and level groups with the new numbers  1188ms
+   ✓ NotificationSettingsForm > saves every switch and number  1210ms
+   ✓ NotificationSettingsForm > checks each number's range before saving  897ms
+   ✓ NotificationSettingsForm > puts the server's error on its field  1120ms
+   ✓ NotificationSettingsForm > says when the settings couldn't load, and reads in Arabic  2115ms
+   ✓ NotificationSettingsForm > shows staff without notification_settings.update the settings, read-only  558ms
+   ✓ NotificationSettingsForm > WhatsApp column > is hidden while the feature is off  596ms
+   ✓ NotificationSettingsForm > WhatsApp column > leaves whatsapp out of the PATCH body while the feature is off  535ms
+   ✓ NotificationSettingsForm > WhatsApp column > shows a switch per type and saves it  916ms
+
+ Test Files  21 passed (21)
+      Tests  218 passed (218)
+   Start at  02:01:09
+   Duration  21.87s (transform 4.19s, setup 21.53s, collect 28.74s, tests 87.04s, environment 26.02s, prepare 4.20s)
+

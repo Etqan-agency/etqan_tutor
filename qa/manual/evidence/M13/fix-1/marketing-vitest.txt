@@ -1,0 +1,6 @@
+ ✓ test/site.test.ts (19 tests) 25ms
+ ✓ test/layout.test.ts (7 tests) 35ms
+ ✓ test/components.test.ts (25 tests) 118ms
+ ✓ test/closed.test.ts (19 tests) 200ms
+ Test Files  4 passed (4)
+      Tests  70 passed (70)

@@ -1,0 +1,18 @@
+# M06 agent1 log
+- 2026-10-27T18:50:14Z start M06 manual test (Agent 1)
+- 2026-10-27T18:52:44Z created sub 94 (Mona, Ahmad, Wed+Sat 17:00) via AR form
+- 2026-10-27T18:55:17Z filed F-001..F-006; sub 95 backdated
+- 2026-10-27T18:55:37Z sub 96 (Ibrahim/Ahmad Mon+Thu 17:00 = clash with Omar sub 90): no warning in UI -> known ETQAN-QA-043, not re-filed
+- 2026-10-27T19:00:43Z slot edit/stop/resume (96), pause (96), renew normal (96->97), early renew (94->98), cancel+archive (95). Restore exists via row checkbox.
+- 2026-10-27T19:03:04Z bundles 7 (multi) and 8 (family Najjar, paused 08-10/11) created; filed F-007..F-013
+- 2026-10-27T19:07:28Z trials: created trial 2 (Fatima, Ahmad 31/10 18:00), trial 3 (Fatima Tajweed 27/10 20:00, attended) converted -> sub 103
+- 2026-10-27T19:10:03Z EN pass started; sub 104 (outside availability), 105 (double-click -> 1 sub only, OK). Filed F-014..F-018
+- 2026-10-27T19:12:00Z teacher Ahmad (sessions today/week, availability), student Mona (subs, sessions, direct admin URL -> home), parent Najjar home walked. F-019 (past session generated), F-020, F-021
+- 2026-10-27T19:15:13Z mobile AR list/create/detail/calendar/trials, EN list/create/detail/trials/schedules, staff no-code + codes (no access page), teacher direct URL (redirect home). Filed F-019..F-022
+- 2026-10-27T19:16:22Z F-023 filed; findings complete (23); covered list written. Done.
+- 2026-10-27T20:07:15Z Agent 1 confirmation sweep start (post-fix re-walk)
+- 2026-10-27T20:10:00Z sweep: AR list/create (sub 107 Hamza/Yousef Tue+Fri 18:00) OK; slot stop confirm OK; pause delete + slot delete no confirm -> F-024
+- 2026-10-27T20:11:47Z sweep: trials list/detail/schedule dialog AR OK; bundle 8 back link + pause order msg OK; weekly schedules list names wrap broken -> F-025
+- 2026-10-27T20:13:29Z sweep EN: sub 107 detail/renew dialog/cancel confirm, list search, trials list OK
+- 2026-10-27T20:14:23Z sweep mobile AR list/create/calendar OK (375 wide); admin sessions list names also broken -> F-025b
+- 2026-10-27T20:16:38Z sweep: teacher/student/parent AR, parent EN walked OK; filed F-024, F-025. Sweep done (~37 step calls).

@@ -1,0 +1,9 @@
+..............................................................           [100%]
+=============================== warnings summary ===============================
+etqan/learning/tests/test_api_reviews.py: 20 warnings
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+62 passed, 20 warnings in 9.53s
+exit 0

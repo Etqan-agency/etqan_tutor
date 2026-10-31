@@ -1,0 +1,16 @@
+.............................                                            [100%]
+=============================== warnings summary ===============================
+etqan/consultations/tests/test_api_products.py::test_opt_in_then_product_round_trip
+etqan/consultations/tests/test_api_products.py::test_patch_keeps_enabled_when_omitted
+etqan/consultations/tests/test_api_products.py::test_product_errors_name_their_field
+etqan/consultations/tests/test_api_products.py::test_unknown_consultant_is_404
+etqan/consultations/tests/test_api_products.py::test_slots
+etqan/consultations/tests/test_api_products.py::test_product_list_needs_the_view_code
+etqan/consultations/tests/test_api_products.py::test_family_and_teachers_get_403
+etqan/consultations/tests/test_api_products.py::test_switch_off_is_404
+  /usr/local/lib/python3.13/site-packages/django/core/handlers/base.py:62: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+29 passed, 8 warnings in 3.67s
+exit 0

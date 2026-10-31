@@ -1,0 +1,5 @@
+# M15 Agent 3 (fixer) log
+
+- 2026-10-28T01:42:54Z Cycle 1 start: 13 bugs (450,451,455,458,459,460,461,462,464,465,466,467,468). Branches already qa/manual-2026-10 in dashboard+backend.
+- 2026-10-28T01:50:25Z Fixed (dashboard, tests green): 458 MyHomework awaiting-review chip; 462 AppSidebar deeper-item exact match; 459 reviews starts_at (backend additive key) + time label; 460 maxLength+counter; 461 ref guard; 468 child empty state; 465 topics copy + ?student= persistence; 455 used/left + period; 466 PrintBackButton + no italic for Arabic; 467 self-start. Next: 464, 450, 451.
+- 2026-10-28T01:57:33Z Fixed 464 (WhatsApp required w/o phone + Arabic error), 450 (receipt fee rows), 451 (awaiting-payment chip; backend auto-cancel delay -> proposal). Checks: tsc 0; Vitest 19 files/128 passed; biome touched files clean; pytest 62 passed; ruff ok; lint-imports 54 kept. Register: 13 bugs FIXED-UNVERIFIED. Proposals appended to qa/coverage-gaps.md § M15. Evidence qa/manual/evidence/M15/fix-1/. Not committed.
