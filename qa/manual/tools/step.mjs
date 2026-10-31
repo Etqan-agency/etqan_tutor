@@ -6,7 +6,7 @@
 // usage: node step.mjs --session qa-admin-ar --lang ar --viewport 1440x900 \
 //          --url http://qa.etqan.localhost/app/people/students \
 //          --actions '[{"click":"role=button[name=\"Add student\"]"}]' \
-//          --shot ../screens/M04/M04-step-012.png [--full] [--text 2500] [--keep]
+//          --shot ../screens/M04/M04-step-012.png [--full] [--text 2500] [--keep] [--theme dark]
 //
 // actions (each object has one key, run in order):
 //   {"goto": "/app/..."}           relative to the --url origin, or absolute
@@ -43,6 +43,7 @@ const url = arg("url");
 const actions = JSON.parse(arg("actions", "[]"));
 const shot = arg("shot");
 const textMax = Number(arg("text", 2000));
+const theme = arg("theme"); // "dark" | "light" (optional)
 const statePath = path.join(sessions, `${session}.json`);
 
 const browser = await chromium.launch();
@@ -52,7 +53,9 @@ const context = await browser.newContext({
   storageState: fs.existsSync(statePath) ? statePath : undefined,
   isMobile: vw < 500,
   hasTouch: vw < 500,
+  colorScheme: theme === "dark" ? "dark" : "light",
 });
+if (theme) await context.addInitScript((t) => { try { localStorage.setItem("etqan-theme", t); } catch {} }, theme);
 await context.addInitScript((l) => { try { localStorage.setItem("etqan-locale", l); } catch {} }, lang);
 const page = await context.newPage();
 const consoleErrors = [];
