@@ -213,3 +213,82 @@ The gate will then repeat:
 - the gap measurement on Students and Sessions;
 - the full keyboard pass;
 - `tsc` and vitest.
+
+## Cycle 2 — EN + phone (Agent 2, 2026-11-02)
+
+Scope: EN at 1440×900 (light and dark), and AR + EN at 375×812 (light and dark; `isMobile` +
+`hasTouch`, every open and every pick a real `tap()`). Code under test: the local working tree,
+served by the running dashboard container. Driven with Playwright (same setup as `step.mjs`,
+logged in as `qa-admin@` / `qa-teacher@`); every result below was read back from the DOM, and the
+screenshots were looked at.
+
+### Verdict: **PASS** (EN + phone)
+
+| Screen | Pick by click (1440) / tap (375) | Value + effect | Gap text→chevron | Popup |
+|---|---|---|---|---|
+| Students, Gender | 6/6 configs | `female`, rows 29 → 12; reverted to Any | 1440: 8 px (35 px after "Female": the placeholder ghost, G-4, by design) | on screen, start-aligned |
+| Sessions, Status (+ Period) | 6/6 | `scheduled`; with Period = Upcoming, Status = Cancelled sends `?when=upcoming&status=cancelled` and shows the empty state; reverted | 1440: 8 px | on screen |
+| Trials, Request status | 6/6 | `under_review`, rows 5 → 1; reverted | 1440: 8 px (41 px after a pick, G-4 ghost) | on screen |
+| Invoices, Student (101 options) | 6/6 | `124`, rows 25 → 0; reverted | 8 px everywhere | scrolls (3644/318 px), on screen |
+| New subscription, Student + Course | 6/6 | `124`, `9`/`1`; not saved | form field, chevron at the end (accepted pattern) | 375: flips above the field when low, on screen |
+| Settings, Default language | 6/6 | `ar → en`, Save, reload = `en`; reverted, Save, reload = `ar` (6 times) | form field | on screen |
+| Settings, Time zone (419 options, the long list) | 6/6 | scrolled 1500 px inside the list, picked a visible row (Ceuta / Asmara), value changed; not saved (stays `Africa/Cairo`) | form field | 320 px, scrolls, `overscroll-contain` |
+| Teacher availability | – | no selects on the page (4 time inputs, same `border-input`), as decisions.md says; teacher Sessions' 18 attendance selects are disabled until a session starts | – | – |
+
+- **Pointer (G-1): fixed.** Every click and every touch tap chose the option, the field showed it,
+  the list closed and the table or form value followed. 0 misses in 6 configs × 9 picks.
+- **Borders:** light `--input` `rgb(147,141,131)`, dark `rgb(121,126,124)` (#797E7C) on every select
+  and on the time inputs. Soft, not the old white outline.
+- **Popup:** start-aligned in LTR and RTL (the check column on the start side). `+cmd`, `-5 days`,
+  `=HYPERLINK("http://x")` keep their order inside the RTL list (G-3 fixed). At 375 every popup was
+  inside `[8, 367]` horizontally and inside the 812 px viewport vertically.
+- **No sideways scroll:** `scrollWidth == clientWidth` (1440 / 375) on every screen, with the list
+  open and closed.
+- **Console:** only the known 403 on `/identity/me/` before sign-in.
+
+**Keyboard** (EN light 1440):
+- **Trials, Request status:**
+  - Tab in, then ↓ opens on the current value. ↓↓ moves through Under review → Accepted, and ↑
+    moves back.
+  - Escape closes with the value unchanged and focus kept. Enter opens it again.
+  - End goes to Rejected and Home goes back to Any.
+  - Typeahead `a` → Accepted, and Enter chooses it: `accepted`, rows 5 → 4.
+  - With the list closed, `r` opens it on Rejected. Tab then chooses Rejected and moves focus to
+    "Request source".
+  - Escape after Home keeps `rejected`.
+  - Reset to Any.
+- **New subscription:**
+  - Enter opens the Student list. Typeahead `dan` → Daniel Carter.
+  - PageDown and PageUp move by 10.
+  - Escape closes with nothing chosen. ↓, `dan`, Enter gives `245` = Daniel Carter.
+  - The burst `f02 s` (with a space) → F02 Student a, then Enter.
+  - Tab moves to Supervisor.
+  - Course: ↓↓ highlights "Arabic for Non-Native Speakers", and Tab chooses `9` and moves on to
+    Teacher.
+  - A second burst started within 500 ms of the previous one runs on from it, as the native
+    control does. That's expected.
+
+**Notes for the owner (not failures):**
+- **N-1:** at 375 the Sessions and Trials filters stack as full-width fields (343 px), with the
+  chevron at the field's end like the date fields under them. The text-to-chevron distance there is
+  170–260 px. On Students at 375 they sit in an even 2-column grid (166 px each, 43–105 px).
+  decisions.md keeps this phone layout on purpose, and it is the normal phone form pattern. If the
+  owner wants content-sized filters on phones too, that is a layout change, not a Select bug.
+- **N-2:** after picking a value shorter than the placeholder, a desktop filter keeps the
+  placeholder's width (G-4). So "Female" shows a 35 px gap and "Under review" a 41 px gap, instead
+  of 8 px. That is the agreed trade-off against the row shifting.
+- **N-3:** at 375 the Time zone list is up to 352 px wide, so in LTR it runs about 8 px past the
+  field's end (16–367 vs 16–359). It stays inside the 8 px margin. Cosmetic.
+
+**Shots** (`qa/manual/screens/r3/dropdown/`):
+- 1440:
+  - `g2-en-01…16-*-en-{light,dark}.png`: open and picked for each screen, plus settings saved and
+    time zone scrolled/picked.
+  - `g2-en-17/18`: keyboard, Trials.
+  - `g2-en-19/22`: keyboard, New subscription.
+  - `g2-en-20`: Sessions, Cancelled.
+  - `g2-en-21`: time zone opened on the chosen value.
+  - `g2-en-23-teacher-availability-*`.
+- Phone: `g2-375-01…16-*-{ar,en}-{light,dark}.png` and `g2-375-23-teacher-availability-*`.
+
+Not re-run in this pass: `tsc` and vitest (outside this EN + phone UI scope).
