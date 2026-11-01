@@ -4,3 +4,9 @@ tools/pw/package-lock.json
 manual/tools/node_modules
 manual/sessions/
 manual/screens/
+backups/
+manual/evidence/r3/
+manual/round-3/logs/
+manual/round-3/evidence/
+manual/round-3/evidence-final/*
+!manual/round-3/evidence-final/*.md
