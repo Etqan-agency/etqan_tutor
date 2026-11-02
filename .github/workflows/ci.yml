@@ -204,13 +204,16 @@ jobs:
           docker run --rm -v "$PWD:/mnt" -w /mnt koalaman/shellcheck:v0.11.0 \
             infra/scripts/*.sh infra/scripts/tests/*.sh infra/scripts/tests/fakebin/* \
             infra/staging-sim/entrypoint.sh scripts/deploy-staging.sh scripts/staging-sim.sh \
-            scripts/staging-sim-needed.sh scripts/orchestration/*.sh scripts/orchestration/tests/*.sh
+            scripts/staging-sim-needed.sh scripts/orchestration/*.sh scripts/orchestration/tests/*.sh \
+            scripts/bump-submodules.sh scripts/check-submodule-pins.sh scripts/tests/*.sh
       - name: ship.sh, smoke.sh and compose tests
         run: |
           bash infra/scripts/tests/ship_test.sh
           bash infra/scripts/tests/smoke_test.sh
           bash infra/scripts/tests/compose_test.sh
           bash infra/scripts/tests/edge_ca_test.sh
+      - name: just bump and the submodule pin check
+        run: bash scripts/tests/submodules_test.sh
       # launch_phase_test drives the justfile's stream-down and _stack-manage.
       - uses: taiki-e/install-action@v2
         with: { tool: just }
@@ -327,13 +330,22 @@ jobs:
           docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.30.1 \
             dir /repo --redact --no-banner --exit-code 1
 
+  # The images are built from the submodule pointers, so each must be a commit
+  # on its repo's main (never an unmerged branch). Behind main only warns.
+  submodules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
+      - run: bash scripts/check-submodule-pins.sh
+
   # Spec §3.1: every image, built after the tests pass. Pull requests build
   # only (a broken Dockerfile fails the PR); master pushes <meta-sha> and
   # :master to GHCR (private). The backend image needs no build arguments
   # (its default target is production); the frontends read the private
   # @etqan/tokens repo through the tokens_token build secret.
   images:
-    needs: [backend, dashboard, marketing, website, docs-site, caddy, e2e, infra-scripts, orchestra, security]
+    needs: [backend, dashboard, marketing, website, docs-site, caddy, e2e, infra-scripts, orchestra, security, submodules]
     runs-on: ubuntu-latest
     permissions:
       contents: read

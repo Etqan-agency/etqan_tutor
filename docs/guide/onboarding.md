@@ -99,11 +99,13 @@ Trunks: `master` in the meta repo, `main` in each submodule.
 2. Commit with [Conventional Commits](https://www.conventionalcommits.org/)
    (`feat(billing): …`, `fix: …`, `docs: …`).
 3. Open a PR in the submodule (`backend`, `dashboard`…) and get CI green.
-4. After it merges, in the meta repo: branch, check out the merged commit in the submodule,
-   commit the new pointer with its path given explicitly (`git commit backend -m "chore: bump backend"`,
-   never `git commit -a`, which also picks up stray pointer changes), and open the meta PR.
-   With `gh` in the meta repo pass `--repo Etqan-agency/etqan_tutor`, because the repo is a fork
-   and `gh` otherwise targets the parent.
+4. After it merges, run `just bump` in the meta repo. It points every submodule at its
+   `main` (`tokens` at the tag dashboard and marketing pin), checks the token pin, and opens
+   one meta PR listing what moved. Merging that PR deploys all of it. CI fails a meta commit
+   whose pointer is not on its repo's `main`, and warns when one is behind it. Bumping by
+   hand still works: commit the pointer with its path given explicitly, never
+   `git commit -a`, and pass `--repo Etqan-agency/etqan_tutor` to `gh`, because the repo is
+   a fork and `gh` otherwise targets the parent.
 5. Never `--no-verify` or force-push shared branches.
 
 The meta repo's CI runs everything: backend, dashboard, marketing, Caddy, end-to-end, infra

@@ -32,7 +32,7 @@ shared tooling. Each submodule has trunk `main`.
 | `caddy/Caddyfile.local` | The local edge | Caddy |
 
 A change that touches `backend/` is a PR in the backend repo, then a PR in the meta repo that
-bumps the submodule pointer. See [Onboarding → Git workflow](onboarding.md#git-workflow).
+bumps the submodule pointer (`just bump` opens it). See [Onboarding → Git workflow](onboarding.md#git-workflow).
 
 ## Request path
 
