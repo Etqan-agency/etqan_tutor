@@ -207,6 +207,11 @@ seed:
 # Staging deploys from CI on every green master (infra/STAGING.md)
 deploy:
     @echo "Staging deploys from CI on every green master; see infra/STAGING.md."
+    @echo "Run 'just bump' to point every submodule at its main first."
+
+# Point every submodule at its main and open one meta PR; merging it deploys them all
+bump:
+    bash scripts/bump-submodules.sh
 
 # Prove the staging deploy on a simulated server (privileged Docker-in-Docker)
 staging-sim:

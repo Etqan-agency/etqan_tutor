@@ -6,8 +6,8 @@ Multi-academy tutoring operations SaaS (Etqan Agency). Fork of Kaleem.
 Meta repo with submodules: `backend/` (Django + DRF, package `etqan`), `dashboard/`
 (React + TanStack), `marketing/` (each academy's site), `website/` (the official Etqan
 Tutor site, static Astro), `infra/`, `tokens/` (`@etqan/tokens`). Trunk: `master` here, `main`
-in submodules. Work on a `feat/*` branch in each touched repo, PR, merge; then bump the
-submodule pointers here.
+in submodules. Work on a `feat/*` branch in each touched repo, PR, merge; then `just bump`
+here (every pointer to its `main`, one meta PR; CI fails a pointer not on `main`).
 
 ## Tenancy (read before touching models)
 - django-tenants, one PostgreSQL schema per academy; `etqan.tenants.Academy` is the tenant.
