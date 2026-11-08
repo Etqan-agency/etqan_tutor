@@ -1,21 +1,44 @@
-# `logos/` — Kaleem logo family
+# Etqan Tutor logo: Ruqaa Seal
 
-Each entry below ships as `<stem>.svg` (editable master) **and** `<stem>.png` (preview).
-See [`../design.md`](../design.md) §3/§8 and [`../ASSET-INDEX.md`](../ASSET-INDEX.md) §1.
+Chosen on 2026-10-27 (concept K2 from `../exploration/etqan-tutor-2026/round-2/`).
 
-| Stem | Theme · Lang · Treatment |
-| --- | --- |
-| `kaleem-logo-primary-en-light` | Light · EN · color (signature) |
-| `kaleem-logo-primary-en-dark` | Dark · EN · color |
-| `kaleem-logo-primary-ar-light` | Light · AR · color |
-| `kaleem-logo-primary-ar-dark` | Dark · AR · color |
-| `kaleem-logo-primary-mono-ink` | Mono ink `#16211D` on cream |
-| `kaleem-logo-primary-mono-reversed` | Mono `#FAF7F0` on emerald |
-| `kaleem-logo-horizontal-{en,ar}-{light,dark}` | Wide header lockup |
-| `kaleem-logo-vertical-{en,ar}-{light,dark}` | Stacked lockup |
-| `kaleem-wordmark-{en,ar}-{light,dark}` | Secondary / wordmark-only |
-| `kaleem-icon-color-{light,dark}` | Icon-only, color |
-| `kaleem-icon-mono-ink` / `kaleem-icon-mono-reversed` | Icon-only, mono |
+It is a round seal, like the stamp on an ijazah: إتقان in Ruqaa sits in the centre, and ETQAN TUTOR · ACADEMY PLATFORM runs round the band, separated by gold diamonds. Every file is a vector with the text converted to outlines, so no fonts are needed.
 
-**Rules:** light logos use emerald `#0E5C4F`; dark logos use `#4FB89F`; gold dot
-`#C9A227`→`#D9B43C`. Keep the clear space (≥ wordmark cap-height). Icon legible ≥16px.
+## Website lockups
+
+The site serves these from `website/public/brand/`.
+
+| File | Use |
+|---|---|
+| `logo-en-light.svg` | English, on light grounds (seal on the left) |
+| `logo-ar-light.svg` | Arabic, on light grounds (seal on the right, Arabic name first) |
+| `logo-en-emerald.svg`, `logo-ar-emerald.svg` | On emerald or dark grounds (footer, hero) |
+
+## Full set
+
+All files are named `etqan-tutor-k2-ruqaa-seal-<kind>-<treatment>.svg`.
+
+**Kinds:**
+- `symbol`: the seal alone
+- `horizontal`: seal and name side by side
+- `stacked`: seal above the name
+- `wordmark`: the name alone, without the seal
+
+**Treatments:**
+
+| Treatment | Background | Colours |
+|---|---|---|
+| `light` | light | emerald `#146B50`, gold `#B79A58`, ink `#202522` |
+| `dark` | `#022217` | emerald `#4FA082`, gold `#C7AD74` |
+| `emerald` | `#146B50` | marble `#FAF9F5`, gold `#D9C69D` |
+| `mono` | light | all ink `#202522` |
+| `reversed` | dark | all marble `#FAF9F5` |
+
+**Favicon:** `../favicons-app-icons/favicon.svg` is a simplified ق seal. The band text can't be read below about 64px, so small sizes use this instead. `apple-touch-icon.png` is 180×180.
+
+## Rules
+
+- **Minimum size:** use the full seal at 64px or larger. Below that, use the favicon ق seal.
+- **Clear space:** keep a quarter of the seal's diameter clear on every side.
+- **Fonts:** Aref Ruqaa (centre and Arabic name) and Readex Pro (band and English name), both OFL-licensed. Already outlined in the files.
+- **Academies:** don't put this logo on academy-facing surfaces (dashboard, academy sites, academy emails). Those are white-label and show each academy's own logo.

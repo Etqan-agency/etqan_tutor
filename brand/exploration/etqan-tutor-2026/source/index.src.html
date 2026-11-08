@@ -1,0 +1,495 @@
+<title>Etqan Tutor — Logo Identity Exploration</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@500;700&display=swap">
+<style>
+/* Layout: a brand-book column (1180px) on marble; specimen surfaces keep fixed brand grounds in both themes. */
+:root {
+  --bg: #FAF9F5; --bg-deep: #F3F1EA; --card: #FFFFFF; --line: #E2DFD6; --line-gold: #EBDFC4;
+  --fg: #202522; --fg-soft: #3D4641; --fg-muted: #535D57;
+  --brand: #146B50; --brand-text: #146B50; --brand-soft: #DFF1E9; --gold: #B79A58; --gold-text: #8D6F27; --gold-soft: #F5EEDF;
+  --on-brand: #FFFFFF;
+  /* specimen grounds: brand surfaces, identical in both themes on purpose */
+  --sp-light: #FAF9F5; --sp-dark: #022217; --sp-emerald: #146B50; --sp-white: #FFFFFF; --sp-ink: #202522; --sp-ink-soft: #535D57;
+  --sp-line: #E2DFD6; --sp-gold: #B79A58; --sp-gold-soft: #E6D9BC; --sp-dash: #191C1B; --sp-dash-2: #2A302E; --sp-dash-fg: #F1EBE0; --sp-dash-muted: #BFC5C2;
+  --f-display: "Fraunces", Georgia, serif; --f-body: "Inter", system-ui, sans-serif; --f-ar: "IBM Plex Sans Arabic", "Inter", sans-serif;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0D1613; --bg-deep: #121D19; --card: #16211D; --line: #2A3A34; --line-gold: #3A3424;
+  --fg: #EEF0EC; --fg-soft: #CDD5D0; --fg-muted: #9DB0A8;
+  --brand: #4FA082; --brand-text: #9FD0BC; --brand-soft: #173329; --gold: #C7AD74; --gold-text: #D9C69D; --gold-soft: #2A2618;
+  --on-brand: #022217; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0D1613; --bg-deep: #121D19; --card: #16211D; --line: #2A3A34; --line-gold: #3A3424;
+  --fg: #EEF0EC; --fg-soft: #CDD5D0; --fg-muted: #9DB0A8;
+  --brand: #4FA082; --brand-text: #9FD0BC; --brand-soft: #173329; --gold: #C7AD74; --gold-text: #D9C69D; --gold-soft: #2A2618;
+  --on-brand: #022217; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--f-body); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 600; text-wrap: balance; letter-spacing: -0.01em; margin: 0; }
+h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); line-height: 1.15; }
+h3 { font-size: 1.2rem; line-height: 1.25; }
+p { margin: 0; }
+code { overflow-wrap: anywhere; }
+.sec-head > *, .panel > * { min-width: 0; }
+.eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-text); }
+.muted { color: var(--fg-muted); }
+.lead { font-size: 1.05rem; color: var(--fg-soft); max-width: 68ch; }
+svg.logo { display: block; height: 100%; width: auto; max-width: 100%; }
+button, .btn { font: 600 0.85rem/1 var(--f-body); border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--fg); padding: 9px 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; }
+button:hover { border-color: var(--brand); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+button.primary { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+
+/* top bar */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line-gold); }
+.top .wrap { display: flex; align-items: center; gap: 18px; height: 58px; }
+.top .name { font-family: var(--f-display); font-weight: 600; white-space: nowrap; }
+.top nav { display: flex; gap: 4px; overflow-x: auto; flex: 1; min-width: 0; scrollbar-width: none; }
+.top nav a { color: var(--fg-soft); text-decoration: none; font-size: 0.86rem; font-weight: 500; padding: 6px 10px; border-radius: 8px; white-space: nowrap; }
+.top nav a:hover { background: var(--gold-soft); color: var(--gold-text); }
+.fav-pill { font-size: 0.8rem; font-weight: 600; white-space: nowrap; color: var(--gold-text); }
+@media (max-width: 720px) { .top .name, .fav-pill { display: none; } }
+
+section { padding-block: 64px; border-bottom: 1px solid var(--line); }
+.sec-head { display: grid; gap: 10px; margin-bottom: 30px; }
+
+/* intro */
+.intro { padding-block: 56px 40px; display: grid; gap: 22px; }
+.intro h1 { font-size: clamp(2.1rem, 5vw, 3.3rem); line-height: 1.05; max-width: 18ch; }
+.intro h1 em { font-style: normal; color: var(--brand-text); }
+.strip { display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; margin-top: 10px; }
+.strip button { height: 74px; padding: 14px; justify-content: center; border-radius: 12px; background: var(--sp-light); border-color: var(--sp-line); }
+.strip button span { position: absolute; }
+@media (max-width: 720px) { .strip { grid-template-columns: repeat(4, 1fr); } }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 0.88rem; color: var(--fg-muted); }
+.facts b { color: var(--fg); font-variant-numeric: tabular-nums; }
+
+/* brand overview */
+.ov { display: grid; grid-template-columns: 1.25fr 1fr; gap: 28px; }
+@media (max-width: 900px) { .ov { grid-template-columns: 1fr; } }
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.sw { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--card); }
+.sw i { display: block; height: 62px; }
+.sw div { padding: 9px 11px; font-size: 0.78rem; line-height: 1.4; }
+.sw b { display: block; font-size: 0.84rem; }
+.sw code { font: 600 0.8rem ui-monospace, Menlo, monospace; color: var(--fg-soft); }
+.panel { border: 1px solid var(--line); border-radius: var(--r); background: var(--card); padding: 20px; display: grid; gap: 12px; min-width: 0; }
+.type-row { display: grid; grid-template-columns: 120px 1fr; gap: 12px; align-items: baseline; border-top: 1px solid var(--line); padding-top: 10px; }
+.type-row:first-of-type { border-top: 0; padding-top: 0; }
+.type-row small { color: var(--fg-muted); font-size: 0.76rem; }
+ul.tight { margin: 0; padding-inline-start: 18px; display: grid; gap: 6px; color: var(--fg-soft); font-size: 0.92rem; }
+.note { border-inline-start: 3px solid var(--gold); background: var(--gold-soft); padding: 12px 14px; border-radius: 0 10px 10px 0; font-size: 0.88rem; color: var(--fg-soft); }
+.ov-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+@media (max-width: 700px) { .ov-grid2 { grid-template-columns: 1fr; } }
+
+/* gallery */
+.gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 860px) { .gallery { grid-template-columns: 1fr; } }
+.card { border: 1px solid var(--line); border-radius: 18px; background: var(--card); overflow: hidden; display: grid; grid-template-rows: auto auto 1fr; }
+.card .hero { background: var(--sp-light); height: 170px; display: grid; place-items: center; padding: 30px; border-bottom: 1px solid var(--sp-line); }
+.card .hero .lg { height: 58px; max-width: 100%; }
+.card .sub { display: grid; grid-template-columns: 1.4fr 1fr; border-bottom: 1px solid var(--line); }
+.card .sub > div { height: 84px; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 14px; }
+.card .sub .dk { background: var(--sp-dark); }
+.card .sub .sz { background: var(--sp-light); align-items: flex-end; }
+.card .sub .sz div { display: grid; justify-items: center; gap: 4px; font-size: 0.62rem; color: var(--sp-ink-soft); }
+.card .body { padding: 20px; display: grid; gap: 12px; align-content: start; }
+.card .id { font: 700 0.75rem ui-monospace, Menlo, monospace; color: var(--gold-text); letter-spacing: 0.06em; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 0.74rem; font-weight: 500; padding: 4px 9px; border-radius: 99px; background: var(--brand-soft); color: var(--brand-text); }
+.card .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.score-badge { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--brand-text); }
+
+/* concept picker */
+.picker { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+.picker button { padding: 7px 11px 7px 8px; }
+.picker button .ic { width: 22px; height: 22px; background: var(--sp-light); border-radius: 6px; padding: 2px; }
+.picker button[aria-pressed="true"] .ic { background: var(--sp-light); }
+
+/* mockups (fixed brand surfaces) */
+.mocks { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 18px; }
+.mock { grid-column: span 12; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--sp-light); color: var(--sp-ink); min-width: 0; }
+.mock-cap { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-muted); margin: 0 0 8px; }
+.m6 { grid-column: span 6; } .m4 { grid-column: span 4; } .m8 { grid-column: span 8; }
+@media (max-width: 900px) { .m6, .m4, .m8 { grid-column: span 12; } }
+.mwrap { min-width: 0; }
+.nav-mock { height: 72px; display: flex; align-items: center; gap: 22px; padding: 0 24px; border-bottom: 1px solid #EBDFC4; background: var(--sp-light); overflow: hidden; }
+.nav-mock .lg { height: 38px; flex-shrink: 0; }
+.nav-mock .links { display: flex; gap: 20px; flex: 1; justify-content: center; font-size: 0.88rem; font-weight: 500; color: #3D4641; white-space: nowrap; }
+.nav-mock .cta { display: flex; gap: 8px; }
+.pbtn { font: 600 0.8rem/1 var(--f-body); padding: 10px 14px; border-radius: 10px; white-space: nowrap; }
+.pbtn.gold { background: var(--sp-gold); color: #251A00; }
+.pbtn.em { background: var(--sp-emerald); color: #fff; }
+@media (max-width: 1060px) { .nav-mock .links { display: none; } .nav-mock .cta { margin-inline-start: auto; } }
+@media (max-width: 520px) { .nav-mock .cta .gold { display: none; } }
+.hero-mock { background: var(--sp-emerald); padding: 22px; }
+.hero-mock .frame { border: 1px solid rgba(230, 217, 188, 0.55); border-radius: 12px; padding: 34px 30px; display: grid; gap: 16px; justify-items: start; }
+.hero-mock .lg { height: 46px; }
+.hero-mock h4 { font: 600 clamp(1.5rem, 3vw, 2.2rem)/1.1 var(--f-display); color: #fff; margin: 6px 0 0; }
+.hero-mock h4 span { color: var(--sp-gold-soft); }
+.hero-mock p { color: #DFF1E9; max-width: 46ch; font-size: 0.92rem; }
+.side-mock { display: grid; grid-template-columns: 220px 1fr; min-height: 330px; background: #FBF5EB; }
+.side-mock aside { background: #fff; border-inline-end: 1px solid #E0D9CD; padding: 18px 14px; display: grid; align-content: start; gap: 4px; }
+.side-mock aside .lg { height: 30px; margin: 0 6px 18px; }
+.side-mock .it { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 0.84rem; color: #545D59; }
+.side-mock .it i { width: 14px; height: 14px; border: 1.5px solid currentColor; border-radius: 4px; }
+.side-mock .it.on { background: #DFF1E9; color: #146A51; font-weight: 600; }
+.side-mock main { padding: 22px; display: grid; gap: 12px; align-content: start; }
+.side-mock main .bar { height: 12px; border-radius: 6px; background: #F1EBE0; }
+.side-mock main .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.side-mock main .tiles div { height: 64px; border-radius: 10px; background: #fff; border: 1px solid #E0D9CD; }
+.side-mock.dark { background: var(--sp-dash); }
+.side-mock.dark aside { background: var(--sp-dash-2); border-color: #3E4542; }
+.side-mock.dark .it { color: var(--sp-dash-muted); }
+.side-mock.dark .it.on { background: #1E3A31; color: #9FD0BC; }
+.side-mock.dark main .bar { background: #2A302E; }
+.side-mock.dark main .tiles div { background: #2A302E; border-color: #3E4542; }
+.rail { display: grid; grid-template-columns: 64px 1fr; }
+.rail aside { padding: 16px 0; justify-items: center; }
+.rail aside .sym { width: 34px; height: 34px; margin-bottom: 16px; }
+.rail .it { padding: 9px; }
+@media (max-width: 560px) { .side-mock:not(.rail) { grid-template-columns: 1fr; } .side-mock:not(.rail) main { display: none; } }
+.login-mock { background: var(--sp-light); padding: 36px 20px; display: grid; place-items: center; min-height: 380px; }
+.login-mock .box { width: min(330px, 100%); background: #fff; border: 1px solid #E2DFD6; border-radius: 16px; padding: 28px 24px; display: grid; gap: 12px; box-shadow: 0 1px 2px rgb(20 107 80 / 6%), 0 8px 24px rgb(20 107 80 / 6%); }
+.login-mock .lg { height: 84px; justify-self: center; margin-bottom: 6px; }
+.login-mock label { font-size: 0.76rem; font-weight: 600; color: #3D4641; display: grid; gap: 5px; }
+.login-mock .inp { height: 38px; border: 1px solid #938D83; border-radius: 8px; background: #fff; }
+.login-mock .pbtn { text-align: center; padding: 12px; margin-top: 4px; }
+.phone-mock { background: var(--bg-deep); padding: 26px; display: grid; place-items: center; min-height: 380px; }
+.phone { width: 250px; height: 330px; border-radius: 30px; border: 8px solid #202522; background: var(--sp-light); overflow: hidden; display: grid; grid-template-rows: auto 1fr; }
+.phone .bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 14px; border-bottom: 1px solid #EBDFC4; }
+.phone .lg { height: 26px; max-width: 160px; }
+.phone .ham { width: 30px; height: 30px; border: 1px solid #E2DFD6; border-radius: 8px; display: grid; place-content: center; gap: 3px; }
+.phone .ham i { display: block; width: 12px; height: 1.5px; background: #202522; }
+.phone .pc { padding: 18px 14px; display: grid; gap: 10px; align-content: start; }
+.phone .pc b { font: 600 1.1rem/1.15 var(--f-display); color: #202522; }
+.phone .pc span { height: 9px; border-radius: 5px; background: #EEECE5; }
+.browser-mock { background: #DEE1E6; padding: 10px 10px 0; }
+.tabs { display: flex; gap: 2px; align-items: flex-end; overflow: hidden; }
+.tab { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 9px 9px 0 0; font: 12px system-ui, sans-serif; color: #3C4043; min-width: 0; flex: 0 1 220px; white-space: nowrap; }
+.tab.on { background: #fff; }
+.tab .fv { width: 16px; height: 16px; flex-shrink: 0; }
+.tab .fv svg, .bm .fv svg { width: 16px; height: 16px; display: block; }
+.tab span { overflow: hidden; text-overflow: ellipsis; }
+.addr { background: #fff; padding: 8px 12px 12px; display: grid; gap: 10px; }
+.addr .url { background: #F1F3F4; border-radius: 99px; padding: 7px 14px; font: 12.5px system-ui, sans-serif; color: #3C4043; }
+.bm { display: flex; gap: 16px; font: 12px system-ui, sans-serif; color: #3C4043; flex-wrap: wrap; }
+.bm div { display: flex; gap: 6px; align-items: center; }
+.fav-sizes { background: #fff; padding: 16px 12px; display: flex; gap: 22px; align-items: flex-end; flex-wrap: wrap; border-top: 1px solid #E8EAED; }
+.fav-sizes div { display: grid; justify-items: center; gap: 4px; font: 11px system-ui, sans-serif; color: #5F6368; }
+.fav-sizes .px16 svg { width: 16px; height: 16px; } .fav-sizes .px32 svg { width: 32px; height: 32px; } .fav-sizes .px64 svg { width: 64px; height: 64px; }
+.fav-sizes .zoom svg { width: 96px; height: 96px; image-rendering: pixelated; }
+.ground { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+.ground > div { height: 160px; display: grid; place-items: center; padding: 20px; }
+.ground .lg { height: 44px; max-width: 100%; }
+.ground .lg-st { height: 78px; }
+@media (max-width: 700px) { .ground { grid-template-columns: 1fr; } }
+
+/* compare */
+.ctrls { display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: end; margin-bottom: 22px; padding: 18px; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); }
+.ctrl { display: grid; gap: 8px; }
+.ctrl > span { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg button { padding: 7px 11px; }
+input[type=range] { width: 200px; accent-color: var(--brand); }
+.cmp { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.cpanel { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--card); min-width: 0; }
+.cpanel .stage { display: grid; place-items: center; padding: 28px 18px; min-height: 230px; overflow: auto; }
+.cpanel .stage .lg { max-width: none; }
+.cpanel .stage[data-bg="light"] { background: var(--sp-light); }
+.cpanel .stage[data-bg="dark"] { background: var(--sp-dark); }
+.cpanel .stage[data-bg="emerald"] { background: var(--sp-emerald); }
+.cpanel .meta { padding: 14px 16px; display: grid; gap: 10px; border-top: 1px solid var(--line); }
+.cpanel .meta .row { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.cpanel .meta .acts { display: flex; flex-wrap: wrap; gap: 6px; }
+.cpanel .meta .acts button { padding: 7px 10px; font-size: 0.78rem; }
+.cpanel code { font: 0.72rem/1.4 ui-monospace, Menlo, monospace; color: var(--fg-muted); overflow-wrap: anywhere; }
+.toast { position: fixed; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-size: 0.86rem; font-weight: 600; z-index: 50; }
+
+/* evaluation */
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); }
+table { border-collapse: collapse; width: 100%; min-width: 980px; font-size: 0.86rem; }
+th, td { padding: 10px 10px; text-align: start; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-muted); font-weight: 600; line-height: 1.3; }
+td.n { font-variant-numeric: tabular-nums; font-weight: 600; text-align: center; }
+td.n span { display: inline-grid; place-items: center; width: 30px; height: 26px; border-radius: 7px; }
+.s-hi { background: var(--brand); color: var(--on-brand); } .s-mid { background: var(--brand-soft); color: var(--brand-text); } .s-lo { background: var(--gold-soft); color: var(--gold-text); }
+td.avg { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--brand-text); font-size: 1rem; text-align: center; }
+tr.fav td:first-child { box-shadow: inset 3px 0 0 var(--gold); }
+td.cn { display: flex; align-items: center; gap: 10px; min-width: 190px; }
+td.cn .ic { width: 28px; height: 28px; background: var(--sp-light); border-radius: 7px; padding: 3px; flex-shrink: 0; }
+.why { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+@media (max-width: 800px) { .why { grid-template-columns: 1fr; } }
+.why div { font-size: 0.86rem; color: var(--fg-soft); border-top: 1px solid var(--line); padding-top: 10px; }
+.why b { color: var(--fg); }
+.top3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 30px; }
+@media (max-width: 900px) { .top3 { grid-template-columns: 1fr; } }
+.pick { border: 1px solid var(--line-gold); border-radius: 16px; background: var(--card); overflow: hidden; }
+.pick .lgbox { background: var(--sp-light); height: 120px; display: grid; place-items: center; padding: 24px; }
+.pick .lgbox .lg { height: 50px; }
+.pick > div:last-child { padding: 18px; display: grid; gap: 8px; }
+.pick .rank { font: 700 0.72rem var(--f-body); letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-text); }
+footer { padding-block: 40px 60px; color: var(--fg-muted); font-size: 0.85rem; display: grid; gap: 8px; }
+footer code { font: 0.8rem ui-monospace, Menlo, monospace; overflow-wrap: anywhere; }
+@media (prefers-reduced-motion: no-preference) { .card, .cpanel { transition: border-color .2s; } }
+</style>
+
+<header class="top"><div class="wrap">
+  <span class="name">Etqan Tutor · Logo Exploration</span>
+  <nav aria-label="Sections"><a href="#brand">A · Brand</a><a href="#gallery">B · Concepts</a><a href="#mockups">C · In context</a><a href="#compare">D · Compare</a><a href="#evaluation">E · Evaluation</a></nav>
+  <span class="fav-pill" id="favPill"></span>
+</div></header>
+
+<main>
+<div class="wrap intro">
+  <span class="eyebrow">Brand identity exploration · October 2026</span>
+  <h1>Eight logo directions for <em>Etqan Tutor</em></h1>
+  <p class="lead">Eight different marks for the platform academies use to run teaching, scheduling, billing and payroll. All of them use the brand's existing emerald, gold and marble and its existing typefaces. Pick one concept below to preview it everywhere on this page.</p>
+  <div class="strip" id="strip"></div>
+  <div class="facts"><span><b>8</b> concepts</span><span><b>168</b> SVG files, text outlined</span><span><b>6</b> colour treatments each</span><span><b>0</b> new brand colours</span><span>Production site and tokens untouched</span></div>
+</div>
+
+<section id="brand"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow">A · Brand overview</span><h2>What every concept has to fit</h2>
+  <p class="lead">These colours and type come from the live marketing site (<code>etqan_tutor_official_site/src/styles/global.css</code>) and the product tokens (<code>@etqan/tokens</code>). No new colours were added.</p></div>
+  <div class="ov">
+    <div class="panel"><h3>Colour</h3><div class="swatches" id="swatches"></div>
+      <div class="note"><b>Two inconsistencies to know about.</b> 1) <code>brand/design.md</code> still describes the old Kaleem palette (<code>#0E5C4F</code> / <code>#C9A227</code>) and is out of date. 2) The marketing site's gold is <code>#B79A58</code>, while the product's accent token is <code>#A88A3C</code> (the emerald is the same, <code>#146B50</code> vs <code>#146A51</code>). These logos follow the marketing site, because that is where the logo is seen first. Treat the site's values as the reference until the two are unified.</div>
+    </div>
+    <div class="panel"><h3>Type</h3>
+      <div class="type-row"><small>Display · Fraunces</small><span style="font:600 1.6rem/1.1 var(--f-display)">Beautifully organized.</span></div>
+      <div class="type-row"><small>UI · Inter</small><span style="font:500 1.05rem var(--f-body)">Sessions, invoices and payroll</span></div>
+      <div class="type-row"><small>Arabic · IBM Plex Sans Arabic</small><span dir="rtl" lang="ar" style="font:700 1.25rem var(--f-ar)">أكاديميتك كلها، منظمة بإتقان</span></div>
+      <p class="muted" style="font-size:.85rem">All three are OFL-licensed and already shipped by the site. The wordmarks use these exact faces, converted to outlines.</p>
+      <h3 style="margin-top:8px">Today's logo</h3>
+      <div style="display:flex;align-items:center;gap:14px;background:var(--sp-light);border-radius:10px;padding:14px;color:var(--sp-ink)">
+        <svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><rect x="9" y="9" width="22" height="22" rx="2" fill="none" stroke="#146B50" stroke-width="2"/><rect x="9" y="9" width="22" height="22" rx="2" fill="none" stroke="#146B50" stroke-width="2" transform="rotate(45 20 20)"/><circle cx="20" cy="20" r="3.2" fill="#B79A58"/></svg>
+        <span style="line-height:1"><b style="display:block;font-size:1.1rem">Etqan</b><span style="font-size:.66rem;letter-spacing:.18em;color:#8D6F27;font-weight:500">TUTOR</span></span>
+        <span style="font-size:.8rem;margin-inline-start:auto;max-width:24ch;color:var(--sp-ink-soft)">Outlined eight-point star in 2px lines. It disappears below 24px.</span>
+      </div>
+    </div>
+  </div>
+  <div class="ov-grid2">
+    <div class="panel"><h3>Personality and audience</h3>
+      <ul class="tight"><li><b>Who decides:</b> owners and admins of online Quran, Arabic and Islamic-studies academies. Not students, and not individual tutors.</li>
+      <li><b>It should feel like:</b> a serious, organised operations platform with warmth and cultural fluency. Calm and precise.</li>
+      <li><b>Name:</b> <span lang="ar">إتقان</span> means mastery, doing a thing with precision and care. Most concepts build on that idea.</li>
+      <li><b>Must work in:</b> Arabic (RTL) and English, light and dark, and in the dashboard sidebar and the favicon at 16px.</li></ul></div>
+    <div class="panel"><h3>Market research, in short</h3>
+      <ul class="tight"><li>Tutoring SaaS logos are mostly mascots (TutorBird's bird, TutorCruncher's dinosaur) or rounded lowercase wordmarks (Teachable, Teachworks, Kajabi, Wise).</li>
+      <li>Category colours are blue, violet, teal or acid. <b>No competitor checked uses deep green with gold, or any Arabic mark.</b></li>
+      <li>The strongest SaaS systems (Stripe, Linear, Asana) own one simple shape that works in one colour at 16px.</li>
+      <li>Caution: cream, gold and Fraunces are also common "AI default" choices, so the mark's shape has to carry the distinctiveness.</li>
+      <li>TutorHamster could not be verified (site returned an SSL error; no search results). Full notes are in <code>competitor-research.md</code>.</li></ul></div>
+  </div>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow">B · Concept gallery</span><h2>Eight directions, each built differently</h2>
+  <p class="lead">Each card shows the horizontal logo, the dark version, the symbol at 16, 24, 32 and 64px, and the favicon. The 16px symbols are drawn at actual pixel size.</p></div>
+  <div class="gallery" id="gallery-grid"></div>
+</div></section>
+
+<section id="mockups"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow">C · In context</span><h2>How the chosen concept looks in the product</h2>
+  <p class="lead">These mockups copy the real site header, emerald panels and dashboard colours. Only the logo changes. Switch concepts here; the choice is shared with the comparison below.</p></div>
+  <div class="picker" id="mockPicker" role="group" aria-label="Concept for mockups"></div>
+  <div class="mocks" id="mocks"></div>
+</div></section>
+
+<section id="compare"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow">D · Compare</span><h2>Side by side</h2>
+  <p class="lead">Choose up to four concepts, then change the background, logo version and size. Mark one as your favourite. It is saved in this browser and highlighted in the evaluation.</p></div>
+  <div class="ctrls">
+    <div class="ctrl"><span>Concepts (up to 4)</span><div class="seg" id="cmpPick"></div></div>
+    <div class="ctrl"><span>Background</span><div class="seg" id="bgSeg"></div></div>
+    <div class="ctrl"><span>Version</span><div class="seg" id="varSeg"></div></div>
+    <div class="ctrl"><span>Height <b id="sizeOut" style="font-variant-numeric:tabular-nums"></b></span><input type="range" id="size" min="16" max="160" step="4" value="64" aria-label="Logo height in pixels"></div>
+  </div>
+  <div class="cmp" id="cmp"></div>
+</div></section>
+
+<section id="evaluation"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow">E · Evaluation</span><h2>Scores and recommendation</h2>
+  <p class="lead">Scores from 1 to 10 are design judgments, not measurements. The 16px score comes from looking at the renders above. The colour score reflects that every concept uses only existing colours, so it differs only where gold or contrast is weak.</p></div>
+  <div class="tbl-wrap"><table id="tbl"></table></div>
+  <div class="why" id="why"></div>
+  <h3 style="margin-top:44px">Recommended top three</h3>
+  <p class="muted" style="margin-top:6px">A recommendation only. The choice is yours.</p>
+  <div class="top3" id="top3"></div>
+</div></section>
+
+<footer class="wrap">
+  <span>All files: <code>etqan_tutor/brand/exploration/etqan-tutor-2026/</code>. SVGs are in <code>assets/concept-a … concept-h/</code>, with names like <code>etqan-tutor-h-gateway-arch-horizontal-light.svg</code>.</span>
+  <span>The selection guide is in <code>README.md</code> and the scoring notes are in <code>logo-comparison.md</code>. Nothing in the production site, dashboard or tokens has changed.</span>
+</footer>
+</main>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const DATA = __DATA__;
+const C = DATA.concepts, S = DATA.svgs;
+const byId = Object.fromEntries(C.map(c => [c.id, c]));
+const $ = (s, el = document) => el.querySelector(s);
+const lg = (svg, cls = "lg") => svg.replace("<svg ", `<svg class="logo ${cls}" `);
+const conceptCode = (id) => `ETQ-LOGO-${id}-${byId[id].key}`;
+
+const CRIT = [
+  ["uniq", "Uniqueness"], ["b2b", "B2B SaaS fit"], ["edu", "Education fit"], ["mem", "Memorability"], ["small", "16px readability"],
+  ["color", "Brand colours"], ["web", "Site fit"], ["type", "Typography"], ["long", "Longevity"],
+];
+const SCORES = {
+  A: [6, 8, 6, 7, 8, 10, 9, 7, 8], B: [5, 7, 7, 6, 8, 9, 9, 9, 7], C: [8, 9, 6, 8, 8, 9, 8, 8, 9], D: [5, 8, 7, 6, 9, 9, 8, 7, 7],
+  E: [6, 9, 6, 7, 8, 9, 8, 7, 8], F: [4, 8, 6, 6, 8, 9, 7, 7, 7], G: [10, 7, 9, 9, 8, 10, 9, 8, 8], H: [9, 8, 9, 9, 7, 10, 10, 8, 9],
+};
+const WHY = {
+  A: "Safest step: it keeps today's star, now solid and readable at 16px. Eight-point stars are common in the Islamic-education niche, so uniqueness is capped.",
+  B: "The most refined type, but it is a lowercase wordmark plus an 'e' tile, which is the most crowded look in this market. The tile is strong in app stores.",
+  C: "The most 'software company' option: sturdy and owned, and it reads as ET at 16px. It says less about education or culture on its own.",
+  D: "Clearest at tiny sizes: pure rectangles, pixel-crisp. Bars and steps are also used by analytics products, so the education meaning is soft.",
+  E: "Good platform story (four roles, one core) and good as an app icon. Four-part symmetric marks are a familiar genre, so it is moderately memorable.",
+  F: "Friendly and clean, but a geometric 'e' is a very common SaaS move. Lowest uniqueness of the eight.",
+  G: "The most distinctive in the category and truly bilingual. Risk: ت with two dots above can read as a smiling face. Some will find that warm, others not serious enough for B2B.",
+  H: "Matches the arch photography already on the site and feels institutional and premium. At 16px the opening narrows, so the favicon drops the inner detail. Avoid any mosque-like reading in future refinements.",
+};
+const TOP3 = [
+  ["H", "First choice", "It belongs on the current site: the arch in the hero photos becomes the brand mark. It feels like an institution an academy owner can trust, and it is simple enough for one colour and a favicon."],
+  ["C", "Most SaaS", "If Etqan wants to read first as a software platform, the ET ligature is the strongest product mark: compact, ownable, and very good in the dashboard sidebar and app icon."],
+  ["G", "Most distinctive", "No competitor has an Arabic mark. The gold rhombus dots make it unmistakably Etqan. Check the 'smiley' reading with a few academy owners before choosing it."],
+];
+const avg = (id) => SCORES[id].reduce((a, b) => a + b, 0) / SCORES[id].length;
+
+let store = {};
+try { store = JSON.parse(localStorage.getItem("etqan-logo-x") || "{}"); } catch (e) {}
+const state = { active: store.active || "H", fav: store.fav || null, cmp: store.cmp || ["H", "C", "G"], bg: "light", variant: "horizontal", size: 64 };
+const save = () => { try { localStorage.setItem("etqan-logo-x", JSON.stringify({ active: state.active, fav: state.fav, cmp: state.cmp })); } catch (e) {} };
+
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => (t.hidden = true), 1800); }
+async function copy(text, label) {
+  try { await navigator.clipboard.writeText(text); toast(`Copied ${label}`); }
+  catch (e) { const ta = document.createElement("textarea"); ta.value = text; document.body.append(ta); ta.select(); try { document.execCommand("copy"); toast(`Copied ${label}`); } catch (_) { toast("Copy blocked. Select the text manually."); } ta.remove(); }
+}
+function download(svg, name) {
+  try {
+    const url = URL.createObjectURL(new Blob([svg + "\n"], { type: "image/svg+xml" }));
+    const a = Object.assign(document.createElement("a"), { href: url, download: name });
+    document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000);
+    toast(`Downloading ${name}`);
+  } catch (e) { toast("Download blocked here. Use Copy SVG, or open the local index.html."); }
+}
+const fileName = (id, kind, pal) => `etqan-tutor-${id.toLowerCase()}-${byId[id].key}-${kind}${pal ? "-" + pal : ""}.svg`;
+
+function setFav(id) { state.fav = state.fav === id ? null : id; save(); renderAll(); toast(state.fav ? `Favourite: ${byId[id].name}` : "Favourite cleared"); }
+function setActive(id) { state.active = id; save(); renderMocks(); renderPicker(); renderStrip(); }
+
+function renderStrip() {
+  $("#strip").innerHTML = C.map(c => `<button aria-pressed="${state.active === c.id}" data-act="${c.id}" title="${c.id} · ${c.name}" aria-label="Preview ${c.name}">${lg(S[c.id].light.symbol)}</button>`).join("");
+}
+function renderSwatches() {
+  const sw = [
+    ["#146B50", "Emerald 700", "Primary. Logo, buttons", "site + tokens"], ["#4FA082", "Emerald 500", "Mark on dark grounds", "site"],
+    ["#022217", "Emerald 950", "Dark ground", "site"], ["#B79A58", "Gold", "Accent, max ~10% of a logo", "site"],
+    ["#8D6F27", "Gold deep", "Gold that is safe for text", "site"], ["#C7AD74", "Gold 400", "Gold on dark grounds", "site"],
+    ["#FAF9F5", "Marble", "Light ground, reversed logo", "site"], ["#202522", "Ink", "Wordmark text, mono logo", "site"],
+  ];
+  $("#swatches").innerHTML = sw.map(([h, n, u, s]) => `<div class="sw"><i style="background:${h}"></i><div><b>${n}</b><code>${h}</code><br><span class="muted">${u} · ${s}</span></div></div>`).join("");
+}
+function renderGallery() {
+  $("#gallery-grid").innerHTML = C.map(c => {
+    const v = S[c.id];
+    return `<article class="card" id="concept-${c.id}">
+      <div class="hero">${lg(v.light.horizontal)}</div>
+      <div class="sub"><div class="dk">${lg(v.dark.horizontal, "lg")}</div>
+        <div class="sz">${[16, 24, 32, 64].map(s => `<div><span style="height:${s}px;display:block">${lg(v.light.symbol)}</span>${s}</div>`).join("")}<div><span style="height:32px;display:block">${lg(v.favicon)}</span>fav</div></div></div>
+      <div class="body"><span class="id">CONCEPT ${c.id} · ${c.direction.toUpperCase()}</span>
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline"><h3>${c.name}</h3><span class="score-badge" title="Average score">${avg(c.id).toFixed(1)}</span></div>
+        <p class="muted">${c.idea}</p>
+        <div class="chips">${c.traits.map(t => `<span class="chip">${t}</span>`).join("")}</div>
+        <div class="acts"><button data-act="${c.id}" data-go="mockups">See in context</button>
+          <button data-cmp="${c.id}" aria-pressed="${state.cmp.includes(c.id)}">${state.cmp.includes(c.id) ? "In comparison" : "Add to comparison"}</button>
+          <button data-fav="${c.id}" aria-pressed="${state.fav === c.id}">${state.fav === c.id ? "★ Favourite" : "☆ Favourite"}</button></div>
+      </div></article>`;
+  }).join("");
+  $$(".card .sub .dk svg").forEach(s => (s.style.height = "34px"));
+}
+const $$ = (s) => document.querySelectorAll(s);
+function renderPicker() {
+  $("#mockPicker").innerHTML = C.map(c => `<button aria-pressed="${state.active === c.id}" data-act="${c.id}"><span class="ic">${lg(S[c.id].light.symbol)}</span>${c.id} · ${c.name}</button>`).join("");
+}
+function renderMocks() {
+  const v = S[state.active], c = byId[state.active];
+  const items = ["Overview", "Sessions", "Students", "Teachers", "Invoices", "Payroll"];
+  const side = (dark) => `<div class="side-mock ${dark ? "dark" : ""}"><aside>${lg(dark ? v.dark.horizontal : v.light.horizontal)}${items.map((t, i) => `<div class="it ${i === 1 ? "on" : ""}"><i></i>${t}</div>`).join("")}</aside><main><div class="bar" style="width:40%"></div><div class="tiles"><div></div><div></div><div></div></div><div class="bar"></div><div class="bar" style="width:80%"></div><div class="bar" style="width:65%"></div></main></div>`;
+  $("#mocks").innerHTML = `
+  <div class="mwrap" style="grid-column:span 12"><p class="mock-cap">1 · Marketing site header</p><div class="mock"><div class="nav-mock">${lg(v.light.horizontal)}<div class="links"><span>Features</span><span>Who it's for</span><span>How it works</span><span>Pricing</span><span>Contact</span></div><div class="cta"><span class="pbtn gold">Book a demo</span><span class="pbtn em">Start your academy</span></div></div></div></div>
+  <div class="mwrap m8"><p class="mock-cap">2 · Hero panel (emerald)</p><div class="mock"><div class="hero-mock"><div class="frame">${lg(v.emerald.horizontal)}<h4>Your entire academy. <span>Beautifully organized.</span></h4><p>Schedules, sessions, invoices and payroll for Quran, Arabic and Islamic studies academies, in one place.</p></div></div></div></div>
+  <div class="mwrap m4"><p class="mock-cap">5 · Mobile navigation</p><div class="mock"><div class="phone-mock"><div class="phone"><div class="bar">${lg(v.light.horizontal)}<span class="ham"><i></i><i></i><i></i></span></div><div class="pc"><b>Your entire academy, beautifully organized</b><span></span><span style="width:80%"></span><span style="width:60%"></span></div></div></div></div></div>
+  <div class="mwrap m6"><p class="mock-cap">3 · Dashboard sidebar, light</p><div class="mock">${side(false)}</div></div>
+  <div class="mwrap m6"><p class="mock-cap">3 · Dashboard sidebar, dark, plus collapsed rail</p><div class="mock" style="display:grid;grid-template-columns:1fr 64px"><div style="min-width:0">${side(true)}</div><div class="side-mock rail dark" style="grid-template-columns:64px"><aside style="border-inline-start:1px solid #3E4542">${lg(v.dark.symbol, "sym")}${items.slice(0, 5).map((t, i) => `<div class="it ${i === 1 ? "on" : ""}"><i></i></div>`).join("")}</aside></div></div></div>
+  <div class="mwrap m6"><p class="mock-cap">4 · Login</p><div class="mock"><div class="login-mock"><div class="box">${lg(v.light.stacked)}<label>Email<span class="inp"></span></label><label>Password<span class="inp"></span></label><span class="pbtn em">Sign in</span></div></div></div></div>
+  <div class="mwrap m6"><p class="mock-cap">6 · Browser tab and favicon (actual size)</p><div class="mock"><div class="browser-mock"><div class="tabs"><div class="tab on"><span class="fv">${v.favicon}</span><span>Etqan Tutor | Academy management</span></div><div class="tab"><span class="fv" style="background:#ccc;border-radius:3px"></span><span>Inbox</span></div><div class="tab"><span class="fv" style="background:#9ab;border-radius:50%"></span><span>Calendar</span></div></div>
+    <div class="addr"><div class="url">etqantutor.com/en/</div><div class="bm"><div><span class="fv">${v.favicon}</span>Etqan dashboard</div><div><span class="fv">${v.light.symbol}</span>Symbol only, no tile</div></div></div>
+    <div class="fav-sizes"><div class="px16">${v.favicon}16</div><div class="px32">${v.favicon}32</div><div class="px64">${v.favicon}64</div><div class="px16">${v.light.symbol}16 bare</div><div class="px32">${v.light.symbol}32 bare</div></div></div></div></div>
+  <div class="mwrap" style="grid-column:span 12"><p class="mock-cap">7 · Light, dark and emerald grounds</p><div class="mock"><div class="ground"><div style="background:var(--sp-light)">${lg(v.light.horizontal)}</div><div style="background:var(--sp-dark)">${lg(v.dark.horizontal)}</div><div style="background:var(--sp-emerald)">${lg(v.emerald.horizontal)}</div></div><div class="ground"><div style="background:var(--sp-white);height:110px">${lg(v.mono.horizontal)}</div><div style="background:var(--sp-emerald);height:110px">${lg(v.reversed.horizontal)}</div><div style="background:var(--sp-light);height:110px">${lg(v.light.stacked, "lg-st")}</div></div></div></div>`;
+  $$(".tab .fv svg, .bm .fv svg").forEach(s => s.setAttribute("aria-hidden", "true"));
+}
+
+const BG = [["light", "Light"], ["dark", "Dark"], ["emerald", "Emerald"]];
+const VARS = [["horizontal", "Horizontal"], ["stacked", "Stacked"], ["symbol", "Symbol"], ["wordmark", "Wordmark"], ["favicon", "Favicon"], ["mono", "Mono"]];
+function svgFor(id) {
+  const v = S[id];
+  if (state.variant === "favicon") return { svg: v.favicon, name: fileName(id, "favicon") };
+  if (state.variant === "mono") { const pal = state.bg === "light" ? "mono" : "reversed"; return { svg: v[pal].horizontal, name: fileName(id, "horizontal", pal) }; }
+  const pal = state.bg === "light" ? "light" : state.bg === "dark" ? "dark" : "emerald";
+  return { svg: v[pal][state.variant], name: fileName(id, state.variant, pal) };
+}
+function renderCompare() {
+  $("#cmpPick").innerHTML = C.map(c => `<button data-cmp="${c.id}" aria-pressed="${state.cmp.includes(c.id)}">${c.id}</button>`).join("");
+  $("#bgSeg").innerHTML = BG.map(([k, l]) => `<button data-bg="${k}" aria-pressed="${state.bg === k}">${l}</button>`).join("");
+  $("#varSeg").innerHTML = VARS.map(([k, l]) => `<button data-var="${k}" aria-pressed="${state.variant === k}">${l}</button>`).join("");
+  $("#sizeOut").textContent = state.size + "px";
+  $("#cmp").innerHTML = state.cmp.length ? state.cmp.map(id => {
+    const c = byId[id], f = svgFor(id);
+    return `<div class="cpanel"><div class="stage" data-bg="${state.bg}"><div style="height:${state.size}px">${lg(f.svg)}</div></div>
+      <div class="meta"><div class="row"><b>${c.id} · ${c.name}</b><span class="score-badge">${avg(id).toFixed(1)}</span></div>
+      <code>${conceptCode(id)}</code>
+      <div class="acts"><button data-fav="${id}" aria-pressed="${state.fav === id}">${state.fav === id ? "★ Favourite" : "☆ Favourite"}</button>
+      <button data-copyid="${id}">Copy ID</button><button data-copysvg="${id}">Copy SVG</button><button data-dl="${id}">Download SVG</button></div>
+      <code>assets/concept-${id.toLowerCase()}/${f.name}</code></div></div>`;
+  }).join("") : `<p class="muted">Select at least one concept above.</p>`;
+}
+function renderEval() {
+  const cls = (n) => n >= 9 ? "s-hi" : n >= 7 ? "s-mid" : "s-lo";
+  $("#tbl").innerHTML = `<thead><tr><th>Concept</th>${CRIT.map(([, l]) => `<th style="text-align:center">${l}</th>`).join("")}<th style="text-align:center">Avg</th></tr></thead><tbody>` +
+    [...C].sort((a, b) => avg(b.id) - avg(a.id)).map(c => `<tr class="${state.fav === c.id ? "fav" : ""}"><td class="cn"><span class="ic">${lg(S[c.id].light.symbol)}</span><span><b>${c.id} · ${c.name}</b>${state.fav === c.id ? ' <span style="color:var(--gold-text)">★</span>' : ""}<br><span class="muted" style="font-size:.76rem">${c.direction}</span></span></td>${SCORES[c.id].map(n => `<td class="n"><span class="${cls(n)}">${n}</span></td>`).join("")}<td class="avg">${avg(c.id).toFixed(1)}</td></tr>`).join("") + "</tbody>";
+  $("#why").innerHTML = C.map(c => `<div><b>${c.id} · ${c.name}.</b> ${WHY[c.id]}</div>`).join("");
+  $("#top3").innerHTML = TOP3.map(([id, rank, t]) => `<div class="pick"><div class="lgbox">${lg(S[id].light.horizontal)}</div><div><span class="rank">${rank}</span><h3>${id} · ${byId[id].name}</h3><p class="muted">${t}</p><div class="acts" style="display:flex;gap:8px;flex-wrap:wrap"><button data-fav="${id}" aria-pressed="${state.fav === id}">${state.fav === id ? "★ Favourite" : "☆ Make favourite"}</button><button data-copyid="${id}">Copy ID</button></div></div></div>`).join("");
+  $("#favPill").textContent = state.fav ? `★ ${state.fav} · ${byId[state.fav].name}` : "No favourite yet";
+}
+function renderAll() { renderStrip(); renderGallery(); renderPicker(); renderMocks(); renderCompare(); renderEval(); }
+
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  const d = b.dataset;
+  if (d.act) { setActive(d.act); if (d.go || b.closest("#strip")) document.getElementById("mockups").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); }
+  else if (d.fav) setFav(d.fav);
+  else if (d.cmp) {
+    const i = state.cmp.indexOf(d.cmp);
+    if (i >= 0) state.cmp.splice(i, 1); else if (state.cmp.length < 4) state.cmp.push(d.cmp); else toast("Up to four at once. Remove one first.");
+    save(); renderCompare(); renderGallery();
+  }
+  else if (d.bg) { state.bg = d.bg; renderCompare(); }
+  else if (d.var) { state.variant = d.var; renderCompare(); }
+  else if (d.copyid) copy(conceptCode(d.copyid), conceptCode(d.copyid));
+  else if (d.copysvg) { const f = svgFor(d.copysvg); copy(f.svg, f.name); }
+  else if (d.dl) { const f = svgFor(d.dl); download(f.svg, f.name); }
+});
+$("#size").addEventListener("input", (e) => { state.size = +e.target.value; renderCompare(); });
+renderSwatches(); renderAll();
+</script>
