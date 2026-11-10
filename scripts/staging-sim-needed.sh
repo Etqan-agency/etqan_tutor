@@ -14,7 +14,7 @@ set -euo pipefail
 
 BASE="${1:?Usage: staging-sim-needed.sh <base-sha>}"
 changed="$(git diff --name-only "$BASE" HEAD)"
-if grep -qE '^(infra$|\.github/workflows/|caddy/|docs-site/(Dockerfile|Dockerfile\.dockerignore|nginx\.conf)$|scripts/(deploy-staging|staging-sim))' <<< "$changed"; then
+if grep -qE '^(infra$|\.github/workflows/|caddy/|docs-site/(Dockerfile|Dockerfile\.dockerignore|nginx\.conf)$|scripts/(deploy|staging-sim))' <<< "$changed"; then
     echo true
     exit 0
 fi

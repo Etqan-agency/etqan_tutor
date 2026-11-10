@@ -69,7 +69,7 @@ On the base domain's `/admin/`, or with `manage.sh`:
 users live in `/opt/etqan/caddy/docs-users/users.caddy` on the server, one
 `name <bcrypt hash>` line per person, never in git. Caddy gets the whole `docs-users/`
 directory (read-only), so it sees the file however it is edited. `ship.sh` and
-`deploy-staging.sh` refuse to deploy unless it is a regular file with at least one user
+`deploy.sh` refuse to deploy unless it is a regular file with at least one user
 line, because Caddy cannot load its configuration without it.
 
 In `/opt/etqan` (on staging add `-f docker-compose.staging.yml` after the production file):
