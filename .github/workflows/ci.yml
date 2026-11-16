@@ -794,9 +794,13 @@ jobs:
       sha: ${{ github.sha }}
     secrets: inherit
 
+  # A bare `if:` means success(), which is false whenever any job upstream
+  # was skipped, as every gate is on a verified tree; so say it explicitly.
   deploy-production:
     needs: [deploy-staging]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: >-
+      ${{ !failure() && !cancelled() && needs.deploy-staging.result == 'success'
+      && github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     uses: ./.github/workflows/deploy.yml
     with:
       environment: production
