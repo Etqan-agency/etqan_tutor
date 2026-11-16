@@ -1,0 +1,24 @@
+@font-face { font-family: Fraunces; src: url(fraunces-latin-opsz-normal.woff2) format("woff2"); font-weight: 100 900; }
+@font-face { font-family: Fraunces; src: url(fraunces-latin-opsz-italic.woff2) format("woff2"); font-weight: 100 900; font-style: italic; }
+@font-face { font-family: Inter; src: url(inter-latin-wght-normal.woff2) format("woff2"); font-weight: 100 900; }
+:root { --green: #1A5E43; --deep: #14432F; --gold: #C2A36B; --parch: #F6F1E7; --ink: #2B2A26; }
+* { margin: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1350px; overflow: hidden; }
+body { font-family: Inter, sans-serif; position: relative; }
+.light { background-color: var(--parch); color: var(--ink);
+  background-image: linear-gradient(rgba(194,163,107,.22) 1px, transparent 1px), linear-gradient(90deg, rgba(194,163,107,.22) 1px, transparent 1px);
+  background-size: 54px 54px; }
+.dark { background-color: var(--deep); color: var(--parch);
+  background-image: linear-gradient(rgba(246,241,231,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(246,241,231,.06) 1px, transparent 1px);
+  background-size: 54px 54px; }
+.sq { position: absolute; width: 54px; height: 54px; background: var(--gold); }
+.light .sq { opacity: .28; } .dark .sq { opacity: .22; }
+.eyebrow { font-size: 22px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: #8D6F27; }
+.dark .eyebrow { color: var(--gold); }
+.lockup { display: flex; align-items: center; gap: 22px; }
+.lockup svg { height: 62px; width: auto; }
+.lockup .rule { width: 2px; height: 56px; background: var(--gold); opacity: .7; }
+.lockup .name { font-size: 19px; font-weight: 600; letter-spacing: .34em; line-height: 1.5; color: var(--green); }
+.dark .lockup .name { color: var(--parch); }
+.url { font-size: 22px; font-weight: 600; color: var(--green); }
+.dark .url { color: var(--gold); }
