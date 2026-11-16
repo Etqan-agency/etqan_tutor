@@ -81,13 +81,31 @@ stale local stack will fail there. Rebuild before you trust a local result.
 
 | Job | Checks |
 |---|---|
-| backend | ruff check + format, `lint-imports`, pytest with coverage (PostgreSQL 18 service) |
-| dashboard | token pin check, `tsc`, biome, vitest coverage, build |
+| triage | decides what runs (below) |
+| backend | ruff check + format, `lint-imports`, the switches JSON |
+| backend tests (1–4/4) | pytest with `-n auto`, a quarter of the files each (`scripts/pytest-shard.py`) |
+| backend-coverage | combines the four shards' coverage; the 80% floor is checked here |
+| dashboard | token pin check, `tsc`, biome, build |
+| dashboard tests (1–3/3), dashboard-coverage | vitest in three shards; thresholds checked on the merged report |
 | marketing | astro check, lint, vitest coverage, build |
 | caddy, infra-scripts | Caddyfile validation; shellcheck and tests for the deploy scripts |
-| e2e | Playwright against a full stack |
+| e2e (1–3/3) | Playwright against a full stack, a third of the specs per shard |
 | orchestra | the orchestration tooling's own tests |
 | security | gitleaks: history plus tracked tree (allowlist `.gitleaksignore`) |
 
-On `master` it then builds images, runs a simulated staging deploy when infra changed, and
-deploys to staging. See [Deploy](runbooks/deploy.md).
+Then it builds the images, runs the simulated staging deploy when the change needs it (in
+parallel with the tests), and on `master` deploys to staging and production. See
+[Deploy](runbooks/deploy.md).
+
+What runs: a change that touches only `docs/` or root `*.md` files skips the gates (docs-site,
+security, images and the deploys still run). A green pull request records its git tree, and
+the push that merges it skips every test job when its tree is the same (it goes straight to
+images and the deploys).
+
+Sharding has two consequences for tests you write:
+
+- Backend: each xdist worker has its own test database, and workers clone academy schemas at
+  the same time. CI starts PostgreSQL with `max_locks_per_transaction=512`; a local
+  `pytest -n` needs the same flag, or it fails with `out of shared memory`.
+- End-to-end: each shard has its own freshly seeded database, so a spec must never depend on
+  state that a spec in another file left behind.

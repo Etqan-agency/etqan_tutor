@@ -107,7 +107,7 @@ stream-down:
 test: test-backend test-frontend test-marketing check-boundaries
 
 # Backend tests (in container)
-# The --cov flag MUST match the `backend` job in .github/workflows/ci.yml
+# The --cov flag MUST match the `backend-tests` job in .github/workflows/ci.yml
 # exactly (--cov=etqan). A mismatch measures a different set of files than
 # the ratchet floor was set from, and `just test` fails against a floor
 # nothing pointed at. Changing the measured package? Change it in both places.

@@ -13,20 +13,63 @@ env:
   PYTHON_VERSION: "3.13"
   NODE_VERSION: "22"
 
+# Every job carries a timeout of about 3x its measured wall clock: GitHub's
+# default is 6 hours, and a hung job would hold the deploy that long.
+
 jobs:
-  backend:
+  # Runs first, on every event. `gates` is false when the change cannot break
+  # the code (every path under docs/ or a root *.md) or when a green pull
+  # request already tested this exact tree (`verified`, push only). The gate
+  # jobs skip on false; docs-site and security skip only on `verified`, since
+  # docs-site builds docs/ and a secret scan reads every byte (ADR-0042).
+  # A tree hash covers submodule pointers and is the same under merge, squash
+  # or rebase, so a merge whose pull request was green on that exact tree goes
+  # straight to images and deploy.
+  triage:
     runs-on: ubuntu-latest
-    # The suite takes 45-55 min; a hung test must not hold the deploy for 6 hours.
-    timeout-minutes: 90
-    services:
-      postgres:
-        image: postgres:18-alpine
-        env: { POSTGRES_DB: etqan_test, POSTGRES_USER: etqan, POSTGRES_PASSWORD: etqan }
-        ports: ["5432:5432"]
-        options: >-
-          --health-cmd "pg_isready -U etqan" --health-interval 5s --health-timeout 3s --health-retries 10
-    env:
-      DATABASE_URL: postgres://etqan:etqan@localhost:5432/etqan_test
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      gates: ${{ steps.triage.outputs.gates }}
+      verified: ${{ steps.triage.outputs.verified }}
+      tree: ${{ steps.triage.outputs.tree }}
+    steps:
+      - uses: actions/checkout@v7
+        with: { fetch-depth: 0 }
+      - id: triage
+        env:
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+          REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+        # Fails closed: an unknown base or a failed lookup runs every gate.
+        run: |
+          tree="$(git rev-parse 'HEAD^{tree}')"
+          # A pull request runs on its merge commit, so its change is HEAD^1..HEAD.
+          if [ "$EVENT" = pull_request ]; then base="$(git rev-parse HEAD^1)"; else base="$BEFORE"; fi
+          code=true
+          if [[ "$base" =~ ^[0-9a-f]{40}$ && ! "$base" =~ ^0+$ ]] && changed="$(git diff --name-only "$base" HEAD)"; then
+            grep -qvE '^(docs/|[^/]+\.md$)' <<< "$changed" || code=false
+          fi
+          verified=false
+          if [ "$EVENT" = push ]; then
+            n="$(gh api "repos/$REPO/actions/artifacts?name=verified-tree-$tree" \
+              --jq '[.artifacts[] | select(.expired | not)] | length')" || n=0
+            if [ "${n:-0}" -gt 0 ]; then verified=true; fi
+          fi
+          gates=true
+          if [ "$code" = false ] || [ "$verified" = true ]; then gates=false; fi
+          echo "tree=$tree code=$code verified=$verified gates=$gates"
+          { echo "tree=$tree"; echo "verified=$verified"; echo "gates=$gates"; } >> "$GITHUB_OUTPUT"
+
+  # Lint, the import boundaries and the switches JSON: no database.
+  backend:
+    needs: [triage]
+    if: needs.triage.outputs.gates == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     defaults: { run: { working-directory: backend } }
     steps:
       - uses: actions/checkout@v7
@@ -39,12 +82,87 @@ jobs:
       - name: Switches JSON is fresh (no DB needed)
         run: python manage.py dump_features ../docs-site/src/data/features.json --check --skip-checks
         env: { DJANGO_SETTINGS_MODULE: config.settings.test }
+
+  # The suite (45 min serial) as four shards of whole files, balanced by test
+  # count (scripts/pytest-shard.py), each on every core with pytest-xdist: one
+  # test database per worker. backend-coverage holds the 80% floor over all four.
+  backend-tests:
+    needs: [triage]
+    if: needs.triage.outputs.gates == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    name: backend tests (${{ matrix.shard }}/4)
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    env:
+      DATABASE_URL: postgres://etqan:etqan@localhost:5432/etqan_test
+    defaults: { run: { working-directory: backend } }
+    steps:
+      # Not a service container: those cannot take server flags. Every xdist
+      # worker clones academy schemas inside one transaction each, and at the
+      # default 64 locks per transaction concurrent clones run Postgres out of
+      # shared memory.
+      - name: Postgres, with room for concurrent schema clones
+        working-directory: .
+        run: |
+          docker run -d --name pg -p 5432:5432 \
+            -e POSTGRES_DB=etqan_test -e POSTGRES_USER=etqan -e POSTGRES_PASSWORD=etqan \
+            postgres:18-alpine -c max_locks_per_transaction=512
+      - uses: actions/checkout@v7
+        with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
+      - uses: actions/setup-python@v7
+        with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip, cache-dependency-path: backend/requirements/*.txt }
+      - run: pip install -r requirements/local.txt
+      # Over TCP: during initdb the image runs a socket-only server first.
+      - name: Wait for Postgres
+        run: |
+          for _ in $(seq 1 60); do docker exec pg pg_isready -h 127.0.0.1 -U etqan >/dev/null 2>&1 && break; sleep 1; done
+          docker exec pg pg_isready -h 127.0.0.1 -U etqan
+      - name: This shard's test files
+        run: |
+          pytest --collect-only -q > "$RUNNER_TEMP/collected.txt"
+          python3 ../scripts/pytest-shard.py ${{ matrix.shard }} 4 < "$RUNNER_TEMP/collected.txt" > "$RUNNER_TEMP/shard.txt"
+          echo "$(wc -l < "$RUNNER_TEMP/shard.txt") files"
       # A test still running after 5 min prints every thread's stack, so a
       # hang shows where it is stuck (pytest's built-in faulthandler).
-      - run: pytest --create-db --cov=etqan -q -o faulthandler_timeout=300
+      - name: Tests
+        run: |
+          # shellcheck disable=SC2046 # one test file per word
+          pytest --create-db -n auto --cov=etqan --cov-report= --cov-fail-under=0 -q \
+            -o faulthandler_timeout=300 $(cat "$RUNNER_TEMP/shard.txt")
+          mv .coverage ".coverage.shard${{ matrix.shard }}"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: backend-coverage-${{ matrix.shard }}
+          path: backend/.coverage.shard${{ matrix.shard }}
+          include-hidden-files: true
+          retention-days: 1
 
-  dashboard:
+  backend-coverage:
+    needs: [backend-tests]
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults: { run: { working-directory: backend } }
+    steps:
+      - uses: actions/checkout@v7
+        with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
+      - uses: actions/setup-python@v7
+        with: { python-version: "${{ env.PYTHON_VERSION }}", cache: pip, cache-dependency-path: backend/requirements/*.txt }
+      # The same requirements, so the same coverage.py that wrote the data.
+      - run: pip install -r requirements/local.txt
+      - uses: actions/download-artifact@v8
+        with: { pattern: backend-coverage-*, merge-multiple: true, path: backend }
+      - name: Combined coverage meets the floor (pyproject fail_under)
+        run: coverage combine && coverage report --skip-covered
+
+  # Types, lint and the build; the unit tests are dashboard-tests.
+  dashboard:
+    needs: [triage]
+    if: needs.triage.outputs.gates == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
     defaults: { run: { working-directory: dashboard } }
     steps:
       - uses: actions/checkout@v7
@@ -53,11 +171,8 @@ jobs:
         with: { version: 10 }
       - uses: actions/setup-node@v7
         with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: dashboard/pnpm-lock.yaml }
-      - name: Configure git auth for private @etqan/tokens
-        run: |
-          git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
-          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "git@github.com:"
-          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
+      - uses: ./.github/actions/tokens-auth
+        with: { token: "${{ secrets.TOKENS_REPO_TOKEN }}" }
       - name: Fetch tokens submodule tags
         working-directory: .
         run: git -C tokens fetch --depth=1 --force origin "+refs/tags/*:refs/tags/*"
@@ -67,11 +182,68 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm tsc --noEmit
       - run: pnpm lint
-      - run: pnpm test:coverage
       - run: pnpm build
 
-  marketing:
+  # The unit suite (14 min serial) in three shards. Each writes a blob with
+  # its coverage and no thresholds (a shard covers a third of the code);
+  # dashboard-coverage merges them and holds the vitest.config.ts thresholds.
+  dashboard-tests:
+    needs: [triage]
+    if: needs.triage.outputs.gates == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    name: dashboard tests (${{ matrix.shard }}/3)
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    defaults: { run: { working-directory: dashboard } }
+    steps:
+      - uses: actions/checkout@v7
+        with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
+      - uses: pnpm/action-setup@v6
+        with: { version: 10 }
+      - uses: actions/setup-node@v7
+        with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: dashboard/pnpm-lock.yaml }
+      - uses: ./.github/actions/tokens-auth
+        with: { token: "${{ secrets.TOKENS_REPO_TOKEN }}" }
+      - run: pnpm install --frozen-lockfile
+      - run: >-
+          pnpm exec vitest run --shard=${{ matrix.shard }}/3 --reporter=blob --coverage
+          --coverage.thresholds.lines=0 --coverage.thresholds.statements=0
+          --coverage.thresholds.functions=0 --coverage.thresholds.branches=0
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dashboard-blob-${{ matrix.shard }}
+          path: dashboard/.vitest-reports
+          include-hidden-files: true
+          retention-days: 1
+
+  dashboard-coverage:
+    needs: [dashboard-tests]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults: { run: { working-directory: dashboard } }
+    steps:
+      - uses: actions/checkout@v7
+        with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
+      - uses: pnpm/action-setup@v6
+        with: { version: 10 }
+      - uses: actions/setup-node@v7
+        with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: dashboard/pnpm-lock.yaml }
+      - uses: ./.github/actions/tokens-auth
+        with: { token: "${{ secrets.TOKENS_REPO_TOKEN }}" }
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/download-artifact@v8
+        with: { pattern: dashboard-blob-*, merge-multiple: true, path: dashboard/.vitest-reports }
+      - name: Merged coverage meets the thresholds
+        run: pnpm exec vitest run --merge-reports --coverage
+
+  marketing:
+    needs: [triage]
+    if: needs.triage.outputs.gates == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     defaults: { run: { working-directory: marketing } }
     steps:
       - uses: actions/checkout@v7
@@ -80,11 +252,8 @@ jobs:
         with: { version: 10 }
       - uses: actions/setup-node@v7
         with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: marketing/pnpm-lock.yaml }
-      - name: Configure git auth for private @etqan/tokens
-        run: |
-          git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
-          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "git@github.com:"
-          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
+      - uses: ./.github/actions/tokens-auth
+        with: { token: "${{ secrets.TOKENS_REPO_TOKEN }}" }
       - name: Fetch tokens submodule tags
         working-directory: .
         run: git -C tokens fetch --depth=1 --force origin "+refs/tags/*:refs/tags/*"
@@ -99,7 +268,10 @@ jobs:
 
   # The official Etqan Tutor site (base domain). Standalone: no @etqan/tokens.
   website:
+    needs: [triage]
+    if: needs.triage.outputs.gates == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     defaults: { run: { working-directory: website } }
     steps:
       - uses: actions/checkout@v7
@@ -112,9 +284,13 @@ jobs:
       - run: pnpm check
       - run: pnpm build
 
-  # The internal docs site (docs.{$BASE_DOMAIN}); reads docs/ in place.
+  # The internal docs site (docs.{$BASE_DOMAIN}); reads docs/ in place, so a
+  # docs-only change still runs it.
   docs-site:
+    needs: [triage]
+    if: needs.triage.outputs.verified != 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     defaults: { run: { working-directory: docs-site } }
     steps:
       - uses: actions/checkout@v7
@@ -127,7 +303,10 @@ jobs:
       - run: pnpm build
 
   caddy:
+    needs: [triage]
+    if: needs.triage.outputs.gates == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
         with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
@@ -175,18 +354,18 @@ jobs:
           bash infra/scripts/tests/docs_edge_test.sh
 
   orchestra:
+    needs: [triage]
+    if: needs.triage.outputs.gates == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
         with: { version: 10 }
       - uses: actions/setup-node@v7
         with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: orchestra/web/pnpm-lock.yaml }
-      - name: Configure git auth for private @etqan/tokens
-        run: |
-          git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
-          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "git@github.com:"
-          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
+      - uses: ./.github/actions/tokens-auth
+        with: { token: "${{ secrets.TOKENS_REPO_TOKEN }}" }
       - name: Server tests
         working-directory: orchestra/server
         run: python3 -m unittest discover -s tests -t . -v
@@ -199,7 +378,10 @@ jobs:
           pnpm lint
 
   infra-scripts:
+    needs: [triage]
+    if: needs.triage.outputs.gates == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
         with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
@@ -218,6 +400,8 @@ jobs:
           bash infra/scripts/tests/edge_ca_test.sh
       - name: just bump and the submodule pin check
         run: bash scripts/tests/submodules_test.sh
+      - name: The backend test sharding
+        run: bash scripts/tests/pytest_shard_test.sh
       # launch_phase_test drives the justfile's stream-down and _stack-manage.
       - uses: taiki-e/install-action@v2
         with: { tool: just }
@@ -228,8 +412,19 @@ jobs:
           bash scripts/orchestration/tests/start_session_test.sh
           python3 -m unittest discover -s scripts/orchestration/tests -v
 
+  # Three shards, each a whole stack with its own seeded database: the specs
+  # stay serial within a shard (playwright.config.ts: one worker in CI), so
+  # no two log in as the same account against one database at once.
   e2e:
+    needs: [triage]
+    if: needs.triage.outputs.gates == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 35
+    name: e2e (${{ matrix.shard }}/3)
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
     services:
       postgres:
         image: postgres:18-alpine
@@ -263,11 +458,13 @@ jobs:
         with: { version: 10 }
       - uses: actions/setup-node@v7
         with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: "dashboard/pnpm-lock.yaml\nmarketing/pnpm-lock.yaml" }
-      - name: Configure git auth for private @etqan/tokens
-        run: |
-          git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
-          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "git@github.com:"
-          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
+      - uses: ./.github/actions/tokens-auth
+        with: { token: "${{ secrets.TOKENS_REPO_TOKEN }}" }
+      # The browser download; --with-deps still installs the system packages.
+      - uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('dashboard/pnpm-lock.yaml') }}
       - name: Backend up with seeded academies
         working-directory: backend
         run: |
@@ -309,14 +506,17 @@ jobs:
           E2E_MAIL_DIR: /tmp/etqan-mail
         run: |
           pnpm exec playwright install --with-deps chromium
-          pnpm e2e
+          pnpm e2e --shard=${{ matrix.shard }}/3
       - if: failure()
         run: |
           tail -n 200 /tmp/django.log /tmp/preview.log /tmp/marketing.log
           docker logs edge 2>&1 | tail -n 100
 
   security:
+    needs: [triage]
+    if: needs.triage.outputs.verified != 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
         with: { fetch-depth: 0, submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
@@ -337,7 +537,10 @@ jobs:
   # The images are built from the submodule pointers, so each must be a commit
   # on its repo's main (never an unmerged branch). Behind main only warns.
   submodules:
+    needs: [triage]
+    if: needs.triage.outputs.gates == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
         with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
@@ -347,10 +550,30 @@ jobs:
   # only (a broken Dockerfile fails the PR); master pushes <meta-sha> and
   # :master to GHCR (private). The backend image needs no build arguments
   # (its default target is production); the frontends read the private
-  # @etqan/tokens repo through the tokens_token build secret.
+  # @etqan/tokens repo through the tokens_token build secret. Runs when every
+  # gate passed or was skipped by triage (a verified tree still needs its
+  # images pushed under its own SHA).
   images:
-    needs: [backend, dashboard, marketing, website, docs-site, caddy, e2e, infra-scripts, orchestra, security, submodules]
+    needs:
+      - triage
+      - backend
+      - backend-tests
+      - backend-coverage
+      - dashboard
+      - dashboard-tests
+      - dashboard-coverage
+      - marketing
+      - website
+      - docs-site
+      - caddy
+      - e2e
+      - infra-scripts
+      - orchestra
+      - security
+      - submodules
+    if: ${{ !failure() && !cancelled() }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: read
       packages: write
@@ -392,6 +615,7 @@ jobs:
   # Spec §5: which pull requests need the staging simulation.
   sim-needed:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     outputs:
       run: ${{ steps.check.outputs.run }}
     steps:
@@ -422,10 +646,12 @@ jobs:
   # Docker-in-Docker, privileged, started with docker run: a service
   # container cannot be built from this repo). Two blue/green deploys under
   # a health poll, the smoke check, seed_staging and the full journey. One
-  # retry of the whole run, never of a step.
+  # retry of the whole run, never of a step. It runs alongside the tests
+  # rather than after them: it builds its own images (from the layer cache
+  # the images job keeps), and the deploys still wait for both.
   staging-sim:
-    needs: [sim-needed, images]
-    if: needs.sim-needed.outputs.run == 'true'
+    needs: [triage, sim-needed]
+    if: needs.triage.outputs.gates == 'true' && needs.sim-needed.outputs.run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -433,22 +659,24 @@ jobs:
       SIM_DIR: ${{ github.workspace }}/../staging-sim
     steps:
       # The server pulls about 3 GB, and ship.sh refuses to start with less
-      # than 5 GB free: drop toolchains this job never uses.
+      # than 5 GB free: drop toolchains this job never uses. In the
+      # background (a minute of deleting); the deploy step waits for it.
       - name: Free disk space
         run: |
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
-          df -h /
+          sudo nohup rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL \
+            > /dev/null 2>&1 &
       - uses: actions/checkout@v7
         with: { submodules: recursive, token: "${{ secrets.SUBMODULE_TOKEN }}" }
       - uses: pnpm/action-setup@v6
         with: { version: 10 }
       - uses: actions/setup-node@v7
         with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm, cache-dependency-path: dashboard/pnpm-lock.yaml }
-      - name: Configure git auth for private @etqan/tokens
-        run: |
-          git config --global url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
-          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "git@github.com:"
-          git config --global --add url."https://x-access-token:${{ secrets.TOKENS_REPO_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
+      - uses: ./.github/actions/tokens-auth
+        with: { token: "${{ secrets.TOKENS_REPO_TOKEN }}" }
+      - uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('dashboard/pnpm-lock.yaml') }}
       - name: Playwright (the journey runs from here)
         working-directory: dashboard
         run: |
@@ -492,6 +720,10 @@ jobs:
           load: true
           tags: localhost:15000/etqan-agency/docs-site:${{ github.sha }}
           cache-from: type=gha,scope=docs-site
+      - name: Disk space freed
+        run: |
+          while pgrep -f 'rm -rf /usr/share/dotnet' > /dev/null; do sleep 2; done
+          df -h /
       - name: Deploy twice, seed, smoke and walk the journey
         run: |
           bash scripts/staging-sim.sh run && exit 0
@@ -507,14 +739,50 @@ jobs:
       - if: always()
         run: bash scripts/staging-sim.sh down
 
+  # A pull request whose every gate passed records its tree; the push that
+  # merges it finds the record in triage and skips the gates (see triage).
+  record-verified-tree:
+    needs:
+      - triage
+      - backend
+      - backend-tests
+      - backend-coverage
+      - dashboard
+      - dashboard-tests
+      - dashboard-coverage
+      - marketing
+      - website
+      - docs-site
+      - caddy
+      - e2e
+      - infra-scripts
+      - orchestra
+      - security
+      - submodules
+      - images
+      - staging-sim
+    if: ${{ github.event_name == 'pull_request' && !failure() && !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: echo "${{ needs.triage.outputs.tree }}" > tree.txt
+      - uses: actions/upload-artifact@v7
+        with:
+          name: verified-tree-${{ needs.triage.outputs.tree }}
+          path: tree.txt
+          retention-days: 14
+
   # Spec §3.2: every green master is deployed, to staging and then to
   # production, once each server exists; an environment without its SSH_HOST
   # secret skips its steps and succeeds. Production waits for staging, so a
   # deploy that breaks staging never reaches it. Manual runs (rollback) use the
-  # same workflow.
+  # same workflow. staging-sim is skipped on a verified tree (its pull request
+  # ran it, or did not need it), so it may be skipped here but never failed.
   deploy-staging:
     needs: [images, staging-sim]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: >-
+      ${{ !failure() && !cancelled() && needs.images.result == 'success'
+      && github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     uses: ./.github/workflows/deploy.yml
     with:
       environment: staging
