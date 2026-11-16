@@ -16,6 +16,8 @@ env:
 jobs:
   backend:
     runs-on: ubuntu-latest
+    # The suite takes 45-55 min; a hung test must not hold the deploy for 6 hours.
+    timeout-minutes: 90
     services:
       postgres:
         image: postgres:18-alpine
@@ -37,7 +39,9 @@ jobs:
       - name: Switches JSON is fresh (no DB needed)
         run: python manage.py dump_features ../docs-site/src/data/features.json --check --skip-checks
         env: { DJANGO_SETTINGS_MODULE: config.settings.test }
-      - run: pytest --create-db --cov=etqan -q
+      # A test still running after 5 min prints every thread's stack, so a
+      # hang shows where it is stuck (pytest's built-in faulthandler).
+      - run: pytest --create-db --cov=etqan -q -o faulthandler_timeout=300
 
   dashboard:
     runs-on: ubuntu-latest
