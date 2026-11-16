@@ -54,6 +54,15 @@ pull request had already tested (PR run 63 min, then the push run 65 min).
    just before the deploy step. The five copies of the tokens git-auth step are now
    `.github/actions/tokens-auth`.
 
+7. **PostgreSQL pinned to 18.6** in CI, `docker-compose.local.yml` and infra's production
+   compose (infra PR #11). Found on this change's first CI run: `postgres:18-alpine` moved to
+   18.7 on 2026-11-15, and on 18.7 django-tenants' `clone_schema` spins (one backend at 100%
+   CPU, no lock wait), so `create_academy` never returns. That is the hang behind master's
+   frozen backend suite (PR #98) and the staging-sim journey timing out. Reproduced locally: the
+   same shard passes on 18.6 and hangs on 18.7. `ship.sh` pulls before every deploy, so without
+   the pin the next green master would have upgraded production into it. Unpinning waits for a
+   django-tenants or PostgreSQL fix, proven by CI.
+
 ## Expected
 
 PR critical path ~13–15 min (the e2e shards or staging-sim, then images), down from 40–63.
