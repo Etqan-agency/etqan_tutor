@@ -1,4 +1,18 @@
-# Etqan Tutor logo: Ruqaa Seal
+# Etqan Tutor logo: Kufic Grid
+
+Chosen on 2026-11-16 (concept 10, "Focus"). It replaces the Ruqaa Seal; the seal files below stay for reference.
+
+إتقان is written in square Kufic on a one-unit grid. The emerald letters are the system and the structure; the gold squares (the dots of ن, ق and ت, and the hamza below the alif) are the data moving through it. The grid stands for the technology underneath. Every file is drawn from rectangles, so no fonts are needed.
+
+- **Generator:** `kufic-grid/generate.mjs`. Run `node brand/logos/kufic-grid/generate.mjs` from the repo root. It writes every file below and the site's copies in `website/public/`.
+- **Mark:** `etqan-tutor-kufic-grid-symbol-<light|dark|emerald|mono|reversed>.svg`.
+- **App icon and favicon:** `etqan-tutor-kufic-grid-app-icon.svg`, `../favicons-app-icons/favicon.svg` and `apple-touch-icon.png` (180×180) show the ق alone on an emerald tile. Use them below 48px.
+- **Website lockup:** the mark, a thin gold rule, then ETQAN / TUTOR in two letter-spaced lines, set in the site's font by `website/src/components/Logo.astro`. The mark files there are `public/brand/etqan-kufic-light.svg` (light grounds) and `etqan-kufic-dark.svg` (dark grounds).
+- **Academies:** as before, this logo stays off academy-facing surfaces, which are white-label.
+
+---
+
+# Previous logo: Ruqaa Seal
 
 Chosen on 2026-10-27 (concept K2 from `../exploration/etqan-tutor-2026/round-2/`).
 
@@ -6,7 +20,7 @@ It is a round seal, like the stamp on an ijazah: إتقان in Ruqaa sits in the
 
 ## Website lockups
 
-The site serves these from `website/public/brand/`.
+The site served these from `website/public/brand/` until 2026-11-16.
 
 | File | Use |
 |---|---|
@@ -34,7 +48,7 @@ All files are named `etqan-tutor-k2-ruqaa-seal-<kind>-<treatment>.svg`.
 | `mono` | light | all ink `#202522` |
 | `reversed` | dark | all marble `#FAF9F5` |
 
-**Favicon:** `../favicons-app-icons/favicon.svg` is a simplified ق seal. The band text can't be read below about 64px, so small sizes use this instead. `apple-touch-icon.png` is 180×180.
+**Favicon (seal era):** a simplified ق seal, now replaced by the Kufic ق tile. The band text can't be read below about 64px, so small sizes use this instead. `apple-touch-icon.png` is 180×180.
 
 ## Rules
 
