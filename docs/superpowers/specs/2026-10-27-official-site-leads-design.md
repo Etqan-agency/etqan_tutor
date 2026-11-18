@@ -127,7 +127,7 @@ guide, not the contract.
   subdomain is a wish, and the Academy creation form validates it when staff create the
   academy.
 - **Bot traps** answer `201 {"ok": true}` and store nothing: a non-empty `website`, or
-  `elapsed_ms` under 3000 (*my call:* 3 s).
+  `elapsed_ms` under 1500 (*my call:* first 3 s, lowered to 1.5 s in review so a fast autofilled callback isn't dropped).
 - **Throttles** follow `etqan/site/throttling.py` (`SimpleRateThrottle`, per IP and
   per email) **without `InternalExemptMixin`**. `DJANGO_TRUST_INTERNAL_HEADER` is on in
   staging and production, and the base-domain Caddy blocks don't strip

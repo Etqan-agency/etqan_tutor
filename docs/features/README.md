@@ -20,6 +20,7 @@ Most features can be switched on or off per academy. See [Feature toggles](featu
 | [Academy settings](academy-settings.md) | Settings row, themes and appearance, languages and translations, system status |
 | [Integrations](integrations.md) | `resolve(service)`, Etqan default vs academy-owned accounts, email/WhatsApp/Zoom/Stripe/AI providers |
 | [Etqan billing](etqan-billing.md) | Metering Etqan's defaults, prices and allowances, Etqan's invoices to academies |
+| [Official-site requests](official-site-requests.md) | The Etqan Tutor site's forms: intake, team alerts, receipts, the Requests admin, creating an academy from an application |
 | [Private files](private-files.md) | Protected storage and authenticated file streaming |
 
 ## People and access
